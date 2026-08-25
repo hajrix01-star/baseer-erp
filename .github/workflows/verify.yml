@@ -29,9 +29,11 @@ jobs:
     env:
       CI_DATABASE_ADMIN_URL: postgresql://postgres:postgres@localhost:5432/baseer_erp_test?schema=public
       BASEER_SYSTEM_TENANT_CODE: baseer-ci-system
-      BASEER_ACCESS_TOKEN_SECRET: baseer-ci-access-token-secret-at-least-32-chars
-      BASEER_REFRESH_TOKEN_SECRET: baseer-ci-refresh-token-secret-at-least-32-chars
-      BASEER_AI_CREDENTIAL_ENCRYPTION_KEY: 0123456789abcdef0123456789abcdef
+      # These names intentionally match the runtime configuration contract in
+      # identity-token.service.ts and ai-credential-vault.ts. They are CI-only
+      # fixtures, never deploy credentials.
+      IDENTITY_JWT_SECRET: baseer-ci-identity-jwt-secret-at-least-32-chars
+      AI_CREDENTIAL_ENCRYPTION_KEY: MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -53,11 +55,17 @@ jobs:
       - run: git diff --exit-code -- apps/api/src/generated/prisma
       - run: git diff --check
       - run: npm run check:architecture
+      - run: npm run check:nest-registration
       - run: npm run check:permissions
       - run: npm run check:ai-gate-b
       - run: npm run check:web-financial-boundaries
       - run: npm run check:web-dialog-conventions
       - run: npm run check:web-localization
+      - run: npm run check:web-numeric-policy
+      - run: npm run audit:ui-components -- --json
+      - run: npm run check:ui-governance-registers
+      - run: npm run check:ui-native-control-ratchet
+      - run: npm run check:ui-inline-style-ratchet
       - run: npm run check --workspace @baseer-erp/contracts
       - run: npm run check --workspace @baseer-erp/api
       - run: npm run check --workspace @baseer-erp/web
@@ -73,6 +81,7 @@ jobs:
       - run: node scripts/run-auth-rate-limit-verification.mjs
       - run: npm run verify:administration-lifecycle
       - run: npm run verify:finance-gate-b-db
+      - run: npm run verify:finance-accounts-http
       - run: npm run verify:finance-period-race
       - run: npm run verify:ai-gate-b-db
       - run: npm run verify:ai-gate-b-http
@@ -80,6 +89,10 @@ jobs:
       - run: npm run verify:daily-sales-http
       - run: npm run build --workspace @baseer-erp/web
       - run: npm run verify:web-budget
+      - name: Run web accessibility and interaction acceptance tests
+        run: |
+          npx playwright install --with-deps chromium
+          npm run test:e2e --workspace @baseer-erp/web
       - run: npx prisma generate --schema apps/api/prisma/schema.prisma
       - run: git diff --exit-code -- apps/api/src/generated/prisma
       - run: git diff --check

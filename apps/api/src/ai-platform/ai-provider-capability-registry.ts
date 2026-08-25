@@ -73,7 +73,11 @@ const REGISTRY: readonly AiProviderModelCapability[] = [
       tokenizerVersion: BASIRA_S2_TOKENIZER_VERSION,
       tokenSafetyMargin: 256,
       maxInputTokens: 12_000,
-      maxOutputTokens: 600,
+      // GPT-5 mini's low-effort reasoning tokens share this ceiling with the
+      // strict JSON answer. 600 can truncate an otherwise valid Arabic
+      // explanation before the schema is closed; 1,200 retains the compact
+      // response shape while leaving enough completion headroom.
+      maxOutputTokens: 1_200,
       reasoning: "low",
       structuredOutput: true,
       tools: "none",

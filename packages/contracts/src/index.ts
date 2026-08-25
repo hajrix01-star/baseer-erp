@@ -1,6 +1,7 @@
 export * from './identity.js';
 export * from './output.js';
 export * from './report-documents.js';
+export * from './official-report-runs.js';
 
 export * from './business-date.js';
 export * from './file-metadata.js';
@@ -16,6 +17,7 @@ export * from './hr.js';
 export * from './reporting.js';
 export * from './ledger-trial-balance.js';
 export * from './internal-vat-report.js';
+export * from './vat-simulation.js';
 export * from './operations.js';
 export * from './marketing.js';
 export * from './inbound-evidence.js';

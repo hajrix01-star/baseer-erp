@@ -1,4 +1,5 @@
-import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Param, ParseUUIDPipe, Post, Query, Res, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Param, ParseUUIDPipe, Post, Query, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { SkipThrottle, Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import type { FastifyReply } from 'fastify';
 import { RouteConfig } from '@nestjs/platform-fastify';
 import { companyIdSchema, createHrEmployeeDocumentRequestSchema, hrEmployeeDocumentReceiptSchema, hrEmployeeDocumentsQuerySchema, hrEmployeeDocumentsReceiptSchema, replaceHrEmployeeDocumentRequestSchema, revokeHrEmployeeDocumentRequestSchema } from '@baseer-erp/contracts';
@@ -19,6 +20,9 @@ export class HrEmployeeDocumentController {
 
   @Post('employees/:employeeId/documents') @HttpCode(201)
   @RouteConfig({ bodyLimit: 8 * 1024 * 1024 })
+  @UseGuards(ThrottlerGuard)
+  @SkipThrottle({ authIp: true, authIdentity: true, report: true, output: true })
+  @Throttle({ fileWrite: { limit: 12, ttl: 60_000, blockDuration: 60_000 } })
   async create(@Param('employeeId', ParseUUIDPipe) employeeId: string, @Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = createHrEmployeeDocumentRequestSchema.safeParse(body); if (!parsed.success) throw new BadRequestException('Invalid employee-document request.');
     const context = await this.authorize(authorization, companyId, 'hr.employee_documents.write');
@@ -28,6 +32,9 @@ export class HrEmployeeDocumentController {
   @Post('employee-documents/:documentId/versions')
   @HttpCode(200)
   @RouteConfig({ bodyLimit: 8 * 1024 * 1024 })
+  @UseGuards(ThrottlerGuard)
+  @SkipThrottle({ authIp: true, authIdentity: true, report: true, output: true })
+  @Throttle({ fileWrite: { limit: 12, ttl: 60_000, blockDuration: 60_000 } })
   async replace(@Param('documentId', ParseUUIDPipe) documentId: string, @Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = replaceHrEmployeeDocumentRequestSchema.safeParse(body); if (!parsed.success) throw new BadRequestException('Invalid employee-document replacement request.');
     const context = await this.authorize(authorization, companyId, 'hr.employee_documents.write');

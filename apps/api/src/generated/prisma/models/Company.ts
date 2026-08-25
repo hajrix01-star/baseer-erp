@@ -312,6 +312,7 @@ export type CompanyWhereInput = {
   ledgerRevision?: Prisma.XOR<Prisma.FinanceLedgerRevisionNullableScalarRelationFilter, Prisma.FinanceLedgerRevisionWhereInput> | null
   reportRuns?: Prisma.ReportRunListRelationFilter
   reportDocuments?: Prisma.ReportDocumentListRelationFilter
+  vatSimulations?: Prisma.VatSimulationListRelationFilter
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventListRelationFilter
   cashPerformanceCoverage?: Prisma.XOR<Prisma.FinanceCashPerformanceCoverageNullableScalarRelationFilter, Prisma.FinanceCashPerformanceCoverageWhereInput> | null
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportListRelationFilter
@@ -441,6 +442,7 @@ export type CompanyOrderByWithRelationInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionOrderByWithRelationInput
   reportRuns?: Prisma.ReportRunOrderByRelationAggregateInput
   reportDocuments?: Prisma.ReportDocumentOrderByRelationAggregateInput
+  vatSimulations?: Prisma.VatSimulationOrderByRelationAggregateInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventOrderByRelationAggregateInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageOrderByWithRelationInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportOrderByRelationAggregateInput
@@ -574,6 +576,7 @@ export type CompanyWhereUniqueInput = Prisma.AtLeast<{
   ledgerRevision?: Prisma.XOR<Prisma.FinanceLedgerRevisionNullableScalarRelationFilter, Prisma.FinanceLedgerRevisionWhereInput> | null
   reportRuns?: Prisma.ReportRunListRelationFilter
   reportDocuments?: Prisma.ReportDocumentListRelationFilter
+  vatSimulations?: Prisma.VatSimulationListRelationFilter
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventListRelationFilter
   cashPerformanceCoverage?: Prisma.XOR<Prisma.FinanceCashPerformanceCoverageNullableScalarRelationFilter, Prisma.FinanceCashPerformanceCoverageWhereInput> | null
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportListRelationFilter
@@ -740,6 +743,7 @@ export type CompanyCreateInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -868,6 +872,7 @@ export type CompanyUncheckedCreateInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -996,6 +1001,7 @@ export type CompanyUpdateInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -1124,6 +1130,7 @@ export type CompanyUncheckedUpdateInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -1806,6 +1813,20 @@ export type CompanyUpdateOneRequiredWithoutReportDocumentsNestedInput = {
   upsert?: Prisma.CompanyUpsertWithoutReportDocumentsInput
   connect?: Prisma.CompanyWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutReportDocumentsInput, Prisma.CompanyUpdateWithoutReportDocumentsInput>, Prisma.CompanyUncheckedUpdateWithoutReportDocumentsInput>
+}
+
+export type CompanyCreateNestedOneWithoutVatSimulationsInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutVatSimulationsInput, Prisma.CompanyUncheckedCreateWithoutVatSimulationsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutVatSimulationsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneRequiredWithoutVatSimulationsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutVatSimulationsInput, Prisma.CompanyUncheckedCreateWithoutVatSimulationsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutVatSimulationsInput
+  upsert?: Prisma.CompanyUpsertWithoutVatSimulationsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutVatSimulationsInput, Prisma.CompanyUpdateWithoutVatSimulationsInput>, Prisma.CompanyUncheckedUpdateWithoutVatSimulationsInput>
 }
 
 export type CompanyCreateNestedOneWithoutCashPerformanceEventsInput = {
@@ -3017,6 +3038,7 @@ export type CompanyCreateWithoutTenantInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -3144,6 +3166,7 @@ export type CompanyUncheckedCreateWithoutTenantInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -3316,6 +3339,7 @@ export type CompanyCreateWithoutBrandingInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -3443,6 +3467,7 @@ export type CompanyUncheckedCreateWithoutBrandingInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -3586,6 +3611,7 @@ export type CompanyUpdateWithoutBrandingInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -3713,6 +3739,7 @@ export type CompanyUncheckedUpdateWithoutBrandingInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -3839,6 +3866,7 @@ export type CompanyCreateWithoutMembershipsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -3966,6 +3994,7 @@ export type CompanyUncheckedCreateWithoutMembershipsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -4109,6 +4138,7 @@ export type CompanyUpdateWithoutMembershipsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -4236,6 +4266,7 @@ export type CompanyUncheckedUpdateWithoutMembershipsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -4363,6 +4394,7 @@ export type CompanyCreateWithoutAuditsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -4490,6 +4522,7 @@ export type CompanyUncheckedCreateWithoutAuditsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -4633,6 +4666,7 @@ export type CompanyUpdateWithoutAuditsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -4760,6 +4794,7 @@ export type CompanyUncheckedUpdateWithoutAuditsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -4887,6 +4922,7 @@ export type CompanyCreateWithoutIdempotencyReceiptsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -5014,6 +5050,7 @@ export type CompanyUncheckedCreateWithoutIdempotencyReceiptsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -5157,6 +5194,7 @@ export type CompanyUpdateWithoutIdempotencyReceiptsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -5284,6 +5322,7 @@ export type CompanyUncheckedUpdateWithoutIdempotencyReceiptsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -5411,6 +5450,7 @@ export type CompanyCreateWithoutDocumentSerialCountersInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -5538,6 +5578,7 @@ export type CompanyUncheckedCreateWithoutDocumentSerialCountersInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -5681,6 +5722,7 @@ export type CompanyUpdateWithoutDocumentSerialCountersInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -5808,6 +5850,7 @@ export type CompanyUncheckedUpdateWithoutDocumentSerialCountersInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -5935,6 +5978,7 @@ export type CompanyCreateWithoutFileMetadataInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -6062,6 +6106,7 @@ export type CompanyUncheckedCreateWithoutFileMetadataInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -6205,6 +6250,7 @@ export type CompanyUpdateWithoutFileMetadataInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -6332,6 +6378,7 @@ export type CompanyUncheckedUpdateWithoutFileMetadataInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -6459,6 +6506,7 @@ export type CompanyCreateWithoutFinanceProfileInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -6586,6 +6634,7 @@ export type CompanyUncheckedCreateWithoutFinanceProfileInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -6729,6 +6778,7 @@ export type CompanyUpdateWithoutFinanceProfileInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -6856,6 +6906,7 @@ export type CompanyUncheckedUpdateWithoutFinanceProfileInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -6983,6 +7034,7 @@ export type CompanyCreateWithoutFinanceAccountsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -7110,6 +7162,7 @@ export type CompanyUncheckedCreateWithoutFinanceAccountsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -7253,6 +7306,7 @@ export type CompanyUpdateWithoutFinanceAccountsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -7380,6 +7434,7 @@ export type CompanyUncheckedUpdateWithoutFinanceAccountsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -7507,6 +7562,7 @@ export type CompanyCreateWithoutPnlMappingVersionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -7634,6 +7690,7 @@ export type CompanyUncheckedCreateWithoutPnlMappingVersionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -7777,6 +7834,7 @@ export type CompanyUpdateWithoutPnlMappingVersionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -7904,6 +7962,7 @@ export type CompanyUncheckedUpdateWithoutPnlMappingVersionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -8031,6 +8090,7 @@ export type CompanyCreateWithoutPnlStatementLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -8158,6 +8218,7 @@ export type CompanyUncheckedCreateWithoutPnlStatementLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -8301,6 +8362,7 @@ export type CompanyUpdateWithoutPnlStatementLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -8428,6 +8490,7 @@ export type CompanyUncheckedUpdateWithoutPnlStatementLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -8555,6 +8618,7 @@ export type CompanyCreateWithoutPnlAccountMappingsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -8682,6 +8746,7 @@ export type CompanyUncheckedCreateWithoutPnlAccountMappingsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -8825,6 +8890,7 @@ export type CompanyUpdateWithoutPnlAccountMappingsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -8952,6 +9018,7 @@ export type CompanyUncheckedUpdateWithoutPnlAccountMappingsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -9079,6 +9146,7 @@ export type CompanyCreateWithoutLedgerRevisionInput = {
   pnlAccountMappings?: Prisma.FinancePnlAccountMappingCreateNestedManyWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -9206,6 +9274,7 @@ export type CompanyUncheckedCreateWithoutLedgerRevisionInput = {
   pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedCreateNestedManyWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -9349,6 +9418,7 @@ export type CompanyUpdateWithoutLedgerRevisionInput = {
   pnlAccountMappings?: Prisma.FinancePnlAccountMappingUpdateManyWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -9476,6 +9546,7 @@ export type CompanyUncheckedUpdateWithoutLedgerRevisionInput = {
   pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedUpdateManyWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -9603,6 +9674,7 @@ export type CompanyCreateWithoutReportRunsInput = {
   pnlAccountMappings?: Prisma.FinancePnlAccountMappingCreateNestedManyWithoutCompanyInput
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -9730,6 +9802,7 @@ export type CompanyUncheckedCreateWithoutReportRunsInput = {
   pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedCreateNestedManyWithoutCompanyInput
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -9873,6 +9946,7 @@ export type CompanyUpdateWithoutReportRunsInput = {
   pnlAccountMappings?: Prisma.FinancePnlAccountMappingUpdateManyWithoutCompanyNestedInput
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -10000,6 +10074,7 @@ export type CompanyUncheckedUpdateWithoutReportRunsInput = {
   pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedUpdateManyWithoutCompanyNestedInput
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -10128,6 +10203,7 @@ export type CompanyCreateWithoutDecisionMetricDefinitionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -10255,6 +10331,7 @@ export type CompanyUncheckedCreateWithoutDecisionMetricDefinitionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -10398,6 +10475,7 @@ export type CompanyUpdateWithoutDecisionMetricDefinitionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -10525,6 +10603,7 @@ export type CompanyUncheckedUpdateWithoutDecisionMetricDefinitionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -10652,6 +10731,7 @@ export type CompanyCreateWithoutDecisionSalesChangePolicyInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -10779,6 +10859,7 @@ export type CompanyUncheckedCreateWithoutDecisionSalesChangePolicyInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -10922,6 +11003,7 @@ export type CompanyUpdateWithoutDecisionSalesChangePolicyInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -11049,6 +11131,7 @@ export type CompanyUncheckedUpdateWithoutDecisionSalesChangePolicyInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -11176,6 +11259,7 @@ export type CompanyCreateWithoutDecisionRuleDefinitionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -11303,6 +11387,7 @@ export type CompanyUncheckedCreateWithoutDecisionRuleDefinitionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -11446,6 +11531,7 @@ export type CompanyUpdateWithoutDecisionRuleDefinitionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -11573,6 +11659,7 @@ export type CompanyUncheckedUpdateWithoutDecisionRuleDefinitionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -11700,6 +11787,7 @@ export type CompanyCreateWithoutDecisionCompanyContextEventsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -11827,6 +11915,7 @@ export type CompanyUncheckedCreateWithoutDecisionCompanyContextEventsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -11970,6 +12059,7 @@ export type CompanyUpdateWithoutDecisionCompanyContextEventsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -12097,6 +12187,7 @@ export type CompanyUncheckedUpdateWithoutDecisionCompanyContextEventsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -12224,6 +12315,7 @@ export type CompanyCreateWithoutDecisionEvaluationRunsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -12351,6 +12443,7 @@ export type CompanyUncheckedCreateWithoutDecisionEvaluationRunsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -12494,6 +12587,7 @@ export type CompanyUpdateWithoutDecisionEvaluationRunsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -12621,6 +12715,7 @@ export type CompanyUncheckedUpdateWithoutDecisionEvaluationRunsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -12748,6 +12843,7 @@ export type CompanyCreateWithoutDecisionEvidenceSnapshotsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -12875,6 +12971,7 @@ export type CompanyUncheckedCreateWithoutDecisionEvidenceSnapshotsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -13018,6 +13115,7 @@ export type CompanyUpdateWithoutDecisionEvidenceSnapshotsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -13145,6 +13243,7 @@ export type CompanyUncheckedUpdateWithoutDecisionEvidenceSnapshotsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -13272,6 +13371,7 @@ export type CompanyCreateWithoutDecisionAlertsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -13399,6 +13499,7 @@ export type CompanyUncheckedCreateWithoutDecisionAlertsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -13542,6 +13643,7 @@ export type CompanyUpdateWithoutDecisionAlertsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -13669,6 +13771,7 @@ export type CompanyUncheckedUpdateWithoutDecisionAlertsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -13796,6 +13899,7 @@ export type CompanyCreateWithoutDecisionAlertActionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -13923,6 +14027,7 @@ export type CompanyUncheckedCreateWithoutDecisionAlertActionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -14066,6 +14171,7 @@ export type CompanyUpdateWithoutDecisionAlertActionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -14193,6 +14299,7 @@ export type CompanyUncheckedUpdateWithoutDecisionAlertActionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -14320,6 +14427,7 @@ export type CompanyCreateWithoutDecisionFeedbackInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -14447,6 +14555,7 @@ export type CompanyUncheckedCreateWithoutDecisionFeedbackInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -14590,6 +14699,7 @@ export type CompanyUpdateWithoutDecisionFeedbackInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -14717,6 +14827,7 @@ export type CompanyUncheckedUpdateWithoutDecisionFeedbackInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -14844,6 +14955,7 @@ export type CompanyCreateWithoutMarketingCampaignsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -14971,6 +15083,7 @@ export type CompanyUncheckedCreateWithoutMarketingCampaignsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -15114,6 +15227,7 @@ export type CompanyUpdateWithoutMarketingCampaignsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -15241,6 +15355,7 @@ export type CompanyUncheckedUpdateWithoutMarketingCampaignsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -15368,6 +15483,7 @@ export type CompanyCreateWithoutMarketingCampaignAnalysisFeedbackInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -15495,6 +15611,7 @@ export type CompanyUncheckedCreateWithoutMarketingCampaignAnalysisFeedbackInput 
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -15638,6 +15755,7 @@ export type CompanyUpdateWithoutMarketingCampaignAnalysisFeedbackInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -15765,6 +15883,7 @@ export type CompanyUncheckedUpdateWithoutMarketingCampaignAnalysisFeedbackInput 
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -15892,6 +16011,7 @@ export type CompanyCreateWithoutMarketingCampaignFinancialLinksInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -16019,6 +16139,7 @@ export type CompanyUncheckedCreateWithoutMarketingCampaignFinancialLinksInput = 
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -16162,6 +16283,7 @@ export type CompanyUpdateWithoutMarketingCampaignFinancialLinksInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -16289,6 +16411,7 @@ export type CompanyUncheckedUpdateWithoutMarketingCampaignFinancialLinksInput = 
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -16416,6 +16539,7 @@ export type CompanyCreateWithoutMarketingCampaignContextLinksInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -16543,6 +16667,7 @@ export type CompanyUncheckedCreateWithoutMarketingCampaignContextLinksInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -16686,6 +16811,7 @@ export type CompanyUpdateWithoutMarketingCampaignContextLinksInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -16813,6 +16939,7 @@ export type CompanyUncheckedUpdateWithoutMarketingCampaignContextLinksInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -16940,6 +17067,7 @@ export type CompanyCreateWithoutMarketingSalesTargetsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -17067,6 +17195,7 @@ export type CompanyUncheckedCreateWithoutMarketingSalesTargetsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -17210,6 +17339,7 @@ export type CompanyUpdateWithoutMarketingSalesTargetsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -17337,6 +17467,7 @@ export type CompanyUncheckedUpdateWithoutMarketingSalesTargetsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -17464,6 +17595,7 @@ export type CompanyCreateWithoutMarketingProviderConnectionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -17591,6 +17723,7 @@ export type CompanyUncheckedCreateWithoutMarketingProviderConnectionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -17734,6 +17867,7 @@ export type CompanyUpdateWithoutMarketingProviderConnectionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -17861,6 +17995,7 @@ export type CompanyUncheckedUpdateWithoutMarketingProviderConnectionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -17988,6 +18123,7 @@ export type CompanyCreateWithoutMarketingReputationReplyPolicyInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -18115,6 +18251,7 @@ export type CompanyUncheckedCreateWithoutMarketingReputationReplyPolicyInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -18258,6 +18395,7 @@ export type CompanyUpdateWithoutMarketingReputationReplyPolicyInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -18385,6 +18523,7 @@ export type CompanyUncheckedUpdateWithoutMarketingReputationReplyPolicyInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -18511,6 +18650,7 @@ export type CompanyCreateWithoutReportDocumentsInput = {
   pnlAccountMappings?: Prisma.FinancePnlAccountMappingCreateNestedManyWithoutCompanyInput
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -18638,6 +18778,7 @@ export type CompanyUncheckedCreateWithoutReportDocumentsInput = {
   pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedCreateNestedManyWithoutCompanyInput
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -18781,6 +18922,7 @@ export type CompanyUpdateWithoutReportDocumentsInput = {
   pnlAccountMappings?: Prisma.FinancePnlAccountMappingUpdateManyWithoutCompanyNestedInput
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -18908,6 +19050,535 @@ export type CompanyUncheckedUpdateWithoutReportDocumentsInput = {
   pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedUpdateManyWithoutCompanyNestedInput
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingSalesTargets?: Prisma.MarketingSalesTargetUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUncheckedUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollLines?: Prisma.HrPayrollLineUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
+  aiInterpretations?: Prisma.AiInterpretationUncheckedUpdateManyWithoutCompanyNestedInput
+  aiInterpretationRuns?: Prisma.AiInterpretationRunUncheckedUpdateManyWithoutCompanyNestedInput
+  aiInterpretationPlacements?: Prisma.AiInterpretationPlacementUncheckedUpdateManyWithoutCompanyNestedInput
+  aiHumanInsights?: Prisma.AiHumanInsightUncheckedUpdateManyWithoutCompanyNestedInput
+  aiBudgetReservations?: Prisma.AiBudgetReservationUncheckedUpdateManyWithoutCompanyNestedInput
+  aiUsageLedgerEntries?: Prisma.AiUsageLedgerUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaignAnalysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingProviderConnections?: Prisma.MarketingProviderConnectionUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUncheckedUpdateOneWithoutCompanyNestedInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUncheckedUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutVatSimulationsInput = {
+  id?: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: $Enums.CompanyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
+  memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionCreateNestedManyWithoutCompanyInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineCreateNestedManyWithoutCompanyInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingCreateNestedManyWithoutCompanyInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
+  reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
+  vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionCreateNestedManyWithoutCompanyInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileCreateNestedManyWithoutCompanyInput
+  marketingSalesTargets?: Prisma.MarketingSalesTargetCreateNestedManyWithoutCompanyInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionCreateNestedManyWithoutCompanyInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveCreateNestedManyWithoutCompanyInput
+  hrPayrollRuns?: Prisma.HrPayrollRunCreateNestedManyWithoutCompanyInput
+  hrPayrollLines?: Prisma.HrPayrollLineCreateNestedManyWithoutCompanyInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationCreateNestedManyWithoutCompanyInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationCreateNestedManyWithoutCompanyInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentCreateNestedManyWithoutCompanyInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
+  aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCompanyInput
+  aiInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutCompanyInput
+  aiInterpretationRuns?: Prisma.AiInterpretationRunCreateNestedManyWithoutCompanyInput
+  aiInterpretationPlacements?: Prisma.AiInterpretationPlacementCreateNestedManyWithoutCompanyInput
+  aiHumanInsights?: Prisma.AiHumanInsightCreateNestedManyWithoutCompanyInput
+  aiBudgetReservations?: Prisma.AiBudgetReservationCreateNestedManyWithoutCompanyInput
+  aiUsageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutCompanyInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
+  decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
+  decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
+  marketingCampaignAnalysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkCreateNestedManyWithoutCompanyInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkCreateNestedManyWithoutCompanyInput
+  marketingProviderConnections?: Prisma.MarketingProviderConnectionCreateNestedManyWithoutCompanyInput
+  marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyCreateNestedOneWithoutCompanyInput
+  operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
+  operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
+  operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
+  operationsItemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutCompanyInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionCreateNestedManyWithoutCompanyInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeCreateNestedManyWithoutCompanyInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionCreateNestedManyWithoutCompanyInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutCompanyInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileCreateNestedOneWithoutCompanyInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventCreateNestedManyWithoutCompanyInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceCreateNestedManyWithoutCompanyInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutVatSimulationsInput = {
+  id?: string
+  tenantId: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: $Enums.CompanyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUncheckedCreateNestedManyWithoutCompanyInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUncheckedCreateNestedManyWithoutCompanyInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedCreateNestedManyWithoutCompanyInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
+  reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedCreateNestedManyWithoutCompanyInput
+  marketingSalesTargets?: Prisma.MarketingSalesTargetUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUncheckedCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUncheckedCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollLines?: Prisma.HrPayrollLineUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
+  aiInterpretations?: Prisma.AiInterpretationUncheckedCreateNestedManyWithoutCompanyInput
+  aiInterpretationRuns?: Prisma.AiInterpretationRunUncheckedCreateNestedManyWithoutCompanyInput
+  aiInterpretationPlacements?: Prisma.AiInterpretationPlacementUncheckedCreateNestedManyWithoutCompanyInput
+  aiHumanInsights?: Prisma.AiHumanInsightUncheckedCreateNestedManyWithoutCompanyInput
+  aiBudgetReservations?: Prisma.AiBudgetReservationUncheckedCreateNestedManyWithoutCompanyInput
+  aiUsageLedgerEntries?: Prisma.AiUsageLedgerUncheckedCreateNestedManyWithoutCompanyInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaignAnalysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUncheckedCreateNestedManyWithoutCompanyInput
+  marketingProviderConnections?: Prisma.MarketingProviderConnectionUncheckedCreateNestedManyWithoutCompanyInput
+  marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
+  operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUncheckedCreateNestedManyWithoutCompanyInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUncheckedCreateNestedManyWithoutCompanyInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUncheckedCreateNestedOneWithoutCompanyInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUncheckedCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutVatSimulationsInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutVatSimulationsInput, Prisma.CompanyUncheckedCreateWithoutVatSimulationsInput>
+}
+
+export type CompanyUpsertWithoutVatSimulationsInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutVatSimulationsInput, Prisma.CompanyUncheckedUpdateWithoutVatSimulationsInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutVatSimulationsInput, Prisma.CompanyUncheckedCreateWithoutVatSimulationsInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutVatSimulationsInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutVatSimulationsInput, Prisma.CompanyUncheckedUpdateWithoutVatSimulationsInput>
+}
+
+export type CompanyUpdateWithoutVatSimulationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
+  memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUpdateManyWithoutCompanyNestedInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUpdateManyWithoutCompanyNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUpdateManyWithoutCompanyNestedInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
+  reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUpdateManyWithoutCompanyNestedInput
+  marketingSalesTargets?: Prisma.MarketingSalesTargetUpdateManyWithoutCompanyNestedInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUpdateManyWithoutCompanyNestedInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUpdateManyWithoutCompanyNestedInput
+  hrPayrollLines?: Prisma.HrPayrollLineUpdateManyWithoutCompanyNestedInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUpdateManyWithoutCompanyNestedInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUpdateManyWithoutCompanyNestedInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUpdateManyWithoutCompanyNestedInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
+  aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCompanyNestedInput
+  aiInterpretations?: Prisma.AiInterpretationUpdateManyWithoutCompanyNestedInput
+  aiInterpretationRuns?: Prisma.AiInterpretationRunUpdateManyWithoutCompanyNestedInput
+  aiInterpretationPlacements?: Prisma.AiInterpretationPlacementUpdateManyWithoutCompanyNestedInput
+  aiHumanInsights?: Prisma.AiHumanInsightUpdateManyWithoutCompanyNestedInput
+  aiBudgetReservations?: Prisma.AiBudgetReservationUpdateManyWithoutCompanyNestedInput
+  aiUsageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutCompanyNestedInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
+  decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
+  decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
+  marketingCampaignAnalysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUpdateManyWithoutCompanyNestedInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUpdateManyWithoutCompanyNestedInput
+  marketingProviderConnections?: Prisma.MarketingProviderConnectionUpdateManyWithoutCompanyNestedInput
+  marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyUpdateOneWithoutCompanyNestedInput
+  operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
+  operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
+  operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutCompanyNestedInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUpdateManyWithoutCompanyNestedInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUpdateManyWithoutCompanyNestedInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUpdateManyWithoutCompanyNestedInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutCompanyNestedInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUpdateOneWithoutCompanyNestedInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUpdateManyWithoutCompanyNestedInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUpdateManyWithoutCompanyNestedInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutVatSimulationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedUpdateManyWithoutCompanyNestedInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
+  reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -19036,6 +19707,7 @@ export type CompanyCreateWithoutCashPerformanceEventsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
   vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutCompanyInput
@@ -19163,6 +19835,7 @@ export type CompanyUncheckedCreateWithoutCashPerformanceEventsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
   vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutCompanyInput
@@ -19306,6 +19979,7 @@ export type CompanyUpdateWithoutCashPerformanceEventsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
   vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutCompanyNestedInput
@@ -19433,6 +20107,7 @@ export type CompanyUncheckedUpdateWithoutCashPerformanceEventsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
   vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutCompanyNestedInput
@@ -19560,6 +20235,7 @@ export type CompanyCreateWithoutCashPerformanceCoverageInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
   vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutCompanyInput
@@ -19687,6 +20363,7 @@ export type CompanyUncheckedCreateWithoutCashPerformanceCoverageInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
   vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutCompanyInput
@@ -19830,6 +20507,7 @@ export type CompanyUpdateWithoutCashPerformanceCoverageInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
   vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutCompanyNestedInput
@@ -19957,6 +20635,7 @@ export type CompanyUncheckedUpdateWithoutCashPerformanceCoverageInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
   vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutCompanyNestedInput
@@ -20084,6 +20763,7 @@ export type CompanyCreateWithoutCashPerformanceHistoricalImportsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutCompanyInput
@@ -20211,6 +20891,7 @@ export type CompanyUncheckedCreateWithoutCashPerformanceHistoricalImportsInput =
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutCompanyInput
@@ -20354,6 +21035,7 @@ export type CompanyUpdateWithoutCashPerformanceHistoricalImportsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutCompanyNestedInput
@@ -20481,6 +21163,7 @@ export type CompanyUncheckedUpdateWithoutCashPerformanceHistoricalImportsInput =
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutCompanyNestedInput
@@ -20608,6 +21291,7 @@ export type CompanyCreateWithoutVatSettlementsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -20735,6 +21419,7 @@ export type CompanyUncheckedCreateWithoutVatSettlementsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -20878,6 +21563,7 @@ export type CompanyUpdateWithoutVatSettlementsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -21005,6 +21691,7 @@ export type CompanyUncheckedUpdateWithoutVatSettlementsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -21131,6 +21818,7 @@ export type CompanyCreateWithoutFinanceCategoriesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -21258,6 +21946,7 @@ export type CompanyUncheckedCreateWithoutFinanceCategoriesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -21401,6 +22090,7 @@ export type CompanyUpdateWithoutFinanceCategoriesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -21528,6 +22218,7 @@ export type CompanyUncheckedUpdateWithoutFinanceCategoriesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -21655,6 +22346,7 @@ export type CompanyCreateWithoutFinanceSuppliersInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -21782,6 +22474,7 @@ export type CompanyUncheckedCreateWithoutFinanceSuppliersInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -21925,6 +22618,7 @@ export type CompanyUpdateWithoutFinanceSuppliersInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -22052,6 +22746,7 @@ export type CompanyUncheckedUpdateWithoutFinanceSuppliersInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -22179,6 +22874,7 @@ export type CompanyCreateWithoutFinanceFiscalPeriodsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -22306,6 +23002,7 @@ export type CompanyUncheckedCreateWithoutFinanceFiscalPeriodsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -22449,6 +23146,7 @@ export type CompanyUpdateWithoutFinanceFiscalPeriodsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -22576,6 +23274,7 @@ export type CompanyUncheckedUpdateWithoutFinanceFiscalPeriodsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -22703,6 +23402,7 @@ export type CompanyCreateWithoutFinanceVaultsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -22830,6 +23530,7 @@ export type CompanyUncheckedCreateWithoutFinanceVaultsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -22973,6 +23674,7 @@ export type CompanyUpdateWithoutFinanceVaultsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -23100,6 +23802,7 @@ export type CompanyUncheckedUpdateWithoutFinanceVaultsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -23227,6 +23930,7 @@ export type CompanyCreateWithoutFinanceVaultReconciliationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -23354,6 +24058,7 @@ export type CompanyUncheckedCreateWithoutFinanceVaultReconciliationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -23497,6 +24202,7 @@ export type CompanyUpdateWithoutFinanceVaultReconciliationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -23624,6 +24330,7 @@ export type CompanyUncheckedUpdateWithoutFinanceVaultReconciliationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -23751,6 +24458,7 @@ export type CompanyCreateWithoutFinanceSupplierDuesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -23878,6 +24586,7 @@ export type CompanyUncheckedCreateWithoutFinanceSupplierDuesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -24021,6 +24730,7 @@ export type CompanyUpdateWithoutFinanceSupplierDuesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -24148,6 +24858,7 @@ export type CompanyUncheckedUpdateWithoutFinanceSupplierDuesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -24275,6 +24986,7 @@ export type CompanyCreateWithoutFinanceSupplierDuePaymentsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -24402,6 +25114,7 @@ export type CompanyUncheckedCreateWithoutFinanceSupplierDuePaymentsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -24545,6 +25258,7 @@ export type CompanyUpdateWithoutFinanceSupplierDuePaymentsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -24672,6 +25386,7 @@ export type CompanyUncheckedUpdateWithoutFinanceSupplierDuePaymentsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -24799,6 +25514,7 @@ export type CompanyCreateWithoutFinanceJournalEntriesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -24926,6 +25642,7 @@ export type CompanyUncheckedCreateWithoutFinanceJournalEntriesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -25069,6 +25786,7 @@ export type CompanyUpdateWithoutFinanceJournalEntriesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -25196,6 +25914,7 @@ export type CompanyUncheckedUpdateWithoutFinanceJournalEntriesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -25323,6 +26042,7 @@ export type CompanyCreateWithoutOutflowDocumentsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -25450,6 +26170,7 @@ export type CompanyUncheckedCreateWithoutOutflowDocumentsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -25593,6 +26314,7 @@ export type CompanyUpdateWithoutOutflowDocumentsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -25720,6 +26442,7 @@ export type CompanyUncheckedUpdateWithoutOutflowDocumentsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -25847,6 +26570,7 @@ export type CompanyCreateWithoutOutflowDocumentRevisionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -25974,6 +26698,7 @@ export type CompanyUncheckedCreateWithoutOutflowDocumentRevisionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -26117,6 +26842,7 @@ export type CompanyUpdateWithoutOutflowDocumentRevisionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -26244,6 +26970,7 @@ export type CompanyUncheckedUpdateWithoutOutflowDocumentRevisionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -26372,6 +27099,7 @@ export type CompanyCreateWithoutOperationsAssetWarrantyAssetsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -26499,6 +27227,7 @@ export type CompanyUncheckedCreateWithoutOperationsAssetWarrantyAssetsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -26642,6 +27371,7 @@ export type CompanyUpdateWithoutOperationsAssetWarrantyAssetsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -26769,6 +27499,7 @@ export type CompanyUncheckedUpdateWithoutOperationsAssetWarrantyAssetsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -26896,6 +27627,7 @@ export type CompanyCreateWithoutOperationsAssetWarrantyLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -27023,6 +27755,7 @@ export type CompanyUncheckedCreateWithoutOperationsAssetWarrantyLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -27166,6 +27899,7 @@ export type CompanyUpdateWithoutOperationsAssetWarrantyLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -27293,6 +28027,7 @@ export type CompanyUncheckedUpdateWithoutOperationsAssetWarrantyLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -27419,6 +28154,7 @@ export type CompanyCreateWithoutOutflowBatchesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -27546,6 +28282,7 @@ export type CompanyUncheckedCreateWithoutOutflowBatchesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -27689,6 +28426,7 @@ export type CompanyUpdateWithoutOutflowBatchesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -27816,6 +28554,7 @@ export type CompanyUncheckedUpdateWithoutOutflowBatchesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -27944,6 +28683,7 @@ export type CompanyCreateWithoutHrEmployeesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -28071,6 +28811,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -28214,6 +28955,7 @@ export type CompanyUpdateWithoutHrEmployeesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -28341,6 +29083,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -28468,6 +29211,7 @@ export type CompanyCreateWithoutHrEmployeePromotionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -28595,6 +29339,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeePromotionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -28738,6 +29483,7 @@ export type CompanyUpdateWithoutHrEmployeePromotionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -28865,6 +29611,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeePromotionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -28992,6 +29739,7 @@ export type CompanyCreateWithoutHrEmployeeLeavesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -29119,6 +29867,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeLeavesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -29262,6 +30011,7 @@ export type CompanyUpdateWithoutHrEmployeeLeavesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -29389,6 +30139,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeLeavesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -29516,6 +30267,7 @@ export type CompanyCreateWithoutHrEmployeeDocumentBlobsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -29643,6 +30395,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeDocumentBlobsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -29786,6 +30539,7 @@ export type CompanyUpdateWithoutHrEmployeeDocumentBlobsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -29913,6 +30667,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeDocumentBlobsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -30040,6 +30795,7 @@ export type CompanyCreateWithoutHrEmployeeDocumentsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -30167,6 +30923,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeDocumentsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -30310,6 +31067,7 @@ export type CompanyUpdateWithoutHrEmployeeDocumentsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -30437,6 +31195,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeDocumentsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -30564,6 +31323,7 @@ export type CompanyCreateWithoutHrEmployeeLettersInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -30691,6 +31451,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeLettersInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -30834,6 +31595,7 @@ export type CompanyUpdateWithoutHrEmployeeLettersInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -30961,6 +31723,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeLettersInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -31088,6 +31851,7 @@ export type CompanyCreateWithoutHrEmployeeServicesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -31215,6 +31979,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeServicesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -31358,6 +32123,7 @@ export type CompanyUpdateWithoutHrEmployeeServicesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -31485,6 +32251,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeServicesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -31612,6 +32379,7 @@ export type CompanyCreateWithoutHrEmployeeFinancialMovementsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -31739,6 +32507,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeFinancialMovementsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -31882,6 +32651,7 @@ export type CompanyUpdateWithoutHrEmployeeFinancialMovementsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -32009,6 +32779,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeFinancialMovementsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -32136,6 +32907,7 @@ export type CompanyCreateWithoutHrFinalSettlementsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -32263,6 +33035,7 @@ export type CompanyUncheckedCreateWithoutHrFinalSettlementsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -32406,6 +33179,7 @@ export type CompanyUpdateWithoutHrFinalSettlementsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -32533,6 +33307,7 @@ export type CompanyUncheckedUpdateWithoutHrFinalSettlementsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -32660,6 +33435,7 @@ export type CompanyCreateWithoutHrEmployeeAdvancesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -32787,6 +33563,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvancesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -32930,6 +33707,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvancesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -33057,6 +33835,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvancesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -33184,6 +33963,7 @@ export type CompanyCreateWithoutHrEmployeeAdvanceAllocationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -33311,6 +34091,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceAllocationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -33454,6 +34235,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceAllocationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -33581,6 +34363,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceAllocationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -33708,6 +34491,7 @@ export type CompanyCreateWithoutHrEmployeeAdvanceSettlementsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -33835,6 +34619,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceSettlementsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -33978,6 +34763,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceSettlementsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -34105,6 +34891,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceSettlementsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -34232,6 +35019,7 @@ export type CompanyCreateWithoutHrEmployeeAdvanceDeferralsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -34359,6 +35147,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceDeferralsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -34502,6 +35291,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceDeferralsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -34629,6 +35419,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceDeferralsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -34756,6 +35547,7 @@ export type CompanyCreateWithoutHrEmployeeAdministrativeDeductionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -34883,6 +35675,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdministrativeDeductionsInput
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -35026,6 +35819,7 @@ export type CompanyUpdateWithoutHrEmployeeAdministrativeDeductionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -35153,6 +35947,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdministrativeDeductionsInput
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -35280,6 +36075,7 @@ export type CompanyCreateWithoutHrEmployeeAdministrativeDeductionActionsInput = 
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -35407,6 +36203,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdministrativeDeductionAction
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -35550,6 +36347,7 @@ export type CompanyUpdateWithoutHrEmployeeAdministrativeDeductionActionsInput = 
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -35677,6 +36475,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdministrativeDeductionAction
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -35804,6 +36603,7 @@ export type CompanyCreateWithoutHrEmployeeCompensationProfilesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -35931,6 +36731,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeCompensationProfilesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -36074,6 +36875,7 @@ export type CompanyUpdateWithoutHrEmployeeCompensationProfilesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -36201,6 +37003,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeCompensationProfilesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -36328,6 +37131,7 @@ export type CompanyCreateWithoutHrCompensationPoliciesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -36455,6 +37259,7 @@ export type CompanyUncheckedCreateWithoutHrCompensationPoliciesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -36598,6 +37403,7 @@ export type CompanyUpdateWithoutHrCompensationPoliciesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -36725,6 +37531,7 @@ export type CompanyUncheckedUpdateWithoutHrCompensationPoliciesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -36852,6 +37659,7 @@ export type CompanyCreateWithoutHrCompensationPolicyVersionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -36979,6 +37787,7 @@ export type CompanyUncheckedCreateWithoutHrCompensationPolicyVersionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -37122,6 +37931,7 @@ export type CompanyUpdateWithoutHrCompensationPolicyVersionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -37249,6 +38059,7 @@ export type CompanyUncheckedUpdateWithoutHrCompensationPolicyVersionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -37376,6 +38187,7 @@ export type CompanyCreateWithoutHrPayrollRunsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -37503,6 +38315,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollRunsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -37646,6 +38459,7 @@ export type CompanyUpdateWithoutHrPayrollRunsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -37773,6 +38587,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollRunsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -37900,6 +38715,7 @@ export type CompanyCreateWithoutHrPayrollLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -38027,6 +38843,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -38170,6 +38987,7 @@ export type CompanyUpdateWithoutHrPayrollLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -38297,6 +39115,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -38424,6 +39243,7 @@ export type CompanyCreateWithoutHrPayrollAdvanceApplicationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -38551,6 +39371,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollAdvanceApplicationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -38694,6 +39515,7 @@ export type CompanyUpdateWithoutHrPayrollAdvanceApplicationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -38821,6 +39643,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollAdvanceApplicationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -38948,6 +39771,7 @@ export type CompanyCreateWithoutHrPayrollDeductionApplicationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -39075,6 +39899,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollDeductionApplicationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -39218,6 +40043,7 @@ export type CompanyUpdateWithoutHrPayrollDeductionApplicationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -39345,6 +40171,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollDeductionApplicationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -39472,6 +40299,7 @@ export type CompanyCreateWithoutHrPayrollPaymentsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -39599,6 +40427,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollPaymentsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -39742,6 +40571,7 @@ export type CompanyUpdateWithoutHrPayrollPaymentsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -39869,6 +40699,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollPaymentsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -39996,6 +40827,7 @@ export type CompanyCreateWithoutHrPayrollPaymentAllocationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -40123,6 +40955,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollPaymentAllocationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -40266,6 +41099,7 @@ export type CompanyUpdateWithoutHrPayrollPaymentAllocationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -40393,6 +41227,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollPaymentAllocationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -40519,6 +41354,7 @@ export type CompanyCreateWithoutFinanceJournalLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -40646,6 +41482,7 @@ export type CompanyUncheckedCreateWithoutFinanceJournalLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -40789,6 +41626,7 @@ export type CompanyUpdateWithoutFinanceJournalLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -40916,6 +41754,7 @@ export type CompanyUncheckedUpdateWithoutFinanceJournalLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -41043,6 +41882,7 @@ export type CompanyCreateWithoutOperationalDaysInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -41170,6 +42010,7 @@ export type CompanyUncheckedCreateWithoutOperationalDaysInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -41313,6 +42154,7 @@ export type CompanyUpdateWithoutOperationalDaysInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -41440,6 +42282,7 @@ export type CompanyUncheckedUpdateWithoutOperationalDaysInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -41567,6 +42410,7 @@ export type CompanyCreateWithoutDailySalesClosingsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -41694,6 +42538,7 @@ export type CompanyUncheckedCreateWithoutDailySalesClosingsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -41837,6 +42682,7 @@ export type CompanyUpdateWithoutDailySalesClosingsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -41964,6 +42810,7 @@ export type CompanyUncheckedUpdateWithoutDailySalesClosingsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -42091,6 +42938,7 @@ export type CompanyCreateWithoutDailySalesAllocationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -42218,6 +43066,7 @@ export type CompanyUncheckedCreateWithoutDailySalesAllocationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -42361,6 +43210,7 @@ export type CompanyUpdateWithoutDailySalesAllocationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -42488,6 +43338,7 @@ export type CompanyUncheckedUpdateWithoutDailySalesAllocationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -42615,6 +43466,7 @@ export type CompanyCreateWithoutDailyFinancialSummariesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -42742,6 +43594,7 @@ export type CompanyUncheckedCreateWithoutDailyFinancialSummariesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -42885,6 +43738,7 @@ export type CompanyUpdateWithoutDailyFinancialSummariesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -43012,6 +43866,7 @@ export type CompanyUncheckedUpdateWithoutDailyFinancialSummariesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -43139,6 +43994,7 @@ export type CompanyCreateWithoutDailySalesChannelSummariesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -43266,6 +44122,7 @@ export type CompanyUncheckedCreateWithoutDailySalesChannelSummariesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -43409,6 +44266,7 @@ export type CompanyUpdateWithoutDailySalesChannelSummariesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -43536,6 +44394,7 @@ export type CompanyUncheckedUpdateWithoutDailySalesChannelSummariesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -43663,6 +44522,7 @@ export type CompanyCreateWithoutRecurringExpenseProfilesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -43790,6 +44650,7 @@ export type CompanyUncheckedCreateWithoutRecurringExpenseProfilesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -43933,6 +44794,7 @@ export type CompanyUpdateWithoutRecurringExpenseProfilesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -44060,6 +44922,7 @@ export type CompanyUncheckedUpdateWithoutRecurringExpenseProfilesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -44187,6 +45050,7 @@ export type CompanyCreateWithoutRecurringExpenseCoveragesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -44314,6 +45178,7 @@ export type CompanyUncheckedCreateWithoutRecurringExpenseCoveragesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -44457,6 +45322,7 @@ export type CompanyUpdateWithoutRecurringExpenseCoveragesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -44584,6 +45450,7 @@ export type CompanyUncheckedUpdateWithoutRecurringExpenseCoveragesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -44711,6 +45578,7 @@ export type CompanyCreateWithoutInclusiveLoansInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -44838,6 +45706,7 @@ export type CompanyUncheckedCreateWithoutInclusiveLoansInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -44981,6 +45850,7 @@ export type CompanyUpdateWithoutInclusiveLoansInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -45108,6 +45978,7 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoansInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -45235,6 +46106,7 @@ export type CompanyCreateWithoutInclusiveLoanPaymentsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -45362,6 +46234,7 @@ export type CompanyUncheckedCreateWithoutInclusiveLoanPaymentsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -45505,6 +46378,7 @@ export type CompanyUpdateWithoutInclusiveLoanPaymentsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -45632,6 +46506,7 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoanPaymentsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -45759,6 +46634,7 @@ export type CompanyCreateWithoutInclusiveLoanInstallmentsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -45886,6 +46762,7 @@ export type CompanyUncheckedCreateWithoutInclusiveLoanInstallmentsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -46029,6 +46906,7 @@ export type CompanyUpdateWithoutInclusiveLoanInstallmentsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -46156,6 +47034,7 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoanInstallmentsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -46284,6 +47163,7 @@ export type CompanyCreateWithoutAiCompanyIdentitiesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -46411,6 +47291,7 @@ export type CompanyUncheckedCreateWithoutAiCompanyIdentitiesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -46554,6 +47435,7 @@ export type CompanyUpdateWithoutAiCompanyIdentitiesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -46681,6 +47563,7 @@ export type CompanyUncheckedUpdateWithoutAiCompanyIdentitiesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -46808,6 +47691,7 @@ export type CompanyCreateWithoutAiCompanyContextsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -46935,6 +47819,7 @@ export type CompanyUncheckedCreateWithoutAiCompanyContextsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -47078,6 +47963,7 @@ export type CompanyUpdateWithoutAiCompanyContextsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -47205,6 +48091,7 @@ export type CompanyUncheckedUpdateWithoutAiCompanyContextsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -47332,6 +48219,7 @@ export type CompanyCreateWithoutAiSkillActivationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -47459,6 +48347,7 @@ export type CompanyUncheckedCreateWithoutAiSkillActivationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -47602,6 +48491,7 @@ export type CompanyUpdateWithoutAiSkillActivationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -47729,6 +48619,7 @@ export type CompanyUncheckedUpdateWithoutAiSkillActivationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -47856,6 +48747,7 @@ export type CompanyCreateWithoutAiExecutionReceiptsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -47983,6 +48875,7 @@ export type CompanyUncheckedCreateWithoutAiExecutionReceiptsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -48126,6 +49019,7 @@ export type CompanyUpdateWithoutAiExecutionReceiptsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -48253,6 +49147,7 @@ export type CompanyUncheckedUpdateWithoutAiExecutionReceiptsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -48380,6 +49275,7 @@ export type CompanyCreateWithoutAiInterpretationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -48507,6 +49403,7 @@ export type CompanyUncheckedCreateWithoutAiInterpretationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -48650,6 +49547,7 @@ export type CompanyUpdateWithoutAiInterpretationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -48777,6 +49675,7 @@ export type CompanyUncheckedUpdateWithoutAiInterpretationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -48904,6 +49803,7 @@ export type CompanyCreateWithoutAiInterpretationRunsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -49031,6 +49931,7 @@ export type CompanyUncheckedCreateWithoutAiInterpretationRunsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -49174,6 +50075,7 @@ export type CompanyUpdateWithoutAiInterpretationRunsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -49301,6 +50203,7 @@ export type CompanyUncheckedUpdateWithoutAiInterpretationRunsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -49428,6 +50331,7 @@ export type CompanyCreateWithoutAiBudgetReservationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -49555,6 +50459,7 @@ export type CompanyUncheckedCreateWithoutAiBudgetReservationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -49698,6 +50603,7 @@ export type CompanyUpdateWithoutAiBudgetReservationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -49825,6 +50731,7 @@ export type CompanyUncheckedUpdateWithoutAiBudgetReservationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -49952,6 +50859,7 @@ export type CompanyCreateWithoutAiUsageLedgerEntriesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -50079,6 +50987,7 @@ export type CompanyUncheckedCreateWithoutAiUsageLedgerEntriesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -50222,6 +51131,7 @@ export type CompanyUpdateWithoutAiUsageLedgerEntriesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -50349,6 +51259,7 @@ export type CompanyUncheckedUpdateWithoutAiUsageLedgerEntriesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -50476,6 +51387,7 @@ export type CompanyCreateWithoutAiInterpretationPlacementsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -50603,6 +51515,7 @@ export type CompanyUncheckedCreateWithoutAiInterpretationPlacementsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -50746,6 +51659,7 @@ export type CompanyUpdateWithoutAiInterpretationPlacementsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -50873,6 +51787,7 @@ export type CompanyUncheckedUpdateWithoutAiInterpretationPlacementsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -51000,6 +51915,7 @@ export type CompanyCreateWithoutAiHumanInsightsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -51127,6 +52043,7 @@ export type CompanyUncheckedCreateWithoutAiHumanInsightsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -51270,6 +52187,7 @@ export type CompanyUpdateWithoutAiHumanInsightsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -51397,6 +52315,7 @@ export type CompanyUncheckedUpdateWithoutAiHumanInsightsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -51524,6 +52443,7 @@ export type CompanyCreateWithoutAiEvaluationFeedbackInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -51651,6 +52571,7 @@ export type CompanyUncheckedCreateWithoutAiEvaluationFeedbackInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -51794,6 +52715,7 @@ export type CompanyUpdateWithoutAiEvaluationFeedbackInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -51921,6 +52843,7 @@ export type CompanyUncheckedUpdateWithoutAiEvaluationFeedbackInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -52048,6 +52971,7 @@ export type CompanyCreateWithoutAiSkillEvaluationRunsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -52175,6 +53099,7 @@ export type CompanyUncheckedCreateWithoutAiSkillEvaluationRunsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -52318,6 +53243,7 @@ export type CompanyUpdateWithoutAiSkillEvaluationRunsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -52445,6 +53371,7 @@ export type CompanyUncheckedUpdateWithoutAiSkillEvaluationRunsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -52572,6 +53499,7 @@ export type CompanyCreateWithoutOperationsSectionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -52699,6 +53627,7 @@ export type CompanyUncheckedCreateWithoutOperationsSectionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -52842,6 +53771,7 @@ export type CompanyUpdateWithoutOperationsSectionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -52969,6 +53899,7 @@ export type CompanyUncheckedUpdateWithoutOperationsSectionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -53096,6 +54027,7 @@ export type CompanyCreateWithoutOperationsUnitsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -53223,6 +54155,7 @@ export type CompanyUncheckedCreateWithoutOperationsUnitsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -53366,6 +54299,7 @@ export type CompanyUpdateWithoutOperationsUnitsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -53493,6 +54427,7 @@ export type CompanyUncheckedUpdateWithoutOperationsUnitsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -53620,6 +54555,7 @@ export type CompanyCreateWithoutOperationsItemsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -53747,6 +54683,7 @@ export type CompanyUncheckedCreateWithoutOperationsItemsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -53890,6 +54827,7 @@ export type CompanyUpdateWithoutOperationsItemsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -54017,6 +54955,7 @@ export type CompanyUncheckedUpdateWithoutOperationsItemsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -54144,6 +55083,7 @@ export type CompanyCreateWithoutOperationsItemUnitsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -54271,6 +55211,7 @@ export type CompanyUncheckedCreateWithoutOperationsItemUnitsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -54414,6 +55355,7 @@ export type CompanyUpdateWithoutOperationsItemUnitsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -54541,6 +55483,7 @@ export type CompanyUncheckedUpdateWithoutOperationsItemUnitsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -54668,6 +55611,7 @@ export type CompanyCreateWithoutOperationsConversionVersionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -54795,6 +55739,7 @@ export type CompanyUncheckedCreateWithoutOperationsConversionVersionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -54938,6 +55883,7 @@ export type CompanyUpdateWithoutOperationsConversionVersionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -55065,6 +56011,7 @@ export type CompanyUncheckedUpdateWithoutOperationsConversionVersionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -55192,6 +56139,7 @@ export type CompanyCreateWithoutOperationsConversionEdgesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -55319,6 +56267,7 @@ export type CompanyUncheckedCreateWithoutOperationsConversionEdgesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -55462,6 +56411,7 @@ export type CompanyUpdateWithoutOperationsConversionEdgesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -55589,6 +56539,7 @@ export type CompanyUncheckedUpdateWithoutOperationsConversionEdgesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -55716,6 +56667,7 @@ export type CompanyCreateWithoutOperationsInternalRegistrationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -55843,6 +56795,7 @@ export type CompanyUncheckedCreateWithoutOperationsInternalRegistrationsInput = 
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -55986,6 +56939,7 @@ export type CompanyUpdateWithoutOperationsInternalRegistrationsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -56113,6 +57067,7 @@ export type CompanyUncheckedUpdateWithoutOperationsInternalRegistrationsInput = 
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -56240,6 +57195,7 @@ export type CompanyCreateWithoutOperationsInternalRegistrationLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -56367,6 +57323,7 @@ export type CompanyUncheckedCreateWithoutOperationsInternalRegistrationLinesInpu
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -56510,6 +57467,7 @@ export type CompanyUpdateWithoutOperationsInternalRegistrationLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -56637,6 +57595,7 @@ export type CompanyUncheckedUpdateWithoutOperationsInternalRegistrationLinesInpu
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -56764,6 +57723,7 @@ export type CompanyCreateWithoutOperationsInternalRegistrationConsumptionsInput 
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -56891,6 +57851,7 @@ export type CompanyUncheckedCreateWithoutOperationsInternalRegistrationConsumpti
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -57034,6 +57995,7 @@ export type CompanyUpdateWithoutOperationsInternalRegistrationConsumptionsInput 
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -57161,6 +58123,7 @@ export type CompanyUncheckedUpdateWithoutOperationsInternalRegistrationConsumpti
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -57288,6 +58251,7 @@ export type CompanyCreateWithoutOperationsRecipeVersionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -57415,6 +58379,7 @@ export type CompanyUncheckedCreateWithoutOperationsRecipeVersionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -57558,6 +58523,7 @@ export type CompanyUpdateWithoutOperationsRecipeVersionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -57685,6 +58651,7 @@ export type CompanyUncheckedUpdateWithoutOperationsRecipeVersionsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -57812,6 +58779,7 @@ export type CompanyCreateWithoutOperationsRecipeLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -57939,6 +58907,7 @@ export type CompanyUncheckedCreateWithoutOperationsRecipeLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -58082,6 +59051,7 @@ export type CompanyUpdateWithoutOperationsRecipeLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -58209,6 +59179,7 @@ export type CompanyUncheckedUpdateWithoutOperationsRecipeLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -58336,6 +59307,7 @@ export type CompanyCreateWithoutOperationsPurchaseRequestsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -58463,6 +59435,7 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseRequestsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -58606,6 +59579,7 @@ export type CompanyUpdateWithoutOperationsPurchaseRequestsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -58733,6 +59707,7 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseRequestsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -58860,6 +59835,7 @@ export type CompanyCreateWithoutOperationsPurchaseRequestLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -58987,6 +59963,7 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseRequestLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -59130,6 +60107,7 @@ export type CompanyUpdateWithoutOperationsPurchaseRequestLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -59257,6 +60235,7 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseRequestLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -59384,6 +60363,7 @@ export type CompanyCreateWithoutOperationsPurchaseReceiptsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -59511,6 +60491,7 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseReceiptsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -59654,6 +60635,7 @@ export type CompanyUpdateWithoutOperationsPurchaseReceiptsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -59781,6 +60763,7 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseReceiptsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -59908,6 +60891,7 @@ export type CompanyCreateWithoutOperationsPurchaseReceiptLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -60035,6 +61019,7 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseReceiptLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -60178,6 +61163,7 @@ export type CompanyUpdateWithoutOperationsPurchaseReceiptLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -60305,6 +61291,7 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseReceiptLinesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -60432,6 +61419,7 @@ export type CompanyCreateWithoutOperationsCustodyProfileInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -60559,6 +61547,7 @@ export type CompanyUncheckedCreateWithoutOperationsCustodyProfileInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -60702,6 +61691,7 @@ export type CompanyUpdateWithoutOperationsCustodyProfileInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -60829,6 +61819,7 @@ export type CompanyUncheckedUpdateWithoutOperationsCustodyProfileInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -60956,6 +61947,7 @@ export type CompanyCreateWithoutOperationsCustodyEventsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -61083,6 +62075,7 @@ export type CompanyUncheckedCreateWithoutOperationsCustodyEventsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -61226,6 +62219,7 @@ export type CompanyUpdateWithoutOperationsCustodyEventsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -61353,6 +62347,7 @@ export type CompanyUncheckedUpdateWithoutOperationsCustodyEventsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -61480,6 +62475,7 @@ export type CompanyCreateWithoutOperationsInventoryBalancesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -61607,6 +62603,7 @@ export type CompanyUncheckedCreateWithoutOperationsInventoryBalancesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -61750,6 +62747,7 @@ export type CompanyUpdateWithoutOperationsInventoryBalancesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -61877,6 +62875,7 @@ export type CompanyUncheckedUpdateWithoutOperationsInventoryBalancesInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -62004,6 +63003,7 @@ export type CompanyCreateWithoutOperationsInventoryMovementsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
@@ -62131,6 +63131,7 @@ export type CompanyUncheckedCreateWithoutOperationsInventoryMovementsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
   reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
   reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
@@ -62274,6 +63275,7 @@ export type CompanyUpdateWithoutOperationsInventoryMovementsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -62401,6 +63403,7 @@ export type CompanyUncheckedUpdateWithoutOperationsInventoryMovementsInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -62541,6 +63544,7 @@ export type CompanyUpdateWithoutTenantInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
@@ -62668,6 +63672,7 @@ export type CompanyUncheckedUpdateWithoutTenantInput = {
   ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
   reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
   reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
   cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
@@ -62801,6 +63806,7 @@ export type CompanyCountOutputType = {
   pnlAccountMappings: number
   reportRuns: number
   reportDocuments: number
+  vatSimulations: number
   cashPerformanceEvents: number
   cashPerformanceHistoricalImports: number
   vatSettlements: number
@@ -62910,6 +63916,7 @@ export type CompanyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   pnlAccountMappings?: boolean | CompanyCountOutputTypeCountPnlAccountMappingsArgs
   reportRuns?: boolean | CompanyCountOutputTypeCountReportRunsArgs
   reportDocuments?: boolean | CompanyCountOutputTypeCountReportDocumentsArgs
+  vatSimulations?: boolean | CompanyCountOutputTypeCountVatSimulationsArgs
   cashPerformanceEvents?: boolean | CompanyCountOutputTypeCountCashPerformanceEventsArgs
   cashPerformanceHistoricalImports?: boolean | CompanyCountOutputTypeCountCashPerformanceHistoricalImportsArgs
   vatSettlements?: boolean | CompanyCountOutputTypeCountVatSettlementsArgs
@@ -63224,6 +64231,13 @@ export type CompanyCountOutputTypeCountReportRunsArgs<ExtArgs extends runtime.Ty
  */
 export type CompanyCountOutputTypeCountReportDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ReportDocumentWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountVatSimulationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VatSimulationWhereInput
 }
 
 /**
@@ -63787,6 +64801,7 @@ export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   ledgerRevision?: boolean | Prisma.Company$ledgerRevisionArgs<ExtArgs>
   reportRuns?: boolean | Prisma.Company$reportRunsArgs<ExtArgs>
   reportDocuments?: boolean | Prisma.Company$reportDocumentsArgs<ExtArgs>
+  vatSimulations?: boolean | Prisma.Company$vatSimulationsArgs<ExtArgs>
   cashPerformanceEvents?: boolean | Prisma.Company$cashPerformanceEventsArgs<ExtArgs>
   cashPerformanceCoverage?: boolean | Prisma.Company$cashPerformanceCoverageArgs<ExtArgs>
   cashPerformanceHistoricalImports?: boolean | Prisma.Company$cashPerformanceHistoricalImportsArgs<ExtArgs>
@@ -63953,6 +64968,7 @@ export type CompanyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   ledgerRevision?: boolean | Prisma.Company$ledgerRevisionArgs<ExtArgs>
   reportRuns?: boolean | Prisma.Company$reportRunsArgs<ExtArgs>
   reportDocuments?: boolean | Prisma.Company$reportDocumentsArgs<ExtArgs>
+  vatSimulations?: boolean | Prisma.Company$vatSimulationsArgs<ExtArgs>
   cashPerformanceEvents?: boolean | Prisma.Company$cashPerformanceEventsArgs<ExtArgs>
   cashPerformanceCoverage?: boolean | Prisma.Company$cashPerformanceCoverageArgs<ExtArgs>
   cashPerformanceHistoricalImports?: boolean | Prisma.Company$cashPerformanceHistoricalImportsArgs<ExtArgs>
@@ -64079,6 +65095,7 @@ export type $CompanyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     ledgerRevision: Prisma.$FinanceLedgerRevisionPayload<ExtArgs> | null
     reportRuns: Prisma.$ReportRunPayload<ExtArgs>[]
     reportDocuments: Prisma.$ReportDocumentPayload<ExtArgs>[]
+    vatSimulations: Prisma.$VatSimulationPayload<ExtArgs>[]
     cashPerformanceEvents: Prisma.$FinanceCashPerformanceEventPayload<ExtArgs>[]
     cashPerformanceCoverage: Prisma.$FinanceCashPerformanceCoveragePayload<ExtArgs> | null
     cashPerformanceHistoricalImports: Prisma.$FinanceCashPerformanceHistoricalImportPayload<ExtArgs>[]
@@ -64601,6 +65618,7 @@ export interface Prisma__CompanyClient<T, Null = never, ExtArgs extends runtime.
   ledgerRevision<T extends Prisma.Company$ledgerRevisionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$ledgerRevisionArgs<ExtArgs>>): Prisma.Prisma__FinanceLedgerRevisionClient<runtime.Types.Result.GetResult<Prisma.$FinanceLedgerRevisionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   reportRuns<T extends Prisma.Company$reportRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$reportRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReportRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reportDocuments<T extends Prisma.Company$reportDocumentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$reportDocumentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReportDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  vatSimulations<T extends Prisma.Company$vatSimulationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$vatSimulationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VatSimulationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   cashPerformanceEvents<T extends Prisma.Company$cashPerformanceEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$cashPerformanceEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceCashPerformanceEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   cashPerformanceCoverage<T extends Prisma.Company$cashPerformanceCoverageArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$cashPerformanceCoverageArgs<ExtArgs>>): Prisma.Prisma__FinanceCashPerformanceCoverageClient<runtime.Types.Result.GetResult<Prisma.$FinanceCashPerformanceCoveragePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   cashPerformanceHistoricalImports<T extends Prisma.Company$cashPerformanceHistoricalImportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$cashPerformanceHistoricalImportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceCashPerformanceHistoricalImportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -65948,6 +66966,30 @@ export type Company$reportDocumentsArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.ReportDocumentScalarFieldEnum | Prisma.ReportDocumentScalarFieldEnum[]
+}
+
+/**
+ * Company.vatSimulations
+ */
+export type Company$vatSimulationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the VatSimulation
+   */
+  select?: Prisma.VatSimulationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the VatSimulation
+   */
+  omit?: Prisma.VatSimulationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VatSimulationInclude<ExtArgs> | null
+  where?: Prisma.VatSimulationWhereInput
+  orderBy?: Prisma.VatSimulationOrderByWithRelationInput | Prisma.VatSimulationOrderByWithRelationInput[]
+  cursor?: Prisma.VatSimulationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VatSimulationScalarFieldEnum | Prisma.VatSimulationScalarFieldEnum[]
 }
 
 /**

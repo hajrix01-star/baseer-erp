@@ -1,5 +1,6 @@
-import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Param, Post, Query, UnauthorizedException } from '@nestjs/common';
-import { companyIdSchema, personalCashPerformanceCoverageRequestSchema, personalCashPerformanceEvidenceQuerySchema, personalCashPerformanceEvidenceReceiptSchema, personalCashPerformanceRequestSchema, personalCashPerformanceResultSchema, personalCashPerformanceSourceReceiptSchema } from '@baseer-erp/contracts';
+import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Param, Post, Query, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { SkipThrottle, Throttle, ThrottlerGuard } from '@nestjs/throttler';
+import { companyIdSchema, personalCashPerformanceCoverageRequestSchema, personalCashPerformanceEvidenceQuerySchema, personalCashPerformanceEvidenceReceiptSchema, personalCashPerformanceLiveEvidenceReceiptSchema, personalCashPerformanceRequestSchema, personalCashPerformanceResultSchema, personalCashPerformanceSourceReceiptSchema } from '@baseer-erp/contracts';
 
 import { CompanyContextService } from '../company-context/company-context.service.js';
 import { CashPerformanceCoverageService } from './cash-performance-coverage.service.js';
@@ -9,6 +10,9 @@ import { REPORTS_READ_CAPABILITY } from './report-catalog.service.js';
 const CASH_PERFORMANCE_ACTIVATE_CAPABILITY = 'reports.cash_performance.activate';
 
 @Controller('reports')
+@UseGuards(ThrottlerGuard)
+@SkipThrottle({ authIp: true, authIdentity: true, output: true, fileWrite: true })
+@Throttle({ report: { limit: 60, ttl: 60_000, blockDuration: 60_000 } })
 export class ReportsController {
   constructor(
     private readonly companyContexts: CompanyContextService,
@@ -46,6 +50,35 @@ export class ReportsController {
     ));
   }
 
+  @Get('personal-cash-performance/live/evidence')
+  async personalCashPerformanceLiveEvidence(
+    @Query() query: Record<string, unknown>,
+    @Headers('authorization') authorization?: string,
+    @Headers('x-baseer-company-id') companyId?: string,
+  ) {
+    const request = liveEvidenceRequest(query);
+    const parsed = personalCashPerformanceEvidenceQuerySchema.safeParse({ rowCode: query.rowCode, ...(typeof query.cursor === 'string' ? { cursor: query.cursor } : {}) });
+    if (!parsed.success) throw new BadRequestException('Invalid live report evidence request.');
+    return personalCashPerformanceLiveEvidenceReceiptSchema.parse(await this.cashPerformance.liveEvidence(
+      await this.context(authorization, companyId, REPORTS_READ_CAPABILITY), request, parsed.data.rowCode, parsed.data.cursor,
+    ));
+  }
+
+  @Get('personal-cash-performance/live/evidence/:eventId/source')
+  async personalCashPerformanceLiveSource(
+    @Param('eventId') eventId: string,
+    @Query() query: Record<string, unknown>,
+    @Headers('authorization') authorization?: string,
+    @Headers('x-baseer-company-id') companyId?: string,
+  ) {
+    if (!companyIdSchema.safeParse(eventId).success) throw new BadRequestException('Invalid report source event.');
+    return personalCashPerformanceSourceReceiptSchema.parse(await this.cashPerformance.liveSourceJournal(
+      await this.context(authorization, companyId, REPORTS_READ_CAPABILITY), liveEvidenceRequest(query), eventId,
+    ));
+  }
+
+  // Static live routes must be registered before :reportRunId so Fastify
+  // never interprets the literal "live" as a saved report-run identifier.
   @Get('personal-cash-performance/:reportRunId/evidence')
   async personalCashPerformanceEvidence(
     @Param('reportRunId') reportRunId: string,
@@ -93,4 +126,15 @@ function parseBoolean(value: string | undefined, fallback: boolean): boolean {
   if (value === 'true') return true;
   if (value === 'false') return false;
   throw new BadRequestException('vatInclusive must be true or false.');
+}
+function liveEvidenceRequest(query: Record<string, unknown>) {
+  const months = Array.isArray(query.months) ? query.months : typeof query.months === 'string' ? query.months.split(',').filter(Boolean) : undefined;
+  const request = personalCashPerformanceRequestSchema.safeParse({
+    from: query.from,
+    to: query.to,
+    ...(months?.length ? { months } : {}),
+    vatInclusive: parseBoolean(typeof query.vatInclusive === 'string' ? query.vatInclusive : undefined, true),
+  });
+  if (!request.success) throw new BadRequestException('Invalid live report evidence request.');
+  return { from: parseDate(request.data.from), to: parseDate(request.data.to), ...(request.data.months ? { months: request.data.months } : {}), vatInclusive: request.data.vatInclusive };
 }

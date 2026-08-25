@@ -49,14 +49,7 @@ export class LedgerTrialBalanceReportService {
     if (!source.company || !source.profile) return { state: 'NOT_READY' as const, messageAr: 'هذا التقرير غير متاح بعد لأن إعداد الشركة المالي غير مكتمل.' };
     if (source.accountCount > MAX_INTERACTIVE_ACCOUNTS) return { state: 'RANGE_EXCEEDS_INTERACTIVE_LIMIT' as const, messageAr: 'عدد الحسابات أكبر من الحد التفاعلي لميزان المراجعة. استخدم مخرجاً خادمياً عند توفره.' };
 
-    const run = await this.reportRuns.create(context, {
-      reportCode: REPORT_CODE,
-      definitionVersion: DEFINITION_VERSION,
-      canonicalOptions: { from: dateText(request.from), to: dateText(request.to), includeZeroRows: request.includeZeroRows },
-      economicAsOfDate: request.to,
-      sourceCoverage: { sourceKind: 'sealed_ledger', projection: 'none', freshness: 'NOT_APPLICABLE' },
-    });
-    const ledgerRevision = BigInt(run.ledgerRevision);
+    const ledgerRevision = await this.reportRuns.currentLedgerRevision(context);
     const { accounts, opening, period } = await this.database.inTenantTransaction(context.tenantId, async (transaction) => {
       const eligible = ledgerPredicate(context, ledgerRevision);
       const lineWhere = { tenantId: context.tenantId, companyId: context.companyId } satisfies Prisma.FinanceJournalLineWhereInput;
@@ -86,7 +79,7 @@ export class LedgerTrialBalanceReportService {
       .sort((left, right) => left.account.type.localeCompare(right.account.type) || left.account.code.localeCompare(right.account.code));
     const totals = rows.reduce<TrialAmounts>((sum, row) => addAmounts(sum, row.amounts), zeroAmounts());
     assertBalanced(totals);
-    const metadata = metadataFor({ company: source.company, profile: source.profile }, request, run);
+    const metadata = metadataFor({ company: source.company, profile: source.profile }, request, ledgerRevision);
     if (!rows.length) {
       return { state: 'NO_DATA' as const, messageAr: 'لا توجد حسابات مؤهلة ضمن الفترة المحددة.', ...metadata, rows: [], totals: displayAmounts(totals) };
     }
@@ -99,6 +92,20 @@ export class LedgerTrialBalanceReportService {
       })),
       totals: displayAmounts(totals),
     };
+  }
+
+  /** Creates the immutable boundary only when the caller is producing an official output. */
+  async issueOfficialRun(context: TrustedCompanyActorContext, request: TrialBalanceRequest) {
+    assertPeriod(request);
+    const current = await this.dates.currentForTrustedContext(context);
+    if (request.to > businessDate(current.businessDate)) throw new BadRequestException('The Trial Balance end date cannot be after the current business date.');
+    return this.reportRuns.create(context, {
+      reportCode: REPORT_CODE,
+      definitionVersion: DEFINITION_VERSION,
+      canonicalOptions: { from: dateText(request.from), to: dateText(request.to), includeZeroRows: request.includeZeroRows },
+      economicAsOfDate: request.to,
+      sourceCoverage: { sourceKind: 'sealed_ledger', projection: 'none', freshness: 'NOT_APPLICABLE' },
+    });
   }
 
   async evidence(context: TrustedCompanyActorContext, reportRunId: string, accountId: string, scope: 'OPENING' | 'PERIOD' | 'CLOSING', cursor?: string) {
@@ -241,7 +248,7 @@ function displayAmounts(value: TrialAmounts) { return { openingDebit: money(valu
 function isZero(value: TrialAmounts) { return Object.values(value).every((amount) => amount.isZero()); }
 export function isEligibleTrialBalanceAccount(account: { status: string; isSystem: boolean }, hasHistoricalEvidence: boolean, amounts: TrialAmounts, includeZeroRows: boolean) { if (!(account.status === 'ACTIVE' || account.isSystem || hasHistoricalEvidence)) return false; return includeZeroRows || account.isSystem || !isZero(amounts); }
 function assertBalanced(value: TrialAmounts) { for (const [debit, credit] of [['openingDebit', 'openingCredit'], ['periodDebit', 'periodCredit'], ['closingDebit', 'closingCredit']] as const) if (!value[debit].equals(value[credit])) throw new BadRequestException('The Trial Balance is not balanced for the eligible ledger scope.'); }
-function metadataFor(source: { company: { nameAr: string; nameEn: string; businessTimezone: string }; profile: { functionalCurrencyCode: string } }, request: TrialBalanceRequest, run: { reportRunId: string; ledgerRevision: string; checksum: string }) { return { reportCode: REPORT_CODE, definitionVersion: DEFINITION_VERSION, reportRunId: run.reportRunId, ledgerRevision: run.ledgerRevision, runChecksum: run.checksum, company: { displayName: source.company.nameAr || source.company.nameEn, functionalCurrency: source.profile.functionalCurrencyCode }, businessTimezone: source.company.businessTimezone, selectedPeriod: { from: dateText(request.from), to: dateText(request.to) }, economicAsOfDate: dateText(request.to), basisLabelAr: 'دفتر الأستاذ — القيود المختومة', sourceKindAr: 'قيود دفتر مختومة', cancellationTreatmentAr: 'يبقى أصل العملية في تاريخه الاقتصادي، ويبدأ أثر الإلغاء من تاريخ عمل قيد الإلغاء.', dataCoverage: { state: 'COMPLETE' as const }, reconciliation: { state: 'RECONCILED' as const, messageAr: 'تساوت إجماليات المدين والدائن للافتتاح والحركة والختام.' }, roundingRule: 'تُحسب المبالغ بأربع منازل عشرية وتُعرض بمنزلتين عشريتين.' }; }
+function metadataFor(source: { company: { nameAr: string; nameEn: string; businessTimezone: string }; profile: { functionalCurrencyCode: string } }, request: TrialBalanceRequest, ledgerRevision: bigint) { return { reportCode: REPORT_CODE, definitionVersion: DEFINITION_VERSION, dataMode: 'LIVE' as const, ledgerRevision: ledgerRevision.toString(), company: { displayName: source.company.nameAr || source.company.nameEn, functionalCurrency: source.profile.functionalCurrencyCode }, businessTimezone: source.company.businessTimezone, selectedPeriod: { from: dateText(request.from), to: dateText(request.to) }, economicAsOfDate: dateText(request.to), basisLabelAr: 'دفتر الأستاذ — القيود المختومة', sourceKindAr: 'قيود دفتر مختومة', cancellationTreatmentAr: 'يبقى أصل العملية في تاريخه الاقتصادي، ويبدأ أثر الإلغاء من تاريخ عمل قيد الإلغاء.', dataCoverage: { state: 'COMPLETE' as const }, reconciliation: { state: 'RECONCILED' as const, messageAr: 'تساوت إجماليات المدين والدائن للافتتاح والحركة والختام.' }, roundingRule: 'تُحسب المبالغ بأربع منازل عشرية وتُعرض بمنزلتين عشريتين.' }; }
 function scopeDateFilter(scope: 'OPENING' | 'PERIOD' | 'CLOSING', request: TrialBalanceRequest) { return scope === 'OPENING' ? { lt: request.from } : scope === 'PERIOD' ? { gte: request.from, lte: request.to } : { lte: request.to }; }
 function journalLabel(entry: { sourceType: string; sourceReference: string }) { return entry.sourceType === 'journal_reversal' ? { labelAr: `إلغاء ${entry.sourceReference}`, labelEn: `Cancellation ${entry.sourceReference}` } : { labelAr: 'قيد أو تسوية', labelEn: 'Journal or adjustment' }; }
 function cancellationLabel(entry: { sourceType: string; reversalEntry?: { ledgerRevision: bigint } | null }, reportRevision: bigint) { if (entry.sourceType === 'journal_reversal') return 'قيد إلغاء'; return entry.reversalEntry && entry.reversalEntry.ledgerRevision <= reportRevision ? 'ملغى' : null; }

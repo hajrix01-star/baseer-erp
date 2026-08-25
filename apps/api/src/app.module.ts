@@ -68,6 +68,8 @@ import { LedgerTrialBalanceController } from './reports/ledger-trial-balance.con
 import { LedgerTrialBalanceReportService } from './reports/ledger-trial-balance-report.service.js';
 import { InternalVatReportController } from './reports/internal-vat-report.controller.js';
 import { InternalVatReportService } from './reports/internal-vat-report.service.js';
+import { VatSimulationController } from './reports/vat-simulation.controller.js';
+import { VatSimulationService } from './reports/vat-simulation.service.js';
 import { ReportDocumentController } from './reports/report-document.controller.js';
 import { ReportDocumentService } from './reports/report-document.service.js';
 import { FinanceCashPerformanceEventService } from './finance/finance-cash-performance-event.service.js';
@@ -133,6 +135,7 @@ import { InboundEvidenceDocumentIntelligenceService } from './inbound-evidence/i
 import { OwnerDailyBriefController } from './owner-daily-brief/owner-daily-brief.controller.js';
 import { OwnerDailyBriefService } from './owner-daily-brief/owner-daily-brief.service.js';
 import { OwnerDailyBriefSchedulerService } from './owner-daily-brief/owner-daily-brief-scheduler.service.js';
+import { OfficialReportRunsController } from './reports/official-report-runs.controller.js';
 
 @Module({
   imports: [
@@ -142,10 +145,15 @@ import { OwnerDailyBriefSchedulerService } from './owner-daily-brief/owner-daily
       throttlers: [
         { name: 'authIp', limit: 10, ttl: 900_000, blockDuration: 900_000 },
         { name: 'authIdentity', limit: 5, ttl: 900_000, blockDuration: 900_000 },
+        // A single private API instance can use in-process limits safely. If
+        // deployments gain replicas, move these named policies to shared storage.
+        { name: 'report', limit: 60, ttl: 60_000, blockDuration: 60_000 },
+        { name: 'output', limit: 20, ttl: 60_000, blockDuration: 60_000 },
+        { name: 'fileWrite', limit: 12, ttl: 60_000, blockDuration: 60_000 },
       ],
     }),
   ],
-  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController, HrOverviewController, ReportCatalogController, ReportsController, LedgerTrialBalanceController, InternalVatReportController, ReportDocumentController, OperationsCatalogController, OperationsExecutionController, OperationsInternalRegistrationController, OperationsAssetsWarrantyController, OperationsOverviewController, DecisionIntelligenceController, MarketingController, InboundEvidenceController, OwnerDailyBriefController],
+  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinanceAccountsController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController, HrOverviewController, ReportCatalogController, ReportsController, LedgerTrialBalanceController, InternalVatReportController, VatSimulationController, ReportDocumentController, OfficialReportRunsController, OperationsCatalogController, OperationsExecutionController, OperationsInternalRegistrationController, OperationsAssetsWarrantyController, OperationsOverviewController, DecisionIntelligenceController, MarketingController, InboundEvidenceController, OwnerDailyBriefController],
   providers: [
     DatabaseService,
     TenantAdministrationContextService,
@@ -192,6 +200,7 @@ import { OwnerDailyBriefSchedulerService } from './owner-daily-brief/owner-daily
     PersonalCashPerformanceReportService,
     LedgerTrialBalanceReportService,
     InternalVatReportService,
+    VatSimulationService,
     ReportDocumentService,
     FinanceCashPerformanceEventService,
     FinanceVatSettlementService,

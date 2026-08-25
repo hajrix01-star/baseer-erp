@@ -15,11 +15,16 @@ import {
   Param,
   Post,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
+import { SkipThrottle, Throttle, ThrottlerGuard } from '@nestjs/throttler';
 
 import { OutputService } from './output.service.js';
 
 @Controller('outputs')
+@UseGuards(ThrottlerGuard)
+@SkipThrottle({ authIp: true, authIdentity: true, report: true, fileWrite: true })
+@Throttle({ output: { limit: 20, ttl: 60_000, blockDuration: 60_000 } })
 export class OutputController {
   constructor(private readonly output: OutputService) {}
 

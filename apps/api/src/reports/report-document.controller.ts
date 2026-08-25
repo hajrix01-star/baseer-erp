@@ -1,4 +1,5 @@
-import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Param, Post, Query, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Param, Post, Query, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { SkipThrottle, Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { createReportDocumentRequestSchema, renderReportDocumentRequestSchema, renderReportRunRequestSchema, reportDocumentArtifactSchema, reportDocumentListSchema, reportDocumentReceiptSchema } from '@baseer-erp/contracts';
 
 import { CompanyContextService } from '../company-context/company-context.service.js';
@@ -6,6 +7,9 @@ import { REPORTS_READ_CAPABILITY } from './report-catalog.service.js';
 import { ReportDocumentService } from './report-document.service.js';
 
 @Controller('reports/documents')
+@UseGuards(ThrottlerGuard)
+@SkipThrottle({ authIp: true, authIdentity: true, report: true, fileWrite: true })
+@Throttle({ output: { limit: 20, ttl: 60_000, blockDuration: 60_000 } })
 export class ReportDocumentController {
   constructor(private readonly contexts: CompanyContextService, private readonly documents: ReportDocumentService) {}
 

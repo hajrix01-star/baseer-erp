@@ -12,13 +12,15 @@ Only the reverse proxy exposes HTTPS. PostgreSQL has no host port and remains on
 - `docker-compose.private-online.yml`: private API, internal PostgreSQL, and HTTPS reverse proxy.
 - `docker/Caddyfile.private-online`: HTTPS reverse proxy configuration; certificates are handled by Caddy after DNS points to the selected domain.
 - `ops/private-online/.env.private-online.example`: non-secret configuration template.
+- `docs/operations/PRIVATE_ONLINE_FILE_STORAGE_AND_RECOVERY.md`: same-server
+  bind-mount, file-encryption, scanner, backup, and isolated-restore procedure.
 - `docker/baseer-private-init/10-create-baseer-app.sh`: creates a non-superuser database application role on the first empty database volume.
 
 ## Before the first private deployment
 
 1. Choose the owner-controlled Hostinger server and subscribe to Hostinger daily server backups. Do not treat the live database volume itself as a backup. The adopted policy is recorded in `HOSTINGER_PRIVATE_HOSTING_AND_BACKUP_DECISION_2026-08-16.md`.
 2. Choose any available domain and point its DNS records to the private server. The domain may change later; **BASEER ERP** remains the product name.
-3. Copy `ops/private-online/.env.private-online.example` to `ops/private-online/.env.private-online`; replace every placeholder with unique secrets stored outside the repository.
+3. Copy `ops/private-online/.env.private-online.example` to `ops/private-online/.env.private-online`; replace every placeholder with unique secrets stored outside the repository. Prepare the permanent same-server file-storage bind mount before startup as described in `PRIVATE_ONLINE_FILE_STORAGE_AND_RECOVERY.md`.
 4. Build the API runtime and migration images locally; this does not start the services:
 
    ```powershell
@@ -62,8 +64,8 @@ Only the reverse proxy exposes HTTPS. PostgreSQL has no host port and remains on
 1. HTTPS works on the chosen domain; only ports 80/443 are externally reachable.
 2. API and database administration ports are not publicly reachable.
 3. A user from one company is refused access to another company's data.
-4. Hostinger daily server backup coverage and retention are confirmed for the database volume and enabled application files.
-5. Restore a Hostinger backup into a disposable isolated environment and prove row counts, key reports, and log-in behaviour without touching production.
+4. Hostinger daily server backup coverage and retention are confirmed for the database volume and the permanent application-file bind mount.
+5. Restore a Hostinger backup into a disposable isolated environment and prove row counts, key reports, log-in behaviour, and an encrypted employee-document/logo read without touching production.
 6. Record the date, operator, backup identifier, restore result, and any corrective action in the governance evidence.
 
 ## Explicitly deferred

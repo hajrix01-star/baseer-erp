@@ -97,6 +97,7 @@ export class CompanyAccessService {
             .then((companies) =>
               companies.map((company) => ({
                 ...company,
+                isOwner: true,
                 permissionCodes: ADMINISTRATION_PERMISSION_CATALOG.map(
                   (permission) => permission.code,
                 ),
@@ -122,6 +123,7 @@ export class CompanyAccessService {
           .then((memberships) =>
             memberships.map((membership) => ({
               ...membership.company,
+              isOwner: false,
               permissionCodes: membership.role.grants.map(
                 (grant) => grant.permissionCode,
               ),

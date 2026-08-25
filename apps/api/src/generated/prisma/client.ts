@@ -364,6 +364,13 @@ export type MarketingReputationReplyPolicy = Prisma.MarketingReputationReplyPoli
  */
 export type ReportDocument = Prisma.ReportDocumentModel
 /**
+ * Model VatSimulation
+ * A quarterly VAT planning workspace. It is deliberately separate from the
+ * ledger, invoices and VAT settlements: saving a simulation never posts or
+ * changes accounting truth.
+ */
+export type VatSimulation = Prisma.VatSimulationModel
+/**
  * Model FinanceCashPerformanceEvent
  * Immutable event read-model written atomically with an actual external
  * collection/payment and its sealed journal entry. Reversals append an

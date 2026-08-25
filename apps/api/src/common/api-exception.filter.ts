@@ -11,6 +11,7 @@ import type { FastifyReply, FastifyRequest } from 'fastify';
 
 import { IdempotencyPayloadMismatchError } from '../core-controls/idempotency.service.js';
 import { RequestContext } from '../observability/request-context.js';
+import { ReportRunExpiredException } from '../reports/report-run.service.js';
 
 type ErrorCode = ApiErrorReceipt['error']['code'];
 type Retry = ApiErrorReceipt['error']['retry'];
@@ -24,6 +25,7 @@ export class ApiExceptionFilter implements ExceptionFilter {
     const response = context.getResponse<FastifyReply>();
     const request = context.getRequest<FastifyRequest>();
     const idempotencyMismatch = exception instanceof IdempotencyPayloadMismatchError;
+    const reportRunExpired = exception instanceof ReportRunExpiredException;
     const status = idempotencyMismatch
       ? HttpStatus.CONFLICT
       : exception instanceof HttpException
@@ -34,7 +36,7 @@ export class ApiExceptionFilter implements ExceptionFilter {
     const retryAfterSeconds = status === HttpStatus.TOO_MANY_REQUESTS
       ? this.retryAfterSeconds(response)
       : undefined;
-    const [code, retry] = this.classify(status, retryAfterSeconds, idempotencyMismatch);
+    const [code, retry] = this.classify(status, retryAfterSeconds, idempotencyMismatch, reportRunExpired);
     if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
       // Keep the response safe, but preserve a correlation-bound diagnosis in
       // the server log. Without this, an interceptor can record its pre-filter
@@ -60,8 +62,10 @@ export class ApiExceptionFilter implements ExceptionFilter {
     status: number,
     retryAfterSeconds?: number,
     idempotencyMismatch = false,
+    reportRunExpired = false,
   ): [ErrorCode, Retry] {
     if (idempotencyMismatch) return ['IDEMPOTENCY_MISMATCH', { kind: 'do-not-retry' }];
+    if (reportRunExpired) return ['REPORT_RUN_EXPIRED', { kind: 'do-not-retry' }];
     if (status === HttpStatus.BAD_REQUEST) return ['VALIDATION_FAILED', { kind: 'do-not-retry' }];
     if (status === HttpStatus.UNAUTHORIZED) return ['AUTHENTICATION_FAILED', { kind: 'do-not-retry' }];
     if (status === HttpStatus.FORBIDDEN) return ['AUTHORIZATION_DENIED', { kind: 'do-not-retry' }];
@@ -79,17 +83,25 @@ export class ApiExceptionFilter implements ExceptionFilter {
   }
 
   private retryAfterSeconds(response: FastifyReply): number {
-    for (const header of ['retry-after-authIp', 'retry-after-authIdentity']) {
+    for (const header of [
+      'retry-after-authIp',
+      'retry-after-authIdentity',
+      'retry-after-report',
+      'retry-after-output',
+      'retry-after-fileWrite',
+    ]) {
       const value = response.getHeader(header);
       const parsed = typeof value === 'number'
         ? value
         : typeof value === 'string'
           ? Number.parseInt(value, 10)
           : Number.NaN;
-      if (Number.isFinite(parsed) && parsed > 0) return Math.ceil(parsed);
+      // @nestjs/throttler exposes the remaining block time in milliseconds;
+      // the HTTP Retry-After header and API contract use whole seconds.
+      if (Number.isFinite(parsed) && parsed > 0) return Math.ceil(parsed / 1_000);
     }
-    // This is a safe fallback for a 15-minute identity limiter. A custom
-    // 429 from another subsystem must never ask a client to retry immediately.
+    // A custom 429 from another subsystem must never ask a client to retry
+    // immediately. Named limiters supply their own header above.
     return 900;
   }
 
@@ -102,6 +114,7 @@ export class ApiExceptionFilter implements ExceptionFilter {
       IDEMPOTENCY_MISMATCH: { ar: 'مفتاح الإعادة لا يطابق الطلب الأصلي.', en: 'The idempotency key does not match the original request.' },
       INTERNAL_ERROR: { ar: 'حدث خطأ داخلي آمن.', en: 'A safe internal error occurred.' },
       NOT_FOUND: { ar: 'السجل المطلوب غير موجود.', en: 'The requested resource was not found.' },
+      REPORT_RUN_EXPIRED: { ar: 'انتهت صلاحية لقطة التقرير. حدّث التقرير ثم أعد المحاولة.', en: 'The report snapshot has expired. Refresh the report and try again.' },
       RATE_LIMITED: { ar: '\u062a\u0645 \u062a\u0642\u064a\u064a\u062f \u0627\u0644\u0645\u062d\u0627\u0648\u0644\u0627\u062a \u0645\u0624\u0642\u062a\u0627\u064b. \u0623\u0639\u062f \u0627\u0644\u0645\u062d\u0627\u0648\u0644\u0629 \u0644\u0627\u062d\u0642\u0627\u064b.', en: 'Sign-in attempts are temporarily limited. Try again later.' },
       VALIDATION_FAILED: { ar: 'بيانات الطلب غير صالحة.', en: 'The request data is invalid.' },
     };

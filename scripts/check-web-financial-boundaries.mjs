@@ -5,7 +5,7 @@ const workspace = readFileSync("apps/web/src/daily-sales-workspace.tsx", "utf8")
 const reversal = readFileSync("apps/web/src/daily-sales-reversal-dialog.tsx", "utf8");
 const copy = readFileSync("apps/web/src/daily-sales-copy.ts", "utf8");
 const client = readFileSync("apps/web/src/daily-sales-client.ts", "utf8");
-const purchase = readFileSync("apps/web/src/purchase-expense-workspace.tsx", "utf8");
+const purchase = readFileSync("apps/web/src/purchase-expense-workspace-runtime.tsx", "utf8");
 const financeSources = [
   "apps/web/src/daily-sales-closing-dialog.tsx",
   "apps/web/src/expenses-obligations-workspace.tsx",
@@ -21,7 +21,8 @@ if (/\bfetch\(/.test(signIn) || /\bfetch\(/.test(workspace)) {
 if (/window\.prompt/.test(workspace)) {
   throw new Error("Financial reversal must use the confirmed dialog, never window.prompt.");
 }
-if (!reversal.includes("useDialogFocusTrap") || !copy.includes("reverseConfirm")) {
+const reversalUsesFocusedDialog = reversal.includes("useDialogFocusTrap") || (reversal.includes("BaseerDialog") && reversal.includes("busy={saving}"));
+if (!reversalUsesFocusedDialog || !copy.includes("reverseConfirm")) {
   throw new Error("Reversal dialog must preserve focus behavior and explicit confirmation.");
 }
 if (!client.includes("parseBaseerApiResponse")) {

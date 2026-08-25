@@ -15,9 +15,8 @@ export const internalVatReportRequestSchema = z.object({
 const metadata = z.object({
   reportCode: z.literal('internal_vat_report'),
   definitionVersion: z.literal('internal_vat_report_v1'),
-  reportRunId: uuidSchema,
+  dataMode: z.literal('LIVE'),
   ledgerRevision: z.string().regex(/^\d+$/),
-  runChecksum: z.string().regex(/^[a-f0-9]{64}$/),
   company: z.object({ displayName: z.string().min(1).max(160), functionalCurrency: z.string().regex(/^[A-Z]{3}$/) }).strict(),
   selectedPeriod: z.object({ from: businessDateSchema, to: businessDateSchema, months: z.array(monthSchema).optional() }).strict(),
   basisLabelAr: z.literal('دفتر الأستاذ — حسابات الضريبة'),

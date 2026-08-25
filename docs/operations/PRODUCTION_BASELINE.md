@@ -41,9 +41,10 @@ access, or customer tenancy.
 | Users | Only the owner and users explicitly created for the owner's companies; no public registration, billing, tenant onboarding, or customer administration. |
 | Isolation | Every request uses verified identity, tenant, company membership, live permissions, RLS, audit, and no body-supplied company/actor authority. |
 | Network | Public HTTPS only through the owner-controlled domain/reverse proxy. PostgreSQL, Docker, backup, metrics, and administrative ports remain private. |
-| Logs/metrics | Keep Baseer's redacted JSON logs, request correlation, health/readiness, and protected in-process summary. Use Docker log rotation locally; no Loki/Grafana/SaaS collector is required initially. |
+| Logs/metrics | Keep Baseer's redacted JSON logs, request correlation, health/readiness, and protected in-process summary. The supplied Compose stack uses API/web health checks and Docker local log rotation (five 10 MiB files per service); no Loki/Grafana/SaaS collector is required initially. |
 | Alerts | The owner is the operational contact. Health checks and manual review are sufficient initially; external paging/webhook is deferred until needed. |
-| Backups | Hostinger daily server backups, under the owner subscription. Confirm coverage for the PostgreSQL volume and enabled application files, retention and restore request path before real data. This replaces the older 35-daily/12-weekly external-device wording. |
+| Files | A single same-server bind mount is the only writable API path. It contains separate HR, logo, and optional inbound-evidence roots; it is private, encrypted where required, scanner-gated, and never exposed over HTTP. |
+| Backups | Hostinger daily server backups, under the owner subscription, plus one encrypted copy on a separate owner-controlled medium or machine. Confirm coverage for the PostgreSQL volume and enabled application-file bind mount, retention and restore request path before real data. |
 | Restore | Restore only into an isolated disposable database first. Verify checksum, migrations, RLS, users, and company reconciliation before touching the live private system. |
 | Updates | Create a backup checkpoint, apply only tested additive migrations, run readiness/smoke checks, and retain the previous Docker image/version for rollback. |
 | Incidents | Owner decides whether to pause writes, restore an isolated copy, or roll back; no public status page or external incident process is required. |

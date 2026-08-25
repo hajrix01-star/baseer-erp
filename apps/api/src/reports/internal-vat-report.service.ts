@@ -8,6 +8,7 @@ import { BusinessDateService } from '../business-date/business-date.service.js';
 import { DatabaseService } from '../database/database.service.js';
 import { FinanceJournalEntryStatus, Prisma } from '../generated/prisma/client.js';
 import { ReportRunService, SEALED_LEDGER_ENTRY_PREDICATE_VERSION } from './report-run.service.js';
+import { interactiveReportPeriodMessage, interactiveReportSourceMessage } from './interactive-report-limits.js';
 
 const REPORT_CODE = 'internal_vat_report';
 const DEFINITION_VERSION = 'internal_vat_report_v1';
@@ -26,20 +27,30 @@ export class InternalVatReportService {
 
   async run(context: TrustedCompanyActorContext, request: Request) {
     assertPeriod(request);
+    const periodMessage = interactiveReportPeriodMessage(request.from, request.to, request.months);
+    if (periodMessage) return { state: 'NOT_READY' as const, messageAr: periodMessage };
     const source = await this.source(context);
     if (!source.company || !source.profile) return { state: 'NOT_READY' as const, messageAr: 'هذا التقرير غير متاح بعد لأن إعداد الشركة المالي غير مكتمل.' };
     const readySource = { company: source.company, profile: source.profile };
-    const run = await this.reportRuns.create(context, {
+    const ledgerRevision = await this.reportRuns.currentLedgerRevision(context);
+    const sourceMessage = interactiveReportSourceMessage(await this.sourceLineCount(context, ledgerRevision, request));
+    if (sourceMessage) return { state: 'NOT_READY' as const, messageAr: sourceMessage };
+    const rows = aggregate(await this.lines(context, ledgerRevision, request));
+    const metadata = reportMetadata(readySource, request, ledgerRevision);
+    if (!rows.some((row) => !row.amount.isZero())) return { state: 'NO_DATA' as const, messageAr: 'لا توجد حركات ضريبية مؤهلة ضمن الفترة المحددة.', ...metadata, rows: [], netVat: money(zero()) };
+    const output = amountFor(rows, 'output_vat'); const input = amountFor(rows, 'input_vat');
+    return { state: 'READY' as const, ...metadata, rows: rows.filter((row) => !row.amount.isZero()).map(displayRow), netVat: money(output.minus(input)) };
+  }
+
+  /** Creates the immutable boundary only when the caller is producing an official output. */
+  async issueOfficialRun(context: TrustedCompanyActorContext, request: Request) {
+    assertPeriod(request);
+    return this.reportRuns.create(context, {
       reportCode: REPORT_CODE, definitionVersion: DEFINITION_VERSION,
       canonicalOptions: { from: day(request.from), to: day(request.to), ...(request.months?.length ? { months: request.months } : {}) },
       economicAsOfDate: request.to,
       sourceCoverage: { sourceKind: 'sealed_ledger_vat_control_lines', settlementTreatment: 'separate_from_period_tax' },
     });
-    const rows = aggregate(await this.lines(context, run.ledgerRevision, request));
-    const metadata = reportMetadata(readySource, request, run);
-    if (!rows.some((row) => !row.amount.isZero())) return { state: 'NO_DATA' as const, messageAr: 'لا توجد حركات ضريبية مؤهلة ضمن الفترة المحددة.', ...metadata, rows: [], netVat: money(zero()) };
-    const output = amountFor(rows, 'output_vat'); const input = amountFor(rows, 'input_vat');
-    return { state: 'READY' as const, ...metadata, rows: rows.filter((row) => !row.amount.isZero()).map(displayRow), netVat: money(output.minus(input)) };
   }
 
   async evidence(context: TrustedCompanyActorContext, reportRunId: string, rowCode: RowCode, cursor?: string) {
@@ -81,12 +92,32 @@ export class InternalVatReportService {
   }
 
   private async lines(context: TrustedCompanyActorContext, revision: bigint | string, request: Request): Promise<VatLine[]> {
-    const eligible: Prisma.FinanceJournalEntryWhereInput = { tenantId: context.tenantId, companyId: context.companyId, isSealed: true, status: { in: [FinanceJournalEntryStatus.POSTED, FinanceJournalEntryStatus.REVERSED] }, ledgerRevision: { lte: BigInt(revision) }, businessDate: { gte: request.from, lte: request.to } };
+    const eligible = this.eligibleEntryWhere(context, revision, request);
     const records = await this.database.inTenantTransaction(context.tenantId, (transaction) => transaction.financeJournalLine.findMany({
       where: { tenantId: context.tenantId, companyId: context.companyId, account: { is: { systemKey: { in: ['VAT_OUTPUT', 'VAT_INPUT'] } } }, journalEntry: { is: eligible } },
       select: { id: true, debitAmount: true, creditAmount: true, account: { select: { systemKey: true } }, journalEntry: { select: { businessDate: true, sourceReference: true, sourceType: true, reversalOfEntry: { select: { sourceType: true } } } } },
     }));
-    return records.filter((line) => !request.months?.length || request.months.includes(day(line.journalEntry.businessDate).slice(0, 7))).flatMap((line): VatLine[] => line.account.systemKey === 'VAT_OUTPUT' || line.account.systemKey === 'VAT_INPUT' ? [{ id: line.id, businessDate: line.journalEntry.businessDate, accountKey: line.account.systemKey, debit: line.debitAmount, credit: line.creditAmount, reference: line.journalEntry.sourceReference, sourceType: line.journalEntry.sourceType, originalSourceType: line.journalEntry.reversalOfEntry?.sourceType ?? null }] : []);
+    return records.flatMap((line): VatLine[] => line.account.systemKey === 'VAT_OUTPUT' || line.account.systemKey === 'VAT_INPUT' ? [{ id: line.id, businessDate: line.journalEntry.businessDate, accountKey: line.account.systemKey, debit: line.debitAmount, credit: line.creditAmount, reference: line.journalEntry.sourceReference, sourceType: line.journalEntry.sourceType, originalSourceType: line.journalEntry.reversalOfEntry?.sourceType ?? null }] : []);
+  }
+
+  private sourceLineCount(context: TrustedCompanyActorContext, revision: bigint | string, request: Request) {
+    const eligible = this.eligibleEntryWhere(context, revision, request);
+    return this.database.inTenantTransaction(context.tenantId, (transaction) => transaction.financeJournalLine.count({
+      where: { tenantId: context.tenantId, companyId: context.companyId, account: { is: { systemKey: { in: ['VAT_OUTPUT', 'VAT_INPUT'] } } }, journalEntry: { is: eligible } },
+    }));
+  }
+
+  private eligibleEntryWhere(context: TrustedCompanyActorContext, revision: bigint | string, request: Request): Prisma.FinanceJournalEntryWhereInput {
+    return {
+      tenantId: context.tenantId,
+      companyId: context.companyId,
+      isSealed: true,
+      status: { in: [FinanceJournalEntryStatus.POSTED, FinanceJournalEntryStatus.REVERSED] },
+      ledgerRevision: { lte: BigInt(revision) },
+      ...(request.months?.length
+        ? { OR: request.months.map((month) => ({ businessDate: monthRange(month) })) }
+        : { businessDate: { gte: request.from, lte: request.to } }),
+    };
   }
 
   private async readyRun(context: TrustedCompanyActorContext, reportRunId: string) {
@@ -105,10 +136,11 @@ function aggregate(lines: readonly VatLine[]) { const definitions: ReadonlyArray
 function amountFor(rows: ReadonlyArray<{ code: RowCode; amount: Prisma.Decimal }>, code: RowCode) { return rows.find((row) => row.code === code)?.amount ?? zero(); }
 function displayRow(row: { code: RowCode; labelAr: string; labelEn: string; amount: Prisma.Decimal; eventCount: number }) { return { ...row, amount: money(row.amount) }; }
 function labelFor(line: VatLine) { return isSettlement(line) ? { labelAr: line.sourceType === 'journal_reversal' ? `إلغاء ${line.reference}` : 'تسوية ضريبة', labelEn: line.sourceType === 'journal_reversal' ? `Cancellation ${line.reference}` : 'VAT settlement' } : { labelAr: line.sourceType === 'journal_reversal' ? `إلغاء ${line.reference}` : 'قيد ضريبي', labelEn: line.sourceType === 'journal_reversal' ? `Cancellation ${line.reference}` : 'VAT journal entry' }; }
-function reportMetadata(source: { company: { nameAr: string; nameEn: string; businessTimezone: string }; profile: { functionalCurrencyCode: string } }, request: Request, run: { reportRunId: string; ledgerRevision: string; checksum: string }) { return { reportCode: REPORT_CODE, definitionVersion: DEFINITION_VERSION, reportRunId: run.reportRunId, ledgerRevision: run.ledgerRevision, runChecksum: run.checksum, company: { displayName: source.company.nameAr || source.company.nameEn, functionalCurrency: source.profile.functionalCurrencyCode }, selectedPeriod: { from: day(request.from), to: day(request.to), ...(request.months?.length ? { months: request.months } : {}) }, basisLabelAr: 'دفتر الأستاذ — حسابات الضريبة' }; }
+function reportMetadata(source: { company: { nameAr: string; nameEn: string; businessTimezone: string }; profile: { functionalCurrencyCode: string } }, request: Request, ledgerRevision: bigint) { return { reportCode: REPORT_CODE, definitionVersion: DEFINITION_VERSION, dataMode: 'LIVE' as const, ledgerRevision: ledgerRevision.toString(), company: { displayName: source.company.nameAr || source.company.nameEn, functionalCurrency: source.profile.functionalCurrencyCode }, selectedPeriod: { from: day(request.from), to: day(request.to), ...(request.months?.length ? { months: request.months } : {}) }, basisLabelAr: 'دفتر الأستاذ — حسابات الضريبة' }; }
 function money(value: Prisma.Decimal) { const sign = value.gt(0) ? 'positive' as const : value.lt(0) ? 'negative' as const : 'zero' as const; return { raw: value.toFixed(4), display: value.abs().toFixed(2), sign }; }
 function zero() { return new Prisma.Decimal(0); }
 function day(value: Date) { return value.toISOString().slice(0, 10); }
 function dateOf(value: string) { const date = new Date(`${value}T00:00:00.000Z`); if (Number.isNaN(date.valueOf()) || day(date) !== value) throw new BadRequestException('A valid business date is required.'); return date; }
 function assertPeriod(value: Request) { if (!(value.from instanceof Date) || !(value.to instanceof Date) || Number.isNaN(value.from.valueOf()) || Number.isNaN(value.to.valueOf()) || value.from > value.to) throw new BadRequestException('A valid VAT report period is required.'); }
 function cursorValue(value: string): { businessDate: string; id: string } { const match = /^(\d{4}-\d{2}-\d{2}):([0-9a-f-]{36})$/i.exec(value); if (!match || !match[1] || !match[2]) throw new BadRequestException('The VAT evidence cursor is invalid.'); return { businessDate: match[1], id: match[2] }; }
+function monthRange(month: string) { const [year, monthNumber] = month.split('-').map(Number); return { gte: new Date(Date.UTC(year!, monthNumber! - 1, 1)), lte: new Date(Date.UTC(year!, monthNumber!, 0)) }; }

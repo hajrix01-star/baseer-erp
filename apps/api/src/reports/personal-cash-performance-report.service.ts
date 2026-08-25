@@ -12,6 +12,7 @@ import {
   Prisma,
 } from '../generated/prisma/client.js';
 import { financeJournalPresentation } from '../finance/finance-journal-presentation.js';
+import { interactiveReportPeriodMessage, interactiveReportSourceMessage } from './interactive-report-limits.js';
 import { ReportRunService } from './report-run.service.js';
 
 const REPORT_CODE = 'personal_cash_performance';
@@ -91,6 +92,8 @@ export class PersonalCashPerformanceReportService {
 
   async run(context: TrustedCompanyActorContext, request: PersonalCashPerformanceRequest) {
     assertPeriod(request);
+    const periodMessage = interactiveReportPeriodMessage(request.from, request.to, request.months);
+    if (periodMessage) return unavailable('NOT_READY', periodMessage);
     const source = await this.database.inTenantTransaction(context.tenantId, async (transaction) => {
       const [company, profile] = await Promise.all([
         transaction.company.findFirst({
@@ -109,23 +112,15 @@ export class PersonalCashPerformanceReportService {
     }
     const readySource = { company: source.company, profile: source.profile };
 
-    const receipt = await this.reportRuns.create(context, {
-      reportCode: REPORT_CODE,
-      definitionVersion: DEFINITION_VERSION,
-      canonicalOptions: { from: dateText(request.from), to: dateText(request.to), ...(request.months?.length ? { months: request.months } : {}), vatInclusive: request.vatInclusive },
-      economicAsOfDate: request.to,
-      sourceCoverage: {
-        state: 'SEALED_LEDGER_VAULT_LINES',
-        inclusionRule: 'Every sealed journal line on a configured vault account, except an internal vault transfer.',
-        vatMode: request.vatInclusive ? 'cash_gross' : 'invoice_net_excluding_vat_settlements',
-      },
-    });
-    const movements = await this.loadVaultMovements(context, BigInt(receipt.ledgerRevision), request);
+    const ledgerRevision = await this.reportRuns.currentLedgerRevision(context);
+    const sourceMessage = interactiveReportSourceMessage(await this.interactiveSourceLineCount(context, ledgerRevision, request));
+    if (sourceMessage) return unavailable('NOT_READY', sourceMessage);
+    const movements = await this.loadVaultMovements(context, ledgerRevision, request);
     if (!request.vatInclusive && movements.some((movement) => movement.requiresVatEvidence && !movement.vatBreakdownKnown)) {
       return unavailable(
         'COVERAGE_INCOMPLETE',
         'لا تكتمل تغطية المصدر للوضع غير الشامل للضريبة؛ توجد عمليات تحتاج فصلًا ضريبيًا موثوقًا.',
-        { reportRunId: receipt.reportRunId, ledgerRevision: receipt.ledgerRevision },
+        { ledgerRevision: ledgerRevision.toString() },
       );
     }
     const eligible = request.vatInclusive ? movements : movements.filter((movement) => movement.group !== 'vat');
@@ -133,7 +128,7 @@ export class PersonalCashPerformanceReportService {
       return {
         state: 'NO_DATA' as const,
         messageAr: 'لا توجد حركات مؤهلة ضمن الفترة المحددة.',
-        ...metadata(readySource, request, receipt),
+        ...metadata(readySource, request, ledgerRevision),
         rows: [],
         vaults: [],
         totals: zeroTotals(),
@@ -143,7 +138,7 @@ export class PersonalCashPerformanceReportService {
     const salesCollections = aggregation.rows.find((row) => row.code === 'sales')?.amount ?? new Prisma.Decimal(0);
     return {
       state: 'READY' as const,
-      ...metadata(readySource, request, receipt),
+      ...metadata(readySource, request, ledgerRevision),
       rows: aggregation.rows.map((row) => ({
         code: row.code, labelAr: row.labelAr, labelEn: row.labelEn,
         kind: row.kind, parentCode: row.parentCode,
@@ -162,14 +157,42 @@ export class PersonalCashPerformanceReportService {
     };
   }
 
+  /** Creates the immutable boundary only when the caller is producing an official output. */
+  async issueOfficialRun(context: TrustedCompanyActorContext, request: PersonalCashPerformanceRequest) {
+    assertPeriod(request);
+    return this.reportRuns.create(context, {
+      reportCode: REPORT_CODE,
+      definitionVersion: DEFINITION_VERSION,
+      canonicalOptions: { from: dateText(request.from), to: dateText(request.to), ...(request.months?.length ? { months: request.months } : {}), vatInclusive: request.vatInclusive },
+      economicAsOfDate: request.to,
+      sourceCoverage: {
+        state: 'SEALED_LEDGER_VAULT_LINES',
+        inclusionRule: 'Every sealed journal line on a configured vault account, except an internal vault transfer.',
+        vatMode: request.vatInclusive ? 'cash_gross' : 'invoice_net_excluding_vat_settlements',
+      },
+    });
+  }
+
   async evidence(context: TrustedCompanyActorContext, reportRunId: string, rowCode: string, cursor?: string) {
     const run = await this.reportRuns.findReady(context, reportRunId);
     if (run.reportCode !== REPORT_CODE || run.definitionVersion !== DEFINITION_VERSION) throw new BadRequestException('The report run does not match personal cash performance.');
     const options = personalCashPerformanceRequestSchema.safeParse(run.canonicalOptionsJson);
     if (!options.success) throw new BadRequestException('The report run has invalid canonical options.');
     const request = { from: parseBusinessDate(options.data.from), to: parseBusinessDate(options.data.to), ...(options.data.months ? { months: options.data.months } : {}), vatInclusive: options.data.vatInclusive };
+    return this.evidenceAtRevision(context, run.ledgerRevision, request, rowCode, cursor, run.id);
+  }
+
+  /** Used by interactive drill-downs. It intentionally has no report snapshot dependency. */
+  async liveEvidence(context: TrustedCompanyActorContext, request: PersonalCashPerformanceRequest, rowCode: string, cursor?: string) {
+    assertPeriod(request);
+    const ledgerRevision = await this.reportRuns.currentLedgerRevision(context);
+    const page = await this.evidenceAtRevision(context, ledgerRevision, request, rowCode, cursor);
+    return page;
+  }
+
+  private async evidenceAtRevision(context: TrustedCompanyActorContext, ledgerRevision: bigint, request: PersonalCashPerformanceRequest, rowCode: string, cursor?: string, reportRunId?: string) {
     const parsedCursor = cursor ? evidenceCursor(cursor) : null;
-    const movements = (await this.loadVaultMovements(context, run.ledgerRevision, request))
+    const movements = (await this.loadVaultMovements(context, ledgerRevision, request))
       .filter((movement) => request.vatInclusive || movement.group !== 'vat')
       .filter((movement) => movementMatchesRow(movement, rowCode))
       .sort((left, right) => dateText(left.businessDate).localeCompare(dateText(right.businessDate)) || left.id.localeCompare(right.id));
@@ -180,7 +203,7 @@ export class PersonalCashPerformanceReportService {
     const page = afterCursor.slice(0, 100);
     const final = page.at(-1);
     return {
-      reportRunId: run.id, rowCode,
+      ...(reportRunId ? { reportRunId } : {}), rowCode,
       nextCursor: afterCursor.length > page.length && final ? `${dateText(final.businessDate)}:${final.id}` : null,
       items: page.map((movement) => {
         return {
@@ -240,10 +263,20 @@ export class PersonalCashPerformanceReportService {
     const options = personalCashPerformanceRequestSchema.safeParse(run.canonicalOptionsJson);
     if (!options.success) throw new BadRequestException('The report run has invalid canonical options.');
     const request = { from: parseBusinessDate(options.data.from), to: parseBusinessDate(options.data.to), ...(options.data.months ? { months: options.data.months } : {}), vatInclusive: options.data.vatInclusive };
-    const movement = (await this.loadVaultMovements(context, run.ledgerRevision, request)).find((candidate) => candidate.id === eventId && (request.vatInclusive || candidate.group !== 'vat'));
+    return this.sourceJournalAtRevision(context, run.ledgerRevision, request, eventId);
+  }
+
+  /** Opens a source from a live drill-down without first issuing an output snapshot. */
+  async liveSourceJournal(context: TrustedCompanyActorContext, request: PersonalCashPerformanceRequest, eventId: string) {
+    assertPeriod(request);
+    return this.sourceJournalAtRevision(context, await this.reportRuns.currentLedgerRevision(context), request, eventId);
+  }
+
+  private async sourceJournalAtRevision(context: TrustedCompanyActorContext, ledgerRevision: bigint, request: PersonalCashPerformanceRequest, eventId: string) {
+    const movement = (await this.loadVaultMovements(context, ledgerRevision, request)).find((candidate) => candidate.id === eventId && (request.vatInclusive || candidate.group !== 'vat'));
     if (!movement) throw new BadRequestException('The source movement is not available in this report run.');
     const journal = await this.database.inTenantTransaction(context.tenantId, (transaction) => transaction.financeJournalEntry.findFirst({
-      where: { id: movement.journalEntryId, tenantId: context.tenantId, companyId: context.companyId, isSealed: true, status: { in: ['POSTED', 'REVERSED'] }, ledgerRevision: { lte: run.ledgerRevision } },
+      where: { id: movement.journalEntryId, tenantId: context.tenantId, companyId: context.companyId, isSealed: true, status: { in: ['POSTED', 'REVERSED'] }, ledgerRevision: { lte: ledgerRevision } },
       select: {
         id: true, businessDate: true, sourceType: true, sourceReference: true, description: true, postedAt: true,
         ...journalPresentationSelect,
@@ -255,7 +288,7 @@ export class PersonalCashPerformanceReportService {
     return {
       journalEntry: {
         id: journal.id, businessDate: dateText(journal.businessDate), sourceType: journal.sourceType, sourceReference: financeJournalPresentation(journal).reference, description: journal.description,
-        status: journal.reversalEntry && journal.reversalEntry.ledgerRevision <= run.ledgerRevision ? 'REVERSED' as const : 'POSTED' as const, postedAt: journal.postedAt.toISOString(),
+        status: journal.reversalEntry && journal.reversalEntry.ledgerRevision <= ledgerRevision ? 'REVERSED' as const : 'POSTED' as const, postedAt: journal.postedAt.toISOString(),
         lines: journal.lines.map((line) => ({ id: line.id, lineNumber: line.lineNumber, accountCode: line.account.code, accountNameAr: line.account.nameAr, accountNameEn: line.account.nameEn, debitAmount: line.debitAmount.toFixed(4), creditAmount: line.creditAmount.toFixed(4), description: line.description })),
       },
     };
@@ -336,6 +369,32 @@ export class PersonalCashPerformanceReportService {
           categoryPath: categoryPathFor(event, categoryByCode, categoryById),
           requiresVatEvidence: operationalSource(sourceType), vatBreakdownKnown: event?.vatBreakdownKnown ?? !operationalSource(sourceType),
         } satisfies VaultMovement];
+      });
+    });
+  }
+
+  private async interactiveSourceLineCount(context: TrustedCompanyActorContext, ledgerRevision: bigint, request: PersonalCashPerformanceRequest): Promise<number> {
+    return this.database.inTenantTransaction(context.tenantId, async (transaction) => {
+      const vaults = await transaction.financeVault.findMany({
+        where: { tenantId: context.tenantId, companyId: context.companyId },
+        select: { accountId: true },
+      });
+      const accountIds = vaults.map((vault) => vault.accountId);
+      if (!accountIds.length) return 0;
+      return transaction.financeJournalLine.count({
+        where: {
+          tenantId: context.tenantId,
+          companyId: context.companyId,
+          accountId: { in: accountIds },
+          journalEntry: {
+            tenantId: context.tenantId,
+            companyId: context.companyId,
+            isSealed: true,
+            status: { in: ['POSTED', 'REVERSED'] },
+            ledgerRevision: { lte: ledgerRevision },
+            ...journalPeriodPredicate(request),
+          },
+        },
       });
     });
   }
@@ -693,10 +752,10 @@ function isOperational(kind: FinanceCashPerformanceEventKind): boolean {
     || kind === FinanceCashPerformanceEventKind.PURCHASE_PAYMENT
     || kind === FinanceCashPerformanceEventKind.OPERATING_EXPENSE_PAYMENT;
 }
-function metadata(source: { company: { nameAr: string; nameEn: string; businessTimezone: string }; profile: { functionalCurrencyCode: string } }, request: PersonalCashPerformanceRequest, receipt: { reportRunId: string; ledgerRevision: string; checksum: string }) {
+function metadata(source: { company: { nameAr: string; nameEn: string; businessTimezone: string }; profile: { functionalCurrencyCode: string } }, request: PersonalCashPerformanceRequest, ledgerRevision: bigint) {
   return {
     reportCode: REPORT_CODE, definitionVersion: DEFINITION_VERSION,
-    reportRunId: receipt.reportRunId, ledgerRevision: receipt.ledgerRevision, runChecksum: receipt.checksum,
+    dataMode: 'LIVE' as const, ledgerRevision: ledgerRevision.toString(),
     company: { displayName: source.company.nameAr || source.company.nameEn, functionalCurrency: source.profile.functionalCurrencyCode },
     businessTimezone: source.company.businessTimezone,
     selectedPeriod: { from: dateText(request.from), to: dateText(request.to), ...(request.months?.length ? { months: request.months } : {}) },

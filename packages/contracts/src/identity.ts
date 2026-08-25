@@ -164,6 +164,7 @@ export const apiErrorCodeSchema = z.enum([
   "DEPENDENCY_UNAVAILABLE",
   "INTERNAL_ERROR",
   "RATE_LIMITED",
+  "REPORT_RUN_EXPIRED",
 ]);
 
 export const apiErrorReceiptSchema = z
@@ -187,6 +188,9 @@ export const activeCompanyReceiptSchema = z
     // Capability metadata is a UI hint only. Every command is still authorized
     // again by the server against live company membership and role grants.
     permissionCodes: z.array(z.string().min(3).max(120)).max(250),
+    // This is an identity attribute, not a permission inference. It lets the
+    // shell tailor owner-oriented navigation without granting a capability.
+    isOwner: z.boolean().default(false),
   })
   .strict();
 export const availableCompaniesReceiptSchema = z

@@ -106,6 +106,7 @@ export const ModelName = {
   MarketingProviderOAuthState: 'MarketingProviderOAuthState',
   MarketingReputationReplyPolicy: 'MarketingReputationReplyPolicy',
   ReportDocument: 'ReportDocument',
+  VatSimulation: 'VatSimulation',
   FinanceCashPerformanceEvent: 'FinanceCashPerformanceEvent',
   FinanceCashPerformanceCoverage: 'FinanceCashPerformanceCoverage',
   FinanceCashPerformanceHistoricalImport: 'FinanceCashPerformanceHistoricalImport',
@@ -1146,6 +1147,32 @@ export const ReportDocumentScalarFieldEnum = {
 } as const
 
 export type ReportDocumentScalarFieldEnum = (typeof ReportDocumentScalarFieldEnum)[keyof typeof ReportDocumentScalarFieldEnum]
+
+
+export const VatSimulationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  year: 'year',
+  quarter: 'quarter',
+  vatRateBasisPoints: 'vatRateBasisPoints',
+  salesTaxableAmount: 'salesTaxableAmount',
+  outputVatAmount: 'outputVatAmount',
+  purchasesTaxableAmount: 'purchasesTaxableAmount',
+  inputVatAmount: 'inputVatAmount',
+  priorAdjustments: 'priorAdjustments',
+  balanceCarried: 'balanceCarried',
+  paymentTarget: 'paymentTarget',
+  notes: 'notes',
+  sourceLedgerRevision: 'sourceLedgerRevision',
+  sourceImportedAt: 'sourceImportedAt',
+  createdByUserId: 'createdByUserId',
+  updatedByUserId: 'updatedByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VatSimulationScalarFieldEnum = (typeof VatSimulationScalarFieldEnum)[keyof typeof VatSimulationScalarFieldEnum]
 
 
 export const FinanceCashPerformanceEventScalarFieldEnum = {

@@ -24,9 +24,8 @@ export const ledgerTrialBalanceRequestSchema = z.object({
 const ledgerTrialBalanceMetadataSchema = z.object({
   reportCode: z.literal('ledger_trial_balance'),
   definitionVersion: z.literal('ledger_trial_balance_v1'),
-  reportRunId: uuidSchema,
+  dataMode: z.literal('LIVE'),
   ledgerRevision: z.string().regex(/^\d+$/),
-  runChecksum: z.string().regex(/^[a-f0-9]{64}$/),
   company: z.object({
     displayName: z.string().min(1).max(160),
     functionalCurrency: z.string().regex(/^[A-Z]{3}$/),

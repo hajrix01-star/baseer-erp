@@ -1,4 +1,5 @@
-import { BadRequestException, Controller, ForbiddenException, Get, Headers, Param, Query, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Controller, ForbiddenException, Get, Headers, Param, Query, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { SkipThrottle, Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { companyIdSchema, internalVatReportEvidenceQuerySchema, internalVatReportEvidenceReceiptSchema, internalVatReportRequestSchema, internalVatReportResultSchema, personalCashPerformanceSourceReceiptSchema } from '@baseer-erp/contracts';
 
 import { CompanyContextService } from '../company-context/company-context.service.js';
@@ -6,6 +7,9 @@ import { REPORTS_READ_CAPABILITY } from './report-catalog.service.js';
 import { InternalVatReportService } from './internal-vat-report.service.js';
 
 @Controller('reports/internal-vat')
+@UseGuards(ThrottlerGuard)
+@SkipThrottle({ authIp: true, authIdentity: true, output: true, fileWrite: true })
+@Throttle({ report: { limit: 60, ttl: 60_000, blockDuration: 60_000 } })
 export class InternalVatReportController {
   constructor(private readonly contexts: CompanyContextService, private readonly report: InternalVatReportService) {}
 

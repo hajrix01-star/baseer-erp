@@ -1,3 +1,6 @@
+import { accessSync, constants, statSync } from "node:fs";
+import { isAbsolute, resolve, sep } from "node:path";
+
 const allowedBindHosts = new Set(["127.0.0.1", "0.0.0.0"]);
 const domainPattern =
   /^(?=.{1,253}$)([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/i;
@@ -9,6 +12,97 @@ function requireValue(name: string, value: string | undefined): string {
     );
   }
   return value.trim();
+}
+
+function requireBase64Key(name: string, value: string | undefined): void {
+  const raw = requireValue(name, value);
+  const key = Buffer.from(raw, "base64");
+  if (key.length !== 32 || key.toString("base64") !== raw) {
+    throw new Error(`${name} must be a canonical base64-encoded 32-byte key.`);
+  }
+}
+
+function requireHttpUrl(name: string, value: string | undefined): URL {
+  const raw = requireValue(name, value);
+  try {
+    const url = new URL(raw);
+    if (url.protocol !== "http:" && url.protocol !== "https:") {
+      throw new Error("unsupported protocol");
+    }
+    return url;
+  } catch {
+    throw new Error(`${name} must be an absolute HTTP(S) URL.`);
+  }
+}
+
+function requireWritableStorageDirectory(
+  name: string,
+  value: string | undefined,
+  storageRoot: string,
+): string {
+  const configured = requireValue(name, value);
+  if (!isAbsolute(configured)) {
+    throw new Error(`${name} must be an absolute container path.`);
+  }
+  const directory = resolve(configured);
+  if (!directory.startsWith(`${storageRoot}${sep}`)) {
+    throw new Error(`${name} must be a dedicated directory below BASEER_FILE_STORAGE_ROOT.`);
+  }
+  try {
+    if (!statSync(directory).isDirectory()) {
+      throw new Error("not a directory");
+    }
+    accessSync(directory, constants.R_OK | constants.W_OK);
+  } catch {
+    throw new Error(`${name} must exist and be readable and writable by the API runtime user.`);
+  }
+  return directory;
+}
+
+function validatePersistentFileStorage(environment: NodeJS.ProcessEnv, domain: string): void {
+  if (environment.BASEER_FILE_STORAGE_ENABLED !== "true") {
+    throw new Error("BASEER_FILE_STORAGE_ENABLED must be true for private online production.");
+  }
+  const configuredRoot = requireValue("BASEER_FILE_STORAGE_ROOT", environment.BASEER_FILE_STORAGE_ROOT);
+  if (!isAbsolute(configuredRoot)) {
+    throw new Error("BASEER_FILE_STORAGE_ROOT must be an absolute container path.");
+  }
+  const storageRoot = resolve(configuredRoot);
+  try {
+    if (!statSync(storageRoot).isDirectory()) throw new Error("not a directory");
+    accessSync(storageRoot, constants.R_OK | constants.W_OK);
+  } catch {
+    throw new Error("BASEER_FILE_STORAGE_ROOT must be a mounted, readable, writable directory.");
+  }
+
+  requireWritableStorageDirectory(
+    "BASEER_EMPLOYEE_DOCUMENT_STORAGE_ROOT",
+    environment.BASEER_EMPLOYEE_DOCUMENT_STORAGE_ROOT,
+    storageRoot,
+  );
+  requireWritableStorageDirectory(
+    "BASEER_COMPANY_LOGO_STORAGE_ROOT",
+    environment.BASEER_COMPANY_LOGO_STORAGE_ROOT,
+    storageRoot,
+  );
+  requireBase64Key("BASEER_EMPLOYEE_DOCUMENT_ENCRYPTION_KEY", environment.BASEER_EMPLOYEE_DOCUMENT_ENCRYPTION_KEY);
+  requireHttpUrl("BASEER_DOCUMENT_SCANNER_ENDPOINT", environment.BASEER_DOCUMENT_SCANNER_ENDPOINT);
+
+  if (environment.BASEER_GMAIL_OAUTH_ENABLED !== "true") return;
+
+  requireWritableStorageDirectory(
+    "BASEER_INBOUND_EVIDENCE_STORAGE_ROOT",
+    environment.BASEER_INBOUND_EVIDENCE_STORAGE_ROOT,
+    storageRoot,
+  );
+  requireBase64Key("BASEER_INBOUND_EVIDENCE_ENCRYPTION_KEY", environment.BASEER_INBOUND_EVIDENCE_ENCRYPTION_KEY);
+  requireBase64Key("BASEER_INBOUND_EVIDENCE_STORAGE_ENCRYPTION_KEY", environment.BASEER_INBOUND_EVIDENCE_STORAGE_ENCRYPTION_KEY);
+  const redirect = requireHttpUrl("BASEER_GMAIL_OAUTH_REDIRECT_URI", environment.BASEER_GMAIL_OAUTH_REDIRECT_URI);
+  if (redirect.protocol !== "https:" || redirect.hostname !== domain.toLowerCase()) {
+    throw new Error("BASEER_GMAIL_OAUTH_REDIRECT_URI must use the public HTTPS domain.");
+  }
+  requireValue("BASEER_GMAIL_OAUTH_CLIENT_ID", environment.BASEER_GMAIL_OAUTH_CLIENT_ID);
+  requireValue("BASEER_GMAIL_OAUTH_CLIENT_SECRET", environment.BASEER_GMAIL_OAUTH_CLIENT_SECRET);
 }
 
 export function validatePrivateDeploymentConfiguration(
@@ -61,4 +155,6 @@ export function validatePrivateDeploymentConfiguration(
   if (jwtSecret.length < 32) {
     throw new Error("IDENTITY_JWT_SECRET must be at least 32 characters long.");
   }
+
+  validatePersistentFileStorage(environment, domain);
 }

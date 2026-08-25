@@ -22,14 +22,16 @@ let app;
 try {
   await seedFixture();
   process.env.BASEER_SYSTEM_TENANT_CODE = `reports-http-${suffix}`;
-  const [{ AppModule }, { AuthService }, { DatabaseService }, { ReportRunService }] = await Promise.all([
+  const [{ AppModule }, { ApiExceptionFilter }, { AuthService }, { DatabaseService }, { ReportRunService }] = await Promise.all([
     import("../apps/api/dist/app.module.js"),
+    import("../apps/api/dist/common/api-exception.filter.js"),
     import("../apps/api/dist/identity/auth.service.js"),
     import("../apps/api/dist/database/database.service.js"),
     import("../apps/api/dist/reports/report-run.service.js"),
   ]);
   app = await NestFactory.create(AppModule, new FastifyAdapter({ logger: false }));
   app.setGlobalPrefix("v1");
+  app.useGlobalFilters(new ApiExceptionFilter());
   await app.init();
 
   const auth = app.get(AuthService);
@@ -54,6 +56,31 @@ try {
   assert.equal(crossCompany.statusCode, 403, crossCompany.body);
   const crossTenant = await server.inject({ method: "GET", url: "/v1/reports/catalogue", headers: headers(reporter.accessToken, fixture.foreignCompanyId) });
   assert.equal(crossTenant.statusCode, 403, crossTenant.body);
+
+  const officialRunBody = { reportCode: "personal_cash_performance", purpose: "evidence", request: { from: "2026-08-01", to: "2026-08-20", vatInclusive: true } };
+  const officialUnauthenticated = await server.inject({ method: "POST", url: "/v1/reports/official-runs", payload: officialRunBody });
+  assert.equal(officialUnauthenticated.statusCode, 401, officialUnauthenticated.body);
+  const officialEvidence = await server.inject({ method: "POST", url: "/v1/reports/official-runs", headers: readerHeaders, payload: officialRunBody });
+  assert.equal(officialEvidence.statusCode, 201, officialEvidence.body);
+  assert.equal(officialEvidence.json().reportCode, "personal_cash_performance");
+  assert.equal(officialEvidence.json().ledgerRevision, "41");
+  // Dashboard drill-downs are live reads. This confirms the literal /live
+  // route is never consumed by the legacy :reportRunId route and does not
+  // create an output snapshot just to show operations on screen.
+  const liveEvidence = await server.inject({ method: "GET", url: "/v1/reports/personal-cash-performance/live/evidence?from=2026-08-01&to=2026-08-20&vatInclusive=true&rowCode=expenses%3Acategory%3Arent", headers: readerHeaders });
+  assert.equal(liveEvidence.statusCode, 200, liveEvidence.body);
+  assert.equal(liveEvidence.json().rowCode, "expenses:category:rent");
+  assert.equal("reportRunId" in liveEvidence.json(), false, "Live evidence must not require or disclose an output snapshot.");
+  const officialPreviewDenied = await server.inject({ method: "POST", url: "/v1/reports/official-runs", headers: readerHeaders, payload: { ...officialRunBody, purpose: "preview" } });
+  assert.equal(officialPreviewDenied.statusCode, 403, officialPreviewDenied.body);
+  for (const payload of [
+    { reportCode: "ledger_trial_balance", purpose: "evidence", request: { from: "2026-08-01", to: "2026-08-20", includeZeroRows: false } },
+    { reportCode: "internal_vat_report", purpose: "evidence", request: { from: "2026-08-01", to: "2026-08-20" } },
+  ]) {
+    const issued = await server.inject({ method: "POST", url: "/v1/reports/official-runs", headers: readerHeaders, payload });
+    assert.equal(issued.statusCode, 201, issued.body);
+    assert.equal(issued.json().reportCode, payload.reportCode);
+  }
 
   const ownDocuments = await server.inject({ method: "GET", url: "/v1/reports/documents?locale=en", headers: reporterHeaders });
   assert.equal(ownDocuments.statusCode, 200, ownDocuments.body);
@@ -95,10 +122,14 @@ try {
   const afterRevisionAdvance = await reportRuns.findReady({ tenantId: fixture.tenantId, companyId: fixture.companyId, actorUserId: fixture.reporterUserId }, fixture.reportRunId);
   assert.equal(afterRevisionAdvance.ledgerRevision, BigInt(41), "A report run must retain its frozen ledger revision.");
   assert.equal(afterRevisionAdvance.checksum, checksum, "A report run checksum must remain frozen.");
+  await database.inTenantTransaction(fixture.tenantId, (transaction) => transaction.reportRun.update({ where: { id: fixture.reportRunId }, data: { status: 'EXPIRED' } }));
+  const expiredRun = await server.inject({ method: "POST", url: "/v1/reports/documents/render", headers: reporterHeaders, payload: { reportRunId: fixture.reportRunId, locale: "en", format: "xlsx" } });
+  assert.equal(expiredRun.statusCode, 404, expiredRun.body);
+  assert.equal(expiredRun.json().error.code, "REPORT_RUN_EXPIRED", expiredRun.body);
   const foreignRows = await database.inTenantTransaction(fixture.foreignTenantId, (transaction) => transaction.reportRun.count({ where: { id: fixture.reportRunId } }));
   assert.equal(foreignRows, 0, "Tenant RLS must hide report runs from another tenant even when IDs are known.");
 
-  console.log("Reports HTTP verification passed: 401/403, reports.read RBAC, company/tenant isolation, actor-scoped documents, preview/export permissions, evidence/source boundaries, report-run RLS, and frozen revision/checksum.");
+  console.log("Reports HTTP verification passed: 401/403, official-run purpose RBAC, company/tenant isolation, actor-scoped documents, preview/export permissions, evidence/source boundaries, report-run expiry receipt, RLS, and frozen revision/checksum.");
 } finally {
   if (app) await app.close();
   await pool.end();

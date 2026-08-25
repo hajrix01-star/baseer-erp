@@ -10,6 +10,11 @@ import { RequestContext } from '../observability/request-context.js';
 export const REPORTING_R0_B_BOUNDARY_POLICY_VERSION = 'REPORTING_R0_B_2026_08_20';
 export const SEALED_LEDGER_ENTRY_PREDICATE_VERSION = 'sealed_posted_or_reversed_v1';
 
+/** Distinguishes an expired immutable report snapshot from an unrelated 404. */
+export class ReportRunExpiredException extends NotFoundException {
+  constructor() { super('The report run has expired.'); }
+}
+
 export type CreateReportRunInput = Readonly<{
   reportCode: string;
   definitionVersion: string;
@@ -38,6 +43,19 @@ export type ReportRunReceipt = Readonly<{
 @Injectable()
 export class ReportRunService {
   constructor(private readonly database: DatabaseService) {}
+
+  /**
+   * Capture the current sealed-ledger boundary for a live read without
+   * persisting a ReportRun. Official output creation uses create() instead.
+   */
+  async currentLedgerRevision(context: TrustedCompanyActorContext): Promise<bigint> {
+    return this.database.inTenantTransaction(context.tenantId, async (transaction) => (
+      await transaction.financeLedgerRevision.findUnique({
+        where: { tenantId_companyId: { tenantId: context.tenantId, companyId: context.companyId } },
+        select: { currentRevision: true },
+      })
+    )?.currentRevision ?? BigInt(0));
+  }
 
   async create(context: TrustedCompanyActorContext, input: CreateReportRunInput): Promise<ReportRunReceipt> {
     const reportCode = requiredText(input.reportCode, 80, 'A report code is required.');
@@ -110,10 +128,11 @@ export class ReportRunService {
     if (!isUuid(reportRunId)) throw new BadRequestException('A valid report run identifier is required.');
     return this.database.inTenantTransaction(context.tenantId, async (transaction) => {
       const run = await transaction.reportRun.findFirst({
-        where: { id: reportRunId, tenantId: context.tenantId, companyId: context.companyId, status: ReportRunStatus.READY },
+        where: { id: reportRunId, tenantId: context.tenantId, companyId: context.companyId },
       });
       if (!run) throw new NotFoundException('The ready report run was not found.');
-      if (run.expiresAt <= new Date()) throw new NotFoundException('The report run has expired.');
+      if (run.status === ReportRunStatus.EXPIRED || run.expiresAt <= new Date()) throw new ReportRunExpiredException();
+      if (run.status !== ReportRunStatus.READY) throw new NotFoundException('The ready report run was not found.');
       return run;
     });
   }

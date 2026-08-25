@@ -31,6 +31,7 @@ const prismaModelByDelegate = {
   hrPayrollPayment: "HrPayrollPayment",
   reportDocument: "ReportDocument",
   reportRun: "ReportRun",
+  vatSimulation: "VatSimulation",
 };
 
 const sourceFiles = readdirSync(reportsPath, { withFileTypes: true })

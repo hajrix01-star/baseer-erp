@@ -452,6 +452,7 @@ export const ModelName = {
   MarketingProviderOAuthState: 'MarketingProviderOAuthState',
   MarketingReputationReplyPolicy: 'MarketingReputationReplyPolicy',
   ReportDocument: 'ReportDocument',
+  VatSimulation: 'VatSimulation',
   FinanceCashPerformanceEvent: 'FinanceCashPerformanceEvent',
   FinanceCashPerformanceCoverage: 'FinanceCashPerformanceCoverage',
   FinanceCashPerformanceHistoricalImport: 'FinanceCashPerformanceHistoricalImport',
@@ -561,7 +562,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "ownerDailyBriefSnapshot" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financePnlMappingVersion" | "financePnlStatementLine" | "financePnlAccountMapping" | "financeLedgerRevision" | "reportRun" | "decisionMetricDefinition" | "decisionSalesChangePolicy" | "decisionRuleDefinition" | "decisionContextSource" | "decisionContextImportRun" | "decisionContextResearchRun" | "decisionContextCandidate" | "decisionGlobalContextEvent" | "decisionGlobalContextEventRevision" | "decisionGlobalContextReviewAction" | "decisionCompanyContextEvent" | "decisionEvaluationRun" | "decisionEvidenceSnapshot" | "decisionAlert" | "decisionAlertAction" | "decisionFeedback" | "inboundEvidenceLabel" | "inboundEvidenceRule" | "inboundEvidenceCommandReceipt" | "inboundEvidenceGmailConnection" | "inboundEvidenceGmailOAuthState" | "inboundEvidenceMessage" | "inboundEvidenceAttachment" | "inboundEvidenceDocumentAnalysis" | "inboundEvidenceMessageLabel" | "marketingCampaign" | "marketingCampaignAnalysisFeedback" | "marketingCampaignFinancialLink" | "marketingCampaignContextLink" | "marketingSalesTarget" | "marketingProviderConnection" | "marketingProviderOAuthState" | "marketingReputationReplyPolicy" | "reportDocument" | "financeCashPerformanceEvent" | "financeCashPerformanceCoverage" | "financeCashPerformanceHistoricalImport" | "financeVatSettlement" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowDocumentRevision" | "operationsAssetWarrantyAsset" | "operationsAssetWarrantyLine" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiCompanyContext" | "aiSkillActivation" | "aiExecutionReceipt" | "aiInterpretation" | "aiInterpretationRun" | "aiModelPriceRevision" | "aiBudgetReservation" | "aiUsageLedger" | "aiInterpretationPlacement" | "aiHumanInsight" | "aiEvaluationFeedback" | "aiSkillEvaluationRun" | "aiSystemIdentity" | "operationsSection" | "operationsUnit" | "operationsItem" | "operationsItemUnit" | "operationsItemConversionVersion" | "operationsItemConversionEdge" | "operationsInternalRegistration" | "operationsInternalRegistrationLine" | "operationsInternalRegistrationConsumption" | "operationsRecipeVersion" | "operationsRecipeLine" | "operationsPurchaseRequest" | "operationsPurchaseRequestLine" | "operationsPurchaseReceipt" | "operationsPurchaseReceiptLine" | "operationsCustodyProfile" | "operationsCustodyEvent" | "operationsInventoryBalance" | "operationsInventoryMovement"
+    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "ownerDailyBriefSnapshot" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financePnlMappingVersion" | "financePnlStatementLine" | "financePnlAccountMapping" | "financeLedgerRevision" | "reportRun" | "decisionMetricDefinition" | "decisionSalesChangePolicy" | "decisionRuleDefinition" | "decisionContextSource" | "decisionContextImportRun" | "decisionContextResearchRun" | "decisionContextCandidate" | "decisionGlobalContextEvent" | "decisionGlobalContextEventRevision" | "decisionGlobalContextReviewAction" | "decisionCompanyContextEvent" | "decisionEvaluationRun" | "decisionEvidenceSnapshot" | "decisionAlert" | "decisionAlertAction" | "decisionFeedback" | "inboundEvidenceLabel" | "inboundEvidenceRule" | "inboundEvidenceCommandReceipt" | "inboundEvidenceGmailConnection" | "inboundEvidenceGmailOAuthState" | "inboundEvidenceMessage" | "inboundEvidenceAttachment" | "inboundEvidenceDocumentAnalysis" | "inboundEvidenceMessageLabel" | "marketingCampaign" | "marketingCampaignAnalysisFeedback" | "marketingCampaignFinancialLink" | "marketingCampaignContextLink" | "marketingSalesTarget" | "marketingProviderConnection" | "marketingProviderOAuthState" | "marketingReputationReplyPolicy" | "reportDocument" | "vatSimulation" | "financeCashPerformanceEvent" | "financeCashPerformanceCoverage" | "financeCashPerformanceHistoricalImport" | "financeVatSettlement" | "financeCategory" | "financeSupplier" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowDocumentRevision" | "operationsAssetWarrantyAsset" | "operationsAssetWarrantyLine" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiCompanyContext" | "aiSkillActivation" | "aiExecutionReceipt" | "aiInterpretation" | "aiInterpretationRun" | "aiModelPriceRevision" | "aiBudgetReservation" | "aiUsageLedger" | "aiInterpretationPlacement" | "aiHumanInsight" | "aiEvaluationFeedback" | "aiSkillEvaluationRun" | "aiSystemIdentity" | "operationsSection" | "operationsUnit" | "operationsItem" | "operationsItemUnit" | "operationsItemConversionVersion" | "operationsItemConversionEdge" | "operationsInternalRegistration" | "operationsInternalRegistrationLine" | "operationsInternalRegistrationConsumption" | "operationsRecipeVersion" | "operationsRecipeLine" | "operationsPurchaseRequest" | "operationsPurchaseRequestLine" | "operationsPurchaseReceipt" | "operationsPurchaseReceiptLine" | "operationsCustodyProfile" | "operationsCustodyEvent" | "operationsInventoryBalance" | "operationsInventoryMovement"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -4632,6 +4633,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ReportDocumentCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ReportDocumentCountAggregateOutputType> | number
+        }
+      }
+    }
+    VatSimulation: {
+      payload: Prisma.$VatSimulationPayload<ExtArgs>
+      fields: Prisma.VatSimulationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VatSimulationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VatSimulationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VatSimulationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VatSimulationPayload>
+        }
+        findFirst: {
+          args: Prisma.VatSimulationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VatSimulationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VatSimulationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VatSimulationPayload>
+        }
+        findMany: {
+          args: Prisma.VatSimulationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VatSimulationPayload>[]
+        }
+        create: {
+          args: Prisma.VatSimulationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VatSimulationPayload>
+        }
+        createMany: {
+          args: Prisma.VatSimulationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VatSimulationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VatSimulationPayload>[]
+        }
+        delete: {
+          args: Prisma.VatSimulationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VatSimulationPayload>
+        }
+        update: {
+          args: Prisma.VatSimulationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VatSimulationPayload>
+        }
+        deleteMany: {
+          args: Prisma.VatSimulationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VatSimulationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VatSimulationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VatSimulationPayload>[]
+        }
+        upsert: {
+          args: Prisma.VatSimulationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VatSimulationPayload>
+        }
+        aggregate: {
+          args: Prisma.VatSimulationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVatSimulation>
+        }
+        groupBy: {
+          args: Prisma.VatSimulationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VatSimulationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VatSimulationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VatSimulationCountAggregateOutputType> | number
         }
       }
     }
@@ -12560,6 +12635,32 @@ export const ReportDocumentScalarFieldEnum = {
 export type ReportDocumentScalarFieldEnum = (typeof ReportDocumentScalarFieldEnum)[keyof typeof ReportDocumentScalarFieldEnum]
 
 
+export const VatSimulationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  year: 'year',
+  quarter: 'quarter',
+  vatRateBasisPoints: 'vatRateBasisPoints',
+  salesTaxableAmount: 'salesTaxableAmount',
+  outputVatAmount: 'outputVatAmount',
+  purchasesTaxableAmount: 'purchasesTaxableAmount',
+  inputVatAmount: 'inputVatAmount',
+  priorAdjustments: 'priorAdjustments',
+  balanceCarried: 'balanceCarried',
+  paymentTarget: 'paymentTarget',
+  notes: 'notes',
+  sourceLedgerRevision: 'sourceLedgerRevision',
+  sourceImportedAt: 'sourceImportedAt',
+  createdByUserId: 'createdByUserId',
+  updatedByUserId: 'updatedByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VatSimulationScalarFieldEnum = (typeof VatSimulationScalarFieldEnum)[keyof typeof VatSimulationScalarFieldEnum]
+
+
 export const FinanceCashPerformanceEventScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -16361,6 +16462,7 @@ export type GlobalOmitConfig = {
   marketingProviderOAuthState?: Prisma.MarketingProviderOAuthStateOmit
   marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyOmit
   reportDocument?: Prisma.ReportDocumentOmit
+  vatSimulation?: Prisma.VatSimulationOmit
   financeCashPerformanceEvent?: Prisma.FinanceCashPerformanceEventOmit
   financeCashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageOmit
   financeCashPerformanceHistoricalImport?: Prisma.FinanceCashPerformanceHistoricalImportOmit

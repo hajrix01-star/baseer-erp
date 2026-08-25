@@ -823,6 +823,8 @@ model User {
   outflowDocumentRevisions           FinanceOutflowDocumentRevision[]
   createdReportRuns                  ReportRun[]
   createdReportDocuments             ReportDocument[]                         @relation("ReportDocumentCreator")
+  createdVatSimulations              VatSimulation[]                          @relation("VatSimulationCreator")
+  updatedVatSimulations              VatSimulation[]                          @relation("VatSimulationUpdater")
   cashPerformanceCoverageActivations FinanceCashPerformanceCoverage[]         @relation("FinanceCashPerformanceCoverageActivator")
   cashPerformanceHistoricalImports   FinanceCashPerformanceHistoricalImport[] @relation("FinanceCashPerformanceHistoricalImportCreator")
   tenantAdministrationAssignments    TenantAdministrationAssignment[]
@@ -887,6 +889,7 @@ model Company {
   ledgerRevision                             FinanceLedgerRevision?
   reportRuns                                 ReportRun[]
   reportDocuments                            ReportDocument[]
+  vatSimulations                             VatSimulation[]
   cashPerformanceEvents                      FinanceCashPerformanceEvent[]
   cashPerformanceCoverage                    FinanceCashPerformanceCoverage?
   cashPerformanceHistoricalImports           FinanceCashPerformanceHistoricalImport[]
@@ -2154,6 +2157,40 @@ model ReportDocument {
   @@unique([reportRunId, createdByUserId, locale])
   @@index([tenantId, companyId, createdByUserId, createdAt])
   @@index([tenantId, companyId, reportCode, createdAt])
+}
+
+/// A quarterly VAT planning workspace. It is deliberately separate from the
+/// ledger, invoices and VAT settlements: saving a simulation never posts or
+/// changes accounting truth.
+model VatSimulation {
+  id                     String    @id @default(uuid()) @db.Uuid
+  tenantId               String    @db.Uuid
+  companyId              String    @db.Uuid
+  year                   Int
+  quarter                Int
+  vatRateBasisPoints     Int
+  salesTaxableAmount     Decimal   @default(0) @db.Decimal(18, 4)
+  outputVatAmount        Decimal   @default(0) @db.Decimal(18, 4)
+  purchasesTaxableAmount Decimal   @default(0) @db.Decimal(18, 4)
+  inputVatAmount         Decimal   @default(0) @db.Decimal(18, 4)
+  priorAdjustments       Decimal   @default(0) @db.Decimal(18, 4)
+  balanceCarried         Decimal   @default(0) @db.Decimal(18, 4)
+  paymentTarget          Decimal?  @db.Decimal(18, 4)
+  notes                  String?   @db.VarChar(1000)
+  sourceLedgerRevision   BigInt?
+  sourceImportedAt       DateTime? @db.Timestamptz(6)
+  createdByUserId        String    @db.Uuid
+  updatedByUserId        String    @db.Uuid
+  createdAt              DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt              DateTime  @updatedAt @db.Timestamptz(6)
+
+  company   Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  createdBy User    @relation("VatSimulationCreator", fields: [createdByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  updatedBy User    @relation("VatSimulationUpdater", fields: [updatedByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@unique([companyId, year, quarter])
+  @@index([tenantId, companyId, year, quarter])
 }
 
 /// Immutable event read-model written atomically with an actual external

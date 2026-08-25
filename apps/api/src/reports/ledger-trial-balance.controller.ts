@@ -1,4 +1,5 @@
-import { BadRequestException, Controller, ForbiddenException, Get, Headers, Param, Query, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Controller, ForbiddenException, Get, Headers, Param, Query, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { SkipThrottle, Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { companyIdSchema, ledgerTrialBalanceEvidenceQuerySchema, ledgerTrialBalanceEvidenceReceiptSchema, ledgerTrialBalanceRequestSchema, ledgerTrialBalanceResultSchema, ledgerTrialBalanceSourceReceiptSchema } from '@baseer-erp/contracts';
 
 import { CompanyContextService } from '../company-context/company-context.service.js';
@@ -6,6 +7,9 @@ import { REPORTS_READ_CAPABILITY } from './report-catalog.service.js';
 import { LedgerTrialBalanceReportService } from './ledger-trial-balance-report.service.js';
 
 @Controller('reports/ledger-trial-balance')
+@UseGuards(ThrottlerGuard)
+@SkipThrottle({ authIp: true, authIdentity: true, output: true, fileWrite: true })
+@Throttle({ report: { limit: 60, ttl: 60_000, blockDuration: 60_000 } })
 export class LedgerTrialBalanceController {
   constructor(private readonly contexts: CompanyContextService, private readonly trialBalance: LedgerTrialBalanceReportService) {}
 

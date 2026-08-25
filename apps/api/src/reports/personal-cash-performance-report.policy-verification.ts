@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 
+import { personalCashPerformanceLiveEvidenceReceiptSchema } from '@baseer-erp/contracts';
 import { FinanceCashPerformanceDirection, FinanceCashPerformanceEventKind, Prisma } from '../generated/prisma/client.js';
 import { aggregateCashPerformanceEvents, aggregateFinancialMovements, percentOfSales, type VaultMovement } from './personal-cash-performance-report.service.js';
 
@@ -81,5 +82,25 @@ const categoryHierarchy = aggregateFinancialMovements([
 ]);
 assert.equal(categoryHierarchy.rows.find((row) => row.code === 'purchases:category:food')?.amount.toFixed(4), '-115.0000');
 assert.equal(categoryHierarchy.rows.find((row) => row.code === 'purchases:category:food:item:meat')?.amount.toFixed(4), '-115.0000');
+
+// Operational routes are page-registry hashes. The live evidence contract
+// must accept them (and the prior section hash) or a valid source row turns
+// into a server-side 500 after the financial query has completed.
+const receiptWithCurrentPageRoute = {
+  rowCode: 'expenses:category:EXP-003', nextCursor: null,
+  items: [{
+    eventId: randomUUID(), businessDate: '2026-08-20', direction: 'OUTFLOW' as const,
+    amount: { raw: '-3500.0000', display: '3500.00', sign: 'negative' as const },
+    source: {
+      journalEntryId: randomUUID(), labelAr: 'فاتورة مشتريات أو مصروف', labelEn: 'Purchase or expense invoice', reference: 'EXP-001',
+      origin: { labelAr: 'العمليات ← المشتريات', labelEn: 'Operations → Purchasing', route: '#module=operations&page=operations-purchases' },
+    },
+  }],
+};
+assert.equal(personalCashPerformanceLiveEvidenceReceiptSchema.safeParse(receiptWithCurrentPageRoute).success, true);
+const [currentEvidenceItem] = receiptWithCurrentPageRoute.items;
+assert.ok(currentEvidenceItem);
+assert.equal(personalCashPerformanceLiveEvidenceReceiptSchema.safeParse({ ...receiptWithCurrentPageRoute, items: [{ ...currentEvidenceItem, source: { ...currentEvidenceItem.source, origin: { ...currentEvidenceItem.source.origin, route: '#module=finance&section=3' } } }] }).success, true);
+assert.equal(personalCashPerformanceLiveEvidenceReceiptSchema.safeParse({ ...receiptWithCurrentPageRoute, items: [{ ...currentEvidenceItem, source: { ...currentEvidenceItem.source, origin: { ...currentEvidenceItem.source.origin, route: '#module=operations&page=../../unsafe' } } }] }).success, false);
 
 console.log('financial profit-and-loss report policy verification passed');

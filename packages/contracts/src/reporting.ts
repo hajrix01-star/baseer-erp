@@ -46,9 +46,9 @@ const personalCashPerformanceVaultSchema = z.object({
 const personalCashPerformanceMetadataSchema = z.object({
   reportCode: z.literal('personal_cash_performance'),
   definitionVersion: z.string().min(1).max(80),
-  reportRunId: z.string().uuid(),
+  /** An interactive report is deliberately live; a ReportRun is issued only for an official output. */
+  dataMode: z.literal('LIVE'),
   ledgerRevision: z.string().regex(/^\d+$/),
-  runChecksum: z.string().regex(/^[a-f0-9]{64}$/),
   company: z.object({ displayName: z.string().min(1).max(160), functionalCurrency: z.string().regex(/^[A-Z]{3}$/) }).strict(),
   businessTimezone: z.string().min(1).max(64),
   selectedPeriod: z.object({ from: businessDateSchema, to: businessDateSchema, months: z.array(z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/)).optional() }).strict(),
@@ -66,7 +66,7 @@ export const personalCashPerformanceResultSchema = z.discriminatedUnion('state',
   z.object({ state: z.literal('NOT_READY'), messageAr: z.string().min(1).max(500) }).strict(),
   z.object({
     state: z.literal('COVERAGE_INCOMPLETE'), messageAr: z.string().min(1).max(500),
-    coverageStartBusinessDate: businessDateSchema.optional(), reportRunId: z.string().uuid().optional(), ledgerRevision: z.string().regex(/^\d+$/).optional(),
+    coverageStartBusinessDate: businessDateSchema.optional(), ledgerRevision: z.string().regex(/^\d+$/).optional(),
   }).strict(),
   personalCashPerformanceMetadataSchema.extend({
     state: z.literal('NO_DATA'), messageAr: z.string().min(1).max(500),
@@ -87,16 +87,27 @@ export const personalCashPerformanceEvidenceQuerySchema = z.object({
   cursor: z.string().regex(/^\d{4}-\d{2}-\d{2}:[0-9a-f-]{36}$/i).optional(),
 }).strict();
 
-export const personalCashPerformanceEvidenceReceiptSchema = z.object({
-  reportRunId: z.string().uuid(), rowCode: z.string().min(1).max(160), nextCursor: z.string().regex(/^\d{4}-\d{2}-\d{2}:[0-9a-f-]{36}$/i).nullable(),
-  items: z.array(z.object({
+const personalCashPerformanceEvidenceItemSchema = z.object({
     eventId: z.string().uuid(), businessDate: businessDateSchema, direction: z.enum(['INFLOW', 'OUTFLOW']), amount: reportMoneyDisplaySchema,
       source: z.object({
         journalEntryId: z.string().uuid(), labelAr: z.string().min(1).max(160), labelEn: z.string().min(1).max(160), reference: z.string().min(1).max(160),
-        origin: z.object({ labelAr: z.string().min(1).max(160), labelEn: z.string().min(1).max(160), route: z.string().regex(/^#module=[a-z]+&section=\d+(?:&stage=[a-z-]+)?$/) }).strict(),
+        // Current workspaces use stable page hashes. Keep the legacy section
+        // form valid for saved evidence created before the page registry.
+        origin: z.object({ labelAr: z.string().min(1).max(160), labelEn: z.string().min(1).max(160), route: z.string().regex(/^#module=[a-z-]+&(page=[a-z][a-z0-9-]*|section=\d+)(?:&stage=[a-z][a-z0-9-]{0,31})?$/) }).strict(),
       }).strict(),
-  }).strict()).max(100),
+  }).strict();
+
+const personalCashPerformanceEvidencePageSchema = z.object({
+  rowCode: z.string().min(1).max(160), nextCursor: z.string().regex(/^\d{4}-\d{2}-\d{2}:[0-9a-f-]{36}$/i).nullable(),
+  items: z.array(personalCashPerformanceEvidenceItemSchema).max(100),
 }).strict();
+
+export const personalCashPerformanceEvidenceReceiptSchema = personalCashPerformanceEvidencePageSchema.extend({
+  reportRunId: z.string().uuid(),
+}).strict();
+
+/** Interactive evidence is deliberately live; only print/export/save create a report run. */
+export const personalCashPerformanceLiveEvidenceReceiptSchema = personalCashPerformanceEvidencePageSchema;
 
 export const personalCashPerformanceSourceReceiptSchema = z.object({
   journalEntry: z.object({
