@@ -4,11 +4,11 @@ export type ReportDocumentFormat = 'preview' | 'xlsx';
 export type ReportDocumentArtifact = Readonly<{ snapshotId: string; format: ReportDocumentFormat; mimeType: string; fileName: string | null; contentEncoding: 'utf8' | 'base64'; content: string }>;
 
 /** Central client adapter for every report's frozen print and Excel outputs. */
-export async function renderReportRunDocument(session: ActiveSession, input: { reportRunId: string; locale: 'ar' | 'en'; format: ReportDocumentFormat }) {
-  return api<ReportDocumentArtifact>(session, '/reports/documents/render', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(input) });
+export async function renderReportRunDocument(session: ActiveSession, input: { reportRunId: string; locale: 'ar' | 'en'; format: ReportDocumentFormat }, companyId?: string) {
+  return api<ReportDocumentArtifact>(session, '/reports/documents/render', { method: 'POST', headers: { 'Content-Type': 'application/json', ...(companyId ? { 'X-Baseer-Company-Id': companyId } : {}) }, body: JSON.stringify(input) });
 }
-export async function renderSavedReportDocument(session: ActiveSession, documentId: string, format: ReportDocumentFormat) {
-  return api<ReportDocumentArtifact>(session, `/reports/documents/${documentId}/render`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ format }) });
+export async function renderSavedReportDocument(session: ActiveSession, documentId: string, format: ReportDocumentFormat, companyId?: string) {
+  return api<ReportDocumentArtifact>(session, `/reports/documents/${documentId}/render`, { method: 'POST', headers: { 'Content-Type': 'application/json', ...(companyId ? { 'X-Baseer-Company-Id': companyId } : {}) }, body: JSON.stringify({ format }) });
 }
 export function openReportPrintWindow(): Window {
   const target = window.open('', '_blank', 'popup');

@@ -1,0 +1,1019 @@
+{
+  "schemaVersion": 1,
+  "title": "Baseer UI component registry",
+  "authority": "docs/governance/BASEER_UI_SYSTEM_STANDARD.md",
+  "updatedAt": "2026-08-25",
+  "components": [
+    {
+      "id": "foundation-tokens",
+      "name": "Foundation tokens",
+      "layer": "foundation",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/styles.css",
+      "publicApi": "CSS custom properties and logical layout rules",
+      "states": [
+        "rtl",
+        "ltr",
+        "reduced-motion"
+      ],
+      "tests": [
+        "npm run build --workspace @baseer-erp/web"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "Only central source for shared visual tokens."
+    },
+    {
+      "id": "baseer-brand",
+      "name": "BaseerBrand",
+      "layer": "primitive",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-brand.tsx",
+      "publicApi": "BaseerBrand({ className? })",
+      "states": [
+        "default"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web"
+      ],
+      "consumers": [
+        "apps/web/src/baseer-login.tsx"
+      ],
+      "notes": "Brand presentation only."
+    },
+    {
+      "id": "baseer-button",
+      "name": "BaseerButton",
+      "layer": "primitive",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-button.tsx",
+      "publicApi": "BaseerButton with semantic variants, busy and disabled state",
+      "states": [
+        "default",
+        "focus",
+        "disabled",
+        "busy",
+        "danger"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web",
+        "npm run audit:ui-components -- --json"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "Future icon treatment extends this API; it is not a parallel primitive."
+    },
+    {
+      "id": "baseer-menu",
+      "name": "BaseerMenu",
+      "layer": "primitive",
+      "lifecycle": "pilot",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-menu.tsx",
+      "publicApi": "accessible contextual menu with labelled trigger and menuitem children",
+      "states": [
+        "closed",
+        "open",
+        "keyboard",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web",
+        "npx playwright test e2e/reports-mocked-auth.spec.ts --workers=1"
+      ],
+      "consumers": [
+        "apps/web/src/baseer-share-menu.tsx"
+      ],
+      "usageEvidence": {
+        "kind": "imports",
+        "paths": [
+          "apps/web/src/baseer-share-menu.tsx"
+        ]
+      },
+      "notes": "Owns compact contextual-menu focus and keyboard behavior; consumers supply menu items only."
+    },
+    {
+      "id": "baseer-card",
+      "name": "BaseerCard",
+      "layer": "primitive",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-card.tsx",
+      "publicApi": "BaseerCard({ children, className? })",
+      "states": [
+        "default"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "Token-owned surface."
+    },
+    {
+      "id": "baseer-text-input",
+      "name": "BaseerTextInput",
+      "layer": "primitive",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-text-input.tsx",
+      "publicApi": "forwardRef input with central class contract",
+      "states": [
+        "default",
+        "focus",
+        "disabled",
+        "invalid"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web",
+        "npm run audit:ui-components -- --json"
+      ],
+      "consumers": [
+        "apps/web/src/baseer-login.tsx"
+      ],
+      "notes": "Re-exported from baseer-form-fields for compatibility."
+    },
+    {
+      "id": "baseer-form-fields",
+      "name": "Baseer form field primitives",
+      "layer": "primitive",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-form-fields.tsx",
+      "publicApi": "BaseerMoneyInput, BaseerIntegerInput, BaseerMonthPicker, BaseerCheckbox, BaseerTextArea and BaseerFileInput",
+      "states": [
+        "default",
+        "focus",
+        "disabled",
+        "invalid",
+        "readonly"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web",
+        "npm run check:web-numeric-policy",
+        "npm run audit:ui-components -- --json"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "Money and integer values remain string-safe at the UI boundary."
+    },
+    {
+      "id": "baseer-static-select",
+      "name": "BaseerStaticSelect",
+      "layer": "primitive",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-static-select.tsx",
+      "publicApi": "labelled native select for short static options",
+      "states": [
+        "default",
+        "focus",
+        "disabled",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web",
+        "npm run audit:ui-components -- --json"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "Use for small fixed choices, not live record lookup."
+    },
+    {
+      "id": "baseer-combobox",
+      "name": "BaseerCombobox",
+      "layer": "primitive",
+      "lifecycle": "pilot",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-combobox.tsx",
+      "publicApi": "labelled searchable record selector returning stable identifiers",
+      "states": [
+        "loading",
+        "empty",
+        "error",
+        "disabled",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web",
+        "npm run verify:web-budget"
+      ],
+      "consumers": [
+        "apps/web/src/hr-leave-workspace.tsx"
+      ],
+      "notes": "Keyboard, assistive-technology, portal and remote-state behavior are implemented and covered by the control contract; further adoption remains governed by the registry ratchet."
+    },
+    {
+      "id": "baseer-date-picker",
+      "name": "BaseerDatePicker",
+      "layer": "primitive",
+      "lifecycle": "pilot",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-date-picker.tsx",
+      "implementationSources": [
+        "apps/web/src/baseer-date-picker-runtime.tsx"
+      ],
+      "publicApi": "single business-date picker with min/max/clearable presentation",
+      "states": [
+        "open",
+        "disabled",
+        "clearable",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web",
+        "npm run verify:web-budget"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "The runtime implementation is a semantic native date input behind this one public contract; it remains registered to preserve the performance ceiling."
+    },
+    {
+      "id": "baseer-aria-date-picker",
+      "name": "BaseerAriaDatePicker",
+      "layer": "primitive",
+      "lifecycle": "retired",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-aria-date-picker.tsx",
+      "publicApi": "compatibility alias to BaseerDatePicker only",
+      "states": [
+        "disabled",
+        "clearable",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web",
+        "npm run verify:web-budget"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "No consumer imports this alias; it contains no second date implementation and may be removed in a breaking-change window."
+    },
+    {
+      "id": "baseer-dialog",
+      "name": "BaseerDialog",
+      "layer": "primitive",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-dialog.tsx",
+      "publicApi": "modal dialog with title, footer, busy/error and optional eyebrow",
+      "states": [
+        "open",
+        "busy",
+        "error",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "npm run check:web-dialog-conventions",
+        "npm run check --workspace @baseer-erp/web"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "The sole current generic dialog contract."
+    },
+    {
+      "id": "baseer-confirm-dialog",
+      "name": "BaseerConfirmDialog",
+      "layer": "pattern",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-confirm-dialog.tsx",
+      "publicApi": "confirmation composition over BaseerDialog",
+      "states": [
+        "open",
+        "busy",
+        "destructive",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "npm run check:web-dialog-conventions",
+        "npm run check:web-financial-boundaries"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "Replaces browser confirmation for application actions."
+    },
+    {
+      "id": "baseer-form-dialog",
+      "name": "BaseerFormDialog",
+      "layer": "pattern",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-form-dialog.tsx",
+      "publicApi": "formId-linked submit/cancel dialog composition",
+      "states": [
+        "open",
+        "busy",
+        "error",
+        "submit-disabled"
+      ],
+      "tests": [
+        "npm run check:web-dialog-conventions",
+        "npm run check --workspace @baseer-erp/web"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "Uses BaseerDialog rather than a parallel dialog layer."
+    },
+    {
+      "id": "baseer-data-grid",
+      "name": "BaseerDataGrid",
+      "layer": "pattern",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-data-grid.tsx",
+      "publicApi": "typed data grid plus server load-more composition",
+      "states": [
+        "empty",
+        "sorted",
+        "load-more",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web",
+        "npm run audit:ui-components -- --json"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "Does not own server cursor or business reads."
+    },
+    {
+      "id": "data-table",
+      "name": "DataTable",
+      "layer": "pattern",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/data-table.tsx",
+      "publicApi": "lightweight bounded table",
+      "states": [
+        "empty",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web",
+        "npm run audit:ui-components -- --json"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "For bounded table presentation; specialised reports remain exceptions."
+    },
+    {
+      "id": "baseer-filter-bar",
+      "name": "BaseerFilterBar",
+      "layer": "pattern",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-filter-bar.tsx",
+      "publicApi": "search, filter controls, applied chips and clear action",
+      "states": [
+        "default",
+        "filtered",
+        "compact",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "Does not calculate financial values or alter authorization scope."
+    },
+    {
+      "id": "baseer-filter-controls",
+      "name": "BaseerFilterSelect and BaseerFilterToggle",
+      "layer": "primitive",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-filter-controls.tsx",
+      "publicApi": "short native filter select and labelled checkbox toggle",
+      "states": [
+        "default",
+        "focus",
+        "disabled",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web"
+      ],
+      "consumers": [
+        "apps/web/src/baseer-filter-bar.tsx"
+      ],
+      "notes": "Only for short static filter choices."
+    },
+    {
+      "id": "baseer-filter-autocomplete",
+      "name": "BaseerFilterAutocomplete",
+      "layer": "pattern",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-filter-autocomplete.tsx",
+      "publicApi": "filter-owned search and selected values presentation",
+      "states": [
+        "default",
+        "selected",
+        "empty",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "Use for filter context, not form record selection."
+    },
+    {
+      "id": "baseer-period-filter",
+      "name": "BaseerPeriodFilter",
+      "layer": "pattern",
+      "lifecycle": "pilot",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-period-filter.tsx",
+      "publicApi": "server-intent day/month/quarter/year/range period selection",
+      "states": [
+        "default",
+        "applied",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web",
+        "npm run check:web-localization"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "The pilot keyboard and popover contract is implemented; further adoption is governed by the registry and native-control ratchets."
+    },
+    {
+      "id": "baseer-validated-form",
+      "name": "BaseerValidatedForm",
+      "layer": "pattern",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-validated-form.tsx",
+      "publicApi": "React Hook Form and Zod composition boundary",
+      "states": [
+        "default",
+        "submitting",
+        "invalid",
+        "error"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web",
+        "npm run check:web-numeric-policy"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "Client validation never replaces server business validation."
+    },
+    {
+      "id": "baseer-workspace",
+      "name": "BaseerWorkspace",
+      "layer": "pattern",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-workspace.tsx",
+      "publicApi": "workspace container, BaseerSectionHeader, BaseerNotice and BaseerEmptyState",
+      "states": [
+        "default",
+        "empty",
+        "notice",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web",
+        "npm run audit:ui-components -- --json"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "BaseerAsyncState composes state-oriented surfaces where loading, empty, error, stale or retry behavior is required."
+    },
+    {
+      "id": "baseer-load-failure",
+      "name": "BaseerLoadFailure",
+      "layer": "pattern",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-load-failure.tsx",
+      "publicApi": "safe failed-read message and retry affordance",
+      "states": [
+        "error",
+        "retry",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web",
+        "npm run check:web-localization"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "Will be absorbed by BaseerAsyncState without losing correlation detail."
+    },
+    {
+      "id": "baseer-status-badge",
+      "name": "BaseerStatusBadge",
+      "layer": "primitive",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-status-badge.tsx",
+      "publicApi": "labelled status tone",
+      "states": [
+        "neutral",
+        "success",
+        "warning",
+        "danger"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web",
+        "npm run audit:ui-components -- --json"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "Color is not the sole status signal."
+    },
+    {
+      "id": "baseer-summary-metric",
+      "name": "BaseerSummaryMetric",
+      "layer": "pattern",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-summary-metric.tsx",
+      "publicApi": "metric grid and labelled metric presentation",
+      "states": [
+        "default",
+        "tone",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web",
+        "npm run audit:ui-components -- --json"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "Renders server-owned metric values."
+    },
+    {
+      "id": "baseer-money",
+      "name": "BaseerMoney",
+      "layer": "domain-specialized",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-money.tsx",
+      "publicApi": "currency display with language and currency inputs",
+      "states": [
+        "rtl",
+        "ltr",
+        "numeric"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web",
+        "npm run check:web-numeric-policy"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "Formatting only; no financial calculation."
+    },
+    {
+      "id": "baseer-chart",
+      "name": "BaseerChart",
+      "layer": "domain-specialized",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-chart.tsx",
+      "publicApi": "lazy chart presentation over complete server series",
+      "states": [
+        "loading",
+        "summary",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web",
+        "npm run verify:web-budget"
+      ],
+      "consumers": [
+        "apps/web/src/hr-overview-workspace.tsx"
+      ],
+      "notes": "Charts do not aggregate or infer business metrics."
+    },
+    {
+      "id": "baseer-select-facade",
+      "name": "BaseerSelect",
+      "layer": "pattern",
+      "lifecycle": "pilot",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-select.tsx",
+      "publicApi": "lazy selection facade delegating to BaseerCombobox",
+      "states": [
+        "loading",
+        "disabled",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web",
+        "npm run verify:web-budget"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "Compatibility facade, not a second selection contract; it follows the verified BaseerCombobox contract."
+    },
+    {
+      "id": "baseer-combobox-field-facade",
+      "name": "BaseerComboboxField",
+      "layer": "pattern",
+      "lifecycle": "pilot",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-combobox-field.tsx",
+      "publicApi": "lazy field facade delegating to BaseerCombobox",
+      "states": [
+        "loading",
+        "disabled",
+        "invalid",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web",
+        "npm run verify:web-budget"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "Compatibility facade, not a second selection contract; it follows the verified BaseerCombobox contract."
+    },
+    {
+      "id": "baseer-data-grid-field-facade",
+      "name": "BaseerDataGridField",
+      "layer": "pattern",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-data-grid-field.tsx",
+      "publicApi": "lazy route facade delegating to BaseerDataGrid",
+      "states": [
+        "loading",
+        "empty",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web",
+        "npm run verify:web-budget"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "Performance facade; it preserves the BaseerDataGrid contract."
+    },
+    {
+      "id": "baseer-required-textarea-form",
+      "name": "BaseerRequiredTextareaForm",
+      "layer": "pattern",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-required-textarea-form.tsx",
+      "publicApi": "required explanation form adapter",
+      "states": [
+        "open",
+        "busy",
+        "invalid"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web",
+        "npm run check:web-numeric-policy"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "Narrow form composition; a generic FormField requires a separate evidence-backed decision."
+    },
+    {
+      "id": "baseer-validated-form-field",
+      "name": "BaseerValidatedFormField",
+      "layer": "pattern",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-validated-form-field.tsx",
+      "publicApi": "validated form field adapter",
+      "states": [
+        "default",
+        "invalid",
+        "disabled",
+        "help"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "Validated field adapter; ownership is explicit through the field contract and any new competing field API requires an ADR."
+    },
+    {
+      "id": "baseer-form-layout",
+      "name": "BaseerFormSection and BaseerFormGrid",
+      "layer": "pattern",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-form-section.tsx",
+      "publicApi": "form section and responsive grid composition",
+      "states": [
+        "one-column",
+        "two-column",
+        "three-column",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "Layout only; no form state."
+    },
+    {
+      "id": "baseer-output-actions",
+      "name": "BaseerOutputActions",
+      "layer": "pattern",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-output-actions.tsx",
+      "publicApi": "authorised print and export actions",
+      "states": [
+        "default",
+        "disabled",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "Server reauthorizes every output request."
+    },
+    {
+      "id": "baseer-share-menu",
+      "name": "BaseerShareMenu",
+      "layer": "pattern",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-share-menu.tsx",
+      "publicApi": "bounded disclosure-style share menu",
+      "states": [
+        "closed",
+        "open",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "P1 may compose a generic menu popover; it does not replace native disclosure without an ADR."
+    },
+    {
+      "id": "baseer-company-read-query",
+      "name": "BaseerCompanyReadQuery",
+      "layer": "pattern",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-company-read-query.tsx",
+      "publicApi": "company/session scoped simple read composition",
+      "states": [
+        "loading",
+        "error",
+        "stale-company"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "Not for mutations or complex cursor pagination."
+    },
+    {
+      "id": "baseer-batch-layout",
+      "name": "Baseer batch layout",
+      "layer": "pattern",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-batch-layout.tsx",
+      "publicApi": "BaseerWorkspaceTabs, BaseerBatchPanel, BaseerBatchHeader and BaseerBatchFooter",
+      "states": [
+        "active-tab",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "ARIA tab keyboard behavior is implemented; any future tab variant remains governed by the finalization constitution and the component registry."
+    },
+    {
+      "id": "baseer-stepper",
+      "name": "BaseerStepper",
+      "layer": "pattern",
+      "lifecycle": "active",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-stepper.tsx",
+      "publicApi": "labelled multistep workflow navigation",
+      "states": [
+        "active-step",
+        "disabled",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web"
+      ],
+      "consumers": [
+        "apps/web/src"
+      ],
+      "notes": "Workflow composition, not a general tab substitute."
+    },
+    {
+      "id": "baseer-app-shell",
+      "name": "BaseerAppShell",
+      "layer": "pattern",
+      "lifecycle": "pilot",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-app-shell.tsx",
+      "publicApi": "authenticated module frame with durable navigation slots",
+      "states": [
+        "desktop",
+        "mobile",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "apps/web/e2e/finance-mocked-auth.spec.ts",
+        "npm run test:e2e --workspace @baseer-erp/web"
+      ],
+      "testEvidence": {
+        "kind": "playwright",
+        "paths": [
+          "apps/web/e2e/finance-mocked-auth.spec.ts"
+        ]
+      },
+      "consumers": [
+        "apps/web/src/App.tsx"
+      ],
+      "usageEvidence": {
+        "kind": "imports",
+        "paths": [
+          "apps/web/src/App.tsx"
+        ]
+      },
+      "notes": "Implementation is verified locally with authenticated desktop/mobile evidence; it remains pilot until the SHA-bound final acceptance record is issued."
+    },
+    {
+      "id": "baseer-navigation-drawer",
+      "name": "BaseerNavigationDrawer",
+      "layer": "pattern",
+      "lifecycle": "pilot",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-navigation-drawer.tsx",
+      "publicApi": "mobile navigation drawer with portal, dialog semantics, focus and scroll policy",
+      "states": [
+        "open",
+        "closed",
+        "rtl",
+        "ltr",
+        "mobile"
+      ],
+      "tests": [
+        "apps/web/e2e/finance-mocked-auth.spec.ts",
+        "npm run test:e2e --workspace @baseer-erp/web"
+      ],
+      "testEvidence": {
+        "kind": "playwright",
+        "paths": [
+          "apps/web/e2e/finance-mocked-auth.spec.ts"
+        ]
+      },
+      "consumers": [
+        "apps/web/src/baseer-app-shell.tsx"
+      ],
+      "usageEvidence": {
+        "kind": "imports",
+        "paths": [
+          "apps/web/src/baseer-app-shell.tsx"
+        ]
+      },
+      "notes": "Implementation owns portal, dialog semantics, focus and scroll policy; SHA-bound final acceptance is still required and no waiver is allowed."
+    },
+    {
+      "id": "baseer-async-state",
+      "name": "BaseerAsyncState",
+      "layer": "pattern",
+      "lifecycle": "pilot",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-async-state.tsx",
+      "publicApi": "loading, empty, error, retry and stale scope composition",
+      "states": [
+        "ready",
+        "loading",
+        "empty",
+        "error",
+        "retry",
+        "stale"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web",
+        "npx playwright test e2e/baseer-async-state.spec.ts --workers=1"
+      ],
+      "consumers": [
+        "apps/web/src/administration-ai-settings-panel.tsx"
+      ],
+      "usageEvidence": {
+        "kind": "imports",
+        "paths": [
+          "apps/web/src/administration-ai-settings-panel.tsx"
+        ]
+      },
+      "notes": "Central state contract is proven by a mounted Vite harness and adopted by Basira governance reads; ready preserves children without an extra wrapper."
+    },
+    {
+      "id": "baseer-overlay-policy",
+      "name": "Baseer overlay and portal policy",
+      "layer": "foundation",
+      "lifecycle": "pilot",
+      "owner": "UI Platform",
+      "source": "apps/web/src/baseer-overlay-policy.ts",
+      "publicApi": "named base/sticky/popover/modal/toast layers and portal ownership",
+      "states": [
+        "base",
+        "sticky",
+        "popover",
+        "modal",
+        "toast",
+        "rtl",
+        "ltr"
+      ],
+      "tests": [
+        "npm run check --workspace @baseer-erp/web",
+        "npx playwright test e2e/app-shell-navigation-drawer.spec.ts --workers=1"
+      ],
+      "consumers": [
+        "apps/web/src/baseer-combobox.tsx",
+        "apps/web/src/baseer-navigation-drawer.tsx"
+      ],
+      "usageEvidence": {
+        "kind": "imports",
+        "paths": [
+          "apps/web/src/baseer-combobox.tsx",
+          "apps/web/src/baseer-navigation-drawer.tsx"
+        ]
+      },
+      "notes": "All new portal overlays must select a named layer here; the drawer and portalled combobox prove the ordering contract."
+    }
+  ]
+}

@@ -2,7 +2,10 @@ import { useBaseerForm, z } from "./baseer-form-state";
 import { useEffect, useMemo } from "react";
 
 import { BaseerButton } from "./baseer-button";
+import { BaseerComboboxField as BaseerCombobox } from "./baseer-combobox-field";
 import { BaseerDialog } from "./baseer-dialog";
+import { BaseerStaticSelect } from "./baseer-static-select";
+import { BaseerCheckbox, BaseerTextInput } from "./baseer-form-fields";
 import { categoryText } from "./categories-copy";
 import { displayName, localizedEnum } from "./baseer-localization";
 import { uiCopy } from "./baseer-ui-copy";
@@ -38,20 +41,22 @@ export function FinanceCategoryFormDialog({ open, language, busy, value, editing
   const form = useBaseerForm<CategoryForm>({ defaultValues: value, schema: validation, shouldFocusError: true });
   const kind = form.watch("kind");
   const isPosting = form.watch("isPosting");
+  const parentId = form.watch("parentId");
+  const suggestedSupplierId = form.watch("suggestedSupplierId");
   const active = categories.filter((item) => item.status === "ACTIVE");
   const parentOptions = active.filter((item) => !item.isPosting && item.kind === kind && item.id !== editing?.id);
   const suggestedSupplierOptions = suppliers.filter((item) => item.status === "ACTIVE" && item.supplierType === (kind === "PURCHASE" ? "PURCHASE" : "EXPENSE"));
   useEffect(() => { if (open) form.reset(value); }, [form, open, value]);
   return <BaseerDialog open={open} title={editing ? text.editCategory : text.addCategory} language={language} busy={busy} onClose={onClose} footer={<><BaseerButton type="button" variant="secondary" disabled={busy} onClick={onClose}>{shared.cancel}</BaseerButton><BaseerButton type="submit" form="category-form" variant="primary" disabled={busy}>{editing ? text.save : text.add}</BaseerButton></>}>
     <form id="category-form" className="administration-form" style={{ gridTemplateColumns: "minmax(6.5rem, .72fr) minmax(0, 1.14fr) minmax(0, 1.14fr)", gap: ".55rem" }} data-baseer-rhf-form="true" noValidate onSubmit={form.handleSubmit((next) => void onSubmit(next))}>
-      <label>{text.code}<input autoFocus aria-invalid={Boolean(form.formState.errors.code)} {...form.register("code")} />{form.formState.errors.code ? <small role="alert">{form.formState.errors.code.message}</small> : null}</label>
-      <label>{text.nameAr}<input aria-invalid={Boolean(form.formState.errors.nameAr)} {...form.register("nameAr")} />{form.formState.errors.nameAr ? <small role="alert">{form.formState.errors.nameAr.message}</small> : null}</label>
-      <label>{text.nameEn}<input aria-invalid={Boolean(form.formState.errors.nameEn)} {...form.register("nameEn")} />{form.formState.errors.nameEn ? <small role="alert">{form.formState.errors.nameEn.message}</small> : null}</label>
-      <label>{text.kind}<select disabled={Boolean(editing)} {...form.register("kind")} onChange={(event) => { form.setValue("kind", event.target.value as CategoryKind, { shouldDirty: true }); form.setValue("parentId", "", { shouldDirty: true }); form.setValue("suggestedSupplierId", "", { shouldDirty: true }); }}><option value="PURCHASE">{localizedEnum(language, "PURCHASE")}</option><option value="EXPENSE">{localizedEnum(language, "EXPENSE")}</option><option value="SALE">{localizedEnum(language, "SALE")}</option></select></label>
-      <label>{text.parent}<select {...form.register("parentId")}><option value="">{text.noParent}</option>{parentOptions.map((item) => <option key={item.id} value={item.id}>{displayName(language, item)}</option>)}</select></label>
-      {kind !== "SALE" && isPosting ? <label>{text.suggestedSupplier}<select {...form.register("suggestedSupplierId")}><option value="">{text.noSuggestedSupplier}</option>{suggestedSupplierOptions.map((item) => <option key={item.id} value={item.id}>{displayName(language, item)}</option>)}</select></label> : null}
+      <label>{text.code}<BaseerTextInput autoFocus aria-invalid={Boolean(form.formState.errors.code)} {...form.register("code")} />{form.formState.errors.code ? <small role="alert">{form.formState.errors.code.message}</small> : null}</label>
+      <label>{text.nameAr}<BaseerTextInput aria-invalid={Boolean(form.formState.errors.nameAr)} {...form.register("nameAr")} />{form.formState.errors.nameAr ? <small role="alert">{form.formState.errors.nameAr.message}</small> : null}</label>
+      <label>{text.nameEn}<BaseerTextInput aria-invalid={Boolean(form.formState.errors.nameEn)} {...form.register("nameEn")} />{form.formState.errors.nameEn ? <small role="alert">{form.formState.errors.nameEn.message}</small> : null}</label>
+      <label>{text.kind}<BaseerStaticSelect label={text.kind} disabled={Boolean(editing)} {...form.register("kind")} onChange={(event) => { form.setValue("kind", event.target.value as CategoryKind, { shouldDirty: true }); form.setValue("parentId", "", { shouldDirty: true }); form.setValue("suggestedSupplierId", "", { shouldDirty: true }); }}><option value="PURCHASE">{localizedEnum(language, "PURCHASE")}</option><option value="EXPENSE">{localizedEnum(language, "EXPENSE")}</option><option value="SALE">{localizedEnum(language, "SALE")}</option></BaseerStaticSelect></label>
+      <label>{text.parent}<BaseerCombobox label={text.parent} value={parentId} placeholder={text.noParent} options={parentOptions.map((item) => ({ id: item.id, label: displayName(language, item) }))} onChange={(nextParentId) => form.setValue("parentId", nextParentId, { shouldDirty: true, shouldValidate: true })} /></label>
+      {kind !== "SALE" && isPosting ? <label>{text.suggestedSupplier}<BaseerCombobox label={text.suggestedSupplier} value={suggestedSupplierId} placeholder={text.noSuggestedSupplier} options={suggestedSupplierOptions.map((item) => ({ id: item.id, label: displayName(language, item) }))} onChange={(nextSupplierId) => form.setValue("suggestedSupplierId", nextSupplierId, { shouldDirty: true, shouldValidate: true })} /></label> : null}
       {editing ? <small style={{ gridColumn: "1 / -1", color: "var(--muted)", fontSize: "var(--font-caption)" }}>{text.accountingTypeFixed}</small> : null}
-      <label style={{ gridColumn: "1 / -1" }}><input type="checkbox" {...form.register("isPosting")} /> {isPosting ? text.acceptsPosting : text.groupOnly}</label>
+      <label style={{ gridColumn: "1 / -1" }}><BaseerCheckbox {...form.register("isPosting")} /> {isPosting ? text.acceptsPosting : text.groupOnly}</label>
     </form>
   </BaseerDialog>;
 }

@@ -31,8 +31,9 @@
 .hr-workforce-chart__body { display: grid; grid-template-columns: minmax(15rem, .88fr) minmax(19rem, 1.12fr); align-items: center; gap: clamp(1rem, 3vw, 2.5rem); }
 .hr-workforce-chart__visual { position: relative; display: grid; min-block-size: 15.5rem; place-items: center; isolation: isolate; }
 .hr-workforce-chart__visual::before { position: absolute; z-index: -1; inline-size: min(85%, 14rem); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgb(21 154 121 / 14%), transparent 68%); content: ""; animation: hr-workforce-chart-glow 2.9s ease-in-out infinite; }
-.hr-workforce-chart__plot { inline-size: min(100%, 17rem); block-size: 15.5rem; }
-.hr-workforce-chart__center { position: absolute; display: grid; max-inline-size: 8.7rem; gap: .16rem; place-items: center; pointer-events: none; text-align: center; }
+.hr-workforce-chart__plot { position: relative; inline-size: min(100%, 15.5rem); block-size: 15.5rem; border: 1px solid color-mix(in srgb, var(--brand) 18%, var(--line)); border-radius: 50%; box-shadow: 0 1rem 2.6rem rgb(10 58 44 / 12%); }
+.hr-workforce-chart__plot::after { position: absolute; inset: 22%; border-radius: 50%; background: var(--surface); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--brand) 10%, var(--line)); content: ""; }
+.hr-workforce-chart__center { position: absolute; z-index: 1; display: grid; max-inline-size: 8.7rem; gap: .16rem; place-items: center; pointer-events: none; text-align: center; }
 .hr-workforce-chart__center strong { color: var(--ink); font-size: clamp(2rem, 4vw, 3rem); font-variant-numeric: tabular-nums; letter-spacing: -.06em; line-height: 1; }
 .hr-workforce-chart__center span { color: var(--muted); font-size: var(--font-caption); font-weight: 750; line-height: 1.35; }
 
@@ -60,7 +61,7 @@
   .hr-workforce-chart__footer { align-items: flex-start; flex-direction: column; }
   .hr-workforce-chart__body { grid-template-columns: 1fr; gap: .8rem; }
   .hr-workforce-chart__visual { min-block-size: 14rem; }
-  .hr-workforce-chart__plot { block-size: 14rem; }
+  .hr-workforce-chart__plot { inline-size: 14rem; block-size: 14rem; }
   .hr-workforce-chart__footer span:last-child { text-align: start; }
 }
 

@@ -37,6 +37,14 @@ function isTopmostDialog(dialogId: symbol) {
   return dialogStack.at(-1) === dialogId;
 }
 
+/** The dialog contract owns every normally tabbable HTML surface, not only form controls. */
+function focusableElements(root: HTMLElement | null) {
+  if (!root) return [];
+  return Array.from(root.querySelectorAll<HTMLElement>(
+    'a[href], area[href], button, input, select, textarea, iframe, [contenteditable="true"], [tabindex]:not([tabindex="-1"])',
+  )).filter((element) => !element.hasAttribute("disabled") && element.tabIndex >= 0 && element.getClientRects().length > 0);
+}
+
 /** Routes an operation error to the active modal instead of a notice hidden behind its backdrop. */
 export function reportTopmostDialogError(message: string) {
   const dialogId = dialogStack.at(-1);
@@ -93,13 +101,7 @@ export function useDialogFocusTrap({
       document.activeElement instanceof HTMLElement
         ? document.activeElement
         : null;
-    const focusable = () =>
-      Array.from(
-        dialogRef.current?.querySelectorAll<HTMLElement>(
-          "button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled])",
-        ) ?? [],
-      );
-    const timer = window.setTimeout(() => focusable()[0]?.focus(), 0);
+    const timer = window.setTimeout(() => focusableElements(dialogRef.current)[0]?.focus(), 0);
     return () => {
       window.clearTimeout(timer);
       previousFocus?.focus();
@@ -108,12 +110,6 @@ export function useDialogFocusTrap({
 
   useEffect(() => {
     if (!open) return;
-    const focusable = () =>
-      Array.from(
-        dialogRef.current?.querySelectorAll<HTMLElement>(
-          "button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled])",
-        ) ?? [],
-      );
     const onKeyDown = (event: KeyboardEvent) => {
       if (!isTopmostDialog(dialogIdRef.current)) return;
       if (event.key === "Escape" && !saving) {
@@ -122,7 +118,7 @@ export function useDialogFocusTrap({
         return;
       }
       if (event.key !== "Tab") return;
-      const items = focusable();
+      const items = focusableElements(dialogRef.current);
       if (!items.length) return;
       const first = items[0];
       const last = items[items.length - 1];

@@ -4,7 +4,7 @@ import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
 import { BaseerConfirmDialog } from "./baseer-confirm-dialog";
 import { BaseerDialog } from "./baseer-dialog";
-import { BaseerMoneyInput, formatBaseerEditableAmount } from "./baseer-form-fields";
+import { BaseerCheckbox, BaseerMoneyInput, BaseerMonthPicker, BaseerTextInput, formatBaseerEditableAmount } from "./baseer-form-fields";
 import { useBaseerForm, z } from "./baseer-form-state";
 import { BaseerMoney } from "./baseer-money";
 import { activeSession, requestId } from "./daily-sales-client";
@@ -211,7 +211,7 @@ export function HrPayrollCreateDialog({ open, payrollRunId, runNumber, onClose, 
   const inclusionControl = (employee: HrPayrollPreviewEmployee) => {
     const canIncludeLeave = employee.status === "ON_LEAVE" && employee.reason !== "ON_LEAVE_MISSING_COMPENSATION";
     if (!canIncludeLeave) return <span className={employee.included ? "hr-payroll-create__included" : "hr-payroll-create__excluded"}>{reason(employee)}</span>;
-    return <label className="hr-payroll-create__leave-toggle"><input type="checkbox" checked={includeOnLeaveIds.includes(employee.id)} disabled={previewLoading} onChange={(event) => setIncludeOnLeaveIds((ids) => event.target.checked ? [...new Set([...ids, employee.id])] : ids.filter((id) => id !== employee.id))} />{ar ? "إدراج الإجازة" : "Include leave"}</label>;
+    return <label className="hr-payroll-create__leave-toggle"><BaseerCheckbox checked={includeOnLeaveIds.includes(employee.id)} disabled={previewLoading} onChange={(event) => setIncludeOnLeaveIds((ids) => event.target.checked ? [...new Set([...ids, employee.id])] : ids.filter((id) => id !== employee.id))} />{ar ? "إدراج الإجازة" : "Include leave"}</label>;
   };
 
   const applicationChoices = (employee: HrPayrollPreviewEmployee, kind: "advances" | "deductions") => {
@@ -224,7 +224,7 @@ export function HrPayrollCreateDialog({ open, payrollRunId, runNumber, onClose, 
     return <div className="hr-payroll-create__application-list">{rows.map((entry) => {
       const item = choices[entry.id] ?? { enabled: false, amount: formatBaseerEditableAmount(entry.remainingAmount) };
       return <label key={entry.id} className={item.enabled ? "is-selected" : undefined}>
-        <input type="checkbox" checked={item.enabled} disabled={!employee.included || busy} onChange={(event) => updateApplication(employee.id, kind, entry.id, event.target.checked, item.amount)} />
+        <BaseerCheckbox checked={item.enabled} disabled={!employee.included || busy} onChange={(event) => updateApplication(employee.id, kind, entry.id, event.target.checked, item.amount)} />
         <span>{label} · {entry.referenceNumber}</span>
         <BaseerMoneyInput aria-label={`${label} ${entry.referenceNumber}`} disabled={!employee.included || !item.enabled || busy} value={item.amount} onValueChange={(amount) => updateApplication(employee.id, kind, entry.id, item.enabled, amount)} />
       </label>;
@@ -235,7 +235,7 @@ export function HrPayrollCreateDialog({ open, payrollRunId, runNumber, onClose, 
   const title = editing ? (ar ? `تعديل مسودة ${runNumber ?? ""}`.trim() : `Edit draft ${runNumber ?? ""}`.trim()) : (ar ? "إنشاء مسير راتب" : "Create payroll run");
   return <><BaseerDialog open={open} title={title} size="wide" className="hr-payroll-create-dialog" language={language} busy={busy} onClose={onClose} footer={<><div className="hr-payroll-create__total"><span>{ar ? "صافي المستحق" : "Net payable"}</span>{displayedNetPayable !== null ? <BaseerMoney value={displayedNetPayable} language={language} /> : "—"}</div><div className="hr-payroll-create__actions">{editing ? <BaseerButton type="button" variant="danger" disabled={busy || draftLoading} onClick={() => setDiscardOpen(true)}>{ar ? "حذف المسودة" : "Discard draft"}</BaseerButton> : null}{editing && onReview ? <BaseerButton type="button" variant="secondary" disabled={busy || draftLoading} onClick={onReview}>{ar ? "مراجعة واعتماد" : "Review and approve"}</BaseerButton> : null}<BaseerButton type="button" variant="secondary" disabled={busy} onClick={onClose}>{ar ? "إغلاق" : "Close"}</BaseerButton><BaseerButton type="submit" form="hr-payroll-create-form" disabled={!canSubmit}>{editing ? (ar ? "حفظ التعديلات" : "Save changes") : (ar ? "إنشاء المسودة" : "Create draft")}</BaseerButton></div></>}>
     {draftLoading ? <p className="hr-payroll-create__loading-shell" role="status">{ar ? "جارٍ فتح مسودة المسير…" : "Opening payroll draft…"}</p> : <form id="hr-payroll-create-form" className="hr-payroll-create" data-baseer-rhf-form="true" noValidate onSubmit={draftForm.handleSubmit((values) => void submit(values))}>
-      <header className="hr-payroll-create__controls"><label>{ar ? "الشهر" : "Month"}<input {...draftForm.register("payrollMonth")} required disabled={editing} type="month" aria-invalid={draftForm.formState.errors.payrollMonth ? "true" : undefined} aria-describedby={draftForm.formState.errors.payrollMonth ? "hr-payroll-month-error" : undefined} value={draft.payrollMonth.slice(0, 7)} onChange={(event) => { draftForm.setValue("payrollMonth", `${event.target.value}-01`, { shouldDirty: true, shouldValidate: true }); resetApplications(); }} />{draftForm.formState.errors.payrollMonth ? <small id="hr-payroll-month-error" role="alert">{draftForm.formState.errors.payrollMonth.message}</small> : null}</label><label>{ar ? "ملاحظات" : "Notes"}<input {...draftForm.register("notes")} /></label></header>
+      <header className="hr-payroll-create__controls"><label>{ar ? "الشهر" : "Month"}<BaseerMonthPicker {...draftForm.register("payrollMonth")} required disabled={editing} aria-invalid={draftForm.formState.errors.payrollMonth ? "true" : undefined} aria-describedby={draftForm.formState.errors.payrollMonth ? "hr-payroll-month-error" : undefined} value={draft.payrollMonth.slice(0, 7)} onChange={(event) => { draftForm.setValue("payrollMonth", `${event.target.value}-01`, { shouldDirty: true, shouldValidate: true }); resetApplications(); }} />{draftForm.formState.errors.payrollMonth ? <small id="hr-payroll-month-error" role="alert">{draftForm.formState.errors.payrollMonth.message}</small> : null}</label><label>{ar ? "ملاحظات" : "Notes"}<BaseerTextInput {...draftForm.register("notes")} /></label></header>
       <div className="hr-payroll-create__table-heading"><strong>{ar ? `قائمة الموظفين (${preview?.totals.employeeCount ?? 0})` : `Employees (${preview?.totals.employeeCount ?? 0})`}</strong><BaseerButton type="button" variant="secondary" disabled={previewLoading} onClick={() => void loadPreview()}>{ar ? "تحديث" : "Refresh"}</BaseerButton></div>
       {previewLoading && !preview ? <p className="hr-payroll-create__loading">{ar ? "جارٍ إعداد المسير…" : "Preparing payroll…"}</p> : null}
       {preview?.exceptions.length ? <p className="hr-payroll-create__notice" role="alert">{ar ? `يلزم معالجة ${preview.counts.exceptions} استثناء قبل إنشاء المسير.` : `${preview.counts.exceptions} exception(s) must be resolved before creating the payroll.`}</p> : null}

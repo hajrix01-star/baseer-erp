@@ -5,6 +5,7 @@ import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
 import { BaseerDatePicker } from "./baseer-date-picker";
+import { BaseerFormDialog } from "./baseer-form-dialog";
 import { BaseerMoneyInput } from "./baseer-form-fields";
 import {
   BaseerSummaryMetric,
@@ -16,7 +17,6 @@ import { compareMoneyDecimals, isPositiveMoneyDecimal } from "./decimal-string";
 import { displayName } from "./baseer-localization";
 import { financeText } from "./finance-copy";
 import { formatMoney } from "./number-format";
-import { useDialogFocusTrap } from "./use-dialog-focus-trap";
 
 export type PurchaseCreditWorkspace = {
   companyId: string;
@@ -241,7 +241,6 @@ function CreditPaymentDialog({
   const text = financeText(language);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-  const dialogRef = useDialogFocusTrap({ open: due !== null, saving, onClose });
   const validation = useMemo(
     () =>
       z
@@ -328,37 +327,21 @@ function CreditPaymentDialog({
     }
   };
   return (
-    <div
-      className="daily-sales-dialog-backdrop"
-      role="presentation"
-      onMouseDown={() => !saving && onClose()}
+    <BaseerFormDialog
+      open
+      title={text.recordSettlement}
+      language={language}
+      formId="purchase-expense-credit-payment"
+      submitLabel={saving ? text.saving : text.recordSettlement}
+      busy={saving}
+      error={error}
+      onClose={onClose}
     >
-      <section
-        ref={dialogRef}
-        className="daily-sales-dialog"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="credit-payment-dialog-title"
-        onMouseDown={(event) => event.stopPropagation()}
-      >
-        <header className="daily-sales-dialog__header">
-          <div>
-            <h3 id="credit-payment-dialog-title">{text.recordSettlement}</h3>
-            <p>
-              {due.documentNumber} · {formatMoney(due.remainingAmount)}
-            </p>
-          </div>
-          <button
-            className="dialog-icon-button"
-            type="button"
-            aria-label={text.cancel}
-            disabled={saving}
-            onClick={onClose}
-          >
-            ×
-          </button>
-        </header>
+        <p>
+          {due.documentNumber} · {formatMoney(due.remainingAmount)}
+        </p>
         <form
+          id="purchase-expense-credit-payment"
           className="daily-sales-dialog__form"
           data-baseer-rhf-form="true"
           noValidate
@@ -409,14 +392,7 @@ function CreditPaymentDialog({
               <small role="alert">{form.formState.errors.amount.message}</small>
             ) : null}
           </label>
-          {error ? <p className="daily-sales-message error">{error}</p> : null}
-          <footer className="daily-sales-dialog__actions">
-            <BaseerButton variant="primary" disabled={saving}>
-              {saving ? text.saving : text.recordSettlement}
-            </BaseerButton>
-          </footer>
         </form>
-      </section>
-    </div>
+    </BaseerFormDialog>
   );
 }

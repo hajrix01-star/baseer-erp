@@ -1,0 +1,7 @@
+.baseer-menu { position: relative; display: inline-flex; }
+.baseer-menu__trigger { justify-content: center; width: 2.45rem; min-width: 2.45rem; height: 2.45rem; padding: 0; }
+.baseer-menu__trigger[aria-expanded="true"] { border-color: var(--baseer-primary, #087c53); box-shadow: 0 0 0 2px color-mix(in srgb, var(--baseer-primary, #087c53) 15%, transparent); }
+.baseer-menu__list { position: absolute; inset-inline-start: 0; top: calc(100% + .4rem); z-index: 20; display: grid; min-width: 13.5rem; padding: .35rem; border: 1px solid var(--baseer-border, #d7e4dd); border-radius: .65rem; background: var(--baseer-surface, #fff); box-shadow: 0 .7rem 1.5rem rgb(24 52 40 / 16%); }
+.baseer-menu__list button { padding: .55rem .65rem; border: 0; border-radius: .4rem; background: transparent; color: var(--baseer-ink, #183428); font: inherit; text-align: start; cursor: pointer; }
+.baseer-menu__list button:hover:not(:disabled), .baseer-menu__list button:focus-visible { background: var(--baseer-surface-subtle, #eff7f2); outline: none; }
+.baseer-menu__list button:disabled { color: var(--baseer-ink-muted, #718178); cursor: wait; }

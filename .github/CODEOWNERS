@@ -1,0 +1,21 @@
+# These teams must exist in the repository's GitHub organisation before the
+# branch-protection rule is activated. Their names are the governance roles,
+# not a substitute for GitHub membership or required-review configuration.
+
+# Platform contracts, shared visual tokens, overlays and their executable rules.
+/apps/web/src/styles.css                 @baseer-erp/ui-platform
+/apps/web/src/workspace-foundation.css   @baseer-erp/ui-platform
+/apps/web/src/baseer-*.tsx               @baseer-erp/ui-platform
+/apps/web/src/baseer-*.css                @baseer-erp/ui-platform
+/apps/web/src/use-dialog-focus-trap.ts   @baseer-erp/ui-platform
+/apps/web/src/baseer-overlay-policy.ts   @baseer-erp/ui-platform
+/apps/web/vite.config.ts                  @baseer-erp/ui-platform
+
+# UI governance records and automated gates cannot be changed without the
+# accountable platform owner.
+/docs/governance/BASEER_UI_*             @baseer-erp/ui-platform
+/docs/governance/UI_*                    @baseer-erp/ui-platform
+/scripts/check-ui-*                      @baseer-erp/ui-platform
+/scripts/check-web-release-budget.mjs     @baseer-erp/ui-platform
+/.github/workflows/verify.yml            @baseer-erp/ui-platform @baseer-erp/engineering
+/.github/CODEOWNERS                      @baseer-erp/ui-platform @baseer-erp/engineering

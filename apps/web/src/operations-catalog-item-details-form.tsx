@@ -1,6 +1,9 @@
 import { useBaseerForm, z } from "./baseer-form-state";
 import { useEffect, useMemo } from "react";
 
+import { BaseerComboboxField as BaseerCombobox } from "./baseer-combobox-field";
+import { BaseerTextInput } from "./baseer-form-fields";
+
 type Language = "ar" | "en";
 type Kind = "RAW_MATERIAL" | "MENU_PRODUCT";
 type Section = { id: string; nameAr: string; nameEn: string | null; isActive: boolean };
@@ -43,12 +46,13 @@ export function OperationsCatalogItemDetailsForm({ formId, language, value, sect
   }), [language, text.choose, value.kind]);
   const form = useBaseerForm<Pick<OperationsCatalogItemDetails, "code" | "nameAr" | "nameEn" | "sectionId">>({ schema: validation, defaultValues: value, shouldFocusError: true });
   useEffect(() => { form.reset(value); }, [form, value]);
+  const sectionId = form.watch("sectionId");
   const name = (section: Section) => ar ? section.nameAr : section.nameEn ?? section.nameAr;
 
   return <form id={formId} className="administration-form" data-baseer-rhf-form="true" noValidate onSubmit={form.handleSubmit((next) => void onSubmit({ ...value, ...next }))}>
-    <label>{text.code}<input autoFocus aria-invalid={Boolean(form.formState.errors.code)} {...form.register("code")} />{form.formState.errors.code ? <small role="alert">{form.formState.errors.code.message}</small> : null}</label>
-    <label>{text.nameAr}<input aria-invalid={Boolean(form.formState.errors.nameAr)} {...form.register("nameAr")} />{form.formState.errors.nameAr ? <small role="alert">{form.formState.errors.nameAr.message}</small> : null}</label>
-    <label>{text.nameEn}<input {...form.register("nameEn")} /></label>
-    {value.kind === "MENU_PRODUCT" ? <label>{text.section}<select aria-invalid={Boolean(form.formState.errors.sectionId)} {...form.register("sectionId")}><option value="">—</option>{sections.filter((section) => section.isActive).map((section) => <option key={section.id} value={section.id}>{name(section)}</option>)}</select>{form.formState.errors.sectionId ? <small role="alert">{form.formState.errors.sectionId.message}</small> : null}</label> : null}
+    <label>{text.code}<BaseerTextInput autoFocus aria-invalid={Boolean(form.formState.errors.code)} {...form.register("code")} />{form.formState.errors.code ? <small role="alert">{form.formState.errors.code.message}</small> : null}</label>
+    <label>{text.nameAr}<BaseerTextInput aria-invalid={Boolean(form.formState.errors.nameAr)} {...form.register("nameAr")} />{form.formState.errors.nameAr ? <small role="alert">{form.formState.errors.nameAr.message}</small> : null}</label>
+    <label>{text.nameEn}<BaseerTextInput {...form.register("nameEn")} /></label>
+    {value.kind === "MENU_PRODUCT" ? <label>{text.section}<BaseerCombobox label={text.section} placeholder="—" value={sectionId} required invalid={Boolean(form.formState.errors.sectionId)} options={sections.filter((section) => section.isActive).map((section) => ({ id: section.id, label: name(section) }))} onChange={(sectionId) => form.setValue("sectionId", sectionId, { shouldDirty: true, shouldValidate: true })} />{form.formState.errors.sectionId ? <small role="alert">{form.formState.errors.sectionId.message}</small> : null}</label> : null}
   </form>;
 }

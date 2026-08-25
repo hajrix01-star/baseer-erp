@@ -1,27 +1,10 @@
 import { lazy, Suspense } from "react";
 
-import type { BaseerSearchOption } from "./baseer-select-options";
+import type { BaseerComboboxProps } from "./baseer-combobox";
 
 const LazyBaseerCombobox = lazy(async () => ({ default: (await import("./baseer-combobox")).BaseerCombobox }));
 
-type Props = {
-  id?: string;
-  label: string;
-  value: string;
-  options: readonly BaseerSearchOption[];
-  placeholder: string;
-  disabled?: boolean;
-  required?: boolean;
-  scopeKey?: string;
-  remoteSearch?: (query: string, signal: AbortSignal) => Promise<readonly BaseerSearchOption[]>;
-  loadingLabel?: string;
-  emptyLabel?: string;
-  errorLabel?: string;
-  searchable?: boolean;
-  className?: string;
-  menuClassName?: string;
-  onChange: (value: string) => void;
-};
+type Props = BaseerComboboxProps;
 
 /**
  * Lazy screen gateway for BaseerCombobox. Feature modules import this facade
@@ -33,6 +16,7 @@ export function BaseerComboboxField(props: Props) {
     id={props.id}
     className={props.className}
     aria-label={props.label}
+    aria-invalid={props.invalid || undefined}
     placeholder={props.placeholder}
     disabled={props.disabled}
     required={props.required}

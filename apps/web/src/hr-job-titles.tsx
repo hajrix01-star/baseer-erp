@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { BaseerButton } from "./baseer-button";
 import { BaseerComboboxField as BaseerCombobox } from "./baseer-combobox-field";
+import { BaseerTextInput } from "./baseer-form-fields";
 import "./hr-job-titles.css";
 
 type Language = "ar" | "en";
@@ -51,5 +52,5 @@ export function HrJobTitleSelect({ id, language, value, required, disabled, allo
     setCustom(false);
     onChange(ar ? title.nameAr : title.nameEn);
   };
-  return <div className="hr-job-title-select">{custom && allowCustom ? <div className="hr-job-title-select__custom"><input id={id} required={required} disabled={disabled} value={value} placeholder={ar ? "اكتب المسمى الوظيفي" : "Enter job title"} onChange={(event) => onChange(event.target.value)} /><BaseerButton type="button" variant="quiet" disabled={disabled} onClick={() => { setCustom(false); onChange(""); }}>{ar ? "اختيار مسمى معتمد" : "Choose an approved title"}</BaseerButton></div> : <BaseerCombobox id={id} label={ar ? "المسمى الوظيفي" : "Job title"} value={selectedTitle?.id ?? ""} options={options} placeholder={ar ? "اختر مسمى وظيفياً" : "Select a job title"} required={required} disabled={disabled} className="hr-job-title-select__input" menuClassName="hr-job-title-select__menu" onChange={choose} />}</div>;
+  return <div className="hr-job-title-select">{custom && allowCustom ? <div className="hr-job-title-select__custom"><BaseerTextInput id={id} required={required} disabled={disabled} value={value} placeholder={ar ? "اكتب المسمى الوظيفي" : "Enter job title"} onChange={(event) => onChange(event.target.value)} /><BaseerButton type="button" variant="quiet" disabled={disabled} onClick={() => { setCustom(false); onChange(""); }}>{ar ? "اختيار مسمى معتمد" : "Choose an approved title"}</BaseerButton></div> : <BaseerCombobox id={id} label={ar ? "المسمى الوظيفي" : "Job title"} value={selectedTitle?.id ?? ""} options={options} placeholder={ar ? "اختر مسمى وظيفياً" : "Select a job title"} required={required} disabled={disabled} className="hr-job-title-select__input" menuClassName="hr-job-title-select__menu" onChange={choose} />}</div>;
 }

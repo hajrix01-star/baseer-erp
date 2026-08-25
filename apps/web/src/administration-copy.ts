@@ -3,6 +3,7 @@ import { defineLocalizedCopy, type BaseerLanguage } from "./baseer-ui-copy";
 export const administrationCopy = defineLocalizedCopy({
   ar: {
     administration: "الإدارة",
+    basiraMark: "ب",
     companies: "الشركات",
     users: "المستخدمون",
     roles: "الأدوار والصلاحيات",
@@ -51,6 +52,7 @@ export const administrationCopy = defineLocalizedCopy({
   },
   en: {
     administration: "Administration",
+    basiraMark: "B",
     companies: "Companies",
     users: "Users",
     roles: "Roles & permissions",

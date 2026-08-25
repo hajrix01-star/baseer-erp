@@ -115,14 +115,15 @@ test("finance setup uses the shared Gregorian form and date adapters in RTL", as
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   const form = page.locator("[data-baseer-rhf-form]");
   await expect(form).toBeVisible();
-  await expect(form.getByRole("button", { name: "بداية الفترة" })).toBeVisible();
-  await expect(form.getByRole("button", { name: "نهاية الفترة" })).toBeVisible();
-
-  const startDate = form.getByRole("button", { name: "بداية الفترة" });
-  await startDate.press("Enter");
-  await expect(page.getByRole("dialog", { name: "بداية الفترة" }).locator(".baseer-date-picker__popover")).toBeVisible();
-  await page.keyboard.press("Escape");
-  await expect(page.getByRole("dialog", { name: "بداية الفترة" })).toHaveCount(0);
+  const startDate = form.locator('input[type="date"][aria-label="بداية الفترة"]');
+  const endDate = form.locator('input[type="date"][aria-label="نهاية الفترة"]');
+  await expect(startDate).toBeVisible();
+  await expect(endDate).toBeVisible();
+  await expect(startDate).toHaveAttribute("lang", "en");
+  await startDate.focus();
+  await expect(startDate).toBeFocused();
+  await startDate.fill("2026-01-01");
+  await expect(startDate).toHaveValue("2026-01-01");
 
   await form.getByRole("button", { name: "التالي" }).click();
   await expect(form.getByRole("group", { name: "الخزائن والقنوات المبدئية" })).toBeVisible();
@@ -136,7 +137,7 @@ test("finance setup keeps the Gregorian adapter available in LTR", async ({ page
   await page.goto("/#module=finance&section=0");
 
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
-  await expect(page.locator("[data-baseer-rhf-form]").getByRole("button", { name: "Period start" })).toBeVisible();
+  await expect(page.locator('[data-baseer-rhf-form] input[type="date"][aria-label="Period start"]')).toBeVisible();
 });
 
 test("finance settings displays last while old numeric links retain their page identity", async ({ page }) => {
@@ -202,6 +203,7 @@ test("purchase-entry clerk sees and loads only the entry surface", async ({ page
   await mockPurchaseEntryClerk(page, requests);
 
   await page.goto("/#module=operations&section=2");
+  await page.getByRole("button", { name: "إدارة المشتريات" }).click();
 
   await expect(page.getByRole("tab", { name: "إدخال" })).toBeVisible();
   await expect(page.getByRole("tab", { name: "سجل الفواتير" })).toHaveCount(0);

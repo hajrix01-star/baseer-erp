@@ -26,7 +26,7 @@ async function fulfill(route: Route, json: unknown, status = 200) {
   await route.fulfill({ status, contentType: "application/json", body: JSON.stringify(json) });
 }
 
-async function mockInternalRegistration(page: Page) {
+async function mockInternalRegistration(page: Page, options: { isOwner?: boolean; includeOwnerFlag?: boolean; legacyOwnerFallback?: boolean } = {}) {
   const requested: Array<{ method: string; path: string; body?: unknown }> = [];
   await page.addInitScript((company) => {
     sessionStorage.setItem("baseer.erp.access-token", "operations-e2e-token");
@@ -41,7 +41,8 @@ async function mockInternalRegistration(page: Page) {
     const body = method === "POST" ? route.request().postDataJSON() : undefined;
     requested.push({ method, path: `${url.pathname}${url.search}`, body });
     if (url.pathname === "/v1/companies/available") {
-      return fulfill(route, { companies: [{ id: companyId, nameAr: "شركة الاختبار", nameEn: "Test Company", permissionCodes: ["operations.internal_registration.create", "operations.internal_registration.read", "operations.catalog.manage"] }] });
+      const company = { id: companyId, nameAr: "شركة الاختبار", nameEn: "Test Company", permissionCodes: ["operations.internal_registration.create", "operations.internal_registration.read", "operations.catalog.manage", ...(options.legacyOwnerFallback ? ["inbound_evidence.owner_access"] : [])] };
+      return fulfill(route, { companies: [{ ...company, ...(options.includeOwnerFlag === false ? {} : { isOwner: options.isOwner ?? false }) }] });
     }
     if (url.pathname === "/v1/operations/internal-registration/workstation") {
       return fulfill(route, {
@@ -110,6 +111,34 @@ test("internal registration keeps its Gregorian business date through the Baseer
 
   const accessibility = await new AxeBuilder({ page }).include(".operations-internal-registration").analyze();
   expect(accessibility.violations).toEqual([]);
+});
+
+test("internal registration keeps navigation focused for an operator and exposes it for the owner", async ({ page }) => {
+  await mockInternalRegistration(page);
+  await page.goto("/#module=operations&section=7");
+  await expect(page.locator(".module-sidebar")).toHaveCount(0);
+
+  await mockInternalRegistration(page, { isOwner: true });
+  await page.reload();
+  await expect(page.locator(".module-sidebar")).toBeVisible();
+});
+
+test("internal registration recognizes an owner during an API compatibility rollout", async ({ page }) => {
+  await mockInternalRegistration(page, { includeOwnerFlag: false, legacyOwnerFallback: true });
+  await page.goto("/#module=operations&section=7");
+
+  await expect(page.locator(".module-sidebar")).toBeVisible();
+});
+
+test("opening Operations starts at its first permitted section, not the last recent section", async ({ page }) => {
+  await mockInternalRegistration(page);
+  await page.addInitScript(() => {
+    localStorage.setItem("baseer-erp.shell.recent.v2", JSON.stringify(["module=operations&page=operations-internal-registration"]));
+  });
+  await page.goto("/");
+
+  await page.getByRole("button", { name: "العمليات", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "المخزون والمستودعات" })).toBeVisible();
 });
 
 test("operations catalog keeps filters and cursor paging on the server", async ({ page }) => {

@@ -1,0 +1,10 @@
+.mobile-drawer__panel {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+
+.mobile-drawer__panel:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--brand) 58%, white);
+  outline-offset: -3px;
+}

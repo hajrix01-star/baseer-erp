@@ -7,6 +7,7 @@ export type BaseerApiErrorCode =
   | "INTERNAL_ERROR"
   | "NOT_FOUND"
   | "RATE_LIMITED"
+  | "REPORT_RUN_EXPIRED"
   | "VALIDATION_FAILED";
 
 type LocalizedMessage = { ar: string; en: string };

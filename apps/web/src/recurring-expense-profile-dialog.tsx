@@ -2,9 +2,11 @@ import { useBaseerForm, z } from "./baseer-form-state";
 import { useEffect, useMemo } from "react";
 
 import { BaseerButton } from "./baseer-button";
+import { BaseerComboboxField as BaseerCombobox } from "./baseer-combobox-field";
 import { BaseerDatePicker } from "./baseer-date-picker";
 import { BaseerDialog } from "./baseer-dialog";
-import { BaseerMoneyInput } from "./baseer-form-fields";
+import { BaseerCheckbox, BaseerMoneyInput, BaseerTextInput } from "./baseer-form-fields";
+import { BaseerStaticSelect } from "./baseer-static-select";
 import { displayName } from "./baseer-localization";
 import { financeText } from "./finance-copy";
 import type { ProfileForm, RecurringExpenseConfiguration } from "./recurring-expense-workspace";
@@ -25,6 +27,8 @@ export function RecurringExpenseProfileDialog({ open, language, busy, configurat
   const validation = useMemo(() => schema(language === "ar"), [language]);
   const form = useBaseerForm<ProfileForm>({ defaultValues: emptyProfile(businessDate), schema: validation, shouldFocusError: true });
   const selectedCategory = form.watch("categoryId");
+  const selectedSupplier = form.watch("supplierId");
+  const selectedVault = form.watch("defaultVaultId");
   const nextReminderDate = form.watch("nextReminderDate");
   const allowAmountOverride = form.watch("allowAmountOverride");
   const categories = configuration.categories.filter((item) => item.status === "ACTIVE" && item.kind === "EXPENSE");
@@ -33,17 +37,17 @@ export function RecurringExpenseProfileDialog({ open, language, busy, configurat
   useEffect(() => { if (open) form.reset(emptyProfile(businessDate)); }, [businessDate, form, open]);
   return <BaseerDialog open={open} title={text.addRecurring} language={language} busy={busy} onClose={onClose} footer={<><BaseerButton type="button" variant="secondary" disabled={busy} onClick={onClose}>{text.cancel}</BaseerButton><BaseerButton type="submit" form="recurring-profile-form" variant="primary" disabled={busy}>{busy ? text.saving : text.saveRecurring}</BaseerButton></>}>
     <form id="recurring-profile-form" className="administration-form" data-baseer-rhf-form="true" noValidate onSubmit={form.handleSubmit((next) => void onSubmit(next))}>
-      <label>{text.nameArabic}<input autoFocus placeholder={language === "ar" ? "كهرباء الفرع" : "Branch electricity"} aria-invalid={Boolean(form.formState.errors.nameAr)} {...form.register("nameAr")} />{form.formState.errors.nameAr ? <small role="alert">{form.formState.errors.nameAr.message}</small> : null}</label>
-      <label>{text.nameEnglish}<input placeholder="Branch electricity" {...form.register("nameEn")} /></label>
-      <label>{text.financialCategory}<select aria-invalid={Boolean(form.formState.errors.categoryId)} {...form.register("categoryId")} onChange={(event) => { form.setValue("categoryId", event.target.value, { shouldDirty: true }); const category = categories.find((item) => item.id === event.target.value); form.setValue("supplierId", category?.suggestedSupplierId ?? "", { shouldDirty: true }); }}><option value="">{text.selectCategory}</option>{categories.map((item) => <option value={item.id} key={item.id}>{displayName(language, item)}</option>)}</select>{form.formState.errors.categoryId ? <small role="alert">{form.formState.errors.categoryId.message}</small> : null}</label>
-      <label>{text.supplier}<select {...form.register("supplierId")}><option value="">{text.optional}</option>{suppliers.map((item) => <option value={item.id} key={item.id}>{displayName(language, item)}</option>)}</select></label>
-      <label>{text.serviceNumber}<input placeholder={text.optional} {...form.register("serviceNumber")} /></label>
+      <label>{text.nameArabic}<BaseerTextInput autoFocus placeholder={language === "ar" ? "كهرباء الفرع" : "Branch electricity"} aria-invalid={Boolean(form.formState.errors.nameAr)} {...form.register("nameAr")} />{form.formState.errors.nameAr ? <small role="alert">{form.formState.errors.nameAr.message}</small> : null}</label>
+      <label>{text.nameEnglish}<BaseerTextInput placeholder="Branch electricity" {...form.register("nameEn")} /></label>
+      <label>{text.financialCategory}<BaseerCombobox required label={text.financialCategory} value={selectedCategory} placeholder={text.selectCategory} options={categories.map((item) => ({ id: item.id, label: displayName(language, item) }))} invalid={Boolean(form.formState.errors.categoryId)} onChange={(categoryId) => { form.setValue("categoryId", categoryId, { shouldDirty: true, shouldValidate: true }); const category = categories.find((item) => item.id === categoryId); form.setValue("supplierId", category?.suggestedSupplierId ?? "", { shouldDirty: true, shouldValidate: true }); }} />{form.formState.errors.categoryId ? <small role="alert">{form.formState.errors.categoryId.message}</small> : null}</label>
+      <label>{text.supplier}<BaseerCombobox label={text.supplier} value={selectedSupplier} placeholder={text.optional} options={suppliers.map((item) => ({ id: item.id, label: displayName(language, item) }))} onChange={(supplierId) => form.setValue("supplierId", supplierId, { shouldDirty: true, shouldValidate: true })} /></label>
+      <label>{text.serviceNumber}<BaseerTextInput placeholder={text.optional} {...form.register("serviceNumber")} /></label>
       <label>{text.expectedAmount} (SAR)<BaseerMoneyInput placeholder={text.enterAmount} aria-invalid={Boolean(form.formState.errors.expectedAmount)} value={form.watch("expectedAmount")} onValueChange={(expectedAmount) => form.setValue("expectedAmount", expectedAmount, { shouldDirty: true, shouldValidate: true })} />{form.formState.errors.expectedAmount ? <small role="alert">{form.formState.errors.expectedAmount.message}</small> : null}</label>
-      <label>{text.paymentCycle}<select {...form.register("intervalMonths")}>{[1, 2, 3, 4, 6, 12].map((month) => <option key={month} value={month}>{month === 1 ? text.monthly : text.everyMonths(month)}</option>)}</select></label>
+      <label>{text.paymentCycle}<BaseerStaticSelect label={text.paymentCycle} {...form.register("intervalMonths")}>{[1, 2, 3, 4, 6, 12].map((month) => <option key={month} value={month}>{month === 1 ? text.monthly : text.everyMonths(month)}</option>)}</BaseerStaticSelect></label>
       <label>{text.nextDueDate}<BaseerDatePicker language={language} label={text.nextDueDate} value={nextReminderDate} onChange={(value) => form.setValue("nextReminderDate", value, { shouldDirty: true, shouldValidate: true })} /></label>
-      <label>{text.defaultPaymentChannel}<select {...form.register("defaultVaultId")}><option value="">{text.setAtPayment}</option>{vaults.map((item) => <option value={item.id} key={item.id}>{displayName(language, item)}</option>)}</select></label>
-      <label><input type="checkbox" {...form.register("allowAmountOverride")} /> {allowAmountOverride ? text.allowAmountOverride : text.allowAmountOverride}</label>
-      <label style={{ gridColumn: "1 / -1" }}>{text.notes}<input placeholder={text.optional} {...form.register("notes")} /></label>
+      <label>{text.defaultPaymentChannel}<BaseerCombobox label={text.defaultPaymentChannel} value={selectedVault} placeholder={text.setAtPayment} options={vaults.map((item) => ({ id: item.id, label: displayName(language, item) }))} onChange={(defaultVaultId) => form.setValue("defaultVaultId", defaultVaultId, { shouldDirty: true, shouldValidate: true })} /></label>
+      <label><BaseerCheckbox {...form.register("allowAmountOverride")} /> {allowAmountOverride ? text.allowAmountOverride : text.allowAmountOverride}</label>
+      <label style={{ gridColumn: "1 / -1" }}>{text.notes}<BaseerTextInput placeholder={text.optional} {...form.register("notes")} /></label>
     </form>
   </BaseerDialog>;
 }

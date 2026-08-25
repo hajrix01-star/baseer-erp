@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { activeSession, api, monthRange, type Closing } from "./daily-sales-client";
 import { presentBaseerApiError } from "./baseer-api-error";
+import { BaseerStaticSelect } from "./baseer-static-select";
 import { formatNumber, formatPercent } from "./number-format";
 
 type Language = "ar" | "en";
@@ -36,18 +37,24 @@ function percent(current: number | null, comparison: number | null) {
 
 function monthlyDailyAverages(closings: readonly Closing[], month: MonthValue) {
   const daily = new Map<string, number>();
-  closings.filter((closing) => closing.status === "POSTED").forEach((closing) => daily.set(closing.businessDate, (daily.get(closing.businessDate) ?? 0) + Number(closing.grossAmount)));
+  closings.filter((closing) => closing.status === "POSTED").forEach((closing) => {
+    const businessDate = closing.businessDate.slice(0, 10);
+    daily.set(businessDate, (daily.get(businessDate) ?? 0) + Number(closing.grossAmount));
+  });
   const total = [...daily.values()].reduce((sum, value) => sum + value, 0);
   return { month, total, days: daily.size, average: daily.size ? total / daily.size : null };
 }
 
 function weeklyDailyAverages(closings: readonly Closing[], month: MonthValue) {
   const daily = new Map<string, number>();
-  closings.filter((closing) => closing.status === "POSTED").forEach((closing) => daily.set(closing.businessDate, (daily.get(closing.businessDate) ?? 0) + Number(closing.grossAmount)));
+  closings.filter((closing) => closing.status === "POSTED").forEach((closing) => {
+    const businessDate = closing.businessDate.slice(0, 10);
+    daily.set(businessDate, (daily.get(businessDate) ?? 0) + Number(closing.grossAmount));
+  });
   const weeks = Array.from({ length: Math.ceil(Number(rangeForMonth(month).to.slice(8)) / 7) }, (_, index) => {
     const first = index * 7 + 1;
     const last = Math.min(first + 6, Number(rangeForMonth(month).to.slice(8)));
-    const values = [...daily.entries()].filter(([date]) => { const day = Number(date.slice(8)); return day >= first && day <= last; }).map(([, value]) => value);
+    const values = [...daily.entries()].filter(([date]) => { const day = Number(date.slice(8, 10)); return day >= first && day <= last; }).map(([, value]) => value);
     return { first, last, average: values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : null };
   });
   return weeks;
@@ -103,11 +110,11 @@ export function SalesAnalyticsWorkspace({ language }: { language: Language }) {
     <div className="sales-analytics__grid">
       <article className="sales-analytics__card">
         <header><div><span className="sales-analytics__vat">{ar ? "شامل الضريبة" : "VAT inclusive"}</span><h2>{ar ? "متوسط المبيعات اليومية حسب أسبوع الشهر" : "Daily sales average by month week"}</h2></div></header>
-        <div className="sales-analytics__filters"><label>{ar ? "الفترة الأولى" : "Primary period"}<select value={primaryMonth} onChange={(event) => setPrimaryMonth(event.target.value as MonthValue)}>{months.map((month) => <option key={month} value={month}>{labelForMonth(month, language)}</option>)}</select></label><label>{ar ? "فترة المقارنة" : "Comparison period"}<select value={comparisonMonth} onChange={(event) => setComparisonMonth(event.target.value as MonthValue)}>{months.map((month) => <option key={month} value={month}>{labelForMonth(month, language)}</option>)}</select></label></div>
+        <div className="sales-analytics__filters"><label>{ar ? "الفترة الأولى" : "Primary period"}<BaseerStaticSelect label={ar ? "الفترة الأولى" : "Primary period"} value={primaryMonth} onChange={(event) => setPrimaryMonth(event.target.value as MonthValue)}>{months.map((month) => <option key={month} value={month}>{labelForMonth(month, language)}</option>)}</BaseerStaticSelect></label><label>{ar ? "فترة المقارنة" : "Comparison period"}<BaseerStaticSelect label={ar ? "فترة المقارنة" : "Comparison period"} value={comparisonMonth} onChange={(event) => setComparisonMonth(event.target.value as MonthValue)}>{months.map((month) => <option key={month} value={month}>{labelForMonth(month, language)}</option>)}</BaseerStaticSelect></label></div>
         <AnalyticsTable headers={[ar ? "الفترة" : "Period", labelForMonth(primaryMonth, language), labelForMonth(comparisonMonth, language), ar ? "التغير" : "Change"]}>{weeks.map((week) => { const change = percent(week.average, week.comparison); return <tr key={week.first}><th scope="row">{ar ? `أسبوع ${Math.ceil(week.first / 7)} (${week.first}–${week.last})` : `Week ${Math.ceil(week.first / 7)} (${week.first}–${week.last})`}</th><td>{week.average === null ? "—" : money(week.average, language)}</td><td>{week.comparison === null ? "—" : money(week.comparison, language)}</td><td className={change === null ? "" : change >= 0 ? "is-positive" : "is-negative"}>{change === null ? "—" : `${change >= 0 ? "+" : "-"}${formatPercent(Math.abs(change))}`}</td></tr>; })}</AnalyticsTable>
       </article>
       <article className="sales-analytics__card">
-        <header><div><span className="sales-analytics__vat">{ar ? "شامل الضريبة" : "VAT inclusive"}</span><h2>{ar ? `المعدل اليومي الشهري — ${year}` : `Monthly daily average — ${year}`}</h2></div><label>{ar ? "السنة" : "Year"}<select value={year} onChange={(event) => setYear(Number(event.target.value))}>{[year, year - 1, year - 2].map((value) => <option key={value} value={value}>{value}</option>)}</select></label></header>
+        <header><div><span className="sales-analytics__vat">{ar ? "شامل الضريبة" : "VAT inclusive"}</span><h2>{ar ? `المعدل اليومي الشهري — ${year}` : `Monthly daily average — ${year}`}</h2></div><label>{ar ? "السنة" : "Year"}<BaseerStaticSelect label={ar ? "السنة" : "Year"} value={year} onChange={(event) => setYear(Number(event.target.value))}>{[year, year - 1, year - 2].map((value) => <option key={value} value={value}>{value}</option>)}</BaseerStaticSelect></label></header>
         <AnalyticsTable headers={[ar ? "الشهر" : "Month", ar ? "المبيعات" : "Sales", ar ? "المعدل اليومي" : "Daily average", ar ? "التغير" : "Change"]}>{monthly.map((item, index) => { const prior = monthly[index - 1]?.average ?? null; const change = percent(item.average, prior); return <tr key={item.month}><th scope="row">{labelForMonth(item.month, language)}</th><td>{money(item.total, language)}</td><td>{item.average === null ? "—" : money(item.average, language)}</td><td className={change === null ? "" : change >= 0 ? "is-positive" : "is-negative"}>{change === null ? "—" : `${change >= 0 ? "+" : "-"}${formatPercent(Math.abs(change))}`}</td></tr>; })}</AnalyticsTable>
       </article>
     </div>

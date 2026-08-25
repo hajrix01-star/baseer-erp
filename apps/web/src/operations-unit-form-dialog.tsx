@@ -2,6 +2,8 @@ import { useBaseerForm, z } from "./baseer-form-state";
 import { useEffect, useMemo } from "react";
 
 import { BaseerFormDialog } from "./baseer-form-dialog";
+import { BaseerStaticSelect } from "./baseer-static-select";
+import { BaseerCheckbox, BaseerTextInput } from "./baseer-form-fields";
 
 export type OperationsUnitForm = { nameAr: string; nameEn: string; dimension: "COUNT" | "MASS" | "VOLUME" | "PACKAGE"; isActive: boolean };
 
@@ -35,10 +37,10 @@ export function OperationsUnitFormDialog({ open, language, busy, value, editingC
   return <BaseerFormDialog open={open} title={editing ? text.edit : text.add} language={language} formId="operations-unit" submitLabel={text.save} busy={busy} onClose={onClose}>
     <form id="operations-unit" className="administration-form" data-baseer-rhf-form="true" noValidate onSubmit={form.handleSubmit((next) => void onSubmit(next))}>
       {editingCode ? <p><bdi>{editingCode}</bdi></p> : null}
-      <label>{text.nameAr}<input autoFocus aria-invalid={Boolean(form.formState.errors.nameAr)} {...form.register("nameAr")} />{form.formState.errors.nameAr ? <small role="alert">{form.formState.errors.nameAr.message}</small> : null}</label>
-      <label>{text.nameEn}<input {...form.register("nameEn")} /></label>
-      <label>{text.dimension}<select disabled={editing} {...form.register("dimension")}>{dimensions.map((dimension) => <option key={dimension} value={dimension}>{text[dimension]}</option>)}</select></label>
-      {editing ? <label><input type="checkbox" {...form.register("isActive")} /> {text.active}</label> : null}
+      <label>{text.nameAr}<BaseerTextInput autoFocus aria-invalid={Boolean(form.formState.errors.nameAr)} {...form.register("nameAr")} />{form.formState.errors.nameAr ? <small role="alert">{form.formState.errors.nameAr.message}</small> : null}</label>
+      <label>{text.nameEn}<BaseerTextInput {...form.register("nameEn")} /></label>
+      <label>{text.dimension}<BaseerStaticSelect label={text.dimension} disabled={editing} {...form.register("dimension")}>{dimensions.map((dimension) => <option key={dimension} value={dimension}>{text[dimension]}</option>)}</BaseerStaticSelect></label>
+      {editing ? <label><BaseerCheckbox {...form.register("isActive")} /> {text.active}</label> : null}
     </form>
   </BaseerFormDialog>;
 }

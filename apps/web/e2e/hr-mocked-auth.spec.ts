@@ -239,6 +239,14 @@ test("advance issuer shortcut loads only its narrow entry references", async ({ 
   await page.getByRole("menuitem", { name: "إدخال سلفة" }).click();
   await expectTopmostDialog(page, "إدخال سلفة");
   await expect.poll(() => requested.some((request) => request === "GET /v1/hr/advances/entry-references")).toBeTruthy();
+  const employeePicker = page.getByRole("combobox", { name: "الموظف" });
+  const employeeOption = page.getByRole("option", { name: `${employee.employeeNumber} · ${employee.nameAr}` });
+  await employeePicker.click();
+  await expect(employeeOption).toBeVisible();
+  const [pickerBox, optionBox] = await Promise.all([employeePicker.boundingBox(), employeeOption.boundingBox()]);
+  expect(optionBox!.y).toBeGreaterThanOrEqual(pickerBox!.y + pickerBox!.height);
+  await employeeOption.click();
+  await expect(employeePicker).toHaveValue(`${employee.employeeNumber} · ${employee.nameAr}`);
   expect(requested.some((request) => request.startsWith("GET /v1/hr/employees"))).toBeFalsy();
   expect(requested.some((request) => request.startsWith("GET /v1/finance/configuration"))).toBeFalsy();
   expect(requested.some((request) => request.startsWith("GET /v1/hr/advances?") || request.endsWith("GET /v1/hr/advances"))).toBeFalsy();
@@ -581,20 +589,28 @@ test("leave and payroll dialogs include nested return and destructive confirmati
   await expectTopmostDialog(page, "إلغاء دفعة المسير");
 });
 
-test("leave date picker is keyboard-operable and remains Gregorian in Arabic", async ({ page }) => {
+test("leave date picker uses a keyboard-operable Gregorian native date input in Arabic", async ({ page }) => {
   const requested: string[] = [];
   await mockHr(page, requested);
 
   await page.goto("/#module=hr&section=2");
   await page.getByRole("button", { name: "تسجيل إجازة" }).click();
   const dialog = await expectTopmostDialog(page, "تسجيل إجازة");
-  await dialog.getByRole("button", { name: "من" }).press("Enter");
-  await expect(page.getByRole("dialog", { name: "من" }).locator(".baseer-date-picker__popover")).toBeVisible();
-  await page.keyboard.press("Escape");
-  await expect(page.getByRole("dialog", { name: "من" })).toHaveCount(0);
+  const from = dialog.locator('input[type="date"][aria-label="من"]');
+  const to = dialog.locator('input[type="date"][aria-label="إلى"]');
+  await expect(from).toBeVisible();
+  await expect(from).toHaveAttribute("lang", "en");
+  await from.focus();
+  await expect(from).toBeFocused();
+  await from.press("ArrowUp");
+  await from.fill("2026-08-10");
+  await to.fill("2026-08-11");
+  await expect(from).toHaveValue("2026-08-10");
+  await expect(to).toHaveAttribute("min", "2026-08-10");
+  await expect(dialog).toHaveScreenshot("baseer-date-picker-ar.png", { animations: "disabled" });
 });
 
-test("leave date picker remains labeled and usable in English LTR", async ({ page }) => {
+test("leave date picker remains labeled, bounded and usable in English LTR", async ({ page }) => {
   const requested: string[] = [];
   await mockHr(page, requested, { language: "en" });
 
@@ -603,10 +619,30 @@ test("leave date picker remains labeled and usable in English LTR", async ({ pag
   const dialog = page.getByRole("dialog", { name: "Record leave" });
   await expect(dialog).toBeVisible();
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
-  await dialog.getByRole("button", { name: "From" }).press("Enter");
-  await expect(page.getByRole("dialog", { name: "From" }).locator(".baseer-date-picker__popover")).toBeVisible();
-  await page.keyboard.press("Escape");
-  await expect(page.getByRole("dialog", { name: "From" })).toHaveCount(0);
+  const from = dialog.locator('input[type="date"][aria-label="From"]');
+  const to = dialog.locator('input[type="date"][aria-label="To"]');
+  await from.fill("2026-08-11");
+  await to.fill("2026-08-12");
+  await expect(from).toHaveValue("2026-08-11");
+  await expect(to).toHaveAttribute("min", "2026-08-11");
+  await expect(dialog).toHaveScreenshot("baseer-date-picker-en.png", { animations: "disabled" });
+});
+
+test("clearable document dates clear through the native date control", async ({ page }) => {
+  const requested: string[] = [];
+  await mockHr(page, requested);
+
+  await page.goto("/#module=hr&section=1");
+  await page.getByRole("listitem").filter({ hasText: employee.nameAr }).click();
+  const profile = await expectTopmostDialog(page, employee.nameAr);
+  await profile.getByRole("tab", { name: "المستندات والخطابات" }).click();
+  await profile.getByRole("button", { name: "إضافة مستند" }).click();
+  const create = await expectTopmostDialog(page, "إضافة مستند");
+  const issueDate = create.locator('input[type="date"][aria-label="تاريخ الإصدار"]');
+  await issueDate.fill("2026-08-10");
+  await expect(issueDate).toHaveValue("2026-08-10");
+  await create.getByRole("button", { name: "مسح التاريخ" }).click();
+  await expect(issueDate).toHaveValue("");
 });
 
 test("service cancellation validates its required reason before sending a request", async ({ page }) => {

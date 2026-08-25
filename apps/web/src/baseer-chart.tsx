@@ -1,11 +1,11 @@
-import { BarChart, LineChart, PieChart } from "echarts/charts";
-import { AriaComponent, GridComponent, LegendComponent, TooltipComponent } from "echarts/components";
+import { BarChart, LineChart } from "echarts/charts";
+import { GridComponent } from "echarts/components";
 import { init, use } from "echarts/core";
-import { SVGRenderer } from "echarts/renderers";
+import { CanvasRenderer } from "echarts/renderers";
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { formatCompactNumber, formatCount, formatDate, formatMoney, formatMonthYear, formatNumber, formatPercent } from "./number-format";
 
-use([BarChart, LineChart, PieChart, GridComponent, TooltipComponent, LegendComponent, AriaComponent, SVGRenderer]);
+use([BarChart, LineChart, GridComponent, CanvasRenderer]);
 
 type Language = "ar" | "en";
 export type BaseerOperationalChartPoint = { id?: string; label: string; value: number; displayValue?: string; rank?: number; shareOfTotalPercent?: string };
@@ -43,7 +43,7 @@ export function BaseerChart({ language, title, points, asOf, showSummary = true,
   const pointDisplay = (point: BaseerOperationalChartPoint) => point.displayValue ?? formatNumber(point.value, language);
   useEffect(() => {
     if (presentation !== "chart" || !element.current) return;
-    const chart = init(element.current, undefined, { renderer: "svg" });
+    const chart = init(element.current, undefined, { renderer: "canvas" });
     const description = language === "ar" ? `${title}. ${points.map((point) => `${point.label}: ${pointDisplay(point)}`).join("، ")}` : `${title}. ${points.map((point) => `${point.label}: ${pointDisplay(point)}`).join(", ")}`;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     chart.setOption({
@@ -54,7 +54,6 @@ export function BaseerChart({ language, title, points, asOf, showSummary = true,
       animationEasingUpdate: "cubicOut",
       aria: { enabled: true, description },
       grid: { left: 14, right: 126, top: 16, bottom: 18, containLabel: true },
-      tooltip: { trigger: "axis" },
       xAxis: { type: "value", minInterval: 1, splitLine: { lineStyle: { color: "rgba(24, 74, 63, .13)" } } },
       yAxis: {
         type: "category",
@@ -116,7 +115,27 @@ export function HrWorkforceStatusChart({ language, title, points, asOf }: {
   points: readonly BaseerOperationalChartPoint[];
   asOf: string;
 }) {
-  const element = useRef<HTMLDivElement | null>(null);
+  const ar = language === "ar";
+  const total = points.reduce((sum, point) => sum + Math.max(0, point.value), 0);
+  const palette = ["#159a79", "#4f7fd7", "#e2a238"];
+  const activePoints = points.filter((point) => point.value > 0);
+  const singleActivePoint = activePoints.length === 1 ? activePoints[0] : null;
+  let cursor = 0;
+  const stops = points.map((point, index) => {
+    const start = total ? cursor / total * 100 : 0;
+    cursor += Math.max(0, point.value);
+    const end = total ? cursor / total * 100 : 0;
+    return `${palette[index % palette.length]} ${start}% ${end}%`;
+  }).join(", ") || "#e8efeb 0 100%";
+  return <section className="hr-workforce-chart" aria-label={title} dir={ar ? "rtl" : "ltr"}>
+    <header className="hr-workforce-chart__header"><div><p>{ar ? "لقطة تشغيلية" : "Operational snapshot"}</p><h3>{title}</h3></div><small>{ar ? `محدّث في ${formatDate(asOf, language)}` : `Updated ${formatDate(asOf, language)}`}</small></header>
+    <div className="hr-workforce-chart__body">
+      <div className="hr-workforce-chart__visual"><div className="hr-workforce-chart__plot" role="img" aria-label={title} style={{ background: `conic-gradient(${stops})` }} /><div className="hr-workforce-chart__center" aria-hidden="true"><strong dir="ltr">{formatCount(total, language)}</strong><span>{singleActivePoint?.label ?? (ar ? "إجمالي الإشارات" : "Total signals")}</span></div></div>
+      <div className="hr-workforce-chart__insights" aria-label={ar ? "تفاصيل الحالة" : "Status details"}>{points.map((point, index) => <div key={point.id ?? point.label} className="hr-workforce-chart__insight"><span className="hr-workforce-chart__dot" style={{ backgroundColor: palette[index % palette.length] }} aria-hidden="true" /><span><strong>{point.label}</strong><small>{ar ? "إشارة تشغيلية" : "Operational signal"}</small></span><b dir="ltr">{point.displayValue ?? formatCount(point.value, language)}</b></div>)}</div>
+    </div>
+    <footer className="hr-workforce-chart__footer"><span>{ar ? "المؤشرات قد تتداخل بين الموظفين" : "Signals may overlap across employees"}</span></footer>
+  </section>;
+  { const element = useRef<HTMLDivElement | null>(null);
   const chartRef = useRef<ReturnType<typeof init> | null>(null);
   const ar = language === "ar";
   const palette = ["#159a79", "#4f7fd7", "#e2a238"];
@@ -135,7 +154,7 @@ export function HrWorkforceStatusChart({ language, title, points, asOf }: {
 
   useEffect(() => {
     if (!element.current) return;
-    const chart = init(element.current, undefined, { renderer: "svg" });
+    const chart = init(element.current, undefined, { renderer: "canvas" });
     chartRef.current = chart;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const chartPoints = points.map((point, index) => ({
@@ -242,14 +261,14 @@ export function HrWorkforceStatusChart({ language, title, points, asOf }: {
       </div>
     </div>
     <footer className="hr-workforce-chart__footer"><span>{ar ? "مرّر أو اضغط على أي مؤشر لاستكشافه" : "Hover or select a status to explore it"}</span><span>{ar ? "المؤشرات قد تتداخل بين الموظفين" : "Signals may overlap across employees"}</span></footer>
-  </section>;
+  </section>; }
 }
 
 /**
  * Shared, server-read-only marketing timeline. The selected view changes only
  * presentation; sales and linked-spend values remain server-provided.
  */
-export function BaseerMarketingTimelineChart({ language, title, days, campaigns, context, asOf, mode = "daily" }: {
+export function BaseerMarketingTimelineChart({ language, title, days, campaigns, context, asOf, mode = "daily", showModeControls = false, onModeChange }: {
   language: Language;
   title: string;
   days: readonly BaseerMarketingTimelineDay[];
@@ -257,6 +276,8 @@ export function BaseerMarketingTimelineChart({ language, title, days, campaigns,
   context: readonly BaseerMarketingTimelineContext[];
   asOf: string;
   mode?: "daily" | "monthly" | "campaigns";
+  showModeControls?: boolean;
+  onModeChange?: (mode: "daily" | "monthly" | "campaigns") => void;
 }) {
   const timelineElement = useRef<HTMLDivElement | null>(null);
   const [visibleSeries, setVisibleSeries] = useState({ sales: true, spend: true, campaigns: true });
@@ -268,9 +289,14 @@ export function BaseerMarketingTimelineChart({ language, title, days, campaigns,
     ...(mode === "campaigns" ? [] : [{ id: "spend" as const, label: ar ? "المصروف المثبت" : "Posted spend", kind: "bar" }]),
     { id: "campaigns" as const, label: ar ? "الحملات النشطة" : "Active campaigns", kind: "dashed" },
   ];
+  const modeItems = [
+    { id: "daily" as const, label: ar ? "يومي" : "Daily" },
+    { id: "monthly" as const, label: ar ? "شهري" : "Monthly" },
+    { id: "campaigns" as const, label: ar ? "الحملات" : "Campaigns" },
+  ];
   useEffect(() => {
     if (!timelineElement.current) return;
-    const timeline = init(timelineElement.current, undefined, { renderer: "svg" });
+    const timeline = init(timelineElement.current, undefined, { renderer: "canvas" });
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const campaignsById = new Map(campaigns.map((campaign) => [campaign.id, campaign]));
     const qualityLabel = (quality: BaseerMarketingTimelineDay["salesDayQuality"]) => ar
@@ -310,7 +336,7 @@ export function BaseerMarketingTimelineChart({ language, title, days, campaigns,
     const series = [
       {
         name: ar ? "المبيعات الرسمية" : "Official sales", type: "line" as const, smooth: true, connectNulls: false,
-        data: timelineRows.map((item) => item.sales), itemStyle: { color: "#0c8a6a" }, lineStyle: { width: 3 }, symbolSize: 7,
+        data: timelineRows.map((item) => item.sales), itemStyle: { color: "#0c8a6a" }, lineStyle: { width: 3 }, areaStyle: { color: "rgba(12, 138, 106, .11)" }, symbolSize: 7,
         markArea: mode !== "monthly" && contextAreas.length ? { silent: true, itemStyle: { color: "rgba(193, 139, 31, .08)" }, data: contextAreas } : undefined,
       },
       ...(mode === "campaigns" ? [] : [{ name: ar ? "المصروف المثبت" : "Posted spend", type: "bar" as const, barMaxWidth: 22, data: timelineRows.map((item) => item.spend), itemStyle: { color: "#d98c27", borderRadius: [5, 5, 0, 0] } }]),
@@ -318,16 +344,17 @@ export function BaseerMarketingTimelineChart({ language, title, days, campaigns,
     ];
     timeline.setOption({
       animation: !reducedMotion,
-      animationDuration: 620,
+      animationDuration: 760,
+      animationDurationUpdate: 460,
       animationEasing: "cubicOut",
+      animationEasingUpdate: "cubicOut",
       aria: { enabled: true, description },
-      grid: { left: 28, right: 30, top: 52, bottom: 42, containLabel: true },
+      grid: { left: 12, right: 18, top: 26, bottom: 34, containLabel: true },
       legend: { show: false },
-      tooltip: { trigger: "axis", confine: true, formatter: mode === "monthly" ? undefined : dailyTooltip },
-      xAxis: { type: "category", data: labels, boundaryGap: false, axisLabel: { hideOverlap: true, formatter: (value: string) => mode === "daily" || mode === "campaigns" ? value.slice(8) : value } },
+      xAxis: { type: "category", data: labels, boundaryGap: false, axisTick: { show: false }, axisLine: { lineStyle: { color: "#dfe7e1" } }, axisLabel: { hideOverlap: true, color: "#72817a", fontSize: 10, formatter: (value: string) => mode === "daily" || mode === "campaigns" ? value.slice(8) : value } },
       yAxis: [
-        { type: "value", name: ar ? "ر.س" : "SAR", min: 0, axisLabel: { formatter: (value: number) => compactNumber(value, language) } },
-        { type: "value", name: ar ? "حملات" : "Campaigns", minInterval: 1, min: 0 },
+        { type: "value", name: ar ? "ر.س" : "SAR", min: 0, axisLabel: { color: "#72817a", fontSize: 10, formatter: (value: number) => compactNumber(value, language) }, splitLine: { lineStyle: { color: "rgba(24, 74, 63, .09)" } } },
+        { type: "value", minInterval: 1, min: 0, show: false },
       ],
       series: series.filter((item) => item.name === (ar ? "المبيعات الرسمية" : "Official sales") ? visibleSeries.sales : item.name === (ar ? "المصروف المثبت" : "Posted spend") ? visibleSeries.spend : visibleSeries.campaigns),
     });
@@ -335,10 +362,14 @@ export function BaseerMarketingTimelineChart({ language, title, days, campaigns,
     timelineObserver.observe(timelineElement.current);
     return () => { timelineObserver.disconnect(); timeline.dispose(); };
   }, [campaigns, context, days, language, mode, title, visibleSeries]);
-  return <section className="baseer-chart baseer-marketing-timeline" aria-label={title}>
-    <header><div><h3>{title}</h3>{periodLabel ? <small>{periodLabel}</small> : null}</div><small>{language === "ar" ? `قراءة خادمية في ${formatDate(asOf, language)}` : `Server read as of ${formatDate(asOf, language)}`}</small></header>
-    <div className="baseer-marketing-timeline__legend" aria-label={ar ? "مفاتيح الرسم" : "Chart legend"}>{legendItems.map((item) => <button key={item.id} type="button" className={`baseer-marketing-timeline__legend-button is-${item.kind}`} aria-pressed={visibleSeries[item.id]} onClick={() => setVisibleSeries((current) => ({ ...current, [item.id]: !current[item.id] }))}><span aria-hidden="true" /><strong>{item.label}</strong><small>{visibleSeries[item.id] ? (ar ? "ظاهر" : "Shown") : (ar ? "مخفي" : "Hidden")}</small></button>)}</div>
+  return <section className={`baseer-chart baseer-marketing-timeline${showModeControls ? " baseer-marketing-timeline--command" : ""}`} aria-label={title}>
+    <header className="baseer-marketing-timeline__header"><div>{showModeControls ? <p className="baseer-marketing-timeline__eyebrow">{ar ? "مركز القيادة" : "Command center"}</p> : null}<h3>{title}</h3>{periodLabel ? <small>{periodLabel}</small> : null}</div><small className="baseer-marketing-timeline__as-of">{language === "ar" ? `قراءة خادمية في ${formatDate(asOf, language)}` : `Server read as of ${formatDate(asOf, language)}`}</small></header>
+    <div className="baseer-marketing-timeline__toolbar">
+      {showModeControls && onModeChange ? <div className="baseer-marketing-timeline__modes" role="group" aria-label={ar ? "نمط العرض" : "Chart view"}>{modeItems.map((item) => <button key={item.id} type="button" aria-pressed={mode === item.id} onClick={() => onModeChange(item.id)}>{item.label}</button>)}</div> : null}
+      <div className="baseer-marketing-timeline__legend" aria-label={ar ? "مفاتيح الرسم" : "Chart legend"}>{legendItems.map((item) => <button key={item.id} type="button" className={`baseer-marketing-timeline__legend-button is-${item.kind}`} aria-pressed={visibleSeries[item.id]} onClick={() => setVisibleSeries((current) => ({ ...current, [item.id]: !current[item.id] }))}><span aria-hidden="true" /><strong>{item.label}</strong><small>{visibleSeries[item.id] ? (ar ? "ظاهر" : "Shown") : (ar ? "مخفي" : "Hidden")}</small></button>)}</div>
+    </div>
     <div ref={timelineElement} className="baseer-chart__plot baseer-marketing-timeline__plot" role="img" aria-label={title} />
+    {showModeControls ? <footer className="baseer-marketing-timeline__footer"><span>{ar ? "الأيام غير المكتملة لا تُعامل كمبيعات صفرية." : "Incomplete days are never treated as zero sales."}</span><span>{ar ? "قراءة من النظام" : "System read"}</span></footer> : null}
   </section>;
 }
 
@@ -351,7 +382,7 @@ export function BaseerOperationsMonthChart({ language, title, days, asOf }: { la
   const ar = language === "ar";
   useEffect(() => {
     if (!element.current) return;
-    const chart = init(element.current, undefined, { renderer: "svg" });
+    const chart = init(element.current, undefined, { renderer: "canvas" });
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const description = ar ? `${title}. المبيعات المثبتة وفواتير المشتريات المثبتة خلال الشهر. الأيام غير المكتملة لا تظهر كمبيعات صفرية.` : `${title}. Posted sales and posted purchase invoices for the month. Incomplete sales days are not treated as zero.`;
     chart.setOption({
@@ -361,17 +392,6 @@ export function BaseerOperationsMonthChart({ language, title, days, asOf }: { la
       animationEasing: "cubicOut",
       aria: { enabled: true, description },
       grid: { left: 30, right: 22, top: 46, bottom: 30, containLabel: true },
-      tooltip: {
-        trigger: "axis",
-        confine: true,
-        formatter: (params: readonly { axisValue?: string; seriesName?: string; data?: unknown }[]) => {
-          const date = params[0]?.axisValue ?? "";
-          const item = days.find((day) => day.businessDate === date);
-          if (!item) return "";
-          const sales = item.salesGrossAmount === null ? (ar ? "غير مكتملة" : "Incomplete") : formatMoney(item.salesGrossAmount, ar ? "ر.س" : "SAR", language);
-          return [formatDate(date, language), `${ar ? "المبيعات" : "Sales"}: ${sales}`, `${ar ? "المشتريات" : "Purchases"}: ${formatMoney(item.purchaseGrossAmount, ar ? "ر.س" : "SAR", language)}`, item.purchaseDocumentCount ? `${ar ? "فواتير المشتريات" : "Purchase invoices"}: ${formatCount(item.purchaseDocumentCount, language)}` : ""].filter(Boolean).map(escapeHtml).join("<br/>");
-        },
-      },
       xAxis: { type: "category", data: days.map((day) => day.businessDate), boundaryGap: false, axisLabel: { hideOverlap: true, formatter: (value: string) => value.slice(8) }, axisTick: { show: false } },
       yAxis: { type: "value", min: 0, axisLabel: { formatter: (value: number) => compactNumber(value, language) }, splitLine: { lineStyle: { color: "rgba(24, 74, 63, .12)" } } },
       series: [

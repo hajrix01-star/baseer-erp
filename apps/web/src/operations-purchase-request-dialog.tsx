@@ -3,6 +3,7 @@ import { lazy, Suspense, useEffect, useState } from "react";
 
 import { BaseerButton } from "./baseer-button";
 import { BaseerDatePicker } from "./baseer-date-picker";
+import { BaseerTextInput } from "./baseer-form-fields";
 import { BaseerFormDialog } from "./baseer-form-dialog";
 import { normalizeBaseerNumericInput } from "./number-format";
 import type { OperationsPurchasePosLine } from "./operations-purchase-pos-composer";
@@ -87,9 +88,9 @@ export function OperationsPurchaseRequestDialog({ open, language, busy, material
           <BaseerButton type="button" variant={channel === "BANK_TRANSFER" ? "primary" : "secondary"} onClick={() => form.setValue("paymentChannel", "BANK_TRANSFER", { shouldValidate: true })}>{text.transfer}</BaseerButton>
           <BaseerButton type="button" variant={channel === "CUSTODY" ? "primary" : "secondary"} onClick={() => form.setValue("paymentChannel", "CUSTODY", { shouldValidate: true })}>{text.custody}</BaseerButton>
         </div></fieldset>
-        {channel === "CUSTODY" ? <><label>{text.funding}<input aria-invalid={Boolean(form.formState.errors.custodyFundingAmount)} inputMode="decimal" dir="ltr" lang="en" value={custodyFundingAmount} onChange={(event) => form.setValue("custodyFundingAmount", normalizeBaseerNumericInput(event.target.value), { shouldDirty: true, shouldValidate: true })} />{form.formState.errors.custodyFundingAmount ? <small role="alert">{form.formState.errors.custodyFundingAmount.message}</small> : null}</label><label>{text.representative}<input aria-invalid={Boolean(form.formState.errors.representativeName)} {...form.register("representativeName")} />{form.formState.errors.representativeName ? <small role="alert">{form.formState.errors.representativeName.message}</small> : null}</label></> : null}
+        {channel === "CUSTODY" ? <><label>{text.funding}<input aria-invalid={Boolean(form.formState.errors.custodyFundingAmount)} inputMode="decimal" dir="ltr" lang="en" value={custodyFundingAmount} onChange={(event) => form.setValue("custodyFundingAmount", normalizeBaseerNumericInput(event.target.value), { shouldDirty: true, shouldValidate: true })} />{form.formState.errors.custodyFundingAmount ? <small role="alert">{form.formState.errors.custodyFundingAmount.message}</small> : null}</label><label>{text.representative}<BaseerTextInput aria-invalid={Boolean(form.formState.errors.representativeName)} {...form.register("representativeName")} />{form.formState.errors.representativeName ? <small role="alert">{form.formState.errors.representativeName.message}</small> : null}</label></> : null}
       </div>
-      <label>{text.notes}<input {...form.register("notes")} /></label>
+      <label>{text.notes}<BaseerTextInput {...form.register("notes")} /></label>
       <Suspense fallback={<p>{text.loading}</p>}><OperationsPurchasePosComposer language={language} materials={materials} units={units} lines={lines} onChange={setLines} /></Suspense>
       {form.formState.errors.root ? <small role="alert">{form.formState.errors.root.message}</small> : null}
       <p>{text.plan}</p>

@@ -1,6 +1,8 @@
 import { useState, type ReactNode } from "react";
 import { BaseerApiError, parseBaseerApiResponse, presentBaseerApiError } from "./baseer-api-error";
 import { BaseerBrand } from "./baseer-brand";
+import { BaseerButton } from "./baseer-button";
+import { BaseerTextInput } from "./baseer-text-input";
 import { baseerLoginCopy } from "./baseer-login-copy";
 import { baseerApiBaseUrl, persistActiveSession, type AuthSessionReceipt } from "./daily-sales-client";
 
@@ -54,10 +56,10 @@ export function BaseerLogin({ language, onLanguage, themeControl }: Props) {
       <div className="baseer-login__panel">
         <div className="baseer-login__heading"><span className="baseer-login__mark"><LoginIcon name="lock" /></span><p>Baseer ERP</p><h1>{text.welcome}</h1><span>{text.secureAccess}</span></div>
         <form className="baseer-login__form" onSubmit={(event) => void submit(event)}>
-          <label><span>{text.login}</span><span className="baseer-login__field"><LoginIcon name="user" /><input autoComplete="username" autoFocus required value={login} onChange={(event) => setLogin(event.target.value)} /></span></label>
+          <label><span>{text.login}</span><span className="baseer-login__field"><LoginIcon name="user" /><BaseerTextInput autoComplete="username" autoFocus required value={login} onChange={(event) => setLogin(event.target.value)} /></span></label>
           <label><span>{text.password}</span><span className="baseer-login__field baseer-login__password"><LoginIcon name="lock" /><input autoComplete="current-password" required type={visible ? "text" : "password"} value={password} onChange={(event) => setPassword(event.target.value)} /><button type="button" aria-label={visible ? text.hide : text.show} title={visible ? text.hide : text.show} onClick={() => setVisible((value) => !value)}><LoginIcon name={visible ? "eyeOff" : "eye"} /></button></span></label>
           {error && <p className="daily-sales-message error" role="alert">{error}</p>}
-          <button className="daily-sales-primary baseer-login__submit" disabled={loading}>{loading ? text.loading : <><span>{text.submit}</span><LoginIcon name="arrow" /></>}</button>
+          <BaseerButton className="baseer-login__submit" type="submit" variant="primary" disabled={loading}>{loading ? text.loading : <><span>{text.submit}</span><LoginIcon name="arrow" /></>}</BaseerButton>
         </form>
       </div>
     </section>

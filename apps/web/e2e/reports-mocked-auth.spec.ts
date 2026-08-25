@@ -5,6 +5,7 @@ const companyId = "11111111-1111-4111-8111-111111111111";
 const accountId = "22222222-2222-4222-8222-222222222222";
 const trialRunId = "33333333-3333-4333-8333-333333333333";
 const cashRunId = "44444444-4444-4444-8444-444444444444";
+const renewedCashRunId = "44444444-4444-4444-8444-444444444445";
 const vatRunId = "55555555-5555-4555-8555-555555555555";
 const documentId = "66666666-6666-4666-8666-666666666666";
 
@@ -39,9 +40,8 @@ function trialReport(url: URL) {
     state: "READY",
     reportCode: "ledger_trial_balance",
     definitionVersion: "ledger_trial_balance_v1",
-    reportRunId: trialRunId,
+    dataMode: "LIVE",
     ledgerRevision: "1",
-    runChecksum: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
     company: { displayName: "Test company", functionalCurrency: "SAR" },
     selectedPeriod: { from: url.searchParams.get("from"), to: url.searchParams.get("to") },
     economicAsOfDate: url.searchParams.get("to"),
@@ -62,7 +62,7 @@ function trialReport(url: URL) {
 
 function cashReport(url: URL) {
   return {
-    state: "READY", reportCode: "personal_cash_performance", definitionVersion: "v1", reportRunId: cashRunId, ledgerRevision: "1", runChecksum: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    state: "READY", reportCode: "personal_cash_performance", definitionVersion: "v1", dataMode: "LIVE", ledgerRevision: "1",
     company: { displayName: "Test company", functionalCurrency: "SAR" }, businessTimezone: "Asia/Riyadh",
     selectedPeriod: { from: url.searchParams.get("from"), to: url.searchParams.get("to") }, basisLabelAr: "حركة مالية فعلية", vatInclusive: url.searchParams.get("vatInclusive") === "true",
     cancellationTreatmentAr: "القيود الملغاة مستبعدة", dataCoverage: { state: "COMPLETE", sourceKind: "sealed_ledger_vault_lines" }, roundingRule: "HALF_UP_2DP",
@@ -76,8 +76,8 @@ function cashReport(url: URL) {
 
 function vatReport(url: URL) {
   return {
-    state: "READY", reportCode: "internal_vat_report", definitionVersion: "internal_vat_report_v1", reportRunId: vatRunId,
-    ledgerRevision: "1", runChecksum: "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    state: "READY", reportCode: "internal_vat_report", definitionVersion: "internal_vat_report_v1", dataMode: "LIVE",
+    ledgerRevision: "1",
     company: { displayName: "Test company", functionalCurrency: "SAR" },
     selectedPeriod: { from: url.searchParams.get("from"), to: url.searchParams.get("to") },
     basisLabelAr: "دفتر الأستاذ — حسابات الضريبة",
@@ -91,7 +91,9 @@ function vatReport(url: URL) {
   };
 }
 
-async function mockReports(page: Page, language: "ar" | "en", requests: RequestLog[]) {
+async function mockReports(page: Page, language: "ar" | "en", requests: RequestLog[], options: { expireFirstCashEvidence?: boolean; expireFirstCashDocumentSave?: boolean } = {}) {
+  let cashEvidenceRuns = 0;
+  let cashSaveRuns = 0;
   await page.addInitScript(({ company, locale }) => {
     sessionStorage.setItem("baseer.erp.access-token", "reports-e2e-token");
     sessionStorage.setItem("baseer.erp.refresh-token", "reports-e2e-refresh-token");
@@ -105,21 +107,40 @@ async function mockReports(page: Page, language: "ar" | "en", requests: RequestL
     requests.push({ method: route.request().method(), pathname: url.pathname, search: url.search, company: route.request().headers()["x-baseer-company-id"] ?? null });
     if (url.pathname === "/v1/companies/available") return fulfill(route, { companies: [{ id: companyId, nameAr: "شركة الاختبار", nameEn: "Test company", permissionCodes: ["reports.read", "platform.output.preview", "platform.output.export"] }] });
     if (url.pathname === "/v1/reports/catalogue") return fulfill(route, catalogue());
+    if (url.pathname === "/v1/reports/official-runs" && route.request().method() === "POST") {
+      const body = JSON.parse(route.request().postData() ?? "{}") as { reportCode?: string; purpose?: string };
+      const isCash = body.reportCode === "personal_cash_performance";
+      const isEvidence = body.purpose === "evidence";
+      const isSave = body.purpose === "save";
+      if (isCash && isEvidence) cashEvidenceRuns += 1;
+      if (isCash && isSave) cashSaveRuns += 1;
+      const reportRunId = body.reportCode === "ledger_trial_balance" ? trialRunId
+        : body.reportCode === "internal_vat_report" ? vatRunId
+        : (options.expireFirstCashEvidence && isEvidence && cashEvidenceRuns > 1) || (options.expireFirstCashDocumentSave && isSave && cashSaveRuns > 1) ? renewedCashRunId : cashRunId;
+      return fulfill(route, { reportRunId, reportCode: body.reportCode, definitionVersion: "v1", ledgerRevision: "1", checksum: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", expiresAt: "2099-01-02T00:00:00.000Z" });
+    }
     if (url.pathname === "/v1/reports/ledger-trial-balance") return fulfill(route, trialReport(url));
     if (url.pathname === `/v1/reports/ledger-trial-balance/${trialRunId}/evidence`) {
       const second = Boolean(url.searchParams.get("cursor"));
       return fulfill(route, { reportRunId: trialRunId, accountId, scope: url.searchParams.get("scope"), nextCursor: second ? null : "trial-page-2", items: [{ lineId: second ? "line-2" : "line-1", businessDate: "2026-08-01", reference: second ? "JV-002" : "JV-001", labelAr: "قيد يومية", labelEn: "Journal entry", description: "Report test", cancellationLabelAr: null, debit, credit: zero }] });
     }
     if (url.pathname === `/v1/reports/ledger-trial-balance/${trialRunId}/evidence/line-1/source`) return fulfill(route, { journalEntry: { businessDate: "2026-08-01", sourceReference: "JV-001", labelAr: "قيد يومية", labelEn: "Journal entry", description: "Report test", cancellationLabelAr: null, lines: [{ id: "trial-source-line", lineNumber: 1, accountCode: "1100", accountNameAr: "الصندوق", accountNameEn: "Cash", debit, credit: zero }] } });
-    if (url.pathname === "/v1/reports/personal-cash-performance") return fulfill(route, cashReport(url));
-    if (url.pathname === `/v1/reports/personal-cash-performance/${cashRunId}/evidence`) {
-      const second = Boolean(url.searchParams.get("cursor"));
-      return fulfill(route, { reportRunId: cashRunId, rowCode: url.searchParams.get("rowCode"), nextCursor: second ? null : "cash-page-2", items: [{ eventId: second ? "cash-event-2" : "cash-event-1", businessDate: "2026-08-02", direction: "INFLOW", amount: money("100.00", "100.00"), source: { journalEntryId: "cash-journal-1", labelAr: "تحصيل مبيعات", labelEn: "Sales receipt", reference: second ? "RC-002" : "RC-001" } }] });
+    if (url.pathname === "/v1/reports/personal-cash-performance") {
+      return fulfill(route, cashReport(url));
     }
-    if (url.pathname === `/v1/reports/personal-cash-performance/${cashRunId}/evidence/cash-event-1/source`) return fulfill(route, { journalEntry: { id: "cash-journal-1", businessDate: "2026-08-02", sourceType: "SALE", sourceReference: "RC-001", description: "Sales receipt", status: "POSTED", postedAt: "2026-08-02T09:00:00.000Z", lines: [{ id: "cash-source-line", lineNumber: 1, accountCode: "1100", accountNameAr: "الصندوق", accountNameEn: "Cash", debitAmount: "100.00", creditAmount: "0.00" }] } });
+    if (url.pathname === "/v1/reports/personal-cash-performance/live/evidence") {
+      const second = Boolean(url.searchParams.get("cursor"));
+      return fulfill(route, { rowCode: url.searchParams.get("rowCode"), nextCursor: second ? null : "cash-page-2", items: [{ eventId: second ? "cash-event-2" : "cash-event-1", businessDate: "2026-08-02", direction: "INFLOW", amount: money("100.00", "100.00"), source: { journalEntryId: "cash-journal-1", labelAr: "تحصيل مبيعات", labelEn: "Sales receipt", reference: second ? "RC-002" : "RC-001", origin: { labelAr: "العمليات ← المبيعات", labelEn: "Operations → Sales", route: "#module=operations&page=operations-sales" } } }] });
+    }
+    if (url.pathname === "/v1/reports/personal-cash-performance/live/evidence/cash-event-1/source") return fulfill(route, { journalEntry: { id: "cash-journal-1", businessDate: "2026-08-02", sourceType: "SALE", sourceReference: "RC-001", description: "Sales receipt", status: "POSTED", postedAt: "2026-08-02T09:00:00.000Z", lines: [{ id: "cash-source-line", lineNumber: 1, accountCode: "1100", accountNameAr: "الصندوق", accountNameEn: "Cash", debitAmount: "100.00", creditAmount: "0.00" }] } });
     if (url.pathname === "/v1/reports/internal-vat") return fulfill(route, vatReport(url));
     if (url.pathname === `/v1/reports/internal-vat/${vatRunId}/evidence`) return fulfill(route, { reportRunId: vatRunId, rowCode: url.searchParams.get("rowCode"), nextCursor: null, items: [{ lineId: "vat-line-1", businessDate: "2026-08-03", amount: money("30.00", "30.00"), reference: "VAT-001", labelAr: "فاتورة مبيعات", labelEn: "Sales invoice" }] });
     if (url.pathname === `/v1/reports/internal-vat/${vatRunId}/evidence/vat-line-1/source`) return fulfill(route, { journalEntry: { sourceReference: "VAT-001", businessDate: "2026-08-03", description: "VAT source", lines: [{ id: "vat-source-line", lineNumber: 1, accountCode: "2100", accountNameAr: "ضريبة مخرجات", accountNameEn: "Output VAT", debitAmount: "0.00", creditAmount: "30.00" }] } });
+    if (url.pathname === "/v1/reports/documents" && route.request().method() === "POST") {
+      const body = JSON.parse(route.request().postData() ?? "{}");
+      if (options.expireFirstCashDocumentSave && body.reportRunId === cashRunId) return fulfill(route, { error: { code: "REPORT_RUN_EXPIRED", message: { ar: "انتهت صلاحية لقطة التقرير.", en: "The report run has expired." }, correlationId: "expired-report-run", retry: { kind: "do-not-retry" } } }, 404);
+      return fulfill(route, { id: documentId, reused: false });
+    }
     if (url.pathname === "/v1/reports/documents") return fulfill(route, { documents: [{ id: documentId, reportRunId: trialRunId, reportCode: "ledger_trial_balance", title: language === "ar" ? "ميزان مراجعة أغسطس" : "August Trial Balance", locale: language, createdAt: "2026-08-03T09:00:00.000Z" }] });
     return fulfill(route, {});
   });
@@ -127,6 +148,10 @@ async function mockReports(page: Page, language: "ar" | "en", requests: RequestL
 
 function reportRequests(requests: readonly RequestLog[], pathname: string) {
   return requests.filter((request) => request.method === "GET" && request.pathname === pathname);
+}
+
+function officialRunRequests(requests: readonly RequestLog[]) {
+  return requests.filter((request) => request.method === "POST" && request.pathname === "/v1/reports/official-runs");
 }
 
 test("reports catalogue is accessible in Arabic RTL and English LTR", async ({ page }) => {
@@ -147,7 +172,7 @@ test("reports catalogue is accessible in Arabic RTL and English LTR", async ({ p
   expect((await new AxeBuilder({ page }).include(".reports-overview").analyze()).violations).toEqual([]);
 });
 
-test("trial snapshot supports period/toggle, evidence source, cursor paging and focus-safe report runs", async ({ page }) => {
+test("live trial balance supports period/toggle while evidence uses one frozen run", async ({ page }) => {
   const requests: RequestLog[] = [];
   await mockReports(page, "en", requests);
   await page.goto("/#module=reports&section=1&stage=trial-balance");
@@ -191,13 +216,13 @@ test("trial snapshot supports period/toggle, evidence source, cursor paging and 
   await expect.poll(() => reportRequests(requests, "/v1/reports/ledger-trial-balance").length).toBeGreaterThan(afterToggleRuns);
   await expect(snapshot).toContainText("120.00");
 
-  const runsBeforeFocus = reportRequests(requests, "/v1/reports/ledger-trial-balance").length;
+  const officialRunsBeforeFocus = officialRunRequests(requests).length;
   await page.evaluate(() => window.dispatchEvent(new Event("focus")));
   await page.waitForTimeout(150);
-  expect(reportRequests(requests, "/v1/reports/ledger-trial-balance")).toHaveLength(runsBeforeFocus);
+  expect(officialRunRequests(requests)).toHaveLength(officialRunsBeforeFocus);
 });
 
-test("cash and VAT snapshots are read models, and saved report documents remain explicit", async ({ page }) => {
+test("cash and VAT reads are live, and report documents remain explicit", async ({ page }) => {
   const requests: RequestLog[] = [];
   await mockReports(page, "en", requests);
   await page.goto("/#module=reports&section=1&stage=cash-performance");
@@ -224,4 +249,28 @@ test("cash and VAT snapshots are read models, and saved report documents remain 
   await expect(page.getByRole("heading", { name: "Report documents", level: 2 })).toBeVisible();
   await expect(page.getByText("August Trial Balance")).toBeVisible();
   expect(reportRequests(requests, "/v1/reports/documents").length).toBeGreaterThan(0);
+});
+
+test("cash evidence opens directly without creating an output snapshot", async ({ page }) => {
+  const requests: RequestLog[] = [];
+  await mockReports(page, "en", requests);
+  await page.goto("/#module=reports&section=1&stage=cash-performance");
+  await expect(page.getByRole("button", { name: "Sales collections" }).first()).toBeVisible();
+  await page.getByRole("button", { name: "Sales collections" }).first().click();
+  const dialog = page.getByRole("dialog", { name: /Amount details — Sales collections/ });
+  await expect(dialog.getByText("RC-001")).toBeVisible();
+  expect(officialRunRequests(requests).length).toBe(0);
+  expect(reportRequests(requests, "/v1/reports/personal-cash-performance/live/evidence").length).toBeGreaterThan(0);
+});
+
+test("an expired snapshot is regenerated before saving a report document", async ({ page }) => {
+  const requests: RequestLog[] = [];
+  await mockReports(page, "en", requests, { expireFirstCashDocumentSave: true });
+  await page.goto("/#module=reports&section=1&stage=cash-performance");
+  await expect(page.getByLabel("Share")).toBeVisible();
+  await page.getByLabel("Share").click();
+  await page.getByRole("menuitem", { name: "Save to report documents" }).click();
+  await expect(page.getByText("The report snapshot was saved to report documents.")).toBeVisible();
+  await expect.poll(() => officialRunRequests(requests).length).toBeGreaterThanOrEqual(2);
+  expect(requests.filter((request) => request.method === "POST" && request.pathname === "/v1/reports/documents").length).toBeGreaterThan(0);
 });

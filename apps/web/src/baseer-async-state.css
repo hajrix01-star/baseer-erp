@@ -1,0 +1,35 @@
+.baseer-async-state {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: .7rem;
+  align-items: start;
+  padding: .9rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  background: var(--surface);
+}
+
+.baseer-async-state__content { display: grid; gap: .38rem; min-inline-size: 0; }
+.baseer-async-state__content strong { font-size: var(--font-body); }
+.baseer-async-state__content p { margin: 0; color: var(--muted); font-size: var(--font-label); }
+.baseer-async-state__content .baseer-button { justify-self: start; margin-block-start: .2rem; }
+
+.baseer-async-state__indicator {
+  inline-size: 1.15rem;
+  block-size: 1.15rem;
+  margin-block-start: .12rem;
+  border: 2px solid color-mix(in srgb, var(--brand) 25%, transparent);
+  border-inline-start-color: var(--brand);
+  border-radius: 50%;
+  animation: baseer-async-state-spin .8s linear infinite;
+}
+
+.baseer-async-state--empty { background: color-mix(in srgb, var(--surface) 94%, var(--brand)); }
+.baseer-async-state--error { border-color: color-mix(in srgb, #a12c25 45%, var(--line)); background: color-mix(in srgb, #a12c25 5%, var(--surface)); }
+.baseer-async-state--stale { grid-template-columns: minmax(0, 1fr); border-color: color-mix(in srgb, #ad7300 42%, var(--line)); background: color-mix(in srgb, #ad7300 6%, var(--surface)); }
+.baseer-async-state__stale-content { min-inline-size: 0; }
+
+@keyframes baseer-async-state-spin { to { transform: rotate(1turn); } }
+
+@media (prefers-reduced-motion: reduce) { .baseer-async-state__indicator { animation: none; } }

@@ -1,18 +1,11 @@
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 
-export type DataTableColumn<Row> = {
-  id: string;
-  header: ReactNode;
-  cell: (row: Row) => ReactNode;
-  width?: string;
-  align?: "start" | "end" | "center";
-  numeric?: boolean;
-  className?: string;
-  /** Use only for complete local collections. Paginated financial registers sort on the server. */
-  sort?: (row: Row) => string | number | null | undefined;
-};
+import { BaseerDataGrid, type BaseerDataGridColumn } from "./baseer-data-grid";
 
-export function DataTable<Row>({
+/** @deprecated Use BaseerDataGrid directly. This adapter keeps complete legacy lists on the shared grid. */
+export type DataTableColumn<Row extends object> = BaseerDataGridColumn<Row>;
+
+export function DataTable<Row extends object>({
   ariaLabel,
   caption,
   className,
@@ -28,7 +21,6 @@ export function DataTable<Row>({
   rowKey: (row: Row) => string;
 }) {
   const [sort, setSort] = useState<{ id: string; d: boolean } | null>(null);
-  const tableClassName = ["baseer-data-table", className].filter(Boolean).join(" ");
   const sortedRows = sort ? [...rows].sort((left, right) => {
     const column = columns.find((item) => item.id === sort.id);
     const leftValue = column?.sort?.(left);
@@ -37,50 +29,15 @@ export function DataTable<Row>({
     return sort.d ? -comparison : comparison;
   }) : rows;
 
-  return (
-    <div className={tableClassName} role="region" aria-label={ariaLabel} tabIndex={0}>
-      <table>
-        <caption className="visually-hidden">{caption}</caption>
-        <colgroup>
-          {columns.map((column) => <col key={column.id} style={column.width ? { width: column.width } : undefined} />)}
-        </colgroup>
-        <thead>
-          <tr>
-            {columns.map((column) => (
-              <th
-                key={column.id}
-                scope="col"
-                aria-sort={sort?.id === column.id ? (sort.d ? "descending" : "ascending") : undefined}
-                className={[
-                  `baseer-data-table__${column.align ?? "start"}`,
-                  column.numeric ? "baseer-data-table__numeric" : "",
-                  column.className ?? "",
-                ].filter(Boolean).join(" ")}
-              >
-                {column.sort ? <button className="baseer-sort" type="button" onClick={() => setSort((current) => current?.id !== column.id ? { id: column.id, d: false } : current.d ? null : { id: column.id, d: true })}>{column.header}<span aria-hidden="true">{sort?.id === column.id ? sort.d ? "▼" : "▲" : "▾"}</span></button> : column.header}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {sortedRows.map((row) => (
-            <tr key={rowKey(row)}>
-              {columns.map((column) => (
-                <td
-                  key={column.id}
-                  className={[
-                    `baseer-data-table__${column.align ?? "start"}`,
-                    column.numeric ? "baseer-data-table__numeric" : "",
-                    column.className ?? "",
-                  ].filter(Boolean).join(" ")}
-                >
-                  {column.cell(row)}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+  return <BaseerDataGrid
+    ariaLabel={ariaLabel}
+    caption={caption}
+    className={className}
+    columns={columns}
+    rows={sortedRows}
+    rowKey={rowKey}
+    serverSortColumnId={sort?.id}
+    sortDirection={sort?.d ? "desc" : "asc"}
+    onClientSortChange={(columnId) => setSort((current) => current?.id !== columnId ? { id: columnId, d: false } : current.d ? null : { id: columnId, d: true })}
+  />;
 }

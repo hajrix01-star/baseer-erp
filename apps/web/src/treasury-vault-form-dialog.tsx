@@ -3,6 +3,8 @@ import { useEffect, useMemo } from "react";
 
 import { BaseerButton } from "./baseer-button";
 import { BaseerDialog } from "./baseer-dialog";
+import { BaseerStaticSelect } from "./baseer-static-select";
+import { BaseerCheckbox, BaseerTextInput } from "./baseer-form-fields";
 import { financeText } from "./finance-copy";
 import type { PaymentMethod, VaultForm } from "./treasury-workspace";
 
@@ -25,11 +27,11 @@ export function TreasuryVaultFormDialog({ open, language, busy, value, editing, 
   const label = (method: PaymentMethod) => method === "CASH" ? text.cash : method === "APP" ? text.app : method === "BANK_TRANSFER" ? text.bankTransfer : method === "BANK_CARD" ? text.bankCard : text.bankPayment;
   return <BaseerDialog open={open} language={language} busy={busy} title={editing ? text.edit : text.addVault} onClose={onClose} footer={<><BaseerButton type="button" onClick={onClose}>{text.cancel}</BaseerButton><BaseerButton type="submit" variant="primary" form="vault-form" disabled={busy}>{busy ? text.saving : editing ? text.save : text.saveVault}</BaseerButton></>}>
     <form id="vault-form" className="administration-form" data-baseer-rhf-form="true" noValidate onSubmit={form.handleSubmit((next) => void onSubmit(next))}>
-      <label>{text.nameArabic}<input autoFocus aria-invalid={Boolean(form.formState.errors.nameAr)} {...form.register("nameAr")} />{form.formState.errors.nameAr ? <small role="alert">{form.formState.errors.nameAr.message}</small> : null}</label>
-      <label>{text.nameEnglish}<input aria-invalid={Boolean(form.formState.errors.nameEn)} {...form.register("nameEn")} />{form.formState.errors.nameEn ? <small role="alert">{form.formState.errors.nameEn.message}</small> : null}</label>
-      <label>{text.vaultType}<select {...form.register("type")} onChange={(event) => { const next = event.target.value as VaultForm["type"]; form.setValue("type", next, { shouldDirty: true }); form.setValue("paymentMethods", defaultsFor(next), { shouldDirty: true, shouldValidate: true }); }}><option value="CASH">{text.cash}</option><option value="BANK">{text.bank}</option><option value="APP">{text.app}</option></select></label>
-      <fieldset><legend>{text.paymentMethod}</legend>{options.map((method) => <label key={method}><input type="checkbox" disabled={!isPaymentDestination} checked={paymentMethods.includes(method)} onChange={() => toggle(method)} /> {label(method)}</label>)}{form.formState.errors.paymentMethods ? <small role="alert">{form.formState.errors.paymentMethods.message}</small> : null}</fieldset>
-      <fieldset><legend>{text.vaults}</legend><label><input type="checkbox" {...form.register("isSalesChannel")} /> {text.collectionChannel}</label><label><input type="checkbox" {...form.register("isPaymentDestination")} /> {text.paymentDestination}</label></fieldset>
+      <label>{text.nameArabic}<BaseerTextInput autoFocus aria-invalid={Boolean(form.formState.errors.nameAr)} {...form.register("nameAr")} />{form.formState.errors.nameAr ? <small role="alert">{form.formState.errors.nameAr.message}</small> : null}</label>
+      <label>{text.nameEnglish}<BaseerTextInput aria-invalid={Boolean(form.formState.errors.nameEn)} {...form.register("nameEn")} />{form.formState.errors.nameEn ? <small role="alert">{form.formState.errors.nameEn.message}</small> : null}</label>
+      <label>{text.vaultType}<BaseerStaticSelect label={text.vaultType} {...form.register("type")} onChange={(event) => { const next = event.target.value as VaultForm["type"]; form.setValue("type", next, { shouldDirty: true }); form.setValue("paymentMethods", defaultsFor(next), { shouldDirty: true, shouldValidate: true }); }}><option value="CASH">{text.cash}</option><option value="BANK">{text.bank}</option><option value="APP">{text.app}</option></BaseerStaticSelect></label>
+      <fieldset><legend>{text.paymentMethod}</legend>{options.map((method) => <label key={method}><BaseerCheckbox disabled={!isPaymentDestination} checked={paymentMethods.includes(method)} onChange={() => toggle(method)} /> {label(method)}</label>)}{form.formState.errors.paymentMethods ? <small role="alert">{form.formState.errors.paymentMethods.message}</small> : null}</fieldset>
+      <fieldset><legend>{text.vaults}</legend><label><BaseerCheckbox {...form.register("isSalesChannel")} /> {text.collectionChannel}</label><label><BaseerCheckbox {...form.register("isPaymentDestination")} /> {text.paymentDestination}</label></fieldset>
     </form>
   </BaseerDialog>;
 }

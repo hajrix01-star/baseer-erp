@@ -7,6 +7,8 @@ import {
 } from "./daily-sales-auth-client";
 import { persistActiveSession } from "./daily-sales-client";
 import { dailySalesText, type DailySalesLanguage } from "./daily-sales-copy";
+import { BaseerButton } from "./baseer-button";
+import { BaseerTextInput } from "./baseer-form-fields";
 import {
   BaseerValidatedFormField as BaseerValidatedForm,
   type BaseerValidatedFormSchemaFactory,
@@ -134,7 +136,7 @@ export function DailySalesSignIn({
           </p>
           <label>
             <span>{language === "ar" ? "البريد الإلكتروني" : "Email"}</span>
-            <input
+            <BaseerTextInput
               type="email"
               value={activationValues.login}
               onChange={(event) => setActivationValues((value) => ({ ...value, login: event.target.value }))}
@@ -158,7 +160,7 @@ export function DailySalesSignIn({
                 ? "رمز التفعيل لمرة واحدة"
                 : "One-time activation code"}
             </span>
-            <input
+            <BaseerTextInput
               value={activationValues.activationCode}
               onChange={(event) => setActivationValues((value) => ({ ...value, activationCode: event.target.value }))}
               autoComplete="one-time-code"
@@ -233,7 +235,7 @@ export function DailySalesSignIn({
                 : "Show password"}
           </button>
           {error && <p className="daily-sales-message error">{error}</p>}
-          <button
+          <BaseerButton
             className="daily-sales-primary"
             type="submit"
             disabled={loading}
@@ -243,17 +245,18 @@ export function DailySalesSignIn({
               : language === "ar"
                 ? "تفعيل ودخول"
                 : "Activate and sign in"}
-          </button>
-          <button
+          </BaseerButton>
+          <BaseerButton
             className="daily-sales-secondary"
             type="button"
+            variant="secondary"
             onClick={() => {
               setActivationMode(false);
               setError("");
             }}
           >
             {language === "ar" ? "العودة للدخول" : "Back to sign in"}
-          </button>
+          </BaseerButton>
           </>}
         </BaseerValidatedForm>
       ) : (
@@ -272,7 +275,7 @@ export function DailySalesSignIn({
           </p>
           <label>
             <span>{copy.login}</span>
-            <input
+            <BaseerTextInput
               type="text"
               value={signInValues.login}
               onChange={(event) => setSignInValues((value) => ({ ...value, login: event.target.value }))}
@@ -324,16 +327,17 @@ export function DailySalesSignIn({
                 : "Show password"}
           </button>
           {error && <p className="daily-sales-message error">{error}</p>}
-          <button
+          <BaseerButton
             className="daily-sales-primary"
             type="submit"
             disabled={loading}
           >
             {loading ? copy.signingIn : copy.signIn}
-          </button>
-          <button
+          </BaseerButton>
+          <BaseerButton
             className="daily-sales-secondary"
             type="button"
+            variant="secondary"
             onClick={() => {
               setActivationMode(true);
               setError("");
@@ -343,7 +347,7 @@ export function DailySalesSignIn({
             {language === "ar"
               ? "تفعيل المالك العام لأول مرة"
               : "Activate general owner"}
-          </button>
+          </BaseerButton>
           </>}
         </BaseerValidatedForm>
       )}

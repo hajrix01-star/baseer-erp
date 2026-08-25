@@ -1,5 +1,7 @@
 import { dailySalesText, type DailySalesLanguage } from "./daily-sales-copy";
 import { BaseerDatePicker } from "./baseer-date-picker";
+import { BaseerButton } from "./baseer-button";
+import { BaseerStaticSelect } from "./baseer-static-select";
 import {
   divideMoneyDecimalByInteger,
   isPositiveMoneyDecimal,
@@ -21,7 +23,7 @@ import type {
   Vault,
 } from "./daily-sales-client";
 import { BaseerValidatedFormField as BaseerValidatedForm } from "./baseer-validated-form-field";
-import { normalizeBaseerAmount } from "./baseer-form-fields";
+import { BaseerIntegerInput, BaseerTextArea, normalizeBaseerAmount } from "./baseer-form-fields";
 
 type Props = {
   language: DailySalesLanguage;
@@ -107,14 +109,12 @@ function ShiftCard({
       <div className="daily-sales-dialog__entry-fields">
         <label className="daily-sales-dialog__customer-field">
           <span>{copy.customers}</span>
-          <input
-            inputMode="numeric"
-            dir="ltr"
+          <BaseerIntegerInput
             min="0"
             step="1"
             value={form.customerCount}
-            onChange={(event) =>
-              onChange({ ...form, customerCount: normalizeBaseerAmount(event.target.value).replace(".", "") })
+            onValueChange={(customerCount) =>
+              onChange({ ...form, customerCount })
             }
             placeholder={language === "ar" ? "أدخل العدد" : "Enter count"}
             required
@@ -163,9 +163,9 @@ function ShiftCard({
       </fieldset>
       <label className="daily-sales-dialog__wide">
         <span>{copy.notes}</span>
-        <textarea
+        <BaseerTextArea
           value={form.notes}
-          onChange={(event) => onChange({ ...form, notes: event.target.value })}
+          onValueChange={(notes) => onChange({ ...form, notes })}
           maxLength={2_000}
           placeholder={
             language === "ar"
@@ -363,7 +363,7 @@ export function DailySalesClosingDialog({
               <small>{copy.dayOffNoMoneyHint}</small>
               <label>
                 <span>{copy.dayOffReason}</span>
-                <select
+                <BaseerStaticSelect label={copy.dayOffReason}
                   value={dayOffReason}
                   onChange={(event) =>
                     onDayOffReasonChange(event.target.value as DayOffReason)
@@ -374,13 +374,14 @@ export function DailySalesClosingDialog({
                   <option value="MAINTENANCE">{copy.MAINTENANCE}</option>
                   <option value="EMERGENCY">{copy.EMERGENCY}</option>
                   <option value="OTHER">{copy.OTHER}</option>
-                </select>
+                </BaseerStaticSelect>
               </label>
               <label>
                 <span>{copy.dayOffNote}</span>
-                <textarea
+                <BaseerTextArea
+                  compact
                   value={dayOffNote}
-                  onChange={(event) => onDayOffNoteChange(event.target.value)}
+                  onValueChange={onDayOffNoteChange}
                   maxLength={1_000}
                   required={dayOffReason === "OTHER"}
                 />
@@ -404,15 +405,16 @@ export function DailySalesClosingDialog({
             </div>
           )}
           <footer className="daily-sales-dialog__actions">
-            <button
+            <BaseerButton
               className="daily-sales-secondary"
               type="button"
+              variant="secondary"
               onClick={close}
               disabled={saving}
             >
               {copy.cancelEdit}
-            </button>
-            <button
+            </BaseerButton>
+            <BaseerButton
               className="daily-sales-primary"
               disabled={saving}
               type="submit"
@@ -424,7 +426,7 @@ export function DailySalesClosingDialog({
                   : editing
                     ? copy.correct
                     : copy.saveAndSend}
-            </button>
+            </BaseerButton>
           </footer>
         </BaseerValidatedForm>
       </section>

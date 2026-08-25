@@ -76,7 +76,7 @@ export const pageRegistry = [
   page({ id: "reports-overview", moduleId: "reports", legacySection: 0, title: { ar: "نظرة التقارير", en: "Reports overview" }, icon: "dashboard", navigation: { order: 10, visible: true }, requiredPermissions: any(["reports.read"]) }),
   page({ id: "reports-financial", moduleId: "reports", legacySection: 1, title: { ar: "التقارير المالية", en: "Financial reports" }, icon: "chart", navigation: { order: 20, visible: true }, requiredPermissions: any(["reports.read"]) }),
   page({ id: "reports-vat", moduleId: "reports", legacySection: 2, title: { ar: "التقرير الضريبي", en: "VAT report" }, icon: "tax", navigation: { order: 30, visible: true }, requiredPermissions: any(["reports.read"]) }),
-  page({ id: "reports-hajri-tax", moduleId: "reports", legacySection: 3, title: { ar: "Hajri Tax", en: "Hajri Tax" }, icon: "tax", navigation: { order: 40, visible: true }, requiredPermissions: any(["reports.read"]) }),
+  page({ id: "reports-hajri-tax", moduleId: "reports", legacySection: 3, title: { ar: "محاكاة VAT", en: "VAT simulation" }, icon: "tax", navigation: { order: 40, visible: true }, requiredPermissions: any(["reports.read"]) }),
   page({ id: "reports-documents", moduleId: "reports", legacySection: 4, title: { ar: "مستندات التقارير", en: "Report documents" }, icon: "print", navigation: { order: 50, visible: true }, requiredPermissions: any(["reports.read"]) }),
 
   page({ id: "administration-overview", moduleId: "administration", legacySection: 0, title: { ar: "نظرة الإدارة", en: "Administration overview" }, icon: "dashboard", navigation: { order: 10, visible: true }, requiredPermissions: any(["administration.companies.read", "administration.users.read", "administration.roles.read"]) }),

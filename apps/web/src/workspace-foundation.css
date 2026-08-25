@@ -185,6 +185,14 @@ html[dir="rtl"] .baseer-metric::before { inset: 0 0 0 auto; }
   background: var(--surface);
   border-color: var(--field-border);
 }
+.baseer-button--quiet {
+  color: var(--brand-deep);
+  background: transparent;
+  border-color: transparent;
+}
+.baseer-button--quiet:not(:disabled):hover {
+  background: color-mix(in srgb, var(--brand) 9%, transparent);
+}
 .baseer-button--danger,
 .daily-sales-danger {
   color: #fff;

@@ -1,6 +1,8 @@
-import { useDialogFocusTrap } from "./use-dialog-focus-trap";
+import { BaseerButton } from "./baseer-button";
+import { BaseerDialog } from "./baseer-dialog";
 import { formatDate, formatMoney } from "./number-format";
 import { dailySalesText, type DailySalesLanguage } from "./daily-sales-copy";
+import { BaseerTextArea } from "./baseer-form-fields";
 import type { Closing } from "./daily-sales-client";
 
 type DailySalesReversalDialogProps = {
@@ -43,7 +45,6 @@ export function DailySalesReversalDialog({
           confirm: "Cancel",
           hint: "",
         };
-  const dialogRef = useDialogFocusTrap({ open: !!closing, saving, onClose });
   if (!closing) return null;
   const close = () => {
     if (!saving) onClose();
@@ -51,34 +52,33 @@ export function DailySalesReversalDialog({
   const valid = reason.trim().length >= 3;
 
   return (
-    <div
-      className="daily-sales-dialog-backdrop"
-      role="presentation"
-      onMouseDown={close}
-    >
-      <section
-        ref={dialogRef}
-        className="daily-sales-dialog daily-sales-reversal-dialog"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="daily-sales-reversal-title"
-        onMouseDown={(event) => event.stopPropagation()}
+    <BaseerDialog
+      open
+      title={cancellation.title}
+      language={language}
+      busy={saving}
+      className="daily-sales-reversal-dialog"
+      onClose={close}
+      footer={<><BaseerButton
+        className="daily-sales-secondary"
+        type="button"
+        variant="secondary"
+        onClick={close}
+        disabled={saving}
       >
-        <header className="daily-sales-dialog__header">
-          <div>
-            <p className="eyebrow">{copy.eyebrow}</p>
-            <h3 id="daily-sales-reversal-title">{cancellation.title}</h3>
-            <p>{cancellation.intro}</p>
-          </div>
-          <button
-            className="daily-sales-secondary"
-            type="button"
-            onClick={close}
-            disabled={saving}
-          >
-            {copy.closeDialog}
-          </button>
-        </header>
+        {copy.cancelEdit}
+      </BaseerButton><BaseerButton
+        className="daily-sales-danger"
+        type="button"
+        variant="danger"
+        onClick={onConfirm}
+        disabled={saving || !valid}
+      >
+        {saving ? copy.saving : cancellation.confirm}
+      </BaseerButton></>}
+    >
+        <p className="eyebrow">{copy.eyebrow}</p>
+        <p>{cancellation.intro}</p>
         <div className="daily-sales-reversal-dialog__summary">
           <span>{cancellation.record}</span>
           <strong>{closing.documentNumber}</strong>
@@ -89,34 +89,15 @@ export function DailySalesReversalDialog({
         </div>
         <label className="daily-sales-reversal-dialog__reason">
           <span>{cancellation.reason}</span>
-          <textarea
+          <BaseerTextArea
             value={reason}
-            onChange={(event) => onReasonChange(event.target.value)}
+            onValueChange={onReasonChange}
             maxLength={500}
             minLength={3}
             required
           />
           {cancellation.hint ? <small>{cancellation.hint}</small> : null}
         </label>
-        <footer className="daily-sales-dialog__actions">
-          <button
-            className="daily-sales-secondary"
-            type="button"
-            onClick={close}
-            disabled={saving}
-          >
-            {copy.cancelEdit}
-          </button>
-          <button
-            className="daily-sales-danger"
-            type="button"
-            onClick={onConfirm}
-            disabled={saving || !valid}
-          >
-            {saving ? copy.saving : cancellation.confirm}
-          </button>
-        </footer>
-      </section>
-    </div>
+    </BaseerDialog>
   );
 }

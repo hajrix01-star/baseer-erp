@@ -9,7 +9,7 @@ export type BaseerDataGridColumn<Row extends object> = Readonly<{
   align?: 'start' | 'end' | 'center';
   numeric?: boolean;
   className?: string;
-  /** Compatibility metadata only. Sorting remains server-controlled. */
+  /** A compatibility adapter may opt into local sorting for a complete collection. */
   sort?: (row: Row) => string | number | null | undefined;
 }>;
 
@@ -29,9 +29,11 @@ export type BaseerDataGridProps<Row extends object> = {
   serverSortColumnId?: string;
   sortDirection?: 'asc' | 'desc';
   onSortDirectionChange?: () => void;
+  /** Reserved for the legacy DataTable adapter when every row is already loaded. */
+  onClientSortChange?: (columnId: string) => void;
 };
 
-export function BaseerDataGrid<Row extends object>({ ariaLabel, caption, className, columns, rows, rowKey, serverSortColumnId, sortDirection, onSortDirectionChange }: BaseerDataGridProps<Row>) {
+export function BaseerDataGrid<Row extends object>({ ariaLabel, caption, className, columns, rows, rowKey, serverSortColumnId, sortDirection, onSortDirectionChange, onClientSortChange }: BaseerDataGridProps<Row>) {
   const helper = createColumnHelper<typeof features, Row>();
   const tableColumns = useMemo(() => columns.map((column) => helper.display({
     id: column.id,
@@ -45,10 +47,12 @@ export function BaseerDataGrid<Row extends object>({ ariaLabel, caption, classNa
       <caption className="visually-hidden">{caption}</caption>
       <colgroup>{columns.map((column) => <col key={column.id} style={column.width ? { width: column.width } : undefined} />)}</colgroup>
       <thead>{table.getHeaderGroups().map((group) => <tr key={group.id}>{group.headers.map((header) => {
-        const sortable = header.id === serverSortColumnId && onSortDirectionChange;
         const column = columns.find((entry) => entry.id === header.id);
+        const serverSortable = header.id === serverSortColumnId && onSortDirectionChange;
+        const clientSortable = Boolean(onClientSortChange && column?.sort);
+        const sortable = serverSortable || clientSortable;
         const className = [`baseer-data-table__${column?.align ?? 'start'}`, column?.numeric ? 'baseer-data-table__numeric' : '', column?.className ?? ''].filter(Boolean).join(' ');
-        return <th key={header.id} scope="col" aria-sort={header.id === serverSortColumnId ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className={className}>{header.isPlaceholder ? null : sortable ? <button className="baseer-sort" type="button" onClick={onSortDirectionChange}><table.FlexRender header={header} /><span aria-hidden="true">{sortDirection === 'asc' ? '▲' : '▼'}</span></button> : <table.FlexRender header={header} />}</th>;
+        return <th key={header.id} scope="col" aria-sort={header.id === serverSortColumnId ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className={className}>{header.isPlaceholder ? null : sortable ? <button className="baseer-sort" type="button" onClick={() => clientSortable ? onClientSortChange?.(header.id) : onSortDirectionChange?.()}><table.FlexRender header={header} /><span aria-hidden="true">{header.id === serverSortColumnId ? (sortDirection === 'asc' ? '▲' : '▼') : '▾'}</span></button> : <table.FlexRender header={header} />}</th>;
       })}</tr>)}</thead>
       <tbody>{table.getRowModel().rows.map((row) => <tr key={row.id}>{row.getAllCells().map((cell) => { const column = columns.find((entry) => entry.id === cell.column.id); const className = [`baseer-data-table__${column?.align ?? 'start'}`, column?.numeric ? 'baseer-data-table__numeric' : '', column?.className ?? ''].filter(Boolean).join(' '); return <td key={cell.id} className={className}>{column?.cell(row.original)}</td>; })}</tr>)}</tbody>
     </table>

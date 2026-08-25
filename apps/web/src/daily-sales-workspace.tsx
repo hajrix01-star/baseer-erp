@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { dailySalesText, type DailySalesLanguage } from "./daily-sales-copy";
 import { BaseerPeriodFilter, baseerPeriodQuery, defaultBaseerPeriodRange } from "./baseer-period-filter";
+import { BaseerButton } from "./baseer-button";
 import { DailySalesClosingDialog } from "./daily-sales-closing-dialog";
 import { DailySalesReversalDialog } from "./daily-sales-reversal-dialog";
 import { DailySalesRecordDialog } from "./daily-sales-record-dialog";
@@ -350,22 +351,8 @@ export function DailySalesWorkspace({
           <h2>{copy.title}</h2>
         </div>
         <div className="daily-sales-heading__actions">
-          {canCreate && (
-            <button
-              className="daily-sales-primary"
-              type="button"
-              onClick={() => openEntryForDate()}
-            >
-              {copy.create}
-            </button>
-          )}
-          <button
-            className="daily-sales-secondary"
-            type="button"
-            onClick={() => void load()}
-          >
-            {copy.refresh}
-          </button>
+          {canCreate ? <BaseerButton type="button" onClick={() => openEntryForDate()}>{copy.create}</BaseerButton> : null}
+          <BaseerButton type="button" variant="secondary" onClick={() => void load()}>{copy.refresh}</BaseerButton>
         </div>
       </header>
       <BaseerPeriodFilter language={language} value={range} onChange={setRange} />

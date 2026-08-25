@@ -106,6 +106,9 @@ export type AvailableCompany = {
   nameAr: string;
   nameEn: string;
   permissionCodes: string[];
+  // Older private deployments may not have returned this identity hint yet.
+  // The shell retains a guarded compatibility path until their API is rebuilt.
+  isOwner?: boolean;
 };
 export type DailySalesScope = "MORNING" | "EVENING" | "ALL";
 export type FormState = {

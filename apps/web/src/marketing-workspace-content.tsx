@@ -8,7 +8,7 @@ import { BaseerCompanyReadQuery } from "./baseer-company-read-query";
 import { BaseerDatePicker } from "./baseer-date-picker";
 import { BaseerEmptyState } from "./baseer-workspace";
 import { BaseerFormDialog } from "./baseer-form-dialog";
-import { BaseerMoneyInput } from "./baseer-form-fields";
+import { BaseerMoneyInput, BaseerTextInput } from "./baseer-form-fields";
 import { useBaseerForm, z } from "./baseer-form-state";
 import { BaseerFilterSelect, BaseerFilterToggle } from "./baseer-filter-controls";
 import { BaseerPeriodFilter, defaultBaseerPeriodRange, type BaseerPeriodRange } from "./baseer-period-filter";
@@ -28,7 +28,7 @@ type Workspace = { companyId: string; campaigns: Campaign[]; readiness: Array<{ 
 type Draft = { titleAr: string; titleEn: string; platform: Campaign["platform"]; startsOn: string; endsOn: string; status: Exclude<Campaign["status"], "ARCHIVED">; objective: string; notes: string; externalReference: string; plannedCost: string };
 
 const blank = (): Draft => ({ titleAr: "", titleEn: "", platform: "MANUAL", startsOn: "", endsOn: "", status: "DRAFT", objective: "", notes: "", externalReference: "", plannedCost: "" });
-const visible = (codes: readonly string[] | null, capability: string) => codes === null || codes.includes(capability);
+const visible = (codes: readonly string[] | null, capability: string) => codes?.includes(capability) ?? false;
 const campaignStatuses: Campaign["status"][] = ["DRAFT", "PLANNED", "ACTIVE", "COMPLETED", "CANCELLED", "ARCHIVED"];
 const campaignPlatforms: Campaign["platform"][] = ["MANUAL", "GOOGLE_ADS", "META", "TIKTOK", "SNAPCHAT", "OTHER"];
 function campaignStatusLabel(status: Campaign["status"], ar: boolean) {
@@ -189,15 +189,15 @@ function CampaignDialog({ open, language, busy, editing, initial, copy, error, o
   const fieldError = (name: keyof Draft) => form.formState.errors[name]?.message;
   return <BaseerFormDialog open={open} title={editing ? copy.editTitle : copy.createTitle} language={language} formId="marketing-campaign-form" submitLabel={copy.save} onClose={onClose} busy={busy} error={error} size="wide">
     <form id="marketing-campaign-form" data-baseer-rhf-form="true" className="marketing-campaign-form" noValidate onSubmit={form.handleSubmit((values) => onSubmit(values))}>
-      <label>{copy.titleAr}<input aria-invalid={Boolean(fieldError("titleAr"))} {...form.register("titleAr")} autoFocus /></label>{fieldError("titleAr") ? <small className="baseer-field-error" role="alert">{fieldError("titleAr")}</small> : null}
-      <label>{copy.titleEn}<input {...form.register("titleEn")} /></label>
+      <label>{copy.titleAr}<BaseerTextInput aria-invalid={Boolean(fieldError("titleAr"))} {...form.register("titleAr")} autoFocus /></label>{fieldError("titleAr") ? <small className="baseer-field-error" role="alert">{fieldError("titleAr")}</small> : null}
+      <label>{copy.titleEn}<BaseerTextInput {...form.register("titleEn")} /></label>
       <label>{copy.platform}<BaseerCombobox label={copy.platform} placeholder={ar ? "اختر المنصة" : "Select platform"} value={value.platform} options={campaignPlatforms.map((item) => ({ id: item, label: campaignPlatformLabel(item, ar) }))} onChange={(next) => set("platform", next)} /></label>
       <div className="marketing-campaign-form__dates"><label>{copy.from}<BaseerDatePicker language={language} label={copy.from} value={value.startsOn} onChange={(next) => set("startsOn", next)} /></label><label>{copy.to}<BaseerDatePicker language={language} label={copy.to} value={value.endsOn} onChange={(next) => set("endsOn", next)} /></label></div>{fieldError("endsOn") ? <small className="baseer-field-error" role="alert">{fieldError("endsOn")}</small> : null}
       <label>{copy.lifecycle}<BaseerCombobox label={copy.lifecycle} placeholder={ar ? "اختر الحالة" : "Select status"} value={value.status} options={campaignStatuses.filter((item) => item !== "ARCHIVED").map((item) => ({ id: item, label: campaignStatusLabel(item, ar) }))} onChange={(next) => set("status", next)} /></label>
       <label>{ar ? "التكلفة المخططة (ر.س، اختيارية)" : "Planned cost (SAR, optional)"}<BaseerMoneyInput value={value.plannedCost} onValueChange={(plannedCost) => set("plannedCost", plannedCost)} /></label>
       <label>{copy.objective}<textarea {...form.register("objective")} /></label>{fieldError("objective") ? <small className="baseer-field-error" role="alert">{fieldError("objective")}</small> : null}
       <label>{copy.notes}<textarea {...form.register("notes")} /></label>{fieldError("notes") ? <small className="baseer-field-error" role="alert">{fieldError("notes")}</small> : null}
-      <label>{copy.ref}<input {...form.register("externalReference")} /></label>{fieldError("externalReference") ? <small className="baseer-field-error" role="alert">{fieldError("externalReference")}</small> : null}
+      <label>{copy.ref}<BaseerTextInput {...form.register("externalReference")} /></label>{fieldError("externalReference") ? <small className="baseer-field-error" role="alert">{fieldError("externalReference")}</small> : null}
     </form>
   </BaseerFormDialog>;
 }

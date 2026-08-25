@@ -267,7 +267,7 @@
 .owner-daily-brief__paper-tone[open] summary { color: #fff; border-color: var(--brand); background: var(--brand); }
 .owner-daily-brief__paper-tone > div { position: absolute; z-index: 3; top: calc(100% + .4rem); inset-inline-end: 0; display: grid; min-width: 10.75rem; gap: .18rem; padding: .3rem; border: 1px solid var(--owner-paper-edge); border-radius: .65rem; background: #fffefb; box-shadow: 0 .75rem 1.75rem rgb(44 54 42 / .14); }
 .owner-daily-brief__paper-tone button { display: grid; grid-template-columns: 1.1rem 1fr; align-items: center; gap: .45rem; width: 100%; min-height: 2rem; padding: .3rem .38rem; border: 0; border-radius: .42rem; color: #2e4438; background: transparent; font: inherit; font-size: .7rem; font-weight: 750; text-align: start; cursor: pointer; }
-.owner-daily-brief__paper-tone button:hover,.owner-daily-brief__paper-tone button[aria-checked="true"] { color: #0d6545; background: #edf6ef; }
+.owner-daily-brief__paper-tone button:hover,.owner-daily-brief__paper-tone button[aria-pressed="true"] { color: #0d6545; background: #edf6ef; }
 .owner-daily-brief__paper-tone-swatch { inline-size: .95rem; block-size: .95rem; border: 1px solid rgb(62 72 63 / .14); border-radius: 999px; background: #fff4c9; }.owner-daily-brief__paper-tone-swatch.is-pure-white { background: #fff; }.owner-daily-brief__paper-tone-swatch.is-soft-yellow { background: #fffbe9; }
 
 .owner-daily-brief__company-summary,
@@ -315,4 +315,66 @@
 
 @media (max-width: 840px) {
   .owner-daily-brief__companies { grid-template-columns: repeat(auto-fill, minmax(15rem, 17.5rem)); }
+}
+
+/* Each company is an independent daily reading. Keep space for three clear,
+   comparable cards instead of letting a single company occupy a notebook row. */
+.owner-daily-brief__companies {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  justify-content: stretch;
+  gap: 1rem;
+}
+.owner-daily-brief .owner-daily-brief__company {
+  min-inline-size: 0;
+  padding: 1rem;
+  border: 1px solid color-mix(in srgb, var(--brand) 17%, var(--owner-paper-edge));
+  border-radius: .9rem;
+  background: color-mix(in srgb, #fff 76%, var(--owner-paper));
+  box-shadow: 0 .55rem 1.35rem rgb(45 69 55 / .08);
+  text-align: start;
+}
+.owner-daily-brief__company header {
+  align-items: flex-start;
+  justify-content: space-between;
+  min-block-size: 2.7rem;
+  padding: 0;
+}
+.owner-daily-brief__company header > div { flex: 1; }
+.owner-daily-brief__company header span {
+  overflow: visible;
+  font-family: inherit;
+  line-height: 1.35;
+  text-align: start;
+  text-overflow: clip;
+  white-space: normal;
+}
+.owner-daily-brief__company header small { text-align: start; }
+.owner-daily-brief__company header em { position: static; margin-inline-start: .45rem; }
+.owner-daily-brief__company-sales {
+  justify-items: center;
+  text-align: center;
+}
+.owner-daily-brief__company-sales-label {
+  color: #6e7c74;
+  font-size: .76rem;
+  font-weight: 800;
+}
+.owner-daily-brief__trend { border-bottom: 1px solid color-mix(in srgb, var(--brand) 15%, transparent); }
+.owner-daily-brief__company dl { text-align: start; }
+.owner-daily-brief__company dl div,
+.owner-daily-brief__company dl div:nth-child(odd),
+.owner-daily-brief__company dl div:nth-child(-n + 2) {
+  padding: .58rem .62rem;
+  border: 1px solid color-mix(in srgb, var(--brand) 12%, var(--owner-paper-edge));
+  border-radius: .58rem;
+  background: rgb(255 255 255 / .46);
+}
+
+@media (max-width: 840px) {
+  .owner-daily-brief__companies { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 570px) {
+  .owner-daily-brief__companies { grid-template-columns: 1fr; }
 }

@@ -14,10 +14,10 @@ export function hasActivePermission(code: string) { return activePermissionCodes
  * to a screen that is known to be unavailable to them.
  */
 function isAllowed(rule: PagePermissionRule | undefined, permissionCodes: readonly string[] | null): boolean {
-  // Before the authenticated company response arrives we retain the shell to
-  // avoid a misleading empty navigation flash. An empty, loaded list denies
-  // every protected route.
-  if (permissionCodes === null) return true;
+  // The authenticated company response is the discoverability boundary. Do
+  // not render or navigate to protected workspaces until it has arrived.
+  // An empty, loaded list also denies every protected route.
+  if (permissionCodes === null) return false;
   // A missing rule must never turn into access. New pages need an explicit
   // discoverability decision before they can appear in a live company shell.
   if (!rule) return false;

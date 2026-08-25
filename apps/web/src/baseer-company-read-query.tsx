@@ -3,7 +3,7 @@ import { useMemo, type ReactNode } from "react";
 
 import type { ActiveSession } from "./daily-sales-client";
 
-type QueryState<T> = { data: T | undefined; loading: boolean; error: unknown; refetch: () => Promise<void> };
+type QueryState<T> = { data: T | undefined; loading: boolean; error: unknown; refetch: () => Promise<void>; reload: () => Promise<T | undefined> };
 type BaseerCompanyReadQueryProps<T> = {
   session: ActiveSession;
   /** Stable server resource identifier, never a human-readable route label. */
@@ -42,7 +42,8 @@ function CompanyQuery<T>({ session, resource, scope, mode, load, children }: Bas
     queryFn: ({ signal }) => load(session, signal),
     ...(snapshot ? { staleTime: Infinity, retry: false, retryOnMount: false, refetchOnWindowFocus: false, refetchOnReconnect: false } : {}),
   });
-  return <>{children({ data: query.data, loading: query.isPending, error: query.error, refetch: async () => { await query.refetch({ throwOnError: true }); } })}</>;
+  const reload = async () => (await query.refetch({ throwOnError: true })).data;
+  return <>{children({ data: query.data, loading: query.isPending, error: query.error, reload, refetch: async () => { await reload(); } })}</>;
 }
 
 /** A lazy company/session-scoped read cache for a single read surface. */

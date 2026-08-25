@@ -1,76 +1,82 @@
 import { expect, test, type Page, type Route } from "@playwright/test";
-import AxeBuilder from "@axe-core/playwright";
 
 const companyId = "11111111-1111-4111-8111-111111111111";
-const calendarPath = "/v1/finance/operational-calendar";
 
-async function fulfill(route: Route, json: unknown) {
-  await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(json) });
+function money(raw: string, display: string, sign: "positive" | "negative" | "zero" = "positive") {
+  return { raw, display, sign };
 }
 
-async function mockCommandCenter(page: Page, permissions: string[], calendarRequests: URL[], language: "ar" | "en" = "en") {
-  await page.addInitScript(({ company, locale }) => {
+const financialRead = {
+  state: "READY",
+  selectedPeriod: { from: "2026-08-01", to: "2026-08-31" },
+  rows: [
+    { code: "sales", labelAr: "المبيعات", labelEn: "Sales", kind: "SECTION", parentCode: null, direction: "INFLOW", eventCount: 2, amount: money("200.0000", "200.00"), shareOfCollectedSalesPercent: "100.0000" },
+    { code: "expenses", labelAr: "المصروفات", labelEn: "Expenses", kind: "SECTION", parentCode: null, direction: "OUTFLOW", eventCount: 1, amount: money("50.0000", "50.00", "negative"), shareOfCollectedSalesPercent: "25.0000" },
+  ],
+  vaults: [],
+  totals: { inflows: money("200.0000", "200.00"), outflows: money("50.0000", "50.00", "negative"), netCashResult: money("150.0000", "150.00"), netCashResultShareOfCollectedSalesPercent: "75.0000" },
+};
+
+const marketingRead = {
+  period: { fromBusinessDate: "2026-08-01", toBusinessDate: "2026-08-31", timezone: "Asia/Riyadh" },
+  sales: { dataQuality: "READY", payload: { netAmount: "200.0000" } },
+  campaigns: [], days: [], weekdayAverages: [], salesTargets: [], context: [], linkedActualGrossAmount: "0.0000",
+  spendResult: { plannedCampaignCost: "0.0000", linkedActualSpend: "0.0000", officialNetSales: "200.0000", spendToSalesPercent: "0.0000", campaignCount: 0, salesDataQuality: "READY", conclusionAr: "", conclusionEn: "" },
+};
+
+async function fulfill(route: Route, json: unknown, status = 200) {
+  await route.fulfill({ status, contentType: "application/json", body: JSON.stringify(json) });
+}
+
+async function mockCommandCenter(page: Page, options: { marketingFails?: boolean } = {}, requests: string[] = []) {
+  await page.addInitScript((company) => {
     sessionStorage.setItem("baseer.erp.access-token", "mock-access-token");
     sessionStorage.setItem("baseer.erp.refresh-token", "mock-refresh-token");
     sessionStorage.setItem("baseer.erp.session-expires-at", "2099-01-01T00:00:00.000Z");
     sessionStorage.setItem("baseer.erp.company-id", company);
-    localStorage.setItem("baseer.ui.locale.v1", locale);
-  }, { company: companyId, locale: language });
+    localStorage.setItem("baseer.ui.locale.v1", "en");
+  }, companyId);
   await page.route("**/v1/**", async (route) => {
     const url = new URL(route.request().url());
-    if (url.pathname === "/v1/companies/available") return fulfill(route, { companies: [{ id: companyId, name: "Test company", functionalCurrency: "SAR", permissionCodes: permissions }] });
-    if (url.pathname === calendarPath) {
-      calendarRequests.push(url);
-      return fulfill(route, {
-        companyId,
-        fromBusinessDate: `${url.searchParams.get("fromBusinessDate")}T00:00:00.000Z`,
-        toBusinessDate: `${url.searchParams.get("toBusinessDate")}T00:00:00.000Z`,
-        days: [{ businessDate: "2026-08-23", operationalStatus: "OPEN", dataStatus: "RECORDED", hasActiveClosing: true, salesGrossAmount: "120.4500", customerCount: 4 }],
-      });
+    requests.push(url.pathname);
+    if (url.pathname === "/v1/companies/available") return fulfill(route, { companies: [{ id: companyId, nameAr: "شركة الاختبار", nameEn: "Test company", permissionCodes: ["reports.read", "marketing.insights.read"] }] });
+    if (url.pathname === "/v1/reports/personal-cash-performance") return fulfill(route, financialRead);
+    if (url.pathname === "/v1/reports/personal-cash-performance/live/evidence") return fulfill(route, { rowCode: url.searchParams.get("rowCode"), nextCursor: null, items: [{ eventId: "expense-event-1", businessDate: "2026-08-03", direction: "OUTFLOW", amount: money("50.0000", "50.00", "negative"), source: { journalEntryId: "expense-journal-1", labelAr: "إيجار", labelEn: "Rent", reference: "EXP-001", origin: { labelAr: "المصروفات", labelEn: "Expenses", route: "#module=operations&page=operations-purchases" } } }] });
+    if (url.pathname === "/v1/marketing/calendar") {
+      if (options.marketingFails) return fulfill(route, { error: { code: "DEPENDENCY_UNAVAILABLE", message: { ar: "خدمة التسويق غير متاحة.", en: "Marketing service is unavailable." }, correlationId: "command-center-marketing", retry: { kind: "retry" } } }, 503);
+      return fulfill(route, marketingRead);
     }
     return fulfill(route, {});
   });
 }
 
-test("Command center reads a company-scoped calendar, preserves Decimal strings, and supports accessible refresh", async ({ page }) => {
-  const calendarRequests: URL[] = [];
-  await mockCommandCenter(page, ["finance.daily_sales.read"], calendarRequests);
+test("command center opens live reads directly without a summary gate", async ({ page }) => {
+  await mockCommandCenter(page);
   await page.goto("/#module=command&section=0");
-  await expect(page.getByRole("heading", { name: "Operations and sales calendar" })).toBeVisible();
-  await expect(page.getByText("SAR 120.4500", { exact: true })).toBeVisible();
-  await expect.poll(() => calendarRequests.length).toBeGreaterThanOrEqual(1);
-  expect(calendarRequests.every((request) => request.searchParams.has("fromBusinessDate"))).toBeTruthy();
-  expect(calendarRequests.every((request) => request.searchParams.has("toBusinessDate"))).toBeTruthy();
-  await expect(page.locator(".command-sales-calendar")).toHaveAttribute("aria-busy", "false");
 
-  await page.locator(".baseer-period-filter__trigger").click();
-  const periodDialog = page.getByRole("dialog", { name: "Choose period" });
-  await periodDialog.getByRole("combobox").selectOption("YEAR");
-  await periodDialog.getByRole("button", { name: "2026", exact: true }).click();
-  await periodDialog.getByRole("button", { name: "Apply" }).click();
-  await expect.poll(() => calendarRequests.some((request) => request.searchParams.get("fromBusinessDate") === "2026-01-01" && request.searchParams.get("toBusinessDate") === "2026-12-31")).toBeTruthy();
-  const requestCountBeforeRefresh = calendarRequests.length;
-  await page.getByRole("button", { name: "Refresh" }).click();
-  await expect.poll(() => calendarRequests.length).toBeGreaterThan(requestCountBeforeRefresh);
-  const accessibility = await new AxeBuilder({ page }).include(".command-sales-calendar").analyze();
-  expect(accessibility.violations).toEqual([]);
+  await expect(page.getByRole("heading", { name: "Financial movement by item", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Marketing", exact: true })).toBeVisible();
+  await expect(page.getByText("Net movement", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Open full command center" })).toHaveCount(0);
+  await expect(page.getByText("The summary could not be loaded. Open the full command center to retry.")).toHaveCount(0);
 });
 
-test("Command center supports Arabic RTL without converting Decimal display values", async ({ page }) => {
-  const calendarRequests: URL[] = [];
-  await mockCommandCenter(page, ["finance.daily_sales.read"], calendarRequests, "ar");
+test("a marketing read failure does not hide the live financial cards", async ({ page }) => {
+  await mockCommandCenter(page, { marketingFails: true });
   await page.goto("/#module=command&section=0");
-  await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
-  await expect(page.getByRole("heading", { name: "تقويم التشغيل والمبيعات" })).toBeVisible();
-  await expect(page.getByText("SAR 120.4500", { exact: true })).toBeVisible();
-  const accessibility = await new AxeBuilder({ page }).include(".command-sales-calendar").analyze();
-  expect(accessibility.violations).toEqual([]);
+
+  await expect(page.getByText("Net movement", { exact: true })).toBeVisible();
+  await expect(page.getByText("Marketing service is unavailable.")).toBeVisible();
+  await expect(page.getByText("The summary could not be loaded. Open the full command center to retry.")).toHaveCount(0);
 });
 
-test("Command center does not issue calendar reads without finance.daily_sales.read", async ({ page }) => {
-  const calendarRequests: URL[] = [];
-  await mockCommandCenter(page, ["finance.purchase_expense.read"], calendarRequests);
+test("command-center operation details read live without creating a report snapshot", async ({ page }) => {
+  const requests: string[] = [];
+  await mockCommandCenter(page, {}, requests);
   await page.goto("/#module=command&section=0");
-  await expect(page.getByText("You do not have permission to read the operations and sales calendar.")).toBeVisible();
-  await expect.poll(() => calendarRequests.length).toBe(0);
+
+  await page.getByRole("button", { name: "Operation details — Expenses" }).click();
+  await expect(page.getByRole("dialog", { name: "Operation details — Expenses" })).toContainText("EXP-001");
+  expect(requests).toContain("/v1/reports/personal-cash-performance/live/evidence");
+  expect(requests).not.toContain("/v1/reports/official-runs");
 });

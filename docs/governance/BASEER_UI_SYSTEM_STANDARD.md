@@ -1,81 +1,122 @@
-# معيار واجهة بصير المركزي
+# معيار نظام واجهة بصير المركزي
 
-## القرار
+**الحالة:** إلزامي من 2026-08-25.
+**المرجع المعماري:** [دستور الإقفال النهائي](./BASEER_UI_FINALIZATION_CONSTITUTION_2026-08-25.md).
+**السجل التشغيلي:** [سجل المكونات](./UI_COMPONENT_REGISTRY.json) و[سجل الاستثناءات](./UI_EXCEPTION_REGISTER.json) و[سقف العناصر الأصلية](./UI_NATIVE_CONTROL_RATCHET.json).
 
-واجهة بصير تستخدم نظام تصميم مركزي واحد للجوال والكمبيوتر. لا ينشأ موديول جديد بأزرار أو حقول أو جداول أو كروت أو نافذة حوار مستقلة.
+**فرض المستودع:** [تهيئة فرض الحوكمة](./UI_REPOSITORY_ENFORCEMENT_CONFIGURATION.md) و[سقف التنسيقات المضمّنة والطبقات](./UI_INLINE_STYLE_RATCHET.json).
 
-## المقاييس المعتمدة
+## قرار حاكم واحد
 
-- النص المساعد: `12px`.
-- الوسوم والعناوين الثانوية: `13px` على سطح المكتب.
-- النص والحقول والأزرار: `14px` على سطح المكتب.
-- العنوان الفرعي: `18px`، والعنوان المهم: `20–24px` حسب مستوى الصفحة.
-- سطح المكتب يستخدم كثافة مهنية: ارتفاع الحقل والزر الافتراضي `36px`، وصف الجدول القياسي `36–40px`.
-- الجوال أو مؤشر اللمس يستخدم ارتفاع `44px` للحقل والزر، ولا يُصغّر هدف اللمس من أجل الكثافة.
-- الـShell المكتبي منفصل عن حيز الشعار: الشعار يقيم في رأس القائمة الجانبية (`64px`) ولا يفرض ارتفاع الهدر. الهدر `56px`، وصف التنقل `40px`، ونصه `13px` بوزن 500 (650 للحالة النشطة). في الجوال يبقى الهدر وصف التنقل `44px` على الأقل.
-- عنوان الصفحة المكتبي `24–30px` بوزن 700؛ breadcrumb وعناصر الهدر الثانوية بوزن 500–600. لا تستخدم أوزان 800+ لمجرد إبراز عناصر التنقل.
-- الأوزان: النص العادي `400–500`، الوسم `600–650`، العنوان أو الرقم المالي المهم `700`، ولا يستخدم `800+` إلا لشعار أو حالة استثنائية مبررة.
-- المسافات المركزية: `4 / 8 / 12 / 16 / 24px`؛ لا تضيف الوحدة فراغاً كبيراً لمجرد الزينة.
-- الخط: `Noto Sans Arabic Variable`، ويليه `IBM Plex Sans Variable` للنص اللاتيني والأرقام.
+هذا المعيار هو المرجع التنفيذي المختصر لنظام واجهة بصير. يحل محل قواعد
+المكونات والميزانية المتعارضة في نسخته السابقة؛ الدستور يعرّف شروط الإقفال
+النهائي، والسجلان يعرّفان ما هو معتمد الآن. لا يغيّر سجل تاريخي أو خطة هجرة
+أو مكوّن موجود هذا المعيار من دون UI-ADR مقبول وتحديث السجل.
 
-هذه القاعدة تأخذ من أودو **كثافة العمل وانضباطه** لا ألوانه أو CSS الخاص به: سطح المكتب يعرض معلومات أكثر بوضوح، بينما يبقى الجوال مريحاً للمس.
+واجهة بصير نظام واحد للجوال وسطح المكتب: الميزات تركب العقود المركزية ولا
+تنشئ بديلاً بصرياً أو تفاعلياً لها. لا يعني ذلك تحويل التقرير أو محرر الصفوف
+المتخصص إلى مكوّن عام بالقوة؛ يصنّف الاستثناء ويملك سبباً ومالكاً وموعد مراجعة.
 
-## المكونات المعتمدة
+## طبقات الملكية
 
-| الحاجة | المكوّن أو القاعدة |
-| --- | --- |
-| كرت | `BaseerCard` / `.baseer-card` |
-| جدول | `DataTable` / `.baseer-data-table` |
-| زر | `BaseerButton` / `.baseer-button` |
-| حقل | قواعد الحقول المركزية في styles.css |
-| اختيار متعدد | input[type=checkbox] مركزي بقياس 18px × 18px؛ لا يوسّع إلى عرض الحقل أو مساحة البطاقة |
-| تاريخ قيد / تاريخ فاتورة | `input type="date"` الأصلي: تقويم المتصفح وسرعة إدخال موحّدة |
-| فلتر فترة | `BaseerPeriodFilter`: يوم/شهر (واحد أو أكثر)/ربع/سنة/نطاق، ثم «تطبيق» |
-| شريط فلاتر قائمة | `BaseerFilterBar` مع `BaseerFilterSelect` و`BaseerFilterToggle`: بحث، فلاتر سياقية، شرائح للفلاتر المطبقة، إزالة فردية ومسح الكل |
-| اختيار قائمة طويلة | `BaseerCombobox` أو `BaseerFilterAutocomplete`: مربع بحث واقتراحات مملوك لبصير (لا قائمة متصفح أصلية) يعرض الاسم المحلي ويعيد معرف السجل الثابت للخادم |
-| نافذة | طبقة الحوار المركزية (`daily-sales-dialog-backdrop` وعقد الحوار) |
-| حالة | شارة الحالة المركزية (`daily-sales-badge` وعقد الحالات) |
+| الطبقة | ما تملكه | القاعدة |
+| --- | --- | --- |
+| Foundation | tokens، الخط، RTL/LTR، الطبقات والـportal والحركة | لا قيمة مرئية أو `z-index` أو portal جديد خارج token/policy معتمدة. |
+| Primitive | عنصر تفاعلي أو عرضي أساسي | API واحد ومالك واحد؛ لا primitive موازٍ للعقد نفسه. |
+| Pattern | تركيب primitives بلا business/API state | الميزة تمرّر البيانات وcallbacks فقط ولا تنسخ pattern. |
+| Domain-specialized | التقرير أو محرر الصفوف أو workflow | يستهلك الطبقات السابقة ولا يغيّر عقودها. |
 
-## قواعد التنفيذ
+## العقود الحالية
 
-1. يستخدم أي موديول جديد المكوّن المركزي أولاً، ولا يكرر CSS للألوان أو الزوايا أو المقاسات الأساسية.
-2. النصوص تبدأ من جهة اللغة؛ الأرقام والمبالغ تستخدم `dir="ltr"` ومحاذاة رقمية.
-3. الجداول قابلة للتمرير أفقيًا على الجوال ولا تُخفي بياناتها.
-4. الأزرار الخطرة تبقى حمراء ولا تستخدم للإغلاق؛ الإغلاق يكون بزر × أو زر إغلاق محايد.
-5. مصدر الألوان والمسافات والارتفاعات هو CSS tokens في `apps/web/src/styles.css`.
-6. أي استثناء بصري يجب أن يقتصر على محتوى الموديول، لا أن يغيّر شكل المكوّن الأساسي.
-7. التأكيدات تستخدم BaseerConfirmDialog؛ يمنع window.confirm في الواجهة.
-8. النصوص المشتركة تأتي من قاموس مركزي؛ لا تكرر نصوص الإغلاق والإلغاء وحالات المعالجة.
-9. التنقل والأزرار تسترشد بصلاحيات الشركة الحية لإخفاء ما لا يتاح؛ الخادم يعيد التحقق من كل طلب ولا تعتمد الحماية على الواجهة.
-10. كل نص يراه المستخدم يأتي من مفتاح ترجمة مركزي للعربية والإنجليزية، ويشمل العناوين والحقول والأزرار والخيارات ورسائل الخطأ وحالات التحميل والطباعة والتصدير.
-11. البيانات الأساسية تحمل اسم عرض عربي وإنجليزي متى كانت من بصير (شركة، بند، مورد، فئة، تصنيف). الكود والمعرّف والرقم المالي حقائق ثابتة ولا تترجم. البيانات المرحّلة التي ينقصها اسم إنجليزي توسم صراحة وتدخل قائمة استكمال، ولا تستبدل بقيمة مخمّنة.
-12. لا يقبل القسم عند اختيار EN إذا بقيت محتويات الأعمال عربية بلا سبب بيانات موثق؛ يثبت ذلك باختبار عربي/إنجليزي وRTL/LTR.
-13. تحفظ لغة الواجهة فقط محلياً بمفتاح `baseer.ui.locale.v1` وتستعاد بعد إعادة التحميل؛ لا تخزن معه الجلسة أو الصلاحيات أو الشركة أو أي بيانات مالية.
-14. تاريخ القيد وتاريخ الفاتورة وكل تاريخ لإدخال عملية يستخدم اختياراً فورياً: النقر على اليوم يثبت التاريخ ويغلق `BaseerDatePicker` بلا زر «تطبيق». زر «تطبيق» خاص بـ`BaseerPeriodFilter` وحده، لأنه يغيّر نطاقاً زمنياً للتقارير والسجلات لا تاريخ عملية مفردة.
-15. فلترة البيانات حسب الوقت تستخدم `BaseerPeriodFilter`، ولا تستعمل حقل تاريخ منفرداً مكان فترة التقرير.
-16. لا تتغير قاعدة الخادم: منع التاريخ المستقبلي وتاريخ العمل والتحقق المحاسبي مسؤولية الخادم مهما اختلف شكل الحقل.
-17. أي قائمة أو سجل قابل للتصفية يستعمل `BaseerFilterBar` بدلاً من عناصر `input` و`select` وcheckbox متناثرة. يضع المكوّن البحث والفلاتر السياقية في شريط واحد؛ في القوائم الكثيفة تستخدم الفلاتر وضع القائمة المنبثقة المدمج مع حقل البحث وتغلق بالنقر خارجه أو Esc. يعرض الفلاتر الفعالة في صف ثانٍ قابلة للإزالة، ويعرض «مسح الكل» فقط عند وجود فلتر فعّال.
-18. فلاتر الشركة والفترة تظل خادمية ومرتبطة بـ`BaseerPeriodFilter`؛ شريط الفلاتر لا يحسب أرقاماً مالية ولا يبدل نطاق التفويض.
-19. تستخدم القوائم الديناميكية الطويلة (مثل المورد أو الفئة أو العميل) `BaseerCombobox` في النماذج والجداول و`BaseerFilterAutocomplete` في الفلاتر؛ أما الخيارات القصيرة والثابتة (مثل الحالة والنوع) فتستخدم `BaseerFilterSelect`. الاختيار التلقائي يعرض الاسم فقط لكنه يرسل المعرّف الثابت إلى الخادم. تظهر شرائح الفلاتر المطبقة دائماً في صف ثانٍ مستقل عن أدوات الفلترة. الشاشات غير القائمة لا تضيف بحثاً شكلياً؛ تستخدم فلتر الفترة المركزي فقط متى كان لها مصدر زمني.
-20. أسهم القوائم المملوكة لواجهة Baseer تستخدم المثلث المغلق ▾؛ لا تستخدم علامة V المفتوحة لتمييز القائمة المنسدلة.
+الحكم على وجود المكوّن أو حالته لا يؤخذ من اسم ملف أو من معرفة شفوية؛ يؤخذ من
+`UI_COMPONENT_REGISTRY.json`. لا يستعمل مكوّن بحالة `planned` أو `pilot` في
+مسار جديد إلا وفق UI-ADR وحكمه المسجل. المكونات المركزية الحالية تشمل، بحسب
+السجل: الأزرار، الحقول، الاختيار القصير والطويل، الحوارات، الجداول، حالات
+الواجهة، شريط الفلاتر، الفترة، النماذج، بطاقات ومقاييس الحالة.
 
-## بوابة التسليم
+العناصر التالية لها شروط P0 معلنة في الدستور، ولذلك لا تعد «مغلقة» لمجرد وجود
+ملف باسمها: `BaseerCombobox` و`BaseerDatePicker` و`BaseerAriaDatePicker`،
+`BaseerAppShell`، `BaseerNavigationDrawer`، و`BaseerAsyncState`.
 
-قبل إغلاق أي قسم واجهة: تحقق من استخدام المكونات المركزية، ومن قابلية الجوال، ومن عدم وجود حجم خط أو لون أو كرت أو جدول مستقل بلا سبب موثق. أضف اختبار Playwright لمسار لوحة المفاتيح/الـEscape والاتجاهات عند تغير التنقل أو الحوار، ثم اختبارات authenticated/visual للمسارات ذات البيانات.
-## Release-budget rule (2026-08-18)
+## قواعد تجربة الاستخدام غير القابلة للتفاوض
 
-The production web budget measures a real user journey from the Vite manifest: **250 KB startup JavaScript**, **85 KB largest additional workspace JavaScript**, **58 KB startup CSS**, and **16 KB largest additional workspace CSS** (raw generated assets). Cache totals are reported for observability only; they are not release gates because a user opens one workspace journey at a time, not every lazy module together.
+1. العربية RTL والإنجليزية LTR من مزود اللغة المركزي؛ تستعمل CSS logical properties.
+2. النصوص المرئية من قاموس مركزي. البيانات التي يملكها العمل تبقى بيانات، ولا
+   يخمّن العميل ترجمة لاسم مفقود.
+3. الأرقام والمبالغ `dir="ltr"` ومحاذاة رقمية؛ الخادم يبقى مصدر حساب المال
+   وتواريخه وصلاحياته.
+4. أهداف اللمس 44px على أجهزة اللمس؛ الكثافة المكتبية الافتراضية 36px فقط حيث
+   لا تضيع قابلية الوصول.
+5. لكل فعل أيقوني اسم قابل للوصول، وtooltip عندما لا يكون معنى الفعل ظاهراً.
+6. لا دور ARIA مركب شكلي: tab/menu/listbox/dialog يطبق مفاتيحه وتركيزه كاملاً
+   أو يستخدم عنصر HTML أبسط صحيحاً.
+7. الحوار modal يحبس التركيز ويعيده، ويغلق بـEscape/backdrop وفق عقده؛ popover
+   ليس modal. لا تنشئ feature طبقة portal أو `z-index` محلية منافسة.
+8. حالات loading/empty/error/retry تستخدم pattern مركزي حين يكتمل؛ لا يستخدم
+   toast لخطأ حقل أو لقرار مالي دائم.
+9. الاستثناء ليس إذناً دائماً: لا يُقبل إلا في السجل، ولا يوجد P0 waiver.
 
-Shared shell rules remain in `styles.css`. Feature styles that are not needed at startup live beside their owning shared component or workspace and load with that feature. Any threshold increase still requires removing duplicate rules or a new explicit UI-system decision; the preferred response is route splitting or consolidation, not raising a global limit.
+## سقف العناصر الأصلية (Native-control ratchet)
 
-### Stable navigation state
+العناصر الأصلية التفاعلية (`button` و`select` و`input` و`textarea`) لا تمنع
+بأثر رجعي لأن التطبيق له دين هجرة معلوم، ولا تعامل كاستثناءات صامتة. الحارس
+`check-ui-native-control-ratchet` يقرأ JSX عبر TypeScript AST ويطبق سقفاً لكل
+ملف: لا مصدر جديد ولا زيادة لأي نوع؛ التخفيض فقط يمر تلقائياً. المصدر الجديد
+لا يمر إلا إذا كان implementation لعقد مسجل ومفعّل في registry؛ لذلك لا يمكن
+للتغيير القادم إعادة نشر raw controls داخل feature عادي بينما تبقى الهجرة
+تدريجية وآمنة.
 
-The application shell is the single owner of stable navigation state. It writes the current module and section to the URL hash as `#module=<id>&section=<index>` and may add a validated `stage` for a durable workspace tab. A refresh therefore restores the same place; if a hash is absent, the same browser session may restore the last valid route. Signing out clears that session route.
+رفع سقف أو نقل عنصر أصلي يحتاج UI-ADR ومراجعة UI Platform وتحديث السجل أو سجل
+الاستثناءات عندما يكون ذلك عقداً متخصصاً. وجود exception مسجل لا يرفع السقف
+تلقائياً.
 
-Only durable navigation is restored. Draft financial rows, dialog visibility, search text, and unsaved forms are deliberately not persisted or replayed after refresh.
+## سقف التنسيقات المضمّنة والطبقات
 
-## Central authentication shell — 2026-08-18
+التنسيق المضمّن ليس مساراً لبناء واجهة جديدة؛ يستخدم CSS/tokens والعقود المركزية
+بدلاً منه. يحرس `check-ui-inline-style-ratchet` عدد خصائص `style` المضمّنة في
+JSX و`z-index` في JSX/CSS عبر TypeScript وPostCSS AST: لا مصدر جديد ولا زيادة،
+والتخفيض فقط يمر تلقائياً. قيمة طبقة portal في JSX لا تكون رقماً محلياً؛ تستخدم
+`BASEER_OVERLAY_LAYER` وتخضع للسقف كذلك. رفع سقف يحتاج UI-ADR ومراجعة UI Platform
+وقياساً يثبت ضرورة الحالة؛ لا يصح تحويل السقف إلى استثناء صامت.
 
-- `BaseerLogin` is the only unauthenticated web landing. It provides username/email sign-in, password visibility, loading/error feedback, Arabic/English display, and server-authorized company choice.
-- A signed-in header exposes an explicit sign-out action instead of a placeholder profile action. It calls the audited server sign-out endpoint best-effort and always clears the current device session.
-- The login surface uses existing central layout, button, field, brand, theme, and localization primitives; it must not introduce a second design system or persist secrets outside `sessionStorage`.
+## الميزانية والأداء
+
+تقاس ميزانية الويب من Vite manifest بعد build حقيقي، لا من مجموع lazy chunks:
+
+| المقياس | الحد |
+| --- | ---: |
+| Startup JavaScript | 251 KB |
+| أكبر رحلة workspace إضافية | 95 KB |
+| Startup CSS | 65 KB |
+| أكبر CSS إضافي للرحلة | 16 KB |
+
+يشغّل `npm run verify:web-budget` بعد `npm run build --workspace @baseer-erp/web`.
+لا يرفع حد أو يضاف استثناء أداء في نفس التغيير الذي يزيد الحمل؛ يحتاج UI-ADR
+وقياساً مستقلاً.
+
+## بروتوكول تغيير واجهة
+
+1. ابحث في registry قبل إنشاء شيء جديد. وسّع عقداً قائماً إن كان يحافظ على
+   المسؤولية وAPI الواضح.
+2. إن تعذر ذلك، أضف UI-ADR من القالب، وسجّل component أو exception قبل دمج
+   الاستعمال.
+3. حدّث اختبارات العقد والحالات AR/EN وRTL/LTR والجوال/لوحة المفاتيح حيث ينطبق.
+4. شغّل تحقق السجلين:
+
+   ```powershell
+   node scripts/check-ui-governance-registers.mjs
+   npm run check:ui-native-control-ratchet
+   ```
+
+5. شغّل TypeScript والحراس الحالية وميزانية الإصدار بحسب نوع التغيير.
+
+تفرض CI صحة السجلات، وسقف العناصر الأصلية عبر AST، وE2E/Axe للويب. visual
+regression لا يعتمد baseline قبل تثبيت رحلات ذات بيانات ومخرجات متكررة؛ لذلك لا
+يستبدل إثبات التفاعل والوصول بل يضاف عند جاهزية تلك الرحلات.
+
+## نماذج السجل
+
+- [قالب UI-ADR](./UI_ADR_TEMPLATE.md): لتغيير API عام أو overlay أو budget أو
+  استثناء دائم.
+- [قالب سجل القبول النهائي](./UI_FINAL_ACCEPTANCE_RECORD_TEMPLATE.md): لا ينشأ
+  كقبول فعلي إلا على commit SHA محدد بعد نجاح كل بوابات الدستور.

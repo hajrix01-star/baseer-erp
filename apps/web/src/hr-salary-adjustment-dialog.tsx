@@ -4,9 +4,10 @@ import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
 import { BaseerFormDialog } from "./baseer-form-dialog";
 import { BaseerFormGrid, BaseerFormSection } from "./baseer-form-section";
-import { BaseerMoneyInput, normalizeBaseerAmount } from "./baseer-form-fields";
+import { BaseerIntegerInput, BaseerMoneyInput, BaseerMonthPicker, BaseerTextArea } from "./baseer-form-fields";
 import { baseerDecimalString, useBaseerForm, z } from "./baseer-form-state";
 import { BaseerMoney } from "./baseer-money";
+import { BaseerStaticSelect } from "./baseer-static-select";
 import { activeSession, requestId } from "./daily-sales-client";
 import { addMoneyDecimals, isPositiveMoneyDecimal, normalizeMoneyDecimal, subtractMoneyDecimals, tryMoneyDecimal } from "./decimal-string";
 import { setHrEmployeeCompensation, type HrCompensationMethod, type HrCompensationProfile, type HrEmployee } from "./hr-client";
@@ -128,21 +129,21 @@ export function HrSalaryManagementDialog({ open, language, employee, profile, on
       <BaseerFormSection title={employee.nameAr}>
         {profile ? <div className="baseer-inline-actions" role="group" aria-label={ar ? "نوع تعديل الراتب" : "Salary change type"}>{(["FULL", "INCREASE", "DECREASE"] as const).map((value) => <BaseerButton key={value} type="button" variant={operation === value ? "primary" : "secondary"} disabled={busy} onClick={() => setOperation(value)}>{operationLabel(language, value)}</BaseerButton>)}</div> : null}
         <BaseerFormGrid>
-          <label className="baseer-form-field">{ar ? "شهر التطبيق" : "Effective month"}<input required type="month" min={minimumMonth} value={effectiveMonth} onChange={(event) => setEffectiveMonth(event.target.value)} /></label>
+          <label className="baseer-form-field">{ar ? "شهر التطبيق" : "Effective month"}<BaseerMonthPicker required min={minimumMonth} value={effectiveMonth} onChange={(event) => setEffectiveMonth(event.target.value)} /></label>
           {profile ? <div className="baseer-form-field"><span>{ar ? "الراتب الحالي" : "Current salary"}</span><strong className="baseer-form-static"><BaseerMoney value={profile.monthlyGross} language={language} /></strong></div> : null}
           {isFullEdit ? <>
             <label className="baseer-form-field">{ar ? "إجمالي الراتب الشهري" : "Monthly salary"}<BaseerMoneyInput required autoFocus aria-invalid={Boolean(salaryForm.formState.errors.monthlyGross)} value={monthlyGross} onValueChange={setMonthlyGross} />{salaryForm.formState.errors.monthlyGross ? <small role="alert">{String(salaryForm.formState.errors.monthlyGross.message)}</small> : null}</label>
-            <label className="baseer-form-field">{ar ? "طريقة الاحتساب" : "Calculation method"}<select value={compensationMethod} onChange={(event) => setCompensationMethod(event.target.value as HrCompensationMethod)}><option value="FIXED_MONTHLY">{ar ? "راتب شهري ثابت" : "Fixed monthly salary"}</option><option value="INCLUSIVE_OVERTIME">{ar ? "شامل الأوفر تايم" : "Inclusive overtime"}</option></select></label>
+            <label className="baseer-form-field">{ar ? "طريقة الاحتساب" : "Calculation method"}<BaseerStaticSelect label={ar ? "طريقة الاحتساب" : "Calculation method"} value={compensationMethod} onChange={(event) => setCompensationMethod(event.target.value as HrCompensationMethod)}><option value="FIXED_MONTHLY">{ar ? "راتب شهري ثابت" : "Fixed monthly salary"}</option><option value="INCLUSIVE_OVERTIME">{ar ? "شامل الأوفر تايم" : "Inclusive overtime"}</option></BaseerStaticSelect></label>
             <label className="baseer-form-field">{ar ? "بدل الأكل" : "Food allowance"}<BaseerMoneyInput value={foodAllowance} onValueChange={setFoodAllowance} /></label>
             <label className="baseer-form-field">{ar ? "بدل السكن" : "Housing allowance"}<BaseerMoneyInput value={housingAllowance} onValueChange={setHousingAllowance} /></label>
             <label className="baseer-form-field">{ar ? "بدل المواصلات" : "Transport allowance"}<BaseerMoneyInput value={transportAllowance} onValueChange={setTransportAllowance} /></label>
             <label className="baseer-form-field">{ar ? "بدلات أخرى" : "Other allowances"}<BaseerMoneyInput value={otherAllowance} onValueChange={setOtherAllowance} /></label>
-            {requiresOvertimeSchedule ? <><label className="baseer-form-field">{ar ? "ساعات الدوام اليومية" : "Daily hours"}<input required inputMode="numeric" dir="ltr" min="9" max="12" value={scheduledHoursPerDay} onChange={(event) => setScheduledHoursPerDay(normalizeBaseerAmount(event.target.value).replace(".", ""))} /></label><label className="baseer-form-field">{ar ? "أيام العمل الشهرية" : "Monthly working days"}<input required inputMode="numeric" dir="ltr" min="1" max="31" value={scheduledWorkDays} onChange={(event) => setScheduledWorkDays(normalizeBaseerAmount(event.target.value).replace(".", ""))} /></label></> : null}
+            {requiresOvertimeSchedule ? <><label className="baseer-form-field">{ar ? "ساعات الدوام اليومية" : "Daily hours"}<BaseerIntegerInput required min="9" max="12" value={scheduledHoursPerDay} onValueChange={setScheduledHoursPerDay} /></label><label className="baseer-form-field">{ar ? "أيام العمل الشهرية" : "Monthly working days"}<BaseerIntegerInput required min="1" max="31" value={scheduledWorkDays} onValueChange={setScheduledWorkDays} /></label></> : null}
           </> : <>
             <label className="baseer-form-field baseer-form-field--full">{operation === "INCREASE" ? (ar ? "مبلغ الزيادة" : "Increase amount") : (ar ? "مبلغ التخفيض" : "Decrease amount")}<BaseerMoneyInput required autoFocus aria-invalid={Boolean(salaryForm.formState.errors.changeAmount)} value={changeAmount} onValueChange={setChangeAmount} />{salaryForm.formState.errors.changeAmount ? <small role="alert">{String(salaryForm.formState.errors.changeAmount.message)}</small> : null}</label>
             <div className="baseer-form-field baseer-form-field--full"><span>{ar ? "الراتب بعد التعديل" : "Salary after adjustment"}</span><strong className="baseer-form-static"><BaseerMoney value={next && isPositiveMoneyDecimal(next) ? next : "0"} language={language} /></strong></div>
           </>}
-          <label className="baseer-form-field baseer-form-field--full">{ar ? "السبب أو الملاحظة (اختياري)" : "Reason or note (optional)"}<textarea value={reason} onChange={(event) => setReason(event.target.value)} /></label>
+          <label className="baseer-form-field baseer-form-field--full">{ar ? "السبب أو الملاحظة (اختياري)" : "Reason or note (optional)"}<BaseerTextArea compact value={reason} onValueChange={setReason} /></label>
         </BaseerFormGrid>
       </BaseerFormSection>
     </form>

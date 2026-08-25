@@ -10,12 +10,14 @@ import {
 } from "./administration-client";
 import { administrationText } from "./administration-copy";
 import type { AdministrationOverview } from "./administration-types";
+import { BaseerButton } from "./baseer-button";
+import { BaseerDialog } from "./baseer-dialog";
 import { BaseerFilterBar } from "./baseer-filter-bar";
 import { BaseerFilterToggle } from "./baseer-filter-controls";
-import { normalizeBaseerAmount } from "./baseer-form-fields";
+import { BaseerStaticSelect } from "./baseer-static-select";
+import { BaseerTextInput, normalizeBaseerAmount } from "./baseer-form-fields";
 import { displayName } from "./baseer-localization";
 import { api, requestId, type ActiveSession } from "./daily-sales-client";
-import { useDialogFocusTrap } from "./use-dialog-focus-trap";
 import type { BaseerValidatedFormFieldProps, BaseerValidatedFormSchemaFactory } from "./baseer-validated-form-field";
 
 type Company = AdministrationOverview["companies"][number];
@@ -69,7 +71,7 @@ export function AdministrationCompaniesPanel({ language, session, companies, own
     <header className="administration-section-heading administration-companies-heading">
       <div><h3>{text.companies}</h3></div>
       <div className="administration-companies-toolbar">
-        {owner && <button className="daily-sales-primary" type="button" onClick={() => setMode("create")}>+ {text.addCompany}</button>}
+        {owner && <BaseerButton type="button" onClick={() => setMode("create")}>+ {text.addCompany}</BaseerButton>}
       </div>
     </header>
     <BaseerFilterBar controlsPresentation="menu" language={language} search={search} searchLabel={text.companies} searchPlaceholder={language === "ar" ? "ابحث باسم الشركة" : "Search company"} onSearchChange={setSearch} appliedFilters={appliedFilters} onClear={clearFilters} controls={archivedCount > 0 ? <BaseerFilterToggle label={text.showArchived} checked={showArchived} onChange={setShowArchived} /> : undefined} />
@@ -125,7 +127,6 @@ function CompanyDialog({ language, session, company, owner, onDone, onError, onC
     return () => { active = false; };
   }, [company, onError, session]);
 
-  const dialogRef = useDialogFocusTrap({ open: true, saving: busy, onClose });
   const selectedLocation = COMPANY_CONTEXT_LOCATIONS.find((location) => location.code === values.contextLocationCode) ?? null;
   const save = async (next: CompanyForm) => {
     if (!owner) return;
@@ -176,40 +177,34 @@ function CompanyDialog({ language, session, company, owner, onDone, onError, onC
   };
   const title = isCreate ? text.addCompany : `${text.edit}: ${displayName(language, company)}`;
 
-  return <div className="daily-sales-dialog-backdrop" role="presentation" onMouseDown={() => !busy && !vatBusy && onClose()}>
-    <section ref={dialogRef} className="daily-sales-dialog administration-company-dialog" role="dialog" aria-modal="true" aria-label={title} onMouseDown={(event) => event.stopPropagation()}>
-      <header className="daily-sales-dialog__header">
-        <div><p className="eyebrow">{text.companyManagement}</p><h3>{title}</h3></div>
-        <button className="dialog-icon-button" type="button" aria-label={text.close} disabled={busy || vatBusy} onClick={onClose}>×</button>
-      </header>
+  return <BaseerDialog open title={title} eyebrow={text.companyManagement} language={language} busy={busy || vatBusy} onClose={onClose} className="administration-company-dialog">
       <BaseerValidatedFormField<CompanyForm> id="administration-company" className="administration-dialog-form" values={values} schemaFactory={companySchemaFactory} onValid={(next) => void save(next)} errorSummaryLabel={text.checkRequiredFields}>
         {({ errors }) => <>
-        {owner ? <footer className="administration-company-dialog__save"><button className="daily-sales-primary" disabled={busy || vatBusy}>{busy ? text.saving : isCreate ? text.createCompany : text.saveChanges}</button></footer> : <p className="daily-sales-message error">{text.ownerOnly}</p>}
+        {owner ? <footer className="administration-company-dialog__save"><BaseerButton disabled={busy || vatBusy}>{busy ? text.saving : isCreate ? text.createCompany : text.saveChanges}</BaseerButton></footer> : <p className="daily-sales-message error">{text.ownerOnly}</p>}
         <div className="administration-company-editor-profile">
           {logoUrl ? <img alt={`${text.companyLogo}: ${values.nameAr || text.companies}`} src={logoUrl} /> : <span>{values.nameAr.trim().slice(0, 1) || "ش"}</span>}
           <div><strong>{values.nameAr || text.companies}</strong><small>{isCreate ? text.newCompany : company.status === "ACTIVE" ? text.activeCompany : text.archivedCompany}</small></div>
         </div>
-        <label>{text.companyArabicName}<input disabled={!owner || busy} autoFocus aria-invalid={Boolean(errors.nameAr)} value={values.nameAr} onChange={(event) => setValues((current) => ({ ...current, nameAr: event.target.value }))} />{errors.nameAr ? <small role="alert">{errors.nameAr.message}</small> : null}</label>
-        <label>{text.companyEnglishName}<input disabled={!owner || busy} aria-invalid={Boolean(errors.nameEn)} value={values.nameEn} onChange={(event) => setValues((current) => ({ ...current, nameEn: event.target.value }))} />{errors.nameEn ? <small role="alert">{errors.nameEn.message}</small> : null}</label>
-        {!isCreate && owner && <label className="administration-company-logo-upload">{text.companyLogo}<input accept="image/png,image/jpeg,image/webp" disabled={busy || vatBusy} type="file" onChange={(event) => void selectLogo(event)} /><span>{text.companyLogoHint}</span></label>}
+        <label>{text.companyArabicName}<BaseerTextInput disabled={!owner || busy} autoFocus aria-invalid={Boolean(errors.nameAr)} value={values.nameAr} onChange={(event) => setValues((current) => ({ ...current, nameAr: event.target.value }))} />{errors.nameAr ? <small role="alert">{errors.nameAr.message}</small> : null}</label>
+        <label>{text.companyEnglishName}<BaseerTextInput disabled={!owner || busy} aria-invalid={Boolean(errors.nameEn)} value={values.nameEn} onChange={(event) => setValues((current) => ({ ...current, nameEn: event.target.value }))} />{errors.nameEn ? <small role="alert">{errors.nameEn.message}</small> : null}</label>
+        {!isCreate && owner && <label className="administration-company-logo-upload">{text.companyLogo}<span className="baseer-file-input"><input className="baseer-file-input__native" accept="image/png,image/jpeg,image/webp" disabled={busy || vatBusy} type="file" onChange={(event) => void selectLogo(event)} /><span className="baseer-file-input__trigger">{language === "ar" ? "اختيار الشعار" : "Choose logo"}</span></span><span>{text.companyLogoHint}</span></label>}
         {!isCreate && company && <fieldset className="administration-access-list administration-company-location">
           <legend>{language === "ar" ? "موقع الشركة وسياقها" : "Company location and context"}</legend>
-          <label className="administration-company-location__picker">{language === "ar" ? "المدينة" : "City"}<select disabled={!owner || busy} value={values.contextLocationCode} onChange={(event) => setValues((current) => ({ ...current, contextLocationCode: event.target.value }))}><option value="">{language === "ar" ? "اختر المدينة" : "Select a city"}</option>{COMPANY_CONTEXT_LOCATIONS.map((location) => <option key={location.code} value={location.code}>{language === "ar" ? location.labelAr : location.labelEn}</option>)}</select></label>
+          <label className="administration-company-location__picker">{language === "ar" ? "المدينة" : "City"}<BaseerStaticSelect label={language === "ar" ? "المدينة" : "City"} disabled={!owner || busy} value={values.contextLocationCode} onChange={(event) => setValues((current) => ({ ...current, contextLocationCode: event.target.value }))}><option value="">{language === "ar" ? "اختر المدينة" : "Select a city"}</option>{COMPANY_CONTEXT_LOCATIONS.map((location) => <option key={location.code} value={location.code}>{language === "ar" ? location.labelAr : location.labelEn}</option>)}</BaseerStaticSelect></label>
           <small>{language === "ar" ? "يحفظ النظام رمز المدينة وإحداثياتها المعتمدة تلقائياً لربط الطقس والمباريات المحلية بهذه الشركة فقط." : "Baseer saves the approved city code and coordinates automatically to connect local weather and fixtures to this company only."}</small>
         </fieldset>}
         {!isCreate && company && <fieldset className="administration-access-list administration-company-tax">
           <legend>{language === "ar" ? "الإعدادات الضريبية" : "Tax settings"}</legend>
           <label>{language === "ar" ? "نسبة ضريبة القيمة المضافة" : "VAT rate"}<input aria-describedby="company-vat-rate-note" aria-invalid={Boolean(vatError)} disabled={!owner || vatBusy} inputMode="decimal" dir="ltr" min="0" max="100" step="0.01" value={vatRate} onChange={(event) => { setVatRate(normalizeBaseerAmount(event.target.value)); setVatError(""); }} />{vatError ? <small role="alert">{vatError}</small> : null}</label>
           <small id="company-vat-rate-note">{language === "ar" ? "تطبّق على الفواتير الجديدة فقط؛ الفواتير السابقة لا تتغير." : "Applies to future invoices only; posted invoices never change."}</small>
-          {owner && <footer><button className="daily-sales-secondary" disabled={vatBusy} type="button" onClick={() => void saveVatRate()}>{vatBusy ? text.saving : language === "ar" ? "حفظ النسبة" : "Save rate"}</button></footer>}
+          {owner && <footer><BaseerButton variant="secondary" disabled={vatBusy} type="button" onClick={() => void saveVatRate()}>{vatBusy ? text.saving : language === "ar" ? "حفظ النسبة" : "Save rate"}</BaseerButton></footer>}
         </fieldset>}
         {!isCreate && owner && <fieldset className="administration-company-status-action">
           <legend>{company.status === "ACTIVE" ? text.archiveCompany : text.reactivateCompany}</legend>
-          <label>{text.changeReason} ({text.optional})<input value={reason} onChange={(event) => setReason(event.target.value)} placeholder={text.shortReason} /></label>
-          <button className={company.status === "ACTIVE" ? "daily-sales-danger" : "daily-sales-secondary"} disabled={busy || vatBusy} type="button" onClick={() => void changeStatus()}>{company.status === "ACTIVE" ? text.archiveCompanyAction : text.reactivateCompanyAction}</button>
+          <label>{text.changeReason} ({text.optional})<BaseerTextInput value={reason} onChange={(event) => setReason(event.target.value)} placeholder={text.shortReason} /></label>
+          <BaseerButton variant={company.status === "ACTIVE" ? "danger" : "secondary"} disabled={busy || vatBusy} type="button" onClick={() => void changeStatus()}>{company.status === "ACTIVE" ? text.archiveCompanyAction : text.reactivateCompanyAction}</BaseerButton>
         </fieldset>}
         </>}
       </BaseerValidatedFormField>
-    </section>
-  </div>;
+  </BaseerDialog>;
 }

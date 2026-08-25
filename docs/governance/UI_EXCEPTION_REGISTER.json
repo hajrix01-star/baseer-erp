@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "title": "Baseer UI exception register",
+  "authority": "docs/governance/BASEER_UI_SYSTEM_STANDARD.md",
+  "updatedAt": "2026-08-25",
+  "exceptions": [
+    {
+      "id": "specialized-financial-report-tables",
+      "status": "approved",
+      "category": "domain-specialized",
+      "scope": { "kind": "source-paths", "paths": ["apps/web/src/internal-vat-report-workspace.tsx", "apps/web/src/ledger-trial-balance-workspace.tsx", "apps/web/src/reports-workspace.tsx"] },
+      "rationale": "Multi-header financial report snapshots carry a domain-owned column model and cannot be flattened into the general grid without losing accounting meaning.",
+      "owner": "Finance Engineering",
+      "evidence": ["docs/governance/BASEER_UI_FINALIZATION_CONSTITUTION_2026-08-25.md", "docs/governance/LIBRARY_MIGRATION_MANIFEST.json"],
+      "createdAt": "2026-08-25",
+      "review": { "trigger": "A second report adopts the same header/row behavior or the report receives editing.", "reviewBy": "2026-11-25" },
+      "p0Waiver": false
+    },
+    {
+      "id": "specialized-pos-and-row-editors",
+      "status": "approved",
+      "category": "domain-specialized",
+      "scope": { "kind": "source-paths", "paths": ["apps/web/src/outflow-batch-entry-table.tsx", "apps/web/src/operations-recipe-editor.tsx", "apps/web/src/operations-catalog-conversion-form.tsx"] },
+      "rationale": "Fast line entry owns domain row lifecycle, validation and command shape; it may consume field primitives but is not a generic form/table pattern.",
+      "owner": "Operations Engineering",
+      "evidence": ["docs/governance/BASEER_UI_FINALIZATION_CONSTITUTION_2026-08-25.md", "docs/governance/LIBRARY_MIGRATION_MANIFEST.json"],
+      "createdAt": "2026-08-25",
+      "review": { "trigger": "Three editors demonstrate an identical non-financial row contract.", "reviewBy": "2026-11-25" },
+      "p0Waiver": false
+    },
+    {
+      "id": "specialized-chart-rendering",
+      "status": "approved",
+      "category": "domain-specialized",
+      "scope": { "kind": "source-paths", "paths": ["apps/web/src/baseer-chart.tsx"] },
+      "rationale": "Chart rendering is a central specialised presentation adapter with lazy runtime and an accessible HTML summary; it is not a generic card or table.",
+      "owner": "UI Platform",
+      "evidence": ["docs/governance/ADR-UI-005-ECHARTS_HR_OVERVIEW_PILOT.md", "docs/governance/UI_COMPONENT_REGISTRY.json"],
+      "createdAt": "2026-08-25",
+      "review": { "trigger": "A new chart type or chart library is proposed.", "reviewBy": "2026-11-25" },
+      "p0Waiver": false
+    },
+    {
+      "id": "native-disclosure-share-menu",
+      "status": "approved",
+      "category": "semantic-native-control",
+      "scope": { "kind": "source-paths", "paths": ["apps/web/src/baseer-share-menu.tsx"] },
+      "rationale": "The bounded share surface uses native disclosure semantics. It must not be replaced with ARIA menu roles until the generic menu contract is implemented and tested.",
+      "owner": "UI Platform",
+      "evidence": ["docs/governance/UI_COMPONENT_REGISTRY.json", "docs/governance/BASEER_UI_FINALIZATION_CONSTITUTION_2026-08-25.md"],
+      "createdAt": "2026-08-25",
+      "review": { "trigger": "A second non-disclosure action menu is needed.", "reviewBy": "2026-10-25" },
+      "p0Waiver": false
+    },
+    {
+      "id": "immediate-image-upload-preview",
+      "status": "approved",
+      "category": "domain-specialized",
+      "scope": { "kind": "source-paths", "paths": ["apps/web/src/operations-asset-register-dialog.tsx", "apps/web/src/hr-employee-documents-panel.tsx"] },
+      "rationale": "Immediate file upload/preview has server authorization and lifecycle behavior beyond BaseerFileInput, which remains the field primitive.",
+      "owner": "Operations Engineering",
+      "evidence": ["docs/governance/BASEER_UI_FINALIZATION_CONSTITUTION_2026-08-25.md", "docs/governance/LIBRARY_MIGRATION_MANIFEST.json"],
+      "createdAt": "2026-08-25",
+      "review": { "trigger": "A third upload flow needs the same preview, retry and authorization behavior.", "reviewBy": "2026-11-25" },
+      "p0Waiver": false
+    }
+  ]
+}

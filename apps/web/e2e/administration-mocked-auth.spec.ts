@@ -11,6 +11,31 @@ const permissions = [
   "platform.ai.configuration.read", "platform.ai.configuration.write", "platform.ai.provider.configure",
 ];
 
+const basiraGovernance = {
+  companyId,
+  catalogue: [],
+  companyContexts: [],
+  activations: [],
+  receipts: [],
+  evaluations: [],
+  evaluationRuns: [],
+  consumption: { dayStartAt: "2026-08-25T00:00:00.000Z", currency: "USD", chargedCostUsd: "0.0000", providerCalls: 0 },
+};
+
+const openAiCapability = {
+  provider: "OPENAI_COMPATIBLE",
+  model: "gpt-5-mini",
+  displayNameAr: "OpenAI GPT-5 mini",
+  displayNameEn: "OpenAI GPT-5 mini",
+  summaryAr: "ملف تجريبي محكوم لبصيرة.",
+  summaryEn: "A governed pilot profile for Basira.",
+  status: "AVAILABLE",
+  activationReadiness: "READY_FOR_CONFIGURATION",
+  requiredActivationGates: [],
+  costTier: "LOW",
+  supportedSkillKeys: ["decision.command_center_analyst"],
+};
+
 async function fulfill(route: Route, json: unknown, status = 200) {
   await route.fulfill({ status, contentType: "application/json", body: JSON.stringify(json) });
 }
@@ -41,7 +66,8 @@ async function mockAdministration(page: Page, language: "ar" | "en", requests: s
     requests.push(`${route.request().method()} ${url.pathname}`);
     if (url.pathname === "/v1/companies/available") return fulfill(route, { companies: [{ id: companyId, nameAr: "شركة الاختبار", nameEn: "Test company", permissionCodes: permissions }] });
     if (url.pathname === "/v1/administration/overview") return fulfill(route, overview(owner));
-    if (url.pathname === "/v1/administration/ai/configuration") return fulfill(route, { companyId, activeProvider: null, providerConfigurations: [], activeSystemIdentity: null, activeIdentity: null });
+    if (url.pathname === "/v1/administration/ai/configuration") return fulfill(route, { companyId, providerCapabilities: [openAiCapability], activeProvider: null, providerConfigurations: [], latestProviderConnectionCheck: null, activeSystemIdentity: null, activeIdentity: null });
+    if (url.pathname === "/v1/administration/ai/governance") return fulfill(route, basiraGovernance);
     if (url.pathname === "/v1/administration/ai/provider-connection" && route.request().method() === "POST") return fulfill(route, { state: "READY", reason: null, provider: "OPENAI_COMPATIBLE", model: "gpt-5-mini", checkedAt: "2026-08-23T12:00:00.000Z" });
     if (url.pathname === "/v1/administration/ai/provider-configurations" && route.request().method() === "POST") return fulfill(route, { id: "44444444-4444-4444-8444-444444444444", provider: "OPENAI_COMPATIBLE", model: "gpt-5-mini", status: "ACTIVE", isDefault: true, dailyRequestLimit: 10, dailyCostLimit: null, configurationVersion: 1, createdAt: "2026-08-23T12:00:00.000Z", updatedAt: "2026-08-23T12:00:00.000Z" }, 201);
     return fulfill(route, { updated: true, id: "44444444-4444-4444-8444-444444444444" });
@@ -120,16 +146,34 @@ test("Basira settings store the OpenAI key once and never display it", async ({ 
   await mockAdministration(page, "en", requests);
   await page.goto("/#module=administration&section=4");
 
-  await expect(page.getByRole("heading", { name: "Alert-explanation setup" })).toBeVisible();
+  const advancedSettingsTab = page.getByRole("tab", { name: "Advanced settings" });
+  if (test.info().project.name === "mobile-chromium") await page.getByLabel("Go to section").selectOption("settings");
+  else await advancedSettingsTab.click();
+  await expect(page.getByRole("heading", { name: "AI connection and limits" })).toBeVisible();
   const form = page.locator("form[data-baseer-rhf-form]");
-  await form.getByRole("button", { name: "Save OpenAI configuration" }).click();
+  await form.getByRole("button", { name: "Save Basira configuration" }).click();
   await expect(form.getByRole("alert").first()).toBeVisible();
   expect(requests.filter((request) => request === "POST /v1/administration/ai/provider-configurations")).toHaveLength(0);
-  await page.getByLabel("OpenAI API key").fill("sk-test-never-real");
-  await page.getByRole("button", { name: "Save OpenAI configuration" }).click();
+  await page.getByLabel("AI provider API key").fill("sk-test-never-real");
+  await page.getByRole("button", { name: "Save Basira configuration" }).click();
   await expect.poll(() => requests.filter((request) => request === "POST /v1/administration/ai/provider-configurations").length).toBe(1);
-  await expect(page.getByText("The OpenAI configuration was saved encrypted. The key cannot be shown again.")).toBeVisible();
-  await expect(page.getByLabel("OpenAI API key")).toHaveValue("");
+  await expect(page.getByText("The encrypted configuration was saved as a draft. Verify the connection, then activate it explicitly.")).toBeVisible();
+  await expect(page.getByLabel("AI provider API key")).toHaveValue("");
   const accessibility = await new AxeBuilder({ page }).include(".administration-ai-settings").analyze();
   expect(accessibility.violations).toEqual([]);
 });
+
+for (const language of ["ar", "en"] as const) {
+  test(`Basira connection settings retain their visual contract in ${language}`, async ({ page, isMobile }) => {
+    await mockAdministration(page, language);
+    await page.goto("/#module=administration&section=4");
+
+    if (isMobile) {
+      await page.getByLabel(language === "ar" ? "انتقل إلى قسم" : "Go to section").selectOption("settings");
+    } else {
+      await page.getByRole("tab", { name: language === "ar" ? "إعدادات متقدمة" : "Advanced settings" }).click();
+    }
+    await expect(page.locator(".administration-ai-settings")).toBeVisible();
+    await expect(page).toHaveScreenshot(`basira-connection-${language}.png`, { animations: "disabled" });
+  });
+}
