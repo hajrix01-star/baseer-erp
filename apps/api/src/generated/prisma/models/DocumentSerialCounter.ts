@@ -499,14 +499,6 @@ export type DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput = 
   deleteMany?: Prisma.DocumentSerialCounterScalarWhereInput | Prisma.DocumentSerialCounterScalarWhereInput[]
 }
 
-export type BigIntFieldUpdateOperationsInput = {
-  set?: bigint | number
-  increment?: bigint | number
-  decrement?: bigint | number
-  multiply?: bigint | number
-  divide?: bigint | number
-}
-
 export type DocumentSerialCounterCreateWithoutTenantInput = {
   series: string
   businessDate: Date | string

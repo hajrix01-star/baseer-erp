@@ -77,6 +77,7 @@ type RelatedDecisionContext = Readonly<{
 type DecisionSalesDailyDay = Readonly<{
   businessDate: string;
   netAmount: string | null;
+  customerCount: number | null;
   dayQuality: "READY" | "PENDING" | "PARTIAL" | "MISSING";
 }>;
 
@@ -129,6 +130,7 @@ export class DecisionIntelligenceService {
             select: {
               businessDate: true,
               salesNetAmount: true,
+              customerCount: true,
               operationalDayStatus: true,
               dataStatus: true,
             },
@@ -140,13 +142,13 @@ export class DecisionIntelligenceService {
           const businessDate = day(cursor);
           const summary = byDate.get(businessDate);
           if (!summary) {
-            days.push({ businessDate, netAmount: null, dayQuality: "MISSING" });
+            days.push({ businessDate, netAmount: null, customerCount: null, dayQuality: "MISSING" });
           } else if (summary.dataStatus === "PENDING") {
-            days.push({ businessDate, netAmount: null, dayQuality: "PENDING" });
+            days.push({ businessDate, netAmount: null, customerCount: null, dayQuality: "PENDING" });
           } else if (summary.operationalDayStatus === "PARTIAL") {
-            days.push({ businessDate, netAmount: null, dayQuality: "PARTIAL" });
+            days.push({ businessDate, netAmount: null, customerCount: null, dayQuality: "PARTIAL" });
           } else {
-            days.push({ businessDate, netAmount: summary.salesNetAmount.toFixed(4), dayQuality: "READY" });
+            days.push({ businessDate, netAmount: summary.salesNetAmount.toFixed(4), customerCount: summary.customerCount, dayQuality: "READY" });
           }
         }
         return { metric, days };
@@ -155,7 +157,7 @@ export class DecisionIntelligenceService {
       const metric = unavailableSalesMetric(period);
       const days: DecisionSalesDailyDay[] = [];
       for (let cursor = new Date(period.from); cursor <= period.to; cursor = addDay(cursor)) {
-        days.push({ businessDate: day(cursor), netAmount: null, dayQuality: "MISSING" });
+        days.push({ businessDate: day(cursor), netAmount: null, customerCount: null, dayQuality: "MISSING" });
       }
       return { metric, days };
     }

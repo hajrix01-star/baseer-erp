@@ -1,0 +1,121 @@
+.hr-attendance__daily-overview,
+.hr-attendance__alerts,
+.hr-attendance__exceptions { overflow: hidden; }
+
+/* Shared workspace rhythm: keep attendance panels aligned with the ERP surface contract. */
+.module-page--hr .hr-attendance__tab-panel,
+.module-page--hr .hr-attendance__employee-report-detail { gap: var(--space-section); }
+.module-page--hr .hr-attendance__employee-report-picker { margin-top: var(--space-section); }
+.module-page--hr .hr-attendance__metrics { border-color: var(--border-subtle); background: var(--surface-raised); }
+.module-page--hr .hr-attendance__card-header { gap: var(--space-section); margin-bottom: var(--space-section); }
+
+.hr-attendance__tabs { display: flex; gap: var(--space-2); overflow-x: auto; padding: var(--space-2); border: 1px solid var(--border-subtle); border-radius: var(--card-radius); background: var(--tab-rail); scrollbar-width: thin; }
+.hr-attendance__tab { flex: 0 0 auto; min-block-size: 2.45rem; padding: .48rem .9rem; border: 1px solid transparent; border-radius: .66rem; color: var(--muted); background: transparent; font: inherit; font-size: var(--font-label); font-weight: 800; cursor: pointer; transition: color .16s ease, background .16s ease, border-color .16s ease, box-shadow .16s ease; }
+.hr-attendance__tab:hover { color: var(--brand-deep); background: color-mix(in srgb, var(--brand) 7%, var(--surface)); }
+.hr-attendance__tab:focus-visible { outline: 2px solid color-mix(in srgb, var(--brand) 40%, transparent); outline-offset: 2px; }
+.hr-attendance__tab--active { border-color: color-mix(in srgb, var(--brand) 28%, var(--line)); color: var(--brand-deep); background: var(--surface); box-shadow: 0 .18rem .6rem color-mix(in srgb, var(--brand-deep) 10%, transparent); }
+.hr-attendance__tab-panel { display: grid; gap: 1rem; }
+.hr-attendance__employee-report-picker { margin-top: 1rem; }
+.hr-attendance__employee-portal-link { display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, .9fr); align-items: center; gap: 1rem; margin-top: 1rem; }
+.hr-attendance__employee-portal-link > div { display: grid; gap: .25rem; }.hr-attendance__employee-portal-link span { color: var(--brand); font-size: var(--font-caption); font-weight: 850; }.hr-attendance__employee-portal-link h3, .hr-attendance__employee-portal-link p { margin: 0; }.hr-attendance__employee-portal-link p { color: var(--muted); }.hr-attendance__employee-portal-link a { overflow: hidden; padding: .75rem; border: 1px solid var(--line); border-radius: .75rem; color: var(--brand-deep); background: var(--canvas); font-size: .76rem; font-weight: 750; text-align: start; text-overflow: ellipsis; white-space: nowrap; }
+.hr-attendance__employee-report-picker.is-selected ~ .hr-attendance__tab-panel { display: none; }
+.hr-attendance__employee-report-picker:not(.is-selected) ~ .hr-attendance__tab-panel > .baseer-card:first-child { display: none; }
+.hr-attendance__employee-report-detail { display: grid; gap: 1rem; margin-top: 1rem; }
+.hr-attendance__employee-report-picker ~ .hr-attendance__tab-panel .hr-attendance__report-filter,
+.hr-attendance__employee-report-picker ~ .hr-attendance__tab-panel .hr-attendance__report-quick-periods { display: none; }
+.hr-attendance__employee-report-picker-controls { display: grid; grid-template-columns: minmax(17rem, 1fr) repeat(2, minmax(9.5rem, 11rem)) auto; align-items: end; }
+.hr-attendance__employee-field,
+.hr-attendance__date-field { display: grid; gap: .32rem; min-inline-size: 0; color: var(--ink); font-size: var(--font-caption); font-weight: 800; }
+.hr-attendance__employee-field > span,
+.hr-attendance__date-field > span { color: var(--muted); font-size: .72rem; font-weight: 800; }
+.hr-attendance__employee-field .baseer-combobox,
+.hr-attendance__date-field .baseer-date-picker { inline-size: 100%; min-inline-size: 0; }
+.hr-attendance__date-field .baseer-date-picker__input { min-block-size: 2.55rem; border-color: color-mix(in srgb, var(--brand) 18%, var(--line)); border-radius: .65rem; font-variant-numeric: tabular-nums; }
+
+.hr-attendance__card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+.hr-attendance__card-header > div { display: grid; gap: .2rem; }
+.hr-attendance__card-header > div > span { color: var(--brand); font-size: var(--font-caption); font-weight: 850; letter-spacing: .015em; }
+.hr-attendance__card-header h3 { margin: 0; color: var(--ink); font-size: var(--font-title-md); letter-spacing: -.018em; }
+.hr-attendance__card-header p { max-inline-size: 35rem; margin: .15rem 0 0; color: var(--muted); font-size: var(--font-caption); line-height: 1.55; }
+.hr-attendance__date-action,
+.hr-attendance__report-quick-periods,
+.hr-attendance__report-filter,
+.hr-attendance__row-actions,
+.hr-attendance__time-fields { display: flex; align-items: end; flex-wrap: wrap; gap: .55rem; }
+.hr-attendance__date-action { flex: 0 0 auto; }
+.hr-attendance__report-quick-periods { align-items: center; margin-bottom: .7rem; }
+.hr-attendance__report-quick-periods .baseer-button { min-block-size: 2.2rem; padding-inline: .72rem; font-size: var(--font-caption); }
+.hr-attendance__date-auto-note { flex-basis: 100%; color: var(--muted); font-size: .71rem; font-weight: 700; text-align: end; }
+.hr-attendance__date-action .baseer-date-picker,
+.hr-attendance__report-filter .baseer-date-picker { min-inline-size: 10.4rem; }
+.hr-attendance__metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); overflow: hidden; border: 1px solid color-mix(in srgb, var(--brand) 18%, var(--line)); border-radius: .95rem; background: linear-gradient(135deg, color-mix(in srgb, var(--brand-soft) 35%, var(--surface)), var(--surface)); }
+.hr-attendance__metrics > div { display: grid; gap: .22rem; min-inline-size: 0; padding: .85rem 1rem; }
+.hr-attendance__metrics > div + div { border-inline-start: 1px solid color-mix(in srgb, var(--brand) 14%, var(--line)); }
+.hr-attendance__metrics small { color: var(--muted); font-size: var(--font-caption); font-weight: 750; }
+.hr-attendance__metrics b { overflow: hidden; color: var(--brand-deep); font-size: 1.22rem; font-variant-numeric: tabular-nums; text-overflow: ellipsis; white-space: nowrap; }
+.hr-attendance__metrics--report { grid-template-columns: repeat(5, minmax(0, 1fr)); margin: 1rem 0; }
+.hr-attendance__alert-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: .6rem; margin: 0; padding: 0; list-style: none; }
+.hr-attendance__alert { display: flex; align-items: flex-start; gap: .65rem; min-inline-size: 0; padding: .75rem; border: 1px solid var(--line); border-radius: .78rem; background: var(--surface); }
+.hr-attendance__alert > span { display: grid; place-items: center; flex: 0 0 1.75rem; block-size: 1.75rem; border-radius: 50%; font-size: 1rem; font-weight: 900; }
+.hr-attendance__alert b { color: var(--ink); font-size: var(--font-label); }
+.hr-attendance__alert p { margin: .17rem 0 0; color: var(--muted); font-size: var(--font-caption); line-height: 1.45; }
+.hr-attendance__alert--warning { border-color: color-mix(in srgb, var(--status-warning) 32%, var(--line)); background: color-mix(in srgb, var(--status-warning-surface) 38%, var(--surface)); }
+.hr-attendance__alert--warning > span { color: var(--status-warning); background: color-mix(in srgb, var(--status-warning-surface) 82%, var(--surface)); }
+.hr-attendance__alert--danger { border-color: color-mix(in srgb, var(--status-danger) 32%, var(--line)); background: color-mix(in srgb, var(--status-danger-surface) 38%, var(--surface)); }
+.hr-attendance__alert--danger > span { color: var(--status-danger); background: color-mix(in srgb, var(--status-danger-surface) 82%, var(--surface)); }
+.hr-attendance__alert--info > span { color: var(--brand-deep); background: color-mix(in srgb, var(--brand) 12%, var(--surface)); }
+.hr-attendance__quiet-state { margin: 0; color: var(--muted); font-size: var(--font-caption); }
+.hr-attendance__comparison td:first-child,
+.hr-attendance__comparison td:nth-child(4) { min-inline-size: 8.5rem; }
+.hr-attendance__comparison td small { display: block; margin-top: .16rem; color: var(--muted); font-size: .7rem; font-weight: 700; }
+.hr-attendance__state,
+.hr-attendance__exception-status { display: inline-flex; align-items: center; min-block-size: 1.7rem; padding: .15rem .5rem; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: var(--canvas); font-size: var(--font-caption); font-weight: 800; white-space: nowrap; }
+.hr-attendance__state--in_progress,
+.hr-attendance__exception-status--pending { border-color: color-mix(in srgb, var(--status-warning) 36%, var(--line)); color: var(--status-warning); background: color-mix(in srgb, var(--status-warning-surface) 70%, var(--surface)); }
+.hr-attendance__state--checked_out,
+.hr-attendance__exception-status--approved { border-color: color-mix(in srgb, var(--brand) 32%, var(--line)); color: var(--brand-deep); background: color-mix(in srgb, var(--brand) 9%, var(--surface)); }
+.hr-attendance__exception-status--rejected,
+.hr-attendance__exception-status--cancelled { border-color: color-mix(in srgb, var(--status-danger) 28%, var(--line)); color: var(--status-danger); background: color-mix(in srgb, var(--status-danger-surface) 60%, var(--surface)); }
+.hr-attendance__time-positive { color: var(--brand-deep); font-weight: 850; font-variant-numeric: tabular-nums; }
+.hr-attendance__time-negative { color: var(--status-danger); font-weight: 850; font-variant-numeric: tabular-nums; }
+.hr-attendance__row-actions .baseer-button { min-block-size: 2rem; padding-inline: .55rem; font-size: var(--font-caption); }
+.hr-attendance__exception-form { display: grid; gap: .9rem; }
+.hr-attendance__exception-form > p { margin: 0; color: var(--muted); line-height: 1.55; }
+.hr-attendance__exception-form fieldset { display: flex; flex-wrap: wrap; gap: .55rem 1rem; margin: 0; padding: .7rem; border: 1px solid var(--line); border-radius: .75rem; }
+.hr-attendance__exception-form legend { padding-inline: .25rem; color: var(--ink); font-size: var(--font-label); font-weight: 800; }
+.hr-attendance__exception-form fieldset label,
+.hr-attendance__time-fields label { display: inline-flex; align-items: center; gap: .4rem; color: var(--ink); font-size: var(--font-caption); font-weight: 750; }
+.hr-attendance__time-fields label { display: grid; min-inline-size: 9rem; }
+.hr-attendance__time-fields input { min-block-size: 2.55rem; padding: .35rem .5rem; border: 1px solid var(--line); border-radius: .6rem; color: var(--ink); background: var(--surface); font: inherit; }
+.hr-attendance__time-fields input:focus { border-color: var(--brand); outline: 2px solid color-mix(in srgb, var(--brand) 16%, transparent); outline-offset: 1px; }
+
+@media (max-width: 760px) {
+  .hr-attendance__employee-portal-link { grid-template-columns: 1fr; }
+  .hr-attendance__card-header { align-items: stretch; flex-direction: column; }
+  .hr-attendance__date-action { align-items: stretch; }
+  .hr-attendance__date-action .baseer-button { flex: 1; }
+  .hr-attendance__date-auto-note { text-align: start; }
+  .hr-attendance__metrics,
+  .hr-attendance__metrics--report { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hr-attendance__metrics > div:nth-child(odd) { border-inline-start: 0; }
+  .hr-attendance__metrics > div:nth-child(n + 3) { border-top: 1px solid color-mix(in srgb, var(--brand) 14%, var(--line)); }
+  .hr-attendance__report-filter { align-items: stretch; }
+  .hr-attendance__employee-report-picker-controls { grid-template-columns: 1fr 1fr; }
+  .hr-attendance__employee-field { grid-column: 1 / -1; }
+  .hr-attendance__report-quick-periods { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .hr-attendance__report-quick-periods .baseer-button { inline-size: 100%; padding-inline: .35rem; }
+  .hr-attendance__report-filter .baseer-date-picker,
+  .hr-attendance__report-filter .baseer-button { flex: 1 1 100%; }
+  .hr-attendance__employee-report-picker-controls .baseer-button { grid-column: 1 / -1; }
+}
+
+@media (max-width: 520px) {
+  .hr-attendance__employee-report-picker-controls { grid-template-columns: 1fr; }
+  .hr-attendance__employee-field,
+  .hr-attendance__employee-report-picker-controls .baseer-button { grid-column: auto; }
+}
+
+/* Content surfaces follow the selected container; editable fields keep their control surface. */
+.hr-attendance__metrics, .hr-attendance__alert { background: var(--card-surface); }
+.hr-attendance__tab--active { background: var(--tab-active); }
+.hr-attendance__employee-portal-link a, .hr-attendance__exception-status { background: var(--surface-subtle); }

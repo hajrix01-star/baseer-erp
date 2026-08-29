@@ -1,0 +1,60 @@
+.hr-attendance-team-report { display: grid; gap: var(--space-section); margin-top: var(--space-section); }
+.module-page--hr .hr-attendance-team-report__summary,
+.module-page--hr .hr-attendance-team-report__totals { border-color: var(--border-subtle); background: var(--surface-raised); }
+.module-page--hr .hr-attendance-team-report__cards { gap: var(--space-section); }
+.module-page--hr .hr-attendance-team-report__card { padding: var(--space-card); border-color: var(--border-subtle); background: var(--surface-raised); }
+.hr-attendance-team-report__summary { display: grid; gap: 1rem; background: linear-gradient(135deg, color-mix(in srgb, var(--brand-soft) 45%, var(--surface)), var(--surface) 64%); }
+.hr-attendance-team-report__summary > header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.hr-attendance-team-report__summary header > div:first-child { display: grid; gap: .2rem; }
+.hr-attendance-team-report__summary header span { color: var(--brand); font-size: var(--font-caption); font-weight: 850; }
+.hr-attendance-team-report__summary h3 { margin: 0; color: var(--ink); font-size: var(--font-title-md); }
+.hr-attendance-team-report__summary p { max-inline-size: 48rem; margin: 0; color: var(--muted); font-size: var(--font-caption); line-height: 1.55; }
+.hr-attendance-team-report__view-switch { display: inline-flex; flex: 0 0 auto; padding: .22rem; border: 1px solid color-mix(in srgb, var(--brand) 18%, var(--line)); border-radius: .75rem; background: var(--surface); }
+.hr-attendance-team-report__view-switch .baseer-button { min-block-size: 2.15rem; padding-inline: .75rem; font-size: var(--font-caption); }
+.hr-attendance-team-report__totals { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); overflow: hidden; border: 1px solid color-mix(in srgb, var(--brand) 18%, var(--line)); border-radius: .85rem; background: var(--surface); }
+.hr-attendance-team-report__totals > div { display: grid; gap: .18rem; min-inline-size: 0; padding: .75rem .9rem; }
+.hr-attendance-team-report__totals > div + div { border-inline-start: 1px solid color-mix(in srgb, var(--brand) 14%, var(--line)); }
+.hr-attendance-team-report__totals small { color: var(--muted); font-size: .72rem; font-weight: 800; }
+.hr-attendance-team-report__totals b { overflow: hidden; color: var(--brand-deep); font-size: 1.12rem; font-variant-numeric: tabular-nums; text-overflow: ellipsis; white-space: nowrap; }
+.hr-attendance-team-report__totals .is-attention b { color: var(--status-danger); }
+.hr-attendance-team-report__cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: .75rem; }
+.hr-attendance-team-report__card { display: grid; gap: .8rem; min-block-size: 13rem; padding: 1rem; border: 1px solid var(--line); text-align: start; transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease; }
+.hr-attendance-team-report__card:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--brand) 42%, var(--line)); box-shadow: 0 .75rem 1.5rem color-mix(in srgb, var(--brand-deep) 11%, transparent); }
+.hr-attendance-team-report__card:focus-visible { outline: 3px solid color-mix(in srgb, var(--brand) 34%, transparent); outline-offset: 2px; }
+.hr-attendance-team-report__card > header { display: flex; align-items: flex-start; justify-content: space-between; gap: .6rem; }
+.hr-attendance-team-report__card header > div { display: grid; gap: .12rem; min-inline-size: 0; }
+.hr-attendance-team-report__card header small { color: var(--muted); font-size: .7rem; font-weight: 800; }
+.hr-attendance-team-report__card h4 { overflow: hidden; margin: 0; color: var(--ink); font-size: .95rem; line-height: 1.4; text-overflow: ellipsis; white-space: nowrap; }
+.hr-attendance-team-report__state { display: inline-flex; flex: 0 0 auto; align-items: center; min-block-size: 1.65rem; padding: .18rem .45rem; border-radius: 999px; background: var(--canvas); color: var(--muted); font-size: .68rem; font-weight: 850; white-space: nowrap; }
+.hr-attendance-team-report__state.is-on_time { color: var(--success, #16794d); background: color-mix(in srgb, var(--success, #16794d) 9%, var(--surface)); }
+.hr-attendance-team-report__state.is-in_progress { color: var(--brand-deep); background: color-mix(in srgb, var(--brand) 10%, var(--surface)); }
+.hr-attendance-team-report__state.is-attention, .hr-attendance-team-report__state.is-missing_check_in { color: var(--status-danger); background: color-mix(in srgb, var(--status-danger-surface) 66%, var(--surface)); }
+.hr-attendance-team-report__card-main { display: grid; grid-template-columns: 6.75rem 1fr; gap: .75rem; align-items: stretch; }
+.hr-attendance-team-report__score, .hr-attendance-team-report__hours { display: grid; align-content: center; gap: .18rem; padding: .62rem; border-radius: .7rem; background: var(--canvas); }
+.hr-attendance-team-report__score { text-align: center; color: var(--brand-deep); }
+.hr-attendance-team-report__card.is-good .hr-attendance-team-report__score { color: var(--success, #16794d); }
+.hr-attendance-team-report__card.is-watch .hr-attendance-team-report__score { color: var(--status-warning, #9a641a); }
+.hr-attendance-team-report__card.is-attention .hr-attendance-team-report__score { color: var(--status-danger); }
+.hr-attendance-team-report__score small, .hr-attendance-team-report__hours small, .hr-attendance-team-report__hours span { color: var(--muted); font-size: .68rem; font-weight: 750; }
+.hr-attendance-team-report__score b { font-size: 1.35rem; font-variant-numeric: tabular-nums; }
+.hr-attendance-team-report__hours b { color: var(--ink); font-size: 1rem; font-variant-numeric: tabular-nums; }
+.hr-attendance-team-report__card > footer { display: flex; align-items: end; justify-content: space-between; gap: .5rem; padding-top: .65rem; border-top: 1px solid color-mix(in srgb, var(--line) 85%, transparent); color: var(--muted); font-size: .72rem; font-weight: 750; }
+.hr-attendance-team-report__card > footer span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hr-attendance-team-report__card > footer span.is-attention { color: var(--status-danger); }
+.hr-attendance-team-report__card > footer b { flex: 0 0 auto; color: var(--brand-deep); }
+.hr-attendance-team-report__table-card { padding: 0; overflow: hidden; }
+.hr-attendance-team-report__table { min-inline-size: 58rem; }
+.hr-attendance-team-report__table th { color: var(--muted); font-size: .72rem; font-weight: 850; white-space: nowrap; }
+.hr-attendance-team-report__table td { vertical-align: middle; }
+.hr-attendance-team-report__table td:first-child { min-inline-size: 13rem; }
+.hr-attendance-team-report__table td:nth-child(4) { min-inline-size: 9rem; }
+.hr-attendance-team-report__table strong, .hr-attendance-team-report__table small { display: block; }
+.hr-attendance-team-report__table strong { color: var(--ink); }
+.hr-attendance-team-report__table small { margin-top: .15rem; color: var(--muted); font-size: .7rem; }
+.hr-attendance-team-report__table-score { font-variant-numeric: tabular-nums; }
+.hr-attendance-team-report__table-score.is-good { color: var(--success, #16794d); }.hr-attendance-team-report__table-score.is-watch { color: var(--status-warning, #9a641a); }.hr-attendance-team-report__table-score.is-attention, .hr-attendance-team-report__table td.is-attention { color: var(--status-danger); }
+@media (max-width: 760px) { .hr-attendance-team-report__summary > header { flex-direction: column; }.hr-attendance-team-report__view-switch { align-self: stretch; }.hr-attendance-team-report__view-switch .baseer-button { flex: 1; }.hr-attendance-team-report__totals { grid-template-columns: repeat(2, minmax(0, 1fr)); }.hr-attendance-team-report__totals > div:nth-child(odd) { border-inline-start: 0; }.hr-attendance-team-report__totals > div:nth-child(n + 3) { border-top: 1px solid color-mix(in srgb, var(--brand) 14%, var(--line)); } }
+@media (max-width: 460px) { .hr-attendance-team-report__cards { grid-template-columns: 1fr; }.hr-attendance-team-report__card > footer { align-items: flex-start; flex-direction: column; }.hr-attendance-team-report__card-main { grid-template-columns: 6rem 1fr; } }
+
+.hr-attendance-team-report__summary, .hr-attendance-team-report__totals { background: var(--card-surface); }
+.hr-attendance-team-report__view-switch, .hr-attendance-team-report__state, .hr-attendance-team-report__score, .hr-attendance-team-report__hours { background: var(--surface-subtle); }

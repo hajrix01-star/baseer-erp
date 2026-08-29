@@ -12,6 +12,7 @@ import type { FastifyReply, FastifyRequest } from 'fastify';
 import { IdempotencyPayloadMismatchError } from '../core-controls/idempotency.service.js';
 import { RequestContext } from '../observability/request-context.js';
 import { ReportRunExpiredException } from '../reports/report-run.service.js';
+import { AUTH_THROTTLE_WINDOW_MS } from '../identity/auth-throttle-policy.js';
 
 type ErrorCode = ApiErrorReceipt['error']['code'];
 type Retry = ApiErrorReceipt['error']['retry'];
@@ -72,23 +73,23 @@ export class ApiExceptionFilter implements ExceptionFilter {
     if (status === HttpStatus.NOT_FOUND) return ['NOT_FOUND', { kind: 'do-not-retry' }];
     if (status === HttpStatus.CONFLICT) return ['CONFLICT', { kind: 'do-not-retry' }];
     if (status === HttpStatus.TOO_MANY_REQUESTS)
-      return ['RATE_LIMITED', {
-        kind: 'retry-after',
-        retryAfterSeconds: retryAfterSeconds ?? 900,
-      }];
+      return retryAfterSeconds
+        ? ['RATE_LIMITED', { kind: 'retry-after', retryAfterSeconds }]
+        : ['RATE_LIMITED', { kind: 'retry' }];
     if (status === HttpStatus.SERVICE_UNAVAILABLE) return ['DEPENDENCY_UNAVAILABLE', { kind: 'retry' }];
     if (status >= HttpStatus.INTERNAL_SERVER_ERROR) return ['INTERNAL_ERROR', { kind: 'retry' }];
 
     return ['VALIDATION_FAILED', { kind: 'do-not-retry' }];
   }
 
-  private retryAfterSeconds(response: FastifyReply): number {
+  private retryAfterSeconds(response: FastifyReply): number | undefined {
     for (const header of [
       'retry-after-authIp',
       'retry-after-authIdentity',
       'retry-after-report',
       'retry-after-output',
       'retry-after-fileWrite',
+      'retry-after-attendancePin',
     ]) {
       const value = response.getHeader(header);
       const parsed = typeof value === 'number'
@@ -98,11 +99,20 @@ export class ApiExceptionFilter implements ExceptionFilter {
           : Number.NaN;
       // @nestjs/throttler exposes the remaining block time in milliseconds;
       // the HTTP Retry-After header and API contract use whole seconds.
-      if (Number.isFinite(parsed) && parsed > 0) return Math.ceil(parsed / 1_000);
+      if (Number.isFinite(parsed) && parsed > 0) {
+        const seconds = Math.ceil(parsed / 1_000);
+        // Throttler can expose the final limiter TTL (occasionally 1 second)
+        // instead of its active block duration. Never tell a person to retry
+        // before the configured authentication lock can have expired.
+        if (header === 'retry-after-authIp' || header === 'retry-after-authIdentity') {
+          return Math.max(seconds, Math.ceil(AUTH_THROTTLE_WINDOW_MS / 1_000));
+        }
+        return seconds;
+      }
     }
-    // A custom 429 from another subsystem must never ask a client to retry
-    // immediately. Named limiters supply their own header above.
-    return 900;
+    // A custom 429 must not masquerade as the fifteen-minute authentication
+    // lock. Named limiters supply their authoritative duration above.
+    return undefined;
   }
 
   private messageFor(code: ErrorCode): ApiErrorReceipt['error']['message'] {
@@ -115,7 +125,7 @@ export class ApiExceptionFilter implements ExceptionFilter {
       INTERNAL_ERROR: { ar: 'حدث خطأ داخلي آمن.', en: 'A safe internal error occurred.' },
       NOT_FOUND: { ar: 'السجل المطلوب غير موجود.', en: 'The requested resource was not found.' },
       REPORT_RUN_EXPIRED: { ar: 'انتهت صلاحية لقطة التقرير. حدّث التقرير ثم أعد المحاولة.', en: 'The report snapshot has expired. Refresh the report and try again.' },
-      RATE_LIMITED: { ar: '\u062a\u0645 \u062a\u0642\u064a\u064a\u062f \u0627\u0644\u0645\u062d\u0627\u0648\u0644\u0627\u062a \u0645\u0624\u0642\u062a\u0627\u064b. \u0623\u0639\u062f \u0627\u0644\u0645\u062d\u0627\u0648\u0644\u0629 \u0644\u0627\u062d\u0642\u0627\u064b.', en: 'Sign-in attempts are temporarily limited. Try again later.' },
+      RATE_LIMITED: { ar: '\u062a\u0645 \u062a\u0642\u064a\u064a\u062f \u0627\u0644\u0645\u062d\u0627\u0648\u0644\u0627\u062a \u0645\u0624\u0642\u062a\u0627\u064b. \u0623\u0639\u062f \u0627\u0644\u0645\u062d\u0627\u0648\u0644\u0629 \u0644\u0627\u062d\u0642\u0627\u064b.', en: 'Requests are temporarily limited. Try again later.' },
       VALIDATION_FAILED: { ar: 'بيانات الطلب غير صالحة.', en: 'The request data is invalid.' },
     };
 

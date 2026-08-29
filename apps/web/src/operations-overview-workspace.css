@@ -1,6 +1,6 @@
 .operations-overview { display: grid; gap: 1rem; }
 .operations-overview__hero { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
-.operations-overview__metric { position: relative; display: grid; gap: .55rem; min-block-size: 13rem; padding: 1.3rem; overflow: hidden; border: 1px solid var(--line); border-radius: calc(var(--radius-card) + .2rem); background: var(--canvas, #fff); color: var(--ink); text-align: start; font: inherit; cursor: pointer; box-shadow: 0 .45rem 1.3rem rgba(17, 54, 44, .07); transition: transform 180ms ease, box-shadow 180ms ease; animation: operations-overview-rise 480ms cubic-bezier(.2, .8, .2, 1) both; }
+.operations-overview__metric { position: relative; display: grid; gap: .55rem; min-block-size: 13rem; padding: var(--space-panel-header); overflow: hidden; border: 1px solid var(--border-subtle); border-radius: calc(var(--card-radius) + .2rem); background: var(--card-surface); color: var(--ink); text-align: start; font: inherit; cursor: pointer; box-shadow: 0 .45rem 1.3rem rgba(17, 54, 44, .07); transition: transform 180ms ease, box-shadow 180ms ease; animation: operations-overview-rise 480ms cubic-bezier(.2, .8, .2, 1) both; }
 .operations-overview__metric::after { position: absolute; inset-block-end: -4.4rem; inset-inline-end: -2.6rem; inline-size: 10rem; block-size: 10rem; border-radius: 50%; background: var(--overview-accent-soft); content: ""; }
 .operations-overview__metric:hover { transform: translateY(-4px); box-shadow: 0 .9rem 2rem rgba(17, 54, 44, .14); }
 .operations-overview__metric:focus-visible { outline: 3px solid color-mix(in srgb, var(--overview-accent) 55%, transparent); outline-offset: 3px; }
@@ -18,3 +18,8 @@
 @keyframes operations-overview-rise { from { opacity: .01; transform: translateY(.65rem) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @media (max-width: 720px) { .operations-overview__hero { grid-template-columns: 1fr; }.operations-overview__metric { min-block-size: 10rem; }.baseer-operations-month-chart__plot { min-block-size: 17rem; } }
 @media (prefers-reduced-motion: reduce) { .operations-overview__metric, .baseer-operations-month-chart { animation: none; transition: none; } }
+
+/* Overview cards follow the common section and card spacing. */
+.operations-overview { gap: var(--space-section); }
+.operations-overview__hero { gap: var(--space-section); }
+.operations-overview__metric { padding: var(--space-panel-header); border-radius: var(--card-radius); }

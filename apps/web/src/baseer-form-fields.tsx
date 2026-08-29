@@ -1,5 +1,6 @@
 import { forwardRef, type ComponentProps } from "react";
 import { normalizeBaseerNumericInput } from "./number-format";
+import "./baseer-form.css";
 export { BaseerTextInput } from "./baseer-text-input";
 
 type MoneyInputProps = Omit<ComponentProps<"input">, "type" | "value" | "onChange"> & {
@@ -45,11 +46,25 @@ export const BaseerMonthPicker = forwardRef<HTMLInputElement, MonthPickerProps>(
   return <input ref={ref} {...props} className={["baseer-text-input", "baseer-month-picker", className].filter(Boolean).join(" ")} type="month" />;
 });
 
+type TimeInputProps = Omit<ComponentProps<"input">, "type">;
+
+/** Shared native time picker with the same field, focus and RTL contract as all Baseer inputs. */
+export const BaseerTimeInput = forwardRef<HTMLInputElement, TimeInputProps>(function BaseerTimeInput({ className, ...props }, ref) {
+  return <input ref={ref} {...props} className={["baseer-text-input", "baseer-time-input", className].filter(Boolean).join(" ")} type="time" dir="ltr" lang="en" />;
+});
+
 type CheckboxProps = Omit<ComponentProps<"input">, "type">;
 
 /** Shared checkbox preserving native semantics, refs and React Hook Form integration. */
 export const BaseerCheckbox = forwardRef<HTMLInputElement, CheckboxProps>(function BaseerCheckbox({ className, ...props }, ref) {
   return <input ref={ref} {...props} className={["baseer-checkbox", className].filter(Boolean).join(" ")} type="checkbox" />;
+});
+
+type RadioProps = Omit<ComponentProps<"input">, "type">;
+
+/** Shared radio input so mutually exclusive choices retain one visual and accessibility contract. */
+export const BaseerRadio = forwardRef<HTMLInputElement, RadioProps>(function BaseerRadio({ className, ...props }, ref) {
+  return <input ref={ref} {...props} className={["baseer-radio", className].filter(Boolean).join(" ")} type="radio" />;
 });
 
 type TextAreaProps = ComponentProps<"textarea"> & {

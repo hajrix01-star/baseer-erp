@@ -9,6 +9,13 @@
   border-radius: 1.15rem;
   box-shadow: 0 1.5rem 4.5rem rgb(12 37 24 / 28%);
 }
+
+.hr-onboarding__section { background: var(--surface-subtle); }
+.hr-onboarding__result { background: var(--card-surface); }
+
+.baseer-dialog.hr-onboarding-dialog .daily-sales-dialog__body { padding: var(--space-card); background: var(--surface-subtle); }
+.baseer-dialog.hr-onboarding-dialog .hr-onboarding { gap: var(--space-section); }
+.baseer-dialog.hr-onboarding-dialog .hr-onboarding__section { padding: var(--space-card); border-color: var(--border-subtle); background: var(--surface-raised); }
 .hr-onboarding-dialog .daily-sales-dialog__header {
   align-items: center;
   justify-content: space-between;
@@ -106,3 +113,8 @@
   .hr-onboarding__section { padding: .9rem; }
   .hr-onboarding__result { position: static; }
 }
+
+/* The dialog rules above are loaded after shared foundations. Reassert the
+   selected container contract at the component boundary. */
+.baseer-dialog.hr-onboarding-dialog .hr-onboarding__section { background: var(--surface-subtle); }
+.baseer-dialog.hr-onboarding-dialog .hr-onboarding__result { background: var(--card-surface); }

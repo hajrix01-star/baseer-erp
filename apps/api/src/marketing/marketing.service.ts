@@ -8,6 +8,7 @@ import { canonicalJson, IdempotencyPayloadMismatchError, IdempotencyService, typ
 import { DatabaseService } from "../database/database.service.js";
 import { DecisionIntelligenceService } from "../decision-intelligence/decision-intelligence.service.js";
 import { Prisma } from "../generated/prisma/client.js";
+import { PersonalCashPerformanceReportService } from "../reports/personal-cash-performance-report.service.js";
 import { MarketingGooglePlatformService } from "./marketing-google-platform.service.js";
 
 type Receipt = { id: string; replayed: boolean };
@@ -19,7 +20,7 @@ type Receipt = { id: string; replayed: boolean };
  */
 @Injectable()
 export class MarketingService {
-  constructor(private readonly database: DatabaseService, private readonly idempotency: IdempotencyService, private readonly decisions: DecisionIntelligenceService, private readonly googlePlatform: MarketingGooglePlatformService) {}
+  constructor(private readonly database: DatabaseService, private readonly idempotency: IdempotencyService, private readonly decisions: DecisionIntelligenceService, private readonly googlePlatform: MarketingGooglePlatformService, private readonly cashPerformance: PersonalCashPerformanceReportService) {}
 
   async workspace(context: TrustedCompanyActorContext) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
@@ -289,24 +290,46 @@ export class MarketingService {
   }
 
   async calendar(context: TrustedCompanyActorContext, period: Readonly<{ from: Date; to: Date }>) {
-    const [dailySales, timeline, data] = await Promise.all([this.decisions.readSalesDailySeries(context, period), this.decisions.listTimeline(context, period), this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const [campaigns, links, salesTargets] = await Promise.all([
+    const [dailySales, timeline, financialOutflowsByDay, data] = await Promise.all([this.decisions.readSalesDailySeries(context, period), this.decisions.listTimeline(context, period), this.cashPerformance.dailyOutflows(context, period), this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const [campaigns, links, salesTargets, purchasePayments] = await Promise.all([
         tx.marketingCampaign.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, startsOn: { not: null, lte: period.to }, endsOn: { not: null, gte: period.from }, status: { not: "ARCHIVED" } }, orderBy: { startsOn: "asc" }, take: 1_000 }),
         tx.marketingCampaignFinancialLink.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, financialDocument: { status: "POSTED", businessDate: { gte: period.from, lte: period.to } } }, include: { financialDocument: { select: { businessDate: true, grossAmount: true } } }, take: 1_000 }),
         tx.marketingSalesTarget.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, periodMonth: { gte: monthStart(period.from), lte: monthStart(period.to) } }, orderBy: { periodMonth: "asc" }, take: 13 }),
+        // Purchase payments are immutable financial events written with their
+        // sealed source journals. They provide the per-day detail for the
+        // purchases row in the financial report without treating invoices or
+        // planned purchases as cash movement.
+        tx.financeCashPerformanceEvent.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, kind: "PURCHASE_PAYMENT", direction: "OUTFLOW", businessDate: { gte: period.from, lte: period.to }, sourceJournalEntry: { isSealed: true, status: { in: ["POSTED", "REVERSED"] } } }, select: { businessDate: true, grossAmount: true }, take: 1_000 }),
       ]);
-      return { campaigns, links, salesTargets, linkedActualGrossAmount: links.reduce((total, link) => total.plus(link.financialDocument.grossAmount), new Prisma.Decimal(0)).toFixed(4) };
+      return { campaigns, links, salesTargets, purchasePayments, linkedActualGrossAmount: links.reduce((total, link) => total.plus(link.financialDocument.grossAmount), new Prisma.Decimal(0)).toFixed(4) };
     })]);
     const sales = dailySales.metric;
     const linkedSpendByDay = new Map<string, { amount: Prisma.Decimal; count: number }>();
+    const linkedSpendByCampaignDay = new Map<string, Map<string, { amount: Prisma.Decimal; count: number }>>();
     for (const link of data.links) {
       const businessDate = day(link.financialDocument.businessDate)!;
       const current = linkedSpendByDay.get(businessDate) ?? { amount: new Prisma.Decimal(0), count: 0 };
       linkedSpendByDay.set(businessDate, { amount: current.amount.plus(link.financialDocument.grossAmount), count: current.count + 1 });
+      const byCampaign = linkedSpendByCampaignDay.get(businessDate) ?? new Map<string, { amount: Prisma.Decimal; count: number }>();
+      const campaignCurrent = byCampaign.get(link.campaignId) ?? { amount: new Prisma.Decimal(0), count: 0 };
+      byCampaign.set(link.campaignId, { amount: campaignCurrent.amount.plus(link.financialDocument.grossAmount), count: campaignCurrent.count + 1 });
+      linkedSpendByCampaignDay.set(businessDate, byCampaign);
+    }
+    const purchasePaymentsByDay = new Map<string, { amount: Prisma.Decimal; count: number }>();
+    for (const payment of data.purchasePayments) {
+      const businessDate = day(payment.businessDate)!;
+      const current = purchasePaymentsByDay.get(businessDate) ?? { amount: new Prisma.Decimal(0), count: 0 };
+      purchasePaymentsByDay.set(businessDate, { amount: current.amount.plus(payment.grossAmount), count: current.count + 1 });
     }
     const salesTargetByMonth = new Map(data.salesTargets.map((target) => [monthKey(target.periodMonth), target]));
     const days = dailySales.days.map((salesDay) => {
+      // Financial zero is meaningful only when that daily read exists. A map
+      // fallback must never turn a future/unread day into a plotted zero.
+      const isReadableDay = salesDay.netAmount !== null;
       const linked = linkedSpendByDay.get(salesDay.businessDate) ?? { amount: new Prisma.Decimal(0), count: 0 };
+      const campaignSpend = [...(linkedSpendByCampaignDay.get(salesDay.businessDate) ?? new Map()).entries()].map(([campaignId, value]) => ({ campaignId, amount: value.amount.toFixed(4), documentCount: value.count }));
+      const outflows = financialOutflowsByDay.get(salesDay.businessDate) ?? { amount: new Prisma.Decimal(0), count: 0, purchaseAmount: new Prisma.Decimal(0), purchaseCount: 0 };
+      const purchases = purchasePaymentsByDay.get(salesDay.businessDate) ?? { amount: new Prisma.Decimal(0), count: 0 };
       const target = salesTargetByMonth.get(salesDay.businessDate.slice(0, 7));
       const activeCampaignIds = data.campaigns
         .filter((campaign) => day(campaign.startsOn)! <= salesDay.businessDate && day(campaign.endsOn)! >= salesDay.businessDate)
@@ -314,11 +337,17 @@ export class MarketingService {
       return {
         businessDate: salesDay.businessDate,
         officialNetSales: salesDay.netAmount,
+        customerCount: salesDay.customerCount,
         salesDayQuality: salesDay.dayQuality,
         dailySalesTarget: target ? target.amount.div(daysInMonth(salesDay.businessDate)).toFixed(4) : null,
         targetStatus: targetStatus(salesDay.netAmount, target?.amount.div(daysInMonth(salesDay.businessDate)) ?? null),
-        linkedActualSpend: linked.amount.toFixed(4),
+        linkedActualSpend: isReadableDay ? linked.amount.toFixed(4) : null,
         linkedFinancialDocumentCount: linked.count,
+        campaignSpend,
+        financialOutflows: isReadableDay ? outflows.amount.toFixed(4) : null,
+        financialOutflowDocumentCount: outflows.count,
+        purchaseOutflows: isReadableDay ? purchases.amount.toFixed(4) : null,
+        purchaseOutflowDocumentCount: purchases.count,
         activeCampaignIds,
       };
     });

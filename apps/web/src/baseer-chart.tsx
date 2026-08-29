@@ -1,20 +1,29 @@
 import { BarChart, LineChart } from "echarts/charts";
-import { GridComponent } from "echarts/components";
-import { init, use } from "echarts/core";
+import { GridComponent, TooltipComponent } from "echarts/components";
+import { graphic, init, use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
-import { formatCompactNumber, formatCount, formatDate, formatMoney, formatMonthYear, formatNumber, formatPercent } from "./number-format";
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { BaseerButton } from "./baseer-button";
+import { downloadBaseerChartPng, printBaseerChartImage } from "./baseer-chart-output";
+import { BaseerDialog } from "./baseer-dialog";
+import { formatCompactNumber, formatCount, formatDate, formatMoney, formatMonthYear, formatNumber, formatPercent, formatYear } from "./number-format";
 
-use([BarChart, LineChart, GridComponent, CanvasRenderer]);
+use([BarChart, LineChart, GridComponent, TooltipComponent, CanvasRenderer]);
 
 type Language = "ar" | "en";
 export type BaseerOperationalChartPoint = { id?: string; label: string; value: number; displayValue?: string; rank?: number; shareOfTotalPercent?: string };
 export type BaseerMarketingTimelineDay = {
   businessDate: string;
   officialNetSales: string | null;
+  customerCount: number | null;
   salesDayQuality: "READY" | "PENDING" | "PARTIAL" | "MISSING";
-  linkedActualSpend: string;
+  linkedActualSpend: string | null;
   linkedFinancialDocumentCount: number;
+  campaignSpend: readonly { campaignId: string; amount: string; documentCount: number }[];
+  financialOutflows: string | null;
+  financialOutflowDocumentCount: number;
+  purchaseOutflows: string | null;
+  purchaseOutflowDocumentCount: number;
   activeCampaignIds: readonly string[];
 };
 export type BaseerMarketingTimelineCampaign = { id: string; titleAr: string; titleEn: string | null };
@@ -265,111 +274,142 @@ export function HrWorkforceStatusChart({ language, title, points, asOf }: {
 }
 
 /**
- * Shared, server-read-only marketing timeline. The selected view changes only
- * presentation; sales and linked-spend values remain server-provided.
+ * One joined, server-read-only timeline. It is deliberately one visual: a
+ * reader can compare sales, campaign cost, customers and active campaign
+ * windows against the same date without implying causal attribution.
  */
-export function BaseerMarketingTimelineChart({ language, title, days, campaigns, context, asOf, mode = "daily", showModeControls = false, onModeChange }: {
+export function BaseerMarketingTimelineChart({ language, title, days, campaigns, context, asOf, mode = "daily", showModeControls = false, onModeChange, headerMetrics, periodControl, expandedView = false }: {
   language: Language;
   title: string;
   days: readonly BaseerMarketingTimelineDay[];
   campaigns: readonly BaseerMarketingTimelineCampaign[];
   context: readonly BaseerMarketingTimelineContext[];
   asOf: string;
-  mode?: "daily" | "monthly" | "campaigns";
+  mode?: "daily" | "monthly";
   showModeControls?: boolean;
-  onModeChange?: (mode: "daily" | "monthly" | "campaigns") => void;
+  onModeChange?: (mode: "daily" | "monthly") => void;
+  headerMetrics?: ReactNode;
+  periodControl?: ReactNode;
+  /** The print/expand host renders a second, fully interactive chart instance. */
+  expandedView?: boolean;
 }) {
   const timelineElement = useRef<HTMLDivElement | null>(null);
-  const [visibleSeries, setVisibleSeries] = useState({ sales: true, spend: true, campaigns: true });
+  const timelineChart = useRef<ReturnType<typeof init> | null>(null);
   const ar = language === "ar";
+  const [visibleSeries, setVisibleSeries] = useState({ sales: true, campaignSpend: true, purchases: true, customers: true });
+  const [showPointLabels, setShowPointLabels] = useState(false);
+  const [expandedImage, setExpandedImage] = useState<string | null>(null);
+  const [outputError, setOutputError] = useState<string | null>(null);
+  const hasPlotControls = Boolean(periodControl || (showModeControls && onModeChange));
   const displayedMonths = [...new Set(days.map((day) => day.businessDate.slice(0, 7)))];
-  const periodLabel = formatTimelinePeriod(displayedMonths, language);
-  const legendItems = [
-    { id: "sales" as const, label: ar ? "المبيعات الرسمية" : "Official sales", kind: "line" },
-    ...(mode === "campaigns" ? [] : [{ id: "spend" as const, label: ar ? "المصروف المثبت" : "Posted spend", kind: "bar" }]),
-    { id: "campaigns" as const, label: ar ? "الحملات النشطة" : "Active campaigns", kind: "dashed" },
+  const periodLabel = formatTimelinePeriod(displayedMonths, language, mode === "monthly");
+  const campaignsById = new Map(campaigns.map((campaign) => [campaign.id, campaign]));
+  const modeItems = [{ id: "daily" as const, label: ar ? "يومي" : "Daily" }, { id: "monthly" as const, label: ar ? "شهري" : "Monthly" }];
+  const metricItems = [
+    { id: "sales" as const, label: ar ? "المبيعات الرسمية" : "Official sales", color: "#0c8a6a" },
+    { id: "campaignSpend" as const, label: ar ? "الصرف على الحملات" : "Campaign spend", color: "#d98c27" },
+    { id: "purchases" as const, label: ar ? "المشتريات" : "Purchases", color: "#c34a52" },
+    { id: "customers" as const, label: ar ? "العملاء" : "Customers", color: "#7956c7" },
   ];
-  const modeItems = [
-    { id: "daily" as const, label: ar ? "يومي" : "Daily" },
-    { id: "monthly" as const, label: ar ? "شهري" : "Monthly" },
-    { id: "campaigns" as const, label: ar ? "الحملات" : "Campaigns" },
-  ];
+  const captureChart = useCallback(() => timelineChart.current?.getDataURL({ type: "png", pixelRatio: 2, backgroundColor: "#ffffff" }) ?? null, []);
+  const openExpanded = () => { if (expandedView) return; setOutputError(null); setExpandedImage(captureChart()); };
+  const exportPng = () => { const image = expandedImage ?? captureChart(); if (image) downloadBaseerChartPng(image, "baseer-marketing-timeline.png"); };
+  const printChart = () => { const image = expandedImage ?? captureChart(); if (!image) return; try { setOutputError(null); printBaseerChartImage({ dataUrl: image, title, language }); } catch { setOutputError(ar ? "اسمح للمتصفح بفتح نافذة الطباعة ثم أعد المحاولة." : "Allow the browser to open the print window, then try again."); } };
+  type TimelineRow = { label: string; sourceDays: readonly BaseerMarketingTimelineDay[]; sales: number | null; customers: number | null; campaignSpend: number | null; purchases: number | null; activeCampaignIds: readonly string[]; campaignSpendById: Map<string, number> };
+  const dailyRows: TimelineRow[] = days.map((day) => ({
+    label: day.businessDate, sourceDays: [day], sales: day.officialNetSales === null ? null : Number(day.officialNetSales), customers: day.customerCount,
+    campaignSpend: day.linkedActualSpend === null ? null : Number(day.linkedActualSpend), purchases: day.purchaseOutflows === null ? null : Number(day.purchaseOutflows), activeCampaignIds: day.activeCampaignIds,
+    campaignSpendById: new Map((day.campaignSpend ?? []).map((item) => [item.campaignId, Number(item.amount)])),
+  }));
+  const monthlyRows: TimelineRow[] = Array.from(days.reduce((byMonth, day) => {
+    const month = day.businessDate.slice(0, 7); const bucket = byMonth.get(month) ?? [] as BaseerMarketingTimelineDay[];
+    bucket.push(day); byMonth.set(month, bucket); return byMonth;
+  }, new Map<string, BaseerMarketingTimelineDay[]>()).entries()).map(([month, monthDays]) => {
+    const spendById = new Map<string, number>();
+    monthDays.forEach((day) => (day.campaignSpend ?? []).forEach((item) => spendById.set(item.campaignId, (spendById.get(item.campaignId) ?? 0) + Number(item.amount))));
+    return { label: month, sourceDays: monthDays, sales: monthDays.every((day) => day.officialNetSales !== null) ? monthDays.reduce((sum, day) => sum + Number(day.officialNetSales), 0) : null, customers: monthDays.every((day) => day.customerCount !== null) ? monthDays.reduce((sum, day) => sum + (day.customerCount ?? 0), 0) : null, campaignSpend: monthDays.every((day) => day.linkedActualSpend !== null) ? monthDays.reduce((sum, day) => sum + Number(day.linkedActualSpend), 0) : null, purchases: monthDays.every((day) => day.purchaseOutflows !== null) ? monthDays.reduce((sum, day) => sum + Number(day.purchaseOutflows), 0) : null, activeCampaignIds: [...new Set(monthDays.flatMap((day) => day.activeCampaignIds))], campaignSpendById: spendById };
+  });
+  const timelineRows = mode === "monthly" ? monthlyRows : dailyRows;
+  const labels = timelineRows.map((row) => row.label);
+  const campaignLanes = campaigns.map((campaign, index) => {
+    const activeIndexes = timelineRows.flatMap((row, rowIndex) => row.activeCampaignIds.includes(campaign.id) ? [rowIndex] : []);
+    const spend = timelineRows.map((row) => row.campaignSpendById.get(campaign.id) ?? 0);
+    return { id: campaign.id, label: ar ? campaign.titleAr : campaign.titleEn ?? campaign.titleAr, index, activeIndexes, spend, totalSpend: spend.reduce((sum, value) => sum + value, 0) };
+  }).filter((lane) => lane.activeIndexes.length > 0);
+  const hasData = timelineRows.some((row) => row.sales !== null || row.customers !== null || (row.campaignSpend !== null && row.campaignSpend > 0) || (row.purchases !== null && row.purchases > 0) || row.activeCampaignIds.length > 0);
+  const qualityLabel = (quality: BaseerMarketingTimelineDay["salesDayQuality"]) => ar
+    ? ({ READY: "مكتمل", PENDING: "بانتظار الإقفال", PARTIAL: "يوم جزئي", MISSING: "لا توجد قراءة" } as const)[quality]
+    : ({ READY: "Ready", PENDING: "Pending close", PARTIAL: "Partial day", MISSING: "No read" } as const)[quality];
+  const moneyLabel = (value: string | number | null) => value === null ? (ar ? "غير متاحة" : "Unavailable") : formatMoney(String(value), ar ? "ر.س" : "SAR", language);
+  const customerLabel = (value: number | null) => value === null ? (ar ? "غير متاح" : "Unavailable") : formatCount(value, language);
   useEffect(() => {
     if (!timelineElement.current) return;
     const timeline = init(timelineElement.current, undefined, { renderer: "canvas" });
+    timelineChart.current = timeline;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const campaignsById = new Map(campaigns.map((campaign) => [campaign.id, campaign]));
-    const qualityLabel = (quality: BaseerMarketingTimelineDay["salesDayQuality"]) => ar
-      ? ({ READY: "مكتمل", PENDING: "بانتظار الإقفال", PARTIAL: "يوم جزئي", MISSING: "لا توجد قراءة" } as const)[quality]
-      : ({ READY: "Ready", PENDING: "Pending close", PARTIAL: "Partial day", MISSING: "No read" } as const)[quality];
-    const contextsForDay = (businessDate: string) => context.filter((item) => item.startsOn <= businessDate && item.endsOn >= businessDate);
-    const dailyTooltip = (params: readonly { axisValue?: string; seriesName?: string; data?: unknown }[]) => {
-      const businessDate = params[0]?.axisValue;
-      const item = days.find((day) => day.businessDate === businessDate);
-      if (!item) return "";
-      const activeCampaigns = item.activeCampaignIds.map((id) => campaignsById.get(id)).filter((campaign): campaign is BaseerMarketingTimelineCampaign => Boolean(campaign));
-      const relatedContext = contextsForDay(item.businessDate);
-      const lines = [
-        formatDate(item.businessDate, language),
-        `${ar ? "المبيعات الرسمية" : "Official sales"}: ${item.officialNetSales === null ? (ar ? "غير متاحة" : "Unavailable") : formatMoney(item.officialNetSales, ar ? "ر.س" : "SAR", language)}`,
-        `${ar ? "حالة المبيعات" : "Sales state"}: ${qualityLabel(item.salesDayQuality)}`,
-        `${ar ? "المصروف المرتبط المثبت" : "Posted linked spend"}: ${item.linkedFinancialDocumentCount ? formatMoney(item.linkedActualSpend, ar ? "ر.س" : "SAR", language) : (ar ? "لا يوجد مستند مرتبط" : "No linked document")}`,
-        activeCampaigns.length ? `${ar ? "الحملات" : "Campaigns"}: ${activeCampaigns.map((campaign) => ar ? campaign.titleAr : campaign.titleEn ?? campaign.titleAr).join("، ")}` : `${ar ? "الحملات" : "Campaigns"}: ${ar ? "لا توجد حملة بتاريخ محدد" : "No dated campaign"}`,
-        relatedContext.length ? `${ar ? "السياق" : "Context"}: ${relatedContext.map((item) => item.titleAr).join("، ")}` : "",
-      ].filter(Boolean);
-      return lines.map(escapeHtml).join("<br/>");
+    const tooltipCard = (heading: string, lines: readonly [string, string][]) => `<div style="min-width:15rem;direction:${ar ? "rtl" : "ltr"};color:#173d32;font-family:inherit"><div style="margin-bottom:.45rem;padding-bottom:.42rem;border-bottom:1px solid #dfceb2;font-weight:850;font-size:.9rem">${escapeHtml(heading)}</div>${lines.map(([label, value]) => `<div style="display:flex;justify-content:space-between;gap:1rem;margin:.26rem 0;font-size:.78rem"><span style="color:#6f7168">${escapeHtml(label)}</span><strong style="color:#173d32;text-align:${ar ? "left" : "right"};font-weight:800">${escapeHtml(value)}</strong></div>`).join("")}</div>`;
+    const tooltipForRow = (row: TimelineRow) => {
+      const activeCampaigns = row.activeCampaignIds.map((id) => campaignsById.get(id)).filter((campaign): campaign is BaseerMarketingTimelineCampaign => Boolean(campaign));
+      const relatedContext = context.filter((item) => row.sourceDays.some((day) => item.startsOn <= day.businessDate && item.endsOn >= day.businessDate));
+      const saleState = row.sourceDays.length === 1 ? qualityLabel(row.sourceDays[0]!.salesDayQuality) : row.sourceDays.some((day) => day.officialNetSales === null) ? (ar ? "غير مكتملة" : "Incomplete") : (ar ? "مكتملة" : "Complete");
+      return tooltipCard(mode === "monthly" ? formatMonthYear(`${row.label}-01`, language) : formatDate(row.label, language), [
+        [ar ? "المبيعات الرسمية" : "Official sales", moneyLabel(row.sales)],
+        [ar ? "الصرف المثبت على الحملات" : "Posted campaign spend", row.campaignSpend === null ? (ar ? "غير متاح" : "Unavailable") : row.campaignSpend ? moneyLabel(row.campaignSpend) : (ar ? "لا يوجد مستند مثبت" : "No posted document")],
+        [ar ? "المشتريات" : "Purchases", row.purchases === null ? (ar ? "غير متاحة" : "Unavailable") : row.purchases ? moneyLabel(row.purchases) : (ar ? "لا توجد حركة مشتريات" : "No purchase movement")],
+        [ar ? "العملاء" : "Customers", customerLabel(row.customers)],
+        [ar ? "حالة المبيعات" : "Sales state", saleState],
+        [ar ? "الحملات النشطة" : "Active campaigns", activeCampaigns.length ? activeCampaigns.map((campaign) => ar ? campaign.titleAr : campaign.titleEn ?? campaign.titleAr).join("، ") : (ar ? "لا توجد" : "None")],
+        ...(relatedContext.length ? [[ar ? "السياق" : "Context", relatedContext.map((item) => item.titleAr).join("، ")] as [string, string]] : []),
+      ]);
     };
-    const monthly = Array.from(days.reduce((byMonth, item) => {
-      const key = item.businessDate.slice(0, 7); const current = byMonth.get(key) ?? { key, days: [] as BaseerMarketingTimelineDay[] };
-      current.days.push(item); byMonth.set(key, current); return byMonth;
-    }, new Map<string, { key: string; days: BaseerMarketingTimelineDay[] }>()).values()).map((bucket) => ({
-      label: bucket.key,
-      sales: bucket.days.every((item) => item.officialNetSales !== null) ? bucket.days.reduce((sum, item) => sum + Number(item.officialNetSales), 0) : null,
-      spend: bucket.days.reduce((sum, item) => sum + Number(item.linkedActualSpend), 0),
-      activeCampaigns: new Set(bucket.days.flatMap((item) => item.activeCampaignIds)).size,
-    }));
-    const timelineRows = mode === "monthly" ? monthly : days.map((item) => ({ label: item.businessDate, sales: item.officialNetSales === null ? null : Number(item.officialNetSales), spend: item.linkedFinancialDocumentCount ? Number(item.linkedActualSpend) : null, activeCampaigns: item.activeCampaignIds.length }));
-    const labels = timelineRows.map((item) => item.label);
-    const contextAreas = context.slice(0, 40).map((item) => [{ name: item.titleAr, xAxis: item.startsOn }, { xAxis: item.endsOn }]);
-    const viewLabel = mode === "monthly" ? (ar ? "شهري" : "monthly") : mode === "campaigns" ? (ar ? "الحملات" : "campaigns") : (ar ? "يومي" : "daily");
-    const description = ar ? `${title}. عرض ${viewLabel} للمبيعات الرسمية والصرف المثبت والحملات. لا تُعرض الأيام الناقصة كصفر.` : `${title}. A ${viewLabel} view of official sales, linked spend, and campaigns. Missing days are not shown as zero.`;
+    const contextAreas = mode === "daily" ? context.slice(0, 40).map((item) => [{ name: item.titleAr, xAxis: item.startsOn }, { xAxis: item.endsOn }]) : [];
+    const pointLabel = (params: { value?: unknown }) => {
+      const value = typeof params.value === "number" ? params.value : Number(params.value);
+      return Number.isFinite(value) ? compactNumber(value, language) : "";
+    };
     const series = [
-      {
-        name: ar ? "المبيعات الرسمية" : "Official sales", type: "line" as const, smooth: true, connectNulls: false,
-        data: timelineRows.map((item) => item.sales), itemStyle: { color: "#0c8a6a" }, lineStyle: { width: 3 }, areaStyle: { color: "rgba(12, 138, 106, .11)" }, symbolSize: 7,
-        markArea: mode !== "monthly" && contextAreas.length ? { silent: true, itemStyle: { color: "rgba(193, 139, 31, .08)" }, data: contextAreas } : undefined,
-      },
-      ...(mode === "campaigns" ? [] : [{ name: ar ? "المصروف المثبت" : "Posted spend", type: "bar" as const, barMaxWidth: 22, data: timelineRows.map((item) => item.spend), itemStyle: { color: "#d98c27", borderRadius: [5, 5, 0, 0] } }]),
-      { name: ar ? "الحملات النشطة" : "Active campaigns", type: "line" as const, yAxisIndex: 1, step: "middle" as const, symbol: "circle", symbolSize: 5, data: timelineRows.map((item) => item.activeCampaigns), itemStyle: { color: "#4968c8" }, lineStyle: { type: "dashed", width: 2 } },
-    ];
+      visibleSeries.sales ? { id: "sales", name: ar ? "المبيعات الرسمية" : "Official sales", type: "line" as const, smooth: .32, connectNulls: true, showSymbol: true, symbol: "circle", symbolSize: 7, z: 4, data: timelineRows.map((row) => row.sales), label: { show: showPointLabels, position: "top", distance: 5, color: "#08744d", fontSize: 9, fontWeight: 800, formatter: pointLabel }, labelLayout: { hideOverlap: true }, itemStyle: { color: "#0c8a6a", borderWidth: 0 }, lineStyle: { width: 3, type: "solid", cap: "round" }, areaStyle: { color: new graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: "rgba(12, 138, 106, .28)" }, { offset: .52, color: "rgba(12, 138, 106, .11)" }, { offset: 1, color: "rgba(12, 138, 106, 0)" }]) }, emphasis: { focus: "series" as const, symbolSize: 9, lineStyle: { width: 4, type: "solid" } }, markArea: contextAreas.length ? { silent: true, itemStyle: { color: "rgba(193, 139, 31, .08)" }, data: contextAreas } : undefined } : null,
+      visibleSeries.campaignSpend ? { id: "campaignSpend", name: ar ? "الصرف على الحملات" : "Campaign spend", type: "bar" as const, yAxisIndex: 0, barMaxWidth: 18, data: timelineRows.map((row) => row.campaignSpend), itemStyle: { color: "rgba(217, 140, 39, .68)", borderRadius: [5, 5, 0, 0] }, emphasis: { focus: "series" as const, itemStyle: { color: "#d98c27" } } } : null,
+      // A completed no-purchase day is a valid zero; an unread day is null
+      // and must remain a gap instead of inventing a purchase result.
+      visibleSeries.purchases ? { id: "purchases", name: ar ? "المشتريات" : "Purchases", type: "line" as const, yAxisIndex: 0, smooth: .18, connectNulls: true, showSymbol: true, symbol: "circle", symbolSize: 6, z: 4, data: timelineRows.map((row) => row.purchases), label: { show: showPointLabels, position: "top", distance: 4, color: "#b83a3a", fontSize: 8, fontWeight: 800, formatter: pointLabel }, labelLayout: { hideOverlap: true }, itemStyle: { color: "#c34a52", borderWidth: 0 }, lineStyle: { width: 2.4, type: "solid", cap: "round" }, areaStyle: { color: new graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: "rgba(195, 74, 82, .18)" }, { offset: .55, color: "rgba(195, 74, 82, .06)" }, { offset: 1, color: "rgba(195, 74, 82, 0)" }]) }, emphasis: { focus: "series" as const, symbolSize: 8, lineStyle: { width: 3.4, type: "solid" } } } : null,
+      visibleSeries.customers ? { id: "customers", name: ar ? "العملاء" : "Customers", type: "line" as const, yAxisIndex: 1, smooth: .28, connectNulls: true, showSymbol: true, symbol: "circle", symbolSize: 6.5, z: 4, data: timelineRows.map((row) => row.customers), label: { show: showPointLabels, position: "top", distance: 5, color: "#7956c7", fontSize: 8.5, fontWeight: 800, formatter: pointLabel }, labelLayout: { hideOverlap: true }, itemStyle: { color: "#7956c7", borderWidth: 0 }, lineStyle: { width: 2.5, type: "solid", cap: "round" }, areaStyle: { color: new graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: "rgba(121, 86, 199, .16)" }, { offset: .55, color: "rgba(121, 86, 199, .055)" }, { offset: 1, color: "rgba(121, 86, 199, 0)" }]) }, emphasis: { focus: "series" as const, symbolSize: 8.5, lineStyle: { width: 3.5, type: "solid" } } } : null,
+    ].filter((series): series is NonNullable<typeof series> => series !== null);
+    const description = ar ? `${title}. مخطط زمني موحّد يقارن المبيعات والصرف المثبت والعملاء والحملات النشطة على المحور نفسه.` : `${title}. A joined timeline comparing sales, posted campaign spend, customers and active campaigns on one axis.`;
     timeline.setOption({
       animation: !reducedMotion,
-      animationDuration: 760,
-      animationDurationUpdate: 460,
+      // The chart still draws from the first point, but it must settle before
+      // the dashboard feels late after a cold read or period change.
+      animationDuration: 620,
+      animationDurationUpdate: 320,
       animationEasing: "cubicOut",
-      animationEasingUpdate: "cubicOut",
+      animationEasingUpdate: "cubicInOut",
+      animationThreshold: 2_000,
+      stateAnimation: { duration: 360, easing: "cubicInOut" },
       aria: { enabled: true, description },
-      grid: { left: 12, right: 18, top: 26, bottom: 34, containLabel: true },
-      legend: { show: false },
-      xAxis: { type: "category", data: labels, boundaryGap: false, axisTick: { show: false }, axisLine: { lineStyle: { color: "#dfe7e1" } }, axisLabel: { hideOverlap: true, color: "#72817a", fontSize: 10, formatter: (value: string) => mode === "daily" || mode === "campaigns" ? value.slice(8) : value } },
+      tooltip: { trigger: "axis", confine: true, appendToBody: false, backgroundColor: "#fff6e6", borderColor: "#d9c4a3", borderWidth: 1, padding: [11, 13], textStyle: { color: "#173d32", fontFamily: "inherit" }, axisPointer: { type: "line", lineStyle: { color: "rgba(12, 138, 106, .42)", width: 1.4 } }, formatter: (params: unknown) => { const first = Array.isArray(params) ? params[0] : params; const value = first && typeof first === "object" ? first as { axisValue?: string } : {}; const row = timelineRows.find((item) => item.label === value.axisValue); return row ? tooltipForRow(row) : ""; } },
+      grid: { left: 12, right: 55, top: hasPlotControls ? 60 : 26, bottom: 34, containLabel: true },
+      xAxis: { type: "category", data: labels, boundaryGap: true, axisTick: { show: false }, axisLine: { lineStyle: { color: "#dfe7e1" } }, axisLabel: { hideOverlap: true, color: "#72817a", fontSize: 10, formatter: (value: string) => mode === "daily" ? value.slice(8) : value } },
       yAxis: [
         { type: "value", name: ar ? "ر.س" : "SAR", min: 0, axisLabel: { color: "#72817a", fontSize: 10, formatter: (value: number) => compactNumber(value, language) }, splitLine: { lineStyle: { color: "rgba(24, 74, 63, .09)" } } },
-        { type: "value", minInterval: 1, min: 0, show: false },
+        { type: "value", name: ar ? "عميل" : "Customers", min: 0, minInterval: 1, position: ar ? "right" : "right", axisLabel: { color: "#7956c7", fontSize: 10, formatter: (value: number) => compactNumber(value, language) }, splitLine: { show: false } },
       ],
-      series: series.filter((item) => item.name === (ar ? "المبيعات الرسمية" : "Official sales") ? visibleSeries.sales : item.name === (ar ? "المصروف المثبت" : "Posted spend") ? visibleSeries.spend : visibleSeries.campaigns),
+      series,
     });
-    const timelineObserver = new ResizeObserver(() => timeline.resize());
-    timelineObserver.observe(timelineElement.current);
-    return () => { timelineObserver.disconnect(); timeline.dispose(); };
-  }, [campaigns, context, days, language, mode, title, visibleSeries]);
-  return <section className={`baseer-chart baseer-marketing-timeline${showModeControls ? " baseer-marketing-timeline--command" : ""}`} aria-label={title}>
-    <header className="baseer-marketing-timeline__header"><div>{showModeControls ? <p className="baseer-marketing-timeline__eyebrow">{ar ? "مركز القيادة" : "Command center"}</p> : null}<h3>{title}</h3>{periodLabel ? <small>{periodLabel}</small> : null}</div><small className="baseer-marketing-timeline__as-of">{language === "ar" ? `قراءة خادمية في ${formatDate(asOf, language)}` : `Server read as of ${formatDate(asOf, language)}`}</small></header>
-    <div className="baseer-marketing-timeline__toolbar">
-      {showModeControls && onModeChange ? <div className="baseer-marketing-timeline__modes" role="group" aria-label={ar ? "نمط العرض" : "Chart view"}>{modeItems.map((item) => <button key={item.id} type="button" aria-pressed={mode === item.id} onClick={() => onModeChange(item.id)}>{item.label}</button>)}</div> : null}
-      <div className="baseer-marketing-timeline__legend" aria-label={ar ? "مفاتيح الرسم" : "Chart legend"}>{legendItems.map((item) => <button key={item.id} type="button" className={`baseer-marketing-timeline__legend-button is-${item.kind}`} aria-pressed={visibleSeries[item.id]} onClick={() => setVisibleSeries((current) => ({ ...current, [item.id]: !current[item.id] }))}><span aria-hidden="true" /><strong>{item.label}</strong><small>{visibleSeries[item.id] ? (ar ? "ظاهر" : "Shown") : (ar ? "مخفي" : "Hidden")}</small></button>)}</div>
+    const observer = new ResizeObserver(() => timeline.resize()); observer.observe(timelineElement.current);
+    return () => { observer.disconnect(); if (timelineChart.current === timeline) timelineChart.current = null; timeline.dispose(); };
+  }, [ar, campaignsById, context, hasPlotControls, language, mode, showPointLabels, timelineRows, title, visibleSeries]);
+  const maxLaneSpend = Math.max(0, ...campaignLanes.flatMap((lane) => lane.spend));
+  return <section className={`baseer-chart baseer-marketing-timeline${showModeControls ? " baseer-marketing-timeline--command" : ""}${expandedView ? " baseer-marketing-timeline--expanded" : ""}`} aria-label={title}>
+    <header className="baseer-marketing-timeline__header"><div>{showModeControls ? <p className="baseer-marketing-timeline__eyebrow">{ar ? "مركز القيادة" : "Command center"}</p> : null}<h3>{title}</h3>{periodLabel ? <small>{periodLabel}</small> : null}</div><div className="baseer-marketing-timeline__header-meta"><small className="baseer-marketing-timeline__as-of">{language === "ar" ? `قراءة خادمية في ${formatDate(asOf, language)}` : `Server read as of ${formatDate(asOf, language)}`}</small>{headerMetrics}</div></header>
+    <div className="baseer-marketing-timeline__plot-shell">
+      {hasPlotControls ? <div className="baseer-marketing-timeline__plot-period"><div className="baseer-marketing-timeline__plot-actions"><div className="baseer-marketing-timeline__metrics-toggle" role="group" aria-label={ar ? "إظهار المقاييس" : "Show metrics"}>{metricItems.map((item) => <button key={item.id} type="button" aria-pressed={visibleSeries[item.id]} onClick={() => setVisibleSeries((current) => ({ ...current, [item.id]: !current[item.id] }))}><span style={{ backgroundColor: item.color }} aria-hidden="true" />{item.label}</button>)}</div></div><div className="baseer-marketing-timeline__plot-actions">{periodControl}{showModeControls && onModeChange ? <div className="baseer-marketing-timeline__modes baseer-marketing-timeline__modes--plot" role="group" aria-label={ar ? "تجميع الفترة" : "Period granularity"}>{modeItems.map((item) => <button key={item.id} type="button" aria-pressed={mode === item.id} onClick={() => onModeChange(item.id)}>{item.label}</button>)}</div> : null}<button type="button" className="baseer-marketing-timeline__expand" aria-pressed={showPointLabels} onClick={() => setShowPointLabels((current) => !current)}>{showPointLabels ? (ar ? "إخفاء الأرقام" : "Hide numbers") : (ar ? "إظهار الأرقام" : "Show numbers")}</button>{!expandedView ? <button type="button" className="baseer-marketing-timeline__expand" onClick={openExpanded}>{ar ? "تكبير" : "Expand"}</button> : null}</div></div> : null}
+      <div ref={timelineElement} className="baseer-chart__plot baseer-marketing-timeline__plot" role="img" aria-label={title} />
+      <section className="baseer-marketing-timeline__campaign-lanes" aria-label={ar ? "المسار الزمني للحملات وتكلفتها" : "Campaign timeline and cost"}><header><strong>{ar ? "الحملات النشطة وتكلفتها المثبتة" : "Active campaigns and posted cost"}</strong><small>{ar ? "كل مسار يشارك الرسم المحور الزمني نفسه" : "Every lane shares the chart's time axis"}</small></header>{campaignLanes.length ? campaignLanes.map((lane) => { const first = lane.activeIndexes[0]!; const last = lane.activeIndexes[lane.activeIndexes.length - 1]!; const color = ["#4f9e87", "#d49a35", "#7257c4", "#3d83b7"][lane.index % 4]!; return <div key={lane.id} className="baseer-marketing-timeline__campaign-lane" style={{ "--baseer-lane-color": color, "--baseer-lane-points": String(Math.max(1, labels.length)) } as CSSProperties}><div className="baseer-marketing-timeline__campaign-label"><strong>{lane.label}</strong><small dir="ltr">{lane.totalSpend ? formatMoney(String(lane.totalSpend), ar ? "ر.س" : "SAR", language) : (ar ? "لا يوجد صرف مثبت" : "No posted spend")}</small></div><div className="baseer-marketing-timeline__campaign-track" aria-label={`${lane.label}: ${lane.totalSpend ? moneyLabel(lane.totalSpend) : (ar ? "لا يوجد صرف مثبت" : "No posted spend")}`}><span className="baseer-marketing-timeline__campaign-window" style={{ gridColumn: `${first + 1} / ${last + 2}` }} aria-hidden="true" />{lane.spend.map((value, index) => value > 0 ? <span key={index} className="baseer-marketing-timeline__campaign-spend" style={{ gridColumn: String(index + 1), "--baseer-spend-height": `${Math.max(15, Math.round(value / Math.max(1, maxLaneSpend) * 100))}%` } as CSSProperties} title={moneyLabel(value)} aria-label={moneyLabel(value)} /> : null)}</div></div>; }) : <p className="baseer-marketing-timeline__campaigns-empty">{ar ? "لا توجد حملات نشطة ضمن الفترة المحددة." : "No active campaigns in the selected period."}</p>}</section>
+      {!hasData ? <p className="baseer-marketing-timeline__empty" role="status">{ar ? "لا توجد بيانات مؤهلة ضمن الفترة المحددة." : "No eligible data in the selected period."}</p> : null}
     </div>
-    <div ref={timelineElement} className="baseer-chart__plot baseer-marketing-timeline__plot" role="img" aria-label={title} />
-    {showModeControls ? <footer className="baseer-marketing-timeline__footer"><span>{ar ? "الأيام غير المكتملة لا تُعامل كمبيعات صفرية." : "Incomplete days are never treated as zero sales."}</span><span>{ar ? "قراءة من النظام" : "System read"}</span></footer> : null}
+    {showModeControls ? <footer className="baseer-marketing-timeline__footer"><span>{ar ? "الربط الزمني يوضح السياق ولا يثبت السببية." : "Temporal alignment provides context; it does not prove causation."}</span><span>{ar ? "قراءة من النظام" : "System read"}</span></footer> : null}
+    {!expandedView ? <BaseerDialog open={expandedImage !== null} title={title} language={language} size="wide" className="baseer-chart-output-dialog" error={outputError} onClose={() => { setExpandedImage(null); setOutputError(null); }} footer={<><BaseerButton type="button" variant="secondary" onClick={printChart}>{ar ? "طباعة" : "Print"}</BaseerButton><BaseerButton type="button" variant="secondary" onClick={exportPng}>{ar ? "تصدير PNG" : "Export PNG"}</BaseerButton><BaseerButton type="button" onClick={() => { setExpandedImage(null); setOutputError(null); }}>{ar ? "إغلاق" : "Close"}</BaseerButton></>}><div className="baseer-chart-output command-center"><BaseerMarketingTimelineChart language={language} title={title} days={days} campaigns={campaigns} context={context} asOf={asOf} mode={mode} showModeControls={showModeControls} onModeChange={onModeChange} headerMetrics={headerMetrics} periodControl={periodControl} expandedView /></div></BaseerDialog> : null}
   </section>;
 }
 
@@ -417,8 +457,12 @@ function compactNumber(value: number, language: Language) {
   return formatCompactNumber(value, language);
 }
 
-function formatTimelinePeriod(months: readonly string[], language: Language) {
+function formatTimelinePeriod(months: readonly string[], language: Language, yearly = false) {
   if (!months.length) return "";
+  if (yearly) {
+    const years = [...new Set(months.map((month) => month.slice(0, 4)))];
+    if (years.length === 1) return formatYear(years[0]!, language);
+  }
   return months.length === 1 ? formatMonthYear(months[0], language) : months.map((month) => formatMonthYear(month, language)).join(" – ");
 }
 

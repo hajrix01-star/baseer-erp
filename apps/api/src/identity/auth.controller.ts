@@ -15,7 +15,7 @@ import {
   UnauthorizedException,
   UseGuards,
 } from "@nestjs/common";
-import { Throttle, ThrottlerGuard } from "@nestjs/throttler";
+import { SkipThrottle, Throttle, ThrottlerGuard } from "@nestjs/throttler";
 import { RequestContext } from "../observability/request-context.js";
 import { AuthService } from "./auth.service.js";
 import {
@@ -32,6 +32,7 @@ export class AuthController {
   @Post("sign-in")
   @HttpCode(200)
   @UseGuards(ThrottlerGuard)
+  @SkipThrottle({ report: true, output: true, fileWrite: true, attendancePin: true })
   @Throttle({
     authIp: { limit: 10, ttl: AUTH_THROTTLE_WINDOW_MS, blockDuration: AUTH_THROTTLE_WINDOW_MS },
     authIdentity: {
@@ -56,6 +57,7 @@ export class AuthController {
   @Post("owner/activate")
   @HttpCode(204)
   @UseGuards(ThrottlerGuard)
+  @SkipThrottle({ report: true, output: true, fileWrite: true, attendancePin: true })
   @Throttle({
     authIp: { limit: 5, ttl: AUTH_THROTTLE_WINDOW_MS, blockDuration: AUTH_THROTTLE_WINDOW_MS },
     authIdentity: {
@@ -80,6 +82,7 @@ export class AuthController {
   @Post("refresh")
   @HttpCode(200)
   @UseGuards(ThrottlerGuard)
+  @SkipThrottle({ report: true, output: true, fileWrite: true, attendancePin: true })
   @Throttle({
     authIp: { limit: 30, ttl: AUTH_THROTTLE_WINDOW_MS, blockDuration: AUTH_THROTTLE_WINDOW_MS },
     authIdentity: {

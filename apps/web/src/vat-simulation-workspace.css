@@ -116,3 +116,21 @@
 
 @media (max-width: 840px) { .vat-simulation-workspace__columns { grid-template-columns: 1fr; }.vat-simulation-workspace__history { order: 2; }.vat-simulation-workspace__history ul { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 640px) { .vat-simulation-workspace__scope, .vat-simulation-workspace__editor-columns, .vat-simulation-workspace__amount-grid, .vat-simulation-workspace__summary { grid-template-columns: 1fr; }.vat-simulation-workspace__editor-header { flex-direction: column; }.vat-simulation-workspace__input-panel > header { align-items: stretch; flex-direction: column; }.vat-simulation-workspace__editor-actions { inline-size: 100%; justify-content: stretch; }.vat-simulation-workspace__editor-actions > .baseer-button { flex: 1; }.vat-simulation-workspace__target { grid-template-columns: 1fr; }.vat-simulation-workspace__summary > div:first-child:last-child { grid-column: auto; }.vat-simulation-workspace__editor-footer { align-items: stretch; }.vat-simulation-workspace__editor-footer .baseer-button { inline-size: 100%; }.vat-simulation-workspace__history ul { grid-template-columns: 1fr; } }
+
+/* VAT panels and tables follow the central surface, header and spacing contract. */
+.vat-simulation-workspace__content, .vat-simulation-workspace__editor, .vat-simulation-workspace__history { gap: var(--space-section); }
+.vat-simulation-workspace__scope, .vat-simulation-workspace__columns, .vat-simulation-workspace__editor-columns { gap: var(--space-card); }
+.vat-simulation-workspace__overview { gap: var(--space-card); }
+.vat-simulation-workspace__overview-table { border-radius: var(--card-radius); background: var(--card-surface); }
+.vat-simulation-workspace__overview-table thead th { padding: var(--space-3); background: var(--table-header); }
+.vat-simulation-workspace__overview-table td { padding: var(--space-3); }
+.vat-simulation-workspace__input-panel, .vat-simulation-workspace__result-panel, .vat-simulation-workspace__amount-card, .vat-simulation-workspace__target, .vat-simulation-workspace__summary > div { padding: var(--space-card); border-radius: var(--card-radius); }
+
+/* VAT uses semantic accents in text and borders, never as competing card fills. */
+.vat-simulation-workspace__overview-table,
+.vat-simulation-workspace__input-panel,
+.vat-simulation-workspace__result-panel { background: var(--card-surface); }
+.vat-simulation-workspace__amount-card,
+.vat-simulation-workspace__target,
+.vat-simulation-workspace__summary > div { background: var(--surface-subtle) !important; }
+.vat-simulation-workspace__history li button { background: var(--surface-subtle); }

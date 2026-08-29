@@ -1,4 +1,5 @@
-.hr-job-title-select { display: grid; gap: .4rem; }
+.hr-job-title-select { display: grid; gap: var(--space-2); }
+.hr-job-title-select__menu { border-color: var(--border-subtle); background: var(--surface-raised); }
 .hr-job-title-select .company-session-control { inline-size: 100%; }
 .hr-job-title-select__input,
 .hr-job-title-select__custom input {

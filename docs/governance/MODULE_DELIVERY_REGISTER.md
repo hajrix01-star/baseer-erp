@@ -1,16 +1,16 @@
 # BASEER ERP Module Delivery Register
 
-**Last updated:** 2026-08-24
+**Last updated:** 2026-08-26
 **Current authority:** [CURRENT_DELIVERY_AUTHORITY.md](CURRENT_DELIVERY_AUTHORITY.md)
 
 ## Current focus
 
 | Field | Value |
 | --- | --- |
-| Active work | **Marketing & Reputation — A1 + P2 internal analytics + P3a connection control centre.** سجل الحملات وسياسة ردود السمعة وروابط المستندات والسياق وقراءة التقويم، ثم حالة طلب تهيئة Google المعزولة بلا اتصال حي. |
-| Open owner acceptance | قبول A1/P2 بعد اختبارات contracts/API/RLS/audit/UI. تبقى Production وNoorix والتقارير الرسمية وGoogle وAI بوابات مستقلة. |
-| Next decision gate | قبول A1 ثم اكتمال القسم الداخلي. الموصلات تأتي آخر النطاق؛ وعند اعتماد كل PDR يكون ربط كل شركة ذاتياً من الواجهة، لا تدخلاً برمجياً. |
-| Explicitly deferred | Noorix import/cutover, production release, external bank connectivity/automated reconciliation, official reports/P&L, assets accounting, invitations/MFA, Google/provider integration and AI provider execution. |
+| Active work | **Backup & Recovery — Gate 2B data adapters.** عامل داخلي اختياري محمي بـlease fence ولقطة قراءة ثابتة؛ اكتملت حزمة الفئات/الموردين وإعداد المصروف الدوري بعد مراجعة مستقلة، وتبقى توسعة مصدر واحد/حزمة مراجعة في كل موجة. |
+| Open owner acceptance | قبول محولات Gate 2B ثم تغليف تشفيري وتنزيل مخول، وملكية/استعادة كل وحدة معزولة. تبقى Production وNoorix والتقارير الرسمية وGoogle وAI بوابات مستقلة. |
+| Next decision gate | اختيار محول تالٍ فقط بعد إغلاق تبعياته وخطة استعادته واختبارات فشله؛ قبل أي تنزيل أو استيراد. |
+| Explicitly deferred | دمج أو استبدال الشركة، تنزيل نسخة السيرفر الشاملة، pgBackRest/WAL/PITR، مزود نسخ جديد، Noorix import/cutover, production release, external bank connectivity/automated reconciliation, official reports/P&L, assets accounting, invitations/MFA, Google/provider integration and AI provider execution. |
 
 ## Portfolio state
 
@@ -18,6 +18,7 @@
 | --- | --- | --- | --- |
 | Baseer UI Platform Enablement | **Active — operating authority for eligible libraries** | Governance, monitor model, staged plan, CSS-budget recovery, complete-session HR E2E fixture and local-database guard are recorded and re-verified at `cc9c89d3300fd09c7cf9da413f85b172e32d6d62`. HR now has bounded React Aria controls, an RHF/Zod validation form, company/session-scoped Query read and an ECharts operational visualisation with a matching HTML table. Docker hardening removes the Prisma advisory path from the public API runtime while keeping a hardened internal migration job. | The [operating authority](LIBRARY_ADOPTION_OPERATING_AUTHORITY.md) permits further eligible library phases after their gates, without per-library owner authorization. Excluded categories and the current Prisma P1 remain separately governed; no production, dashboard, API/RLS/permission or financial change is implied. |
 | Platform foundation | Verified locally | Identity, company context, RBAC, audit, idempotency, business date, sequences, files, output and observability foundations. | Production backup/restore evidence and production deployment. |
+| Backup & Recovery | **Active — Gate 2B reviewed data adapters and private encryption** | Owner decision, Gate 0 architecture, Gate 1 durable/RLS/audit foundation, reviewed company finance configuration sources, and a fenced internal AES-GCM `.bca` packager with key rotation, tamper verification and no plaintext final namespace. Category parent cycles fail closed; category/supplier restoration remains a future two-pass operation; recurring configuration has no coverage/payment history. | Authorised download, import, remaining domain adapters, isolated restore proof, retention/cleanup and production acceptance. |
 | Finance journal and master data | **Closed — local owner acceptance** | Posted balanced journal, periods, accounts/categories, suppliers, tax-rate configuration, recurring profiles, dues and inclusive loans; governed cancellation policy. | Tax-code model beyond one company VAT rate; production controls remain separate. |
 | Finance and Accounting UI migration | **Closed — local owner acceptance and library migration** | Forms, Gregorian dates, scoped remote selectors and server cursor grids are centralized; money remains exact Decimal strings and account summaries are server-owned. Reference `a1cbf54`; inventory/browser/HTTP/RLS/journal/period/budget gates pass. | Production, Noorix, formal reporting, bank connectivity and volume certification remain separate. |
 | Purchase & Expense | **Closed — local owner acceptance** | Batch purchase/expense input, VAT-inclusive server calculation, supplier credit on cash payment, recurring expenses, payment histories and governed cancellation. | Official long-range reporting and production are separate scopes. |

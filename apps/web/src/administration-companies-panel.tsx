@@ -5,6 +5,7 @@ import {
   createAdministrationCompany,
   loadAdministrationCompanyLogo,
   updateAdministrationCompany,
+  updateAdministrationCompanyMigrationReviewLock,
   updateAdministrationCompanyStatus,
   uploadAdministrationCompanyLogo,
 } from "./administration-client";
@@ -79,7 +80,7 @@ export function AdministrationCompaniesPanel({ language, session, companies, own
       {visibleCompanies.map((company, index) => <button className="baseer-card baseer-card--default baseer-card--compact baseer-card--interactive administration-company-card" key={company.id} type="button" onClick={() => { setSelectedCompanyId(company.id); setMode("manage"); }}>
         <span className="administration-company-card__mark" aria-hidden="true">{company.nameAr.trim().slice(0, 1)}</span>
         <span className="administration-company-card__body"><strong>{displayName(language, company)}</strong><small>{language === "ar" ? company.nameEn : company.nameAr}</small><span>{company.contextLocationLabelAr ?? company.businessTimezone}</span></span>
-        <span className={company.status === "ACTIVE" ? "administration-company-card__status is-active" : "administration-company-card__status is-disabled"}>{company.status === "ACTIVE" ? text.active : text.archived}</span>
+        <span className={company.status === "ACTIVE" ? "administration-company-card__status is-active" : "administration-company-card__status is-disabled"}>{company.status === "ACTIVE" ? (company.migrationReviewLocked ? `${text.active} · مراجعة مقفلة` : text.active) : text.archived}</span>
         <span className="administration-company-card__footer">{text.companyNumber(index + 1)}<b>{text.viewEdit} ←</b></span>
       </button>)}
     </div>
@@ -153,6 +154,15 @@ function CompanyDialog({ language, session, company, owner, onDone, onError, onC
       onClose();
     } catch (error) { onError(error); } finally { setBusy(false); }
   };
+  const changeMigrationReviewLock = async () => {
+    if (!company || !owner) return;
+    setBusy(true);
+    try {
+      await updateAdministrationCompanyMigrationReviewLock(session, company.id, !company.migrationReviewLocked, reason.trim() || "مراجعة ترحيل آمنة");
+      await onDone();
+      onClose();
+    } catch (error) { onError(error); } finally { setBusy(false); }
+  };
   const selectLogo = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file || !company || !owner) return;
@@ -203,6 +213,11 @@ function CompanyDialog({ language, session, company, owner, onDone, onError, onC
           <legend>{company.status === "ACTIVE" ? text.archiveCompany : text.reactivateCompany}</legend>
           <label>{text.changeReason} ({text.optional})<BaseerTextInput value={reason} onChange={(event) => setReason(event.target.value)} placeholder={text.shortReason} /></label>
           <BaseerButton variant={company.status === "ACTIVE" ? "danger" : "secondary"} disabled={busy || vatBusy} type="button" onClick={() => void changeStatus()}>{company.status === "ACTIVE" ? text.archiveCompanyAction : text.reactivateCompanyAction}</BaseerButton>
+        </fieldset>}
+        {!isCreate && company && owner && <fieldset className="administration-company-status-action">
+          <legend>{company.migrationReviewLocked ? "قفل مراجعة الترحيل مفعل" : "قفل مراجعة الترحيل"}</legend>
+          <small>{company.migrationReviewLocked ? "الشركة قابلة للعرض فقط؛ كل عمليات الإنشاء والتعديل والحذف موقوفة مركزيًا." : "فعّل القفل قبل فتح شركة ترحيل للمراجعة؛ يسمح بالقراءة فقط."}</small>
+          <BaseerButton variant={company.migrationReviewLocked ? "secondary" : "danger"} disabled={busy || vatBusy} type="button" onClick={() => void changeMigrationReviewLock()}>{company.migrationReviewLocked ? "رفع قفل المراجعة" : "تفعيل قفل المراجعة"}</BaseerButton>
         </fieldset>}
         </>}
       </BaseerValidatedFormField>

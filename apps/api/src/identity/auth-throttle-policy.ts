@@ -39,5 +39,10 @@ export function refreshIdentityTracker(request: RequestLike): string {
   return identityTracker(request, "refreshToken", "refresh");
 }
 
-/** Fifteen minutes in milliseconds; the API receipt and Retry-After agree. */
-export const AUTH_THROTTLE_WINDOW_MS = 15 * 60 * 1_000;
+/**
+ * Local development needs a short recovery loop while testing credentials.
+ * Production retains the deliberately stricter fifteen-minute lockout.
+ */
+export const AUTH_THROTTLE_WINDOW_MS = process.env.NODE_ENV === "production"
+  ? 15 * 60 * 1_000
+  : 60 * 1_000;

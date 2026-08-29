@@ -18,6 +18,16 @@ import { AiPlatformService } from './ai-platform/ai-platform.service.js';
 
 import { BusinessDateController } from './business-date/business-date.controller.js';
 import { BUSINESS_DATE_CLOCK, BusinessDateService } from './business-date/business-date.service.js';
+import { BackupController } from './backup/backup.controller.js';
+import { BackupService } from './backup/backup.service.js';
+import { BackupDownloadService } from './backup/backup-download.service.js';
+import { CompanyArchiveExporter } from './backup/company-archive-exporter.js';
+import { BackupWorkerService } from './backup/backup-worker.service.js';
+import { RestoreAsNewService } from './backup/restore-as-new.service.js';
+import { BackupPolicyService } from './backup/backup-policy.service.js';
+import { NurixMigrationReviewController } from './nurix-migration/nurix-migration-review.controller.js';
+import { NurixMigrationReviewService } from './nurix-migration/nurix-migration-review.service.js';
+import { BackupScheduleDispatcherService, BackupScheduleRunnerService } from './backup/schedule-dispatcher.js';
 import { CompanyAccessController } from './company-context/company-access.controller.js';
 import { CompanyAccessService } from './company-context/company-access.service.js';
 import { CompanyContextService } from './company-context/company-context.service.js';
@@ -110,6 +120,8 @@ import { HrFinalSettlementController } from './hr/hr-final-settlement.controller
 import { HrFinalSettlementService } from './hr/hr-final-settlement.service.js';
 import { HrOverviewController } from './hr/hr-overview.controller.js';
 import { HrOverviewService } from './hr/hr-overview.service.js';
+import { AttendanceController } from './attendance/attendance.controller.js';
+import { AttendanceService } from './attendance/attendance.service.js';
 import { OperationsCatalogController } from './operations/operations-catalog.controller.js';
 import { OperationsCatalogService } from './operations/operations-catalog.service.js';
 import { OperationsExecutionController } from './operations/operations-execution.controller.js';
@@ -150,12 +162,26 @@ import { OfficialReportRunsController } from './reports/official-report-runs.con
         { name: 'report', limit: 60, ttl: 60_000, blockDuration: 60_000 },
         { name: 'output', limit: 20, ttl: 60_000, blockDuration: 60_000 },
         { name: 'fileWrite', limit: 12, ttl: 60_000, blockDuration: 60_000 },
+        { name: 'attendancePin', limit: 6, ttl: 60_000, blockDuration: 15 * 60_000 },
       ],
     }),
   ],
-  controllers: [AdministrationController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinanceAccountsController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController, HrOverviewController, ReportCatalogController, ReportsController, LedgerTrialBalanceController, InternalVatReportController, VatSimulationController, ReportDocumentController, OfficialReportRunsController, OperationsCatalogController, OperationsExecutionController, OperationsInternalRegistrationController, OperationsAssetsWarrantyController, OperationsOverviewController, DecisionIntelligenceController, MarketingController, InboundEvidenceController, OwnerDailyBriefController],
+  controllers: [AdministrationController, BackupController, NurixMigrationReviewController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinanceAccountsController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController, HrOverviewController, AttendanceController, ReportCatalogController, ReportsController, LedgerTrialBalanceController, InternalVatReportController, VatSimulationController, ReportDocumentController, OfficialReportRunsController, OperationsCatalogController, OperationsExecutionController, OperationsInternalRegistrationController, OperationsAssetsWarrantyController, OperationsOverviewController, DecisionIntelligenceController, MarketingController, InboundEvidenceController, OwnerDailyBriefController],
   providers: [
     DatabaseService,
+    BackupService,
+    BackupDownloadService,
+    CompanyArchiveExporter,
+    BackupWorkerService,
+    BackupPolicyService,
+    NurixMigrationReviewService,
+    BackupScheduleDispatcherService,
+    BackupScheduleRunnerService,
+    {
+      provide: RestoreAsNewService,
+      useFactory: (downloads: BackupDownloadService) => new RestoreAsNewService(downloads),
+      inject: [BackupDownloadService],
+    },
     TenantAdministrationContextService,
     AdministrationService,
     AiCredentialVault,
@@ -225,6 +251,7 @@ import { OfficialReportRunsController } from './reports/official-report-runs.con
     HrEmployeeLetterService,
     HrFinalSettlementService,
     HrOverviewService,
+    AttendanceService,
     OperationsCatalogService,
     OperationsExecutionService,
     OperationsInternalRegistrationService,

@@ -11,7 +11,7 @@ const CASH_PERFORMANCE_ACTIVATE_CAPABILITY = 'reports.cash_performance.activate'
 
 @Controller('reports')
 @UseGuards(ThrottlerGuard)
-@SkipThrottle({ authIp: true, authIdentity: true, output: true, fileWrite: true })
+@SkipThrottle({ authIp: true, authIdentity: true, output: true, fileWrite: true, attendancePin: true })
 @Throttle({ report: { limit: 60, ttl: 60_000, blockDuration: 60_000 } })
 export class ReportsController {
   constructor(

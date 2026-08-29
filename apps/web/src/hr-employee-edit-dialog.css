@@ -2,6 +2,10 @@
   padding-top: .5rem;
 }
 
+.baseer-dialog.hr-employee-edit-dialog .daily-sales-dialog__body { padding-inline: var(--space-card); }
+.baseer-dialog.hr-employee-edit-dialog .hr-employee-edit { gap: var(--space-section); }
+.baseer-dialog.hr-employee-edit-dialog .hr-employee-edit__meta > span { border-color: var(--border-subtle); background: var(--surface-subtle); }
+
 .hr-employee-edit {
   gap: .75rem;
 }
@@ -83,3 +87,6 @@
 @media (max-width: 640px) {
   .hr-employee-edit__meta { grid-template-columns: 1fr; }
 }
+
+.baseer-dialog.hr-employee-edit-dialog .hr-employee-edit__meta > span,
+.hr-employee-edit__additional-toggle { background: var(--surface-subtle); }

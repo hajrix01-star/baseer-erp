@@ -42,6 +42,114 @@ export const IdempotencyReceiptStatus = {
 export type IdempotencyReceiptStatus = (typeof IdempotencyReceiptStatus)[keyof typeof IdempotencyReceiptStatus]
 
 
+export const BackupJobKind = {
+  COMPANY_ARCHIVE_EXPORT: 'COMPANY_ARCHIVE_EXPORT'
+} as const
+
+export type BackupJobKind = (typeof BackupJobKind)[keyof typeof BackupJobKind]
+
+
+export const BackupJobStatus = {
+  QUEUED: 'QUEUED',
+  PRECHECK: 'PRECHECK',
+  CONSISTENT_SNAPSHOT: 'CONSISTENT_SNAPSHOT',
+  EXPORT_DATA: 'EXPORT_DATA',
+  EXPORT_ATTACHMENTS: 'EXPORT_ATTACHMENTS',
+  PACKAGE_COMPRESS_ENCRYPT: 'PACKAGE_COMPRESS_ENCRYPT',
+  VERIFY_HASHES: 'VERIFY_HASHES',
+  PUBLISHED: 'PUBLISHED',
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type BackupJobStatus = (typeof BackupJobStatus)[keyof typeof BackupJobStatus]
+
+
+export const BackupArtifactStatus = {
+  PENDING: 'PENDING',
+  VERIFIED: 'VERIFIED',
+  REJECTED: 'REJECTED',
+  EXPIRED: 'EXPIRED'
+} as const
+
+export type BackupArtifactStatus = (typeof BackupArtifactStatus)[keyof typeof BackupArtifactStatus]
+
+
+export const BackupPolicyFrequency = {
+  MANUAL: 'MANUAL',
+  DAILY: 'DAILY',
+  WEEKLY: 'WEEKLY',
+  MONTHLY: 'MONTHLY'
+} as const
+
+export type BackupPolicyFrequency = (typeof BackupPolicyFrequency)[keyof typeof BackupPolicyFrequency]
+
+
+export const LegacyMigrationRunStatus = {
+  DISCOVERY: 'DISCOVERY',
+  DRY_RUN: 'DRY_RUN',
+  READY_TO_STAGE: 'READY_TO_STAGE',
+  STAGED: 'STAGED',
+  RECONCILED: 'RECONCILED',
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type LegacyMigrationRunStatus = (typeof LegacyMigrationRunStatus)[keyof typeof LegacyMigrationRunStatus]
+
+
+export const LegacyMigrationCompanyMapState = {
+  PLANNED: 'PLANNED',
+  APPROVED: 'APPROVED'
+} as const
+
+export type LegacyMigrationCompanyMapState = (typeof LegacyMigrationCompanyMapState)[keyof typeof LegacyMigrationCompanyMapState]
+
+
+export const LegacyMigrationRecordMapState = {
+  PLANNED: 'PLANNED',
+  STAGED: 'STAGED',
+  RECONCILED: 'RECONCILED',
+  EXCLUDED: 'EXCLUDED'
+} as const
+
+export type LegacyMigrationRecordMapState = (typeof LegacyMigrationRecordMapState)[keyof typeof LegacyMigrationRecordMapState]
+
+
+export const LegacyMigrationExceptionSeverity = {
+  BLOCKER: 'BLOCKER',
+  REVIEW: 'REVIEW',
+  WARNING: 'WARNING'
+} as const
+
+export type LegacyMigrationExceptionSeverity = (typeof LegacyMigrationExceptionSeverity)[keyof typeof LegacyMigrationExceptionSeverity]
+
+
+export const LegacyMigrationReviewActionKind = {
+  APPROVE_DIRECT_CANDIDATES: 'APPROVE_DIRECT_CANDIDATES',
+  APPROVE_COMPANY_MAPS: 'APPROVE_COMPANY_MAPS',
+  ACKNOWLEDGE_EXCEPTION: 'ACKNOWLEDGE_EXCEPTION'
+} as const
+
+export type LegacyMigrationReviewActionKind = (typeof LegacyMigrationReviewActionKind)[keyof typeof LegacyMigrationReviewActionKind]
+
+
+export const LegacyMigrationCounterpartyResolutionKind = {
+  EXPLICIT_ALIAS: 'EXPLICIT_ALIAS',
+  MANUAL: 'MANUAL'
+} as const
+
+export type LegacyMigrationCounterpartyResolutionKind = (typeof LegacyMigrationCounterpartyResolutionKind)[keyof typeof LegacyMigrationCounterpartyResolutionKind]
+
+
+export const LegacyMigrationCounterpartyCandidateKind = {
+  EXPLICIT_ALIAS: 'EXPLICIT_ALIAS',
+  REVIEW_REQUIRED: 'REVIEW_REQUIRED'
+} as const
+
+export type LegacyMigrationCounterpartyCandidateKind = (typeof LegacyMigrationCounterpartyCandidateKind)[keyof typeof LegacyMigrationCounterpartyCandidateKind]
+
+
 export const FileMetadataStatus = {
   RESERVED: 'RESERVED',
   SUPERSEDED: 'SUPERSEDED'
@@ -100,6 +208,28 @@ export const FinanceSupplierType = {
 } as const
 
 export type FinanceSupplierType = (typeof FinanceSupplierType)[keyof typeof FinanceSupplierType]
+
+
+export const FinanceCounterpartyKind = {
+  COMMERCIAL_SUPPLIER: 'COMMERCIAL_SUPPLIER',
+  GOVERNMENT_AUTHORITY: 'GOVERNMENT_AUTHORITY',
+  GOVERNMENT_PLATFORM: 'GOVERNMENT_PLATFORM',
+  UTILITY_PROVIDER: 'UTILITY_PROVIDER',
+  OTHER: 'OTHER'
+} as const
+
+export type FinanceCounterpartyKind = (typeof FinanceCounterpartyKind)[keyof typeof FinanceCounterpartyKind]
+
+
+export const FinanceCounterpartyAliasKind = {
+  CANONICAL: 'CANONICAL',
+  FORMER_NAME: 'FORMER_NAME',
+  TRADE_NAME: 'TRADE_NAME',
+  ABBREVIATION: 'ABBREVIATION',
+  SOURCE_VARIANT: 'SOURCE_VARIANT'
+} as const
+
+export type FinanceCounterpartyAliasKind = (typeof FinanceCounterpartyAliasKind)[keyof typeof FinanceCounterpartyAliasKind]
 
 
 export const FinanceFiscalPeriodStatus = {
@@ -1053,3 +1183,63 @@ export const OperationsInventoryMovementType = {
 } as const
 
 export type OperationsInventoryMovementType = (typeof OperationsInventoryMovementType)[keyof typeof OperationsInventoryMovementType]
+
+
+export const AttendanceEventType = {
+  CHECK_IN: 'CHECK_IN',
+  CHECK_OUT: 'CHECK_OUT'
+} as const
+
+export type AttendanceEventType = (typeof AttendanceEventType)[keyof typeof AttendanceEventType]
+
+
+export const AttendanceWorkSessionStatus = {
+  OPEN: 'OPEN',
+  CLOSED: 'CLOSED'
+} as const
+
+export type AttendanceWorkSessionStatus = (typeof AttendanceWorkSessionStatus)[keyof typeof AttendanceWorkSessionStatus]
+
+
+export const AttendanceScheduleTemplateStatus = {
+  ACTIVE: 'ACTIVE',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type AttendanceScheduleTemplateStatus = (typeof AttendanceScheduleTemplateStatus)[keyof typeof AttendanceScheduleTemplateStatus]
+
+
+export const AttendanceWeeklyAdjustmentKind = {
+  FULL_REST: 'FULL_REST',
+  CUSTOM_PERIODS: 'CUSTOM_PERIODS'
+} as const
+
+export type AttendanceWeeklyAdjustmentKind = (typeof AttendanceWeeklyAdjustmentKind)[keyof typeof AttendanceWeeklyAdjustmentKind]
+
+
+export const AttendanceScheduleExceptionStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type AttendanceScheduleExceptionStatus = (typeof AttendanceScheduleExceptionStatus)[keyof typeof AttendanceScheduleExceptionStatus]
+
+
+export const AttendanceRosterPlanStatus = {
+  DRAFT: 'DRAFT',
+  APPROVED: 'APPROVED',
+  APPLIED: 'APPLIED'
+} as const
+
+export type AttendanceRosterPlanStatus = (typeof AttendanceRosterPlanStatus)[keyof typeof AttendanceRosterPlanStatus]
+
+
+export const AttendanceRosterApprovalMode = {
+  WEEK: 'WEEK',
+  TEMPORARY: 'TEMPORARY',
+  PERMANENT: 'PERMANENT'
+} as const
+
+export type AttendanceRosterApprovalMode = (typeof AttendanceRosterApprovalMode)[keyof typeof AttendanceRosterApprovalMode]

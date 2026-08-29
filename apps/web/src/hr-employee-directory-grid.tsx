@@ -3,10 +3,13 @@ import { useEffect, useRef, useState } from "react";
 import "./hr-employee-directory-grid.css";
 
 import { BaseerMoney } from "./baseer-money";
+import { BaseerCardButton } from "./baseer-card";
 import { BaseerStatusBadge } from "./baseer-status-badge";
+import { getAttendanceEmployeeSchedule } from "./attendance-client";
 import { activeSession } from "./daily-sales-client";
 import { type HrEmployee } from "./hr-client";
 import { getCachedHrEmployeePhotoBlob } from "./hr-employee-photo-cache";
+import { riyadhBusinessDate } from "./number-format";
 
 type Language = "ar" | "en";
 
@@ -61,10 +64,30 @@ function HrEmployeeDirectoryAvatar({ employee, name }: { employee: HrEmployee; n
 /** A compact directory view that deliberately exposes the same fields as the employee table. */
 export function HrEmployeeDirectoryGrid({ employees, language, onOpen }: { employees: readonly HrEmployee[]; language: Language; onOpen: (employee: HrEmployee) => void }) {
   const ar = language === "ar";
+  const [scheduleNameByEmployee, setScheduleNameByEmployee] = useState<Record<string, string>>({});
+  const employeeIds = employees.map((employee) => employee.id).join(",");
+
+  useEffect(() => {
+    const session = activeSession();
+    if (!session || !employees.length) { setScheduleNameByEmployee({}); return; }
+    let active = true;
+    const effectiveDate = riyadhBusinessDate();
+    void Promise.all(employees.map(async (employee) => {
+      try {
+        const schedule = await getAttendanceEmployeeSchedule(session, employee.id);
+        const assignment = schedule.assignments.filter((item) => item.effectiveFrom <= effectiveDate).sort((left, right) => right.effectiveFrom.localeCompare(left.effectiveFrom))[0];
+        const activeAdjustments = schedule.weeklyAdjustments.filter((item) => item.effectiveFrom <= effectiveDate);
+        const permanentRoster = [...new Set(activeAdjustments.map((item) => item.effectiveFrom))].find((effectiveFrom) => new Set(activeAdjustments.filter((item) => item.effectiveFrom === effectiveFrom).map((item) => item.dayOfWeek)).size === 7);
+        return [employee.id, permanentRoster ? (ar ? `دوام مخصص · ${permanentRoster}` : `Custom schedule · ${permanentRoster}`) : assignment ? (ar ? assignment.templateNameAr : assignment.templateNameEn ?? assignment.templateNameAr) : ""] as const;
+      } catch { return [employee.id, ""] as const; }
+    })).then((entries) => { if (active) setScheduleNameByEmployee(Object.fromEntries(entries)); });
+    return () => { active = false; };
+  }, [ar, employeeIds]);
+
   return <div className="hr-employee-directory-grid" role="list" aria-label={ar ? "بطاقات الموظفين" : "Employee cards"}>
     {employees.map((employee) => {
       const name = ar ? employee.nameAr : employee.nameEn ?? employee.nameAr;
-      return <button key={employee.id} type="button" className="hr-employee-directory-card" role="listitem" onClick={() => onOpen(employee)}>
+      return <BaseerCardButton key={employee.id} type="button" className="hr-employee-directory-card" role="listitem" onClick={() => onOpen(employee)}>
         <header>
           <HrEmployeeDirectoryAvatar employee={employee} name={name} />
           <span className="hr-employee-directory-card__identity"><strong>{name}</strong><bdi>{employee.employeeNumber}</bdi></span>
@@ -73,10 +96,11 @@ export function HrEmployeeDirectoryGrid({ employees, language, onOpen }: { emplo
         <dl>
           <div><dt>{ar ? "المسمى الوظيفي" : "Job title"}</dt><dd>{employee.jobTitle ?? "—"}</dd></div>
           <div><dt>{ar ? "تاريخ الانضمام" : "Hire date"}</dt><dd dir="ltr">{employee.hireDate}</dd></div>
+          <div><dt>{ar ? "شفت الدوام" : "Work shift"}</dt><dd>{scheduleNameByEmployee[employee.id] || "—"}</dd></div>
           <div><dt>{ar ? "الراتب الشهري" : "Monthly salary"}</dt><dd>{employee.currentMonthlyGross ? <BaseerMoney value={employee.currentMonthlyGross} language={language} /> : "—"}</dd></div>
         </dl>
         <footer>{ar ? "فتح ملف الموظف" : "Open employee file"}<span aria-hidden="true">←</span></footer>
-      </button>;
+      </BaseerCardButton>;
     })}
   </div>;
 }

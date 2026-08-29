@@ -12,6 +12,8 @@ const financialRead = {
   rows: [
     { code: "sales", labelAr: "المبيعات", labelEn: "Sales", kind: "SECTION", parentCode: null, direction: "INFLOW", eventCount: 2, amount: money("200.0000", "200.00"), shareOfCollectedSalesPercent: "100.0000" },
     { code: "expenses", labelAr: "المصروفات", labelEn: "Expenses", kind: "SECTION", parentCode: null, direction: "OUTFLOW", eventCount: 1, amount: money("50.0000", "50.00", "negative"), shareOfCollectedSalesPercent: "25.0000" },
+    { code: "purchase-supplies", labelAr: "مستلزمات مشتريات", labelEn: "Purchase supplies", kind: "LINE", parentCode: "purchases", direction: "OUTFLOW", eventCount: 1, amount: money("30.0000", "30.00", "negative"), shareOfCollectedSalesPercent: "15.0000" },
+    { code: "expense-rent", labelAr: "إيجار", labelEn: "Rent", kind: "LINE", parentCode: "expenses", direction: "OUTFLOW", eventCount: 1, amount: money("20.0000", "20.00", "negative"), shareOfCollectedSalesPercent: "10.0000" },
   ],
   vaults: [],
   totals: { inflows: money("200.0000", "200.00"), outflows: money("50.0000", "50.00", "negative"), netCashResult: money("150.0000", "150.00"), netCashResultShareOfCollectedSalesPercent: "75.0000" },
@@ -55,7 +57,21 @@ test("command center opens live reads directly without a summary gate", async ({
   await page.goto("/#module=command&section=0");
 
   await expect(page.getByRole("heading", { name: "Financial movement by item", exact: true })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Marketing", exact: true })).toBeVisible();
+  const timeline = page.locator('section[aria-label="Marketing timeline"]');
+  const categoryBreakdown = page.locator('section[aria-label="Purchase and expense breakdown by category"]');
+  await expect(timeline).toBeVisible();
+  await expect(categoryBreakdown).toBeVisible();
+  await expect(timeline.locator(".baseer-marketing-timeline__header .command-center__metric")).toHaveCount(5);
+  const timelineHeader = timeline.locator(".baseer-marketing-timeline__header");
+  await expect(timelineHeader.getByText("Campaigns in period", { exact: true })).toBeVisible();
+  await expect(timelineHeader.getByText("Official sales", { exact: true })).toBeVisible();
+  const layoutOrder = await page.locator("main").evaluate((main) => {
+    const timelineIndex = [...main.querySelectorAll("section")].indexOf(main.querySelector('section[aria-label="Marketing timeline"]')!);
+    const categoryIndex = [...main.querySelectorAll("section")].indexOf(main.querySelector('section[aria-label="Purchase and expense breakdown by category"]')!);
+    return { timelineIndex, categoryIndex };
+  });
+  expect(layoutOrder.timelineIndex).toBeGreaterThanOrEqual(0);
+  expect(layoutOrder.categoryIndex).toBeGreaterThan(layoutOrder.timelineIndex);
   await expect(page.getByText("Net movement", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Open full command center" })).toHaveCount(0);
   await expect(page.getByText("The summary could not be loaded. Open the full command center to retry.")).toHaveCount(0);

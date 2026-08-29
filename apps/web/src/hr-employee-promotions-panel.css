@@ -3,6 +3,11 @@
   gap: 1rem;
 }
 
+.hr-employment-compensation__salary-summary > div, .hr-promotion-form__comparison, .hr-promotion-form__salary-comparison { background: var(--surface-subtle); }
+
+.module-page--hr .hr-employment-compensation { gap: var(--space-section); }
+.module-page--hr .hr-employment-compensation__section { gap: var(--space-section); padding: var(--space-card); border-color: var(--border-subtle); background: var(--surface-raised); }
+
 .hr-employment-compensation__section {
   display: grid;
   gap: .9rem;
@@ -135,3 +140,8 @@
     transform: rotate(90deg);
   }
 }
+
+/* Keep compensation sub-regions on the selected container's inset surface. */
+.hr-employment-compensation__salary-summary > div,
+.hr-promotion-form__comparison,
+.hr-promotion-form__salary-comparison { background: var(--surface-subtle); }

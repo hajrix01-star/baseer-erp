@@ -9,6 +9,7 @@ const HrPayrollWorkspace = lazy(() => import("./hr-payroll-workspace").then((mod
 const HrLeaveWorkspace = lazy(() => import("./hr-leave-workspace").then((module) => ({ default: module.HrLeaveWorkspace })));
 const HrServicesWorkspace = lazy(() => import("./hr-services-workspace").then((module) => ({ default: module.HrServicesWorkspace })));
 const HrSalaryToolsWorkspace = lazy(() => import("./hr-salary-tools-workspace").then((module) => ({ default: module.HrSalaryToolsWorkspace })));
+const HrAttendanceWorkspace = lazy(() => import("./hr-attendance-workspace").then((module) => ({ default: module.HrAttendanceWorkspace })));
 
 export function HrWorkspaceRouter({ language, section }: { language: Language; section: number }) {
   const ar = language === "ar";
@@ -17,5 +18,6 @@ export function HrWorkspaceRouter({ language, section }: { language: Language; s
   if (section === 3) return <Suspense fallback={<BaseerCard>{ar ? "جارٍ تحميل مسير الرواتب…" : "Loading payroll…"}</BaseerCard>}><HrPayrollWorkspace language={language} stage={stage} /></Suspense>;
   if (section === 5) return <Suspense fallback={<BaseerCard>{ar ? "جارٍ تحميل خدمات الموظفين…" : "Loading employee services…"}</BaseerCard>}><HrServicesWorkspace language={language} stage={stage} /></Suspense>;
   if (section === 6) return <Suspense fallback={<BaseerCard>{ar ? "جارٍ تحميل أدوات الراتب…" : "Loading salary tools…"}</BaseerCard>}><HrSalaryToolsWorkspace language={language} /></Suspense>;
+  if (section === 7) return <Suspense fallback={<BaseerCard>{ar ? "جارٍ تحميل الحضور والانصراف…" : "Loading attendance…"}</BaseerCard>}><HrAttendanceWorkspace language={language} /></Suspense>;
   return <Suspense fallback={<BaseerCard>{ar ? "جارٍ تحميل سجل الموارد البشرية…" : "Loading HR register…"}</BaseerCard>}><HrWorkspaceCore language={language} section={section} stage={stage} /></Suspense>;
 }

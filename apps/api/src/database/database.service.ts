@@ -33,6 +33,25 @@ export class DatabaseService implements OnModuleDestroy {
   }
 
   /**
+   * Backup exporters use one read-only repeatable snapshot so a company archive
+   * cannot contain rows observed before and after concurrent business writes.
+   * This intentionally remains a caller-owned bounded transaction; no worker
+   * may open nested tenant transactions while it is active.
+   */
+  async inTenantReadSnapshot<T>(
+    tenantId: string,
+    operation: (transaction: Prisma.TransactionClient) => Promise<T>,
+  ): Promise<T> {
+    return this.client.$transaction(async (transaction) => {
+      await transaction.$executeRaw`
+        SELECT set_config('app.tenant_id', ${tenantId}, true)
+      `;
+      await transaction.$executeRawUnsafe('SET TRANSACTION READ ONLY');
+      return operation(transaction);
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead });
+  }
+
+  /**
    * Reserved for code-owned host schedulers that need to fan out into the
    * tenant-isolated transaction method above. It exposes IDs only; every
    * tenant data operation must still use inTenantTransaction().

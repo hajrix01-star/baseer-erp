@@ -50,3 +50,13 @@
 .operations-menu-product-card .daily-sales-dialog__body { flex: 1 1 auto; min-block-size: 0; overflow: auto; overscroll-behavior: contain; }
 .operations-menu-product-card .daily-sales-dialog__actions { flex: 0 0 auto; }
 @media (max-width: 800px) { .operations-recipe-editor__layout { grid-template-columns: 1fr; }.operations-recipe-editor__summary { position: static; }.operations-recipe-editor__output-bar { justify-content: stretch; }.operations-recipe-editor__output { grid-template-columns: 1fr; width: 100%; }.operations-recipe-editor__panel-heading { align-items: stretch; flex-direction: column; }.operations-recipe-editor__panel-heading .baseer-button { width: 100%; }.operations-menu-product-card { width: calc(100vw - 1rem); min-block-size: calc(100dvh - 1rem); max-block-size: calc(100dvh - 1rem); } }
+
+/* Recipe editor panels and its ingredient table adopt shared workspace tokens. */
+.operations-recipe, .operations-recipe-editor { gap: var(--space-section); }
+.operations-recipe__layout, .operations-recipe-editor__layout, .operations-recipe-editor__main { gap: var(--space-card); }
+.operations-recipe-editor__output-bar, .operations-recipe-editor__summary, .operations-recipe-editor__table-wrap { padding: var(--space-card); border-color: var(--line); border-radius: var(--card-radius); background: var(--card-surface); }
+.operations-recipe-editor__table th { padding: var(--space-3); border-bottom-color: var(--line); background: var(--table-header); color: var(--muted); }
+
+.operations-recipe-editor__material-stages td { background: var(--surface-subtle); }
+.operations-recipe-editor__stages em { border-color: var(--border-subtle); background: var(--surface); color: var(--ink); }
+.operations-recipe-editor__table td { padding: var(--space-3); border-bottom-color: var(--line); }

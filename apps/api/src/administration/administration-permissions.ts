@@ -18,6 +18,15 @@ export const ADMINISTRATION_PERMISSION_CATALOG: readonly AdministrationPermissio
   { code: "administration.roles.read", module: "administration", nameAr: "عرض الأدوار والصلاحيات", nameEn: "View roles and permissions", risk: "standard" },
   { code: "administration.roles.manage", module: "administration", nameAr: "إدارة الأدوار والصلاحيات", nameEn: "Manage roles and permissions", risk: "sensitive" },
 
+  { code: "backup.read", module: "backup", nameAr: "عرض حالة النسخ والاستعادة", nameEn: "View backup and recovery status", risk: "standard" },
+  { code: "backup.create", module: "backup", nameAr: "إنشاء أرشيف شركة", nameEn: "Create company archive", risk: "sensitive" },
+  { code: "backup.download", module: "backup", nameAr: "تنزيل أرشيفات بصير", nameEn: "Download Baseer archives", risk: "sensitive" },
+  { code: "backup.schedule.manage", module: "backup", nameAr: "إدارة جدولة النسخ", nameEn: "Manage backup schedules", risk: "sensitive" },
+  { code: "backup.restore.request", module: "backup", nameAr: "طلب استعادة شركة", nameEn: "Request company recovery", risk: "sensitive" },
+  { code: "backup.restore.approve", module: "backup", nameAr: "اعتماد استعادة شركة", nameEn: "Approve company recovery", risk: "sensitive" },
+  { code: "backup.restore.execute", module: "backup", nameAr: "تنفيذ استعادة شركة", nameEn: "Execute company recovery", risk: "sensitive" },
+  { code: "backup.audit.view", module: "backup", nameAr: "مراجعة تدقيق النسخ", nameEn: "Review backup audit", risk: "standard" },
+
   { code: "finance.setup.write", module: "finance", nameAr: "تهيئة المالية للشركة", nameEn: "Initialize company finance", risk: "sensitive" },
   { code: "finance.configuration.read", module: "finance", nameAr: "عرض إعدادات المالية", nameEn: "View finance configuration", risk: "standard" },
   { code: "finance.periods.write", module: "finance", nameAr: "إدارة الفترات المالية", nameEn: "Manage fiscal periods", risk: "sensitive" },
@@ -88,6 +97,7 @@ export const ADMINISTRATION_PERMISSION_CATALOG: readonly AdministrationPermissio
   { code: "hr.final_settlements.approve", module: "hr", nameAr: "اعتماد تسويات نهاية الخدمة", nameEn: "Approve final settlements", risk: "sensitive" },
   { code: "hr.final_settlements.pay", module: "hr", nameAr: "سداد تسويات نهاية الخدمة", nameEn: "Pay final settlements", risk: "sensitive" },
   { code: "hr.final_settlements.reverse", module: "hr", nameAr: "عكس تسويات نهاية الخدمة", nameEn: "Reverse final settlements", risk: "sensitive" },
+  { code: "attendance.manage", module: "hr", nameAr: "إدارة الحضور والانصراف", nameEn: "Manage attendance and timekeeping", risk: "sensitive" },
 
   { code: "finance.daily_sales.read", module: "operations", nameAr: "عرض سجل المبيعات", nameEn: "View sales register", risk: "standard" },
   { code: "finance.daily_sales.history.read_all", module: "operations", nameAr: "عرض كامل سجل المبيعات", nameEn: "View full sales history", risk: "standard" },
@@ -151,6 +161,13 @@ const DAILY_SALES_MANAGE = [
 ] as const;
 
 const COMPANY_MANAGER_PERMISSIONS = [
+  // A company manager may create and take custody of the encrypted archive for
+  // their own company. Recovery approval/execution stay deliberately split.
+  "backup.read",
+  "backup.create",
+  "backup.download",
+  "backup.schedule.manage",
+  "backup.restore.request",
   "platform.ai.use",
   "platform.ai.context.read",
   "platform.ai.context.write",
@@ -218,6 +235,7 @@ const COMPANY_MANAGER_PERMISSIONS = [
   "hr.final_settlements.approve",
   "hr.final_settlements.pay",
   "hr.final_settlements.reverse",
+  "attendance.manage",
   "finance.daily_sales.read",
   "finance.daily_sales.history.read_all",
   ...DAILY_SALES_MANAGE,
@@ -247,6 +265,7 @@ const COMPANY_MANAGER_PERMISSIONS = [
 
 export const SYSTEM_ROLE_TEMPLATES = [
   { code: "BASEER_COMPANY_MANAGER", nameAr: "مدير الشركة", nameEn: "Company manager", permissions: COMPANY_MANAGER_PERMISSIONS },
+  { code: "BASEER_BACKUP_AUDITOR", nameAr: "مراجع النسخ والاستعادة", nameEn: "Backup and recovery auditor", permissions: ["backup.read", "backup.audit.view"] },
   { code: "BASEER_FINANCE_ACCOUNTANT", nameAr: "محاسب", nameEn: "Accountant", permissions: ["platform.ai.use", "finance.configuration.read", "reports.read", "finance.vaults.read", "finance.vaults.transfer", "finance.vaults.cancel", "finance.vaults.reconcile", "finance.suppliers.read", "finance.supplier_dues.read", "finance.supplier_dues.write", "finance.loans.read", "finance.loans.write", "finance.purchase_expense.read", "finance.purchase_expense.create", "finance.purchase_expense.correct", "finance.purchase_expense.cancel", "finance.daily_sales.read", "finance.daily_sales.history.read_all", ...DAILY_SALES_MANAGE, "platform.files.read", "platform.files.write", "platform.business-date.read", "platform.output.preview", "platform.output.export"] },
   { code: "BASEER_SALES_SUPERVISOR", nameAr: "مشرف مبيعات", nameEn: "Sales supervisor", permissions: ["platform.ai.use", "finance.daily_sales.read", "finance.daily_sales.history.read_all", ...DAILY_SALES_MANAGE, "platform.business-date.read", "platform.output.preview"] },
   { code: "BASEER_CASHIER", nameAr: "كاشير", nameEn: "Cashier", permissions: ["platform.ai.use", "finance.daily_sales.read", "finance.daily_sales.create", "platform.business-date.read"] },

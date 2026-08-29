@@ -40,7 +40,7 @@ export const administrationRoleSchema = z.object({
   id: z.string().uuid(), code: roleCode, nameAr: text160, nameEn: text160, isSystem: z.boolean(), permissionCodes: z.array(permissionCode).max(120),
 }).strict();
 export const administrationCompanySchema = z.object({
-  id: companyIdSchema, nameAr: text160, nameEn: text160, businessTimezone: z.string().min(1).max(64), status: z.enum(["ACTIVE", "ARCHIVED"]), logoFileMetadataId: z.string().uuid().nullable(), ...companyContextLocationFields,
+  id: companyIdSchema, nameAr: text160, nameEn: text160, businessTimezone: z.string().min(1).max(64), status: z.enum(["ACTIVE", "ARCHIVED"]), migrationReviewLocked: z.boolean(), logoFileMetadataId: z.string().uuid().nullable(), ...companyContextLocationFields,
 }).strict();
 export const administrationUserSchema = z.object({
   id: userIdSchema, login: loginIdentifierSchema, nameAr: text160, nameEn: text160, preferredLanguage: languageSchema, avatarKind: userAvatarKind, status: z.enum(["ACTIVE", "DISABLED"]), isOwner: z.boolean(), memberships: z.array(z.object({ companyId: companyIdSchema, companyNameAr: text160, companyNameEn: text160, roleId: z.string().uuid(), roleNameAr: text160, roleNameEn: text160 }).strict()).max(250),
@@ -71,6 +71,7 @@ export const updateAdministrationCompanyRequestSchema = z.object({ nameAr: text1
 });
 export const uploadAdministrationCompanyLogoRequestSchema = z.object({ fileName: safeFileNameSchema, contentBase64: companyLogoContentBase64 }).strict();
 export const updateAdministrationCompanyStatusRequestSchema = z.object({ status: z.enum(["ACTIVE", "ARCHIVED"]), reason: z.string().trim().min(3).max(500).optional() }).strict();
+export const updateAdministrationCompanyMigrationReviewLockRequestSchema = z.object({ locked: z.boolean(), reason: z.string().trim().min(3).max(500) }).strict();
 export const updateAdministrationRoleRequestSchema = z.object({ nameAr: text160, nameEn: text160, permissionCodes: z.array(permissionCode).min(1).max(120) }).strict();
 export const deleteAdministrationRoleRequestSchema = z.object({}).strict();
 export const updateAdministrationUserLoginRequestSchema = z.object({ login: loginIdentifierSchema, reason: z.string().trim().min(3).max(500) }).strict();
@@ -89,6 +90,7 @@ export type UploadAdministrationCompanyLogoRequest = z.infer<typeof uploadAdmini
 export type UpdateAdministrationRoleRequest = z.infer<typeof updateAdministrationRoleRequestSchema>;
 export type DeleteAdministrationRoleRequest = z.infer<typeof deleteAdministrationRoleRequestSchema>;
 export type UpdateAdministrationCompanyStatusRequest = z.infer<typeof updateAdministrationCompanyStatusRequestSchema>;
+export type UpdateAdministrationCompanyMigrationReviewLockRequest = z.infer<typeof updateAdministrationCompanyMigrationReviewLockRequestSchema>;
 export type UpdateAdministrationUserLoginRequest = z.infer<typeof updateAdministrationUserLoginRequestSchema>;
 export type UpdateAdministrationUserDisplayNameRequest = z.infer<typeof updateAdministrationUserDisplayNameRequestSchema>;
 export type UpdateAdministrationUserStatusRequest = z.infer<typeof updateAdministrationUserStatusRequestSchema>;

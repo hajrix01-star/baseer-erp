@@ -12,6 +12,9 @@
   animation: hr-workforce-chart-enter 680ms cubic-bezier(.22, 1, .36, 1) both;
 }
 
+.module-page--hr .hr-workforce-chart { gap: var(--space-section); padding: var(--space-card); border-color: var(--border-subtle); background: var(--surface-raised); }
+.module-page--hr .hr-workforce-chart__body { gap: clamp(var(--space-section), 3vw, var(--space-6)); }
+
 .hr-workforce-chart__header,
 .hr-workforce-chart__footer {
   display: flex;
@@ -52,6 +55,34 @@
 .hr-workforce-chart__footer { padding-top: .8rem; border-top: 1px solid color-mix(in srgb, var(--brand) 12%, var(--line)); color: var(--muted); font-size: var(--font-caption); line-height: 1.45; }
 .hr-workforce-chart__footer span:last-child { text-align: end; }
 
+/* Keep the workforce picture useful without letting it monopolise the overview. */
+.hr-overview__operations { display: grid; grid-template-columns: minmax(22rem, .9fr) minmax(32rem, 1.55fr); align-items: start; gap: 1rem; }
+.hr-overview__operations--without-chart .hr-overview__work { grid-column: 1 / -1; }
+.hr-overview__operations .hr-workforce-chart { gap: .75rem; padding: 1rem; }
+.hr-overview__operations .hr-workforce-chart__header { align-items: flex-start; flex-direction: column; gap: .35rem; }
+.hr-overview__operations .hr-workforce-chart__header h3 { font-size: var(--font-body); }
+.hr-overview__operations .hr-workforce-chart__body { grid-template-columns: minmax(8.5rem, .78fr) minmax(0, 1.22fr); gap: .85rem; }
+.hr-overview__operations .hr-workforce-chart__visual { min-block-size: 10.25rem; }
+.hr-overview__operations .hr-workforce-chart__visual::before { inline-size: min(88%, 9.6rem); }
+.hr-overview__operations .hr-workforce-chart__plot { inline-size: min(100%, 9.5rem); block-size: 9.5rem; }
+.hr-overview__operations .hr-workforce-chart__center { max-inline-size: 6.5rem; }
+.hr-overview__operations .hr-workforce-chart__center strong { font-size: clamp(1.8rem, 3vw, 2.35rem); }
+.hr-overview__operations .hr-workforce-chart__insights { gap: .42rem; }
+.hr-overview__operations .hr-workforce-chart__insight { min-block-size: 3.05rem; gap: .5rem; padding: .48rem .58rem; }
+.hr-overview__operations .hr-workforce-chart__insight small { display: none; }
+.hr-overview__operations .hr-workforce-chart__footer { padding-top: .6rem; }
+
+@media (max-width: 1350px) {
+  .hr-overview__operations .hr-overview__task-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 1100px) {
+  .hr-overview__operations { grid-template-columns: 1fr; }
+  .hr-overview__operations .hr-workforce-chart__body { grid-template-columns: minmax(11rem, .82fr) minmax(16rem, 1.18fr); }
+  .hr-overview__operations .hr-workforce-chart__visual { min-block-size: 12rem; }
+  .hr-overview__operations .hr-workforce-chart__plot { inline-size: 11rem; block-size: 11rem; }
+}
+
 @keyframes hr-workforce-chart-enter { from { opacity: 0; transform: translateY(.8rem) scale(.985); } to { opacity: 1; transform: none; } }
 @keyframes hr-workforce-chart-glow { 0%, 100% { opacity: .55; transform: scale(.94); } 50% { opacity: 1; transform: scale(1.06); } }
 @keyframes hr-workforce-chart-dot { 0%, 100% { box-shadow: 0 0 0 .14rem color-mix(in srgb, var(--brand) 9%, transparent); } 50% { box-shadow: 0 0 0 .42rem color-mix(in srgb, var(--brand) 14%, transparent); } }
@@ -63,6 +94,10 @@
   .hr-workforce-chart__visual { min-block-size: 14rem; }
   .hr-workforce-chart__plot { inline-size: 14rem; block-size: 14rem; }
   .hr-workforce-chart__footer span:last-child { text-align: start; }
+  .hr-overview__operations .hr-workforce-chart__body { grid-template-columns: 1fr; }
+  .hr-overview__operations .hr-workforce-chart__visual { min-block-size: 14rem; }
+  .hr-overview__operations .hr-workforce-chart__plot { inline-size: 14rem; block-size: 14rem; }
+  .hr-overview__operations .hr-workforce-chart__insight small { display: block; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -73,3 +108,8 @@
   .hr-workforce-chart__insight:hover,
   .hr-workforce-chart__insight[aria-pressed="true"] { transform: none; }
 }
+
+/* This file is loaded after the shared shell. Keep the HR dashboard aligned
+   with the chosen container surface instead of reintroducing local card tints. */
+.hr-overview :is(.hr-overview__metrics > button, .hr-overview__task-grid > button, .hr-overview__quick-actions, .hr-overview__activity-card, .hr-workforce-chart, .hr-workforce-chart__insight) { border-color: var(--border-subtle); background: var(--card-surface, var(--surface-raised)); }
+.hr-overview .hr-workforce-chart__plot::after { background: var(--card-surface, var(--surface-raised)); }

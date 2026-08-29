@@ -25,8 +25,8 @@ export function BaseerStepper({ ariaLabel, steps, activeStep, onStepChange, chil
   children: ReactNode;
   footer: ReactNode;
 }) {
-  return <section style={{ display: "grid", gap: "1rem" }}>
-    <nav aria-label={ariaLabel} role="tablist" style={{ display: "flex", flexWrap: "wrap", gap: ".4rem" }}>
+  return <section className="baseer-stepper">
+    <nav className="baseer-stepper__tabs" aria-label={ariaLabel} role="tablist">
       {steps.map((step, index) => {
         const active = index === activeStep;
         return <BaseerButton key={step.id} id={`baseer-step-${step.id}`} role="tab" aria-selected={active} aria-controls={`baseer-step-panel-${step.id}`} tabIndex={active ? 0 : -1} type="button" variant={active ? "primary" : "secondary"} disabled={index > activeStep} onKeyDown={(event) => {
@@ -40,7 +40,7 @@ export function BaseerStepper({ ariaLabel, steps, activeStep, onStepChange, chil
         }} onClick={() => onStepChange(index)}>{index + 1}. {step.label}</BaseerButton>;
       })}
     </nav>
-    <div id={`baseer-step-panel-${steps[activeStep]?.id ?? ""}`} role="tabpanel" aria-labelledby={`baseer-step-${steps[activeStep]?.id ?? ""}`}>{children}</div>
-    <footer style={{ display: "flex", gap: ".5rem", justifyContent: "flex-start" }}>{footer}</footer>
+    <div className="baseer-stepper__panel" id={`baseer-step-panel-${steps[activeStep]?.id ?? ""}`} role="tabpanel" aria-labelledby={`baseer-step-${steps[activeStep]?.id ?? ""}`}>{children}</div>
+    <footer className="baseer-stepper__footer">{footer}</footer>
   </section>;
 }

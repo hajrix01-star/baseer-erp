@@ -7,6 +7,8 @@ const required = [
   "finance.foundation.write", "finance.suppliers.read", "finance.supplier_dues.read", "finance.supplier_dues.write",
   "finance.loans.read", "finance.loans.write", "finance.daily_sales.read", "finance.daily_sales.history.read_all", "finance.daily_sales.create",
   "finance.daily_sales.correct", "finance.daily_sales.reverse", "finance.operational_calendar.manage",
+  "backup.read", "backup.create", "backup.download", "backup.schedule.manage", "backup.restore.request",
+  "backup.restore.approve", "backup.restore.execute", "backup.audit.view",
   "platform.files.read", "platform.files.write", "platform.business-date.read", "platform.observability.read",
   "platform.output.preview", "platform.output.export", "platform.ai.use", "platform.ai.configuration.read", "platform.ai.configuration.write",
   "platform.ai.provider.configure", "platform.ai.identity.read", "platform.ai.identity.write",

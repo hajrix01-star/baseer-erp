@@ -1,21 +1,21 @@
-.owner-daily-brief { margin-block: 1.2rem; color: #26332e; }
+.owner-daily-brief { margin-block: var(--space-5); color: var(--ink); }
 .owner-daily-brief__paper { display: grid; gap: 1.25rem; max-width: 1160px; margin-inline: auto; padding: clamp(1rem, 2.4vw, 2.1rem); border: 1px solid #e5e1d8; border-radius: 1.25rem; background: linear-gradient(90deg, rgb(21 120 78 / .035) 1px, transparent 1px) 0 0 / 100% 2rem, #fffefd; box-shadow: 0 1rem 2.5rem rgb(57 62 44 / .08); }
 .owner-daily-brief .baseer-section-header { padding-bottom: 1.1rem; border-bottom: 1px solid #e6e2da; }
-.owner-daily-brief__state { padding: 2rem; color: var(--muted); text-align: center; }
-.owner-daily-brief__failure { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin: 1.2rem; }
-.owner-daily-brief__report-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.owner-daily-brief__state { padding: var(--space-6); color: var(--muted); text-align: center; }
+.owner-daily-brief__failure { display: flex; align-items: center; justify-content: space-between; gap: var(--section-gap); margin: var(--space-5); }
+.owner-daily-brief__report-head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--section-gap); }
 .owner-daily-brief__report-head > div { display: grid; gap: .18rem; }
 .owner-daily-brief__report-head span, .owner-daily-brief__section-title > span { color: #0f7a51; font-size: .75rem; font-weight: 800; letter-spacing: .02em; }
 .owner-daily-brief__report-head h3, .owner-daily-brief__section-title h3 { margin: 0; font-size: 1.14rem; letter-spacing: -.015em; }
 .owner-daily-brief__report-head p { margin: 0; color: var(--muted); font-size: .78rem; }
 .owner-daily-brief__tax { flex: 0 0 auto; padding: .38rem .65rem; border-radius: 999px; color: #607067; background: #eff5f0; font-size: .72rem; font-weight: 800; }
-.owner-daily-brief__totals { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .7rem; }
+.owner-daily-brief__totals { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--section-gap); }
 .owner-daily-brief__metric { display: grid; gap: .38rem; min-height: 84px; border-color: #e3e8e2; background: rgb(255 255 255 / .9); }
 .owner-daily-brief__metric span, .owner-daily-brief__company dt, .owner-daily-brief__marketing dt { color: #718078; font-size: .72rem; font-weight: 700; }
 .owner-daily-brief__metric bdi { color: #174d39; font-size: 1.14rem; font-variant-numeric: tabular-nums; font-weight: 850; }
-.owner-daily-brief__section { display: grid; gap: .75rem; padding-top: 1.15rem; border-top: 1px solid #e6e2da; }
+.owner-daily-brief__section { display: grid; gap: var(--section-gap); padding-top: var(--space-5); border-top: 1px solid #e6e2da; }
 .owner-daily-brief__section-title { display: grid; gap: .12rem; }
-.owner-daily-brief__companies { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; }
+.owner-daily-brief__companies { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--section-gap); }
 .owner-daily-brief__company { min-height: 184px; padding: 0; overflow: hidden; border-color: #e5e6df; background: rgb(255 255 255 / .92); }
 .owner-daily-brief__company header { display: flex; align-items: flex-start; justify-content: space-between; gap: .6rem; padding: .85rem .9rem .65rem; border-bottom: 1px solid #edf0eb; }
 .owner-daily-brief__company header > div { display: grid; min-width: 0; gap: .13rem; }.owner-daily-brief__company header span { overflow: hidden; font-size: .9rem; font-weight: 850; text-overflow: ellipsis; white-space: nowrap; }.owner-daily-brief__company header small { color: #7b8981; font-size: .67rem; }
@@ -61,7 +61,7 @@
   isolation: isolate;
   overflow: hidden;
   gap: 0;
-  padding: clamp(1.45rem, 3.2vw, 2.8rem) clamp(1.2rem, 3.4vw, 3.25rem);
+  padding: clamp(1.45rem, 3.2vw, 2.8rem) clamp(var(--space-5), 3.4vw, 3.25rem);
   border-color: #e7dfd1;
   border-radius: .35rem 1rem 1rem .35rem;
   background:
@@ -323,11 +323,11 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: stretch;
   justify-content: stretch;
-  gap: 1rem;
+  gap: var(--section-gap);
 }
 .owner-daily-brief .owner-daily-brief__company {
   min-inline-size: 0;
-  padding: 1rem;
+  padding: var(--space-card);
   border: 1px solid color-mix(in srgb, var(--brand) 17%, var(--owner-paper-edge));
   border-radius: .9rem;
   background: color-mix(in srgb, #fff 76%, var(--owner-paper));

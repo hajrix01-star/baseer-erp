@@ -48,11 +48,11 @@ const copy = {
   },
 } as const;
 
-/** The first paint remains useful while batch entry, credit and document dialogs load only on explicit entry to management. */
+/** Purchasing is an operational destination: opening it must enter the managed workspace directly. */
 export function PurchaseExpenseWorkspaceContent({ language, activeTab = "entry", onTabChange }: { language: Language; activeTab?: PurchaseWorkspaceTab; onTabChange?: (tab: PurchaseWorkspaceTab) => void }) {
   const text = copy[language];
   const [session] = useState<ActiveSession | null>(activeSession);
-  const [openRuntime, setOpenRuntime] = useState(activeTab !== "entry");
+  const [openRuntime, setOpenRuntime] = useState(true);
   const [documents, setDocuments] = useState<readonly DocumentPreview[] | null>(null);
   const [failed, setFailed] = useState(false);
   const canRead = hasActivePermission("finance.purchase_expense.read");

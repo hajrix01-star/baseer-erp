@@ -1,4 +1,5 @@
 import { accessSync, constants, statSync } from "node:fs";
+import { isIP } from "node:net";
 import { isAbsolute, resolve, sep } from "node:path";
 
 const allowedBindHosts = new Set(["127.0.0.1", "0.0.0.0"]);
@@ -32,6 +33,18 @@ function requireHttpUrl(name: string, value: string | undefined): URL {
     return url;
   } catch {
     throw new Error(`${name} must be an absolute HTTP(S) URL.`);
+  }
+}
+
+function requireTrustedProxyAddresses(
+  value: string | undefined,
+): void {
+  const addresses = requireValue("BASEER_TRUSTED_REVERSE_PROXY_IPS", value)
+    .split(",")
+    .map((address) => address.trim())
+    .filter(Boolean);
+  if (addresses.length === 0 || addresses.some((address) => isIP(address) === 0)) {
+    throw new Error("BASEER_TRUSTED_REVERSE_PROXY_IPS must contain only explicit proxy IP addresses.");
   }
 }
 
@@ -125,6 +138,7 @@ export function validatePrivateDeploymentConfiguration(
       "Private online deployment must bind inside the Docker network.",
     );
   }
+  requireTrustedProxyAddresses(environment.BASEER_TRUSTED_REVERSE_PROXY_IPS);
   if (environment.BASEER_ALLOW_PUBLIC_SIGNUP !== "false") {
     throw new Error("Public self-registration must remain disabled.");
   }

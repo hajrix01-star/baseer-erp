@@ -8,7 +8,7 @@ import { InternalVatReportService } from './internal-vat-report.service.js';
 
 @Controller('reports/internal-vat')
 @UseGuards(ThrottlerGuard)
-@SkipThrottle({ authIp: true, authIdentity: true, output: true, fileWrite: true })
+@SkipThrottle({ authIp: true, authIdentity: true, output: true, fileWrite: true, attendancePin: true })
 @Throttle({ report: { limit: 60, ttl: 60_000, blockDuration: 60_000 } })
 export class InternalVatReportController {
   constructor(private readonly contexts: CompanyContextService, private readonly report: InternalVatReportService) {}

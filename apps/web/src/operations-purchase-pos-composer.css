@@ -73,3 +73,21 @@
 [dir="ltr"] .operations-purchase-pos__cart-table td:nth-child(2) select {
   background-position: right .48rem center;
 }
+
+/* POS uses the shared canvas, table header and compact component spacing. */
+.operations-purchase-pos { gap: var(--space-section); }
+.operations-purchase-pos__catalog, .operations-purchase-pos__cart { padding: var(--space-card); border-radius: var(--card-radius); background: var(--card-surface); }
+.operations-purchase-pos__catalog-toolbar { gap: var(--space-3); margin-bottom: var(--space-3); }
+.operations-purchase-pos__products { gap: var(--space-2); }
+.operations-purchase-pos__cart-header, .operations-purchase-pos__cart-total { gap: var(--space-3); padding: var(--space-3) var(--space-card); }
+.operations-purchase-pos__cart-lines { gap: var(--space-2); padding: var(--space-3) var(--space-card); }
+.operations-purchase-pos__cart-table-wrap, .operations-purchase-pos__cart-table { background: var(--card-surface); }
+.operations-purchase-pos__cart-table th { background: var(--table-header); }
+
+/* Catalog items are nested choices, while the catalog and basket are primary
+   cards.  Form fields deliberately retain the control surface. */
+.administration-form:has(.operations-purchase-pos) > div:first-child { background: var(--card-surface); }
+.operations-purchase-pos__product { background: var(--surface-subtle); }
+.operations-purchase-pos__product.is-selected { background: color-mix(in srgb, var(--brand) 5%, var(--surface-subtle)); }
+.operations-purchase-pos__cart-header,
+.operations-purchase-pos__cart-total { background: color-mix(in srgb, var(--brand) 6%, var(--surface-subtle)); }

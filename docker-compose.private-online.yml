@@ -63,12 +63,23 @@ services:
       BASEER_DEPLOYMENT_MODE: private-online
       BASEER_BIND_HOST: 0.0.0.0
       BASEER_API_PORT: "5200"
+      # Only the TLS edge has this fixed address. Fastify therefore accepts
+      # X-Forwarded-For exclusively from Caddy, never from another container.
+      BASEER_TRUSTED_REVERSE_PROXY_IPS: "172.30.0.10"
       BASEER_ALLOW_PUBLIC_SIGNUP: "false"
       BASEER_SYSTEM_TENANT_CODE: ${BASEER_SYSTEM_TENANT_CODE:?BASEER_SYSTEM_TENANT_CODE is required}
       DATABASE_URL: postgresql://${BASEER_DB_APP_USER}:${BASEER_DB_APP_PASSWORD}@postgres:5432/${BASEER_DB_NAME}
       IDENTITY_JWT_SECRET: ${IDENTITY_JWT_SECRET:?IDENTITY_JWT_SECRET is required}
       BASEER_PUBLIC_DOMAIN: ${BASEER_PUBLIC_DOMAIN:?BASEER_PUBLIC_DOMAIN is required}
       BASEER_BACKUP_TARGET_LABEL: ${BASEER_BACKUP_TARGET_LABEL:?BASEER_BACKUP_TARGET_LABEL is required}
+      # Company-archive jobs stay opt-in. Their encrypted artifacts live under
+      # the private bind mount, never in the image, workspace, or web root.
+      BASEER_BACKUP_WORKER_ENABLED: ${BASEER_BACKUP_WORKER_ENABLED:-false}
+      BASEER_BACKUP_SCHEDULER_ENABLED: ${BASEER_BACKUP_SCHEDULER_ENABLED:-false}
+      BASEER_BACKUP_ARCHIVE_STORAGE_ROOT: /var/lib/baseer/storage/backup-archives
+      BASEER_ARCHIVE_APPLICATION_VERSION: ${BASEER_ARCHIVE_APPLICATION_VERSION:-}
+      BASEER_ARCHIVE_SCHEMA_VERSION: ${BASEER_ARCHIVE_SCHEMA_VERSION:-}
+      BASEER_ARCHIVE_KEK_KEYRING_V1: ${BASEER_ARCHIVE_KEK_KEYRING_V1:-}
       # All application files remain on this server, but only beneath the
       # explicitly mounted host directory. The API root filesystem stays read-only.
       BASEER_FILE_STORAGE_ENABLED: "true"
@@ -165,10 +176,14 @@ services:
     security_opt:
       - no-new-privileges:true
     networks:
-      - web
+      web:
+        ipv4_address: 172.30.0.10
 
 networks:
   web:
+    ipam:
+      config:
+        - subnet: 172.30.0.0/24
   database:
     internal: true
 

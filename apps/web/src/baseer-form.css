@@ -41,10 +41,12 @@
 .baseer-form-grid input[type="date"] { direction: ltr; text-align: start; }
 .baseer-form-grid input[type="checkbox"] { inline-size: 1.1rem; block-size: 1.1rem; min-height: 0; padding: 0; accent-color: var(--brand); }
 .baseer-checkbox { inline-size: 1.1rem; block-size: 1.1rem; min-height: 0; min-inline-size: 0; padding: 0; accent-color: var(--brand); }
+.baseer-radio { inline-size: 1.1rem; block-size: 1.1rem; min-height: 0; min-inline-size: 0; padding: 0; accent-color: var(--brand); }
 .baseer-form-grid textarea { min-block-size: 4.5rem; resize: vertical; }
 .baseer-money-input { direction: ltr; text-align: end; font-variant-numeric: tabular-nums; }
 .baseer-integer-input { direction: ltr; text-align: end; font-variant-numeric: tabular-nums; }
 .baseer-month-picker { direction: ltr; text-align: start; }
+.baseer-time-input { direction: ltr; text-align: start; font-variant-numeric: tabular-nums; }
 .baseer-textarea { min-block-size: 4.5rem; resize: vertical; }
 .baseer-textarea--compact { min-block-size: var(--control-height); }
 .baseer-file-input { position: relative; display: inline-flex; inline-size: fit-content; min-inline-size: 0; }

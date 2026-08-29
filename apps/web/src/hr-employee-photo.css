@@ -1,4 +1,4 @@
-.hr-employee-photo { display: grid; justify-items: center; gap: .45rem; }
+.hr-employee-photo { display: grid; justify-items: center; gap: var(--space-2); }
 .hr-employee-photo__avatar { display: grid; inline-size: 4.6rem; block-size: 4.6rem; place-items: center; padding: 0; overflow: hidden; border: 2px solid color-mix(in srgb, var(--brand) 38%, var(--line)); border-radius: 999px; background: color-mix(in srgb, var(--brand) 12%, var(--surface)); color: var(--brand-deep); font: inherit; font-weight: 850; cursor: zoom-in; }
 .hr-employee-photo__avatar:disabled { cursor: default; opacity: 1; }
 .hr-employee-photo__avatar img { inline-size: 100%; block-size: 100%; object-fit: cover; }

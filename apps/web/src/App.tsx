@@ -9,6 +9,7 @@ const InboundEvidenceWorkspace = lazy(async () => ({ default: (await import('./i
 const OperationsInternalRegistrationWorkspace = lazy(async () => ({ default: (await import('./operations-internal-registration-workspace')).OperationsInternalRegistrationWorkspace }));
 const OwnerDailyBriefWorkspace = lazy(async () => ({ default: (await import('./owner-daily-brief-workspace')).OwnerDailyBriefWorkspace }));
 const QuickAdvanceDialog = lazy(async () => ({ default: (await import('./quick-advance-dialog')).QuickAdvanceDialog }));
+const AttendanceEmployeePortal = lazy(async () => ({ default: (await import('./attendance-employee-portal')).AttendanceEmployeePortal }));
 const WorkspacePageContent = lazy(async () => ({ default: (await import('./workspace-page-content')).WorkspacePageContent }));
 import { getModule, modules, type ModuleId } from './modules';
 import { activeSession, clearActiveSession, listAvailableCompanies, signOutActiveSession } from './daily-sales-client';
@@ -19,7 +20,8 @@ import { getPage, getPageByLegacySection, pageRouteHash, pagesForModule, type Pa
 type Language = 'ar' | 'en';
 type Theme = 'green' | 'blue' | 'plum' | 'classic';
 type Appearance = 'light' | 'dark' | 'system';
-type LauncherBackground = 'emerald-light' | 'emerald-dark' | 'architectural-light' | 'desert-night' | 'saudi-heritage' | 'saudi-heritage-burned' | 'emerald-glass' | 'basira-vitality';
+type AppBackground = 'product-light' | 'product-white' | 'product-soft' | 'product-gray' | 'product-dark' | 'product-dimmed' | 'product-night';
+type ContainerSurface = 'white' | 'soft' | 'tinted' | 'beige' | 'gray';
 type ResolvedRoute = { moduleId: ModuleId; section: number; pageId: PageId; stage?: string };
 
 type Route = ResolvedRoute | null;
@@ -28,7 +30,8 @@ const recentStorageKey = 'baseer-erp.shell.recent.v2';
 const legacyRecentStorageKey = 'baseer-erp.shell.recent.v1';
 const themeStorageKey = 'baseer-erp.shell.theme.v1';
 const appearanceStorageKey = 'baseer-erp.shell.appearance.v1';
-const launcherBackgroundStorageKey = 'baseer-erp.shell.launcher-background.v1';
+const launcherBackgroundStorageKey = 'baseer-erp.shell.app-background.v2';
+const containerSurfaceStorageKey = 'baseer-erp.shell.container-surface.v1';
 const languageStorageKey = 'baseer.ui.locale.v1';
 const routeSessionKey = 'baseer.erp.shell.route.v2';
 const legacyRouteSessionKey = 'baseer.erp.shell.route.v1';
@@ -44,11 +47,22 @@ function readAppearancePreference(): Appearance {
   }
 }
 
-function ThemePicker({ language, theme, onTheme, background, onBackground }: { language: Language; theme: Theme; onTheme: (theme: Theme) => void; background?: LauncherBackground; onBackground?: (background: LauncherBackground) => void }) {
+function ThemePicker({ language, theme, onTheme, background, onBackground }: { language: Language; theme: Theme; onTheme: (theme: Theme) => void; background?: AppBackground; onBackground?: (background: AppBackground) => void }) {
   const text = appText(language);
   const [appearance, setAppearance] = useState<Appearance>(readAppearancePreference);
   const colors: Record<Theme, string> = { green: "#087f54", blue: "#1268a7", plum: "#7650a7", classic: "#9a7139" };
-  const backgrounds: ReadonlyArray<{ id: LauncherBackground; ar: string; en: string }> = [{ id: 'emerald-light', ar: 'أخضر هادئ', en: 'Calm green' }, { id: 'emerald-dark', ar: 'أخضر داكن', en: 'Executive dark' }, { id: 'architectural-light', ar: 'معماري مضيء', en: 'Architectural light' }, { id: 'desert-night', ar: 'ليل تنفيذي', en: 'Executive night' }, { id: 'saudi-heritage', ar: 'تراث سعودي', en: 'Saudi heritage' }, { id: 'saudi-heritage-burned', ar: 'تراث بنقش بصير', en: 'Heritage engraving' }, { id: 'emerald-glass', ar: 'زجاج زمردي', en: 'Emerald glass' }, { id: 'basira-vitality', ar: 'بصيرة نابضة', en: 'Basira vitality' }];
+  const backgrounds: ReadonlyArray<{ id: AppBackground; ar: string; en: string; color: string }> = [{ id: 'product-white', ar: 'أبيض عالمي', en: 'Global white', color: '#ffffff' }, { id: 'product-light', ar: 'محايد نهاري', en: 'Product light', color: '#f6f8fa' }, { id: 'product-soft', ar: 'محايد ناعم', en: 'Soft neutral', color: '#f4f7f4' }, { id: 'product-gray', ar: 'رمادي متوسط', en: 'Medium gray', color: '#8c8c8c' }, { id: 'product-dark', ar: 'ليلي عميق', en: 'Product dark', color: '#0d1117' }, { id: 'product-dimmed', ar: 'داكن هادئ', en: 'Product dimmed', color: '#22272e' }, { id: 'product-night', ar: 'فحمي ليلي', en: 'Product night', color: '#161b22' }];
+  const containerSurfaces: ReadonlyArray<{ id: ContainerSurface; ar: string; en: string; color: string }> = [{ id: 'white', ar: 'أبيض صلب', en: 'Solid white', color: '#ffffff' }, { id: 'soft', ar: 'هادئ', en: 'Soft neutral', color: '#f5f8f6' }, { id: 'tinted', ar: 'من لون النظام', en: 'Brand tint', color: '#e8f4ed' }, { id: 'beige', ar: 'بيج هادئ', en: 'Soft beige', color: '#f6f0e6' }, { id: 'gray', ar: 'رمادي فاتح', en: 'Light gray', color: '#f1f3f5' }];
+  const [containerSurface, setContainerSurface] = useState<ContainerSurface>(() => {
+    try {
+      const stored = localStorage.getItem(containerSurfaceStorageKey);
+      return stored === 'soft' || stored === 'tinted' || stored === 'beige' || stored === 'gray' || stored === 'white' ? stored : 'white';
+    } catch { return 'white'; }
+  });
+  useEffect(() => {
+    document.body.dataset.containerSurface = containerSurface;
+    try { localStorage.setItem(containerSurfaceStorageKey, containerSurface); } catch { /* Local storage can be unavailable. */ }
+  }, [containerSurface]);
   useEffect(() => {
     const media = window.matchMedia('(prefers-color-scheme: dark)');
     const apply = () => {
@@ -65,7 +79,20 @@ function ThemePicker({ language, theme, onTheme, background, onBackground }: { l
     { id: 'dark', label: text.appearanceDark, icon: '☾' },
     { id: 'system', label: text.appearanceSystem, icon: '◐' },
   ];
-  return <details className="theme-button"><summary aria-label={text.themePicker}><span className="theme-dot" style={{ width: "14px", height: "14px", background: colors[theme] }} /></summary><div className="theme-picker-menu"><section className="appearance-picker"><p>{text.appearance}</p><div>{appearances.map((item) => <button key={item.id} type="button" onClick={() => setAppearance(item.id)} className={appearance === item.id ? 'is-selected' : ''} aria-pressed={appearance === item.id}><span aria-hidden="true">{item.icon}</span>{item.label}</button>)}</div></section><div className="theme-color-grid">{(["green", "blue", "plum", "classic"] as const).map((item) => <button key={item} type="button" aria-label={item} onClick={(event) => { onTheme(item); event.currentTarget.closest("details")?.removeAttribute("open"); }} style={{ background: colors[item] }} className={theme === item ? 'is-selected' : ''} />)}</div>{background && onBackground ? <section className="launcher-background-picker"><p>{language === 'ar' ? 'خلفية شاشة التطبيقات' : 'App screen background'}</p>{backgrounds.map((item) => <button key={item.id} type="button" onClick={(event) => { onBackground(item.id); event.currentTarget.closest('details')?.removeAttribute('open'); }} className={background === item.id ? 'is-selected' : ''}><span className={`launcher-background-swatch launcher-background-swatch--${item.id}`} /><span>{language === 'ar' ? item.ar : item.en}</span><b>✓</b></button>)}</section> : null}</div></details>;
+  return <details className="theme-button">
+    <summary aria-label={text.themePicker}><span className="theme-dot" style={{ width: "14px", height: "14px", background: colors[theme] }} /></summary>
+    <div className="theme-picker-menu">
+      <section className="appearance-picker"><p>{text.appearance}</p><div>{appearances.map((item) => <button key={item.id} type="button" onClick={() => setAppearance(item.id)} className={appearance === item.id ? 'is-selected' : ''} aria-pressed={appearance === item.id}><span aria-hidden="true">{item.icon}</span>{item.label}</button>)}</div></section>
+      <div className="theme-color-grid">{(["green", "blue", "plum", "classic"] as const).map((item) => <button key={item} type="button" aria-label={item} onClick={(event) => { onTheme(item); event.currentTarget.closest("details")?.removeAttribute("open"); }} style={{ background: colors[item] }} className={theme === item ? 'is-selected' : ''} />)}</div>
+      {background && onBackground ? <section className="launcher-background-picker">
+        <p>{language === 'ar' ? 'خلفيات نهارية' : 'Day backgrounds'}</p>
+        <div className="launcher-background-choice-grid">{backgrounds.slice(0, 4).map((item) => <button key={item.id} type="button" onClick={() => onBackground(item.id)} className={background === item.id ? 'is-selected' : ''} aria-pressed={background === item.id}><span className="launcher-background-swatch" style={{ backgroundColor: item.color }} /><span>{language === 'ar' ? item.ar : item.en}</span><b>✓</b></button>)}</div>
+        <p>{language === 'ar' ? 'خلفيات ليلية' : 'Night backgrounds'}</p>
+        <div className="launcher-background-choice-grid">{backgrounds.slice(4).map((item) => <button key={item.id} type="button" onClick={() => onBackground(item.id)} className={background === item.id ? 'is-selected' : ''} aria-pressed={background === item.id}><span className="launcher-background-swatch" style={{ backgroundColor: item.color }} /><span>{language === 'ar' ? item.ar : item.en}</span><b>✓</b></button>)}</div>
+        <div className="container-surface-picker"><p>{language === 'ar' ? 'أسلوب الحاويات' : 'Container surfaces'}</p><div>{containerSurfaces.map((item) => <button key={item.id} type="button" onClick={() => setContainerSurface(item.id)} className={containerSurface === item.id ? 'is-selected' : ''} aria-pressed={containerSurface === item.id}><span style={{ backgroundColor: item.color }} /><span>{language === 'ar' ? item.ar : item.en}</span></button>)}</div></div>
+      </section> : null}
+    </div>
+  </details>;
 }
 
 function readLanguagePreference(): Language {
@@ -188,7 +215,7 @@ function QuickActionsMenu({ language, permissionCodes, onQuickAdvance }: { langu
   return <details className="quick-actions"><summary aria-label={label} title={label}>+</summary><div className="quick-actions__menu"><button type="button" onClick={(event) => { event.currentTarget.closest("details")?.removeAttribute("open"); onQuickAdvance(); }}><span aria-hidden="true">₊</span><span>{language === "ar" ? "إدخال سلفة" : "Enter advance"}</span></button></div></details>;
 }
 
-function AppHeader({ language, theme, background, activeModuleId, permissionCodes, onLanguage, onTheme, onBackground, onModules, onOpenModule, onQuickAdvance, onSignOut }: { language: Language; theme: Theme; background: LauncherBackground; activeModuleId: ModuleId; permissionCodes: readonly string[] | null; onLanguage: () => void; onTheme: (theme: Theme) => void; onBackground: (background: LauncherBackground) => void; onModules: () => void; onOpenModule: (moduleId: ModuleId) => void; onQuickAdvance: () => void; onSignOut: () => void }) {
+function AppHeader({ language, theme, background, activeModuleId, permissionCodes, onLanguage, onTheme, onBackground, onModules, onOpenModule, onQuickAdvance, onSignOut }: { language: Language; theme: Theme; background: AppBackground; activeModuleId: ModuleId; permissionCodes: readonly string[] | null; onLanguage: () => void; onTheme: (theme: Theme) => void; onBackground: (background: AppBackground) => void; onModules: () => void; onOpenModule: (moduleId: ModuleId) => void; onQuickAdvance: () => void; onSignOut: () => void }) {
   const text = appText(language);
   const [moduleNavigationOpen, setModuleNavigationOpen] = useState(false);
   const availableModules = visibleModules(permissionCodes);
@@ -232,7 +259,7 @@ function AppHeader({ language, theme, background, activeModuleId, permissionCode
   </header>;
 }
 
-function ModuleLauncher({ language, theme, background, onLanguage, onTheme, onBackground, onOpen, onQuickAdvance, onSignOut, permissionCodes }: { language: Language; theme: Theme; background: LauncherBackground; onLanguage: () => void; onTheme: (theme: Theme) => void; onBackground: (background: LauncherBackground) => void; onOpen: (route: ResolvedRoute) => void; onQuickAdvance: () => void; onSignOut: () => void; permissionCodes: readonly string[] | null }) {
+function ModuleLauncher({ language, theme, background, onLanguage, onTheme, onBackground, onOpen, onQuickAdvance, onSignOut, permissionCodes }: { language: Language; theme: Theme; background: AppBackground; onLanguage: () => void; onTheme: (theme: Theme) => void; onBackground: (background: AppBackground) => void; onOpen: (route: ResolvedRoute) => void; onQuickAdvance: () => void; onSignOut: () => void; permissionCodes: readonly string[] | null }) {
   const [recent, setRecent] = useState<ResolvedRoute[]>(readRecent);
   const text = appText(language);
   const visible = visibleModules(permissionCodes);
@@ -258,7 +285,7 @@ function Navigation({ moduleId, active, language, onSelect, permissionCodes }: {
     return <button key={routeIdentity(route)} type="button" onClick={() => onSelect(route)} className={"nav-item" + (routeIdentity(route) === routeIdentity(active) ? " active" : "")}><span className="nav-icon" style={{ '--section-accent': colors[position % colors.length] } as React.CSSProperties}><BaseerSectionIcon glyph={page?.icon ?? "dashboard"} /></span><span>{label}</span></button>;
   })}</nav>;
 }
-function ModuleWorkspaceContents({ route, language, theme, background, onLanguage, onTheme, onBackground, onModules, onOpenModule, onRoute, onStage, onQuickAdvance, onSignOut, permissionCodes, isOwner }: { route: ResolvedRoute; language: Language; theme: Theme; background: LauncherBackground; onLanguage: () => void; onTheme: (theme: Theme) => void; onBackground: (background: LauncherBackground) => void; onModules: () => void; onOpenModule: (moduleId: ModuleId) => void; onRoute: (route: ResolvedRoute) => void; onStage: (stage: string) => void; onQuickAdvance: () => void; onSignOut: () => void; permissionCodes: readonly string[] | null; isOwner: boolean }) {
+function ModuleWorkspaceContents({ route, language, theme, background, onLanguage, onTheme, onBackground, onModules, onOpenModule, onRoute, onStage, onQuickAdvance, onSignOut, permissionCodes, isOwner }: { route: ResolvedRoute; language: Language; theme: Theme; background: AppBackground; onLanguage: () => void; onTheme: (theme: Theme) => void; onBackground: (background: AppBackground) => void; onModules: () => void; onOpenModule: (moduleId: ModuleId) => void; onRoute: (route: ResolvedRoute) => void; onStage: (stage: string) => void; onQuickAdvance: () => void; onSignOut: () => void; permissionCodes: readonly string[] | null; isOwner: boolean }) {
   const module = getModule(route.moduleId);
   const text = appText(language);
   const sectionTitle = routeTitle(route, language);
@@ -282,14 +309,15 @@ function ModuleWorkspace(props: Parameters<typeof ModuleWorkspaceContents>[0]) {
 }
 
 export function App() {
+  const [authenticationRevision, setAuthenticationRevision] = useState(0);
   const [language, setLanguage] = useState<Language>(readLanguagePreference);
   const [theme, setTheme] = useState<Theme>(() => {
     const stored = localStorage.getItem(themeStorageKey);
     return stored === "blue" || stored === "plum" || stored === "classic" || stored === "green" ? stored : "green";
   });
-  const [background, setBackground] = useState<LauncherBackground>(() => {
+  const [background, setBackground] = useState<AppBackground>(() => {
     const stored = localStorage.getItem(launcherBackgroundStorageKey);
-    return stored === 'emerald-dark' || stored === 'architectural-light' || stored === 'desert-night' || stored === 'saudi-heritage' || stored === 'saudi-heritage-burned' || stored === 'emerald-glass' || stored === 'basira-vitality' || stored === 'emerald-light' ? stored : 'emerald-light';
+    return stored === 'product-light' || stored === 'product-white' || stored === 'product-soft' || stored === 'product-gray' || stored === 'product-dark' || stored === 'product-dimmed' || stored === 'product-night' ? stored : 'product-white';
   });
   const [route, setRoute] = useState<Route>(parseRoute);
   const [permissionCodes, setPermissionCodes] = useState<string[] | null>(null);
@@ -347,7 +375,7 @@ export function App() {
       if (permissionRetry < 1) window.setTimeout(() => setPermissionRetry((attempt) => attempt + 1), 900);
     });
     return () => { cancelled = true; };
-  }, [permissionRetry, route?.moduleId, route?.section]);
+  }, [authenticationRevision, permissionRetry, route?.moduleId, route?.section]);
 
   const open = (next: ResolvedRoute) => {
     persistRecent(next);
@@ -381,8 +409,19 @@ export function App() {
   }, [permissionCodes, route]);
 
   const session = activeSession();
+  // This is the intentionally minimal employee PWA route. It does not create
+  // a Baseer ERP browser session; the attendance API verifies the signed QR,
+  // PIN and one-time location on the server.
+  if (/^#attendance(?:[?=&]|$)/.test(window.location.hash)) {
+    return <Suspense fallback={<main className="module-page__placeholder" aria-busy="true" />}><AttendanceEmployeePortal language={language} /></Suspense>;
+  }
   if (!session) {
-    return <BaseerLogin language={language} onLanguage={toggleLanguage} themeControl={<ThemePicker language={language} theme={theme} onTheme={setTheme} />} />;
+    return <BaseerLogin
+      language={language}
+      onLanguage={toggleLanguage}
+      themeControl={<ThemePicker language={language} theme={theme} onTheme={setTheme} />}
+      onAuthenticated={() => setAuthenticationRevision((current) => current + 1)}
+    />;
   }
   if (permissionCodes === null) {
     return <main className="module-page__placeholder" aria-busy="true"><p role="status">{appText(language).checkingAccess}</p></main>;

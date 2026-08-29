@@ -7,6 +7,11 @@
   overflow: hidden;
 }
 
+.baseer-dialog.hr-payroll-create-dialog .daily-sales-dialog__body { padding-inline: var(--space-card); }
+.baseer-dialog.hr-payroll-create-dialog .hr-payroll-create { gap: var(--space-section); }
+.baseer-dialog.hr-payroll-create-dialog .hr-payroll-create__table-wrap { border-color: var(--border-subtle); background: var(--surface-raised); }
+.baseer-dialog.hr-payroll-create-dialog .hr-payroll-create__table-wrap th { background: var(--table-header); }
+
 .hr-payroll-create-dialog .daily-sales-dialog__header {
   align-items: center;
   padding: 1rem 1.25rem;
@@ -52,9 +57,9 @@
 .hr-payroll-create__loading { color: var(--muted); background: color-mix(in srgb, var(--surface) 94%, var(--brand) 6%); }
 .hr-payroll-create__notice { border: 1px solid #e5bd71; color: #754b13; background: #fff9ec; font-weight: 650; }
 
-.hr-payroll-create__table-wrap { overflow: auto; border: 1px solid var(--line); border-radius: .65rem; }
+.hr-payroll-create__table-wrap { overflow: auto; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); background: var(--surface-raised); }
 .hr-payroll-create__table-wrap table { width: 100%; min-width: 58rem; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
-.hr-payroll-create__table-wrap th { position: sticky; top: 0; z-index: 1; padding: .6rem .75rem; color: var(--muted); background: #f5f7f5; border-bottom: 1px solid var(--line); font-size: var(--font-caption); font-weight: 750; text-align: start; white-space: nowrap; }
+.hr-payroll-create__table-wrap th { position: sticky; top: 0; z-index: 1; padding: .6rem .75rem; color: var(--muted); background: var(--table-header); border-bottom: 1px solid var(--line); font-size: var(--font-caption); font-weight: 750; text-align: start; white-space: nowrap; }
 .hr-payroll-create__table-wrap td { padding: .55rem .75rem; border-bottom: 1px solid color-mix(in srgb, var(--line) 75%, transparent); color: var(--ink); font-size: var(--font-body); vertical-align: middle; }
 .hr-payroll-create__table-wrap tbody tr:last-child td { border-bottom: 0; }
 .hr-payroll-create__table-wrap tbody tr:hover td { background: color-mix(in srgb, var(--surface) 94%, var(--brand) 6%); }

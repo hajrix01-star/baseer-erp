@@ -8,3 +8,6 @@ createRoot(document.getElementById('root')!).render(
     <App />
   </StrictMode>,
 );
+
+// Attendance stays server-verified and online-only; installation is best-effort.
+if ('serviceWorker' in navigator) void navigator.serviceWorker.register('/service-worker.js');

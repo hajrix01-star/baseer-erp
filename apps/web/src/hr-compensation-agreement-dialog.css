@@ -4,6 +4,10 @@
   min-block-size: min(32rem, calc(100vh - 2rem));
 }
 
+.baseer-dialog.hr-salary-manager-dialog { --dialog-section-gap: var(--space-section); }
+.baseer-dialog .hr-salary-manager { gap: var(--dialog-section-gap); }
+.baseer-dialog .hr-salary-manager__operation { padding: var(--space-3) var(--space-4); border-color: var(--border-subtle); background: var(--surface-raised); }
+
 .hr-salary-manager-dialog .daily-sales-dialog__body {
   flex: 1 1 auto;
   min-block-size: 0;
@@ -99,3 +103,5 @@
     min-block-size: 3.5rem;
   }
 }
+
+.hr-salary-manager__summary { background: var(--surface-subtle); }

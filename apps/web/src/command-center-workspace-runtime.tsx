@@ -1,20 +1,19 @@
-import { Fragment, lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
-import { presentBaseerLoadError } from "./baseer-api-error";
+import { BaseerApiError, presentBaseerLoadError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
+import { BaseerChart, BaseerMarketingTimelineChart } from "./baseer-chart";
 import { BaseerCompanyReadQuery } from "./baseer-company-read-query";
 import { BaseerDialog } from "./baseer-dialog";
 import { BaseerMoneyInput, BaseerMonthPicker } from "./baseer-form-fields";
+import { BaseerMenu } from "./baseer-menu";
 import { BaseerPeriodFilter, baseerPeriodRange, defaultBaseerPeriodRange, type BaseerPeriodRange } from "./baseer-period-filter";
 import { BaseerEmptyState, BaseerSectionHeader, BaseerWorkspace } from "./baseer-workspace";
 import { DailySalesSignIn } from "./daily-sales-sign-in";
 import { activeSession, api, requestId, type ActiveSession } from "./daily-sales-client";
-import { formatCount, formatDate, formatMoney, formatNumber, formatNumberFixed, formatPercent } from "./number-format";
+import { formatCount, formatDate, formatMoney, formatMonthYear, formatNumber, formatNumberFixed, formatPercent } from "./number-format";
 import "./command-center-workspace.css";
-
-const LazyBaseerChart = lazy(() => import("./baseer-chart").then((module) => ({ default: module.BaseerChart })));
-const LazyMarketingTimelineChart = lazy(() => import("./baseer-chart").then((module) => ({ default: module.BaseerMarketingTimelineChart })));
 
 import { pageRouteHash } from "./page-registry";
 
@@ -31,10 +30,10 @@ type FinancialReport =
   | Readonly<{ state: "READY"; selectedPeriod: { from: string; to: string }; rows: readonly FinancialRow[]; vaults: readonly VaultLedgerItem[]; totals: FinancialTotals }>;
 
 type MarketingCampaign = Readonly<{ id: string; titleAr: string; titleEn: string | null }>;
-type MarketingDay = Readonly<{ businessDate: string; officialNetSales: string | null; salesDayQuality: "READY" | "PENDING" | "PARTIAL" | "MISSING"; dailySalesTarget: string | null; targetStatus: "NO_TARGET" | "NO_SALES" | "BELOW" | "NEAR" | "MET" | "EXCEEDED"; linkedActualSpend: string; linkedFinancialDocumentCount: number; activeCampaignIds: readonly string[] }>;
+type MarketingDay = Readonly<{ businessDate: string; officialNetSales: string | null; customerCount: number | null; salesDayQuality: "READY" | "PENDING" | "PARTIAL" | "MISSING"; dailySalesTarget: string | null; targetStatus: "NO_TARGET" | "NO_SALES" | "BELOW" | "NEAR" | "MET" | "EXCEEDED"; linkedActualSpend: string | null; linkedFinancialDocumentCount: number; campaignSpend: readonly { campaignId: string; amount: string; documentCount: number }[]; financialOutflows: string | null; financialOutflowDocumentCount: number; purchaseOutflows: string | null; purchaseOutflowDocumentCount: number; activeCampaignIds: readonly string[] }>;
 type MarketingRead = Readonly<{
   period: { fromBusinessDate: string; toBusinessDate: string; timezone: string };
-  sales: { dataQuality: string; payload: { netAmount: string } };
+  sales: { dataQuality: string; payload: { netAmount: string; customerCount: number }; coverage: { availableDays: number } };
   campaigns: readonly MarketingCampaign[];
   days: readonly MarketingDay[];
   weekdayAverages: readonly { weekday: number; averageOfficialNetSales: string | null; eligibleDayCount: number }[];
@@ -43,43 +42,41 @@ type MarketingRead = Readonly<{
   linkedActualGrossAmount: string;
   spendResult: { plannedCampaignCost: string; linkedActualSpend: string; officialNetSales: string | null; spendToSalesPercent: string | null; campaignCount: number; salesDataQuality: string; conclusionAr: string; conclusionEn: string };
 }>;
+type MarketingTimelineReadResult = Readonly<{ current: MarketingRead; previous: MarketingRead }>;
+type MarketingTimelineGranularity = "daily" | "monthly";
+type MarketingTimelineLocalState = { granularity: MarketingTimelineGranularity; month: string; year: string };
 
 const copy = {
   ar: {
     eyebrow: "مركز القيادة", title: "المال والتسويق",
     day: "اليوم", month: "الشهر", financial: "المال", vaultLedger: "دفتر الخزائن", vaultLedgerDescription: "حركة النقد عبر الخزائن والبنوك خلال الفترة المحددة.", cashIn: "إجمالي الداخل", cashOut: "إجمالي الخارج", netMovement: "صافي الحركة", comparedToPrevious: "مقارنة بالفترة المطابقة من الشهر السابق",
     share: "من المبيعات", financialChart: "الحركة المالية حسب البند", categoryChart: "تفصيل المشتريات والمصروفات حسب الفئة", shareBasis: "أساس النسبة", shareOfSpend: "من إجمالي الإنفاق", shareOfCollectedSales: "من إجمالي المبيعات", total: "المجموع", details: "تفصيل العمليات", sourceJournal: "العملية الأصلية", openSource: "فتح العملية الأصلية", openLocation: "فتحها في قسمها", back: "العودة للعمليات", loadingOperations: "جارٍ تحميل العمليات…", noOperations: "لا توجد عمليات ضمن هذا البند.", close: "إغلاق", debit: "مدين", credit: "دائن",
-    marketing: "التسويق", marketingDescription: "الحملات المسجلة، المبيعات الرسمية، والصرف المثبت المرتبط بها.",
-    campaigns: "الحملات في الفترة", plannedSpend: "التكلفة المخططة", linkedSpend: "الصرف المثبت المرتبط", officialSales: "المبيعات الرسمية", spendShare: "الصرف من المبيعات", marketingChart: "الخط الزمني للتسويق", marketingTimeline: "الخط الزمني", calendar: "التقويم", daily: "يومي", monthly: "شهري", campaignsView: "الحملات", calendarMonth: "شهر التقويم", salesTarget: "هدف المبيعات", saveTarget: "حفظ الهدف", saving: "جارٍ الحفظ…", noTarget: "لا يوجد هدف لهذا الشهر", targetBelow: "أقل من 80٪", targetNear: "من 80٪ إلى أقل من 100٪", targetMet: "من 100٪ إلى أقل من 120٪", targetExceeded: "120٪ فأعلى", targetNoSales: "لا توجد قراءة مبيعات", event: "مناسبة", dayDetails: "تفاصيل اليوم", daySales: "مبيعات اليوم", dayTarget: "هدف اليوم", dayStatus: "حالة الهدف", noEvent: "لا توجد مناسبة مرتبطة بهذا اليوم", openContext: "فتح المناسبات والسياق",
-    openMarketing: "فتح الأداء التسويقي", monthEvents: "مناسبات الشهر", loading: "جارٍ تحميل القراءة…", noData: "لا توجد بيانات مؤهلة للفترة المحددة.", noFinancialAccess: "لا تملك صلاحية قراءة التقرير المالي.", noMarketingAccess: "لا تملك صلاحية قراءة الأداء التسويقي.", retry: "إعادة المحاولة", dataBoundary: "تعرض الحملة سياقاً زمنياً ولا تثبت سبب المبيعات. بيانات الإعلانات الخارجية لا تظهر قبل الربط المعتمد.",
+    marketing: "التسويق", marketingDescription: "الحملات المسجلة، المبيعات الرسمية، والصرف على الحملات.",
+    campaigns: "الحملات في الفترة", plannedSpend: "التكلفة المخططة", linkedSpend: "الصرف على الحملات", officialSales: "المبيعات الرسمية", spendShare: "الصرف من المبيعات", marketingChart: "الخط الزمني للتسويق", marketingTimeline: "الخط الزمني", timelinePeriod: "فترة الخط الزمني", timelineMonth: "شهر الخط الزمني", timelineYear: "سنة الخط الزمني", calendar: "التقويم", daily: "يومي", monthly: "شهري", campaignsView: "الحملات", calendarMonth: "شهر التقويم", salesTarget: "هدف المبيعات", saveTarget: "حفظ الهدف", saving: "جارٍ الحفظ…", noTarget: "لا يوجد هدف لهذا الشهر", targetBelow: "أقل من 80٪", targetNear: "من 80٪ إلى أقل من 100٪", targetMet: "من 100٪ إلى أقل من 120٪", targetExceeded: "120٪ فأعلى", targetNoSales: "لا توجد قراءة مبيعات", event: "مناسبة", dayDetails: "تفاصيل اليوم", daySales: "مبيعات اليوم", dayTarget: "هدف اليوم", dayStatus: "حالة الهدف", noEvent: "لا توجد مناسبة مرتبطة بهذا اليوم", openContext: "فتح المناسبات والسياق",
+    openMarketing: "فتح الأداء التسويقي", monthEvents: "مناسبات الشهر", loading: "جارٍ تحميل القراءة…", noData: "لا توجد بيانات مؤهلة للفترة المحددة.", noFinancialAccess: "لا تملك صلاحية قراءة التقرير المالي.", noMarketingAccess: "لا تملك صلاحية قراءة الأداء التسويقي.", retry: "إعادة المحاولة",
   },
   en: {
     eyebrow: "Command center", title: "Money and marketing",
     day: "Day", month: "Month", financial: "Money", vaultLedger: "Vault ledger", vaultLedgerDescription: "Cash movement across vaults and banks in the selected period.", cashIn: "Total inflow", cashOut: "Total outflow", netMovement: "Net movement", comparedToPrevious: "Compared with the matching prior-month period",
     share: "of sales", financialChart: "Financial movement by item", categoryChart: "Purchase and expense breakdown by category", shareBasis: "Share basis", shareOfSpend: "Of total spend", shareOfCollectedSales: "Of total sales", total: "Total", details: "Operation details", sourceJournal: "Original operation", openSource: "Open original operation", openLocation: "Open in its section", back: "Back to operations", loadingOperations: "Loading operations…", noOperations: "There are no operations for this item.", close: "Close", debit: "Debit", credit: "Credit",
-    marketing: "Marketing", marketingDescription: "Recorded campaigns, official sales, and their posted linked spend.",
-    campaigns: "Campaigns in period", plannedSpend: "Planned cost", linkedSpend: "Posted linked spend", officialSales: "Official sales", spendShare: "Spend of sales", marketingChart: "Marketing timeline", marketingTimeline: "Timeline", calendar: "Calendar", daily: "Daily", monthly: "Monthly", campaignsView: "Campaigns", calendarMonth: "Calendar month", salesTarget: "Sales target", saveTarget: "Save target", saving: "Saving…", noTarget: "No target for this month", targetBelow: "Below 80%", targetNear: "80% to under 100%", targetMet: "100% to under 120%", targetExceeded: "120% or higher", targetNoSales: "No sales read", event: "Event", dayDetails: "Day details", daySales: "Day sales", dayTarget: "Day target", dayStatus: "Target status", noEvent: "No event is linked to this day", openContext: "Open events and context",
-    openMarketing: "Open marketing performance", monthEvents: "Month events", loading: "Loading the read…", noData: "There is no eligible data for the selected period.", noFinancialAccess: "You cannot read the financial report.", noMarketingAccess: "You cannot read marketing performance.", retry: "Retry", dataBoundary: "Campaigns provide temporal context; they do not prove sales causation. External advertising data remains unavailable until an approved connection exists.",
+    marketing: "Marketing", marketingDescription: "Recorded campaigns, official sales, and campaign spend.",
+    campaigns: "Campaigns in period", plannedSpend: "Planned cost", linkedSpend: "Campaign spend", officialSales: "Official sales", spendShare: "Spend of sales", marketingChart: "Marketing timeline", marketingTimeline: "Timeline", timelinePeriod: "Timeline period", timelineMonth: "Timeline month", timelineYear: "Timeline year", calendar: "Calendar", daily: "Daily", monthly: "Monthly", campaignsView: "Campaigns", calendarMonth: "Calendar month", salesTarget: "Sales target", saveTarget: "Save target", saving: "Saving…", noTarget: "No target for this month", targetBelow: "Below 80%", targetNear: "80% to under 100%", targetMet: "100% to under 120%", targetExceeded: "120% or higher", targetNoSales: "No sales read", event: "Event", dayDetails: "Day details", daySales: "Day sales", dayTarget: "Day target", dayStatus: "Target status", noEvent: "No event is linked to this day", openContext: "Open events and context",
+    openMarketing: "Open marketing performance", monthEvents: "Month events", loading: "Loading the read…", noData: "There is no eligible data for the selected period.", noFinancialAccess: "You cannot read the financial report.", noMarketingAccess: "You cannot read marketing performance.", retry: "Retry",
   },
 } as const;
 
 function hasCapability(codes: readonly string[] | null, capability: string) { return codes?.includes(capability) ?? false; }
+function canRetryReadNow(error: unknown) {
+  return !(error instanceof BaseerApiError && error.retry?.kind === "retry-after");
+}
 function moneyClass(money: MoneyDisplay) { return money.sign === "negative" ? "is-negative" : money.sign === "positive" ? "is-positive" : ""; }
-function AnimatedMoney({ money, language }: { money: MoneyDisplay; language: Language }) {
-  const target = Math.abs(Number(money.raw)); const [value, setValue] = useState(0);
-  useEffect(() => {
-    if (!Number.isFinite(target)) return;
-    if (typeof window === "undefined" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) { setValue(target); return; }
-    let frame = 0; const startedAt = performance.now(); const duration = 680;
-    setValue(0);
-    const tick = (now: number) => { const progress = Math.min((now - startedAt) / duration, 1); setValue(target * (1 - Math.pow(1 - progress, 3))); if (progress < 1) frame = requestAnimationFrame(tick); };
-    frame = requestAnimationFrame(tick); return () => cancelAnimationFrame(frame);
-  }, [target]);
-  const display = formatMoney(value, "SAR", language);
+function AnimatedMoney({ money, language, showCurrency = true }: { money: MoneyDisplay; language: Language; showCurrency?: boolean }) {
+  const value = Math.abs(Number(money.raw));
+  const display = showCurrency ? formatMoney(value, "SAR", language) : formatMoney(value, "SAR", language).replace(/\s+SAR$/, "");
   return <>{money.sign === "negative" ? "−" : ""}{display}</>;
 }
 function MoneyValue({ money, language, onClick, label }: { money: MoneyDisplay; language: Language; onClick?: () => void; label?: string }) {
-  const value = <bdi className={`command-center__money command-center__money--count-up ${moneyClass(money)}`} dir="ltr"><AnimatedMoney money={money} language={language} /></bdi>;
+  const value = <bdi className={`command-center__money ${moneyClass(money)}`} dir="ltr"><AnimatedMoney money={money} language={language} /></bdi>;
   return onClick ? <button type="button" className="command-center__amount-link" onClick={onClick} aria-label={label}>{value}</button> : value;
 }
 function MovementDelta({ current, previous, label }: { current: MoneyDisplay; previous: MoneyDisplay | null; label: string }) {
@@ -97,29 +94,39 @@ export function CommandCenterWorkspaceRuntime({ language, permissionCodes, secti
   const financialAllowed = hasCapability(permissionCodes, "reports.read");
   const marketingAllowed = hasCapability(permissionCodes, "marketing.insights.read");
   const calendarSection = section === 1;
+  const marketingSlot = marketingAllowed
+    ? <MarketingPanel language={language} session={session} embedded />
+    : <AccessCard title={text.marketing} message={text.noMarketingAccess} />;
   return <BaseerWorkspace className="command-center">
-    <BaseerSectionHeader eyebrow={text.eyebrow} title={calendarSection ? text.calendar : text.title} actions={<div className="command-center__period-actions"><BaseerButton type="button" variant={period.preset === "DAY" ? "primary" : "secondary"} aria-pressed={period.preset === "DAY"} onClick={() => setPeriod(baseerPeriodRange("DAY"))}>{text.day}</BaseerButton><BaseerButton type="button" variant={period.preset === "MONTH" ? "primary" : "secondary"} aria-pressed={period.preset === "MONTH"} onClick={() => setPeriod(baseerPeriodRange("MONTH"))}>{text.month}</BaseerButton><BaseerPeriodFilter language={language} value={period} onChange={setPeriod} presets={["DAY", "MONTH", "QUARTER", "YEAR", "RANGE"]} allowNonContiguousMonths={false} /></div>} />
+    <BaseerSectionHeader eyebrow={text.eyebrow} title={calendarSection ? text.calendar : text.title} actions={<div className="command-center__period-actions"><div className="command-center__period-shortcuts"><BaseerButton type="button" variant={period.preset === "DAY" ? "primary" : "secondary"} aria-pressed={period.preset === "DAY"} onClick={() => setPeriod(baseerPeriodRange("DAY"))}>{text.day}</BaseerButton><BaseerButton type="button" variant={period.preset === "MONTH" ? "primary" : "secondary"} aria-pressed={period.preset === "MONTH"} onClick={() => setPeriod(baseerPeriodRange("MONTH"))}>{text.month}</BaseerButton></div><div className="command-center__period-picker"><BaseerPeriodFilter language={language} value={period} onChange={setPeriod} presets={["DAY", "MONTH", "QUARTER", "YEAR", "RANGE"]} allowNonContiguousMonths={false} /></div></div>} />
     {permissionCodes === null ? <BaseerCard className="command-center__loading" aria-busy="true">{text.loading}</BaseerCard> : null}
-    <section className="command-center__sections">
-      {calendarSection ? marketingAllowed ? <MarketingCalendarPanel language={language} session={session} initialMonth={period.from.slice(0, 7)} canManageTarget={permissionCodes !== null && hasCapability(permissionCodes, "marketing.campaign.write")} /> : <AccessCard title={text.calendar} message={text.noMarketingAccess} /> : <><>{financialAllowed ? <FinancialPanel language={language} session={session} period={period} /> : <AccessCard title={text.financial} message={text.noFinancialAccess} />}</>{marketingAllowed ? <MarketingPanel language={language} session={session} period={period} /> : <AccessCard title={text.marketing} message={text.noMarketingAccess} />}</>}
+    <section key={calendarSection ? "calendar" : "financial"} className={`command-center__sections${calendarSection ? " is-calendar" : " is-financial"}`}>
+      {calendarSection ? marketingAllowed ? <MarketingCalendarPanel language={language} session={session} initialMonth={period.from.slice(0, 7)} canManageTarget={permissionCodes !== null && hasCapability(permissionCodes, "marketing.campaign.write")} /> : <AccessCard title={text.calendar} message={text.noMarketingAccess} /> : financialAllowed ? <FinancialPanel language={language} session={session} period={period} marketingSlot={marketingSlot} /> : <><AccessCard title={text.financial} message={text.noFinancialAccess} />{marketingSlot}</>}
     </section>
   </BaseerWorkspace>;
 }
 
 function AccessCard({ title, message }: { title: string; message: string }) { return <section className="command-center__section"><h2>{title}</h2><BaseerEmptyState title={message} /></section>; }
 
-function FinancialPanel({ language, session, period }: { language: Language; session: ActiveSession; period: BaseerPeriodRange }) {
+function FinancialPanel({ language, session, period, marketingSlot }: { language: Language; session: ActiveSession; period: BaseerPeriodRange; marketingSlot: ReactNode }) {
   const text = copy[language]; const query = useMemo(() => new URLSearchParams({ from: period.from, to: period.to, vatInclusive: "true" }), [period.from, period.to]);
   const previous = useMemo(() => previousCalendarPeriod(period.from, period.to), [period.from, period.to]); const previousQuery = useMemo(() => new URLSearchParams({ from: previous.from, to: previous.to, vatInclusive: "true" }), [previous]);
-  return <BaseerCompanyReadQuery session={session} resource="command-center.financial-performance" scope={[period.preset, period.from, period.to, previous.from, previous.to]} mode="live" load={async (current, signal) => { const [report, previousReport] = await Promise.all([api<FinancialReport>(current, `/reports/personal-cash-performance?${query.toString()}`, { signal }), api<FinancialReport>(current, `/reports/personal-cash-performance?${previousQuery.toString()}`, { signal })]); return { report, previousReport }; }}>{({ data, loading, error, refetch }) => <section className="command-center__section" aria-busy={loading}>
-    {loading ? <BaseerCard className="command-center__loading">{text.loading}</BaseerCard> : null}
-    {error ? <BaseerEmptyState title={presentBaseerLoadError(error, language, { ar: "القراءة المالية", en: "the financial read" })} action={<BaseerButton type="button" variant="secondary" onClick={() => void refetch().catch(() => undefined)}>{text.retry}</BaseerButton>} /> : null}
-    {!loading && !error && data?.report.state !== "READY" ? <BaseerEmptyState title={data?.report.messageAr || text.noData} /> : null}
-    {!loading && !error && data?.report.state === "READY" ? <FinancialRead language={language} session={session} period={period} report={data.report} previousReport={data.previousReport.state === "READY" ? data.previousReport : null} /> : null}
-  </section>}</BaseerCompanyReadQuery>;
+  const [stableRead, setStableRead] = useState<{ data: { report: FinancialReport; previousReport: FinancialReport }; period: BaseerPeriodRange } | null>(null);
+  return <BaseerCompanyReadQuery session={session} resource="command-center.financial-performance" scope={[period.preset, period.from, period.to, previous.from, previous.to]} mode="live" load={async (current, signal) => { const [report, previousReport] = await Promise.all([api<FinancialReport>(current, `/reports/personal-cash-performance?${query.toString()}`, { signal }), api<FinancialReport>(current, `/reports/personal-cash-performance?${previousQuery.toString()}`, { signal })]); return { report, previousReport }; }}>{({ data, loading, error, refetch }) => <FinancialPanelRead language={language} session={session} period={period} marketingSlot={marketingSlot} data={data} loading={loading} error={error} refetch={refetch} stableRead={stableRead} onStableRead={setStableRead} />}</BaseerCompanyReadQuery>;
 }
 
-function FinancialRead({ language, session, period, report, previousReport }: { language: Language; session: ActiveSession; period: BaseerPeriodRange; report: Extract<FinancialReport, { state: "READY" }>; previousReport: Extract<FinancialReport, { state: "READY" }> | null }) {
+function FinancialPanelRead({ language, session, period, marketingSlot, data, loading, error, refetch, stableRead, onStableRead }: { language: Language; session: ActiveSession; period: BaseerPeriodRange; marketingSlot: ReactNode; data: { report: FinancialReport; previousReport: FinancialReport } | undefined; loading: boolean; error: unknown; refetch: () => Promise<void>; stableRead: { data: { report: FinancialReport; previousReport: FinancialReport }; period: BaseerPeriodRange } | null; onStableRead: (read: { data: { report: FinancialReport; previousReport: FinancialReport }; period: BaseerPeriodRange }) => void }) {
+  const text = copy[language];
+  useEffect(() => { if (data) onStableRead({ data, period }); }, [data, onStableRead, period]);
+  const displayed = data ? { data, period } : stableRead;
+  const report = displayed?.data.report.state === "READY" ? displayed.data.report : null;
+  const previousReport = report && displayed?.data.previousReport.state === "READY" ? displayed.data.previousReport : null;
+  return <section className={`command-center__section${loading && displayed ? " is-refreshing" : ""}`} aria-busy={loading}>
+    <FinancialRead language={language} session={session} period={displayed?.period ?? period} report={report} previousReport={previousReport} marketingSlot={marketingSlot} loading={loading && !displayed} error={error && !displayed ? error : null} onRetry={refetch} />
+  </section>;
+}
+
+function FinancialRead({ language, session, period, report, previousReport, marketingSlot, loading, error, onRetry }: { language: Language; session: ActiveSession; period: BaseerPeriodRange; report: Extract<FinancialReport, { state: "READY" }> | null; previousReport: Extract<FinancialReport, { state: "READY" }> | null; marketingSlot: ReactNode; loading: boolean; error: unknown | null; onRetry: () => Promise<void> }) {
   const text = copy[language];
   const [selectedRow, setSelectedRow] = useState<FinancialRow | null>(null);
   const [evidence, setEvidence] = useState<FinancialEvidence | null>(null);
@@ -131,6 +138,18 @@ function FinancialRead({ language, session, period, report, previousReport }: { 
   const [message, setMessage] = useState("");
   const abortRef = useRef<AbortController | null>(null);
   useEffect(() => () => abortRef.current?.abort(), []);
+  if (!report) {
+    const financialContent = error
+      ? <BaseerCard className="command-center__breakdown command-center__empty-card" padding="compact"><BaseerEmptyState title={presentBaseerLoadError(error, language, { ar: "القراءة المالية", en: "the financial read" })} action={canRetryReadNow(error) ? <BaseerButton type="button" variant="secondary" onClick={() => void onRetry().catch(() => undefined)}>{text.retry}</BaseerButton> : null} /></BaseerCard>
+      : loading
+        ? <BaseerCard className="command-center__breakdown command-center__loading" padding="compact" aria-busy>{text.loading}</BaseerCard>
+        : <BaseerCard className="command-center__breakdown command-center__empty-card" padding="compact"><EmptyCardMessage language={language} /></BaseerCard>;
+    // Keep the timeline mounted in the same grid position while financial data
+    // loads. Both reads now start together, so the entire timeline does not
+    // wait for the financial report before its cards and chart can render.
+    const emptyRead = !loading && !error;
+    return <><div className="command-center__financial-grid">{financialContent}{marketingSlot}</div>{emptyRead ? <><div className="command-center__money-support"><EmptySupportCard language={language} title={text.vaultLedger} /><EmptySupportCard language={language} title={language === "ar" ? "متوسط المبيعات اليومية" : "Daily sales average"} /><EmptySupportCard language={language} title={language === "ar" ? "متوسط المبيعات اليومية حسب أسبوع الشهر" : "Daily sales average by month week"} /></div><BaseerCard className="command-center__category-breakdown command-center__empty-card" padding="compact"><h3>{text.categoryChart}</h3><EmptyCardMessage language={language} /></BaseerCard></> : null}</>;
+  }
   const topRows = report.rows.filter((row) => row.parentCode === null && row.code !== "sales_collections");
   const previousRows = new Map(previousReport?.rows.map((row) => [row.code, row]) ?? []);
   // This chart deliberately shows only the operational category roots. Child
@@ -179,12 +198,32 @@ function FinancialRead({ language, session, period, report, previousReport }: { 
   };
   const closeEvidence = () => { abortRef.current?.abort(); setSelectedRow(null); setEvidence(null); setSource(null); setSourceReference(null); setSelectedEventId(null); setMessage(""); setBusy(false); };
   const sourceTitle = source ? text.sourceJournal : selectedRow ? `${text.details} — ${financialRowLabel(selectedRow, language)}` : text.details;
-  return <><div className="command-center__financial-grid"><BaseerCard className="command-center__breakdown" padding="compact"><h3>{text.financialChart}</h3><ul>{topRows.map((row) => <li key={row.code}><span>{financialRowLabel(row, language)}</span><span><MoneyValue money={row.amount} language={language} label={`${text.details} — ${financialRowLabel(row, language)}`} onClick={() => void openEvidence(row)} /><small>{text.share} <PercentValue value={row.shareOfCollectedSalesPercent} /></small><MovementDelta current={row.amount} previous={previousRows.get(row.code)?.amount ?? null} label={text.comparedToPrevious} /></span></li>)}</ul><footer className="command-center__breakdown-total"><span>{text.total}</span><MoneyValue money={report.totals.netCashResult} language={language} label={text.total} onClick={() => void openEvidence({ code: "net_cash_result", labelAr: text.total, labelEn: text.total, kind: "SECTION", parentCode: null, direction: report.totals.netCashResult.sign === "negative" ? "OUTFLOW" : "INFLOW", eventCount: 0, amount: report.totals.netCashResult, shareOfCollectedSalesPercent: report.totals.netCashResultShareOfCollectedSalesPercent })} /></footer></BaseerCard>{chartPoints.length ? <Suspense fallback={<BaseerCard className="command-center__loading">{text.loading}</BaseerCard>}><LazyBaseerChart language={language} title={text.categoryChart} points={chartPoints} asOf={report.selectedPeriod.to} showSummary={false} presentation="inlineRows" inlineShareLabel={inlineShareLabel} headerActions={<div className="baseer-chart__share-basis" role="group" aria-label={text.shareBasis}><BaseerButton type="button" variant={categoryShareBasis === "spend" ? "primary" : "secondary"} aria-pressed={categoryShareBasis === "spend"} onClick={() => setCategoryShareBasis("spend")}>{text.shareOfSpend}</BaseerButton><BaseerButton type="button" variant={categoryShareBasis === "sales" ? "primary" : "secondary"} aria-pressed={categoryShareBasis === "sales"} onClick={() => setCategoryShareBasis("sales")}>{text.shareOfCollectedSales}</BaseerButton></div>} onPointClick={(point) => { const row = categoryRows.find((item) => item.code === point.id); if (row) void openEvidence(row); }} /></Suspense> : null}</div><div className="command-center__money-support"><VaultLedgerCard language={language} totals={report.totals} vaults={report.vaults} /><WeeklySalesAverageCard language={language} session={session} period={period} /></div><BaseerDialog open={selectedRow !== null} size="wide" language={language} title={sourceTitle} busy={busy} onClose={closeEvidence} footer={<>{message && selectedRow ? <BaseerButton type="button" variant="secondary" disabled={busy} onClick={() => void openEvidence(selectedRow)}>{text.retry}</BaseerButton> : null}<BaseerButton type="button" onClick={closeEvidence}>{text.close}</BaseerButton></>}>{source ? <SourceJournalView language={language} source={source} reference={sourceReference} onBack={() => { setSource(null); setSourceReference(null); }} /> : message ? <p className="command-center__evidence-message is-error">{message}</p> : !evidence ? <p className="command-center__evidence-message">{text.loadingOperations}</p> : evidence.items.length ? <EvidenceTable language={language} items={evidence.items} selectedEventId={selectedEventId} onSelect={(eventId) => setSelectedEventId((current) => current === eventId ? null : eventId)} onOpenSource={openSource} /> : <p className="command-center__evidence-message">{text.noOperations}</p>}</BaseerDialog></>;
+  const categoryChart = chartPoints.length ? <div className="command-center__category-breakdown"><BaseerChart language={language} title={text.categoryChart} points={chartPoints} asOf={report.selectedPeriod.to} showSummary={false} presentation="inlineRows" inlineShareLabel={inlineShareLabel} headerActions={<div className="baseer-chart__share-basis" role="group" aria-label={text.shareBasis}><BaseerButton type="button" variant={categoryShareBasis === "spend" ? "primary" : "secondary"} aria-pressed={categoryShareBasis === "spend"} onClick={() => setCategoryShareBasis("spend")}>{text.shareOfSpend}</BaseerButton><BaseerButton type="button" variant={categoryShareBasis === "sales" ? "primary" : "secondary"} aria-pressed={categoryShareBasis === "sales"} onClick={() => setCategoryShareBasis("sales")}>{text.shareOfCollectedSales}</BaseerButton></div>} onPointClick={(point) => { const row = categoryRows.find((item) => item.code === point.id); if (row) void openEvidence(row); }} /></div> : null;
+  return <><div className="command-center__financial-grid"><BaseerCard className="command-center__breakdown" padding="compact"><h3>{text.financialChart}</h3><ul>{topRows.map((row) => <li key={row.code}><span>{financialRowLabel(row, language)}</span><span><MoneyValue money={row.amount} language={language} label={`${text.details} — ${financialRowLabel(row, language)}`} onClick={() => void openEvidence(row)} /><small><PercentValue value={row.shareOfCollectedSalesPercent} /></small><MovementDelta current={row.amount} previous={previousRows.get(row.code)?.amount ?? null} label={text.comparedToPrevious} /></span></li>)}</ul><footer className="command-center__breakdown-total"><span>{text.total}</span><MoneyValue money={report.totals.netCashResult} language={language} label={text.total} onClick={() => void openEvidence({ code: "net_cash_result", labelAr: text.total, labelEn: text.total, kind: "SECTION", parentCode: null, direction: report.totals.netCashResult.sign === "negative" ? "OUTFLOW" : "INFLOW", eventCount: 0, amount: report.totals.netCashResult, shareOfCollectedSalesPercent: report.totals.netCashResultShareOfCollectedSalesPercent })} /></footer></BaseerCard>{marketingSlot}</div><div className="command-center__money-support"><VaultLedgerCard language={language} totals={report.totals} vaults={report.vaults} /><DailySalesAverageCard language={language} session={session} period={period} /><WeeklySalesAverageCard language={language} session={session} period={period} /></div>{categoryChart}<BaseerDialog open={selectedRow !== null} size="wide" language={language} title={sourceTitle} busy={busy} onClose={closeEvidence} footer={<>{message && selectedRow ? <BaseerButton type="button" variant="secondary" disabled={busy} onClick={() => void openEvidence(selectedRow)}>{text.retry}</BaseerButton> : null}<BaseerButton type="button" onClick={closeEvidence}>{text.close}</BaseerButton></>}>{source ? <SourceJournalView language={language} source={source} reference={sourceReference} onBack={() => { setSource(null); setSourceReference(null); }} /> : message ? <p className="command-center__evidence-message is-error">{message}</p> : !evidence ? <p className="command-center__evidence-message">{text.loadingOperations}</p> : evidence.items.length ? <EvidenceTable language={language} items={evidence.items} selectedEventId={selectedEventId} onSelect={(eventId) => setSelectedEventId((current) => current === eventId ? null : eventId)} onOpenSource={openSource} /> : <p className="command-center__evidence-message">{text.noOperations}</p>}</BaseerDialog></>;
+}
+
+function EmptySupportCard({ language, title }: { language: Language; title: string }) {
+  return <BaseerCard className="command-center__empty-card" padding="compact"><h3>{title}</h3><EmptyCardMessage language={language} /></BaseerCard>;
+}
+
+function EmptyCardMessage({ language }: { language: Language }) {
+  return <p className="command-center__empty-message" role="status">{language === "ar" ? "لا توجد بيانات لهذه الفترة" : "No data for this period"}</p>;
 }
 
 function VaultLedgerCard({ language, totals, vaults }: { language: Language; totals: FinancialTotals; vaults: readonly VaultLedgerItem[] }) {
   const text = copy[language];
-  return <BaseerCard className="command-center__vault-ledger command-center__breakdown" padding="compact"><header><div><h3>{text.vaultLedger}</h3><p>{text.vaultLedgerDescription}</p></div></header><div className="command-center__vault-ledger-table"><div className="command-center__vault-ledger-row is-head"><span>{language === "ar" ? "الخزينة" : "Vault"}</span><span>{text.cashIn}</span><span>{text.cashOut}</span><span>{language === "ar" ? "المتبقي" : "Balance"}</span></div>{vaults.map((vault) => <div className="command-center__vault-ledger-row" key={vault.vaultId}><strong>{language === "ar" ? vault.vaultNameAr : vault.vaultNameEn || vault.vaultNameAr}</strong><bdi className="is-inflow" dir="ltr"><AnimatedMoney money={vault.inflows} language={language} /></bdi><bdi className="is-outflow" dir="ltr"><AnimatedMoney money={vault.outflows} language={language} /></bdi><bdi className="is-balance" dir="ltr"><AnimatedMoney money={vault.balance} language={language} /></bdi></div>)}</div><footer className="command-center__breakdown-total"><span>{text.netMovement}</span><bdi className="command-center__vault-ledger-net" dir="ltr"><AnimatedMoney money={totals.netCashResult} language={language} /></bdi></footer></BaseerCard>;
+  return <BaseerCard className="command-center__vault-ledger command-center__breakdown" padding="compact"><header><div><h3>{text.vaultLedger}</h3><p>{text.vaultLedgerDescription}</p></div></header><div className="command-center__vault-ledger-table"><div className="command-center__vault-ledger-row is-head"><span>{language === "ar" ? "الخزينة" : "Vault"}</span><span>{text.cashIn}</span><span>{text.cashOut}</span><span>{language === "ar" ? "المتبقي" : "Balance"}</span></div>{vaults.map((vault) => <div className="command-center__vault-ledger-row" key={vault.vaultId}><strong>{language === "ar" ? vault.vaultNameAr : vault.vaultNameEn || vault.vaultNameAr}</strong><bdi className="is-inflow" dir="ltr"><AnimatedMoney money={vault.inflows} language={language} showCurrency={false} /></bdi><bdi className="is-outflow" dir="ltr"><AnimatedMoney money={vault.outflows} language={language} showCurrency={false} /></bdi><bdi className="is-balance" dir="ltr"><AnimatedMoney money={vault.balance} language={language} showCurrency={false} /></bdi></div>)}</div><footer className="command-center__breakdown-total"><span>{text.netMovement}</span><bdi className="command-center__vault-ledger-net" dir="ltr"><AnimatedMoney money={totals.netCashResult} language={language} showCurrency={false} /></bdi></footer></BaseerCard>;
+}
+
+type DailySalesAverageRead = Readonly<{ days: readonly MarketingDay[]; sales: { payload: { customerCount: number }; coverage: { availableDays: number } } }>;
+
+function DailySalesAverageCard({ language, session, period }: { language: Language; session: ActiveSession; period: BaseerPeriodRange }) {
+  const month = period.from.slice(0, 7); const current = useMemo(() => monthPeriod(month), [month]); const priorMonth = previousMonthValue(month); const prior = useMemo(() => monthPeriod(priorMonth), [priorMonth]);
+  const [currentRead, setCurrentRead] = useState<DailySalesAverageRead | null>(null); const [priorRead, setPriorRead] = useState<DailySalesAverageRead | null>(null);
+  useEffect(() => { const controller = new AbortController(); void Promise.all([api<DailySalesAverageRead>(session, `/marketing/calendar?from=${current.from}&to=${current.to}`, { signal: controller.signal }), api<DailySalesAverageRead>(session, `/marketing/calendar?from=${prior.from}&to=${prior.to}`, { signal: controller.signal })]).then(([nextCurrent, nextPrior]) => { setCurrentRead(nextCurrent); setPriorRead(nextPrior); }).catch(() => { if (!controller.signal.aborted) { setCurrentRead(null); setPriorRead(null); } }); return () => controller.abort(); }, [current.from, current.to, prior.from, prior.to, session]);
+  const ar = language === "ar"; const currentAverage = dailySalesAverage(currentRead); const priorAverage = dailySalesAverage(priorRead);
+  const averageRow = (label: string, note: string, value: ReturnType<typeof dailySalesAverage>) => <div className="command-center__daily-sales-average-row"><div><strong>{label}</strong><small>{note}</small></div><bdi dir="ltr">{value ? formatMoney(value.sales, "SAR", language) : "—"}</bdi><bdi dir="ltr">{value ? formatCount(value.customers, language) : "—"}</bdi></div>;
+  return <BaseerCard className="command-center__daily-sales-average" padding="compact"><header><div><h3>{ar ? "متوسط المبيعات اليومية" : "Daily sales average"}</h3><p>{ar ? "مبيعات وزبائن الأيام المكتملة فقط" : "Sales and customers for completed days only"}</p></div></header><div className="command-center__daily-sales-average-table" role="table" aria-label={ar ? "مقارنة متوسطات المبيعات اليومية" : "Daily sales average comparison"}><div className="command-center__daily-sales-average-row is-head" role="row"><span>{ar ? "الفترة" : "Period"}</span><span>{ar ? "متوسط المبيعات" : "Average sales"}</span><span>{ar ? "متوسط الزبائن" : "Average customers"}</span></div>{averageRow(formatMonthYear(priorMonth, language), ar ? "الشهر السابق" : "Previous month", priorAverage)}{averageRow(formatMonthYear(month, language), ar ? "حتى آخر يوم مكتمل" : "Through the latest completed day", currentAverage)}</div></BaseerCard>;
 }
 
 function WeeklySalesAverageCard({ language, session, period }: { language: Language; session: ActiveSession; period: BaseerPeriodRange }) {
@@ -200,6 +239,17 @@ function weeklySalesAverages(days: readonly MarketingDay[], from: string, to: st
   const daily = new Map<string, number>(); for (const day of days) if (day.officialNetSales !== null && day.salesDayQuality === "READY") daily.set(day.businessDate, Number(day.officialNetSales));
   const first = Number(from.slice(8)); const last = Number(to.slice(8)); const groups = Array.from({ length: Math.ceil((last - first + 1) / 7) }, (_, index) => ({ start: first + index * 7, end: Math.min(first + index * 7 + 6, last) }));
   return groups.map((group, index) => { const values = [...daily].filter(([date]) => { const day = Number(date.slice(8)); return day >= group.start && day <= group.end; }).map(([, amount]) => amount); return { label: `أسبوع ${index + 1} · ${group.start}–${group.end}`, average: values.length ? values.reduce((sum, amount) => sum + amount, 0) / values.length : null }; });
+}
+
+function dailySalesAverage(read: DailySalesAverageRead | null) {
+  if (!read) return null;
+  const eligible = read.days.filter((day) => day.salesDayQuality === "READY" && day.officialNetSales !== null);
+  if (!eligible.length) return null;
+  const dailyCustomers = eligible.filter((day) => typeof day.customerCount === "number");
+  const customers = dailyCustomers.length === eligible.length
+    ? dailyCustomers.reduce((sum, day) => sum + day.customerCount!, 0) / dailyCustomers.length
+    : read.sales.coverage.availableDays > 0 ? read.sales.payload.customerCount / read.sales.coverage.availableDays : null;
+  return { sales: eligible.reduce((sum, day) => sum + Number(day.officialNetSales), 0) / eligible.length, customers };
 }
 
 function EvidenceTable({ language, items, selectedEventId, onSelect, onOpenSource }: { language: Language; items: FinancialEvidence["items"]; selectedEventId: string | null; onSelect: (eventId: string) => void; onOpenSource: (eventId: string) => void }) {
@@ -228,20 +278,85 @@ function financialRowLabel(row: FinancialRow, language: Language) {
   } as Record<string, string>)[row.code] ?? row.labelAr;
 }
 
-function MarketingPanel({ language, session, period }: { language: Language; session: ActiveSession; period: BaseerPeriodRange }) {
-  const text = copy[language]; const query = useMemo(() => new URLSearchParams({ from: period.from, to: period.to }), [period.from, period.to]);
-  return <BaseerCompanyReadQuery session={session} resource="command-center.marketing" scope={[period.from, period.to]} load={(current, signal) => api<MarketingRead>(current, `/marketing/calendar?${query.toString()}`, { signal })}>{({ data, loading, error, refetch }) => <section className="command-center__section" aria-busy={loading}>
-    <header className="command-center__section-header"><div><h2>{text.marketing}</h2><p>{text.marketingDescription}</p></div><button type="button" className="command-center__link" onClick={() => { window.location.hash = pageRouteHash("marketing-calendar"); }}>{text.openMarketing}</button></header>
-    {loading ? <BaseerCard className="command-center__loading">{text.loading}</BaseerCard> : null}
-    {error ? <BaseerEmptyState title={presentBaseerLoadError(error, language, { ar: "قراءة التسويق", en: "the marketing read" })} action={<BaseerButton type="button" variant="secondary" onClick={() => void refetch().catch(() => undefined)}>{text.retry}</BaseerButton>} /> : null}
-    {!loading && !error && data ? <MarketingReadView language={language} data={data} /> : null}
-  </section>}</BaseerCompanyReadQuery>;
+function MarketingPanel({ language, session, embedded = false }: { language: Language; session: ActiveSession; embedded?: boolean }) {
+  const text = copy[language];
+  return <section className={embedded ? "command-center__timeline-slot" : "command-center__section"}>
+    {!embedded ? <header className="command-center__section-header"><div><h2>{text.marketing}</h2><p>{text.marketingDescription}</p></div><button type="button" className="command-center__link" onClick={() => { window.location.hash = pageRouteHash("marketing-calendar"); }}>{text.openMarketing}</button></header> : null}
+    <MarketingTimelineRead language={language} session={session} />
+  </section>;
 }
 
-function MarketingReadView({ language, data }: { language: Language; data: MarketingRead }) {
-  const [timelineMode, setTimelineMode] = useState<"daily" | "monthly" | "campaigns">("daily");
-  const text = copy[language]; return <><div className="command-center__metrics command-center__metrics--marketing"><TextMetricCard label={text.campaigns} value={String(data.spendResult.campaignCount)} /><TextMetricCard label={text.plannedSpend} value={data.spendResult.plannedCampaignCost} /><TextMetricCard label={text.linkedSpend} value={data.spendResult.linkedActualSpend} /><TextMetricCard label={text.officialSales} value={data.spendResult.officialNetSales ?? "—"} /><TextMetricCard label={text.spendShare} value={data.spendResult.spendToSalesPercent === null ? "—" : `${data.spendResult.spendToSalesPercent}%`} /></div><Suspense fallback={<BaseerCard className="command-center__loading">{text.loading}</BaseerCard>}><LazyMarketingTimelineChart language={language} title={text.marketingChart} days={data.days} campaigns={data.campaigns} context={data.context} asOf={data.period.toBusinessDate} mode={timelineMode} showModeControls onModeChange={setTimelineMode} /></Suspense><p className="command-center__boundary">{text.dataBoundary}</p></>;
+function MarketingTimelineRead({ language, session }: { language: Language; session: ActiveSession }) {
+  const storageKey = `baseer.command-center.marketing-timeline.${session.companyId}`;
+  const initial = useState(() => readMarketingTimelineState(storageKey))[0];
+  const [timelineGranularity, setTimelineGranularity] = useState<MarketingTimelineGranularity>(initial.granularity);
+  const [month, setMonth] = useState(initial.month);
+  const [year, setYear] = useState(initial.year);
+  useEffect(() => { window.sessionStorage.setItem(storageKey, JSON.stringify({ granularity: timelineGranularity, month, year })); }, [month, storageKey, timelineGranularity, year]);
+  const range = useMemo(() => timelineGranularity === "monthly" ? marketingYearRange(year) : marketingMonthRange(month), [month, timelineGranularity, year]);
+  const comparisonRange = useMemo(() => previousMarketingTimelineRange(range, timelineGranularity), [range, timelineGranularity]);
+  const query = useMemo(() => new URLSearchParams(range), [range]);
+  const comparisonQuery = useMemo(() => new URLSearchParams(comparisonRange), [comparisonRange]);
+  const text = copy[language];
+  const updateYear = (nextYear: string) => { setYear(nextYear); setMonth((current) => `${nextYear}${current.slice(4)}`); };
+  const [stableRead, setStableRead] = useState<{ data: MarketingTimelineReadResult; granularity: MarketingTimelineGranularity; month: string; year: string } | null>(null);
+  return <BaseerCompanyReadQuery session={session} resource="command-center.marketing.timeline" scope={[timelineGranularity, month, year, range.from, range.to, comparisonRange.from, comparisonRange.to]} load={async (current, signal) => {
+    const [main, previous] = await Promise.all([
+      api<MarketingRead>(current, `/marketing/calendar?${query.toString()}`, { signal }),
+      api<MarketingRead>(current, `/marketing/calendar?${comparisonQuery.toString()}`, { signal }),
+    ]);
+    return { current: main, previous };
+  }}>{({ data, loading, error, refetch }) => <MarketingTimelineReadState language={language} text={text} data={data} loading={loading} error={error} refetch={refetch} granularity={timelineGranularity} onGranularityChange={setTimelineGranularity} month={month} onMonthChange={setMonth} year={year} onYearChange={updateYear} stableRead={stableRead} onStableRead={setStableRead} />}</BaseerCompanyReadQuery>;
 }
+
+function MarketingTimelineReadState({ language, text, data, loading, error, refetch, granularity, onGranularityChange, month, onMonthChange, year, onYearChange, stableRead, onStableRead }: { language: Language; text: typeof copy[Language]; data: MarketingTimelineReadResult | undefined; loading: boolean; error: unknown; refetch: () => Promise<void>; granularity: MarketingTimelineGranularity; onGranularityChange: (mode: MarketingTimelineGranularity) => void; month: string; onMonthChange: (month: string) => void; year: string; onYearChange: (year: string) => void; stableRead: { data: MarketingTimelineReadResult; granularity: MarketingTimelineGranularity; month: string; year: string } | null; onStableRead: (read: { data: MarketingTimelineReadResult; granularity: MarketingTimelineGranularity; month: string; year: string }) => void }) {
+  useEffect(() => { if (data) onStableRead({ data, granularity, month, year }); }, [data, granularity, month, onStableRead, year]);
+  const displayed = data ? { data, granularity, month, year } : stableRead;
+  return <div className={loading && displayed ? "is-refreshing" : undefined} aria-busy={loading}>
+    {loading && !displayed ? <MarketingTimelineSkeleton language={language} /> : null}
+    {error && !displayed ? <BaseerEmptyState title={presentBaseerLoadError(error, language, { ar: "قراءة التسويق", en: "the marketing read" })} action={canRetryReadNow(error) ? <BaseerButton type="button" variant="secondary" onClick={() => void refetch().catch(() => undefined)}>{text.retry}</BaseerButton> : null} /> : null}
+    {displayed ? <MarketingReadView language={language} data={displayed.data.current} previousData={displayed.data.previous} timelineGranularity={displayed.granularity} onTimelineGranularityChange={onGranularityChange} month={displayed.month} onMonthChange={onMonthChange} year={displayed.year} onYearChange={onYearChange} /> : null}
+  </div>;
+}
+
+function MarketingTimelineSkeleton({ language }: { language: Language }) {
+  const ar = language === "ar";
+  return <section className="baseer-chart baseer-marketing-timeline baseer-marketing-timeline--command command-center__timeline-skeleton" aria-busy="true" aria-label={ar ? "جارٍ تجهيز الخط الزمني للتسويق" : "Preparing marketing timeline"}>
+    <header className="baseer-marketing-timeline__header"><div><p className="baseer-marketing-timeline__eyebrow">{ar ? "مركز القيادة" : "Command center"}</p><h3>{ar ? "الخط الزمني للتسويق" : "Marketing timeline"}</h3><small>{ar ? "يُحمّل الرسم وبيانات الفترة معًا…" : "Loading the chart and period data together…"}</small></div><div className="command-center__marketing-summary" aria-hidden="true">{["sales", "spend", "customers"].map((key) => <div className="command-center__marketing-summary-card" key={key}><i /><i /><i /></div>)}</div></header>
+    <div className="baseer-marketing-timeline__plot-shell"><div className="command-center__timeline-skeleton-toolbar" aria-hidden="true"><i /><i /><i /></div><div className="command-center__timeline-skeleton-plot" aria-hidden="true"><i /><i /><i /><i /><i /></div></div>
+  </section>;
+}
+
+function MarketingReadView({ language, data, previousData, timelineGranularity, onTimelineGranularityChange, month, onMonthChange, year, onYearChange }: { language: Language; data: MarketingRead; previousData: MarketingRead | null; timelineGranularity: MarketingTimelineGranularity; onTimelineGranularityChange: (mode: MarketingTimelineGranularity) => void; month: string; onMonthChange: (month: string) => void; year: string; onYearChange: (year: string) => void }) {
+  const text = copy[language];
+  const headerMetrics = <MarketingSummaryCards language={language} data={data} previousData={previousData} />;
+  const periodControl = <BaseerMenu label={text.timelinePeriod} trigger={<><strong>{timelineGranularity === "monthly" ? year : timelineMonthLabel(month, language)}</strong><span aria-hidden="true">⌄</span></>} triggerClassName="baseer-marketing-timeline__period-trigger" menuClassName="baseer-marketing-timeline__period-menu">{timelineGranularity === "monthly" ? timelineYearOptions(year).map((value) => <button key={value} type="button" role="menuitem" aria-current={value === year ? "true" : undefined} onClick={() => onYearChange(value)}>{value}</button>) : timelineMonthOptions(month).map((value) => <button key={value} type="button" role="menuitem" aria-current={value === month ? "true" : undefined} onClick={() => onMonthChange(value)}>{timelineMonthLabel(value, language)}</button>)}</BaseerMenu>;
+  return <BaseerMarketingTimelineChart language={language} title={text.marketingChart} days={data.days} campaigns={data.campaigns} context={data.context} asOf={data.period.toBusinessDate} mode={timelineGranularity} showModeControls onModeChange={onTimelineGranularityChange} headerMetrics={headerMetrics} periodControl={periodControl} />;
+}
+
+function MarketingSummaryCards({ language, data, previousData }: { language: Language; data: MarketingRead; previousData: MarketingRead | null }) {
+  const ar = language === "ar";
+  const current = marketingSummary(data); const previous = previousData ? marketingSummary(previousData) : null;
+  const items = [
+    { id: "sales", label: ar ? "المبيعات" : "Sales", icon: "↗", value: current.sales, prior: previous?.sales ?? null, tone: "sales" },
+    { id: "spend", label: ar ? "الصرف التسويقي" : "Marketing spend", icon: "◫", value: current.spend, prior: previous?.spend ?? null, tone: "spend" },
+    { id: "customers", label: ar ? "العملاء" : "Customers", icon: "◎", value: current.customers, prior: previous?.customers ?? null, tone: "customers" },
+  ] as const;
+  return <div className="baseer-marketing-timeline__metrics command-center__marketing-summary" aria-label={ar ? "ملخص الأداء التسويقي" : "Marketing performance summary"}>{items.map((item) => {
+    const change = marketingChange(item.value, item.prior);
+    return <section className={`command-center__marketing-summary-card is-${item.tone}`} key={item.id}><header><span aria-hidden="true">{item.icon}</span><strong>{item.label}</strong></header><bdi dir="ltr">{item.id === "customers" ? formatCount(item.value, language) : formatMoney(item.value, "SAR", language)}</bdi><small className={change === null ? "" : change >= 0 ? "is-up" : "is-down"}>{change === null ? (ar ? "لا تتوفر مقارنة" : "No comparison") : `${change >= 0 ? "+" : ""}${formatPercent(change, 1)} ${change >= 0 ? "↗" : "↘"}`}</small></section>;
+  })}</div>;
+}
+
+function marketingSummary(data: MarketingRead) {
+  return data.days.reduce((total, day) => ({
+    sales: total.sales + (day.officialNetSales === null ? 0 : Number(day.officialNetSales)),
+    spend: total.spend + (day.linkedActualSpend === null ? 0 : Number(day.linkedActualSpend)),
+    customers: total.customers + (day.customerCount ?? 0),
+  }), { sales: 0, spend: 0, customers: 0 });
+}
+
+function marketingChange(current: number, previous: number | null) { return previous !== null && previous > 0 ? ((current - previous) / previous) * 100 : null; }
 
 function MarketingCalendarPanel({ language, session, initialMonth, canManageTarget }: { language: Language; session: ActiveSession; initialMonth: string; canManageTarget: boolean }) {
   const [month, setMonth] = useState(initialMonth);
@@ -251,7 +366,7 @@ function MarketingCalendarPanel({ language, session, initialMonth, canManageTarg
   return <BaseerCompanyReadQuery session={session} resource="command-center.marketing.calendar" scope={[month]} load={(current, signal) => api<MarketingRead>(current, `/marketing/calendar?${query.toString()}`, { signal })}>{({ data, loading, error, refetch }) => {
     const text = copy[language];
     if (loading) return <BaseerCard className="command-center__loading">{text.loading}</BaseerCard>;
-    if (error) return <BaseerEmptyState title={presentBaseerLoadError(error, language, { ar: "تقويم التسويق", en: "the marketing calendar" })} action={<BaseerButton type="button" variant="secondary" onClick={() => void refetch().catch(() => undefined)}>{text.retry}</BaseerButton>} />;
+    if (error) return <BaseerEmptyState title={presentBaseerLoadError(error, language, { ar: "تقويم التسويق", en: "the marketing calendar" })} action={canRetryReadNow(error) ? <BaseerButton type="button" variant="secondary" onClick={() => void refetch().catch(() => undefined)}>{text.retry}</BaseerButton> : null} />;
     return data ? <MarketingCalendarView language={language} session={session} month={month} data={data} canManageTarget={canManageTarget} onMonthChange={setMonth} onSaved={() => void refetch().catch(() => undefined)} /> : null;
   }}</BaseerCompanyReadQuery>;
 }
@@ -278,16 +393,21 @@ function MarketingCalendarView({ language, session, month, data, canManageTarget
     finally { setBusy(false); }
   };
   return <BaseerCard className="command-center__calendar" padding="compact">
-    <header className="command-center__calendar-header"><div><h3>{text.calendar}</h3><small>{text.calendarMonth}</small></div><BaseerMonthPicker aria-label={text.calendarMonth} value={month} onChange={(event) => event.target.value && onMonthChange(event.target.value)} /></header>
-    <div className="command-center__target"><span>{text.salesTarget}</span>{canManageTarget ? <div><BaseerMoneyInput value={targetAmount} onValueChange={setTargetAmount} placeholder="0.00" aria-label={text.salesTarget} /><BaseerButton type="button" variant="secondary" disabled={busy || !targetAmount} onClick={() => void saveTarget()}>{busy ? text.saving : text.saveTarget}</BaseerButton></div> : <bdi dir="ltr">{storedTarget || text.noTarget}</bdi>}</div>
-    {monthEvents.length ? <section className="command-center__calendar-events" aria-label={text.monthEvents}><strong>{text.monthEvents}</strong><div>{monthEvents.map((event) => <button type="button" key={event.id} onClick={() => { window.location.hash = pageRouteHash("decision-timeline"); }}><span>{event.titleAr}</span><small dir="ltr">{event.startsOn} — {event.endsOn}</small></button>)}</div></section> : null}
+    <header className="command-center__calendar-header"><span>{text.calendarMonth}</span><BaseerMonthPicker aria-label={text.calendarMonth} value={month} onChange={(event) => event.target.value && onMonthChange(event.target.value)} /></header>
+    <div className="command-center__target"><span>{text.salesTarget}</span>{canManageTarget ? <div><BaseerMoneyInput value={targetAmount} onValueChange={setTargetAmount} placeholder="0.00" aria-label={text.salesTarget} /><BaseerButton type="button" variant="secondary" disabled={busy || !targetAmount} onClick={() => void saveTarget()}>{busy ? text.saving : text.saveTarget}</BaseerButton></div> : <bdi dir="ltr">{storedTarget || text.noTarget}</bdi>}{monthEvents.length ? <section className="command-center__calendar-events" aria-label={text.monthEvents}><strong>{text.monthEvents}</strong><div>{monthEvents.map((event) => <button type="button" key={event.id} onClick={() => { window.location.hash = pageRouteHash("decision-timeline"); }}><span>{event.titleAr}</span><small dir="ltr">{event.startsOn} — {event.endsOn}</small></button>)}</div></section> : null}</div>
     {message ? <p className="command-center__calendar-message">{message}</p> : null}<div className="command-center__calendar-legend" aria-label={text.salesTarget}><span className="is-below">{text.targetBelow}</span><span className="is-near">{text.targetNear}</span><span className="is-met">{text.targetMet}</span><span className="is-exceeded">{text.targetExceeded}</span><span className="is-no-sales">{text.targetNoSales}</span></div>
     <div className="command-center__calendar-body"><div><div className="command-center__calendar-weekdays">{weekdayLabels.map((label, weekday) => { const average = averagesByWeekday.get(weekday); return <span key={label} className="command-center__calendar-weekday"><strong>{label}</strong>{average?.averageOfficialNetSales ? <bdi dir="ltr">{formatNumber(average.averageOfficialNetSales)}</bdi> : null}</span>; })}</div><div className="command-center__calendar-grid">{cells.map((date, index) => { if (!date) return <span key={`blank-${index}`} className="command-center__calendar-empty" aria-hidden="true" />; const day = daysByDate.get(date); const events = eventsByDate.get(date) ?? []; const status = calendarTargetStatus(day, storedTarget); const label = `${date}: ${day?.officialNetSales ?? text.targetNoSales}${events.length ? ` · ${text.event}: ${events.map((event) => event.titleAr).join("، ")}` : ""}`; return <button type="button" key={date} className={`command-center__calendar-day${selectedDay?.businessDate === date ? " is-selected" : ""}${events.length ? " has-event" : ""} is-${status.toLowerCase().replaceAll("_", "-")}`} aria-label={label} title={label} onClick={() => setSelectedDate(date)}><bdi className="command-center__calendar-day-number" dir="ltr">{Number(date.slice(8))}</bdi><small className="command-center__calendar-day-sales" dir="ltr">{formatNumber(day?.officialNetSales)}</small>{events.length ? <span className="command-center__calendar-day-event">{events[0]?.titleAr}{events.length > 1 ? ` +${events.length - 1}` : ""}</span> : null}</button>; })}</div></div>
-      <aside className={`command-center__calendar-detail is-${selectedStatus.toLowerCase().replaceAll("_", "-")}`}><header><strong>{text.dayDetails}</strong><bdi dir="ltr">{selectedDay?.businessDate}</bdi></header><dl><div><dt>{text.daySales}</dt><dd dir="ltr">{formatNumber(selectedDay?.officialNetSales)}</dd></div><div><dt>{text.dayTarget}</dt><dd dir="ltr">{formatNumber(storedTarget)}</dd></div><div><dt>{text.dayStatus}</dt><dd>{targetStatusLabel(text, selectedStatus)}</dd></div></dl>{selectedEvents.length ? <div className="command-center__calendar-detail-events">{selectedEvents.map((event) => <button type="button" key={event.id} onClick={() => { window.location.hash = pageRouteHash("decision-timeline"); }}><strong>{event.titleAr}</strong><small dir="ltr">{event.startsOn} — {event.endsOn}</small></button>)}</div> : <p>{text.noEvent}</p>}</aside></div>
+      <aside className={`command-center__calendar-detail is-${selectedStatus.toLowerCase().replaceAll("_", "-")}`}><header><strong>{text.dayDetails}</strong><bdi dir="ltr">{selectedDay?.businessDate}</bdi></header><dl><div><dt>{text.daySales}</dt><dd dir="ltr">{formatNumber(selectedDay?.officialNetSales)}</dd></div><div><dt>{text.dayTarget}</dt><dd dir="ltr">{formatNumber(storedTarget)}</dd></div><div><dt>{text.dayStatus}</dt><dd>{targetStatusLabel(text, selectedStatus)}</dd></div><div className="command-center__calendar-detail-events"><dt>{text.event}</dt><dd>{selectedEvents.length ? selectedEvents.map((event) => <button type="button" key={event.id} onClick={() => { window.location.hash = pageRouteHash("decision-timeline"); }}><strong>{event.titleAr}</strong><small dir="ltr">{event.startsOn} — {event.endsOn}</small></button>) : <span>{text.noEvent}</span>}</dd></div></dl></aside></div>
   </BaseerCard>;
 }
 
 function marketingMonthRange(month: string) { const [year, calendarMonth] = month.split("-").map(Number); const from = `${month}-01`; const to = new Date(Date.UTC(year, calendarMonth, 0)).toISOString().slice(0, 10); return { from, to }; }
+function marketingYearRange(year: string) { return { from: `${year}-01-01`, to: `${year}-12-31` }; }
+function previousMarketingTimelineRange(range: Readonly<{ from: string; to: string }>, granularity: MarketingTimelineGranularity) { return granularity === "monthly" ? marketingYearRange(String(Number(range.from.slice(0, 4)) - 1)) : marketingMonthRange(previousMonthValue(range.from.slice(0, 7))); }
+function timelineYearOptions(selectedYear: string) { const currentYear = new Date().getUTCFullYear(); const start = Math.min(Number(selectedYear), currentYear - 5); const end = Math.max(Number(selectedYear), currentYear + 1); return Array.from({ length: end - start + 1 }, (_, index) => String(start + index)); }
+function timelineMonthOptions(selectedMonth: string) { const year = selectedMonth.slice(0, 4); return Array.from({ length: 12 }, (_, index) => `${year}-${String(index + 1).padStart(2, "0")}`); }
+function timelineMonthLabel(value: string, language: Language) { return formatMonthYear(value, language); }
+function readMarketingTimelineState(storageKey: string): MarketingTimelineLocalState { const fallbackMonth = defaultBaseerPeriodRange().from.slice(0, 7); const fallback: MarketingTimelineLocalState = { granularity: "daily", month: fallbackMonth, year: fallbackMonth.slice(0, 4) }; try { const value = JSON.parse(window.sessionStorage.getItem(storageKey) ?? "null") as Partial<MarketingTimelineLocalState> & { mode?: string } | null; if (!value || typeof value.month !== "string" || !/^\d{4}-\d{2}$/.test(value.month) || typeof value.year !== "string" || !/^\d{4}$/.test(value.year)) return fallback; return { granularity: value.granularity === "monthly" || value.mode === "monthly" ? "monthly" : "daily", month: value.month, year: value.year }; } catch { return fallback; } }
 function previousCalendarPeriod(from: string, to: string) { const shift = (value: string) => { const date = new Date(`${value}T00:00:00.000Z`); const day = date.getUTCDate(); const previousMonth = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() - 1, 1)); const lastDay = new Date(Date.UTC(previousMonth.getUTCFullYear(), previousMonth.getUTCMonth() + 1, 0)).getUTCDate(); return new Date(Date.UTC(previousMonth.getUTCFullYear(), previousMonth.getUTCMonth(), Math.min(day, lastDay))).toISOString().slice(0, 10); }; return { from: shift(from), to: shift(to) }; }
 function previousMonthValue(month: string) { const [year, value] = month.split("-").map(Number); return `${value === 1 ? year - 1 : year}-${String(value === 1 ? 12 : value - 1).padStart(2, "0")}`; }
 function monthPeriod(month: string) { const [year, value] = month.split("-").map(Number); return { from: `${month}-01`, to: `${month}-${String(new Date(Date.UTC(year, value, 0)).getUTCDate()).padStart(2, "0")}` }; }

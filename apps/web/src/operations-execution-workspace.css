@@ -8,3 +8,8 @@
 .operations-row-link { display: grid; gap: .15rem; width: 100%; padding: 0; border: 0; background: transparent; color: inherit; cursor: pointer; font: inherit; text-align: inherit; }
 .operations-row-link:hover strong { color: #08744d; text-decoration: underline; text-underline-offset: .18rem; }
 .operations-row-link:focus-visible { outline: 2px solid #08744d; outline-offset: .25rem; border-radius: .25rem; }
+
+/* Execution forms share the standard compact control rhythm. */
+.operations-purchase-summary { gap: var(--space-4); }
+.operations-purchase-request-meta { gap: var(--space-3); }
+.operations-payment-channel > div { gap: var(--space-2); }

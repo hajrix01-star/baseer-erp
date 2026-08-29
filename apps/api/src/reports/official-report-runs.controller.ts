@@ -15,7 +15,7 @@ import { REPORTS_READ_CAPABILITY } from './report-catalog.service.js';
  */
 @Controller('reports/official-runs')
 @UseGuards(ThrottlerGuard)
-@SkipThrottle({ authIp: true, authIdentity: true, report: true, fileWrite: true })
+@SkipThrottle({ authIp: true, authIdentity: true, report: true, fileWrite: true, attendancePin: true })
 @Throttle({ output: { limit: 20, ttl: 60_000, blockDuration: 60_000 } })
 export class OfficialReportRunsController {
   constructor(

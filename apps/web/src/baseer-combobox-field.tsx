@@ -4,7 +4,7 @@ import type { BaseerComboboxProps } from "./baseer-combobox";
 
 const LazyBaseerCombobox = lazy(async () => ({ default: (await import("./baseer-combobox")).BaseerCombobox }));
 
-type Props = BaseerComboboxProps;
+type Props = Omit<BaseerComboboxProps, "placeholder"> & { placeholder?: string };
 
 /**
  * Lazy screen gateway for BaseerCombobox. Feature modules import this facade
@@ -22,5 +22,5 @@ export function BaseerComboboxField(props: Props) {
     required={props.required}
     readOnly
     value={selected?.label ?? ""}
-  />}><LazyBaseerCombobox {...props} /></Suspense>;
+  />}><LazyBaseerCombobox {...props} placeholder={props.placeholder ?? ""} /></Suspense>;
 }

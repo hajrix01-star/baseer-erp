@@ -9,3 +9,10 @@
 .recurring-expense-form footer { display: flex; justify-content: flex-start; gap: 8px; }
 @media (max-width: 840px) { .recurring-expense-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .recurring-expense-grid .recurring-span { grid-column: span 2; } }
 @media (max-width: 620px) { .recurring-expense-grid { grid-template-columns: 1fr; } .recurring-expense-grid .recurring-span { grid-column: auto; } }
+
+/* Runtime form spacing is aligned with the shared workspace scale. */
+.recurring-expense-form { gap: var(--space-card); }
+.recurring-expense-form > header { gap: var(--space-4); }
+.recurring-expense-grid { gap: var(--space-3); }
+.recurring-expense-grid label { gap: var(--space-2); }
+.recurring-expense-form footer { gap: var(--space-2); }

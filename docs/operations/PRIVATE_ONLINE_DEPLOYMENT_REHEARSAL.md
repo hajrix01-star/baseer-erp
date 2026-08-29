@@ -20,7 +20,7 @@ Only the reverse proxy exposes HTTPS. PostgreSQL has no host port and remains on
 
 1. Choose the owner-controlled Hostinger server and subscribe to Hostinger daily server backups. Do not treat the live database volume itself as a backup. The adopted policy is recorded in `HOSTINGER_PRIVATE_HOSTING_AND_BACKUP_DECISION_2026-08-16.md`.
 2. Choose any available domain and point its DNS records to the private server. The domain may change later; **BASEER ERP** remains the product name.
-3. Copy `ops/private-online/.env.private-online.example` to `ops/private-online/.env.private-online`; replace every placeholder with unique secrets stored outside the repository. Prepare the permanent same-server file-storage bind mount before startup as described in `PRIVATE_ONLINE_FILE_STORAGE_AND_RECOVERY.md`.
+3. Copy `ops/private-online/.env.private-online.example` to `ops/private-online/.env.private-online`; replace every placeholder with unique secrets stored outside the repository. Prepare the permanent same-server file-storage bind mount before startup as described in `PRIVATE_ONLINE_FILE_STORAGE_AND_RECOVERY.md`. Create `backup-archives/` beneath it with write access for uid 1000; it is private encrypted archive storage and must never be reverse-proxy served. Keep archive worker and scheduler switches `false` until their isolated recovery rehearsal is accepted.
 4. Build the API runtime and migration images locally; this does not start the services:
 
    ```powershell
@@ -67,6 +67,10 @@ Only the reverse proxy exposes HTTPS. PostgreSQL has no host port and remains on
 4. Hostinger daily server backup coverage and retention are confirmed for the database volume and the permanent application-file bind mount.
 5. Restore a Hostinger backup into a disposable isolated environment and prove row counts, key reports, log-in behaviour, and an encrypted employee-document/logo read without touching production.
 6. Record the date, operator, backup identifier, restore result, and any corrective action in the governance evidence.
+
+## Noorix migration rehearsal
+
+Do not use a Baseer backup artifact as a Noorix importer. Before the final cutover, run the Noorix migration against a disposable Baseer database, compare the approved counts and financial reports, and record the source export fingerprint. On cutover day, stop Noorix writes, capture a final export, repeat the reconciliation, and only then admit users to Baseer. The source-specific intake manifest and mapping workbook are maintained under `docs/nurix-migration/` and do not contain real credentials or live data.
 
 ## Explicitly deferred
 

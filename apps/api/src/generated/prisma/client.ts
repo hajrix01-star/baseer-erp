@@ -97,6 +97,58 @@ export type AuditEvent = Prisma.AuditEventModel
  */
 export type IdempotencyReceipt = Prisma.IdempotencyReceiptModel
 /**
+ * Model BackupPolicy
+ * The policy is tenant/company owned and intentionally stores only schedule
+ * intent. The worker implementation is deferred until the execution gate.
+ */
+export type BackupPolicy = Prisma.BackupPolicyModel
+/**
+ * Model BackupJob
+ * Mutable progress is durable and therefore survives API/worker restarts.
+ * The actual archive exporter is deliberately not part of this foundation.
+ */
+export type BackupJob = Prisma.BackupJobModel
+/**
+ * Model BackupArtifact
+ * 
+ */
+export type BackupArtifact = Prisma.BackupArtifactModel
+/**
+ * Model BackupAuditEvent
+ * Append-only application evidence. The migration blocks UPDATE and DELETE;
+ * event hashes give later auditor tooling a deterministic chain to verify.
+ */
+export type BackupAuditEvent = Prisma.BackupAuditEventModel
+/**
+ * Model LegacyMigrationRun
+ * Snapshot-bound migration control plane. It records technical lineage only,
+ * never source credentials or unredacted business payloads.
+ */
+export type LegacyMigrationRun = Prisma.LegacyMigrationRunModel
+/**
+ * Model LegacyMigrationCompanyMap
+ * Source-company to target-company decisions are append-only. Target companies
+ * remain archived until a separately signed reconciliation and Go decision.
+ */
+export type LegacyMigrationCompanyMap = Prisma.LegacyMigrationCompanyMapModel
+/**
+ * Model LegacyMigrationRecordMap
+ * Append-only source-to-target lineage. Legacy IDs never become Baseer IDs.
+ */
+export type LegacyMigrationRecordMap = Prisma.LegacyMigrationRecordMapModel
+/**
+ * Model LegacyMigrationException
+ * A safe exception ledger: codes and technical references only, never source
+ * rows, passwords, storage keys, files, or unredacted PII.
+ */
+export type LegacyMigrationException = Prisma.LegacyMigrationExceptionModel
+/**
+ * Model LegacyMigrationReviewAction
+ * Human attestations are append-only. Their compact snapshot hash proves
+ * exactly which safe aggregate was reviewed without persisting source rows.
+ */
+export type LegacyMigrationReviewAction = Prisma.LegacyMigrationReviewActionModel
+/**
  * Model OwnerDailyBriefSnapshot
  * Immutable, tenant-scoped owner briefing receipt. A scheduled job writes at
  * most one snapshot per completed Riyadh business date; historical reads must
@@ -407,6 +459,31 @@ export type FinanceCategory = Prisma.FinanceCategoryModel
  */
 export type FinanceSupplier = Prisma.FinanceSupplierModel
 /**
+ * Model FinanceCounterpartyIdentity
+ * The approved identity is tenant-scoped while payable/expense facts remain
+ * company-scoped on FinanceSupplier and FinanceOutflowDocument.
+ */
+export type FinanceCounterpartyIdentity = Prisma.FinanceCounterpartyIdentityModel
+/**
+ * Model FinanceCounterpartyAlias
+ * An alias is explicit evidence, never a fuzzy-name guess. Its normalized
+ * value can belong to one identity only within a tenant.
+ */
+export type FinanceCounterpartyAlias = Prisma.FinanceCounterpartyAliasModel
+/**
+ * Model LegacyMigrationCounterpartyResolution
+ * Append-only identity resolution for one legacy supplier.  This is not a
+ * FinanceSupplier map: company-specific supplier creation remains a later,
+ * reviewed migration step.
+ */
+export type LegacyMigrationCounterpartyResolution = Prisma.LegacyMigrationCounterpartyResolutionModel
+/**
+ * Model LegacyMigrationCounterpartyCandidate
+ * A constrained copy of supplier identity evidence used only by the staging
+ * owner-review queue. It is immutable and cannot create a supplier itself.
+ */
+export type LegacyMigrationCounterpartyCandidate = Prisma.LegacyMigrationCounterpartyCandidateModel
+/**
  * Model SupplierCopyProvenance
  * 
  */
@@ -482,6 +559,102 @@ export type FinanceOutflowAllocation = Prisma.FinanceOutflowAllocationModel
  * sign-in user. An employee never receives platform access by being created.
  */
 export type HrEmployee = Prisma.HrEmployeeModel
+/**
+ * Model AttendanceEmployeeCredential
+ * Authentication material for the employee-facing PWA.  It deliberately has
+ * no User, AppSession, device, biometric, or raw-PIN relationship.
+ */
+export type AttendanceEmployeeCredential = Prisma.AttendanceEmployeeCredentialModel
+/**
+ * Model AttendanceBranch
+ * 
+ */
+export type AttendanceBranch = Prisma.AttendanceBranchModel
+/**
+ * Model AttendanceRosterPlan
+ * 
+ */
+export type AttendanceRosterPlan = Prisma.AttendanceRosterPlanModel
+/**
+ * Model AttendanceRosterPeakPeriod
+ * Peak-demand windows are operational planning guidance only. They never
+ * alter attendance evidence, working hours, overtime, or payroll.
+ */
+export type AttendanceRosterPeakPeriod = Prisma.AttendanceRosterPeakPeriodModel
+/**
+ * Model AttendanceRosterEntry
+ * 
+ */
+export type AttendanceRosterEntry = Prisma.AttendanceRosterEntryModel
+/**
+ * Model AttendanceRosterEntryPeriod
+ * 
+ */
+export type AttendanceRosterEntryPeriod = Prisma.AttendanceRosterEntryPeriodModel
+/**
+ * Model AttendanceScheduleTemplate
+ * 
+ */
+export type AttendanceScheduleTemplate = Prisma.AttendanceScheduleTemplateModel
+/**
+ * Model AttendanceScheduleTemplateVersion
+ * The row and its periods are append-only snapshots.  A later version takes
+ * effect from its own date, so historical reporting remains reproducible.
+ */
+export type AttendanceScheduleTemplateVersion = Prisma.AttendanceScheduleTemplateVersionModel
+/**
+ * Model AttendanceSchedulePeriod
+ * ISO weekday: 1 Monday through 7 Sunday. `endsNextDay` is explicit so
+ * 15:00-03:00 is a single overnight work period rather than an ambiguous day.
+ */
+export type AttendanceSchedulePeriod = Prisma.AttendanceSchedulePeriodModel
+/**
+ * Model AttendanceEmployeeScheduleAssignment
+ * Adding a new row changes an employee's template only from its effective
+ * date.  Historic assignments are immutable and never deleted.
+ */
+export type AttendanceEmployeeScheduleAssignment = Prisma.AttendanceEmployeeScheduleAssignmentModel
+/**
+ * Model AttendanceEmployeeWeeklyAdjustment
+ * Per-employee recurring weekly rest/partial-day adjustment.  A subsequent
+ * row with the same weekday and a later effective date supersedes it only for
+ * future business dates.
+ */
+export type AttendanceEmployeeWeeklyAdjustment = Prisma.AttendanceEmployeeWeeklyAdjustmentModel
+/**
+ * Model AttendanceEmployeeWeeklyAdjustmentPeriod
+ * 
+ */
+export type AttendanceEmployeeWeeklyAdjustmentPeriod = Prisma.AttendanceEmployeeWeeklyAdjustmentPeriodModel
+/**
+ * Model AttendanceScheduleException
+ * 
+ */
+export type AttendanceScheduleException = Prisma.AttendanceScheduleExceptionModel
+/**
+ * Model AttendanceScheduleExceptionPeriod
+ * 
+ */
+export type AttendanceScheduleExceptionPeriod = Prisma.AttendanceScheduleExceptionPeriodModel
+/**
+ * Model AttendanceEvent
+ * Immutable evidence from an attendance operation. Coordinates remain here
+ * for authorised review and are never copied into generic audit payloads.
+ */
+export type AttendanceEvent = Prisma.AttendanceEventModel
+/**
+ * Model AttendanceQrScanUse
+ * A kiosk QR is shared between employees during its short validity window,
+ * but an individual employee may consume that exact signed challenge once.
+ * This preserves kiosk throughput while stopping repeated scans of the same
+ * photographed/current QR by the same attendance identity.
+ */
+export type AttendanceQrScanUse = Prisma.AttendanceQrScanUseModel
+/**
+ * Model AttendanceWorkSession
+ * 
+ */
+export type AttendanceWorkSession = Prisma.AttendanceWorkSessionModel
 /**
  * Model HrEmployeePromotion
  * An immutable, operational career-history event. Compensation remains in

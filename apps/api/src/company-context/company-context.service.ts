@@ -33,7 +33,7 @@ export interface CompanyContextReceipt {
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const MAX_PERMISSION_CODE_LENGTH = 120;
-const COMPANY_MANAGER_CAPABILITIES = SYSTEM_ROLE_TEMPLATES.find((role) => role.code === "BASEER_COMPANY_MANAGER")?.permissions ?? [];
+const COMPANY_MANAGER_CAPABILITIES: readonly string[] = SYSTEM_ROLE_TEMPLATES.find((role) => role.code === "BASEER_COMPANY_MANAGER")?.permissions ?? [];
 
 @Injectable()
 export class CompanyContextService {
@@ -98,7 +98,7 @@ export class CompanyContextService {
           }),
           transaction.company.findFirst({
             where: { id: companyId, tenantId: claims.tenantId },
-            select: { status: true },
+            select: { status: true, migrationReviewLocked: true },
           }),
           transaction.companyMembership.findFirst({
             where: {
@@ -129,6 +129,8 @@ export class CompanyContextService {
           throw this.unauthorized();
         if (!company || company.status !== CompanyStatus.ACTIVE)
           throw this.forbidden();
+        if (company.migrationReviewLocked && requestedCapabilities.some((capability) => !capability.endsWith(".read")))
+          throw new ForbiddenException("This company is active for migration review only; operational changes are locked.");
         if (owner)
           return {
             principal: { tenantId: claims.tenantId, userId: claims.userId },
@@ -136,12 +138,12 @@ export class CompanyContextService {
             capabilities: requestedCapabilities,
           };
         if (!membership) throw this.forbidden();
-        // Do not make an active Company Manager wait for a deployment operator
-        // to backfill newly released system capabilities. This only ever adds
-        // the current template's grants to the immutable system role; custom
-        // roles retain their explicit, narrower selection.
+        // A system Company Manager is governed by the immutable role template.
+        // Resolve newly released template capabilities in memory instead of
+        // mutating RolePermission during an ordinary authorization read. This
+        // keeps authentication side-effect free and works with a least-privilege
+        // runtime database role; custom roles retain their explicit grants.
         const systemManager = await transaction.role.findFirst({ where: { id: membership.roleId, tenantId: claims.tenantId, code: "BASEER_COMPANY_MANAGER", isSystem: true }, select: { id: true } });
-        if (systemManager && COMPANY_MANAGER_CAPABILITIES.length) await transaction.rolePermission.createMany({ data: COMPANY_MANAGER_CAPABILITIES.map((permissionCode) => ({ tenantId: claims.tenantId, roleId: systemManager.id, permissionCode })), skipDuplicates: true });
         const grants = await transaction.rolePermission.findMany({
           where: {
             tenantId: claims.tenantId,
@@ -151,6 +153,11 @@ export class CompanyContextService {
           select: { permissionCode: true },
         });
         const granted = new Set(grants.map((grant) => grant.permissionCode));
+        if (systemManager) {
+          for (const capability of requestedCapabilities) {
+            if (COMPANY_MANAGER_CAPABILITIES.includes(capability)) granted.add(capability);
+          }
+        }
         if (requireAll && requestedCapabilities.some((capability) => !granted.has(capability)))
           throw this.forbidden();
         return {

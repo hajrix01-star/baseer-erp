@@ -129,6 +129,7 @@ const sessionExpiryStorageKey = "baseer.erp.session-expires-at";
 const companyStorageKey = "baseer.erp.company-id";
 let sessionExpiryReloadScheduled = false;
 let refreshInFlight: Promise<ActiveSession | null> | null = null;
+let refreshRateLimit: { accessToken: string; until: number; error: BaseerApiError } | null = null;
 export const baseerApiBaseUrl = (
   import.meta.env.VITE_BASEER_API_URL ?? "/v1"
 ).replace(/\/$/, "");
@@ -257,20 +258,25 @@ export async function api<T>(
   path: string,
   options?: RequestInit,
 ): Promise<T> {
-  try {
-    return await requestWithTransientReadRetry<T>(session, path, options);
-  } catch (error) {
-    if (!(error instanceof BaseerApiError) || error.status !== 401) throw error;
-    const refreshed = await refreshSessionOnce(session.accessToken);
-    if (!refreshed) throw error;
+  // A fresh sign-in can race a local development API restart or a token
+  // rotation already in flight. Keep the recovery bounded, but allow the
+  // newly rotated pair one additional authenticated retry before declaring
+  // the browser session invalid.
+  let current = session;
+  for (let refreshAttempt = 0; refreshAttempt < 2; refreshAttempt += 1) {
     try {
-      return await requestWithTransientReadRetry<T>(refreshed, path, options);
-    } catch (retryError) {
-      // A new access token was rejected as well: the session is no longer valid.
-      if (retryError instanceof BaseerApiError && retryError.status === 401) clearExpiredSession();
-      throw retryError;
+      return await requestWithTransientReadRetry<T>(current, path, options);
+    } catch (error) {
+      if (!(error instanceof BaseerApiError) || error.status !== 401) throw error;
+      const refreshed = await refreshSessionOnce(current.accessToken);
+      if (!refreshed) throw error;
+      current = refreshed;
     }
   }
+  // Two newly issued access tokens were rejected. This is an actual invalid
+  // session, rather than a transient handoff condition.
+  clearExpiredSession();
+  throw new BaseerApiError(401, "AUTHENTICATION_FAILED", null, null, null);
 }
 
 function canRetryTransientRead(error: unknown, options?: RequestInit) {
@@ -335,6 +341,10 @@ async function refreshSessionOnce(staleAccessToken: string): Promise<ActiveSessi
   const current = activeSession();
   if (!current) return null;
   if (current.accessToken !== staleAccessToken) return current;
+  if (refreshRateLimit?.accessToken === staleAccessToken) {
+    if (Date.now() < refreshRateLimit.until) throw refreshRateLimit.error;
+    refreshRateLimit = null;
+  }
   if (refreshInFlight) return refreshInFlight;
   refreshInFlight = (async () => {
     const beforeRefresh = activeSession();
@@ -348,11 +358,24 @@ async function refreshSessionOnce(staleAccessToken: string): Promise<ActiveSessi
     try {
       const receipt = await parseBaseerApiResponse<AuthSessionReceipt>(response);
       persistActiveSession(receipt, beforeRefresh.companyId);
+      refreshRateLimit = null;
       return activeSession();
     } catch (error) {
       if (error instanceof BaseerApiError && error.status === 401) {
         clearExpiredSession();
         return null;
+      }
+      if (error instanceof BaseerApiError && error.status === 429) {
+        // Preserve the server's cooldown locally: retries from several reads
+        // must not keep hitting /auth/refresh while the account is blocked.
+        const retryAfterSeconds = error.retry?.kind === "retry-after"
+          ? error.retry.retryAfterSeconds ?? 900
+          : 900;
+        refreshRateLimit = {
+          accessToken: staleAccessToken,
+          until: Date.now() + retryAfterSeconds * 1000,
+          error,
+        };
       }
       throw error;
     }

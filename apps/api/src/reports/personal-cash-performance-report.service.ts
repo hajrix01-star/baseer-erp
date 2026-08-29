@@ -157,6 +157,30 @@ export class PersonalCashPerformanceReportService {
     };
   }
 
+  /**
+   * Read-only daily projection using the exact sealed-vault scope of the
+   * financial-movement report. Amounts are positive display values; their
+   * ledger source remains an outflow.
+   */
+  async dailyOutflows(context: TrustedCompanyActorContext, period: Readonly<{ from: Date; to: Date }>) {
+    assertPeriod({ ...period, vatInclusive: true });
+    const ledgerRevision = await this.reportRuns.currentLedgerRevision(context);
+    const movements = await this.loadVaultMovements(context, ledgerRevision, { ...period, vatInclusive: true });
+    const byBusinessDate = new Map<string, { amount: Prisma.Decimal; count: number; purchaseAmount: Prisma.Decimal; purchaseCount: number }>();
+    for (const movement of movements) {
+      if (movement.direction !== FinanceCashPerformanceDirection.OUTFLOW || !movement.amount.lt(0)) continue;
+      const key = dateText(movement.businessDate);
+      const current = byBusinessDate.get(key) ?? { amount: new Prisma.Decimal(0), count: 0, purchaseAmount: new Prisma.Decimal(0), purchaseCount: 0 };
+      const isPurchase = movement.group === 'purchases';
+      byBusinessDate.set(key, {
+        amount: current.amount.plus(movement.amount.abs()), count: current.count + 1,
+        purchaseAmount: isPurchase ? current.purchaseAmount.plus(movement.amount.abs()) : current.purchaseAmount,
+        purchaseCount: isPurchase ? current.purchaseCount + 1 : current.purchaseCount,
+      });
+    }
+    return byBusinessDate;
+  }
+
   /** Creates the immutable boundary only when the caller is producing an official output. */
   async issueOfficialRun(context: TrustedCompanyActorContext, request: PersonalCashPerformanceRequest) {
     assertPeriod(request);

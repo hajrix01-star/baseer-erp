@@ -41,6 +41,7 @@ export function DailySalesWorkspace({
   const [session, setSession] = useState<ActiveSession | null>(activeSession);
   const [range, setRange] = useState(defaultBaseerPeriodRange);
   const [vaults, setVaults] = useState<Vault[]>([]);
+  const [workspaceLoaded, setWorkspaceLoaded] = useState(false);
   const [permissionCodes, setPermissionCodes] = useState<string[]>([]);
   const [ownerCanCorrect, setOwnerCanCorrect] = useState(false);
   const [closings, setClosings] = useState<Closing[]>([]);
@@ -100,6 +101,7 @@ export function DailySalesWorkspace({
         ? currentForms
         : initialShiftFormsForVaults(workspace.vaults),
     );
+    setWorkspaceLoaded(true);
     setStatus({ kind: "success", message: copy.loaded });
   }, [copy.loaded, range.from, range.to, range.months.join(",")]);
 
@@ -359,7 +361,7 @@ export function DailySalesWorkspace({
       {status.kind !== "idle" && (
         <p className={`daily-sales-message ${status.kind}`}>{status.message}</p>
       )}
-      {vaults.length === 0 && (
+      {workspaceLoaded && vaults.length === 0 && (
         <p className="daily-sales-message error">{copy.emptyChannels}</p>
       )}
       <DailySalesClosingDialog

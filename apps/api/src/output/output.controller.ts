@@ -23,7 +23,7 @@ import { OutputService } from './output.service.js';
 
 @Controller('outputs')
 @UseGuards(ThrottlerGuard)
-@SkipThrottle({ authIp: true, authIdentity: true, report: true, fileWrite: true })
+@SkipThrottle({ authIp: true, authIdentity: true, report: true, fileWrite: true, attendancePin: true })
 @Throttle({ output: { limit: 20, ttl: 60_000, blockDuration: 60_000 } })
 export class OutputController {
   constructor(private readonly output: OutputService) {}

@@ -2,7 +2,7 @@ import { createHash, randomUUID } from "node:crypto";
 import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { dirname, join, resolve, sep } from "node:path";
 import { ConflictException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
-import { companyContextLocationByCode, type AssignAdministrationMembershipRequest, type CreateAdministrationCompanyRequest, type CreateAdministrationRoleRequest, type CreateAdministrationUserRequest, type ResetAdministrationUserPasswordRequest, type ReplaceAdministrationUserAccessRequest, type UpdateAdministrationCompanyRequest, type UpdateAdministrationCompanyStatusRequest, type UpdateAdministrationRoleRequest, type UpdateAdministrationUserLoginRequest, type UpdateAdministrationUserDisplayNameRequest, type UploadAdministrationCompanyLogoRequest, type UpdateAdministrationUserStatusRequest, type WithdrawAdministrationMembershipRequest } from "@baseer-erp/contracts";
+import { companyContextLocationByCode, type AssignAdministrationMembershipRequest, type CreateAdministrationCompanyRequest, type CreateAdministrationRoleRequest, type CreateAdministrationUserRequest, type ResetAdministrationUserPasswordRequest, type ReplaceAdministrationUserAccessRequest, type UpdateAdministrationCompanyMigrationReviewLockRequest, type UpdateAdministrationCompanyRequest, type UpdateAdministrationCompanyStatusRequest, type UpdateAdministrationRoleRequest, type UpdateAdministrationUserLoginRequest, type UpdateAdministrationUserDisplayNameRequest, type UploadAdministrationCompanyLogoRequest, type UpdateAdministrationUserStatusRequest, type WithdrawAdministrationMembershipRequest } from "@baseer-erp/contracts";
 import { CompanyStatus, FileMetadataStatus, Prisma, SessionStatus, UserStatus } from "../generated/prisma/client.js";
 import { DatabaseService } from "../database/database.service.js";
 import { hashPassword } from "../identity/password.util.js";
@@ -17,7 +17,9 @@ export class AdministrationService {
 
   async overview(context: TrustedTenantAdministratorContext) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      await this.ensureSystemRoles(tx, context.tenantId);
+      // Loading the administration overview is a read operation. System-role
+      // bootstrapping belongs to explicit administration commands, never to a
+      // page view that should work with read-only database credentials.
       const [tenant, companies, users, roles] = await Promise.all([
         tx.tenant.findFirstOrThrow({ where: { id: context.tenantId }, select: { code: true } }),
         tx.company.findMany({ orderBy: { nameAr: "asc" }, take: 250, include: { branding: { select: { logoFileMetadataId: true } } } }),
@@ -27,7 +29,7 @@ export class AdministrationService {
       return {
         owner: context.isOwner,
         permissions: ADMINISTRATION_PERMISSION_CATALOG,
-        companies: companies.map((company) => ({ id: company.id, nameAr: company.nameAr, nameEn: company.nameEn, businessTimezone: company.businessTimezone, status: company.status, logoFileMetadataId: company.branding?.logoFileMetadataId ?? null, contextLocationCode: company.contextLocationCode, contextLocationLabelAr: company.contextLocationLabelAr, contextLatitude: company.contextLatitude?.toString() ? Number(company.contextLatitude.toString()) : null, contextLongitude: company.contextLongitude?.toString() ? Number(company.contextLongitude.toString()) : null })),
+        companies: companies.map((company) => ({ id: company.id, nameAr: company.nameAr, nameEn: company.nameEn, businessTimezone: company.businessTimezone, status: company.status, migrationReviewLocked: company.migrationReviewLocked, logoFileMetadataId: company.branding?.logoFileMetadataId ?? null, contextLocationCode: company.contextLocationCode, contextLocationLabelAr: company.contextLocationLabelAr, contextLatitude: company.contextLatitude?.toString() ? Number(company.contextLatitude.toString()) : null, contextLongitude: company.contextLongitude?.toString() ? Number(company.contextLongitude.toString()) : null })),
         users: users.map((user) => ({ id: user.id, login: displayLoginIdentifier(user.loginNormalized, tenant.code), nameAr: user.nameAr, nameEn: user.nameEn, preferredLanguage: user.preferredLanguage, avatarKind: user.avatarKind as "INITIALS" | "MALE" | "FEMALE", status: user.status, isOwner: user.tenantAdministrationAssignments.some((assignment) => assignment.isOwner), memberships: user.memberships.map((membership) => ({ companyId: membership.companyId, companyNameAr: membership.company.nameAr, companyNameEn: membership.company.nameEn, roleId: membership.roleId, roleNameAr: membership.role.nameAr, roleNameEn: membership.role.nameEn })) })),
         roles: roles.map((role) => ({ id: role.id, code: role.code, nameAr: role.nameAr, nameEn: role.nameEn, isSystem: role.isSystem, permissionCodes: role.grants.map((grant) => grant.permissionCode) })),
       };
@@ -291,6 +293,17 @@ export class AdministrationService {
       await tx.company.update({ where: { id: company.id }, data: { status: request.status } });
       await this.audit(tx, context, "administration.company.status_changed", "Company", company.id, { status: company.status }, { status: request.status, reason: request.reason });
       return { updated: true, status: request.status };
+    });
+  }
+  async updateCompanyMigrationReviewLock(context: TrustedTenantAdministratorContext, companyId: string, request: UpdateAdministrationCompanyMigrationReviewLockRequest) {
+    this.ownerOnly(context);
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const company = await tx.company.findFirst({ where: { id: companyId, tenantId: context.tenantId }, select: { id: true, migrationReviewLocked: true } });
+      if (!company) throw new NotFoundException("Company was not found.");
+      if (company.migrationReviewLocked === request.locked) return { updated: true, locked: company.migrationReviewLocked };
+      await tx.company.update({ where: { id: company.id }, data: { migrationReviewLocked: request.locked } });
+      await this.audit(tx, context, "administration.company.migration_review_lock_changed", "Company", company.id, { migrationReviewLocked: company.migrationReviewLocked }, { migrationReviewLocked: request.locked, reason: request.reason });
+      return { updated: true, locked: request.locked };
     });
   }
   private companyLogoStoragePath(storageReference: string): string {

@@ -12,13 +12,31 @@ import { RequestObservabilityInterceptor } from './observability/request-observa
 import { validatePrivateDeploymentConfiguration } from './operations/private-deployment-config.js';
 import { loadCanonicalLocalEnvironment } from './local-environment.js';
 
+function trustedReverseProxyAddresses(): string[] | false {
+  if (process.env.NODE_ENV !== 'production') return false;
+  return (process.env.BASEER_TRUSTED_REVERSE_PROXY_IPS ?? '')
+    .split(',')
+    .map((address) => address.trim())
+    .filter(Boolean);
+}
+
 async function bootstrap(): Promise<void> {
   loadCanonicalLocalEnvironment();
   validatePrivateDeploymentConfiguration();
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter({ logger: false }),
+    new FastifyAdapter({ logger: false, trustProxy: trustedReverseProxyAddresses() }),
   );
+  const corsOrigins = (process.env.BASEER_CORS_ALLOWED_ORIGINS ?? '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+  // Browser access is opt-in. A private deployment normally serves its SPA
+  // behind the same TLS edge, but a local review workspace can explicitly
+  // allow its own Vite origin without widening the API to arbitrary sites.
+  if (corsOrigins.length > 0) {
+    app.enableCors({ origin: corsOrigins });
+  }
   // The API does not serve the SPA. Report CSP violations without blocking a
   // response while the TLS edge and SPA asset policy are verified. HSTS stays
   // deployment-controlled because it is only safe after TLS is confirmed.

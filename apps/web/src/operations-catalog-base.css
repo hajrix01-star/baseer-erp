@@ -4,9 +4,10 @@
 .operations-catalog__header p { max-width: 54rem; margin: 0; color: var(--muted, #64748b); }
 .operations-catalog__metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; }
 .operations-catalog__metrics p { font-size: 1.55rem; margin: .25rem 0 0; font-weight: 750; }
-.operations-catalog__tabs { display: flex; gap: .4rem; padding-bottom: .55rem; overflow-x: auto; border-bottom: 1px solid var(--border, #d8e2dc); }
-.operations-catalog__tabs button { border: 0; background: transparent; color: var(--muted, #64748b); cursor: pointer; font: inherit; font-weight: 700; padding: .6rem .8rem; border-radius: .55rem; white-space: nowrap; }
-.operations-catalog__tabs button.is-active { background: #e8f5ef; color: #08744d; }
+.operations-catalog__tabs { display: flex; gap: var(--space-2); padding: var(--space-2); overflow-x: auto; border: 1px solid var(--border-subtle); border-radius: var(--card-radius); background: var(--tab-rail); }
+.operations-catalog__tabs button { border: 1px solid transparent; background: transparent; color: var(--muted); cursor: pointer; font: inherit; font-weight: 700; padding: .6rem .8rem; border-radius: var(--radius-sm); white-space: nowrap; }
+.operations-catalog__tabs button:hover { color: var(--brand-deep); background: color-mix(in srgb, var(--brand) 7%, var(--tab-rail)); }
+.operations-catalog__tabs button.is-active { border-color: color-mix(in srgb, var(--brand) 22%, var(--border-subtle)); background: var(--tab-active); color: var(--brand-deep); }
 .operations-catalog__search { width: min(100%, 30rem); padding: .7rem .85rem; border: 1px solid var(--border, #cbd8d0); border-radius: .55rem; font: inherit; }
 .operations-catalog__card-heading { display: flex; justify-content: space-between; gap: 1rem; align-items: start; margin-bottom: .7rem; }
 .operations-catalog__card-heading h3, .operations-catalog__card-heading p { margin: 0; }
@@ -17,5 +18,11 @@
 .operations-material-stages { display: flex; flex-wrap: wrap; align-items: center; gap: .28rem; }
 .operations-material-stages > span { display: inline-flex; align-items: center; gap: .28rem; }
 .operations-material-stages bdi { color: #7a8b81; font-size: .85rem; }
-.operations-material-stages em { padding: .24rem .5rem; border: 1px solid #d8e7de; border-radius: 99px; color: #244735; background: #f8fcf9; font-size: .76rem; font-style: normal; font-weight: 750; white-space: nowrap; }
+.operations-material-stages em { padding: .24rem .5rem; border: 1px solid var(--border-subtle); border-radius: 99px; color: var(--ink); background: var(--surface); font-size: .76rem; font-style: normal; font-weight: 750; white-space: nowrap; }
 @media (max-width: 720px) { .operations-catalog__metrics { grid-template-columns: 1fr; } }
+
+/* Shared workspace rhythm: keep catalog controls on the same surface scale as other modules. */
+.operations-catalog { gap: var(--space-section); }
+.operations-catalog__header { gap: var(--space-4); }
+.operations-catalog__metrics { gap: var(--space-3); }
+.operations-catalog__search { padding: var(--space-3); border-color: var(--field-border); border-radius: var(--control-radius); background: var(--surface); }

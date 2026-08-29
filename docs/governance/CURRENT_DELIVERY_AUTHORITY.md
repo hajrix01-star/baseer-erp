@@ -90,6 +90,25 @@ limited pilot.
 This is the single active business scope. The module register and quality
 evidence must change together with its acceptance state.
 
+## Owner-approved Backup & Recovery delivery — 2026-08-26
+
+The owner has authorised the bounded **Backup & Recovery Gate 1 foundation**
+for the private Baseer installation. This supersedes Marketing & Reputation as
+the active scope for new implementation; its existing work remains preserved,
+but no new Marketing work is authorised by this decision.
+
+The binding decision is
+[Backup & Recovery owner decision](../backup-recovery/BACKUP_RECOVERY_OWNER_DECISION_2026-08-26.md)
+and the starting architecture is
+[Backup & Recovery Gate 0 design](../backup-recovery/BACKUP_RECOVERY_GATE_0_DESIGN.md).
+The approved V1 is a Baseer-only company archive, local download for an
+authorised user, durable job/progress/audit controls, and restore-as-new-company.
+It excludes merge/overwrite restore, exposing or downloading the server-wide
+backup, a new cloud provider, pgBackRest, WAL/PITR, automated production
+recovery, or any production-readiness claim. The existing daily whole-server
+backup remains the owner-operated DR baseline and must be proven by an isolated
+restore rehearsal before a DR claim.
+
 ## Active cross-cutting enablement — 2026-08-22
 
 The owner has authorized the **Baseer Library Adoption operating authority**:

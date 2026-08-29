@@ -62,27 +62,6 @@ export class CompanyAccessService {
           session.expiresAt <= now
         )
           throw this.unauthorized();
-        // The paired SQL migrations cover normal deployments. This idempotent
-        // guard repairs existing system-manager roles as soon as they sign in;
-        // custom roles are deliberately untouched.
-        const companyManager = await transaction.role.findFirst({
-          where: {
-            tenantId: claims.tenantId,
-            code: "BASEER_COMPANY_MANAGER",
-            isSystem: true,
-          },
-          select: { id: true },
-        });
-        if (companyManager && COMPANY_MANAGER_CAPABILITIES.length) {
-          await transaction.rolePermission.createMany({
-            data: COMPANY_MANAGER_CAPABILITIES.map((permissionCode) => ({
-              tenantId: claims.tenantId,
-              roleId: companyManager.id,
-              permissionCode,
-            })),
-            skipDuplicates: true,
-          });
-        }
         if (owner) {
           return transaction.company
             .findMany({
@@ -103,6 +82,28 @@ export class CompanyAccessService {
                 ),
               })),
             );
+        }
+        // The paired SQL migrations cover normal deployments. This idempotent
+        // guard repairs existing system-manager roles as soon as a non-owner
+        // signs in; owners receive their permissions directly and must not
+        // mutate role grants merely to list their available companies.
+        const companyManager = await transaction.role.findFirst({
+          where: {
+            tenantId: claims.tenantId,
+            code: "BASEER_COMPANY_MANAGER",
+            isSystem: true,
+          },
+          select: { id: true },
+        });
+        if (companyManager && COMPANY_MANAGER_CAPABILITIES.length) {
+          await transaction.rolePermission.createMany({
+            data: COMPANY_MANAGER_CAPABILITIES.map((permissionCode) => ({
+              tenantId: claims.tenantId,
+              roleId: companyManager.id,
+              permissionCode,
+            })),
+            skipDuplicates: true,
+          });
         }
         return transaction.companyMembership
           .findMany({

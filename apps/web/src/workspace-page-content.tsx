@@ -3,6 +3,8 @@ import type { ModuleId } from "./modules";
 import type { PageId } from "./page-registry";
 
 const AdministrationWorkspace = lazy(async () => ({ default: (await import("./administration-workspace")).AdministrationWorkspace }));
+const BackupRecoveryWorkspace = lazy(async () => ({ default: (await import("./backup-recovery-workspace")).BackupRecoveryWorkspace }));
+const NurixMigrationWorkspace = lazy(async () => ({ default: (await import("./nurix-migration-workspace")).NurixMigrationWorkspace }));
 const CommandCenterSalesCalendar = lazy(async () => ({ default: (await import("./command-center-workspace")).CommandCenterWorkspace }));
 const DecisionIntelligenceWorkspace = lazy(async () => ({ default: (await import("./decision-intelligence-workspace")).DecisionIntelligenceWorkspace }));
 const MarketingWorkspace = lazy(async () => ({ default: (await import("./marketing-workspace")).MarketingWorkspace }));
@@ -26,7 +28,6 @@ const ReportsWorkspace = lazy(async () => ({ default: (await import("./reports-w
 const InternalVatReportWorkspace = lazy(async () => ({ default: (await import("./internal-vat-report-workspace")).InternalVatReportWorkspace }));
 const ReportDocumentsWorkspace = lazy(async () => ({ default: (await import("./report-documents-workspace")).ReportDocumentsWorkspace }));
 const OperationsCatalogWorkspace = lazy(async () => ({ default: (await import("./operations-catalog-workspace")).OperationsCatalogWorkspace }));
-const FeatureComingSoon = lazy(async () => ({ default: (await import("./feature-coming-soon")).FeatureComingSoon }));
 const VatSimulationWorkspace = lazy(async () => ({ default: (await import("./vat-simulation-workspace")).VatSimulationWorkspace }));
 
 type Props = {
@@ -47,7 +48,8 @@ function Fallback({ children }: { children: string }) {
 
 export function WorkspacePageContent({ route, language, permissionCodes, onStage, loading, loadingPurchases, loadingFinanceSetup, loadingVaults, loadingAdministration }: Props) {
   const content = route.moduleId === "reports" && route.pageId === "reports-hajri-tax" ? <VatSimulationWorkspace language={language} />
-    : route.moduleId === "administration" && route.pageId === "administration-backup" ? <FeatureComingSoon language={language} feature="backup" />
+    : route.moduleId === "administration" && route.pageId === "administration-backup" ? <BackupRecoveryWorkspace language={language} />
+    : route.moduleId === "administration" && route.pageId === "administration-nurix-migration" ? <NurixMigrationWorkspace language={language} />
     : route.moduleId === "operations" && route.section === 0 ? <OperationsOverviewWorkspace language={language} />
     : route.moduleId === "command" && route.section === 2 ? <SalesAnalyticsWorkspace language={language} />
     : route.moduleId === "decision" ? <DecisionIntelligenceWorkspace language={language} section={route.section} permissionCodes={permissionCodes} />

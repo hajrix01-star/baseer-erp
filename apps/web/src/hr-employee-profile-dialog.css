@@ -18,6 +18,9 @@
   align-content: start;
 }
 
+.baseer-dialog:has(.hr-employee-profile) .daily-sales-dialog__body { padding: var(--space-card); }
+.baseer-dialog:has(.hr-employee-profile) .hr-employee-profile { gap: var(--space-section); }
+
 .hr-payroll-settlements {
   display: grid;
   gap: .8rem;
@@ -196,3 +199,7 @@
     inline-size: 100%;
   }
 }
+
+.hr-payroll-settlements__scroll { background: var(--card-surface); }
+.hr-payroll-settlements thead th { background: var(--table-header); }
+.hr-document-filters { background: var(--surface-subtle); }

@@ -62,6 +62,8 @@ export type FinanceOutflowDocumentMinAggregateOutputType = {
   coverageStartMonth: number | null
   coverageMonths: number | null
   supplierId: string | null
+  supplierNameSnapshotAr: string | null
+  supplierNameSnapshotEn: string | null
   categoryId: string | null
   supplierInvoiceNumber: string | null
   supplierInvoiceNumberNormalized: string | null
@@ -95,6 +97,8 @@ export type FinanceOutflowDocumentMaxAggregateOutputType = {
   coverageStartMonth: number | null
   coverageMonths: number | null
   supplierId: string | null
+  supplierNameSnapshotAr: string | null
+  supplierNameSnapshotEn: string | null
   categoryId: string | null
   supplierInvoiceNumber: string | null
   supplierInvoiceNumberNormalized: string | null
@@ -128,6 +132,8 @@ export type FinanceOutflowDocumentCountAggregateOutputType = {
   coverageStartMonth: number
   coverageMonths: number
   supplierId: number
+  supplierNameSnapshotAr: number
+  supplierNameSnapshotEn: number
   categoryId: number
   supplierInvoiceNumber: number
   supplierInvoiceNumberNormalized: number
@@ -185,6 +191,8 @@ export type FinanceOutflowDocumentMinAggregateInputType = {
   coverageStartMonth?: true
   coverageMonths?: true
   supplierId?: true
+  supplierNameSnapshotAr?: true
+  supplierNameSnapshotEn?: true
   categoryId?: true
   supplierInvoiceNumber?: true
   supplierInvoiceNumberNormalized?: true
@@ -218,6 +226,8 @@ export type FinanceOutflowDocumentMaxAggregateInputType = {
   coverageStartMonth?: true
   coverageMonths?: true
   supplierId?: true
+  supplierNameSnapshotAr?: true
+  supplierNameSnapshotEn?: true
   categoryId?: true
   supplierInvoiceNumber?: true
   supplierInvoiceNumberNormalized?: true
@@ -251,6 +261,8 @@ export type FinanceOutflowDocumentCountAggregateInputType = {
   coverageStartMonth?: true
   coverageMonths?: true
   supplierId?: true
+  supplierNameSnapshotAr?: true
+  supplierNameSnapshotEn?: true
   categoryId?: true
   supplierInvoiceNumber?: true
   supplierInvoiceNumberNormalized?: true
@@ -371,6 +383,8 @@ export type FinanceOutflowDocumentGroupByOutputType = {
   coverageStartMonth: number | null
   coverageMonths: number | null
   supplierId: string | null
+  supplierNameSnapshotAr: string | null
+  supplierNameSnapshotEn: string | null
   categoryId: string
   supplierInvoiceNumber: string | null
   supplierInvoiceNumberNormalized: string | null
@@ -427,6 +441,8 @@ export type FinanceOutflowDocumentWhereInput = {
   coverageStartMonth?: Prisma.IntNullableFilter<"FinanceOutflowDocument"> | number | null
   coverageMonths?: Prisma.IntNullableFilter<"FinanceOutflowDocument"> | number | null
   supplierId?: Prisma.UuidNullableFilter<"FinanceOutflowDocument"> | string | null
+  supplierNameSnapshotAr?: Prisma.StringNullableFilter<"FinanceOutflowDocument"> | string | null
+  supplierNameSnapshotEn?: Prisma.StringNullableFilter<"FinanceOutflowDocument"> | string | null
   categoryId?: Prisma.UuidFilter<"FinanceOutflowDocument"> | string
   supplierInvoiceNumber?: Prisma.StringNullableFilter<"FinanceOutflowDocument"> | string | null
   supplierInvoiceNumberNormalized?: Prisma.StringNullableFilter<"FinanceOutflowDocument"> | string | null
@@ -472,6 +488,8 @@ export type FinanceOutflowDocumentOrderByWithRelationInput = {
   coverageStartMonth?: Prisma.SortOrderInput | Prisma.SortOrder
   coverageMonths?: Prisma.SortOrderInput | Prisma.SortOrder
   supplierId?: Prisma.SortOrderInput | Prisma.SortOrder
+  supplierNameSnapshotAr?: Prisma.SortOrderInput | Prisma.SortOrder
+  supplierNameSnapshotEn?: Prisma.SortOrderInput | Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   supplierInvoiceNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   supplierInvoiceNumberNormalized?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -523,6 +541,8 @@ export type FinanceOutflowDocumentWhereUniqueInput = Prisma.AtLeast<{
   coverageStartMonth?: Prisma.IntNullableFilter<"FinanceOutflowDocument"> | number | null
   coverageMonths?: Prisma.IntNullableFilter<"FinanceOutflowDocument"> | number | null
   supplierId?: Prisma.UuidNullableFilter<"FinanceOutflowDocument"> | string | null
+  supplierNameSnapshotAr?: Prisma.StringNullableFilter<"FinanceOutflowDocument"> | string | null
+  supplierNameSnapshotEn?: Prisma.StringNullableFilter<"FinanceOutflowDocument"> | string | null
   categoryId?: Prisma.UuidFilter<"FinanceOutflowDocument"> | string
   supplierInvoiceNumber?: Prisma.StringNullableFilter<"FinanceOutflowDocument"> | string | null
   supplierInvoiceNumberNormalized?: Prisma.StringNullableFilter<"FinanceOutflowDocument"> | string | null
@@ -568,6 +588,8 @@ export type FinanceOutflowDocumentOrderByWithAggregationInput = {
   coverageStartMonth?: Prisma.SortOrderInput | Prisma.SortOrder
   coverageMonths?: Prisma.SortOrderInput | Prisma.SortOrder
   supplierId?: Prisma.SortOrderInput | Prisma.SortOrder
+  supplierNameSnapshotAr?: Prisma.SortOrderInput | Prisma.SortOrder
+  supplierNameSnapshotEn?: Prisma.SortOrderInput | Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   supplierInvoiceNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   supplierInvoiceNumberNormalized?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -609,6 +631,8 @@ export type FinanceOutflowDocumentScalarWhereWithAggregatesInput = {
   coverageStartMonth?: Prisma.IntNullableWithAggregatesFilter<"FinanceOutflowDocument"> | number | null
   coverageMonths?: Prisma.IntNullableWithAggregatesFilter<"FinanceOutflowDocument"> | number | null
   supplierId?: Prisma.UuidNullableWithAggregatesFilter<"FinanceOutflowDocument"> | string | null
+  supplierNameSnapshotAr?: Prisma.StringNullableWithAggregatesFilter<"FinanceOutflowDocument"> | string | null
+  supplierNameSnapshotEn?: Prisma.StringNullableWithAggregatesFilter<"FinanceOutflowDocument"> | string | null
   categoryId?: Prisma.UuidWithAggregatesFilter<"FinanceOutflowDocument"> | string
   supplierInvoiceNumber?: Prisma.StringNullableWithAggregatesFilter<"FinanceOutflowDocument"> | string | null
   supplierInvoiceNumberNormalized?: Prisma.StringNullableWithAggregatesFilter<"FinanceOutflowDocument"> | string | null
@@ -637,6 +661,8 @@ export type FinanceOutflowDocumentCreateInput = {
   coverageYear?: number | null
   coverageStartMonth?: number | null
   coverageMonths?: number | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
   supplierInvoiceMissingReason?: string | null
@@ -680,6 +706,8 @@ export type FinanceOutflowDocumentUncheckedCreateInput = {
   coverageStartMonth?: number | null
   coverageMonths?: number | null
   supplierId?: string | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
@@ -714,6 +742,8 @@ export type FinanceOutflowDocumentUpdateInput = {
   coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -757,6 +787,8 @@ export type FinanceOutflowDocumentUncheckedUpdateInput = {
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -796,6 +828,8 @@ export type FinanceOutflowDocumentCreateManyInput = {
   coverageStartMonth?: number | null
   coverageMonths?: number | null
   supplierId?: string | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
@@ -824,6 +858,8 @@ export type FinanceOutflowDocumentUpdateManyMutationInput = {
   coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -855,6 +891,8 @@ export type FinanceOutflowDocumentUncheckedUpdateManyInput = {
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -925,6 +963,8 @@ export type FinanceOutflowDocumentCountOrderByAggregateInput = {
   coverageStartMonth?: Prisma.SortOrder
   coverageMonths?: Prisma.SortOrder
   supplierId?: Prisma.SortOrder
+  supplierNameSnapshotAr?: Prisma.SortOrder
+  supplierNameSnapshotEn?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   supplierInvoiceNumber?: Prisma.SortOrder
   supplierInvoiceNumberNormalized?: Prisma.SortOrder
@@ -969,6 +1009,8 @@ export type FinanceOutflowDocumentMaxOrderByAggregateInput = {
   coverageStartMonth?: Prisma.SortOrder
   coverageMonths?: Prisma.SortOrder
   supplierId?: Prisma.SortOrder
+  supplierNameSnapshotAr?: Prisma.SortOrder
+  supplierNameSnapshotEn?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   supplierInvoiceNumber?: Prisma.SortOrder
   supplierInvoiceNumberNormalized?: Prisma.SortOrder
@@ -1002,6 +1044,8 @@ export type FinanceOutflowDocumentMinOrderByAggregateInput = {
   coverageStartMonth?: Prisma.SortOrder
   coverageMonths?: Prisma.SortOrder
   supplierId?: Prisma.SortOrder
+  supplierNameSnapshotAr?: Prisma.SortOrder
+  supplierNameSnapshotEn?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   supplierInvoiceNumber?: Prisma.SortOrder
   supplierInvoiceNumberNormalized?: Prisma.SortOrder
@@ -1383,6 +1427,8 @@ export type FinanceOutflowDocumentCreateWithoutCompanyInput = {
   coverageYear?: number | null
   coverageStartMonth?: number | null
   coverageMonths?: number | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
   supplierInvoiceMissingReason?: string | null
@@ -1423,6 +1469,8 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutCompanyInput = {
   coverageStartMonth?: number | null
   coverageMonths?: number | null
   supplierId?: string | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
@@ -1491,6 +1539,8 @@ export type FinanceOutflowDocumentScalarWhereInput = {
   coverageStartMonth?: Prisma.IntNullableFilter<"FinanceOutflowDocument"> | number | null
   coverageMonths?: Prisma.IntNullableFilter<"FinanceOutflowDocument"> | number | null
   supplierId?: Prisma.UuidNullableFilter<"FinanceOutflowDocument"> | string | null
+  supplierNameSnapshotAr?: Prisma.StringNullableFilter<"FinanceOutflowDocument"> | string | null
+  supplierNameSnapshotEn?: Prisma.StringNullableFilter<"FinanceOutflowDocument"> | string | null
   categoryId?: Prisma.UuidFilter<"FinanceOutflowDocument"> | string
   supplierInvoiceNumber?: Prisma.StringNullableFilter<"FinanceOutflowDocument"> | string | null
   supplierInvoiceNumberNormalized?: Prisma.StringNullableFilter<"FinanceOutflowDocument"> | string | null
@@ -1519,6 +1569,8 @@ export type FinanceOutflowDocumentCreateWithoutMarketingCampaignFinancialLinksIn
   coverageYear?: number | null
   coverageStartMonth?: number | null
   coverageMonths?: number | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
   supplierInvoiceMissingReason?: string | null
@@ -1561,6 +1613,8 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutMarketingCampaignFinanci
   coverageStartMonth?: number | null
   coverageMonths?: number | null
   supplierId?: string | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
@@ -1610,6 +1664,8 @@ export type FinanceOutflowDocumentUpdateWithoutMarketingCampaignFinancialLinksIn
   coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1652,6 +1708,8 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutMarketingCampaignFinanci
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1685,6 +1743,8 @@ export type FinanceOutflowDocumentCreateWithoutCategoryInput = {
   coverageYear?: number | null
   coverageStartMonth?: number | null
   coverageMonths?: number | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
   supplierInvoiceMissingReason?: string | null
@@ -1725,6 +1785,8 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutCategoryInput = {
   coverageStartMonth?: number | null
   coverageMonths?: number | null
   supplierId?: string | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
   supplierInvoiceMissingReason?: string | null
@@ -1784,6 +1846,8 @@ export type FinanceOutflowDocumentCreateWithoutSupplierInput = {
   coverageYear?: number | null
   coverageStartMonth?: number | null
   coverageMonths?: number | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
   supplierInvoiceMissingReason?: string | null
@@ -1823,6 +1887,8 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutSupplierInput = {
   coverageYear?: number | null
   coverageStartMonth?: number | null
   coverageMonths?: number | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
@@ -1883,6 +1949,8 @@ export type FinanceOutflowDocumentCreateWithoutJournalEntryInput = {
   coverageYear?: number | null
   coverageStartMonth?: number | null
   coverageMonths?: number | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
   supplierInvoiceMissingReason?: string | null
@@ -1923,6 +1991,8 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutJournalEntryInput = {
   coverageStartMonth?: number | null
   coverageMonths?: number | null
   supplierId?: string | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
@@ -1972,6 +2042,8 @@ export type FinanceOutflowDocumentUpdateWithoutJournalEntryInput = {
   coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2012,6 +2084,8 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutJournalEntryInput = {
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2045,6 +2119,8 @@ export type FinanceOutflowDocumentCreateWithoutRevisionsInput = {
   coverageYear?: number | null
   coverageStartMonth?: number | null
   coverageMonths?: number | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
   supplierInvoiceMissingReason?: string | null
@@ -2087,6 +2163,8 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutRevisionsInput = {
   coverageStartMonth?: number | null
   coverageMonths?: number | null
   supplierId?: string | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
@@ -2136,6 +2214,8 @@ export type FinanceOutflowDocumentUpdateWithoutRevisionsInput = {
   coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2178,6 +2258,8 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutRevisionsInput = {
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2211,6 +2293,8 @@ export type FinanceOutflowDocumentCreateWithoutAssetWarrantyAssetsInput = {
   coverageYear?: number | null
   coverageStartMonth?: number | null
   coverageMonths?: number | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
   supplierInvoiceMissingReason?: string | null
@@ -2253,6 +2337,8 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutAssetWarrantyAssetsInput
   coverageStartMonth?: number | null
   coverageMonths?: number | null
   supplierId?: string | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
@@ -2302,6 +2388,8 @@ export type FinanceOutflowDocumentUpdateWithoutAssetWarrantyAssetsInput = {
   coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2344,6 +2432,8 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutAssetWarrantyAssetsInput
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2377,6 +2467,8 @@ export type FinanceOutflowDocumentCreateWithoutBatchInput = {
   coverageYear?: number | null
   coverageStartMonth?: number | null
   coverageMonths?: number | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
   supplierInvoiceMissingReason?: string | null
@@ -2416,6 +2508,8 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutBatchInput = {
   coverageStartMonth?: number | null
   coverageMonths?: number | null
   supplierId?: string | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
@@ -2476,6 +2570,8 @@ export type FinanceOutflowDocumentCreateWithoutAllocationsInput = {
   coverageYear?: number | null
   coverageStartMonth?: number | null
   coverageMonths?: number | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
   supplierInvoiceMissingReason?: string | null
@@ -2518,6 +2614,8 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutAllocationsInput = {
   coverageStartMonth?: number | null
   coverageMonths?: number | null
   supplierId?: string | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
@@ -2567,6 +2665,8 @@ export type FinanceOutflowDocumentUpdateWithoutAllocationsInput = {
   coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2609,6 +2709,8 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutAllocationsInput = {
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2642,6 +2744,8 @@ export type FinanceOutflowDocumentCreateWithoutHrEmployeeServiceInput = {
   coverageYear?: number | null
   coverageStartMonth?: number | null
   coverageMonths?: number | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
   supplierInvoiceMissingReason?: string | null
@@ -2684,6 +2788,8 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutHrEmployeeServiceInput =
   coverageStartMonth?: number | null
   coverageMonths?: number | null
   supplierId?: string | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
@@ -2733,6 +2839,8 @@ export type FinanceOutflowDocumentUpdateWithoutHrEmployeeServiceInput = {
   coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2775,6 +2883,8 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutHrEmployeeServiceInput =
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2808,6 +2918,8 @@ export type FinanceOutflowDocumentCreateWithoutRecurringExpenseProfileInput = {
   coverageYear?: number | null
   coverageStartMonth?: number | null
   coverageMonths?: number | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
   supplierInvoiceMissingReason?: string | null
@@ -2847,6 +2959,8 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutRecurringExpenseProfileI
   coverageStartMonth?: number | null
   coverageMonths?: number | null
   supplierId?: string | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
@@ -2907,6 +3021,8 @@ export type FinanceOutflowDocumentCreateWithoutRecurringCoverageInput = {
   coverageYear?: number | null
   coverageStartMonth?: number | null
   coverageMonths?: number | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
   supplierInvoiceMissingReason?: string | null
@@ -2949,6 +3065,8 @@ export type FinanceOutflowDocumentUncheckedCreateWithoutRecurringCoverageInput =
   coverageStartMonth?: number | null
   coverageMonths?: number | null
   supplierId?: string | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
@@ -2998,6 +3116,8 @@ export type FinanceOutflowDocumentUpdateWithoutRecurringCoverageInput = {
   coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3040,6 +3160,8 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutRecurringCoverageInput =
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3076,6 +3198,8 @@ export type FinanceOutflowDocumentCreateManyCompanyInput = {
   coverageStartMonth?: number | null
   coverageMonths?: number | null
   supplierId?: string | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
@@ -3104,6 +3228,8 @@ export type FinanceOutflowDocumentUpdateWithoutCompanyInput = {
   coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3144,6 +3270,8 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutCompanyInput = {
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3181,6 +3309,8 @@ export type FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyInput = {
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3212,6 +3342,8 @@ export type FinanceOutflowDocumentCreateManyCategoryInput = {
   coverageStartMonth?: number | null
   coverageMonths?: number | null
   supplierId?: string | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
   supplierInvoiceMissingReason?: string | null
@@ -3239,6 +3371,8 @@ export type FinanceOutflowDocumentUpdateWithoutCategoryInput = {
   coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3279,6 +3413,8 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutCategoryInput = {
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3315,6 +3451,8 @@ export type FinanceOutflowDocumentUncheckedUpdateManyWithoutCategoryInput = {
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3344,6 +3482,8 @@ export type FinanceOutflowDocumentCreateManySupplierInput = {
   coverageYear?: number | null
   coverageStartMonth?: number | null
   coverageMonths?: number | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
@@ -3372,6 +3512,8 @@ export type FinanceOutflowDocumentUpdateWithoutSupplierInput = {
   coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3411,6 +3553,8 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutSupplierInput = {
   coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3447,6 +3591,8 @@ export type FinanceOutflowDocumentUncheckedUpdateManyWithoutSupplierInput = {
   coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3477,6 +3623,8 @@ export type FinanceOutflowDocumentCreateManyBatchInput = {
   coverageStartMonth?: number | null
   coverageMonths?: number | null
   supplierId?: string | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
@@ -3505,6 +3653,8 @@ export type FinanceOutflowDocumentUpdateWithoutBatchInput = {
   coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3544,6 +3694,8 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutBatchInput = {
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3580,6 +3732,8 @@ export type FinanceOutflowDocumentUncheckedUpdateManyWithoutBatchInput = {
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3610,6 +3764,8 @@ export type FinanceOutflowDocumentCreateManyRecurringExpenseProfileInput = {
   coverageStartMonth?: number | null
   coverageMonths?: number | null
   supplierId?: string | null
+  supplierNameSnapshotAr?: string | null
+  supplierNameSnapshotEn?: string | null
   categoryId: string
   supplierInvoiceNumber?: string | null
   supplierInvoiceNumberNormalized?: string | null
@@ -3638,6 +3794,8 @@ export type FinanceOutflowDocumentUpdateWithoutRecurringExpenseProfileInput = {
   coverageYear?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceMissingReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3677,6 +3835,8 @@ export type FinanceOutflowDocumentUncheckedUpdateWithoutRecurringExpenseProfileI
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3713,6 +3873,8 @@ export type FinanceOutflowDocumentUncheckedUpdateManyWithoutRecurringExpenseProf
   coverageStartMonth?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   coverageMonths?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierNameSnapshotEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierInvoiceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierInvoiceNumberNormalized?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3813,6 +3975,8 @@ export type FinanceOutflowDocumentSelect<ExtArgs extends runtime.Types.Extension
   coverageStartMonth?: boolean
   coverageMonths?: boolean
   supplierId?: boolean
+  supplierNameSnapshotAr?: boolean
+  supplierNameSnapshotEn?: boolean
   categoryId?: boolean
   supplierInvoiceNumber?: boolean
   supplierInvoiceNumberNormalized?: boolean
@@ -3859,6 +4023,8 @@ export type FinanceOutflowDocumentSelectCreateManyAndReturn<ExtArgs extends runt
   coverageStartMonth?: boolean
   coverageMonths?: boolean
   supplierId?: boolean
+  supplierNameSnapshotAr?: boolean
+  supplierNameSnapshotEn?: boolean
   categoryId?: boolean
   supplierInvoiceNumber?: boolean
   supplierInvoiceNumberNormalized?: boolean
@@ -3898,6 +4064,8 @@ export type FinanceOutflowDocumentSelectUpdateManyAndReturn<ExtArgs extends runt
   coverageStartMonth?: boolean
   coverageMonths?: boolean
   supplierId?: boolean
+  supplierNameSnapshotAr?: boolean
+  supplierNameSnapshotEn?: boolean
   categoryId?: boolean
   supplierInvoiceNumber?: boolean
   supplierInvoiceNumberNormalized?: boolean
@@ -3937,6 +4105,8 @@ export type FinanceOutflowDocumentSelectScalar = {
   coverageStartMonth?: boolean
   coverageMonths?: boolean
   supplierId?: boolean
+  supplierNameSnapshotAr?: boolean
+  supplierNameSnapshotEn?: boolean
   categoryId?: boolean
   supplierInvoiceNumber?: boolean
   supplierInvoiceNumberNormalized?: boolean
@@ -3956,7 +4126,7 @@ export type FinanceOutflowDocumentSelectScalar = {
   updatedAt?: boolean
 }
 
-export type FinanceOutflowDocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "kind" | "status" | "settlementKind" | "documentNumber" | "batchId" | "recurringExpenseProfileId" | "coverageYear" | "coverageStartMonth" | "coverageMonths" | "supplierId" | "categoryId" | "supplierInvoiceNumber" | "supplierInvoiceNumberNormalized" | "supplierInvoiceMissingReason" | "businessDate" | "supplierInvoiceDate" | "grossAmount" | "netAmount" | "vatAmount" | "vatRateBasisPoints" | "assetWarrantyFollowUp" | "notes" | "journalEntryId" | "postingVersion" | "createdByUserId" | "createdAt" | "updatedAt", ExtArgs["result"]["financeOutflowDocument"]>
+export type FinanceOutflowDocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "kind" | "status" | "settlementKind" | "documentNumber" | "batchId" | "recurringExpenseProfileId" | "coverageYear" | "coverageStartMonth" | "coverageMonths" | "supplierId" | "supplierNameSnapshotAr" | "supplierNameSnapshotEn" | "categoryId" | "supplierInvoiceNumber" | "supplierInvoiceNumberNormalized" | "supplierInvoiceMissingReason" | "businessDate" | "supplierInvoiceDate" | "grossAmount" | "netAmount" | "vatAmount" | "vatRateBasisPoints" | "assetWarrantyFollowUp" | "notes" | "journalEntryId" | "postingVersion" | "createdByUserId" | "createdAt" | "updatedAt", ExtArgs["result"]["financeOutflowDocument"]>
 export type FinanceOutflowDocumentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   batch?: boolean | Prisma.FinanceOutflowDocument$batchArgs<ExtArgs>
@@ -4019,6 +4189,8 @@ export type $FinanceOutflowDocumentPayload<ExtArgs extends runtime.Types.Extensi
     coverageStartMonth: number | null
     coverageMonths: number | null
     supplierId: string | null
+    supplierNameSnapshotAr: string | null
+    supplierNameSnapshotEn: string | null
     categoryId: string
     supplierInvoiceNumber: string | null
     supplierInvoiceNumberNormalized: string | null
@@ -4484,6 +4656,8 @@ export interface FinanceOutflowDocumentFieldRefs {
   readonly coverageStartMonth: Prisma.FieldRef<"FinanceOutflowDocument", 'Int'>
   readonly coverageMonths: Prisma.FieldRef<"FinanceOutflowDocument", 'Int'>
   readonly supplierId: Prisma.FieldRef<"FinanceOutflowDocument", 'String'>
+  readonly supplierNameSnapshotAr: Prisma.FieldRef<"FinanceOutflowDocument", 'String'>
+  readonly supplierNameSnapshotEn: Prisma.FieldRef<"FinanceOutflowDocument", 'String'>
   readonly categoryId: Prisma.FieldRef<"FinanceOutflowDocument", 'String'>
   readonly supplierInvoiceNumber: Prisma.FieldRef<"FinanceOutflowDocument", 'String'>
   readonly supplierInvoiceNumberNormalized: Prisma.FieldRef<"FinanceOutflowDocument", 'String'>

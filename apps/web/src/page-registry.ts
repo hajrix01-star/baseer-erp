@@ -72,6 +72,7 @@ export const pageRegistry = [
   page({ id: "hr-advances-deductions", moduleId: "hr", legacySection: 4, title: { ar: "السلف والخصومات", en: "Advances & deductions" }, icon: "hand", navigation: { order: 50, visible: true }, requiredPermissions: any(["hr.advances.read", "hr.advances.issue", "hr.advances.settle", "hr.advances.reverse", "hr.deductions.manage"]) }),
   page({ id: "hr-services", moduleId: "hr", legacySection: 5, title: { ar: "الإقامات والخدمات", en: "Residencies & services" }, icon: "badge", navigation: { order: 60, visible: true }, requiredPermissions: any(["hr.employees.read", "hr.employees.write"]) }),
   page({ id: "hr-salary-tools", moduleId: "hr", legacySection: 6, title: { ar: "أدوات الراتب", en: "Salary tools" }, icon: "ledger", navigation: { order: 70, visible: true }, requiredPermissions: any(["hr.employees.read", "hr.payroll.read", "hr.employee_letters.read", "hr.employee_letters.issue"]) }),
+  page({ id: "hr-attendance", moduleId: "hr", legacySection: 7, title: { ar: "الحضور والانصراف", en: "Attendance & timekeeping" }, icon: "calendar", navigation: { order: 80, visible: true }, requiredPermissions: any(["attendance.manage"]) }),
 
   page({ id: "reports-overview", moduleId: "reports", legacySection: 0, title: { ar: "نظرة التقارير", en: "Reports overview" }, icon: "dashboard", navigation: { order: 10, visible: true }, requiredPermissions: any(["reports.read"]) }),
   page({ id: "reports-financial", moduleId: "reports", legacySection: 1, title: { ar: "التقارير المالية", en: "Financial reports" }, icon: "chart", navigation: { order: 20, visible: true }, requiredPermissions: any(["reports.read"]) }),
@@ -85,6 +86,7 @@ export const pageRegistry = [
   page({ id: "administration-roles", moduleId: "administration", legacySection: 3, title: { ar: "الأدوار والصلاحيات", en: "Roles & permissions" }, icon: "shield", navigation: { order: 40, visible: true }, requiredPermissions: any(["administration.roles.read", "administration.roles.manage"]) }),
   page({ id: "administration-identity-basira", moduleId: "administration", legacySection: 4, title: { ar: "بصيرة", en: "Basira" }, icon: "badge", navigation: { order: 50, visible: true }, requiredPermissions: any(["platform.ai.configuration.read", "platform.ai.identity.read", "platform.ai.system_identity.read"]) }),
   page({ id: "administration-backup", moduleId: "administration", legacySection: 5, title: { ar: "النسخ الاحتياطي", en: "Backup" }, icon: "backup", navigation: { order: 60, visible: true }, requiredPermissions: any(["administration.companies.manage"]) }),
+  page({ id: "administration-nurix-migration", moduleId: "administration", legacySection: 6, title: { ar: "ترحيل نوركس", en: "Noorix migration" }, icon: "shield", navigation: { order: 70, visible: true }, requiredPermissions: any(["administration.companies.manage"]) }),
 ] as const;
 
 export type PageId = (typeof pageRegistry)[number]["id"];

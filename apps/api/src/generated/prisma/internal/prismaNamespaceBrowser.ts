@@ -62,6 +62,15 @@ export const ModelName = {
   AppSession: 'AppSession',
   AuditEvent: 'AuditEvent',
   IdempotencyReceipt: 'IdempotencyReceipt',
+  BackupPolicy: 'BackupPolicy',
+  BackupJob: 'BackupJob',
+  BackupArtifact: 'BackupArtifact',
+  BackupAuditEvent: 'BackupAuditEvent',
+  LegacyMigrationRun: 'LegacyMigrationRun',
+  LegacyMigrationCompanyMap: 'LegacyMigrationCompanyMap',
+  LegacyMigrationRecordMap: 'LegacyMigrationRecordMap',
+  LegacyMigrationException: 'LegacyMigrationException',
+  LegacyMigrationReviewAction: 'LegacyMigrationReviewAction',
   OwnerDailyBriefSnapshot: 'OwnerDailyBriefSnapshot',
   DocumentSerialCounter: 'DocumentSerialCounter',
   FileMetadata: 'FileMetadata',
@@ -113,6 +122,10 @@ export const ModelName = {
   FinanceVatSettlement: 'FinanceVatSettlement',
   FinanceCategory: 'FinanceCategory',
   FinanceSupplier: 'FinanceSupplier',
+  FinanceCounterpartyIdentity: 'FinanceCounterpartyIdentity',
+  FinanceCounterpartyAlias: 'FinanceCounterpartyAlias',
+  LegacyMigrationCounterpartyResolution: 'LegacyMigrationCounterpartyResolution',
+  LegacyMigrationCounterpartyCandidate: 'LegacyMigrationCounterpartyCandidate',
   SupplierCopyProvenance: 'SupplierCopyProvenance',
   FinanceFiscalPeriod: 'FinanceFiscalPeriod',
   FinanceVault: 'FinanceVault',
@@ -127,6 +140,23 @@ export const ModelName = {
   FinanceOutflowBatch: 'FinanceOutflowBatch',
   FinanceOutflowAllocation: 'FinanceOutflowAllocation',
   HrEmployee: 'HrEmployee',
+  AttendanceEmployeeCredential: 'AttendanceEmployeeCredential',
+  AttendanceBranch: 'AttendanceBranch',
+  AttendanceRosterPlan: 'AttendanceRosterPlan',
+  AttendanceRosterPeakPeriod: 'AttendanceRosterPeakPeriod',
+  AttendanceRosterEntry: 'AttendanceRosterEntry',
+  AttendanceRosterEntryPeriod: 'AttendanceRosterEntryPeriod',
+  AttendanceScheduleTemplate: 'AttendanceScheduleTemplate',
+  AttendanceScheduleTemplateVersion: 'AttendanceScheduleTemplateVersion',
+  AttendanceSchedulePeriod: 'AttendanceSchedulePeriod',
+  AttendanceEmployeeScheduleAssignment: 'AttendanceEmployeeScheduleAssignment',
+  AttendanceEmployeeWeeklyAdjustment: 'AttendanceEmployeeWeeklyAdjustment',
+  AttendanceEmployeeWeeklyAdjustmentPeriod: 'AttendanceEmployeeWeeklyAdjustmentPeriod',
+  AttendanceScheduleException: 'AttendanceScheduleException',
+  AttendanceScheduleExceptionPeriod: 'AttendanceScheduleExceptionPeriod',
+  AttendanceEvent: 'AttendanceEvent',
+  AttendanceQrScanUse: 'AttendanceQrScanUse',
+  AttendanceWorkSession: 'AttendanceWorkSession',
   HrEmployeePromotion: 'HrEmployeePromotion',
   HrEmployeeLeave: 'HrEmployeeLeave',
   HrEmployeeDocumentBlob: 'HrEmployeeDocumentBlob',
@@ -259,6 +289,7 @@ export const CompanyScalarFieldEnum = {
   contextLatitude: 'contextLatitude',
   contextLongitude: 'contextLongitude',
   status: 'status',
+  migrationReviewLocked: 'migrationReviewLocked',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -375,6 +406,176 @@ export const IdempotencyReceiptScalarFieldEnum = {
 } as const
 
 export type IdempotencyReceiptScalarFieldEnum = (typeof IdempotencyReceiptScalarFieldEnum)[keyof typeof IdempotencyReceiptScalarFieldEnum]
+
+
+export const BackupPolicyScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  name: 'name',
+  enabled: 'enabled',
+  frequency: 'frequency',
+  scheduleJson: 'scheduleJson',
+  retentionCount: 'retentionCount',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BackupPolicyScalarFieldEnum = (typeof BackupPolicyScalarFieldEnum)[keyof typeof BackupPolicyScalarFieldEnum]
+
+
+export const BackupJobScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  policyId: 'policyId',
+  requestedByUserId: 'requestedByUserId',
+  kind: 'kind',
+  status: 'status',
+  stage: 'stage',
+  idempotencyKey: 'idempotencyKey',
+  requestHash: 'requestHash',
+  correlationId: 'correlationId',
+  progressPercent: 'progressPercent',
+  checkpointJson: 'checkpointJson',
+  recordsProcessed: 'recordsProcessed',
+  recordsTotal: 'recordsTotal',
+  bytesProcessed: 'bytesProcessed',
+  bytesTotal: 'bytesTotal',
+  attemptCount: 'attemptCount',
+  workerLeaseOwnerId: 'workerLeaseOwnerId',
+  workerLeaseFence: 'workerLeaseFence',
+  workerLeaseExpiresAt: 'workerLeaseExpiresAt',
+  workerHeartbeatAt: 'workerHeartbeatAt',
+  lastErrorCode: 'lastErrorCode',
+  lastErrorMessage: 'lastErrorMessage',
+  queuedAt: 'queuedAt',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BackupJobScalarFieldEnum = (typeof BackupJobScalarFieldEnum)[keyof typeof BackupJobScalarFieldEnum]
+
+
+export const BackupArtifactScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  jobId: 'jobId',
+  status: 'status',
+  formatVersion: 'formatVersion',
+  storageKey: 'storageKey',
+  filename: 'filename',
+  sha256: 'sha256',
+  byteSize: 'byteSize',
+  verifiedAt: 'verifiedAt',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BackupArtifactScalarFieldEnum = (typeof BackupArtifactScalarFieldEnum)[keyof typeof BackupArtifactScalarFieldEnum]
+
+
+export const BackupAuditEventScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  jobId: 'jobId',
+  actorUserId: 'actorUserId',
+  action: 'action',
+  correlationId: 'correlationId',
+  previousHash: 'previousHash',
+  eventHash: 'eventHash',
+  metadataJson: 'metadataJson',
+  createdAt: 'createdAt'
+} as const
+
+export type BackupAuditEventScalarFieldEnum = (typeof BackupAuditEventScalarFieldEnum)[keyof typeof BackupAuditEventScalarFieldEnum]
+
+
+export const LegacyMigrationRunScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  sourceSystem: 'sourceSystem',
+  sourceFingerprint: 'sourceFingerprint',
+  transformVersion: 'transformVersion',
+  status: 'status',
+  initiatedByUserId: 'initiatedByUserId',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LegacyMigrationRunScalarFieldEnum = (typeof LegacyMigrationRunScalarFieldEnum)[keyof typeof LegacyMigrationRunScalarFieldEnum]
+
+
+export const LegacyMigrationCompanyMapScalarFieldEnum = {
+  id: 'id',
+  runId: 'runId',
+  tenantId: 'tenantId',
+  sourceCompanyId: 'sourceCompanyId',
+  targetCompanyId: 'targetCompanyId',
+  state: 'state',
+  createdAt: 'createdAt'
+} as const
+
+export type LegacyMigrationCompanyMapScalarFieldEnum = (typeof LegacyMigrationCompanyMapScalarFieldEnum)[keyof typeof LegacyMigrationCompanyMapScalarFieldEnum]
+
+
+export const LegacyMigrationRecordMapScalarFieldEnum = {
+  id: 'id',
+  runId: 'runId',
+  tenantId: 'tenantId',
+  targetCompanyId: 'targetCompanyId',
+  sourceCompanyId: 'sourceCompanyId',
+  sourceEntity: 'sourceEntity',
+  sourceId: 'sourceId',
+  targetEntity: 'targetEntity',
+  targetId: 'targetId',
+  transformVersion: 'transformVersion',
+  sourceChecksum: 'sourceChecksum',
+  state: 'state',
+  createdAt: 'createdAt'
+} as const
+
+export type LegacyMigrationRecordMapScalarFieldEnum = (typeof LegacyMigrationRecordMapScalarFieldEnum)[keyof typeof LegacyMigrationRecordMapScalarFieldEnum]
+
+
+export const LegacyMigrationExceptionScalarFieldEnum = {
+  id: 'id',
+  runId: 'runId',
+  tenantId: 'tenantId',
+  sourceCompanyId: 'sourceCompanyId',
+  sourceEntity: 'sourceEntity',
+  sourceId: 'sourceId',
+  severity: 'severity',
+  code: 'code',
+  message: 'message',
+  createdAt: 'createdAt'
+} as const
+
+export type LegacyMigrationExceptionScalarFieldEnum = (typeof LegacyMigrationExceptionScalarFieldEnum)[keyof typeof LegacyMigrationExceptionScalarFieldEnum]
+
+
+export const LegacyMigrationReviewActionScalarFieldEnum = {
+  id: 'id',
+  runId: 'runId',
+  tenantId: 'tenantId',
+  exceptionId: 'exceptionId',
+  action: 'action',
+  actionKey: 'actionKey',
+  reason: 'reason',
+  reviewSnapshotSha256: 'reviewSnapshotSha256',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type LegacyMigrationReviewActionScalarFieldEnum = (typeof LegacyMigrationReviewActionScalarFieldEnum)[keyof typeof LegacyMigrationReviewActionScalarFieldEnum]
 
 
 export const OwnerDailyBriefSnapshotScalarFieldEnum = {
@@ -1277,6 +1478,7 @@ export const FinanceSupplierScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
   companyId: 'companyId',
+  counterpartyIdentityId: 'counterpartyIdentityId',
   categoryId: 'categoryId',
   supplierType: 'supplierType',
   nameAr: 'nameAr',
@@ -1291,6 +1493,67 @@ export const FinanceSupplierScalarFieldEnum = {
 } as const
 
 export type FinanceSupplierScalarFieldEnum = (typeof FinanceSupplierScalarFieldEnum)[keyof typeof FinanceSupplierScalarFieldEnum]
+
+
+export const FinanceCounterpartyIdentityScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  canonicalKey: 'canonicalKey',
+  canonicalNameAr: 'canonicalNameAr',
+  canonicalNameEn: 'canonicalNameEn',
+  kind: 'kind',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FinanceCounterpartyIdentityScalarFieldEnum = (typeof FinanceCounterpartyIdentityScalarFieldEnum)[keyof typeof FinanceCounterpartyIdentityScalarFieldEnum]
+
+
+export const FinanceCounterpartyAliasScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  identityId: 'identityId',
+  normalizedAlias: 'normalizedAlias',
+  nameAr: 'nameAr',
+  nameEn: 'nameEn',
+  kind: 'kind',
+  createdAt: 'createdAt'
+} as const
+
+export type FinanceCounterpartyAliasScalarFieldEnum = (typeof FinanceCounterpartyAliasScalarFieldEnum)[keyof typeof FinanceCounterpartyAliasScalarFieldEnum]
+
+
+export const LegacyMigrationCounterpartyResolutionScalarFieldEnum = {
+  id: 'id',
+  runId: 'runId',
+  tenantId: 'tenantId',
+  sourceCompanyId: 'sourceCompanyId',
+  sourceSupplierId: 'sourceSupplierId',
+  identityId: 'identityId',
+  kind: 'kind',
+  transformVersion: 'transformVersion',
+  sourceChecksum: 'sourceChecksum',
+  createdAt: 'createdAt'
+} as const
+
+export type LegacyMigrationCounterpartyResolutionScalarFieldEnum = (typeof LegacyMigrationCounterpartyResolutionScalarFieldEnum)[keyof typeof LegacyMigrationCounterpartyResolutionScalarFieldEnum]
+
+
+export const LegacyMigrationCounterpartyCandidateScalarFieldEnum = {
+  id: 'id',
+  runId: 'runId',
+  tenantId: 'tenantId',
+  sourceCompanyId: 'sourceCompanyId',
+  sourceSupplierId: 'sourceSupplierId',
+  nameAr: 'nameAr',
+  nameEn: 'nameEn',
+  kind: 'kind',
+  sourceChecksum: 'sourceChecksum',
+  createdAt: 'createdAt'
+} as const
+
+export type LegacyMigrationCounterpartyCandidateScalarFieldEnum = (typeof LegacyMigrationCounterpartyCandidateScalarFieldEnum)[keyof typeof LegacyMigrationCounterpartyCandidateScalarFieldEnum]
 
 
 export const SupplierCopyProvenanceScalarFieldEnum = {
@@ -1449,6 +1712,8 @@ export const FinanceOutflowDocumentScalarFieldEnum = {
   coverageStartMonth: 'coverageStartMonth',
   coverageMonths: 'coverageMonths',
   supplierId: 'supplierId',
+  supplierNameSnapshotAr: 'supplierNameSnapshotAr',
+  supplierNameSnapshotEn: 'supplierNameSnapshotEn',
   categoryId: 'categoryId',
   supplierInvoiceNumber: 'supplierInvoiceNumber',
   supplierInvoiceNumberNormalized: 'supplierInvoiceNumberNormalized',
@@ -1581,6 +1846,277 @@ export const HrEmployeeScalarFieldEnum = {
 } as const
 
 export type HrEmployeeScalarFieldEnum = (typeof HrEmployeeScalarFieldEnum)[keyof typeof HrEmployeeScalarFieldEnum]
+
+
+export const AttendanceEmployeeCredentialScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  employeeId: 'employeeId',
+  pinHash: 'pinHash',
+  pinLookupHash: 'pinLookupHash',
+  pinCiphertext: 'pinCiphertext',
+  failedAttempts: 'failedAttempts',
+  lockedUntil: 'lockedUntil',
+  rotatedAt: 'rotatedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AttendanceEmployeeCredentialScalarFieldEnum = (typeof AttendanceEmployeeCredentialScalarFieldEnum)[keyof typeof AttendanceEmployeeCredentialScalarFieldEnum]
+
+
+export const AttendanceBranchScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  nameAr: 'nameAr',
+  nameEn: 'nameEn',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  radiusMeters: 'radiusMeters',
+  maxAccuracyMeters: 'maxAccuracyMeters',
+  qrValiditySeconds: 'qrValiditySeconds',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AttendanceBranchScalarFieldEnum = (typeof AttendanceBranchScalarFieldEnum)[keyof typeof AttendanceBranchScalarFieldEnum]
+
+
+export const AttendanceRosterPlanScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  weekStart: 'weekStart',
+  status: 'status',
+  approvalMode: 'approvalMode',
+  effectiveFrom: 'effectiveFrom',
+  effectiveUntil: 'effectiveUntil',
+  revision: 'revision',
+  createdByUserId: 'createdByUserId',
+  approvedByUserId: 'approvedByUserId',
+  approvedAt: 'approvedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AttendanceRosterPlanScalarFieldEnum = (typeof AttendanceRosterPlanScalarFieldEnum)[keyof typeof AttendanceRosterPlanScalarFieldEnum]
+
+
+export const AttendanceRosterPeakPeriodScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  planId: 'planId',
+  businessDate: 'businessDate',
+  startMinute: 'startMinute',
+  endMinute: 'endMinute',
+  createdAt: 'createdAt'
+} as const
+
+export type AttendanceRosterPeakPeriodScalarFieldEnum = (typeof AttendanceRosterPeakPeriodScalarFieldEnum)[keyof typeof AttendanceRosterPeakPeriodScalarFieldEnum]
+
+
+export const AttendanceRosterEntryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  planId: 'planId',
+  employeeId: 'employeeId',
+  businessDate: 'businessDate',
+  kind: 'kind',
+  createdAt: 'createdAt'
+} as const
+
+export type AttendanceRosterEntryScalarFieldEnum = (typeof AttendanceRosterEntryScalarFieldEnum)[keyof typeof AttendanceRosterEntryScalarFieldEnum]
+
+
+export const AttendanceRosterEntryPeriodScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  entryId: 'entryId',
+  startMinute: 'startMinute',
+  endMinute: 'endMinute',
+  endsNextDay: 'endsNextDay',
+  createdAt: 'createdAt'
+} as const
+
+export type AttendanceRosterEntryPeriodScalarFieldEnum = (typeof AttendanceRosterEntryPeriodScalarFieldEnum)[keyof typeof AttendanceRosterEntryPeriodScalarFieldEnum]
+
+
+export const AttendanceScheduleTemplateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  nameAr: 'nameAr',
+  nameEn: 'nameEn',
+  status: 'status',
+  archivedAt: 'archivedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AttendanceScheduleTemplateScalarFieldEnum = (typeof AttendanceScheduleTemplateScalarFieldEnum)[keyof typeof AttendanceScheduleTemplateScalarFieldEnum]
+
+
+export const AttendanceScheduleTemplateVersionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  templateId: 'templateId',
+  versionNumber: 'versionNumber',
+  effectiveFrom: 'effectiveFrom',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type AttendanceScheduleTemplateVersionScalarFieldEnum = (typeof AttendanceScheduleTemplateVersionScalarFieldEnum)[keyof typeof AttendanceScheduleTemplateVersionScalarFieldEnum]
+
+
+export const AttendanceSchedulePeriodScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  versionId: 'versionId',
+  dayOfWeek: 'dayOfWeek',
+  startMinute: 'startMinute',
+  endMinute: 'endMinute',
+  endsNextDay: 'endsNextDay',
+  createdAt: 'createdAt'
+} as const
+
+export type AttendanceSchedulePeriodScalarFieldEnum = (typeof AttendanceSchedulePeriodScalarFieldEnum)[keyof typeof AttendanceSchedulePeriodScalarFieldEnum]
+
+
+export const AttendanceEmployeeScheduleAssignmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  employeeId: 'employeeId',
+  templateId: 'templateId',
+  effectiveFrom: 'effectiveFrom',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type AttendanceEmployeeScheduleAssignmentScalarFieldEnum = (typeof AttendanceEmployeeScheduleAssignmentScalarFieldEnum)[keyof typeof AttendanceEmployeeScheduleAssignmentScalarFieldEnum]
+
+
+export const AttendanceEmployeeWeeklyAdjustmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  employeeId: 'employeeId',
+  dayOfWeek: 'dayOfWeek',
+  effectiveFrom: 'effectiveFrom',
+  kind: 'kind',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type AttendanceEmployeeWeeklyAdjustmentScalarFieldEnum = (typeof AttendanceEmployeeWeeklyAdjustmentScalarFieldEnum)[keyof typeof AttendanceEmployeeWeeklyAdjustmentScalarFieldEnum]
+
+
+export const AttendanceEmployeeWeeklyAdjustmentPeriodScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  adjustmentId: 'adjustmentId',
+  startMinute: 'startMinute',
+  endMinute: 'endMinute',
+  endsNextDay: 'endsNextDay',
+  createdAt: 'createdAt'
+} as const
+
+export type AttendanceEmployeeWeeklyAdjustmentPeriodScalarFieldEnum = (typeof AttendanceEmployeeWeeklyAdjustmentPeriodScalarFieldEnum)[keyof typeof AttendanceEmployeeWeeklyAdjustmentPeriodScalarFieldEnum]
+
+
+export const AttendanceScheduleExceptionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  employeeId: 'employeeId',
+  businessDate: 'businessDate',
+  kind: 'kind',
+  status: 'status',
+  reason: 'reason',
+  requestedByUserId: 'requestedByUserId',
+  decidedByUserId: 'decidedByUserId',
+  decidedAt: 'decidedAt',
+  decisionNote: 'decisionNote',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AttendanceScheduleExceptionScalarFieldEnum = (typeof AttendanceScheduleExceptionScalarFieldEnum)[keyof typeof AttendanceScheduleExceptionScalarFieldEnum]
+
+
+export const AttendanceScheduleExceptionPeriodScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  exceptionId: 'exceptionId',
+  startMinute: 'startMinute',
+  endMinute: 'endMinute',
+  endsNextDay: 'endsNextDay',
+  createdAt: 'createdAt'
+} as const
+
+export type AttendanceScheduleExceptionPeriodScalarFieldEnum = (typeof AttendanceScheduleExceptionPeriodScalarFieldEnum)[keyof typeof AttendanceScheduleExceptionPeriodScalarFieldEnum]
+
+
+export const AttendanceEventScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  branchId: 'branchId',
+  employeeId: 'employeeId',
+  sessionId: 'sessionId',
+  eventType: 'eventType',
+  businessDate: 'businessDate',
+  occurredAt: 'occurredAt',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  accuracyMeters: 'accuracyMeters',
+  qrTokenHash: 'qrTokenHash',
+  requestKey: 'requestKey',
+  createdAt: 'createdAt'
+} as const
+
+export type AttendanceEventScalarFieldEnum = (typeof AttendanceEventScalarFieldEnum)[keyof typeof AttendanceEventScalarFieldEnum]
+
+
+export const AttendanceQrScanUseScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  employeeId: 'employeeId',
+  qrTokenHash: 'qrTokenHash',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt'
+} as const
+
+export type AttendanceQrScanUseScalarFieldEnum = (typeof AttendanceQrScanUseScalarFieldEnum)[keyof typeof AttendanceQrScanUseScalarFieldEnum]
+
+
+export const AttendanceWorkSessionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  branchId: 'branchId',
+  employeeId: 'employeeId',
+  status: 'status',
+  businessDate: 'businessDate',
+  checkInAt: 'checkInAt',
+  checkOutAt: 'checkOutAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AttendanceWorkSessionScalarFieldEnum = (typeof AttendanceWorkSessionScalarFieldEnum)[keyof typeof AttendanceWorkSessionScalarFieldEnum]
 
 
 export const HrEmployeePromotionScalarFieldEnum = {

@@ -205,11 +205,21 @@ export const marketingCalendarQuerySchema = z.object({
 export const marketingCalendarDaySchema = z.object({
   businessDate: marketingDateSchema,
   officialNetSales: marketingAmountSchema.nullable(),
+  /** Customer count is only available when the daily sales read is complete. */
+  customerCount: z.number().int().nonnegative().nullable(),
   salesDayQuality: z.enum(["READY", "PENDING", "PARTIAL", "MISSING"]),
   dailySalesTarget: marketingAmountSchema.nullable(),
   targetStatus: z.enum(["NO_TARGET", "NO_SALES", "BELOW", "NEAR", "MET", "EXCEEDED"]),
   linkedActualSpend: marketingAmountSchema,
   linkedFinancialDocumentCount: z.number().int().nonnegative(),
+  /** Posted financial spend grouped by the campaign explicitly linked to each document. */
+  campaignSpend: z.array(z.object({ campaignId: marketingIdSchema, amount: marketingAmountSchema, documentCount: z.number().int().nonnegative() }).strict()).max(1_000),
+  /** Uses the same sealed-vault scope as the financial movement report. */
+  financialOutflows: marketingAmountSchema,
+  financialOutflowDocumentCount: z.number().int().nonnegative(),
+  /** Purchase movements from the same sealed financial-movement scope as the purchases card. */
+  purchaseOutflows: marketingAmountSchema,
+  purchaseOutflowDocumentCount: z.number().int().nonnegative(),
   activeCampaignIds: z.array(marketingIdSchema).max(1_000),
 }).strict();
 

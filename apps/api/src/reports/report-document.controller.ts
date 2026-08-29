@@ -8,7 +8,7 @@ import { ReportDocumentService } from './report-document.service.js';
 
 @Controller('reports/documents')
 @UseGuards(ThrottlerGuard)
-@SkipThrottle({ authIp: true, authIdentity: true, report: true, fileWrite: true })
+@SkipThrottle({ authIp: true, authIdentity: true, report: true, fileWrite: true, attendancePin: true })
 @Throttle({ output: { limit: 20, ttl: 60_000, blockDuration: 60_000 } })
 export class ReportDocumentController {
   constructor(private readonly contexts: CompanyContextService, private readonly documents: ReportDocumentService) {}

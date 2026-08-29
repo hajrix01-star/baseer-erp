@@ -66,9 +66,15 @@ export type MarketingCalendarRead = {
   days: Array<{
     businessDate: string;
     officialNetSales: string | null;
+    customerCount: number | null;
     salesDayQuality: "READY" | "PENDING" | "PARTIAL" | "MISSING";
-    linkedActualSpend: string;
+    linkedActualSpend: string | null;
     linkedFinancialDocumentCount: number;
+    campaignSpend: Array<{ campaignId: string; amount: string; documentCount: number }>;
+    financialOutflows: string | null;
+    financialOutflowDocumentCount: number;
+    purchaseOutflows: string | null;
+    purchaseOutflowDocumentCount: number;
     activeCampaignIds: string[];
   }>;
   context: Array<{

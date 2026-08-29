@@ -119,6 +119,13 @@ export function formatMonthYear(value: string, language: BaseerLanguage = "en", 
   return new Intl.DateTimeFormat(localeFor(language), { calendar: "gregory", month, ...(includeYear ? { year: "numeric" as const } : {}), timeZone: "UTC" }).format(new Date(`${value}-01T00:00:00Z`));
 }
 
+/** Gregorian year with Latin digits for local timeline controls. */
+export function formatYear(value: string | number, language: BaseerLanguage = "en") {
+  const year = String(value);
+  if (!/^\d{4}$/.test(year)) return "—";
+  return new Intl.DateTimeFormat(localeFor(language), { calendar: "gregory", year: "numeric", timeZone: "UTC" }).format(new Date(`${year}-01-01T00:00:00Z`));
+}
+
 /** Full business-date label for briefs: Arabic names, Gregorian calendar and Latin digits. */
 export function formatLongDate(value: string | Date | null | undefined, language: BaseerLanguage = "en", timeZone = "UTC") {
   const date = isoDate(value);
@@ -131,6 +138,13 @@ export function formatTime(value: string | Date | null | undefined, language: Ba
   const date = isoDate(value);
   if (!date) return "—";
   return new Intl.DateTimeFormat(localeFor(language), { calendar: "gregory", hour: "2-digit", minute: "2-digit", hourCycle: "h23", timeZone }).format(date);
+}
+
+/** The operational business date used by Baseer attendance in Saudi Arabia. */
+export function riyadhBusinessDate(value = new Date()) {
+  const parts = new Intl.DateTimeFormat("en", { timeZone: "Asia/Riyadh", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(value);
+  const values = Object.fromEntries(parts.filter((part) => part.type !== "literal").map((part) => [part.type, part.value]));
+  return `${values.year}-${values.month}-${values.day}`;
 }
 
 /** Exact fractional precision for non-final animated presentation values. */

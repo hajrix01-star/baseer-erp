@@ -201,6 +201,19 @@ export type TenantWhereInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentListRelationFilter
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisListRelationFilter
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotListRelationFilter
+  backupPolicies?: Prisma.BackupPolicyListRelationFilter
+  backupJobs?: Prisma.BackupJobListRelationFilter
+  backupArtifacts?: Prisma.BackupArtifactListRelationFilter
+  backupAuditEvents?: Prisma.BackupAuditEventListRelationFilter
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunListRelationFilter
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapListRelationFilter
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapListRelationFilter
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionListRelationFilter
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionListRelationFilter
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionListRelationFilter
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateListRelationFilter
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityListRelationFilter
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasListRelationFilter
 }
 
 export type TenantOrderByWithRelationInput = {
@@ -228,6 +241,19 @@ export type TenantOrderByWithRelationInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentOrderByRelationAggregateInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisOrderByRelationAggregateInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotOrderByRelationAggregateInput
+  backupPolicies?: Prisma.BackupPolicyOrderByRelationAggregateInput
+  backupJobs?: Prisma.BackupJobOrderByRelationAggregateInput
+  backupArtifacts?: Prisma.BackupArtifactOrderByRelationAggregateInput
+  backupAuditEvents?: Prisma.BackupAuditEventOrderByRelationAggregateInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunOrderByRelationAggregateInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapOrderByRelationAggregateInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapOrderByRelationAggregateInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionOrderByRelationAggregateInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionOrderByRelationAggregateInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionOrderByRelationAggregateInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateOrderByRelationAggregateInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityOrderByRelationAggregateInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasOrderByRelationAggregateInput
 }
 
 export type TenantWhereUniqueInput = Prisma.AtLeast<{
@@ -258,6 +284,19 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentListRelationFilter
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisListRelationFilter
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotListRelationFilter
+  backupPolicies?: Prisma.BackupPolicyListRelationFilter
+  backupJobs?: Prisma.BackupJobListRelationFilter
+  backupArtifacts?: Prisma.BackupArtifactListRelationFilter
+  backupAuditEvents?: Prisma.BackupAuditEventListRelationFilter
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunListRelationFilter
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapListRelationFilter
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapListRelationFilter
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionListRelationFilter
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionListRelationFilter
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionListRelationFilter
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateListRelationFilter
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityListRelationFilter
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasListRelationFilter
 }, "id" | "code">
 
 export type TenantOrderByWithAggregationInput = {
@@ -307,6 +346,19 @@ export type TenantCreateInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateInput = {
@@ -334,6 +386,19 @@ export type TenantUncheckedCreateInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUpdateInput = {
@@ -361,6 +426,19 @@ export type TenantUpdateInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateInput = {
@@ -388,6 +466,19 @@ export type TenantUncheckedUpdateInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateManyInput = {
@@ -547,6 +638,132 @@ export type TenantUpdateOneRequiredWithoutIdempotencyReceiptsNestedInput = {
   upsert?: Prisma.TenantUpsertWithoutIdempotencyReceiptsInput
   connect?: Prisma.TenantWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutIdempotencyReceiptsInput, Prisma.TenantUpdateWithoutIdempotencyReceiptsInput>, Prisma.TenantUncheckedUpdateWithoutIdempotencyReceiptsInput>
+}
+
+export type TenantCreateNestedOneWithoutBackupPoliciesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutBackupPoliciesInput, Prisma.TenantUncheckedCreateWithoutBackupPoliciesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutBackupPoliciesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutBackupPoliciesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutBackupPoliciesInput, Prisma.TenantUncheckedCreateWithoutBackupPoliciesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutBackupPoliciesInput
+  upsert?: Prisma.TenantUpsertWithoutBackupPoliciesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutBackupPoliciesInput, Prisma.TenantUpdateWithoutBackupPoliciesInput>, Prisma.TenantUncheckedUpdateWithoutBackupPoliciesInput>
+}
+
+export type TenantCreateNestedOneWithoutBackupJobsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutBackupJobsInput, Prisma.TenantUncheckedCreateWithoutBackupJobsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutBackupJobsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutBackupJobsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutBackupJobsInput, Prisma.TenantUncheckedCreateWithoutBackupJobsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutBackupJobsInput
+  upsert?: Prisma.TenantUpsertWithoutBackupJobsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutBackupJobsInput, Prisma.TenantUpdateWithoutBackupJobsInput>, Prisma.TenantUncheckedUpdateWithoutBackupJobsInput>
+}
+
+export type TenantCreateNestedOneWithoutBackupArtifactsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutBackupArtifactsInput, Prisma.TenantUncheckedCreateWithoutBackupArtifactsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutBackupArtifactsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutBackupArtifactsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutBackupArtifactsInput, Prisma.TenantUncheckedCreateWithoutBackupArtifactsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutBackupArtifactsInput
+  upsert?: Prisma.TenantUpsertWithoutBackupArtifactsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutBackupArtifactsInput, Prisma.TenantUpdateWithoutBackupArtifactsInput>, Prisma.TenantUncheckedUpdateWithoutBackupArtifactsInput>
+}
+
+export type TenantCreateNestedOneWithoutBackupAuditEventsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutBackupAuditEventsInput, Prisma.TenantUncheckedCreateWithoutBackupAuditEventsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutBackupAuditEventsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutBackupAuditEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutBackupAuditEventsInput, Prisma.TenantUncheckedCreateWithoutBackupAuditEventsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutBackupAuditEventsInput
+  upsert?: Prisma.TenantUpsertWithoutBackupAuditEventsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutBackupAuditEventsInput, Prisma.TenantUpdateWithoutBackupAuditEventsInput>, Prisma.TenantUncheckedUpdateWithoutBackupAuditEventsInput>
+}
+
+export type TenantCreateNestedOneWithoutLegacyMigrationRunsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationRunsInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationRunsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutLegacyMigrationRunsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutLegacyMigrationRunsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationRunsInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationRunsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutLegacyMigrationRunsInput
+  upsert?: Prisma.TenantUpsertWithoutLegacyMigrationRunsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutLegacyMigrationRunsInput, Prisma.TenantUpdateWithoutLegacyMigrationRunsInput>, Prisma.TenantUncheckedUpdateWithoutLegacyMigrationRunsInput>
+}
+
+export type TenantCreateNestedOneWithoutLegacyMigrationCompanyMapsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationCompanyMapsInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationCompanyMapsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutLegacyMigrationCompanyMapsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutLegacyMigrationCompanyMapsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationCompanyMapsInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationCompanyMapsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutLegacyMigrationCompanyMapsInput
+  upsert?: Prisma.TenantUpsertWithoutLegacyMigrationCompanyMapsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutLegacyMigrationCompanyMapsInput, Prisma.TenantUpdateWithoutLegacyMigrationCompanyMapsInput>, Prisma.TenantUncheckedUpdateWithoutLegacyMigrationCompanyMapsInput>
+}
+
+export type TenantCreateNestedOneWithoutLegacyMigrationRecordMapsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationRecordMapsInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationRecordMapsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutLegacyMigrationRecordMapsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutLegacyMigrationRecordMapsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationRecordMapsInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationRecordMapsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutLegacyMigrationRecordMapsInput
+  upsert?: Prisma.TenantUpsertWithoutLegacyMigrationRecordMapsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutLegacyMigrationRecordMapsInput, Prisma.TenantUpdateWithoutLegacyMigrationRecordMapsInput>, Prisma.TenantUncheckedUpdateWithoutLegacyMigrationRecordMapsInput>
+}
+
+export type TenantCreateNestedOneWithoutLegacyMigrationExceptionsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationExceptionsInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationExceptionsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutLegacyMigrationExceptionsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutLegacyMigrationExceptionsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationExceptionsInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationExceptionsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutLegacyMigrationExceptionsInput
+  upsert?: Prisma.TenantUpsertWithoutLegacyMigrationExceptionsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutLegacyMigrationExceptionsInput, Prisma.TenantUpdateWithoutLegacyMigrationExceptionsInput>, Prisma.TenantUncheckedUpdateWithoutLegacyMigrationExceptionsInput>
+}
+
+export type TenantCreateNestedOneWithoutLegacyMigrationReviewActionsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationReviewActionsInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationReviewActionsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutLegacyMigrationReviewActionsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutLegacyMigrationReviewActionsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationReviewActionsInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationReviewActionsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutLegacyMigrationReviewActionsInput
+  upsert?: Prisma.TenantUpsertWithoutLegacyMigrationReviewActionsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutLegacyMigrationReviewActionsInput, Prisma.TenantUpdateWithoutLegacyMigrationReviewActionsInput>, Prisma.TenantUncheckedUpdateWithoutLegacyMigrationReviewActionsInput>
 }
 
 export type TenantCreateNestedOneWithoutOwnerDailyBriefSnapshotsInput = {
@@ -717,6 +934,62 @@ export type TenantUpdateOneRequiredWithoutReportDocumentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutReportDocumentsInput, Prisma.TenantUpdateWithoutReportDocumentsInput>, Prisma.TenantUncheckedUpdateWithoutReportDocumentsInput>
 }
 
+export type TenantCreateNestedOneWithoutFinanceCounterpartyIdentitiesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutFinanceCounterpartyIdentitiesInput, Prisma.TenantUncheckedCreateWithoutFinanceCounterpartyIdentitiesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutFinanceCounterpartyIdentitiesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutFinanceCounterpartyIdentitiesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutFinanceCounterpartyIdentitiesInput, Prisma.TenantUncheckedCreateWithoutFinanceCounterpartyIdentitiesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutFinanceCounterpartyIdentitiesInput
+  upsert?: Prisma.TenantUpsertWithoutFinanceCounterpartyIdentitiesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutFinanceCounterpartyIdentitiesInput, Prisma.TenantUpdateWithoutFinanceCounterpartyIdentitiesInput>, Prisma.TenantUncheckedUpdateWithoutFinanceCounterpartyIdentitiesInput>
+}
+
+export type TenantCreateNestedOneWithoutFinanceCounterpartyAliasesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutFinanceCounterpartyAliasesInput, Prisma.TenantUncheckedCreateWithoutFinanceCounterpartyAliasesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutFinanceCounterpartyAliasesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutFinanceCounterpartyAliasesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutFinanceCounterpartyAliasesInput, Prisma.TenantUncheckedCreateWithoutFinanceCounterpartyAliasesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutFinanceCounterpartyAliasesInput
+  upsert?: Prisma.TenantUpsertWithoutFinanceCounterpartyAliasesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutFinanceCounterpartyAliasesInput, Prisma.TenantUpdateWithoutFinanceCounterpartyAliasesInput>, Prisma.TenantUncheckedUpdateWithoutFinanceCounterpartyAliasesInput>
+}
+
+export type TenantCreateNestedOneWithoutLegacyMigrationCounterpartyResolutionsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationCounterpartyResolutionsInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationCounterpartyResolutionsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutLegacyMigrationCounterpartyResolutionsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutLegacyMigrationCounterpartyResolutionsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationCounterpartyResolutionsInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationCounterpartyResolutionsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutLegacyMigrationCounterpartyResolutionsInput
+  upsert?: Prisma.TenantUpsertWithoutLegacyMigrationCounterpartyResolutionsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutLegacyMigrationCounterpartyResolutionsInput, Prisma.TenantUpdateWithoutLegacyMigrationCounterpartyResolutionsInput>, Prisma.TenantUncheckedUpdateWithoutLegacyMigrationCounterpartyResolutionsInput>
+}
+
+export type TenantCreateNestedOneWithoutLegacyMigrationCounterpartyCandidatesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationCounterpartyCandidatesInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationCounterpartyCandidatesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutLegacyMigrationCounterpartyCandidatesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutLegacyMigrationCounterpartyCandidatesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationCounterpartyCandidatesInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationCounterpartyCandidatesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutLegacyMigrationCounterpartyCandidatesInput
+  upsert?: Prisma.TenantUpsertWithoutLegacyMigrationCounterpartyCandidatesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutLegacyMigrationCounterpartyCandidatesInput, Prisma.TenantUpdateWithoutLegacyMigrationCounterpartyCandidatesInput>, Prisma.TenantUncheckedUpdateWithoutLegacyMigrationCounterpartyCandidatesInput>
+}
+
 export type TenantCreateWithoutUsersInput = {
   id?: string
   code: string
@@ -741,6 +1014,19 @@ export type TenantCreateWithoutUsersInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutUsersInput = {
@@ -767,6 +1053,19 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutUsersInput = {
@@ -809,6 +1108,19 @@ export type TenantUpdateWithoutUsersInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutUsersInput = {
@@ -835,6 +1147,19 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutCompaniesInput = {
@@ -861,6 +1186,19 @@ export type TenantCreateWithoutCompaniesInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutCompaniesInput = {
@@ -887,6 +1225,19 @@ export type TenantUncheckedCreateWithoutCompaniesInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutCompaniesInput = {
@@ -929,6 +1280,19 @@ export type TenantUpdateWithoutCompaniesInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutCompaniesInput = {
@@ -955,6 +1319,19 @@ export type TenantUncheckedUpdateWithoutCompaniesInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutAdministrationAssignmentsInput = {
@@ -981,6 +1358,19 @@ export type TenantCreateWithoutAdministrationAssignmentsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutAdministrationAssignmentsInput = {
@@ -1007,6 +1397,19 @@ export type TenantUncheckedCreateWithoutAdministrationAssignmentsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutAdministrationAssignmentsInput = {
@@ -1049,6 +1452,19 @@ export type TenantUpdateWithoutAdministrationAssignmentsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutAdministrationAssignmentsInput = {
@@ -1075,6 +1491,19 @@ export type TenantUncheckedUpdateWithoutAdministrationAssignmentsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutRolesInput = {
@@ -1101,6 +1530,19 @@ export type TenantCreateWithoutRolesInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutRolesInput = {
@@ -1127,6 +1569,19 @@ export type TenantUncheckedCreateWithoutRolesInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutRolesInput = {
@@ -1169,6 +1624,19 @@ export type TenantUpdateWithoutRolesInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutRolesInput = {
@@ -1195,6 +1663,19 @@ export type TenantUncheckedUpdateWithoutRolesInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutSessionsInput = {
@@ -1221,6 +1702,19 @@ export type TenantCreateWithoutSessionsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutSessionsInput = {
@@ -1247,6 +1741,19 @@ export type TenantUncheckedCreateWithoutSessionsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutSessionsInput = {
@@ -1289,6 +1796,19 @@ export type TenantUpdateWithoutSessionsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutSessionsInput = {
@@ -1315,6 +1835,19 @@ export type TenantUncheckedUpdateWithoutSessionsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutAuditsInput = {
@@ -1341,6 +1874,19 @@ export type TenantCreateWithoutAuditsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutAuditsInput = {
@@ -1367,6 +1913,19 @@ export type TenantUncheckedCreateWithoutAuditsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutAuditsInput = {
@@ -1409,6 +1968,19 @@ export type TenantUpdateWithoutAuditsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutAuditsInput = {
@@ -1435,6 +2007,19 @@ export type TenantUncheckedUpdateWithoutAuditsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutIdempotencyReceiptsInput = {
@@ -1461,6 +2046,19 @@ export type TenantCreateWithoutIdempotencyReceiptsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutIdempotencyReceiptsInput = {
@@ -1487,6 +2085,19 @@ export type TenantUncheckedCreateWithoutIdempotencyReceiptsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutIdempotencyReceiptsInput = {
@@ -1529,6 +2140,19 @@ export type TenantUpdateWithoutIdempotencyReceiptsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutIdempotencyReceiptsInput = {
@@ -1555,6 +2179,1567 @@ export type TenantUncheckedUpdateWithoutIdempotencyReceiptsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutBackupPoliciesInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutBackupPoliciesInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutBackupPoliciesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutBackupPoliciesInput, Prisma.TenantUncheckedCreateWithoutBackupPoliciesInput>
+}
+
+export type TenantUpsertWithoutBackupPoliciesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutBackupPoliciesInput, Prisma.TenantUncheckedUpdateWithoutBackupPoliciesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutBackupPoliciesInput, Prisma.TenantUncheckedCreateWithoutBackupPoliciesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutBackupPoliciesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutBackupPoliciesInput, Prisma.TenantUncheckedUpdateWithoutBackupPoliciesInput>
+}
+
+export type TenantUpdateWithoutBackupPoliciesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutBackupPoliciesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutBackupJobsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutBackupJobsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutBackupJobsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutBackupJobsInput, Prisma.TenantUncheckedCreateWithoutBackupJobsInput>
+}
+
+export type TenantUpsertWithoutBackupJobsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutBackupJobsInput, Prisma.TenantUncheckedUpdateWithoutBackupJobsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutBackupJobsInput, Prisma.TenantUncheckedCreateWithoutBackupJobsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutBackupJobsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutBackupJobsInput, Prisma.TenantUncheckedUpdateWithoutBackupJobsInput>
+}
+
+export type TenantUpdateWithoutBackupJobsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutBackupJobsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutBackupArtifactsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutBackupArtifactsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutBackupArtifactsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutBackupArtifactsInput, Prisma.TenantUncheckedCreateWithoutBackupArtifactsInput>
+}
+
+export type TenantUpsertWithoutBackupArtifactsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutBackupArtifactsInput, Prisma.TenantUncheckedUpdateWithoutBackupArtifactsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutBackupArtifactsInput, Prisma.TenantUncheckedCreateWithoutBackupArtifactsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutBackupArtifactsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutBackupArtifactsInput, Prisma.TenantUncheckedUpdateWithoutBackupArtifactsInput>
+}
+
+export type TenantUpdateWithoutBackupArtifactsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutBackupArtifactsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutBackupAuditEventsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutBackupAuditEventsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutBackupAuditEventsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutBackupAuditEventsInput, Prisma.TenantUncheckedCreateWithoutBackupAuditEventsInput>
+}
+
+export type TenantUpsertWithoutBackupAuditEventsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutBackupAuditEventsInput, Prisma.TenantUncheckedUpdateWithoutBackupAuditEventsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutBackupAuditEventsInput, Prisma.TenantUncheckedCreateWithoutBackupAuditEventsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutBackupAuditEventsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutBackupAuditEventsInput, Prisma.TenantUncheckedUpdateWithoutBackupAuditEventsInput>
+}
+
+export type TenantUpdateWithoutBackupAuditEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutBackupAuditEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutLegacyMigrationRunsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutLegacyMigrationRunsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutLegacyMigrationRunsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationRunsInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationRunsInput>
+}
+
+export type TenantUpsertWithoutLegacyMigrationRunsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutLegacyMigrationRunsInput, Prisma.TenantUncheckedUpdateWithoutLegacyMigrationRunsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationRunsInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationRunsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutLegacyMigrationRunsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutLegacyMigrationRunsInput, Prisma.TenantUncheckedUpdateWithoutLegacyMigrationRunsInput>
+}
+
+export type TenantUpdateWithoutLegacyMigrationRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutLegacyMigrationRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutLegacyMigrationCompanyMapsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutLegacyMigrationCompanyMapsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutLegacyMigrationCompanyMapsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationCompanyMapsInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationCompanyMapsInput>
+}
+
+export type TenantUpsertWithoutLegacyMigrationCompanyMapsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutLegacyMigrationCompanyMapsInput, Prisma.TenantUncheckedUpdateWithoutLegacyMigrationCompanyMapsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationCompanyMapsInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationCompanyMapsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutLegacyMigrationCompanyMapsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutLegacyMigrationCompanyMapsInput, Prisma.TenantUncheckedUpdateWithoutLegacyMigrationCompanyMapsInput>
+}
+
+export type TenantUpdateWithoutLegacyMigrationCompanyMapsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutLegacyMigrationCompanyMapsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutLegacyMigrationRecordMapsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutLegacyMigrationRecordMapsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutLegacyMigrationRecordMapsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationRecordMapsInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationRecordMapsInput>
+}
+
+export type TenantUpsertWithoutLegacyMigrationRecordMapsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutLegacyMigrationRecordMapsInput, Prisma.TenantUncheckedUpdateWithoutLegacyMigrationRecordMapsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationRecordMapsInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationRecordMapsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutLegacyMigrationRecordMapsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutLegacyMigrationRecordMapsInput, Prisma.TenantUncheckedUpdateWithoutLegacyMigrationRecordMapsInput>
+}
+
+export type TenantUpdateWithoutLegacyMigrationRecordMapsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutLegacyMigrationRecordMapsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutLegacyMigrationExceptionsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutLegacyMigrationExceptionsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutLegacyMigrationExceptionsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationExceptionsInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationExceptionsInput>
+}
+
+export type TenantUpsertWithoutLegacyMigrationExceptionsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutLegacyMigrationExceptionsInput, Prisma.TenantUncheckedUpdateWithoutLegacyMigrationExceptionsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationExceptionsInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationExceptionsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutLegacyMigrationExceptionsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutLegacyMigrationExceptionsInput, Prisma.TenantUncheckedUpdateWithoutLegacyMigrationExceptionsInput>
+}
+
+export type TenantUpdateWithoutLegacyMigrationExceptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutLegacyMigrationExceptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutLegacyMigrationReviewActionsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutLegacyMigrationReviewActionsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutLegacyMigrationReviewActionsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationReviewActionsInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationReviewActionsInput>
+}
+
+export type TenantUpsertWithoutLegacyMigrationReviewActionsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutLegacyMigrationReviewActionsInput, Prisma.TenantUncheckedUpdateWithoutLegacyMigrationReviewActionsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationReviewActionsInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationReviewActionsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutLegacyMigrationReviewActionsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutLegacyMigrationReviewActionsInput, Prisma.TenantUncheckedUpdateWithoutLegacyMigrationReviewActionsInput>
+}
+
+export type TenantUpdateWithoutLegacyMigrationReviewActionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutLegacyMigrationReviewActionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutOwnerDailyBriefSnapshotsInput = {
@@ -1581,6 +3766,19 @@ export type TenantCreateWithoutOwnerDailyBriefSnapshotsInput = {
   inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutOwnerDailyBriefSnapshotsInput = {
@@ -1607,6 +3805,19 @@ export type TenantUncheckedCreateWithoutOwnerDailyBriefSnapshotsInput = {
   inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutOwnerDailyBriefSnapshotsInput = {
@@ -1649,6 +3860,19 @@ export type TenantUpdateWithoutOwnerDailyBriefSnapshotsInput = {
   inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutOwnerDailyBriefSnapshotsInput = {
@@ -1675,6 +3899,19 @@ export type TenantUncheckedUpdateWithoutOwnerDailyBriefSnapshotsInput = {
   inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutDocumentSerialCountersInput = {
@@ -1701,6 +3938,19 @@ export type TenantCreateWithoutDocumentSerialCountersInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutDocumentSerialCountersInput = {
@@ -1727,6 +3977,19 @@ export type TenantUncheckedCreateWithoutDocumentSerialCountersInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutDocumentSerialCountersInput = {
@@ -1769,6 +4032,19 @@ export type TenantUpdateWithoutDocumentSerialCountersInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutDocumentSerialCountersInput = {
@@ -1795,6 +4071,19 @@ export type TenantUncheckedUpdateWithoutDocumentSerialCountersInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutFileMetadataInput = {
@@ -1821,6 +4110,19 @@ export type TenantCreateWithoutFileMetadataInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutFileMetadataInput = {
@@ -1847,6 +4149,19 @@ export type TenantUncheckedCreateWithoutFileMetadataInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutFileMetadataInput = {
@@ -1889,6 +4204,19 @@ export type TenantUpdateWithoutFileMetadataInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutFileMetadataInput = {
@@ -1915,6 +4243,19 @@ export type TenantUncheckedUpdateWithoutFileMetadataInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutInboundEvidenceLabelsInput = {
@@ -1941,6 +4282,19 @@ export type TenantCreateWithoutInboundEvidenceLabelsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutInboundEvidenceLabelsInput = {
@@ -1967,6 +4321,19 @@ export type TenantUncheckedCreateWithoutInboundEvidenceLabelsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutInboundEvidenceLabelsInput = {
@@ -2009,6 +4376,19 @@ export type TenantUpdateWithoutInboundEvidenceLabelsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutInboundEvidenceLabelsInput = {
@@ -2035,6 +4415,19 @@ export type TenantUncheckedUpdateWithoutInboundEvidenceLabelsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutInboundEvidenceRulesInput = {
@@ -2061,6 +4454,19 @@ export type TenantCreateWithoutInboundEvidenceRulesInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutInboundEvidenceRulesInput = {
@@ -2087,6 +4493,19 @@ export type TenantUncheckedCreateWithoutInboundEvidenceRulesInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutInboundEvidenceRulesInput = {
@@ -2129,6 +4548,19 @@ export type TenantUpdateWithoutInboundEvidenceRulesInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutInboundEvidenceRulesInput = {
@@ -2155,6 +4587,19 @@ export type TenantUncheckedUpdateWithoutInboundEvidenceRulesInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutInboundEvidenceCommandsInput = {
@@ -2181,6 +4626,19 @@ export type TenantCreateWithoutInboundEvidenceCommandsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutInboundEvidenceCommandsInput = {
@@ -2207,6 +4665,19 @@ export type TenantUncheckedCreateWithoutInboundEvidenceCommandsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutInboundEvidenceCommandsInput = {
@@ -2249,6 +4720,19 @@ export type TenantUpdateWithoutInboundEvidenceCommandsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutInboundEvidenceCommandsInput = {
@@ -2275,6 +4759,19 @@ export type TenantUncheckedUpdateWithoutInboundEvidenceCommandsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutInboundEvidenceGmailConnectionInput = {
@@ -2301,6 +4798,19 @@ export type TenantCreateWithoutInboundEvidenceGmailConnectionInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutInboundEvidenceGmailConnectionInput = {
@@ -2327,6 +4837,19 @@ export type TenantUncheckedCreateWithoutInboundEvidenceGmailConnectionInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutInboundEvidenceGmailConnectionInput = {
@@ -2369,6 +4892,19 @@ export type TenantUpdateWithoutInboundEvidenceGmailConnectionInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutInboundEvidenceGmailConnectionInput = {
@@ -2395,6 +4931,19 @@ export type TenantUncheckedUpdateWithoutInboundEvidenceGmailConnectionInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutInboundEvidenceOAuthStatesInput = {
@@ -2421,6 +4970,19 @@ export type TenantCreateWithoutInboundEvidenceOAuthStatesInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutInboundEvidenceOAuthStatesInput = {
@@ -2447,6 +5009,19 @@ export type TenantUncheckedCreateWithoutInboundEvidenceOAuthStatesInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutInboundEvidenceOAuthStatesInput = {
@@ -2489,6 +5064,19 @@ export type TenantUpdateWithoutInboundEvidenceOAuthStatesInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutInboundEvidenceOAuthStatesInput = {
@@ -2515,6 +5103,19 @@ export type TenantUncheckedUpdateWithoutInboundEvidenceOAuthStatesInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutInboundEvidenceMessagesInput = {
@@ -2541,6 +5142,19 @@ export type TenantCreateWithoutInboundEvidenceMessagesInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutInboundEvidenceMessagesInput = {
@@ -2567,6 +5181,19 @@ export type TenantUncheckedCreateWithoutInboundEvidenceMessagesInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutInboundEvidenceMessagesInput = {
@@ -2609,6 +5236,19 @@ export type TenantUpdateWithoutInboundEvidenceMessagesInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutInboundEvidenceMessagesInput = {
@@ -2635,6 +5275,19 @@ export type TenantUncheckedUpdateWithoutInboundEvidenceMessagesInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutInboundEvidenceAttachmentsInput = {
@@ -2661,6 +5314,19 @@ export type TenantCreateWithoutInboundEvidenceAttachmentsInput = {
   inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutInboundEvidenceAttachmentsInput = {
@@ -2687,6 +5353,19 @@ export type TenantUncheckedCreateWithoutInboundEvidenceAttachmentsInput = {
   inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutInboundEvidenceAttachmentsInput = {
@@ -2729,6 +5408,19 @@ export type TenantUpdateWithoutInboundEvidenceAttachmentsInput = {
   inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutInboundEvidenceAttachmentsInput = {
@@ -2755,6 +5447,19 @@ export type TenantUncheckedUpdateWithoutInboundEvidenceAttachmentsInput = {
   inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutInboundEvidenceDocumentAnalysesInput = {
@@ -2781,6 +5486,19 @@ export type TenantCreateWithoutInboundEvidenceDocumentAnalysesInput = {
   inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutInboundEvidenceDocumentAnalysesInput = {
@@ -2807,6 +5525,19 @@ export type TenantUncheckedCreateWithoutInboundEvidenceDocumentAnalysesInput = {
   inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutInboundEvidenceDocumentAnalysesInput = {
@@ -2849,6 +5580,19 @@ export type TenantUpdateWithoutInboundEvidenceDocumentAnalysesInput = {
   inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutInboundEvidenceDocumentAnalysesInput = {
@@ -2875,6 +5619,19 @@ export type TenantUncheckedUpdateWithoutInboundEvidenceDocumentAnalysesInput = {
   inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutReportDocumentsInput = {
@@ -2901,6 +5658,19 @@ export type TenantCreateWithoutReportDocumentsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutReportDocumentsInput = {
@@ -2927,6 +5697,19 @@ export type TenantUncheckedCreateWithoutReportDocumentsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutReportDocumentsInput = {
@@ -2969,6 +5752,19 @@ export type TenantUpdateWithoutReportDocumentsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutReportDocumentsInput = {
@@ -2995,6 +5791,707 @@ export type TenantUncheckedUpdateWithoutReportDocumentsInput = {
   inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
   inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
   ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutFinanceCounterpartyIdentitiesInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutFinanceCounterpartyIdentitiesInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutFinanceCounterpartyIdentitiesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutFinanceCounterpartyIdentitiesInput, Prisma.TenantUncheckedCreateWithoutFinanceCounterpartyIdentitiesInput>
+}
+
+export type TenantUpsertWithoutFinanceCounterpartyIdentitiesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutFinanceCounterpartyIdentitiesInput, Prisma.TenantUncheckedUpdateWithoutFinanceCounterpartyIdentitiesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutFinanceCounterpartyIdentitiesInput, Prisma.TenantUncheckedCreateWithoutFinanceCounterpartyIdentitiesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutFinanceCounterpartyIdentitiesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutFinanceCounterpartyIdentitiesInput, Prisma.TenantUncheckedUpdateWithoutFinanceCounterpartyIdentitiesInput>
+}
+
+export type TenantUpdateWithoutFinanceCounterpartyIdentitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutFinanceCounterpartyIdentitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutFinanceCounterpartyAliasesInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutFinanceCounterpartyAliasesInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutFinanceCounterpartyAliasesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutFinanceCounterpartyAliasesInput, Prisma.TenantUncheckedCreateWithoutFinanceCounterpartyAliasesInput>
+}
+
+export type TenantUpsertWithoutFinanceCounterpartyAliasesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutFinanceCounterpartyAliasesInput, Prisma.TenantUncheckedUpdateWithoutFinanceCounterpartyAliasesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutFinanceCounterpartyAliasesInput, Prisma.TenantUncheckedCreateWithoutFinanceCounterpartyAliasesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutFinanceCounterpartyAliasesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutFinanceCounterpartyAliasesInput, Prisma.TenantUncheckedUpdateWithoutFinanceCounterpartyAliasesInput>
+}
+
+export type TenantUpdateWithoutFinanceCounterpartyAliasesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutFinanceCounterpartyAliasesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutLegacyMigrationCounterpartyResolutionsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutLegacyMigrationCounterpartyResolutionsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutLegacyMigrationCounterpartyResolutionsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationCounterpartyResolutionsInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationCounterpartyResolutionsInput>
+}
+
+export type TenantUpsertWithoutLegacyMigrationCounterpartyResolutionsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutLegacyMigrationCounterpartyResolutionsInput, Prisma.TenantUncheckedUpdateWithoutLegacyMigrationCounterpartyResolutionsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationCounterpartyResolutionsInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationCounterpartyResolutionsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutLegacyMigrationCounterpartyResolutionsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutLegacyMigrationCounterpartyResolutionsInput, Prisma.TenantUncheckedUpdateWithoutLegacyMigrationCounterpartyResolutionsInput>
+}
+
+export type TenantUpdateWithoutLegacyMigrationCounterpartyResolutionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutLegacyMigrationCounterpartyResolutionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutLegacyMigrationCounterpartyCandidatesInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutLegacyMigrationCounterpartyCandidatesInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutLegacyMigrationCounterpartyCandidatesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationCounterpartyCandidatesInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationCounterpartyCandidatesInput>
+}
+
+export type TenantUpsertWithoutLegacyMigrationCounterpartyCandidatesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutLegacyMigrationCounterpartyCandidatesInput, Prisma.TenantUncheckedUpdateWithoutLegacyMigrationCounterpartyCandidatesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutLegacyMigrationCounterpartyCandidatesInput, Prisma.TenantUncheckedCreateWithoutLegacyMigrationCounterpartyCandidatesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutLegacyMigrationCounterpartyCandidatesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutLegacyMigrationCounterpartyCandidatesInput, Prisma.TenantUncheckedUpdateWithoutLegacyMigrationCounterpartyCandidatesInput>
+}
+
+export type TenantUpdateWithoutLegacyMigrationCounterpartyCandidatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutLegacyMigrationCounterpartyCandidatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 
@@ -3021,6 +6518,19 @@ export type TenantCountOutputType = {
   inboundEvidenceAttachments: number
   inboundEvidenceDocumentAnalyses: number
   ownerDailyBriefSnapshots: number
+  backupPolicies: number
+  backupJobs: number
+  backupArtifacts: number
+  backupAuditEvents: number
+  legacyMigrationRuns: number
+  legacyMigrationCompanyMaps: number
+  legacyMigrationRecordMaps: number
+  legacyMigrationExceptions: number
+  legacyMigrationReviewActions: number
+  legacyMigrationCounterpartyResolutions: number
+  legacyMigrationCounterpartyCandidates: number
+  financeCounterpartyIdentities: number
+  financeCounterpartyAliases: number
 }
 
 export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3042,6 +6552,19 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   inboundEvidenceAttachments?: boolean | TenantCountOutputTypeCountInboundEvidenceAttachmentsArgs
   inboundEvidenceDocumentAnalyses?: boolean | TenantCountOutputTypeCountInboundEvidenceDocumentAnalysesArgs
   ownerDailyBriefSnapshots?: boolean | TenantCountOutputTypeCountOwnerDailyBriefSnapshotsArgs
+  backupPolicies?: boolean | TenantCountOutputTypeCountBackupPoliciesArgs
+  backupJobs?: boolean | TenantCountOutputTypeCountBackupJobsArgs
+  backupArtifacts?: boolean | TenantCountOutputTypeCountBackupArtifactsArgs
+  backupAuditEvents?: boolean | TenantCountOutputTypeCountBackupAuditEventsArgs
+  legacyMigrationRuns?: boolean | TenantCountOutputTypeCountLegacyMigrationRunsArgs
+  legacyMigrationCompanyMaps?: boolean | TenantCountOutputTypeCountLegacyMigrationCompanyMapsArgs
+  legacyMigrationRecordMaps?: boolean | TenantCountOutputTypeCountLegacyMigrationRecordMapsArgs
+  legacyMigrationExceptions?: boolean | TenantCountOutputTypeCountLegacyMigrationExceptionsArgs
+  legacyMigrationReviewActions?: boolean | TenantCountOutputTypeCountLegacyMigrationReviewActionsArgs
+  legacyMigrationCounterpartyResolutions?: boolean | TenantCountOutputTypeCountLegacyMigrationCounterpartyResolutionsArgs
+  legacyMigrationCounterpartyCandidates?: boolean | TenantCountOutputTypeCountLegacyMigrationCounterpartyCandidatesArgs
+  financeCounterpartyIdentities?: boolean | TenantCountOutputTypeCountFinanceCounterpartyIdentitiesArgs
+  financeCounterpartyAliases?: boolean | TenantCountOutputTypeCountFinanceCounterpartyAliasesArgs
 }
 
 /**
@@ -3180,6 +6703,97 @@ export type TenantCountOutputTypeCountOwnerDailyBriefSnapshotsArgs<ExtArgs exten
   where?: Prisma.OwnerDailyBriefSnapshotWhereInput
 }
 
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountBackupPoliciesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BackupPolicyWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountBackupJobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BackupJobWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountBackupArtifactsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BackupArtifactWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountBackupAuditEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BackupAuditEventWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountLegacyMigrationRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LegacyMigrationRunWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountLegacyMigrationCompanyMapsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LegacyMigrationCompanyMapWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountLegacyMigrationRecordMapsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LegacyMigrationRecordMapWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountLegacyMigrationExceptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LegacyMigrationExceptionWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountLegacyMigrationReviewActionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LegacyMigrationReviewActionWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountLegacyMigrationCounterpartyResolutionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LegacyMigrationCounterpartyResolutionWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountLegacyMigrationCounterpartyCandidatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LegacyMigrationCounterpartyCandidateWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountFinanceCounterpartyIdentitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FinanceCounterpartyIdentityWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountFinanceCounterpartyAliasesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FinanceCounterpartyAliasWhereInput
+}
+
 
 export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -3206,6 +6820,19 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   inboundEvidenceAttachments?: boolean | Prisma.Tenant$inboundEvidenceAttachmentsArgs<ExtArgs>
   inboundEvidenceDocumentAnalyses?: boolean | Prisma.Tenant$inboundEvidenceDocumentAnalysesArgs<ExtArgs>
   ownerDailyBriefSnapshots?: boolean | Prisma.Tenant$ownerDailyBriefSnapshotsArgs<ExtArgs>
+  backupPolicies?: boolean | Prisma.Tenant$backupPoliciesArgs<ExtArgs>
+  backupJobs?: boolean | Prisma.Tenant$backupJobsArgs<ExtArgs>
+  backupArtifacts?: boolean | Prisma.Tenant$backupArtifactsArgs<ExtArgs>
+  backupAuditEvents?: boolean | Prisma.Tenant$backupAuditEventsArgs<ExtArgs>
+  legacyMigrationRuns?: boolean | Prisma.Tenant$legacyMigrationRunsArgs<ExtArgs>
+  legacyMigrationCompanyMaps?: boolean | Prisma.Tenant$legacyMigrationCompanyMapsArgs<ExtArgs>
+  legacyMigrationRecordMaps?: boolean | Prisma.Tenant$legacyMigrationRecordMapsArgs<ExtArgs>
+  legacyMigrationExceptions?: boolean | Prisma.Tenant$legacyMigrationExceptionsArgs<ExtArgs>
+  legacyMigrationReviewActions?: boolean | Prisma.Tenant$legacyMigrationReviewActionsArgs<ExtArgs>
+  legacyMigrationCounterpartyResolutions?: boolean | Prisma.Tenant$legacyMigrationCounterpartyResolutionsArgs<ExtArgs>
+  legacyMigrationCounterpartyCandidates?: boolean | Prisma.Tenant$legacyMigrationCounterpartyCandidatesArgs<ExtArgs>
+  financeCounterpartyIdentities?: boolean | Prisma.Tenant$financeCounterpartyIdentitiesArgs<ExtArgs>
+  financeCounterpartyAliases?: boolean | Prisma.Tenant$financeCounterpartyAliasesArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
 
@@ -3254,6 +6881,19 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   inboundEvidenceAttachments?: boolean | Prisma.Tenant$inboundEvidenceAttachmentsArgs<ExtArgs>
   inboundEvidenceDocumentAnalyses?: boolean | Prisma.Tenant$inboundEvidenceDocumentAnalysesArgs<ExtArgs>
   ownerDailyBriefSnapshots?: boolean | Prisma.Tenant$ownerDailyBriefSnapshotsArgs<ExtArgs>
+  backupPolicies?: boolean | Prisma.Tenant$backupPoliciesArgs<ExtArgs>
+  backupJobs?: boolean | Prisma.Tenant$backupJobsArgs<ExtArgs>
+  backupArtifacts?: boolean | Prisma.Tenant$backupArtifactsArgs<ExtArgs>
+  backupAuditEvents?: boolean | Prisma.Tenant$backupAuditEventsArgs<ExtArgs>
+  legacyMigrationRuns?: boolean | Prisma.Tenant$legacyMigrationRunsArgs<ExtArgs>
+  legacyMigrationCompanyMaps?: boolean | Prisma.Tenant$legacyMigrationCompanyMapsArgs<ExtArgs>
+  legacyMigrationRecordMaps?: boolean | Prisma.Tenant$legacyMigrationRecordMapsArgs<ExtArgs>
+  legacyMigrationExceptions?: boolean | Prisma.Tenant$legacyMigrationExceptionsArgs<ExtArgs>
+  legacyMigrationReviewActions?: boolean | Prisma.Tenant$legacyMigrationReviewActionsArgs<ExtArgs>
+  legacyMigrationCounterpartyResolutions?: boolean | Prisma.Tenant$legacyMigrationCounterpartyResolutionsArgs<ExtArgs>
+  legacyMigrationCounterpartyCandidates?: boolean | Prisma.Tenant$legacyMigrationCounterpartyCandidatesArgs<ExtArgs>
+  financeCounterpartyIdentities?: boolean | Prisma.Tenant$financeCounterpartyIdentitiesArgs<ExtArgs>
+  financeCounterpartyAliases?: boolean | Prisma.Tenant$financeCounterpartyAliasesArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TenantIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -3281,6 +6921,19 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     inboundEvidenceAttachments: Prisma.$InboundEvidenceAttachmentPayload<ExtArgs>[]
     inboundEvidenceDocumentAnalyses: Prisma.$InboundEvidenceDocumentAnalysisPayload<ExtArgs>[]
     ownerDailyBriefSnapshots: Prisma.$OwnerDailyBriefSnapshotPayload<ExtArgs>[]
+    backupPolicies: Prisma.$BackupPolicyPayload<ExtArgs>[]
+    backupJobs: Prisma.$BackupJobPayload<ExtArgs>[]
+    backupArtifacts: Prisma.$BackupArtifactPayload<ExtArgs>[]
+    backupAuditEvents: Prisma.$BackupAuditEventPayload<ExtArgs>[]
+    legacyMigrationRuns: Prisma.$LegacyMigrationRunPayload<ExtArgs>[]
+    legacyMigrationCompanyMaps: Prisma.$LegacyMigrationCompanyMapPayload<ExtArgs>[]
+    legacyMigrationRecordMaps: Prisma.$LegacyMigrationRecordMapPayload<ExtArgs>[]
+    legacyMigrationExceptions: Prisma.$LegacyMigrationExceptionPayload<ExtArgs>[]
+    legacyMigrationReviewActions: Prisma.$LegacyMigrationReviewActionPayload<ExtArgs>[]
+    legacyMigrationCounterpartyResolutions: Prisma.$LegacyMigrationCounterpartyResolutionPayload<ExtArgs>[]
+    legacyMigrationCounterpartyCandidates: Prisma.$LegacyMigrationCounterpartyCandidatePayload<ExtArgs>[]
+    financeCounterpartyIdentities: Prisma.$FinanceCounterpartyIdentityPayload<ExtArgs>[]
+    financeCounterpartyAliases: Prisma.$FinanceCounterpartyAliasPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3701,6 +7354,19 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   inboundEvidenceAttachments<T extends Prisma.Tenant$inboundEvidenceAttachmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$inboundEvidenceAttachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InboundEvidenceAttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   inboundEvidenceDocumentAnalyses<T extends Prisma.Tenant$inboundEvidenceDocumentAnalysesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$inboundEvidenceDocumentAnalysesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InboundEvidenceDocumentAnalysisPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   ownerDailyBriefSnapshots<T extends Prisma.Tenant$ownerDailyBriefSnapshotsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$ownerDailyBriefSnapshotsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OwnerDailyBriefSnapshotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  backupPolicies<T extends Prisma.Tenant$backupPoliciesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$backupPoliciesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BackupPolicyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  backupJobs<T extends Prisma.Tenant$backupJobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$backupJobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BackupJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  backupArtifacts<T extends Prisma.Tenant$backupArtifactsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$backupArtifactsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BackupArtifactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  backupAuditEvents<T extends Prisma.Tenant$backupAuditEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$backupAuditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BackupAuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  legacyMigrationRuns<T extends Prisma.Tenant$legacyMigrationRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$legacyMigrationRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LegacyMigrationRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  legacyMigrationCompanyMaps<T extends Prisma.Tenant$legacyMigrationCompanyMapsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$legacyMigrationCompanyMapsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LegacyMigrationCompanyMapPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  legacyMigrationRecordMaps<T extends Prisma.Tenant$legacyMigrationRecordMapsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$legacyMigrationRecordMapsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LegacyMigrationRecordMapPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  legacyMigrationExceptions<T extends Prisma.Tenant$legacyMigrationExceptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$legacyMigrationExceptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LegacyMigrationExceptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  legacyMigrationReviewActions<T extends Prisma.Tenant$legacyMigrationReviewActionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$legacyMigrationReviewActionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LegacyMigrationReviewActionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  legacyMigrationCounterpartyResolutions<T extends Prisma.Tenant$legacyMigrationCounterpartyResolutionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$legacyMigrationCounterpartyResolutionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LegacyMigrationCounterpartyResolutionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  legacyMigrationCounterpartyCandidates<T extends Prisma.Tenant$legacyMigrationCounterpartyCandidatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$legacyMigrationCounterpartyCandidatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LegacyMigrationCounterpartyCandidatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  financeCounterpartyIdentities<T extends Prisma.Tenant$financeCounterpartyIdentitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$financeCounterpartyIdentitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceCounterpartyIdentityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  financeCounterpartyAliases<T extends Prisma.Tenant$financeCounterpartyAliasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$financeCounterpartyAliasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceCounterpartyAliasPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4576,6 +8242,318 @@ export type Tenant$ownerDailyBriefSnapshotsArgs<ExtArgs extends runtime.Types.Ex
   take?: number
   skip?: number
   distinct?: Prisma.OwnerDailyBriefSnapshotScalarFieldEnum | Prisma.OwnerDailyBriefSnapshotScalarFieldEnum[]
+}
+
+/**
+ * Tenant.backupPolicies
+ */
+export type Tenant$backupPoliciesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BackupPolicy
+   */
+  select?: Prisma.BackupPolicySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BackupPolicy
+   */
+  omit?: Prisma.BackupPolicyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BackupPolicyInclude<ExtArgs> | null
+  where?: Prisma.BackupPolicyWhereInput
+  orderBy?: Prisma.BackupPolicyOrderByWithRelationInput | Prisma.BackupPolicyOrderByWithRelationInput[]
+  cursor?: Prisma.BackupPolicyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BackupPolicyScalarFieldEnum | Prisma.BackupPolicyScalarFieldEnum[]
+}
+
+/**
+ * Tenant.backupJobs
+ */
+export type Tenant$backupJobsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BackupJob
+   */
+  select?: Prisma.BackupJobSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BackupJob
+   */
+  omit?: Prisma.BackupJobOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BackupJobInclude<ExtArgs> | null
+  where?: Prisma.BackupJobWhereInput
+  orderBy?: Prisma.BackupJobOrderByWithRelationInput | Prisma.BackupJobOrderByWithRelationInput[]
+  cursor?: Prisma.BackupJobWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BackupJobScalarFieldEnum | Prisma.BackupJobScalarFieldEnum[]
+}
+
+/**
+ * Tenant.backupArtifacts
+ */
+export type Tenant$backupArtifactsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BackupArtifact
+   */
+  select?: Prisma.BackupArtifactSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BackupArtifact
+   */
+  omit?: Prisma.BackupArtifactOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BackupArtifactInclude<ExtArgs> | null
+  where?: Prisma.BackupArtifactWhereInput
+  orderBy?: Prisma.BackupArtifactOrderByWithRelationInput | Prisma.BackupArtifactOrderByWithRelationInput[]
+  cursor?: Prisma.BackupArtifactWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BackupArtifactScalarFieldEnum | Prisma.BackupArtifactScalarFieldEnum[]
+}
+
+/**
+ * Tenant.backupAuditEvents
+ */
+export type Tenant$backupAuditEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BackupAuditEvent
+   */
+  select?: Prisma.BackupAuditEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BackupAuditEvent
+   */
+  omit?: Prisma.BackupAuditEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BackupAuditEventInclude<ExtArgs> | null
+  where?: Prisma.BackupAuditEventWhereInput
+  orderBy?: Prisma.BackupAuditEventOrderByWithRelationInput | Prisma.BackupAuditEventOrderByWithRelationInput[]
+  cursor?: Prisma.BackupAuditEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BackupAuditEventScalarFieldEnum | Prisma.BackupAuditEventScalarFieldEnum[]
+}
+
+/**
+ * Tenant.legacyMigrationRuns
+ */
+export type Tenant$legacyMigrationRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LegacyMigrationRun
+   */
+  select?: Prisma.LegacyMigrationRunSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LegacyMigrationRun
+   */
+  omit?: Prisma.LegacyMigrationRunOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LegacyMigrationRunInclude<ExtArgs> | null
+  where?: Prisma.LegacyMigrationRunWhereInput
+  orderBy?: Prisma.LegacyMigrationRunOrderByWithRelationInput | Prisma.LegacyMigrationRunOrderByWithRelationInput[]
+  cursor?: Prisma.LegacyMigrationRunWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LegacyMigrationRunScalarFieldEnum | Prisma.LegacyMigrationRunScalarFieldEnum[]
+}
+
+/**
+ * Tenant.legacyMigrationCompanyMaps
+ */
+export type Tenant$legacyMigrationCompanyMapsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LegacyMigrationCompanyMap
+   */
+  select?: Prisma.LegacyMigrationCompanyMapSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LegacyMigrationCompanyMap
+   */
+  omit?: Prisma.LegacyMigrationCompanyMapOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LegacyMigrationCompanyMapInclude<ExtArgs> | null
+  where?: Prisma.LegacyMigrationCompanyMapWhereInput
+  orderBy?: Prisma.LegacyMigrationCompanyMapOrderByWithRelationInput | Prisma.LegacyMigrationCompanyMapOrderByWithRelationInput[]
+  cursor?: Prisma.LegacyMigrationCompanyMapWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LegacyMigrationCompanyMapScalarFieldEnum | Prisma.LegacyMigrationCompanyMapScalarFieldEnum[]
+}
+
+/**
+ * Tenant.legacyMigrationRecordMaps
+ */
+export type Tenant$legacyMigrationRecordMapsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LegacyMigrationRecordMap
+   */
+  select?: Prisma.LegacyMigrationRecordMapSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LegacyMigrationRecordMap
+   */
+  omit?: Prisma.LegacyMigrationRecordMapOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LegacyMigrationRecordMapInclude<ExtArgs> | null
+  where?: Prisma.LegacyMigrationRecordMapWhereInput
+  orderBy?: Prisma.LegacyMigrationRecordMapOrderByWithRelationInput | Prisma.LegacyMigrationRecordMapOrderByWithRelationInput[]
+  cursor?: Prisma.LegacyMigrationRecordMapWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LegacyMigrationRecordMapScalarFieldEnum | Prisma.LegacyMigrationRecordMapScalarFieldEnum[]
+}
+
+/**
+ * Tenant.legacyMigrationExceptions
+ */
+export type Tenant$legacyMigrationExceptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LegacyMigrationException
+   */
+  select?: Prisma.LegacyMigrationExceptionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LegacyMigrationException
+   */
+  omit?: Prisma.LegacyMigrationExceptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LegacyMigrationExceptionInclude<ExtArgs> | null
+  where?: Prisma.LegacyMigrationExceptionWhereInput
+  orderBy?: Prisma.LegacyMigrationExceptionOrderByWithRelationInput | Prisma.LegacyMigrationExceptionOrderByWithRelationInput[]
+  cursor?: Prisma.LegacyMigrationExceptionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LegacyMigrationExceptionScalarFieldEnum | Prisma.LegacyMigrationExceptionScalarFieldEnum[]
+}
+
+/**
+ * Tenant.legacyMigrationReviewActions
+ */
+export type Tenant$legacyMigrationReviewActionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LegacyMigrationReviewAction
+   */
+  select?: Prisma.LegacyMigrationReviewActionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LegacyMigrationReviewAction
+   */
+  omit?: Prisma.LegacyMigrationReviewActionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LegacyMigrationReviewActionInclude<ExtArgs> | null
+  where?: Prisma.LegacyMigrationReviewActionWhereInput
+  orderBy?: Prisma.LegacyMigrationReviewActionOrderByWithRelationInput | Prisma.LegacyMigrationReviewActionOrderByWithRelationInput[]
+  cursor?: Prisma.LegacyMigrationReviewActionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LegacyMigrationReviewActionScalarFieldEnum | Prisma.LegacyMigrationReviewActionScalarFieldEnum[]
+}
+
+/**
+ * Tenant.legacyMigrationCounterpartyResolutions
+ */
+export type Tenant$legacyMigrationCounterpartyResolutionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LegacyMigrationCounterpartyResolution
+   */
+  select?: Prisma.LegacyMigrationCounterpartyResolutionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LegacyMigrationCounterpartyResolution
+   */
+  omit?: Prisma.LegacyMigrationCounterpartyResolutionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LegacyMigrationCounterpartyResolutionInclude<ExtArgs> | null
+  where?: Prisma.LegacyMigrationCounterpartyResolutionWhereInput
+  orderBy?: Prisma.LegacyMigrationCounterpartyResolutionOrderByWithRelationInput | Prisma.LegacyMigrationCounterpartyResolutionOrderByWithRelationInput[]
+  cursor?: Prisma.LegacyMigrationCounterpartyResolutionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LegacyMigrationCounterpartyResolutionScalarFieldEnum | Prisma.LegacyMigrationCounterpartyResolutionScalarFieldEnum[]
+}
+
+/**
+ * Tenant.legacyMigrationCounterpartyCandidates
+ */
+export type Tenant$legacyMigrationCounterpartyCandidatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LegacyMigrationCounterpartyCandidate
+   */
+  select?: Prisma.LegacyMigrationCounterpartyCandidateSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LegacyMigrationCounterpartyCandidate
+   */
+  omit?: Prisma.LegacyMigrationCounterpartyCandidateOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LegacyMigrationCounterpartyCandidateInclude<ExtArgs> | null
+  where?: Prisma.LegacyMigrationCounterpartyCandidateWhereInput
+  orderBy?: Prisma.LegacyMigrationCounterpartyCandidateOrderByWithRelationInput | Prisma.LegacyMigrationCounterpartyCandidateOrderByWithRelationInput[]
+  cursor?: Prisma.LegacyMigrationCounterpartyCandidateWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LegacyMigrationCounterpartyCandidateScalarFieldEnum | Prisma.LegacyMigrationCounterpartyCandidateScalarFieldEnum[]
+}
+
+/**
+ * Tenant.financeCounterpartyIdentities
+ */
+export type Tenant$financeCounterpartyIdentitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FinanceCounterpartyIdentity
+   */
+  select?: Prisma.FinanceCounterpartyIdentitySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FinanceCounterpartyIdentity
+   */
+  omit?: Prisma.FinanceCounterpartyIdentityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FinanceCounterpartyIdentityInclude<ExtArgs> | null
+  where?: Prisma.FinanceCounterpartyIdentityWhereInput
+  orderBy?: Prisma.FinanceCounterpartyIdentityOrderByWithRelationInput | Prisma.FinanceCounterpartyIdentityOrderByWithRelationInput[]
+  cursor?: Prisma.FinanceCounterpartyIdentityWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FinanceCounterpartyIdentityScalarFieldEnum | Prisma.FinanceCounterpartyIdentityScalarFieldEnum[]
+}
+
+/**
+ * Tenant.financeCounterpartyAliases
+ */
+export type Tenant$financeCounterpartyAliasesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FinanceCounterpartyAlias
+   */
+  select?: Prisma.FinanceCounterpartyAliasSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FinanceCounterpartyAlias
+   */
+  omit?: Prisma.FinanceCounterpartyAliasOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FinanceCounterpartyAliasInclude<ExtArgs> | null
+  where?: Prisma.FinanceCounterpartyAliasWhereInput
+  orderBy?: Prisma.FinanceCounterpartyAliasOrderByWithRelationInput | Prisma.FinanceCounterpartyAliasOrderByWithRelationInput[]
+  cursor?: Prisma.FinanceCounterpartyAliasWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FinanceCounterpartyAliasScalarFieldEnum | Prisma.FinanceCounterpartyAliasScalarFieldEnum[]
 }
 
 /**

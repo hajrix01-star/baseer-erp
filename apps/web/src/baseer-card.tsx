@@ -29,3 +29,8 @@ export function BaseerCard({
     </article>
   );
 }
+
+/** Shared interactive-card primitive for directory and selection views. */
+export function BaseerCardButton({ children, className, ...props }: ComponentPropsWithoutRef<"button"> & { children: ReactNode }) {
+  return <button {...props} className={["baseer-card", "baseer-card--default", "baseer-card--compact", "baseer-card--interactive", className].filter(Boolean).join(" ")}>{children}</button>;
+}

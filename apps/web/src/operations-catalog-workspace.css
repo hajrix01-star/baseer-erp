@@ -4,9 +4,10 @@
 .operations-catalog__header p { max-width: 54rem; margin: 0; color: var(--muted, #64748b); }
 .operations-catalog__metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; }
 .operations-catalog__metrics p { font-size: 1.55rem; margin: .25rem 0 0; font-weight: 750; }
-.operations-catalog__tabs { display: flex; gap: .4rem; padding-bottom: .55rem; overflow-x: auto; border-bottom: 1px solid var(--border, #d8e2dc); }
-.operations-catalog__tabs button { border: 0; background: transparent; color: var(--muted, #64748b); cursor: pointer; font: inherit; font-weight: 700; padding: .6rem .8rem; border-radius: .55rem; white-space: nowrap; }
-.operations-catalog__tabs button.is-active { background: #e8f5ef; color: #08744d; }
+.operations-catalog__tabs { display: flex; gap: var(--space-2); padding: var(--space-2); overflow-x: auto; border: 1px solid var(--border-subtle); border-radius: var(--card-radius); background: var(--tab-rail); }
+.operations-catalog__tabs button { border: 1px solid transparent; background: transparent; color: var(--muted); cursor: pointer; font: inherit; font-weight: 700; padding: .6rem .8rem; border-radius: var(--radius-sm); white-space: nowrap; }
+.operations-catalog__tabs button:hover { color: var(--brand-deep); background: color-mix(in srgb, var(--brand) 7%, var(--tab-rail)); }
+.operations-catalog__tabs button.is-active { border-color: color-mix(in srgb, var(--brand) 22%, var(--border-subtle)); background: var(--tab-active); color: var(--brand-deep); }
 .operations-catalog__search { width: min(100%, 30rem); padding: .7rem .85rem; border: 1px solid var(--border, #cbd8d0); border-radius: .55rem; font: inherit; }
 .operations-catalog__card-heading { display: flex; justify-content: space-between; gap: 1rem; align-items: start; margin-bottom: .7rem; }
 .operations-catalog__card-heading h3, .operations-catalog__card-heading p { margin: 0; }
@@ -61,9 +62,10 @@
 .operations-conversion-editor__result p { margin: .35rem 0 0; color: #365345; font-size: .86rem; }
 .operations-conversion-editor__result p span { padding-inline: .25rem; color: #08744d; font-weight: 800; }
 .operations-menu-product-card .daily-sales-dialog__body { max-width: 74rem; }
-.operations-menu-product-card__tabs { display: flex; gap: .45rem; overflow-x: auto; margin: -.2rem 0 1rem; padding-bottom: .7rem; border-bottom: 1px solid var(--border, #d8e2dc); }
-.operations-menu-product-card__tabs button { border: 0; border-radius: .55rem; background: transparent; color: var(--muted, #64748b); cursor: pointer; font: inherit; font-weight: 750; padding: .6rem .85rem; white-space: nowrap; }
-.operations-menu-product-card__tabs button.is-active { background: #e8f5ef; color: #08744d; }
+.operations-menu-product-card__tabs { display: flex; gap: var(--space-2); overflow-x: auto; margin: -.2rem 0 var(--space-4); padding: var(--space-2); border: 1px solid var(--border-subtle); border-radius: var(--card-radius); background: var(--tab-rail); }
+.operations-menu-product-card__tabs button { border: 1px solid transparent; border-radius: var(--radius-sm); background: transparent; color: var(--muted); cursor: pointer; font: inherit; font-weight: 750; padding: .6rem .85rem; white-space: nowrap; }
+.operations-menu-product-card__tabs button:hover { color: var(--brand-deep); background: color-mix(in srgb, var(--brand) 7%, var(--tab-rail)); }
+.operations-menu-product-card__tabs button.is-active { border-color: color-mix(in srgb, var(--brand) 22%, var(--border-subtle)); background: var(--tab-active); color: var(--brand-deep); }
 .operations-menu-product-card__price { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .8rem; border: 1px solid var(--border, #d8e2dc); border-radius: .7rem; background: #f8fbf9; }
 .operations-menu-product-card__price strong, .operations-menu-product-card__price small { display: block; }
 .operations-menu-product-card__price small { margin-top: .2rem; color: var(--muted, #64748b); }
@@ -74,6 +76,7 @@
 .operations-raw-material-card__units p { max-width: 40rem; margin-top: .3rem; color: var(--muted, #64748b); font-size: .86rem; line-height: 1.55; }
 .operations-raw-material-card__unit-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: .65rem; }
 .operations-raw-material-card__unit-list > div { display: grid; gap: .2rem; padding: .75rem .8rem; border: 1px solid #d8e5dc; border-radius: .72rem; background: #fff; }
+.operations-catalog-workspace .operations-raw-material-card__unit-list > div { border-color: var(--border-subtle); background: var(--surface-subtle); }
 .operations-raw-material-card__unit-list strong { color: #173d2b; }
 .operations-raw-material-card__unit-list small { color: var(--muted, #64748b); font-size: .8rem; }
 .operations-raw-material-card__conversion-status { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding: .75rem .8rem; border: 1px solid #cfe5d8; border-radius: .72rem; background: #f5fbf7; color: #08744d; }
@@ -147,3 +150,25 @@
 .operations-material-overview__purchase em { color: #29523b; font-style: normal; font-weight: 800; }
 .operations-material-overview__purchase bdi { color: #08744d; font-variant-numeric: tabular-nums; }
 @media (max-width: 720px) { .operations-catalog__metrics { grid-template-columns: 1fr; } .operations-catalog__unit-line, .operations-catalog__conversion-line { grid-template-columns: 1fr; } .operations-item-units-form__list { grid-template-columns: 1fr; } .operations-catalog__item-tools { grid-template-columns: 1fr; } .operations-catalog__item-tools .baseer-inline-actions, .operations-raw-material-card__units > header .baseer-inline-actions { display: grid; grid-template-columns: 1fr; } .operations-raw-material-card__units > header, .operations-inline-conversion__header, .operations-inline-unit-manager > header { align-items: stretch; flex-direction: column; } .operations-inline-conversion__header .baseer-button, .operations-inline-unit-manager > header .baseer-button { width: 100%; } .operations-inline-unit-manager__options, .operations-material-overview { grid-template-columns: 1fr; } .operations-inline-conversion__summary { grid-template-columns: 1fr; } .operations-inline-conversion__summary section:last-child { padding: .75rem 0 0; border-top: 1px solid #e4ded2; border-inline-start: 0; } .operations-conversion-editor > header { align-items: stretch; flex-direction: column; } .operations-conversion-editor > header .baseer-button { width: 100%; } .operations-conversion-editor__row { grid-template-columns: 1.8rem minmax(0, 1fr) auto; align-items: center; } .operations-conversion-editor__row > strong { align-self: center; } .operations-conversion-editor__row label { grid-column: 2 / -1; } .operations-conversion-editor__row label:last-child { grid-column: 1 / -1; } }
+
+/* Local catalog panels inherit the application surface and spacing contract. */
+.operations-item-units-form, .operations-conversion-editor, .operations-inline-conversion { gap: var(--space-card); }
+.operations-item-units-form__card, .operations-conversion-editor__row, .operations-inline-unit-manager, .operations-inline-conversion__start, .operations-inline-conversion__table-wrap, .operations-inline-conversion__summary { border-color: var(--line); border-radius: var(--card-radius); }
+.operations-item-units-form__card, .operations-inline-conversion__table-wrap { background: var(--card-surface); }
+.operations-conversion-editor__row, .operations-inline-unit-manager__options > section { background: var(--surface-subtle); }
+.operations-inline-conversion__table-wrap thead { background: var(--table-header); color: var(--muted); }
+
+/* Catalog workspaces load after the shared theme.  Normalize only neutral
+   legacy panels; success, warning and information states keep their meaning. */
+.operations-catalog__item-tools,
+.operations-conversion-editor__result,
+.operations-menu-product-card__price,
+.operations-inline-unit-manager,
+.operations-inline-conversion__start,
+.operations-inline-conversion__summary,
+.operations-material-stages-card,
+.operations-material-overview > div { background: var(--surface-subtle); }
+.operations-inline-conversion__summary div span,
+.operations-material-overview__purchase span,
+.operations-material-stages em { border-color: var(--border-subtle); background: var(--surface); color: var(--ink); }
+.operations-inline-conversion__table-wrap :is(th, td) { padding: var(--space-3); border-bottom-color: var(--line); }

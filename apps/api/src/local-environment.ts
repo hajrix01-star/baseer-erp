@@ -12,8 +12,13 @@ import { fileURLToPath } from 'node:url';
  * injected deployment environment.
  */
 export function loadCanonicalLocalEnvironment(): void {
+  const profile = process.env.BASEER_LOCAL_ENV_PROFILE ?? 'test';
+  if (profile !== 'test' && profile !== 'nurix-migration-staging') {
+    throw new Error('BASEER_LOCAL_ENV_PROFILE must be test or nurix-migration-staging.');
+  }
+  const filename = profile === 'nurix-migration-staging' ? '.env.nurix-migration-staging' : '.env.baseer-test';
   const localEnvironmentPath = fileURLToPath(
-    new URL('../.env.baseer-test', import.meta.url),
+    new URL(`../${filename}`, import.meta.url),
   );
 
   if (!existsSync(localEnvironmentPath)) return;

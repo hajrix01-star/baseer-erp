@@ -8,7 +8,7 @@ import { VatSimulationService } from './vat-simulation.service.js';
 
 @Controller('reports/vat-simulations')
 @UseGuards(ThrottlerGuard)
-@SkipThrottle({ authIp: true, authIdentity: true, output: true, fileWrite: true })
+@SkipThrottle({ authIp: true, authIdentity: true, output: true, fileWrite: true, attendancePin: true })
 @Throttle({ report: { limit: 60, ttl: 60_000, blockDuration: 60_000 } })
 export class VatSimulationController {
   constructor(private readonly contexts: CompanyContextService, private readonly simulations: VatSimulationService) {}

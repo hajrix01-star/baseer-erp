@@ -453,10 +453,6 @@ export type TenantAdministrationAssignmentUncheckedUpdateManyWithoutUserNestedIn
   deleteMany?: Prisma.TenantAdministrationAssignmentScalarWhereInput | Prisma.TenantAdministrationAssignmentScalarWhereInput[]
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }

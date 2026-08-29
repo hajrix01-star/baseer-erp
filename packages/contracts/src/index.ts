@@ -14,6 +14,7 @@ export * from './decision-intelligence.js';
 
 export * from './administration.js';
 export * from './hr.js';
+export * from './attendance.js';
 export * from './reporting.js';
 export * from './ledger-trial-balance.js';
 export * from './internal-vat-report.js';
@@ -22,3 +23,5 @@ export * from './operations.js';
 export * from './marketing.js';
 export * from './inbound-evidence.js';
 export * from './owner-daily-brief.js';
+export * from './backup.js';
+export * from './nurix-migration.js';
