@@ -1,4 +1,4 @@
-import { cancelOperationsPurchaseRequestSchema, companyIdSchema, createOperationsPurchaseRequestSchema, operationsCustodyMonthlyReportReceiptSchema, operationsEntityReceiptSchema, operationsExecutionWorkspaceReceiptSchema, operationsMaterialsReceivedReportReceiptSchema, operationsRecipePreviewReceiptSchema, operationsRecipeWorkspaceReceiptSchema, operationsReportQuerySchema, previewOperationsRecipeRequestSchema, publishOperationsRecipeRequestSchema, receiveOperationsPurchaseRequestSchema, returnOperationsCustodyRequestSchema, reverseOperationsPurchaseReceiptSchema } from "@baseer-erp/contracts";
+import { cancelOperationsPurchaseRequestSchema, companyIdSchema, createOperationsPurchaseRequestSchema, operationsCustodyMonthlyReportReceiptSchema, operationsEntityReceiptSchema, operationsExecutionWorkspaceReceiptSchema, operationsExecutionWorkspaceSummaryReceiptSchema, operationsMaterialsReceivedReportReceiptSchema, operationsRecipePreviewReceiptSchema, operationsRecipeWorkspaceReceiptSchema, operationsReportQuerySchema, previewOperationsRecipeRequestSchema, publishOperationsRecipeRequestSchema, receiveOperationsPurchaseRequestSchema, returnOperationsCustodyRequestSchema, reverseOperationsPurchaseReceiptSchema } from "@baseer-erp/contracts";
 import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Post, Query, UnauthorizedException } from "@nestjs/common";
 
 import { CompanyContextService } from "../company-context/company-context.service.js";
@@ -12,6 +12,13 @@ export class OperationsExecutionController {
   @Get("execution-workspace")
   async workspace(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
     return operationsExecutionWorkspaceReceiptSchema.parse(await this.operations.workspace(await this.authorize(authorization, companyId, "operations.catalog.manage")));
+  }
+
+  /** Bounded first-paint receipt. It is separate from the established
+   * management workspace response so existing detailed clients stay intact. */
+  @Get("execution-workspace/summary")
+  async workspaceSummary(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    return operationsExecutionWorkspaceSummaryReceiptSchema.parse(await this.operations.workspaceSummary(await this.authorize(authorization, companyId, "operations.catalog.manage")));
   }
 
   @Get("reports/materials-received")

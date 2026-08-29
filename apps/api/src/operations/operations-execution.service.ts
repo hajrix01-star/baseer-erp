@@ -16,6 +16,36 @@ type ReturnCustody = { requestId?: string | undefined; businessDate: string; amo
 export class OperationsExecutionService {
   constructor(private readonly database: DatabaseService, private readonly idempotency: IdempotencyService, private readonly serials: DocumentSerialService) {}
 
+  /**
+   * First-paint read model for the Operations execution landing surface.
+   *
+   * This deliberately contains no recipe, request-line, receipt-line,
+   * inventory-row, or custody-event relation. Management consumers retain the
+   * existing `workspace` read until they migrate to a dedicated detail route.
+   */
+  async workspaceSummary(context: TrustedCompanyActorContext) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const [inventoryMaterialCount, openRequestCount, profile, latestCustodyEvent] = await Promise.all([
+        tx.operationsInventoryBalance.count({ where: { tenantId: context.tenantId, companyId: context.companyId } }),
+        tx.operationsPurchaseRequest.count({
+          where: {
+            tenantId: context.tenantId,
+            companyId: context.companyId,
+            status: { in: [OperationsPurchaseRequestStatus.PENDING_RECEIPT, OperationsPurchaseRequestStatus.PARTIALLY_RECEIVED] },
+          },
+        }),
+        tx.operationsCustodyProfile.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId }, select: { representativeName: true } }),
+        tx.operationsCustodyEvent.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId }, orderBy: { effectiveAt: "desc" }, select: { balanceAfter: true } }),
+      ]);
+      return {
+        inventoryMaterialCount,
+        openRequestCount,
+        custody: { representativeName: profile?.representativeName ?? null, balance: latestCustodyEvent?.balanceAfter.toString() ?? "0" },
+        asOf: new Date().toISOString(),
+      };
+    });
+  }
+
   async workspace(context: TrustedCompanyActorContext) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const [recipes, inventory, requests, profile, events] = await Promise.all([
@@ -47,22 +77,62 @@ export class OperationsExecutionService {
   async materialsReceivedReport(context: TrustedCompanyActorContext, query: OperationsReportQuery) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const businessDate = dateRange(query);
-      const lines = await tx.operationsPurchaseReceiptLine.findMany({
-        where: { tenantId: context.tenantId, companyId: context.companyId, receipt: { status: OperationsPurchaseReceiptStatus.POSTED, ...(businessDate ? { businessDate } : {}) } },
-        include: { rawMaterial: { select: { nameAr: true, nameEn: true } }, receivedUnit: { select: { nameAr: true, nameEn: true } } },
+      const where = { tenantId: context.tenantId, companyId: context.companyId, receipt: { status: OperationsPurchaseReceiptStatus.POSTED, ...(businessDate ? { businessDate } : {}) } };
+      // The response is paginated by material/unit, so aggregate at that same
+      // granularity in PostgreSQL instead of loading every historical receipt
+      // line into the API process before slicing the page.
+      const grouped = await tx.operationsPurchaseReceiptLine.groupBy({
+        by: ["rawMaterialItemId", "receivedUnitId"],
+        where,
+        _sum: { receivedQuantity: true, lineTotal: true },
       });
-      const grouped = new Map<string, { rawMaterialItemId: string; materialNameAr: string; materialNameEn: string | null; unitId: string; unitNameAr: string; unitNameEn: string | null; quantity: Prisma.Decimal; amount: Prisma.Decimal }>();
-      for (const line of lines) {
-        const key = `${line.rawMaterialItemId}:${line.receivedUnitId}`;
-        const current = grouped.get(key) ?? { rawMaterialItemId: line.rawMaterialItemId, materialNameAr: line.rawMaterial.nameAr, materialNameEn: line.rawMaterial.nameEn, unitId: line.receivedUnitId, unitNameAr: line.receivedUnit.nameAr, unitNameEn: line.receivedUnit.nameEn, quantity: zero(), amount: zero() };
-        current.quantity = current.quantity.plus(line.receivedQuantity); current.amount = money(current.amount.plus(line.lineTotal)); grouped.set(key, current);
-      }
-      const materials = [...grouped.values()].sort((left, right) => left.materialNameAr.localeCompare(right.materialNameAr, "ar") || left.rawMaterialItemId.localeCompare(right.rawMaterialItemId) || left.unitId.localeCompare(right.unitId)).map((line) => ({ ...line, quantity: operationalQuantity(line.quantity).toString(), amount: money(line.amount).toString(), weightedActualUnitPrice: money(line.amount.div(line.quantity)).toString() }));
+      const [rawMaterials, units] = await Promise.all([
+        tx.operationsItem.findMany({
+          where: { id: { in: grouped.map((line) => line.rawMaterialItemId) }, tenantId: context.tenantId, companyId: context.companyId },
+          select: { id: true, nameAr: true, nameEn: true },
+        }),
+        tx.operationsUnit.findMany({
+          where: { id: { in: grouped.map((line) => line.receivedUnitId) }, tenantId: context.tenantId, companyId: context.companyId },
+          select: { id: true, nameAr: true, nameEn: true },
+        }),
+      ]);
+      const materialById = new Map(rawMaterials.map((material) => [material.id, material]));
+      const unitById = new Map(units.map((unit) => [unit.id, unit]));
+      const materials = grouped.map((line) => {
+        const material = materialById.get(line.rawMaterialItemId);
+        const unit = unitById.get(line.receivedUnitId);
+        // Receipt lines are relationally constrained to these company-scoped
+        // records. Treat a broken relation as unavailable rather than leaking
+        // it across company scope.
+        if (!material || !unit) throw new NotFoundException("A reported material or unit is unavailable in this company.");
+        const quantity = line._sum.receivedQuantity ?? zero();
+        const amount = money(line._sum.lineTotal ?? zero());
+        return {
+          rawMaterialItemId: line.rawMaterialItemId,
+          materialNameAr: material.nameAr,
+          materialNameEn: material.nameEn,
+          unitId: line.receivedUnitId,
+          unitNameAr: unit.nameAr,
+          unitNameEn: unit.nameEn,
+          quantity,
+          amount,
+        };
+      }).sort((left, right) => left.materialNameAr.localeCompare(right.materialNameAr, "ar") || left.rawMaterialItemId.localeCompare(right.rawMaterialItemId) || left.unitId.localeCompare(right.unitId));
       const cursorIndex = query.cursor ? materials.findIndex((line) => `${line.rawMaterialItemId}:${line.unitId}` === query.cursor) : -1;
       if (query.cursor && cursorIndex < 0) throw new BadRequestException("The materials report cursor is outside this company and period scope.");
       const start = cursorIndex + 1;
       const pageSize = query.pageSize ?? 50;
-      const page = materials.slice(start, start + pageSize);
+      const page = materials.slice(start, start + pageSize).map((line) => ({
+        rawMaterialItemId: line.rawMaterialItemId,
+        materialNameAr: line.materialNameAr,
+        materialNameEn: line.materialNameEn,
+        unitId: line.unitId,
+        unitNameAr: line.unitNameAr,
+        unitNameEn: line.unitNameEn,
+        quantity: operationalQuantity(line.quantity).toString(),
+        amount: line.amount.toString(),
+        weightedActualUnitPrice: money(line.amount.div(line.quantity)).toString(),
+      }));
       const hasMore = start + page.length < materials.length;
       const last = page.at(-1);
       return {

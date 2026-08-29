@@ -22,6 +22,12 @@ const execution = {
   requests: [{ id: "request-1", requestNumber: "REQ-001", businessDate: "2026-08-20", executionKind: "DELEGATED", plannedPaymentChannel: "CUSTODY", status: "PENDING_RECEIPT", custodyFundingAmount: "50.0000", custodyBalance: "50.0000", representativeName: "مندوب الاختبار", notes: null, cancellationReason: null, estimatedTotal: "50.0000", actualTotal: "0.0000", varianceTotal: "0.0000", lines: [], receipts: [] }],
   custody: { representativeName: "مندوب الاختبار", balance: "50.0000", events: [] },
 };
+const executionSummary = {
+  inventoryMaterialCount: 2,
+  openRequestCount: 1,
+  custody: { representativeName: "مندوب الاختبار", balance: "50.0000" },
+  asOf: "2026-08-29T00:00:00.000Z",
+};
 async function fulfill(route: Route, json: unknown, status = 200) {
   await route.fulfill({ status, contentType: "application/json", body: JSON.stringify(json) });
 }
@@ -83,6 +89,7 @@ async function mockInternalRegistration(page: Page, options: { isOwner?: boolean
       });
     }
     if (url.pathname === "/v1/operations/reports/custody-monthly") return fulfill(route, { representativeName: "مندوب الاختبار", months: [{ month: "2026-08", openingBalance: "50.0000", funding: "0", purchases: "8.0000", returns: "0", reversals: "0", closingBalance: "42.0000" }] });
+    if (url.pathname === "/v1/operations/execution-workspace/summary") return fulfill(route, executionSummary);
     if (url.pathname === "/v1/operations/execution-workspace") return fulfill(route, execution);
     if (url.pathname === "/v1/operations/custody/returns" && method === "POST") return fulfill(route, { id: "custody-return-1", replayed: false });
     return fulfill(route, { error: { code: "NOT_FOUND", message: { ar: "غير موجود", en: "Not found" } } }, 404);
@@ -139,6 +146,19 @@ test("opening Operations starts at its first permitted section, not the last rec
 
   await page.getByRole("button", { name: "العمليات", exact: true }).click();
   await expect(page.getByRole("heading", { name: "المخزون والمستودعات" })).toBeVisible();
+});
+
+test("execution workspace reads its bounded summary before management is opened", async ({ page }) => {
+  const requested = await mockInternalRegistration(page);
+  await page.goto("/#module=operations&section=6");
+
+  await expect(page.getByRole("heading", { name: "طلبات الشراء والعهدة" })).toBeVisible();
+  await expect(page.getByText("طلبات مفتوحة", { exact: true })).toBeVisible();
+  await expect.poll(() => requested.filter((request) => request.path === "/v1/operations/execution-workspace/summary").length).toBeGreaterThan(0);
+  expect(requested.some((request) => request.path === "/v1/operations/execution-workspace")).toBeFalsy();
+
+  await page.getByRole("button", { name: "فتح إدارة طلبات الشراء والعهدة" }).click();
+  await expect.poll(() => requested.some((request) => request.path === "/v1/operations/execution-workspace")).toBeTruthy();
 });
 
 test("operations catalog keeps filters and cursor paging on the server", async ({ page }) => {

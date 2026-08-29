@@ -155,7 +155,21 @@ export const attendanceEmployeeScheduleSchema = z.object({
   weeklyAdjustments: z.array(z.object({ id: uuid, dayOfWeek: isoWeekday, effectiveFrom: businessDate, kind: z.enum(["FULL_REST", "CUSTOM_PERIODS"]), periods: z.array(z.object({ startTime: scheduleTime, endTime: scheduleTime, endsNextDay: z.boolean(), minutes: z.number().int().positive() }).strict()), createdAt: dateTime }).strict()),
   exceptions: z.array(z.object({ id: uuid, businessDate, kind: z.enum(["FULL_REST", "CUSTOM_PERIODS"]), status: z.enum(["PENDING", "APPROVED", "REJECTED", "CANCELLED"]), reason: z.string(), decisionNote: z.string().nullable(), decidedAt: dateTime.nullable(), periods: z.array(z.object({ startTime: scheduleTime, endTime: scheduleTime, endsNextDay: z.boolean(), minutes: z.number().int().positive() }).strict()), createdAt: dateTime }).strict()),
 }).strict();
-export const attendanceEmployeeScheduleListReceiptSchema = z.object({ schedules: z.array(attendanceEmployeeScheduleSchema).max(500) }).strict();
+/** Cursor paging keeps the company-wide schedule screen within its documented
+ * 500-employee response ceiling without silently omitting later employees. */
+export const attendanceEmployeeScheduleListQuerySchema = z.object({
+  cursor: uuid.optional(),
+  pageSize: z.coerce.number().int().min(1).max(500).default(500),
+}).strict();
+export const attendanceEmployeeScheduleListReceiptSchema = z.object({
+  schedules: z.array(attendanceEmployeeScheduleSchema).max(500),
+  hasMore: z.boolean(),
+  nextCursor: uuid.nullable(),
+}).strict().superRefine((value, context) => {
+  if (value.hasMore !== Boolean(value.nextCursor)) {
+    context.addIssue({ code: z.ZodIssueCode.custom, message: "A continuation cursor is required exactly when another schedule page exists.", path: ["nextCursor"] });
+  }
+});
 export const attendanceEffectiveEmployeeScheduleSchema = z.object({
   employeeId: uuid, businessDate, source: z.enum(["ROSTER", "EXCEPTION", "WEEKLY_ADJUSTMENT", "TEMPLATE", "NONE"]), kind: z.enum(["FULL_REST", "CUSTOM_PERIODS"]).nullable(), templateId: uuid.nullable(), templateVersionId: uuid.nullable(),
   periods: z.array(z.object({ startTime: scheduleTime, endTime: scheduleTime, endsNextDay: z.boolean(), minutes: z.number().int().positive() }).strict()),
@@ -175,6 +189,7 @@ export type SaveAttendanceRosterDraftRequest = z.infer<typeof saveAttendanceRost
 export type ApproveAttendanceRosterRequest = z.infer<typeof approveAttendanceRosterRequestSchema>;
 export type AttendanceDailyEvaluation = z.infer<typeof attendanceDailyEvaluationSchema>;
 export type AttendanceAlertsReceipt = z.infer<typeof attendanceAlertsReceiptSchema>;
+export type AttendanceEmployeeScheduleListQuery = z.infer<typeof attendanceEmployeeScheduleListQuerySchema>;
 export type CreateAttendanceScheduleTemplateRequest = z.infer<typeof createAttendanceScheduleTemplateRequestSchema>;
 export type UpdateAttendanceScheduleTemplateRequest = z.infer<typeof updateAttendanceScheduleTemplateRequestSchema>;
 export type CreateAttendanceScheduleVersionRequest = z.infer<typeof createAttendanceScheduleVersionRequestSchema>;

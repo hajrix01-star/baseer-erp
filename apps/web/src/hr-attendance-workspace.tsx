@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { toDataURL } from "qrcode";
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
 import { BaseerComboboxField } from "./baseer-combobox-field";
@@ -12,12 +11,16 @@ import { createHrEmployeeAdministrativeDeduction } from "./hr-client";
 import { approveAttendanceRoster, archiveAttendanceScheduleTemplate, assignAttendanceEmployeesSchedule, createAttendanceBranch, createAttendanceScheduleException, createAttendanceScheduleTemplate, createAttendanceScheduleVersion, decideAttendanceScheduleException, getAttendanceAlerts, getAttendanceCoverage, getAttendanceDashboard, getAttendanceEmployeePortalScope, getAttendanceReport, getAttendanceRoster, issueAttendanceQr, listAttendanceBranches, listAttendanceEmployeeSchedules, listAttendanceScheduleTemplates, saveAttendanceRosterDraft, updateAttendanceScheduleTemplate, type AttendanceAlerts, type AttendanceBranch, type AttendanceCoverage, type AttendanceDashboardV2, type AttendanceEmployeeSchedule, type AttendanceReportV2, type AttendanceRoster, type AttendanceScheduleTemplateReceipt } from "./attendance-client";
 import { BaseerApiError, presentBaseerApiError, presentBaseerLoadError } from "./baseer-api-error";
 import { formatNumberFixed, formatTime, riyadhBusinessDate } from "./number-format";
-import { HrAttendanceSchedulesPanel, type AttendanceScheduleDraft, type AttendanceScheduleTemplate } from "./hr-attendance-schedules-panel";
-import { HrAttendanceCoveragePanel } from "./hr-attendance-coverage-panel";
-import { HrAttendanceRosterEditor } from "./hr-attendance-roster-editor";
-import { HrAttendanceEmployeeReport } from "./hr-attendance-employee-report";
-import { HrAttendanceTeamReport, type AttendanceTeamReportView } from "./hr-attendance-team-report";
-import "./hr-attendance-workspace.css";
+import type { AttendanceScheduleDraft, AttendanceScheduleTemplate } from "./hr-attendance-schedules-panel";
+import type { AttendanceTeamReportView } from "./hr-attendance-team-report";
+import "./hr-attendance-shell.css";
+
+const HrAttendanceSchedulesPanel = lazy(async () => ({ default: (await import("./hr-attendance-schedules-panel")).HrAttendanceSchedulesPanel }));
+const HrAttendanceCoveragePanel = lazy(async () => ({ default: (await import("./hr-attendance-coverage-panel")).HrAttendanceCoveragePanel }));
+const HrAttendanceRosterEditor = lazy(async () => ({ default: (await import("./hr-attendance-roster-editor")).HrAttendanceRosterEditor }));
+const HrAttendanceEmployeeReport = lazy(async () => ({ default: (await import("./hr-attendance-employee-report")).HrAttendanceEmployeeReport }));
+const HrAttendanceTeamReport = lazy(async () => ({ default: (await import("./hr-attendance-team-report")).HrAttendanceTeamReport }));
+const HrAttendanceDeferredStyles = lazy(async () => ({ default: (await import("./hr-attendance-deferred-styles")).HrAttendanceDeferredStyles }));
 
 type Language = "ar" | "en";
 type BranchForm = { nameAr: string; latitude: string; longitude: string; radiusMeters: string; maxAccuracyMeters: string; qrValiditySeconds: string };
@@ -70,6 +73,9 @@ function singleEmployeeReport(receipt: AttendanceReportV2, employeeId: string): 
 function AttendanceDateField({ language, label, value, onChange }: { language: Language; label: string; value: string; onChange: (value: string) => void }) {
   return <label className="hr-attendance__date-field"><span>{label}</span><BaseerDatePicker language={language} label={label} value={value} onChange={onChange} /></label>;
 }
+function AttendancePanelFallback({ ar }: { ar: boolean }) {
+  return <BaseerCard aria-busy="true"><p role="status">{ar ? "جارٍ تحميل القسم…" : "Loading section…"}</p></BaseerCard>;
+}
 function panelTemplate(template: AttendanceScheduleTemplateReceipt): AttendanceScheduleTemplate {
   const version = template.versions[0];
   return { id: template.id, nameAr: template.nameAr, nameEn: template.nameEn, status: template.status, effectiveFrom: version?.effectiveFrom ?? null, version: version?.versionNumber, days: Array.from({ length: 7 }, (_, day) => ({ day, intervals: (version?.periods ?? []).filter((period) => panelFromIsoDay(period.dayOfWeek) === day).map((period, index) => ({ id: `${template.id}-${day}-${index}`, start: period.startTime, end: period.endTime })) })) };
@@ -89,6 +95,8 @@ export function HrAttendanceWorkspace({ language }: { language: Language }) {
   const [coverage, setCoverage] = useState<AttendanceCoverage | null>(null);
   const [roster, setRoster] = useState<AttendanceRoster | null>(null);
   const [employeeSchedules, setEmployeeSchedules] = useState<Record<string, AttendanceEmployeeSchedule>>({});
+  const [employeeSchedulesNextCursor, setEmployeeSchedulesNextCursor] = useState<string | null>(null);
+  const [employeeSchedulesLoadingMore, setEmployeeSchedulesLoadingMore] = useState(false);
   const [scheduleTemplates, setScheduleTemplates] = useState<AttendanceScheduleTemplateReceipt[]>([]);
   const [selectedDate, setSelectedDate] = useState(today);
   const [activeTab, setActiveTab] = useState<AttendanceWorkspaceTab>("today");
@@ -139,7 +147,7 @@ export function HrAttendanceWorkspace({ language }: { language: Language }) {
       if (activeTab === "schedules") {
         const [scheduleReceipt, coverageReceipt, rosterReceipt, schedulesReceipt] = await Promise.all([listAttendanceScheduleTemplates(current, readOptions), getAttendanceCoverage(current, selectedDate, readOptions), getAttendanceRoster(current, selectedDate, readOptions), listAttendanceEmployeeSchedules(current, readOptions)]);
         if (request !== loadRequest.current) return;
-        setScheduleTemplates(scheduleReceipt.templates); setCoverage(coverageReceipt); setRoster(rosterReceipt); setEmployeeSchedules(Object.fromEntries(schedulesReceipt.schedules.map((schedule) => [schedule.employeeId, schedule])));
+        setScheduleTemplates(scheduleReceipt.templates); setCoverage(coverageReceipt); setRoster(rosterReceipt); setEmployeeSchedules(Object.fromEntries(schedulesReceipt.schedules.map((schedule) => [schedule.employeeId, schedule]))); setEmployeeSchedulesNextCursor(schedulesReceipt.hasMore ? schedulesReceipt.nextCursor : null);
         return;
       }
       if (activeTab === "reports") {
@@ -154,6 +162,20 @@ export function HrAttendanceWorkspace({ language }: { language: Language }) {
     } catch (error) { if (!controller.signal.aborted && request === loadRequest.current) setMessage({ tone: "danger", text: presentBaseerLoadError(error, language, { ar: "بيانات الحضور", en: "attendance data" }) }); }
   }, [activeTab, selectedDate]);
   useEffect(() => { void load(); return () => loadAbort.current?.abort(); }, [load]);
+
+  const loadMoreEmployeeSchedules = async () => {
+    const current = activeSession();
+    const cursor = employeeSchedulesNextCursor;
+    if (!current || !cursor || employeeSchedulesLoadingMore) return;
+    setEmployeeSchedulesLoadingMore(true);
+    try {
+      const receipt = await listAttendanceEmployeeSchedules(current, { cursor, pageSize: 500 });
+      setEmployeeSchedules((previous) => ({ ...previous, ...Object.fromEntries(receipt.schedules.map((schedule) => [schedule.employeeId, schedule])) }));
+      setEmployeeSchedulesNextCursor(receipt.hasMore ? receipt.nextCursor : null);
+    } catch (error) {
+      setMessage({ tone: "danger", text: presentBaseerLoadError(error, language, { ar: "جداول الموظفين", en: "employee schedules" }) });
+    } finally { setEmployeeSchedulesLoadingMore(false); }
+  };
 
   const saveRoster = async (entries: Array<{ employeeId: string; businessDate: string; kind: "FULL_REST" | "CUSTOM_PERIODS"; periods: Array<{ startMinute: number; endMinute: number; endsNextDay: boolean }> }>, peakPeriods: Array<{ businessDate: string; startMinute: number; endMinute: number }>, baseRevision?: number) => {
     const current = activeSession(); if (!current || !roster || busy) return;
@@ -188,7 +210,7 @@ export function HrAttendanceWorkspace({ language }: { language: Language }) {
   useEffect(() => {
     if (!qr) { setQrImage(null); return; }
     let cancelled = false;
-    void toDataURL(qr.token, { errorCorrectionLevel: "M", margin: 2, width: 420, color: { dark: "#102e20", light: "#ffffff" } }).then((image) => { if (!cancelled) setQrImage(image); }).catch(() => { if (!cancelled) setQrImage(null); });
+    void import("qrcode").then(({ toDataURL }) => toDataURL(qr.token, { errorCorrectionLevel: "M", margin: 2, width: 420, color: { dark: "#102e20", light: "#ffffff" } })).then((image) => { if (!cancelled) setQrImage(image); }).catch(() => { if (!cancelled) setQrImage(null); });
     const refreshIn = Math.max(500, new Date(qr.expiresAt).valueOf() - Date.now() - 2_000);
     const timer = window.setTimeout(() => void refreshQr(qr.branch), refreshIn);
     return () => { cancelled = true; window.clearTimeout(timer); };
@@ -328,6 +350,7 @@ export function HrAttendanceWorkspace({ language }: { language: Language }) {
         ["settings", ar ? "الإعدادات" : "Settings"],
       ] as const).map(([tab, label]) => <button key={tab} type="button" className={`hr-attendance__tab${activeTab === tab ? " hr-attendance__tab--active" : ""}`} aria-current={activeTab === tab ? "page" : undefined} onClick={() => setActiveTab(tab)}>{label}</button>)}
     </nav>
+    {activeTab !== "today" || branchOpen || deductionOpen || exceptionOpen || exceptionDecision ? <Suspense fallback={null}><HrAttendanceDeferredStyles /></Suspense> : null}
     {activeTab === "reports" ? <BaseerCard className={`hr-attendance__employee-report-picker${reportEmployeeId !== "ALL" ? " is-selected" : ""}`}>
       <div className="hr-attendance__card-header">
         <div>
@@ -347,13 +370,14 @@ export function HrAttendanceWorkspace({ language }: { language: Language }) {
       </div>
     </BaseerCard> : null}
     {activeTab === "reports" && reportEmployeeId !== "ALL" ? <section className="hr-attendance__employee-report-detail" aria-label={ar ? "تفصيل الموظف" : "Employee detail"}>
-      {selectedReportRow ? <HrAttendanceEmployeeReport row={selectedReportRow} schedule={selectedReportSchedule} from={reportFrom} to={reportTo} language={language} monthCommitment={employeeCommitments?.month ?? null} yearCommitment={employeeCommitments?.year ?? null} /> : <BaseerCard><p className="hr-attendance__quiet-state">{ar ? "حدد الفترة ثم اختر «إعداد التحليل» لعرض تقرير الموظف." : "Set the period, then choose Run analysis to show the employee report."}</p></BaseerCard>}
+      {selectedReportRow ? <Suspense fallback={<AttendancePanelFallback ar={ar} />}><HrAttendanceEmployeeReport row={selectedReportRow} schedule={selectedReportSchedule} from={reportFrom} to={reportTo} language={language} monthCommitment={employeeCommitments?.month ?? null} yearCommitment={employeeCommitments?.year ?? null} /></Suspense> : <BaseerCard><p className="hr-attendance__quiet-state">{ar ? "حدد الفترة ثم اختر «إعداد التحليل» لعرض تقرير الموظف." : "Set the period, then choose Run analysis to show the employee report."}</p></BaseerCard>}
     </section> : null}
-    {activeTab === "reports" && reportEmployeeId === "ALL" && report ? <HrAttendanceTeamReport report={report} language={language} view={teamReportView} onViewChange={setTeamReportView} onOpenEmployee={openEmployeeReport} /> : null}
+    {activeTab === "reports" && reportEmployeeId === "ALL" && report ? <Suspense fallback={<AttendancePanelFallback ar={ar} />}><HrAttendanceTeamReport report={report} language={language} view={teamReportView} onViewChange={setTeamReportView} onOpenEmployee={openEmployeeReport} /></Suspense> : null}
     {activeTab === "schedules" ? <section className="hr-attendance__tab-panel" aria-label={ar ? "الجداول" : "Schedules"}>
-    <HrAttendanceSchedulesPanel language={language} schedules={scheduleTemplates.map(panelTemplate)} employees={attendanceEmployees} assignedEmployeeIdsByTemplate={assignedEmployeeIdsByTemplate} busy={busy} onCreate={createTemplate} onUpdate={updateTemplate} onArchive={archiveTemplate} onAssignEmployees={assignEmployeesToTemplate} />
-    {roster ? <HrAttendanceRosterEditor roster={roster} language={language} busy={busy} onSave={saveRoster} onApprove={approveRoster} /> : null}
-    {coverage ? <HrAttendanceCoveragePanel coverage={coverage} language={language} /> : null}
+    <Suspense fallback={<AttendancePanelFallback ar={ar} />}><HrAttendanceSchedulesPanel language={language} schedules={scheduleTemplates.map(panelTemplate)} employees={attendanceEmployees} assignedEmployeeIdsByTemplate={assignedEmployeeIdsByTemplate} busy={busy} onCreate={createTemplate} onUpdate={updateTemplate} onArchive={archiveTemplate} onAssignEmployees={assignEmployeesToTemplate} /></Suspense>
+    {employeeSchedulesNextCursor ? <BaseerCard><BaseerButton type="button" variant="secondary" onClick={() => void loadMoreEmployeeSchedules()} disabled={busy || employeeSchedulesLoadingMore}>{employeeSchedulesLoadingMore ? (ar ? "جارٍ تحميل المزيد من جداول الموظفين…" : "Loading more employee schedules…") : (ar ? "تحميل المزيد من جداول الموظفين" : "Load more employee schedules")}</BaseerButton></BaseerCard> : null}
+    {roster ? <Suspense fallback={<AttendancePanelFallback ar={ar} />}><HrAttendanceRosterEditor roster={roster} language={language} busy={busy} onSave={saveRoster} onApprove={approveRoster} /></Suspense> : null}
+    {coverage ? <Suspense fallback={<AttendancePanelFallback ar={ar} />}><HrAttendanceCoveragePanel coverage={coverage} language={language} /></Suspense> : null}
     </section> : null}
     {activeTab === "today" ? <section className="hr-attendance__tab-panel" aria-label={ar ? "متابعة اليوم" : "Today monitoring"}>
     <BaseerCard className="hr-attendance__daily-overview"><div className="hr-attendance__card-header"><div><span>{ar ? "المتابعة اليومية" : "Daily monitoring"}</span><h3>{ar ? "المخطط مقابل الفعلي" : "Planned versus actual"}</h3><p>{ar ? "المؤشرات تشغيلية فقط؛ لا تنشئ أوفر تايم أو خصماً في الرواتب تلقائياً." : "These are operational indicators only; payroll is never changed automatically."}</p></div><div className="hr-attendance__date-action"><BaseerDatePicker language={language} label={ar ? "تاريخ المتابعة" : "Attendance date"} value={selectedDate} onChange={setSelectedDate} /><small className="hr-attendance__date-auto-note">{ar ? "يتحدث تلقائياً عند تغيير التاريخ" : "Updates automatically when the date changes"}</small><BaseerButton type="button" onClick={() => void load()} disabled={busy}>{ar ? "تحديث" : "Refresh"}</BaseerButton></div></div>{dashboard ? <div className="hr-attendance__metrics"><div><small>{ar ? "الموظفون النشطون" : "Active employees"}</small><b>{dashboard.summary.activeEmployees}</b></div><div><small>{ar ? "في الدوام" : "At work"}</small><b>{dashboard.summary.openSessions}</b></div><div><small>{ar ? "لم يسجلوا" : "Missing check-in"}</small><b>{dashboard.summary.notRecorded}</b></div><div><small>{ar ? "تنبيهات اليوم" : "Today alerts"}</small><b>{alerts?.alerts.length ?? "—"}</b></div></div> : null}</BaseerCard>

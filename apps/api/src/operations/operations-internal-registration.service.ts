@@ -94,15 +94,21 @@ export class OperationsInternalRegistrationService {
   /** Financial projection for management. The create/workstation projection stays price-free. */
   async report(context: TrustedCompanyActorContext, query: OperationsInternalRegistrationReportQuery) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const businessDate: { gte?: Date; lte?: Date } = {};
-      if (query.from) businessDate.gte = new Date(`${query.from}T00:00:00.000Z`);
-      if (query.to) businessDate.lte = new Date(`${query.to}T00:00:00.000Z`);
-      const registrations = await tx.operationsInternalRegistration.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, ...(Object.keys(businessDate).length ? { businessDate } : {}) }, orderBy: [{ businessDate: "desc" }, { createdAt: "desc" }], include: { section: { select: { nameAr: true, nameEn: true } }, lines: { orderBy: { lineNumber: "asc" } } } });
+      const period = resolveInternalRegistrationReportPeriod(query);
+      const registrations = await tx.operationsInternalRegistration.findMany({
+        where: {
+          tenantId: context.tenantId,
+          companyId: context.companyId,
+          businessDate: { gte: new Date(`${period.from}T00:00:00.000Z`), lte: new Date(`${period.to}T23:59:59.999Z`) },
+        },
+        orderBy: [{ businessDate: "desc" }, { createdAt: "desc" }],
+        include: { section: { select: { nameAr: true, nameEn: true } }, lines: { orderBy: { lineNumber: "asc" } } },
+      });
       const zero = new Prisma.Decimal(0);
       const lineCount = registrations.reduce((sum, registration) => sum + registration.lines.length, 0);
       const quantity = registrations.reduce((sum, registration) => registration.lines.reduce((lineSum, line) => lineSum.plus(line.quantity), sum), zero);
       const amount = registrations.reduce((sum, registration) => registration.lines.reduce((lineSum, line) => lineSum.plus(line.lineTotalSnapshot ?? zero), sum), zero);
-      return { pricingVisible: true as const, totals: { registrationCount: registrations.length, lineCount, quantity: quantity.toFixed(8), amount: amount.toFixed(4) }, registrations: registrations.map((registration) => ({ id: registration.id, registrationNumber: registration.registrationNumber, businessDate: registration.businessDate.toISOString().slice(0, 10), sectionNameAr: registration.section.nameAr, sectionNameEn: registration.section.nameEn, notes: registration.notes, lines: registration.lines.map((line) => ({ lineNumber: line.lineNumber, productNameAr: line.productNameArSnapshot, productNameEn: line.productNameEnSnapshot, unitNameAr: line.unitNameArSnapshot, unitNameEn: line.unitNameEnSnapshot, quantity: line.quantity.toString(), menuSaleUnitPrice: line.menuSaleUnitPriceSnapshot?.toFixed(4) ?? null, lineTotal: line.lineTotalSnapshot?.toFixed(4) ?? null })) })) };
+      return { pricingVisible: true as const, period, totals: { registrationCount: registrations.length, lineCount, quantity: quantity.toFixed(8), amount: amount.toFixed(4) }, registrations: registrations.map((registration) => ({ id: registration.id, registrationNumber: registration.registrationNumber, businessDate: registration.businessDate.toISOString().slice(0, 10), sectionNameAr: registration.section.nameAr, sectionNameEn: registration.section.nameEn, notes: registration.notes, lines: registration.lines.map((line) => ({ lineNumber: line.lineNumber, productNameAr: line.productNameArSnapshot, productNameEn: line.productNameEnSnapshot, unitNameAr: line.unitNameArSnapshot, unitNameEn: line.unitNameEnSnapshot, quantity: line.quantity.toString(), menuSaleUnitPrice: line.menuSaleUnitPriceSnapshot?.toFixed(4) ?? null, lineTotal: line.lineTotalSnapshot?.toFixed(4) ?? null })) })) };
     });
   }
 
@@ -114,3 +120,22 @@ export class OperationsInternalRegistrationService {
 function zero() { return new Prisma.Decimal(0); }
 function operationalQuantity(value: Prisma.Decimal) { return value.toDecimalPlaces(8); }
 function money(value: Prisma.Decimal) { return value.toDecimalPlaces(4); }
+
+/** A missing date range must never implicitly mean all company history.
+ * Partial legacy queries stay usable, but are completed to that supplied
+ * calendar month's edge; fully explicit ranges keep their caller intent. */
+export function resolveInternalRegistrationReportPeriod(query: OperationsInternalRegistrationReportQuery, now = new Date()) {
+  if (query.from && query.to) return { from: query.from, to: query.to, source: "EXPLICIT" as const };
+  if (query.from) return { from: query.from, to: endOfMonth(query.from), source: "EXPLICIT" as const };
+  if (query.to) return { from: startOfMonth(query.to), to: query.to, source: "EXPLICIT" as const };
+  const riyadhDate = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Riyadh", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(now);
+  const part = (type: "year" | "month") => riyadhDate.find((value) => value.type === type)?.value;
+  const currentMonth = `${part("year")}-${part("month")}`;
+  return { from: `${currentMonth}-01`, to: endOfMonth(`${currentMonth}-01`), source: "DEFAULT_CURRENT_MONTH" as const };
+}
+
+function startOfMonth(date: string) { return `${date.slice(0, 7)}-01`; }
+function endOfMonth(date: string) {
+  const [year, month] = date.slice(0, 7).split("-").map(Number);
+  return new Date(Date.UTC(year!, month!, 0)).toISOString().slice(0, 10);
+}

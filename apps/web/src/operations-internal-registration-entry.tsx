@@ -8,6 +8,7 @@ import { BaseerDatePicker } from "./baseer-date-picker";
 import { normalizeBaseerNumericInput } from "./number-format";
 import { activeSession, api, requestId, type ActiveSession } from "./daily-sales-client";
 import { openDailySalesWhatsApp } from "./daily-sales-whatsapp";
+import "./operations-internal-registration-workspace.css";
 
 type Language = "ar" | "en";
 type Section = { id: string; nameAr: string; nameEn: string | null };

@@ -828,3 +828,27 @@ test("advance deduction and service create/detail dialogs are centralized", asyn
   await postedDetail.getByRole("button", { name: "إلغاء التكلفة" }).click();
   await expectTopmostDialog(page, "إلغاء تكلفة الخدمة");
 });
+
+test("advance deferral pagination advances and clears its own cursor", async ({ page }) => {
+  const requested: string[] = [];
+  const detailRequests: string[] = [];
+  await mockHr(page, requested);
+  await page.route(`**/v1/hr/advances/${advance.id}**`, async (route) => {
+    const url = new URL(route.request().url());
+    detailRequests.push(`${route.request().method()} ${url.pathname}${url.search}`);
+    const deferralCursor = url.searchParams.get("deferralCursor");
+    const deferrals = deferralCursor
+      ? [{ id: "deferral-2", businessDate: "2026-08-02", deferredUntil: "2026-10-01", reason: "تأجيل ثانٍ" }]
+      : [{ id: "deferral-1", businessDate: "2026-08-01", deferredUntil: "2026-09-01", reason: "تأجيل أول" }];
+    return fulfill(route, { advance, settlements: [], hasMoreSettlements: false, nextSettlementCursor: null, deferrals, hasMoreDeferrals: !deferralCursor, nextDeferralCursor: deferralCursor ? null : "deferral-cursor-2" });
+  });
+
+  await page.goto("/#module=hr&section=4");
+  await page.getByRole("button", { name: advance.advanceNumber }).click();
+  const advanceDetail = await expectTopmostDialog(page, advance.advanceNumber);
+  await expect(advanceDetail.getByText("تأجيل أول")).toBeVisible();
+  await advanceDetail.getByRole("button", { name: "تحميل المزيد" }).click();
+  await expect(advanceDetail.getByText("تأجيل ثانٍ")).toBeVisible();
+  await expect(advanceDetail.getByRole("button", { name: "تحميل المزيد" })).toHaveCount(0);
+  expect(detailRequests.filter((request) => request === `GET /v1/hr/advances/${advance.id}?deferralCursor=deferral-cursor-2&deferralPageSize=50`)).toHaveLength(1);
+});

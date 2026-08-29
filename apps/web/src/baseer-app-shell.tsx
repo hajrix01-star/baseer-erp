@@ -1,6 +1,7 @@
-import { type ReactNode, useEffect, useState } from "react";
+import { lazy, Suspense, type ReactNode, useEffect, useState } from "react";
 import { BaseerBrand } from "./baseer-brand";
-import { BaseerNavigationDrawer } from "./baseer-navigation-drawer";
+
+const BaseerNavigationDrawer = lazy(async () => ({ default: (await import("./baseer-navigation-drawer")).BaseerNavigationDrawer }));
 
 type Props = {
   header: ReactNode;
@@ -37,6 +38,6 @@ export function BaseerAppShell({ header, moduleTitle, currentModuleLabel, sectio
         {children}
       </section>
     </main>
-    {hasNavigation ? <BaseerNavigationDrawer open={drawerOpen} title={moduleTitle} eyebrow={sectionsLabel} closeLabel={closeLabel} onClose={closeDrawer}>{navigation}</BaseerNavigationDrawer> : null}
+    {hasNavigation ? <Suspense fallback={null}><BaseerNavigationDrawer open={drawerOpen} title={moduleTitle} eyebrow={sectionsLabel} closeLabel={closeLabel} onClose={closeDrawer}>{navigation}</BaseerNavigationDrawer></Suspense> : null}
   </>;
 }

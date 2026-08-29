@@ -1,0 +1,31 @@
+import { Fragment } from "react";
+
+import { BaseerButton } from "./baseer-button";
+import { BaseerDialog } from "./baseer-dialog";
+import { formatCount, formatDate, formatMoney } from "./number-format";
+import "./command-center-workspace.css";
+
+type Language = "ar" | "en";
+type MoneyDisplay = Readonly<{ raw: string; display: string; sign: "positive" | "negative" | "zero" }>;
+type FinancialEvidence = Readonly<{ items: readonly Readonly<{ eventId: string; businessDate: string; amount: MoneyDisplay; source: { journalEntryId: string; labelAr: string; labelEn: string; reference: string; origin: { labelAr: string; labelEn: string; route: string } } }>[] }>;
+type SourceJournal = Readonly<{ journalEntry: { businessDate: string; sourceType: string; sourceReference: string; description: string | null; status: "POSTED" | "REVERSED"; lines: readonly { id: string; lineNumber: number; accountCode: string; accountNameAr: string; accountNameEn: string; debitAmount: string; creditAmount: string }[] } }>;
+
+function MoneyValue({ money, language, onClick, label }: { money: MoneyDisplay; language: Language; onClick?: () => void; label?: string }) {
+  const value = <bdi className={`command-center__money ${money.sign === "negative" ? "is-negative" : money.sign === "positive" ? "is-positive" : ""}`} dir="ltr">{money.sign === "negative" ? "−" : ""}{formatMoney(Math.abs(Number(money.raw)), "SAR", language)}</bdi>;
+  return onClick ? <button type="button" className="command-center__amount-link" onClick={onClick} aria-label={label}>{value}</button> : value;
+}
+
+function EvidenceTable({ language, items, selectedEventId, detailsLabel, onSelect, onOpenSource, openSourceLabel, openLocationLabel }: { language: Language; items: FinancialEvidence["items"]; selectedEventId: string | null; detailsLabel: string; onSelect: (eventId: string) => void; onOpenSource: (eventId: string) => void; openSourceLabel: string; openLocationLabel: string }) {
+  return <div className="command-center__evidence-table-shell"><table className="command-center__evidence-table"><thead><tr><th>{language === "ar" ? "العملية" : "Operation"}</th><th>{language === "ar" ? "المرجع والتاريخ" : "Reference and date"}</th><th>{language === "ar" ? "المبلغ" : "Amount"}</th></tr></thead><tbody>{items.map((item) => <Fragment key={item.eventId}><tr><td><strong>{language === "ar" ? item.source.labelAr : item.source.labelEn || item.source.labelAr}</strong><small>{language === "ar" ? item.source.origin.labelAr : item.source.origin.labelEn}</small></td><td><bdi dir="ltr">{item.source.reference}</bdi><small dir="ltr">{formatDate(item.businessDate, language)}</small></td><td><MoneyValue money={item.amount} language={language} label={`${detailsLabel} — ${item.source.reference}`} onClick={() => onSelect(item.eventId)} /></td></tr>{selectedEventId === item.eventId ? <tr className="command-center__evidence-table-actions"><td colSpan={3}><BaseerButton type="button" variant="secondary" onClick={() => onOpenSource(item.eventId)}>{openSourceLabel}</BaseerButton><BaseerButton type="button" variant="quiet" onClick={() => { window.location.hash = item.source.origin.route; }}>{openLocationLabel}</BaseerButton></td></tr> : null}</Fragment>)}</tbody></table></div>;
+}
+
+function SourceJournalView({ language, source, reference, onBack, backLabel, debitLabel, creditLabel }: { language: Language; source: SourceJournal; reference: string | null; onBack: () => void; backLabel: string; debitLabel: string; creditLabel: string }) {
+  const entry = source.journalEntry;
+  return <div className="command-center__source-journal" dir={language === "ar" ? "rtl" : "ltr"}><BaseerButton type="button" variant="secondary" onClick={onBack}>{backLabel}</BaseerButton><p><strong dir="ltr">{reference ?? entry.sourceReference}</strong> · <bdi dir="ltr">{formatDate(entry.businessDate, language)}</bdi>{entry.description ? ` · ${entry.description}` : ""}</p><table><thead><tr><th>#</th><th>{language === "ar" ? "الحساب" : "Account"}</th><th>{debitLabel}</th><th>{creditLabel}</th></tr></thead><tbody>{entry.lines.map((line) => <tr key={line.id}><td><bdi dir="ltr">{formatCount(line.lineNumber, language)}</bdi></td><td>{line.accountCode} · {language === "ar" ? line.accountNameAr : line.accountNameEn}</td><td dir="ltr">{formatMoney(line.debitAmount, "SAR", language)}</td><td dir="ltr">{formatMoney(line.creditAmount, "SAR", language)}</td></tr>)}</tbody></table></div>;
+}
+
+export function CommandCenterEvidenceDialog({ open, language, title, busy, onClose, onRetry, message, selectedEventId, onSelect, onOpenSource, onBack, evidence, source, reference, labels }: { open: boolean; language: Language; title: string; busy: boolean; onClose: () => void; onRetry: () => void; message: string; selectedEventId: string | null; onSelect: (eventId: string) => void; onOpenSource: (eventId: string) => void; onBack: () => void; evidence: FinancialEvidence | null; source: SourceJournal | null; reference: string | null; labels: { retry: string; close: string; loadingOperations: string; noOperations: string; details: string; openSource: string; openLocation: string; back: string; debit: string; credit: string } }) {
+  return <BaseerDialog open={open} size="wide" language={language} title={title} busy={busy} onClose={onClose} footer={<>{message ? <BaseerButton type="button" variant="secondary" disabled={busy} onClick={onRetry}>{labels.retry}</BaseerButton> : null}<BaseerButton type="button" onClick={onClose}>{labels.close}</BaseerButton></>}>
+    {source ? <SourceJournalView language={language} source={source} reference={reference} onBack={onBack} backLabel={labels.back} debitLabel={labels.debit} creditLabel={labels.credit} /> : message ? <p className="command-center__evidence-message is-error">{message}</p> : !evidence ? <p className="command-center__evidence-message">{labels.loadingOperations}</p> : evidence.items.length ? <EvidenceTable language={language} items={evidence.items} selectedEventId={selectedEventId} detailsLabel={labels.details} onSelect={onSelect} onOpenSource={onOpenSource} openSourceLabel={labels.openSource} openLocationLabel={labels.openLocation} /> : <p className="command-center__evidence-message">{labels.noOperations}</p>}
+  </BaseerDialog>;
+}

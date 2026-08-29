@@ -9,7 +9,7 @@ import { DailySalesSignIn } from "./daily-sales-sign-in";
 import { activeSession, api, type ActiveSession } from "./daily-sales-client";
 import { hasActivePermission } from "./module-access";
 import { formatCount, formatDate, formatMoney, formatQuantity } from "./number-format";
-import "./operations-internal-registration-workspace.css";
+import "./operations-internal-registration-shell.css";
 
 const LazyOperationsInternalRegistrationEntry = lazy(async () => ({ default: (await import("./operations-internal-registration-entry")).OperationsInternalRegistrationEntry }));
 type Language = "ar" | "en";

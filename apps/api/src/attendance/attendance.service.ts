@@ -1,10 +1,12 @@
 import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { createCipheriv, createDecipheriv, createHash, createHmac, randomBytes, randomUUID } from 'node:crypto';
-import type { ApproveAttendanceRosterRequest, ArchiveAttendanceScheduleTemplateRequest, AssignAttendanceEmployeeScheduleRequest, AssignAttendanceEmployeesScheduleRequest, AttendanceEmployeePortalSessionRequest, AttendanceEmployeeRecordRequest, ConfigureAttendanceEmployeeScheduleRequest, CreateAttendanceBranchRequest, CreateAttendanceScheduleExceptionRequest, CreateAttendanceScheduleTemplateRequest, CreateAttendanceScheduleVersionRequest, DecideAttendanceScheduleExceptionRequest, SaveAttendanceRosterDraftRequest, SetAttendanceEmployeePinRequest, SetAttendanceEmployeeWeeklyAdjustmentRequest, UpdateAttendanceBranchRequest, UpdateAttendanceScheduleTemplateRequest } from '@baseer-erp/contracts';
+import type { ApproveAttendanceRosterRequest, ArchiveAttendanceScheduleTemplateRequest, AssignAttendanceEmployeeScheduleRequest, AssignAttendanceEmployeesScheduleRequest, AttendanceEmployeePortalSessionRequest, AttendanceEmployeeRecordRequest, AttendanceEmployeeScheduleListQuery, ConfigureAttendanceEmployeeScheduleRequest, CreateAttendanceBranchRequest, CreateAttendanceScheduleExceptionRequest, CreateAttendanceScheduleTemplateRequest, CreateAttendanceScheduleVersionRequest, DecideAttendanceScheduleExceptionRequest, SaveAttendanceRosterDraftRequest, SetAttendanceEmployeePinRequest, SetAttendanceEmployeeWeeklyAdjustmentRequest, UpdateAttendanceBranchRequest, UpdateAttendanceScheduleTemplateRequest } from '@baseer-erp/contracts';
 import { AttendanceEventType, AttendanceRosterApprovalMode, AttendanceRosterPlanStatus, AttendanceScheduleExceptionStatus, AttendanceScheduleTemplateStatus, AttendanceWeeklyAdjustmentKind, AttendanceWorkSessionStatus, HrEmployeeStatus, Prisma } from '../generated/prisma/client.js';
 import type { TrustedCompanyActorContext } from '../core-controls/trusted-context.js';
 import { DatabaseService } from '../database/database.service.js';
 import { hashPassword, verifyPassword } from '../identity/password.util.js';
+
+const ATTENDANCE_WORKSPACE_EMPLOYEE_LIMIT = 500;
 
 @Injectable()
 export class AttendanceService {
@@ -338,12 +340,27 @@ export class AttendanceService {
     });
   }
 
-  /** Batch endpoint used by the schedule workspace.  It replaces one HTTP
-   * request per employee with three bounded queries for the whole company. */
-  async employeeSchedules(context: TrustedCompanyActorContext) {
+  /** Batch endpoint used by the schedule workspace. It replaces one HTTP
+   * request per employee with three company-scoped queries and a continuation
+   * cursor, rather than reading every employee in a large tenant at once. */
+  async employeeSchedules(context: TrustedCompanyActorContext, query: AttendanceEmployeeScheduleListQuery) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const employees = await tx.hrEmployee.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, status: HrEmployeeStatus.ACTIVE }, select: { id: true }, orderBy: { id: 'asc' } });
-      return this.readEmployeeSchedules(tx, context, employees.map((employee) => employee.id));
+      const cursor = query.cursor ? await tx.hrEmployee.findFirst({
+        where: { id: query.cursor, tenantId: context.tenantId, companyId: context.companyId, status: HrEmployeeStatus.ACTIVE },
+        select: { id: true },
+      }) : null;
+      if (query.cursor && !cursor) throw new BadRequestException('The attendance schedule cursor is invalid.');
+      const employees = await tx.hrEmployee.findMany({
+        where: { tenantId: context.tenantId, companyId: context.companyId, status: HrEmployeeStatus.ACTIVE },
+        select: { id: true },
+        orderBy: { id: 'asc' },
+        take: query.pageSize + 1,
+        ...(cursor ? { cursor: { id: cursor.id }, skip: 1 } : {}),
+      });
+      const hasMore = employees.length > query.pageSize;
+      const page = hasMore ? employees.slice(0, query.pageSize) : employees;
+      const schedules = await this.readEmployeeSchedules(tx, context, page.map((employee) => employee.id));
+      return { schedules, hasMore, nextCursor: hasMore ? page.at(-1)?.id ?? null : null };
     });
   }
 
@@ -472,16 +489,31 @@ export class AttendanceService {
     return { id: planId, revision: expectedRevision + 1 };
   }
 
+  /** The dashboard and coverage contracts deliberately expose no more than
+   * 500 employees. Probe one extra scoped row before reading related facts so
+   * a larger company gets an explicit, actionable response rather than a
+   * partial view or an oversized database fan-out. */
+  private async boundedActiveEmployees(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext) {
+    const employees = await tx.hrEmployee.findMany({
+      where: { tenantId: context.tenantId, companyId: context.companyId, status: HrEmployeeStatus.ACTIVE },
+      select: { id: true, employeeNumber: true, nameAr: true, nameEn: true },
+      orderBy: [{ employeeNumber: 'asc' }, { id: 'asc' }],
+      take: ATTENDANCE_WORKSPACE_EMPLOYEE_LIMIT + 1,
+    });
+    if (employees.length > ATTENDANCE_WORKSPACE_EMPLOYEE_LIMIT) {
+      throw new BadRequestException('Attendance dashboard and coverage support up to 500 active employees. Use paged attendance views for this company.');
+    }
+    return employees;
+  }
+
   /** Manager-facing operational snapshot. It records facts only; lateness and
    * overtime are intentionally not inferred until an approved shift exists. */
   async dashboard(context: TrustedCompanyActorContext, date?: string) {
     const businessDate = date ?? riyadhDate(new Date());
     const dateValue = businessDateValue(businessDate);
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const [employees, sessions] = await Promise.all([
-        tx.hrEmployee.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, status: HrEmployeeStatus.ACTIVE }, select: { id: true, employeeNumber: true, nameAr: true, nameEn: true }, orderBy: [{ employeeNumber: 'asc' }, { id: 'asc' }] }),
-        tx.attendanceWorkSession.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, businessDate: dateValue }, select: { employeeId: true, status: true, checkInAt: true, checkOutAt: true }, orderBy: { checkInAt: 'desc' } }),
-      ]);
+      const employees = await this.boundedActiveEmployees(tx, context);
+      const sessions = await tx.attendanceWorkSession.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, businessDate: dateValue }, select: { employeeId: true, status: true, checkInAt: true, checkOutAt: true }, orderBy: { checkInAt: 'desc' } });
       const byEmployee = new Map<string, Array<typeof sessions[number]>>();
       for (const session of sessions) byEmployee.set(session.employeeId, [...(byEmployee.get(session.employeeId) ?? []), session]);
       const schedules = await this.resolveEffectiveSchedules(tx, context, employees.map((employee) => employee.id), [businessDate]);
@@ -517,10 +549,8 @@ export class AttendanceService {
     const timelineEndMinute = 27 * 60;
     const bucketCount = (timelineEndMinute - timelineStartMinute) / intervalMinutes;
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const [employees, sessions] = await Promise.all([
-        tx.hrEmployee.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, status: HrEmployeeStatus.ACTIVE }, select: { id: true, employeeNumber: true, nameAr: true, nameEn: true }, orderBy: [{ employeeNumber: 'asc' }, { id: 'asc' }] }),
-        tx.attendanceWorkSession.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, businessDate: { gte: range.start, lt: range.end } }, select: { employeeId: true, businessDate: true, status: true, checkInAt: true, checkOutAt: true } }),
-      ]);
+      const employees = await this.boundedActiveEmployees(tx, context);
+      const sessions = await tx.attendanceWorkSession.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, businessDate: { gte: range.start, lt: range.end } }, select: { employeeId: true, businessDate: true, status: true, checkInAt: true, checkOutAt: true } });
       const schedules = await this.resolveEffectiveSchedules(tx, context, employees.map((employee) => employee.id), weekDates);
       const plannedByDay = new Map<string, Array<{ employeeId: string; startMinute: number; endMinute: number }>>();
       for (const employee of employees) for (const day of weekDates) {

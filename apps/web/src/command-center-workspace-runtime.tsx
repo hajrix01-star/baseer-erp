@@ -1,21 +1,28 @@
-import { Fragment, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
 import { BaseerApiError, presentBaseerLoadError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
-import { BaseerChart, BaseerMarketingTimelineChart } from "./baseer-chart";
-import { BaseerCompanyReadQuery } from "./baseer-company-read-query";
-import { BaseerDialog } from "./baseer-dialog";
-import { BaseerMoneyInput, BaseerMonthPicker } from "./baseer-form-fields";
 import { BaseerMenu } from "./baseer-menu";
 import { BaseerPeriodFilter, baseerPeriodRange, defaultBaseerPeriodRange, type BaseerPeriodRange } from "./baseer-period-filter";
 import { BaseerEmptyState, BaseerSectionHeader, BaseerWorkspace } from "./baseer-workspace";
-import { DailySalesSignIn } from "./daily-sales-sign-in";
 import { activeSession, api, requestId, type ActiveSession } from "./daily-sales-client";
 import { formatCount, formatDate, formatMoney, formatMonthYear, formatNumber, formatNumberFixed, formatPercent } from "./number-format";
-import "./command-center-workspace.css";
+import "./command-center-shell.css";
 
 import { pageRouteHash } from "./page-registry";
+
+// ECharts is useful only after the relevant server read is ready. Keeping its
+// runtime out of the selected route's first paint preserves the textual read
+// and accessible loading state without delaying the initial workspace shell.
+const BaseerChart = lazy(async () => ({ default: (await import("./baseer-chart")).BaseerChart }));
+const BaseerMarketingTimelineChart = lazy(async () => ({ default: (await import("./baseer-chart")).BaseerMarketingTimelineChart }));
+const CommandCenterEvidenceDialog = lazy(async () => ({ default: (await import("./command-center-evidence-dialog")).CommandCenterEvidenceDialog }));
+const CommandCenterDeferredStyles = lazy(async () => ({ default: (await import("./command-center-deferred-styles")).CommandCenterDeferredStyles }));
+const WeeklySalesAverageCard = lazy(async () => ({ default: (await import("./command-center-weekly-sales-card")).WeeklySalesAverageCard }));
+const DailySalesSignIn = lazy(async () => ({ default: (await import("./daily-sales-sign-in")).DailySalesSignIn }));
+const BaseerMoneyInput = lazy(async () => ({ default: (await import("./baseer-form-fields")).BaseerMoneyInput }));
+const BaseerMonthPicker = lazy(async () => ({ default: (await import("./baseer-form-fields")).BaseerMonthPicker }));
 
 type Language = "ar" | "en";
 type MoneyDisplay = Readonly<{ raw: string; display: string; sign: "positive" | "negative" | "zero" }>;
@@ -87,10 +94,40 @@ function MovementDelta({ current, previous, label }: { current: MoneyDisplay; pr
 }
 function PercentValue({ value }: { value: string | null }) { return <bdi className="command-center__share" dir="ltr">{formatPercent(value, 2)}</bdi>; }
 
+/**
+ * Command Center starts independent reads together. Keep their abort boundary
+ * local to this route so opening it does not also pull the generic query
+ * client into its first paint. The key includes the company and session
+ * expiry, so a changed company/session can never render a previous read.
+ */
+function useCommandCenterRead<T>(session: ActiveSession, scope: readonly string[], load: (current: ActiveSession, signal: AbortSignal) => Promise<T>) {
+  const scopeKey = scope.join("\u0001");
+  const readKey = `${session.companyId}:${session.sessionExpiresAt}:${scopeKey}`;
+  const loadRef = useRef(load); loadRef.current = load;
+  const active = useRef<AbortController | null>(null);
+  const [state, setState] = useState<{ key: string; data: T | undefined; error: unknown; loading: boolean }>({ key: readKey, data: undefined, error: null, loading: true });
+  const run = async () => {
+    active.current?.abort();
+    const controller = new AbortController(); active.current = controller;
+    setState((current) => ({ key: readKey, data: current.key === readKey ? current.data : undefined, error: null, loading: true }));
+    try {
+      const data = await loadRef.current(session, controller.signal);
+      if (!controller.signal.aborted) setState({ key: readKey, data, error: null, loading: false });
+      return data;
+    } catch (error) {
+      if (!controller.signal.aborted) setState((current) => ({ key: readKey, data: current.key === readKey ? current.data : undefined, error, loading: false }));
+      throw error;
+    }
+  };
+  useEffect(() => { void run().catch(() => undefined); return () => active.current?.abort(); }, [readKey]);
+  const matching = state.key === readKey;
+  return { data: matching ? state.data : undefined, loading: matching ? state.loading : true, error: matching ? state.error : null, refetch: async () => { await run(); } };
+}
+
 export function CommandCenterWorkspaceRuntime({ language, permissionCodes, section = 0 }: { language: Language; permissionCodes: readonly string[] | null; section?: number }) {
   const [period, setPeriod] = useState<BaseerPeriodRange>(defaultBaseerPeriodRange);
   const session = activeSession(); const text = copy[language];
-  if (!session) return <DailySalesSignIn language={language} />;
+  if (!session) return <Suspense fallback={<BaseerCard aria-busy="true"><p role="status">{text.loading}</p></BaseerCard>}><DailySalesSignIn language={language} /></Suspense>;
   const financialAllowed = hasCapability(permissionCodes, "reports.read");
   const marketingAllowed = hasCapability(permissionCodes, "marketing.insights.read");
   const calendarSection = section === 1;
@@ -112,7 +149,11 @@ function FinancialPanel({ language, session, period, marketingSlot }: { language
   const text = copy[language]; const query = useMemo(() => new URLSearchParams({ from: period.from, to: period.to, vatInclusive: "true" }), [period.from, period.to]);
   const previous = useMemo(() => previousCalendarPeriod(period.from, period.to), [period.from, period.to]); const previousQuery = useMemo(() => new URLSearchParams({ from: previous.from, to: previous.to, vatInclusive: "true" }), [previous]);
   const [stableRead, setStableRead] = useState<{ data: { report: FinancialReport; previousReport: FinancialReport }; period: BaseerPeriodRange } | null>(null);
-  return <BaseerCompanyReadQuery session={session} resource="command-center.financial-performance" scope={[period.preset, period.from, period.to, previous.from, previous.to]} mode="live" load={async (current, signal) => { const [report, previousReport] = await Promise.all([api<FinancialReport>(current, `/reports/personal-cash-performance?${query.toString()}`, { signal }), api<FinancialReport>(current, `/reports/personal-cash-performance?${previousQuery.toString()}`, { signal })]); return { report, previousReport }; }}>{({ data, loading, error, refetch }) => <FinancialPanelRead language={language} session={session} period={period} marketingSlot={marketingSlot} data={data} loading={loading} error={error} refetch={refetch} stableRead={stableRead} onStableRead={setStableRead} />}</BaseerCompanyReadQuery>;
+  const read = useCommandCenterRead(session, [period.preset, period.from, period.to, previous.from, previous.to], async (current, signal) => {
+    const [report, previousReport] = await Promise.all([api<FinancialReport>(current, `/reports/personal-cash-performance?${query.toString()}`, { signal }), api<FinancialReport>(current, `/reports/personal-cash-performance?${previousQuery.toString()}`, { signal })]);
+    return { report, previousReport };
+  });
+  return <FinancialPanelRead language={language} session={session} period={period} marketingSlot={marketingSlot} data={read.data} loading={read.loading} error={read.error} refetch={read.refetch} stableRead={stableRead} onStableRead={setStableRead} />;
 }
 
 function FinancialPanelRead({ language, session, period, marketingSlot, data, loading, error, refetch, stableRead, onStableRead }: { language: Language; session: ActiveSession; period: BaseerPeriodRange; marketingSlot: ReactNode; data: { report: FinancialReport; previousReport: FinancialReport } | undefined; loading: boolean; error: unknown; refetch: () => Promise<void>; stableRead: { data: { report: FinancialReport; previousReport: FinancialReport }; period: BaseerPeriodRange } | null; onStableRead: (read: { data: { report: FinancialReport; previousReport: FinancialReport }; period: BaseerPeriodRange }) => void }) {
@@ -198,8 +239,8 @@ function FinancialRead({ language, session, period, report, previousReport, mark
   };
   const closeEvidence = () => { abortRef.current?.abort(); setSelectedRow(null); setEvidence(null); setSource(null); setSourceReference(null); setSelectedEventId(null); setMessage(""); setBusy(false); };
   const sourceTitle = source ? text.sourceJournal : selectedRow ? `${text.details} — ${financialRowLabel(selectedRow, language)}` : text.details;
-  const categoryChart = chartPoints.length ? <div className="command-center__category-breakdown"><BaseerChart language={language} title={text.categoryChart} points={chartPoints} asOf={report.selectedPeriod.to} showSummary={false} presentation="inlineRows" inlineShareLabel={inlineShareLabel} headerActions={<div className="baseer-chart__share-basis" role="group" aria-label={text.shareBasis}><BaseerButton type="button" variant={categoryShareBasis === "spend" ? "primary" : "secondary"} aria-pressed={categoryShareBasis === "spend"} onClick={() => setCategoryShareBasis("spend")}>{text.shareOfSpend}</BaseerButton><BaseerButton type="button" variant={categoryShareBasis === "sales" ? "primary" : "secondary"} aria-pressed={categoryShareBasis === "sales"} onClick={() => setCategoryShareBasis("sales")}>{text.shareOfCollectedSales}</BaseerButton></div>} onPointClick={(point) => { const row = categoryRows.find((item) => item.code === point.id); if (row) void openEvidence(row); }} /></div> : null;
-  return <><div className="command-center__financial-grid"><BaseerCard className="command-center__breakdown" padding="compact"><h3>{text.financialChart}</h3><ul>{topRows.map((row) => <li key={row.code}><span>{financialRowLabel(row, language)}</span><span><MoneyValue money={row.amount} language={language} label={`${text.details} — ${financialRowLabel(row, language)}`} onClick={() => void openEvidence(row)} /><small><PercentValue value={row.shareOfCollectedSalesPercent} /></small><MovementDelta current={row.amount} previous={previousRows.get(row.code)?.amount ?? null} label={text.comparedToPrevious} /></span></li>)}</ul><footer className="command-center__breakdown-total"><span>{text.total}</span><MoneyValue money={report.totals.netCashResult} language={language} label={text.total} onClick={() => void openEvidence({ code: "net_cash_result", labelAr: text.total, labelEn: text.total, kind: "SECTION", parentCode: null, direction: report.totals.netCashResult.sign === "negative" ? "OUTFLOW" : "INFLOW", eventCount: 0, amount: report.totals.netCashResult, shareOfCollectedSalesPercent: report.totals.netCashResultShareOfCollectedSalesPercent })} /></footer></BaseerCard>{marketingSlot}</div><div className="command-center__money-support"><VaultLedgerCard language={language} totals={report.totals} vaults={report.vaults} /><DailySalesAverageCard language={language} session={session} period={period} /><WeeklySalesAverageCard language={language} session={session} period={period} /></div>{categoryChart}<BaseerDialog open={selectedRow !== null} size="wide" language={language} title={sourceTitle} busy={busy} onClose={closeEvidence} footer={<>{message && selectedRow ? <BaseerButton type="button" variant="secondary" disabled={busy} onClick={() => void openEvidence(selectedRow)}>{text.retry}</BaseerButton> : null}<BaseerButton type="button" onClick={closeEvidence}>{text.close}</BaseerButton></>}>{source ? <SourceJournalView language={language} source={source} reference={sourceReference} onBack={() => { setSource(null); setSourceReference(null); }} /> : message ? <p className="command-center__evidence-message is-error">{message}</p> : !evidence ? <p className="command-center__evidence-message">{text.loadingOperations}</p> : evidence.items.length ? <EvidenceTable language={language} items={evidence.items} selectedEventId={selectedEventId} onSelect={(eventId) => setSelectedEventId((current) => current === eventId ? null : eventId)} onOpenSource={openSource} /> : <p className="command-center__evidence-message">{text.noOperations}</p>}</BaseerDialog></>;
+  const categoryChart = chartPoints.length ? <div className="command-center__category-breakdown"><Suspense fallback={<BaseerCard aria-busy="true"><p role="status">{text.loading}</p></BaseerCard>}><BaseerChart language={language} title={text.categoryChart} points={chartPoints} asOf={report.selectedPeriod.to} showSummary={false} presentation="inlineRows" inlineShareLabel={inlineShareLabel} headerActions={<div className="baseer-chart__share-basis" role="group" aria-label={text.shareBasis}><BaseerButton type="button" variant={categoryShareBasis === "spend" ? "primary" : "secondary"} aria-pressed={categoryShareBasis === "spend"} onClick={() => setCategoryShareBasis("spend")}>{text.shareOfSpend}</BaseerButton><BaseerButton type="button" variant={categoryShareBasis === "sales" ? "primary" : "secondary"} aria-pressed={categoryShareBasis === "sales"} onClick={() => setCategoryShareBasis("sales")}>{text.shareOfCollectedSales}</BaseerButton></div>} onPointClick={(point) => { const row = categoryRows.find((item) => item.code === point.id); if (row) void openEvidence(row); }} /></Suspense></div> : null;
+  return <><Suspense fallback={null}><CommandCenterDeferredStyles /></Suspense><div className="command-center__financial-grid"><BaseerCard className="command-center__breakdown" padding="compact"><h3>{text.financialChart}</h3><ul>{topRows.map((row) => <li key={row.code}><span>{financialRowLabel(row, language)}</span><span><MoneyValue money={row.amount} language={language} label={`${text.details} — ${financialRowLabel(row, language)}`} onClick={() => void openEvidence(row)} /><small><PercentValue value={row.shareOfCollectedSalesPercent} /></small><MovementDelta current={row.amount} previous={previousRows.get(row.code)?.amount ?? null} label={text.comparedToPrevious} /></span></li>)}</ul><footer className="command-center__breakdown-total"><span>{text.total}</span><MoneyValue money={report.totals.netCashResult} language={language} label={text.total} onClick={() => void openEvidence({ code: "net_cash_result", labelAr: text.total, labelEn: text.total, kind: "SECTION", parentCode: null, direction: report.totals.netCashResult.sign === "negative" ? "OUTFLOW" : "INFLOW", eventCount: 0, amount: report.totals.netCashResult, shareOfCollectedSalesPercent: report.totals.netCashResultShareOfCollectedSalesPercent })} /></footer></BaseerCard>{marketingSlot}</div><div className="command-center__money-support"><VaultLedgerCard language={language} totals={report.totals} vaults={report.vaults} /><DailySalesAverageCard language={language} session={session} period={period} /><Suspense fallback={<BaseerCard aria-busy="true"><p role="status">{text.loading}</p></BaseerCard>}><WeeklySalesAverageCard language={language} session={session} period={period} /></Suspense></div>{categoryChart}{selectedRow ? <Suspense fallback={null}><CommandCenterEvidenceDialog open language={language} title={sourceTitle} busy={busy} onClose={closeEvidence} onRetry={() => void openEvidence(selectedRow)} message={message} selectedEventId={selectedEventId} onSelect={(eventId) => setSelectedEventId((current) => current === eventId ? null : eventId)} onOpenSource={openSource} onBack={() => { setSource(null); setSourceReference(null); }} evidence={evidence} source={source} reference={sourceReference} labels={{ retry: text.retry, close: text.close, loadingOperations: text.loadingOperations, noOperations: text.noOperations, details: text.details, openSource: text.openSource, openLocation: text.openLocation, back: text.back, debit: text.debit, credit: text.credit }} /></Suspense> : null}</>;
 }
 
 function EmptySupportCard({ language, title }: { language: Language; title: string }) {
@@ -226,21 +267,6 @@ function DailySalesAverageCard({ language, session, period }: { language: Langua
   return <BaseerCard className="command-center__daily-sales-average" padding="compact"><header><div><h3>{ar ? "متوسط المبيعات اليومية" : "Daily sales average"}</h3><p>{ar ? "مبيعات وزبائن الأيام المكتملة فقط" : "Sales and customers for completed days only"}</p></div></header><div className="command-center__daily-sales-average-table" role="table" aria-label={ar ? "مقارنة متوسطات المبيعات اليومية" : "Daily sales average comparison"}><div className="command-center__daily-sales-average-row is-head" role="row"><span>{ar ? "الفترة" : "Period"}</span><span>{ar ? "متوسط المبيعات" : "Average sales"}</span><span>{ar ? "متوسط الزبائن" : "Average customers"}</span></div>{averageRow(formatMonthYear(priorMonth, language), ar ? "الشهر السابق" : "Previous month", priorAverage)}{averageRow(formatMonthYear(month, language), ar ? "حتى آخر يوم مكتمل" : "Through the latest completed day", currentAverage)}</div></BaseerCard>;
 }
 
-function WeeklySalesAverageCard({ language, session, period }: { language: Language; session: ActiveSession; period: BaseerPeriodRange }) {
-  const initialMonth = period.from.slice(0, 7); const [primaryMonth, setPrimaryMonth] = useState(initialMonth); const [comparisonMonth, setComparisonMonth] = useState(previousMonthValue(initialMonth)); const [salesDays, setSalesDays] = useState<MarketingDay[]>([]); const [previousSalesDays, setPreviousSalesDays] = useState<MarketingDay[]>([]);
-  useEffect(() => { setPrimaryMonth(initialMonth); setComparisonMonth(previousMonthValue(initialMonth)); }, [initialMonth]);
-  const primary = useMemo(() => monthPeriod(primaryMonth), [primaryMonth]); const comparison = useMemo(() => monthPeriod(comparisonMonth), [comparisonMonth]);
-  useEffect(() => { const controller = new AbortController(); void Promise.all([api<Pick<MarketingRead, "days">>(session, `/marketing/calendar?from=${primary.from}&to=${primary.to}`, { signal: controller.signal }), api<Pick<MarketingRead, "days">>(session, `/marketing/calendar?from=${comparison.from}&to=${comparison.to}`, { signal: controller.signal })]).then(([current, prior]) => { setSalesDays([...current.days]); setPreviousSalesDays([...prior.days]); }).catch(() => { if (!controller.signal.aborted) { setSalesDays([]); setPreviousSalesDays([]); } }); return () => controller.abort(); }, [comparison.from, comparison.to, primary.from, primary.to, session]);
-  const currentWeeks = weeklySalesAverages(salesDays, primary.from, primary.to); const priorWeeks = weeklySalesAverages(previousSalesDays, comparison.from, comparison.to); const ar = language === "ar";
-  return <BaseerCard className="command-center__weekly-sales" padding="compact"><header><div><h3>{ar ? "متوسط المبيعات اليومية حسب أسبوع الشهر" : "Daily sales average by month week"}</h3><small>{ar ? "شامل الضريبة" : "VAT inclusive"}</small></div></header><div className="command-center__weekly-sales-filters"><label>{ar ? "الفترة الأولى" : "Primary period"}<BaseerMonthPicker value={primaryMonth} onChange={(event) => event.target.value && setPrimaryMonth(event.target.value)} /></label><label>{ar ? "فترة المقارنة" : "Comparison period"}<BaseerMonthPicker value={comparisonMonth} onChange={(event) => event.target.value && setComparisonMonth(event.target.value)} /></label></div><div className="command-center__weekly-sales-table"><div className="is-head"><span>{ar ? "الفترة" : "Period"}</span><span dir="ltr">{primaryMonth}</span><span dir="ltr">{comparisonMonth}</span><span>{ar ? "التغير" : "Change"}</span></div>{currentWeeks.map((week, index) => { const prior = priorWeeks[index]?.average ?? null; const change = week.average === null || prior === null || prior === 0 ? null : ((week.average - prior) / prior) * 100; return <div key={week.label}><strong>{week.label}</strong><bdi dir="ltr">{formatNumber(week.average)}</bdi><bdi dir="ltr">{formatNumber(prior)}</bdi><bdi className={change === null ? "" : change >= 0 ? "is-positive" : "is-negative"} dir="ltr">{change === null ? "—" : `${change >= 0 ? "+" : ""}${formatPercent(change, 1)}`}</bdi></div>; })}</div></BaseerCard>;
-}
-
-function weeklySalesAverages(days: readonly MarketingDay[], from: string, to: string) {
-  const daily = new Map<string, number>(); for (const day of days) if (day.officialNetSales !== null && day.salesDayQuality === "READY") daily.set(day.businessDate, Number(day.officialNetSales));
-  const first = Number(from.slice(8)); const last = Number(to.slice(8)); const groups = Array.from({ length: Math.ceil((last - first + 1) / 7) }, (_, index) => ({ start: first + index * 7, end: Math.min(first + index * 7 + 6, last) }));
-  return groups.map((group, index) => { const values = [...daily].filter(([date]) => { const day = Number(date.slice(8)); return day >= group.start && day <= group.end; }).map(([, amount]) => amount); return { label: `أسبوع ${index + 1} · ${group.start}–${group.end}`, average: values.length ? values.reduce((sum, amount) => sum + amount, 0) / values.length : null }; });
-}
-
 function dailySalesAverage(read: DailySalesAverageRead | null) {
   if (!read) return null;
   const eligible = read.days.filter((day) => day.salesDayQuality === "READY" && day.officialNetSales !== null);
@@ -250,16 +276,6 @@ function dailySalesAverage(read: DailySalesAverageRead | null) {
     ? dailyCustomers.reduce((sum, day) => sum + day.customerCount!, 0) / dailyCustomers.length
     : read.sales.coverage.availableDays > 0 ? read.sales.payload.customerCount / read.sales.coverage.availableDays : null;
   return { sales: eligible.reduce((sum, day) => sum + Number(day.officialNetSales), 0) / eligible.length, customers };
-}
-
-function EvidenceTable({ language, items, selectedEventId, onSelect, onOpenSource }: { language: Language; items: FinancialEvidence["items"]; selectedEventId: string | null; onSelect: (eventId: string) => void; onOpenSource: (eventId: string) => void }) {
-  const text = copy[language];
-  return <div className="command-center__evidence-table-shell"><table className="command-center__evidence-table"><thead><tr><th>{language === "ar" ? "العملية" : "Operation"}</th><th>{language === "ar" ? "المرجع والتاريخ" : "Reference and date"}</th><th>{language === "ar" ? "المبلغ" : "Amount"}</th></tr></thead><tbody>{items.map((item) => <Fragment key={item.eventId}><tr><td><strong>{language === "ar" ? item.source.labelAr : item.source.labelEn || item.source.labelAr}</strong><small>{language === "ar" ? item.source.origin.labelAr : item.source.origin.labelEn}</small></td><td><bdi dir="ltr">{item.source.reference}</bdi><small dir="ltr">{formatDate(item.businessDate, language)}</small></td><td><MoneyValue money={item.amount} language={language} label={`${text.details} — ${item.source.reference}`} onClick={() => onSelect(item.eventId)} /></td></tr>{selectedEventId === item.eventId ? <tr className="command-center__evidence-table-actions"><td colSpan={3}><BaseerButton type="button" variant="secondary" onClick={() => onOpenSource(item.eventId)}>{text.openSource}</BaseerButton><BaseerButton type="button" variant="quiet" onClick={() => { window.location.hash = item.source.origin.route; }}>{text.openLocation}</BaseerButton></td></tr> : null}</Fragment>)}</tbody></table></div>;
-}
-
-function SourceJournalView({ language, source, reference, onBack }: { language: Language; source: SourceJournal; reference: string | null; onBack: () => void }) {
-  const text = copy[language]; const entry = source.journalEntry;
-  return <div className="command-center__source-journal" dir={language === "ar" ? "rtl" : "ltr"}><BaseerButton type="button" variant="secondary" onClick={onBack}>{text.back}</BaseerButton><p><strong dir="ltr">{reference ?? entry.sourceReference}</strong> · <bdi dir="ltr">{formatDate(entry.businessDate, language)}</bdi>{entry.description ? ` · ${entry.description}` : ""}</p><table><thead><tr><th>#</th><th>{language === "ar" ? "الحساب" : "Account"}</th><th>{text.debit}</th><th>{text.credit}</th></tr></thead><tbody>{entry.lines.map((line) => <tr key={line.id}><td><bdi dir="ltr">{formatCount(line.lineNumber, language)}</bdi></td><td>{line.accountCode} · {language === "ar" ? line.accountNameAr : line.accountNameEn}</td><td dir="ltr">{formatMoney(line.debitAmount, "SAR", language)}</td><td dir="ltr">{formatMoney(line.creditAmount, "SAR", language)}</td></tr>)}</tbody></table></div>;
 }
 
 function financialRowLabel(row: FinancialRow, language: Language) {
@@ -300,13 +316,14 @@ function MarketingTimelineRead({ language, session }: { language: Language; sess
   const text = copy[language];
   const updateYear = (nextYear: string) => { setYear(nextYear); setMonth((current) => `${nextYear}${current.slice(4)}`); };
   const [stableRead, setStableRead] = useState<{ data: MarketingTimelineReadResult; granularity: MarketingTimelineGranularity; month: string; year: string } | null>(null);
-  return <BaseerCompanyReadQuery session={session} resource="command-center.marketing.timeline" scope={[timelineGranularity, month, year, range.from, range.to, comparisonRange.from, comparisonRange.to]} load={async (current, signal) => {
+  const read = useCommandCenterRead(session, [timelineGranularity, month, year, range.from, range.to, comparisonRange.from, comparisonRange.to], async (current, signal) => {
     const [main, previous] = await Promise.all([
       api<MarketingRead>(current, `/marketing/calendar?${query.toString()}`, { signal }),
       api<MarketingRead>(current, `/marketing/calendar?${comparisonQuery.toString()}`, { signal }),
     ]);
     return { current: main, previous };
-  }}>{({ data, loading, error, refetch }) => <MarketingTimelineReadState language={language} text={text} data={data} loading={loading} error={error} refetch={refetch} granularity={timelineGranularity} onGranularityChange={setTimelineGranularity} month={month} onMonthChange={setMonth} year={year} onYearChange={updateYear} stableRead={stableRead} onStableRead={setStableRead} />}</BaseerCompanyReadQuery>;
+  });
+  return <MarketingTimelineReadState language={language} text={text} data={read.data} loading={read.loading} error={read.error} refetch={read.refetch} granularity={timelineGranularity} onGranularityChange={setTimelineGranularity} month={month} onMonthChange={setMonth} year={year} onYearChange={updateYear} stableRead={stableRead} onStableRead={setStableRead} />;
 }
 
 function MarketingTimelineReadState({ language, text, data, loading, error, refetch, granularity, onGranularityChange, month, onMonthChange, year, onYearChange, stableRead, onStableRead }: { language: Language; text: typeof copy[Language]; data: MarketingTimelineReadResult | undefined; loading: boolean; error: unknown; refetch: () => Promise<void>; granularity: MarketingTimelineGranularity; onGranularityChange: (mode: MarketingTimelineGranularity) => void; month: string; onMonthChange: (month: string) => void; year: string; onYearChange: (year: string) => void; stableRead: { data: MarketingTimelineReadResult; granularity: MarketingTimelineGranularity; month: string; year: string } | null; onStableRead: (read: { data: MarketingTimelineReadResult; granularity: MarketingTimelineGranularity; month: string; year: string }) => void }) {
@@ -331,44 +348,37 @@ function MarketingReadView({ language, data, previousData, timelineGranularity, 
   const text = copy[language];
   const headerMetrics = <MarketingSummaryCards language={language} data={data} previousData={previousData} />;
   const periodControl = <BaseerMenu label={text.timelinePeriod} trigger={<><strong>{timelineGranularity === "monthly" ? year : timelineMonthLabel(month, language)}</strong><span aria-hidden="true">⌄</span></>} triggerClassName="baseer-marketing-timeline__period-trigger" menuClassName="baseer-marketing-timeline__period-menu">{timelineGranularity === "monthly" ? timelineYearOptions(year).map((value) => <button key={value} type="button" role="menuitem" aria-current={value === year ? "true" : undefined} onClick={() => onYearChange(value)}>{value}</button>) : timelineMonthOptions(month).map((value) => <button key={value} type="button" role="menuitem" aria-current={value === month ? "true" : undefined} onClick={() => onMonthChange(value)}>{timelineMonthLabel(value, language)}</button>)}</BaseerMenu>;
-  return <BaseerMarketingTimelineChart language={language} title={text.marketingChart} days={data.days} campaigns={data.campaigns} context={data.context} asOf={data.period.toBusinessDate} mode={timelineGranularity} showModeControls onModeChange={onTimelineGranularityChange} headerMetrics={headerMetrics} periodControl={periodControl} />;
+  const fallback = <MarketingTimelineFallback language={language} title={text.marketingChart} headerMetrics={headerMetrics} />;
+  return <><Suspense fallback={null}><CommandCenterDeferredStyles /></Suspense><Suspense fallback={fallback}><BaseerMarketingTimelineChart language={language} title={text.marketingChart} days={data.days} campaigns={data.campaigns} context={data.context} asOf={data.period.toBusinessDate} mode={timelineGranularity} showModeControls onModeChange={onTimelineGranularityChange} headerMetrics={headerMetrics} periodControl={periodControl} /></Suspense></>;
+}
+
+function MarketingTimelineFallback({ language, title, headerMetrics }: { language: Language; title: string; headerMetrics: ReactNode }) {
+  const ar = language === "ar";
+  return <section className="baseer-chart baseer-marketing-timeline baseer-marketing-timeline--command command-center__timeline-skeleton" aria-busy="true" aria-label={title}><header className="baseer-marketing-timeline__header"><div><p className="baseer-marketing-timeline__eyebrow">{ar ? "مركز القيادة" : "Command center"}</p><h3>{title}</h3><small>{ar ? "جارٍ تجهيز الرسم…" : "Preparing the chart…"}</small></div><div className="baseer-marketing-timeline__header-meta">{headerMetrics}</div></header><div className="baseer-marketing-timeline__plot-shell"><div className="command-center__timeline-skeleton-toolbar" aria-hidden="true"><i /><i /><i /></div><div className="command-center__timeline-skeleton-plot" aria-hidden="true"><i /><i /><i /><i /><i /></div></div></section>;
 }
 
 function MarketingSummaryCards({ language, data, previousData }: { language: Language; data: MarketingRead; previousData: MarketingRead | null }) {
-  const ar = language === "ar";
-  const current = marketingSummary(data); const previous = previousData ? marketingSummary(previousData) : null;
+  const text = copy[language];
   const items = [
-    { id: "sales", label: ar ? "المبيعات" : "Sales", icon: "↗", value: current.sales, prior: previous?.sales ?? null, tone: "sales" },
-    { id: "spend", label: ar ? "الصرف التسويقي" : "Marketing spend", icon: "◫", value: current.spend, prior: previous?.spend ?? null, tone: "spend" },
-    { id: "customers", label: ar ? "العملاء" : "Customers", icon: "◎", value: current.customers, prior: previous?.customers ?? null, tone: "customers" },
-  ] as const;
-  return <div className="baseer-marketing-timeline__metrics command-center__marketing-summary" aria-label={ar ? "ملخص الأداء التسويقي" : "Marketing performance summary"}>{items.map((item) => {
-    const change = marketingChange(item.value, item.prior);
-    return <section className={`command-center__marketing-summary-card is-${item.tone}`} key={item.id}><header><span aria-hidden="true">{item.icon}</span><strong>{item.label}</strong></header><bdi dir="ltr">{item.id === "customers" ? formatCount(item.value, language) : formatMoney(item.value, "SAR", language)}</bdi><small className={change === null ? "" : change >= 0 ? "is-up" : "is-down"}>{change === null ? (ar ? "لا تتوفر مقارنة" : "No comparison") : `${change >= 0 ? "+" : ""}${formatPercent(change, 1)} ${change >= 0 ? "↗" : "↘"}`}</small></section>;
-  })}</div>;
+    { id: "campaigns", label: text.campaigns, value: formatCount(data.campaigns.length, language) },
+    { id: "planned", label: text.plannedSpend, value: formatMoney(data.spendResult.plannedCampaignCost, "SAR", language) },
+    { id: "spend", label: text.linkedSpend, value: formatMoney(data.spendResult.linkedActualSpend, "SAR", language) },
+    { id: "sales", label: text.officialSales, value: data.spendResult.officialNetSales === null ? "—" : formatMoney(data.spendResult.officialNetSales, "SAR", language) },
+    { id: "share", label: text.spendShare, value: formatPercent(data.spendResult.spendToSalesPercent, 2, language) },
+  ];
+  return <div className="baseer-marketing-timeline__metrics command-center__metrics command-center__metrics--marketing" aria-label={language === "ar" ? "ملخص الأداء التسويقي" : "Marketing performance summary"}>{items.map((item) => <TextMetricCard key={item.id} label={item.label} value={item.value} />)}</div>;
 }
-
-function marketingSummary(data: MarketingRead) {
-  return data.days.reduce((total, day) => ({
-    sales: total.sales + (day.officialNetSales === null ? 0 : Number(day.officialNetSales)),
-    spend: total.spend + (day.linkedActualSpend === null ? 0 : Number(day.linkedActualSpend)),
-    customers: total.customers + (day.customerCount ?? 0),
-  }), { sales: 0, spend: 0, customers: 0 });
-}
-
-function marketingChange(current: number, previous: number | null) { return previous !== null && previous > 0 ? ((current - previous) / previous) * 100 : null; }
 
 function MarketingCalendarPanel({ language, session, initialMonth, canManageTarget }: { language: Language; session: ActiveSession; initialMonth: string; canManageTarget: boolean }) {
   const [month, setMonth] = useState(initialMonth);
   useEffect(() => setMonth(initialMonth), [initialMonth]);
   const { from, to } = marketingMonthRange(month);
   const query = useMemo(() => new URLSearchParams({ from, to }), [from, to]);
-  return <BaseerCompanyReadQuery session={session} resource="command-center.marketing.calendar" scope={[month]} load={(current, signal) => api<MarketingRead>(current, `/marketing/calendar?${query.toString()}`, { signal })}>{({ data, loading, error, refetch }) => {
-    const text = copy[language];
-    if (loading) return <BaseerCard className="command-center__loading">{text.loading}</BaseerCard>;
-    if (error) return <BaseerEmptyState title={presentBaseerLoadError(error, language, { ar: "تقويم التسويق", en: "the marketing calendar" })} action={canRetryReadNow(error) ? <BaseerButton type="button" variant="secondary" onClick={() => void refetch().catch(() => undefined)}>{text.retry}</BaseerButton> : null} />;
-    return data ? <MarketingCalendarView language={language} session={session} month={month} data={data} canManageTarget={canManageTarget} onMonthChange={setMonth} onSaved={() => void refetch().catch(() => undefined)} /> : null;
-  }}</BaseerCompanyReadQuery>;
+  const read = useCommandCenterRead(session, [month], (current, signal) => api<MarketingRead>(current, `/marketing/calendar?${query.toString()}`, { signal }));
+  const text = copy[language];
+  if (read.loading) return <BaseerCard className="command-center__loading">{text.loading}</BaseerCard>;
+  if (read.error) return <BaseerEmptyState title={presentBaseerLoadError(read.error, language, { ar: "تقويم التسويق", en: "the marketing calendar" })} action={canRetryReadNow(read.error) ? <BaseerButton type="button" variant="secondary" onClick={() => void read.refetch().catch(() => undefined)}>{text.retry}</BaseerButton> : null} />;
+  return read.data ? <Suspense fallback={<BaseerCard className="command-center__loading" aria-busy="true"><p role="status">{text.loading}</p></BaseerCard>}><CommandCenterDeferredStyles /><MarketingCalendarView language={language} session={session} month={month} data={read.data} canManageTarget={canManageTarget} onMonthChange={setMonth} onSaved={() => void read.refetch().catch(() => undefined)} /></Suspense> : null;
 }
 
 function MarketingCalendarView({ language, session, month, data, canManageTarget, onMonthChange, onSaved }: { language: Language; session: ActiveSession; month: string; data: MarketingRead; canManageTarget: boolean; onMonthChange: (month: string) => void; onSaved: () => void }) {

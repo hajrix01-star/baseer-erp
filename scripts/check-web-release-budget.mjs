@@ -117,13 +117,22 @@ function marketingInteractionJs(sectionSource, interactionSource) {
 // surface is intentionally user-triggered, so cap that incremental action
 // separately instead of either charging it to first paint or leaving it
 // unmeasured.
-function workspaceInteractionJs(workspaceSource, firstPaintSource, interactionSource) {
+function workspaceInteractionJs(workspaceSource, firstPaintSource, interactionSource, { allowStaticInFirstPaint = false } = {}) {
   const workspaceKey = entryKeyForSource(workspaceSource);
   const firstPaintKey = entryKeyForSourceOrNull(firstPaintSource);
   const before = firstPaintKey
     ? new Set([...closureKeys(workspaceKey), ...closureKeys(firstPaintKey)])
     : firstPaintRouteKeys(workspaceKey);
-  const after = new Set([...before, ...closureKeys(entryKeyForSource(interactionSource))]);
+  const interactionKey = entryKeyForSourceOrNull(interactionSource);
+  if (!interactionKey) {
+    if (!allowStaticInFirstPaint) throw new Error(`Expected interaction entry is missing from the Vite manifest: ${interactionSource}`);
+    const interactionImport = `./${interactionSource.replace(/^src\//, "").replace(/\.(?:tsx|ts)$/, "")}`;
+    const firstPaintSourceFile = join("apps", "web", firstPaintSource);
+    const hasStaticImport = new RegExp(`import\\s+[^;]*?from\\s+["']${interactionImport.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']`).test(readFileSync(firstPaintSourceFile, "utf8"));
+    if (!hasStaticImport) throw new Error(`Expected ${interactionSource} to be a static first-paint dependency of ${firstPaintSource}.`);
+    return 0;
+  }
+  const after = new Set([...before, ...closureKeys(interactionKey)]);
   return jsSize(new Set([...after].filter((key) => !before.has(key))));
 }
 
@@ -131,7 +140,10 @@ const campaignMutationInteractionJs = marketingInteractionJs("src/marketing-camp
 const campaignDetailsInteractionJs = marketingInteractionJs("src/marketing-campaigns-workspace.tsx", "src/marketing-campaign-details-dialog.tsx");
 const reputationReplyPolicyInteractionJs = marketingInteractionJs("src/marketing-reputation-workspace.tsx", "src/marketing-reputation-reply-policy-editor.tsx");
 const decisionFullAnalysisInteractionJs = workspaceInteractionJs("src/decision-intelligence-workspace.tsx", "src/decision-intelligence-workspace-content.tsx", "src/decision-intelligence-workspace-runtime.tsx");
-const commandCenterFullInteractionJs = workspaceInteractionJs("src/command-center-workspace.tsx", "src/command-center-workspace-content.tsx", "src/command-center-workspace-runtime.tsx");
+// The command-center runtime is intentionally loaded with the selected route.
+// Its cost is therefore covered by the first-paint journey; there is no
+// additional runtime chunk to charge to an interaction budget.
+const commandCenterFullInteractionJs = workspaceInteractionJs("src/command-center-workspace.tsx", "src/command-center-workspace-content.tsx", "src/command-center-workspace-runtime.tsx", { allowStaticInFirstPaint: true });
 const reportsWorkspaceInteractionJs = workspaceInteractionJs("src/reports-workspace.tsx", "src/reports-workspace-content.tsx", "src/reports-workspace-runtime.tsx");
 const vatSimulationInteractionJs = workspaceInteractionJs("src/vat-simulation-workspace.tsx", "src/vat-simulation-workspace.tsx", "src/internal-vat-report-workspace.tsx");
 const financeSetupInteractionJs = workspaceInteractionJs("src/finance-setup-workspace.tsx", "src/finance-setup-workspace-content.tsx", "src/finance-setup-workspace-runtime.tsx");

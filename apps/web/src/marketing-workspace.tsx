@@ -1,5 +1,7 @@
 import { lazy, Suspense } from "react";
 
+import "./marketing-workspace.css";
+
 const MarketingOverviewRoute = lazy(async () => ({ default: (await import("./marketing-overview-workspace")).MarketingOverviewRoute }));
 const MarketingCalendarRoute = lazy(async () => ({ default: (await import("./marketing-calendar-workspace")).MarketingCalendarRoute }));
 const MarketingCampaignsWorkspace = lazy(async () => ({ default: (await import("./marketing-campaigns-workspace")).MarketingCampaignsWorkspace }));

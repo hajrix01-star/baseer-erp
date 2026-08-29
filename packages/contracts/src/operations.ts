@@ -273,6 +273,9 @@ export const operationsInternalRegistrationReportQuerySchema = z.object({
 /** Management-only projection. Do not use this contract in the staff workstation. */
 export const operationsInternalRegistrationReportReceiptSchema = z.object({
   pricingVisible: z.literal(true),
+  /** The server always applies this bounded report period. When callers omit
+   * dates it is the current Riyadh calendar month, not company history. */
+  period: z.object({ from: z.string().date(), to: z.string().date(), source: z.enum(["DEFAULT_CURRENT_MONTH", "EXPLICIT"]) }).strict(),
   totals: z.object({ registrationCount: z.number().int().nonnegative(), lineCount: z.number().int().nonnegative(), quantity: z.string(), amount: z.string() }).strict(),
   registrations: z.array(z.object({
     id: operationsIdSchema,
@@ -381,6 +384,8 @@ export const operationsRecipeWorkspaceReceiptSchema = z.object({
 }).strict();
 
 export const operationsExecutionWorkspaceReceiptSchema = z.object({
+  /** Detailed management payload. Use the separate summary receipt for the
+   * first workspace paint; this payload remains for existing management users. */
   recipes: z.array(operationsRecipeSummarySchema),
   inventory: z.array(z.object({ rawMaterialItemId: operationsIdSchema, baseQuantity: z.string(), totalValue: z.string(), weightedUnitCost: z.string() }).strict()),
   requests: z.array(z.object({
@@ -389,6 +394,16 @@ export const operationsExecutionWorkspaceReceiptSchema = z.object({
     receipts: z.array(z.object({ id: operationsIdSchema, receiptNumber: z.string(), receiptSequence: z.number().int().positive(), businessDate: z.string().date(), actualPaymentChannel: z.enum(["CUSTODY", "CASH", "BANK_TRANSFER"]), paymentReference: z.string().nullable(), status: z.enum(["POSTED", "REVERSED"]), reversalReason: z.string().nullable(), lines: z.array(z.object({ requestLineId: operationsIdSchema.nullable(), rawMaterialItemId: operationsIdSchema, receivedUnitId: operationsIdSchema, receivedQuantity: z.string(), actualUnitPrice: z.string(), lineTotal: z.string() }).strict()) }).strict()),
   }).strict()),
   custody: z.object({ representativeName: z.string().nullable(), balance: z.string(), events: z.array(z.object({ id: operationsIdSchema, requestId: operationsIdSchema.nullable(), receiptId: operationsIdSchema.nullable(), eventNumber: z.string(), eventType: z.enum(["FUNDING", "PURCHASE", "RETURN", "REVERSAL"]), amountDelta: z.string(), balanceAfter: z.string(), businessDate: z.string().date(), notes: z.string().nullable() }).strict()) }).strict(),
+}).strict();
+
+/** First-paint receipt for Purchase requests & custody. It intentionally
+ * carries counts and current custody only; it never expands request, receipt,
+ * inventory, recipe, or custody-event relations. */
+export const operationsExecutionWorkspaceSummaryReceiptSchema = z.object({
+  inventoryMaterialCount: z.number().int().nonnegative(),
+  openRequestCount: z.number().int().nonnegative(),
+  custody: z.object({ representativeName: z.string().nullable(), balance: z.string() }).strict(),
+  asOf: z.string().datetime(),
 }).strict();
 
 export const operationsReportQuerySchema = z.object({
