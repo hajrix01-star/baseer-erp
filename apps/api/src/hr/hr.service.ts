@@ -12,7 +12,12 @@ import { hrReplayReceipt } from './hr-idempotency.util.js';
 
 type EmployeeDetailQuery = Readonly<{ cursor?: string; pageSize: number }>;
 type EmployeeListQuery = Readonly<{ cursor?: string; pageSize: number; status?: HrEmployeeStatus; search?: string }>;
-type EmployeeReadProjection = Readonly<{ includePayroll: boolean }>;
+type EmployeeReadProjection = Readonly<{
+  includePayroll: boolean;
+  includeAdvances?: boolean;
+  includeLeaves?: boolean;
+  includeDocuments?: boolean;
+}>;
 type EmployeeCreateInput = Omit<CreateHrEmployeeRequest, 'idempotencyKey'>;
 type EmployeeUpdateInput = Omit<UpdateHrEmployeeRequest, 'idempotencyKey'>;
 type EmployeePromotionCreateInput = Omit<CreateHrEmployeePromotionRequest, 'idempotencyKey'>;
@@ -90,7 +95,13 @@ export class HrService {
         select: { id: true, businessDate: true },
       }) : null;
       if (query.cursor && !cursor) throw new BadRequestException('The employee-ledger cursor is invalid.');
-      const [services, serviceCount, movementRows, movementCount, compensation, compensationHistory, compensationHistoryCount] = await Promise.all([
+      const advanceScope: Prisma.HrEmployeeAdvanceWhereInput = {
+        employeeId,
+        tenantId: context.tenantId,
+        companyId: context.companyId,
+        status: { in: ['ISSUED', 'PARTIALLY_SETTLED'] },
+      };
+      const [services, serviceCount, movementRows, movementCount, compensation, compensationHistory, compensationHistoryCount, payrollRunCount, advanceCount, openAdvanceAggregate, leaveCount, documentCount, promotionCount] = await Promise.all([
         tx.hrEmployeeService.findMany({
           where: serviceScope,
           orderBy: [{ expiryDate: 'asc' }, { createdAt: 'desc' }, { id: 'desc' }],
@@ -119,6 +130,26 @@ export class HrService {
         projection.includePayroll ? tx.hrEmployeeCompensationProfile.count({
           where: { employeeId, tenantId: context.tenantId, companyId: context.companyId },
         }) : 0,
+        projection.includePayroll ? tx.hrPayrollLine.count({
+          where: { employeeId, tenantId: context.tenantId, companyId: context.companyId },
+        }) : 0,
+        projection.includeAdvances ? tx.hrEmployeeAdvance.count({
+          where: { employeeId, tenantId: context.tenantId, companyId: context.companyId },
+        }) : 0,
+        projection.includeAdvances ? tx.hrEmployeeAdvance.aggregate({
+          where: advanceScope,
+          _count: { _all: true },
+          _sum: { remainingAmount: true },
+        }) : { _count: { _all: 0 }, _sum: { remainingAmount: null } },
+        projection.includeLeaves ? tx.hrEmployeeLeave.count({
+          where: { employeeId, tenantId: context.tenantId, companyId: context.companyId },
+        }) : 0,
+        projection.includeDocuments ? tx.hrEmployeeDocument.count({
+          where: { employeeId, tenantId: context.tenantId, companyId: context.companyId, status: HrEmployeeDocumentStatus.ACTIVE },
+        }) : 0,
+        tx.hrEmployeePromotion.count({
+          where: { employeeId, tenantId: context.tenantId, companyId: context.companyId },
+        }),
       ]);
       const hasMoreMovements = movementRows.length > query.pageSize;
       const movements = hasMoreMovements ? movementRows.slice(0, query.pageSize) : movementRows;
@@ -127,6 +158,15 @@ export class HrService {
         compensation: compensation ? mapCompensation(compensation) : null,
         compensationHistory: compensationHistory.map(mapCompensation),
         compensationHistoryCount,
+        profileSummary: {
+          payrollRunCount,
+          advanceCount,
+          openAdvanceCount: openAdvanceAggregate._count._all,
+          openAdvanceBalance: openAdvanceAggregate._sum.remainingAmount?.toFixed(4) ?? '0.0000',
+          leaveCount,
+          documentCount,
+          promotionCount,
+        },
         services: services.map(mapService),
         serviceCount,
         servicesHasMore: serviceCount > services.length,

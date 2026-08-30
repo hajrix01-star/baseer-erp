@@ -810,6 +810,15 @@ export const hrEmployeeDetailReceiptSchema = z.object({
   /** Immutable salary history shown in the employee file; it never rewrites payroll snapshots. */
   compensationHistory: z.array(hrEmployeeCompensationProfileSchema).max(100),
   compensationHistoryCount: z.number().int().nonnegative(),
+  profileSummary: z.object({
+    payrollRunCount: z.number().int().nonnegative(),
+    advanceCount: z.number().int().nonnegative(),
+    openAdvanceCount: z.number().int().nonnegative(),
+    openAdvanceBalance: hrAmountSchema,
+    leaveCount: z.number().int().nonnegative(),
+    documentCount: z.number().int().nonnegative(),
+    promotionCount: z.number().int().nonnegative(),
+  }).strict(),
   services: z.array(hrEmployeeServiceSchema).max(500),
   serviceCount: z.number().int().nonnegative(),
   servicesHasMore: z.boolean(),

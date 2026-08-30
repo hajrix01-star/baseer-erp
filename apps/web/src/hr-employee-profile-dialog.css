@@ -21,6 +21,28 @@
 .baseer-dialog:has(.hr-employee-profile) .daily-sales-dialog__body { padding: var(--space-card); }
 .baseer-dialog:has(.hr-employee-profile) .hr-employee-profile { gap: var(--space-section); }
 
+/* The employee file starts with its operational picture, before the detailed tabs. */
+.hr-employee-profile__summary {
+  padding-block: .1rem;
+}
+
+.hr-employee-profile__summary .baseer-metric-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .6rem;
+}
+
+.hr-employee-profile__summary .baseer-metric {
+  min-block-size: 5rem;
+}
+
+.hr-employee-profile__overview {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.hr-employee-profile__snapshot {
+  display: none;
+}
+
 .hr-payroll-settlements {
   display: grid;
   gap: .8rem;
@@ -184,6 +206,10 @@
 
   .hr-payroll-settlements table {
     min-inline-size: 48rem;
+  }
+
+  .hr-employee-profile__summary .baseer-metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .hr-document-filters {

@@ -128,7 +128,12 @@ export class HrController {
     const parsed = hrEmployeeDetailQuerySchema.safeParse(query);
     if (!parsed.success) throw new BadRequestException('Invalid employee-ledger query.');
     const access = await this.authorizeEmployeeRead(authorization, companyId);
-    const result = await this.hr.employeeDetail(access.context, employeeId, { pageSize: parsed.data.pageSize, ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) }, { includePayroll: access.canReadPayroll });
+    const result = await this.hr.employeeDetail(access.context, employeeId, { pageSize: parsed.data.pageSize, ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) }, {
+      includePayroll: access.canReadPayroll,
+      includeAdvances: access.canReadAdvances,
+      includeLeaves: access.canReadLeaves,
+      includeDocuments: access.canReadDocuments,
+    });
     return hrEmployeeDetailReceiptSchema.parse({ companyId: access.context.companyId, ...result });
   }
 
@@ -636,12 +641,15 @@ export class HrController {
     const authorized = await this.companyContext.authorizeAvailable({
       accessToken,
       companyId: parsedCompanyId.data,
-      requestedCapabilities: [READ_CAPABILITY, 'hr.payroll.read'],
+      requestedCapabilities: [READ_CAPABILITY, 'hr.payroll.read', 'hr.advances.read', 'hr.leaves.read', 'hr.employee_documents.read'],
     });
     if (!authorized.capabilities.includes(READ_CAPABILITY)) throw new ForbiddenException('Company HR scope is not permitted.');
     return {
       context: { tenantId: authorized.principal.tenantId, companyId: authorized.company.id, actorUserId: authorized.principal.userId },
       canReadPayroll: authorized.capabilities.includes('hr.payroll.read'),
+      canReadAdvances: authorized.capabilities.includes('hr.advances.read'),
+      canReadLeaves: authorized.capabilities.includes('hr.leaves.read'),
+      canReadDocuments: authorized.capabilities.includes('hr.employee_documents.read'),
     };
   }
 }
