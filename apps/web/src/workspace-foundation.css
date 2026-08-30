@@ -28,6 +28,11 @@
 .module-page--hr .hr-salary-tools__boundary { display: none; }
 .module-page--hr .administration-panel > .baseer-filter-bar { margin-top: .85rem; padding: .7rem .8rem; border: 1px solid var(--line); border-radius: .85rem; background: color-mix(in srgb, var(--surface) 94%, var(--brand) 6%); }
 .module-page--hr .administration-panel > .baseer-filter-bar .baseer-filter-bar__search { margin-inline-start: auto; }
+.module-page--hr .administration-panel > .baseer-filter-bar.hr-advances-filter-bar { display: grid; grid-template-columns: minmax(16rem, 28rem) minmax(16rem, 28rem); justify-content: center; align-items: center; }
+.module-page--hr .administration-panel > .baseer-filter-bar.hr-advances-filter-bar .baseer-filter-bar__search { margin-inline-start: 0; inline-size: 100%; }
+.module-page--hr .hr-advances-filter-bar__employee { inline-size: 100%; }
+.module-page--hr .administration-panel > .baseer-filter-bar.hr-advances-filter-bar > .baseer-inline-actions { grid-column: 1 / -1; justify-content: center; }
+@media (max-width: 46rem) { .module-page--hr .administration-panel > .baseer-filter-bar.hr-advances-filter-bar { grid-template-columns: minmax(0, 1fr); } .module-page--hr .administration-panel > .baseer-filter-bar.hr-advances-filter-bar > .baseer-inline-actions { grid-column: auto; } }
 .hr-overview { gap: 1rem; }
 .hr-overview__metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .75rem; }
 .hr-overview__metrics > button { display: grid; min-height: 7rem; padding: 1rem; border: 1px solid var(--line); border-radius: 1rem; color: var(--ink); background: var(--surface); box-shadow: 0 8px 24px rgb(11 36 26 / 5%); text-align: start; cursor: pointer; transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease; }
