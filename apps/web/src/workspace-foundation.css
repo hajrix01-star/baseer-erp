@@ -28,14 +28,17 @@
 .module-page--hr .hr-salary-tools__boundary { display: none; }
 .module-page--hr .administration-panel > .baseer-filter-bar { margin-top: .85rem; padding: .7rem .8rem; border: 1px solid var(--line); border-radius: .85rem; background: color-mix(in srgb, var(--surface) 94%, var(--brand) 6%); }
 .module-page--hr .administration-panel > .baseer-filter-bar .baseer-filter-bar__search { margin-inline-start: auto; }
-.module-page--hr .administration-panel > .baseer-filter-bar.hr-advances-filter-bar { display: grid; grid-template-columns: minmax(16rem, 28rem) minmax(16rem, 28rem); justify-content: center; align-items: center; }
-.module-page--hr .administration-panel > .baseer-filter-bar.hr-advances-filter-bar .baseer-filter-bar__search { margin-inline-start: 0; inline-size: 100%; }
+.module-page--hr .baseer-filter-bar.hr-advances-filter-bar { display: grid; grid-template-columns: minmax(16rem, 28rem) minmax(16rem, 28rem); justify-content: center; align-items: center; }
+.module-page--hr .baseer-filter-bar.hr-advances-filter-bar .baseer-filter-bar__search { margin-inline-start: 0; inline-size: 100%; }
 .module-page--hr .hr-advances-filter-bar__employee { inline-size: 100%; }
-.module-page--hr .administration-panel > .baseer-filter-bar.hr-advances-filter-bar > .baseer-inline-actions { grid-column: 1 / -1; justify-content: center; }
-@media (max-width: 46rem) { .module-page--hr .administration-panel > .baseer-filter-bar.hr-advances-filter-bar { grid-template-columns: minmax(0, 1fr); } .module-page--hr .administration-panel > .baseer-filter-bar.hr-advances-filter-bar > .baseer-inline-actions { grid-column: auto; } }
-.hr-advance-groups { display: grid; gap: .65rem; }
-.hr-advance-group { overflow: hidden; border: 1px solid var(--line); border-radius: .85rem; background: var(--surface); }
-.hr-advance-group > summary { display: grid; grid-template-columns: minmax(15rem, 1.4fr) repeat(3, minmax(8rem, 1fr)) auto; align-items: center; gap: .8rem; padding: .8rem 1rem; cursor: pointer; list-style: none; }
+.module-page--hr .baseer-filter-bar.hr-advances-filter-bar > .baseer-inline-actions { grid-column: 1 / -1; justify-content: center; }
+@media (max-width: 46rem) { .module-page--hr .baseer-filter-bar.hr-advances-filter-bar { grid-template-columns: minmax(0, 1fr); } .module-page--hr .baseer-filter-bar.hr-advances-filter-bar > .baseer-inline-actions { grid-column: auto; } }
+.hr-advance-groups { overflow: hidden; border: 1px solid var(--line); border-radius: .85rem; background: var(--surface); }
+.hr-advance-groups__header, .hr-advance-group > summary { display: grid; grid-template-columns: minmax(15rem, 1.55fr) minmax(5rem, .55fr) repeat(3, minmax(8rem, .95fr)) minmax(6.75rem, auto); align-items: center; column-gap: .8rem; padding: .72rem 1rem; }
+.hr-advance-groups__header { border-bottom: 1px solid var(--line); color: var(--muted); background: color-mix(in srgb, var(--brand) 7%, var(--surface)); font-size: var(--font-caption); font-weight: 800; }
+.hr-advance-group { background: var(--surface); }
+.hr-advance-group + .hr-advance-group { border-top: 1px solid var(--line); }
+.hr-advance-group > summary { cursor: pointer; list-style: none; }
 .hr-advance-group > summary::-webkit-details-marker { display: none; }
 .hr-advance-group > summary:hover { background: color-mix(in srgb, var(--brand) 6%, var(--surface)); }
 .hr-advance-group > summary:focus-visible { outline: 2px solid var(--brand); outline-offset: -2px; }
@@ -44,8 +47,8 @@
 .hr-advance-group__employee strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .hr-advance-group__expand { color: var(--brand-deep); font-size: var(--font-label); white-space: nowrap; }
 .hr-advance-group__details { border-top: 1px solid var(--line); padding: .6rem; background: color-mix(in srgb, var(--canvas) 55%, var(--surface)); }
-@media (max-width: 64rem) { .hr-advance-group > summary { grid-template-columns: minmax(12rem, 1.4fr) repeat(3, minmax(6rem, 1fr)) auto; gap: .55rem; padding: .7rem; } }
-@media (max-width: 46rem) { .hr-advance-group > summary { grid-template-columns: minmax(0, 1fr) repeat(2, minmax(0, 1fr)); } .hr-advance-group__employee { grid-column: 1 / -1; } .hr-advance-group__expand { grid-column: 1 / -1; } }
+@media (max-width: 64rem) { .hr-advance-groups__header, .hr-advance-group > summary { grid-template-columns: minmax(11rem, 1.35fr) minmax(4rem, .45fr) repeat(3, minmax(6rem, .85fr)) minmax(5.5rem, auto); column-gap: .55rem; padding: .7rem; } }
+@media (max-width: 46rem) { .hr-advance-groups__header { display: none; } .hr-advance-group > summary { grid-template-columns: minmax(0, 1fr) repeat(2, minmax(0, 1fr)); row-gap: .55rem; } .hr-advance-group__employee { grid-column: 1 / -1; } .hr-advance-group__expand { grid-column: 1 / -1; } }
 .hr-overview { gap: 1rem; }
 .hr-overview__metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .75rem; }
 .hr-overview__metrics > button { display: grid; min-height: 7rem; padding: 1rem; border: 1px solid var(--line); border-radius: 1rem; color: var(--ink); background: var(--surface); box-shadow: 0 8px 24px rgb(11 36 26 / 5%); text-align: start; cursor: pointer; transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease; }
