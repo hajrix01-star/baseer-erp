@@ -7,10 +7,10 @@ import { DatabaseService } from '../database/database.service.js';
 import { FinanceDailySalesClosingScope, Prisma } from '../generated/prisma/client.js';
 import { DailySalesService } from '../finance/daily-sales.service.js';
 import { NurixExcelStagingStorageService } from './nurix-excel-staging-storage.service.js';
-import { resolveArzV5VaultReference } from './nurix-excel-reference-mapping.js';
+import { resolveNoorixVaultReference } from './nurix-excel-reference-mapping.js';
 
 type Row = Record<string, unknown>;
-type Allocation = Readonly<{ sourceId: string; sourceChecksum: string; vaultSourceId: string; amount: string }>;
+type Allocation = Readonly<{ sourceId: string; sourceChecksum: string; vaultSourceId: string; vaultNameAr: string; amount: string }>;
 type SalesItem = Readonly<{
   sourceId: string; sourceChecksum: string; status: 'active' | 'cancelled' | 'merged'; date: string; scope: FinanceDailySalesClosingScope;
   customerCount: number; cashOnHand: string | null; total: string; notes: string | undefined; allocations: readonly Allocation[];
@@ -87,9 +87,9 @@ export class NurixExcelDailySalesMigrationService {
     for (const row of table('DailySalesAllocations')) {
       const sourceId = text(row.source_id), closingId = text(row.closing_source_id), vaultSourceId = text(row.vault_source_id);
       if (!sourceId || !closingId || !vaultSourceId) throw new BadRequestException('A sales allocation source identity is incomplete.');
-      const vault = resolveArzV5VaultReference({ sourceId: vaultSourceId, nameAr: vaults.get(vaultSourceId) ?? '' });
+      const vault = resolveNoorixVaultReference({ sourceId: vaultSourceId, nameAr: vaults.get(vaultSourceId) ?? '' });
       if (vault.status !== 'MATCHED') throw new ConflictException(`Sales allocation vault ${vaultSourceId} needs an approved identity map.`);
-      const item = { sourceId, sourceChecksum: sha(row), vaultSourceId, amount: money(row.amount, 'sales allocation amount') };
+      const item = { sourceId, sourceChecksum: sha(row), vaultSourceId, vaultNameAr: vaults.get(vaultSourceId) ?? '', amount: money(row.amount, 'sales allocation amount') };
       const values = allocationByClosing.get(closingId) ?? []; values.push(item); allocationByClosing.set(closingId, values);
     }
     const scope = (value: string) => {
@@ -239,7 +239,7 @@ export class NurixExcelDailySalesMigrationService {
       const vaultByCode = new Map(vaults.map((vault) => [vault.account.code.replace(/^NURIX-/, ''), vault.id]));
       const vaultIdBySource = new Map<string, string>();
       for (const allocation of item.allocations) {
-        const source = resolveArzV5VaultReference({ sourceId: allocation.vaultSourceId, nameAr: allocation.vaultSourceId === 'cmnf604l100a6y8lm6h3y6ocx' ? 'بنك' : 'نقد' });
+        const source = resolveNoorixVaultReference({ sourceId: allocation.vaultSourceId, nameAr: allocation.vaultNameAr });
         if (source.status !== 'MATCHED') throw new ConflictException('A daily-sales vault mapping is not approved.');
         const vaultId = vaultByCode.get(source.mapping.targetVaultCode); if (!vaultId) throw new ConflictException(`Sales vault ${source.mapping.targetNameAr} is unavailable.`);
         vaultIdBySource.set(allocation.vaultSourceId, vaultId);

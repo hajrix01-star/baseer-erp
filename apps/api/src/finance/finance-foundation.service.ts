@@ -58,11 +58,20 @@ export class FinanceFoundationService {
 
     const existingAccounts = await transaction.financeAccount.findMany({
       where: { tenantId: context.tenantId, companyId: context.companyId },
-      select: { id: true, code: true },
+      select: { id: true, code: true, type: true, systemKey: true },
     });
     const accountsByCode = new Map(existingAccounts.map((account) => [account.code, account.id]));
     for (const seed of FINANCE_BASE_ACCOUNT_SEEDS) {
-      if (accountsByCode.has(seed.code)) continue;
+      const existing = existingAccounts.find((account) => account.code === seed.code);
+      if (existing) {
+        // A migration may create an evidence-matched account before the
+        // foundation runs. Adopt it only when its accounting type agrees with
+        // the canonical seed; this restores required system behaviour (such
+        // as SALES_REVENUE) without replacing a user-defined account.
+        if (existing.type !== seed.type) throw new ConflictException(`Existing account ${seed.code} conflicts with the required system account type.`);
+        if (!existing.systemKey) await transaction.financeAccount.update({ where: { id: existing.id }, data: { systemKey: seed.systemKey, isSystem: true } });
+        continue;
+      }
       const account = await transaction.financeAccount.create({
         data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, code: seed.code, nameAr: seed.nameAr, nameEn: seed.nameEn, type: seed.type, systemKey: seed.systemKey, isSystem: true, status: FinanceAccountStatus.ACTIVE },
       });
@@ -71,25 +80,41 @@ export class FinanceFoundationService {
 
     const existingCategories = await transaction.financeCategory.findMany({
       where: { tenantId: context.tenantId, companyId: context.companyId },
-      select: { id: true, code: true, accountId: true, parentId: true },
+      select: { id: true, code: true, accountId: true, parentId: true, kind: true },
     });
     const categoriesByCode = new Map(existingCategories.map((category) => [category.code, category]));
     for (const seed of FINANCE_BASE_CATEGORY_SEEDS) {
-      if (categoriesByCode.has(seed.code)) continue;
       const accountId = accountsByCode.get(seed.accountCode);
       if (!accountId) throw new ConflictException('Missing required seeded account ' + seed.accountCode + '.');
+      const existing = categoriesByCode.get(seed.code);
+      if (existing) {
+        if (existing.kind !== seed.kind) throw new ConflictException(`Existing category ${seed.code} conflicts with the required system category kind.`);
+        if (existing.accountId !== accountId) {
+          await transaction.financeCategory.update({ where: { id: existing.id }, data: { accountId } });
+          categoriesByCode.set(seed.code, { ...existing, accountId });
+        }
+        continue;
+      }
       const category = await transaction.financeCategory.create({
         data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, accountId, code: seed.code, nameAr: seed.nameAr, nameEn: seed.nameEn, kind: seed.kind, status: FinanceCategoryStatus.ACTIVE, sortOrder: seed.sortOrder },
-        select: { id: true, code: true, accountId: true, parentId: true },
+        select: { id: true, code: true, accountId: true, parentId: true, kind: true },
       });
       categoriesByCode.set(category.code, category);
     }
 
     const parentCodes = [...new Set(FINANCE_BASE_CATEGORY_HIERARCHY_SEEDS.map((seed) => seed.parentCode))];
     for (const seed of FINANCE_BASE_CATEGORY_HIERARCHY_SEEDS) {
-      if (categoriesByCode.has(seed.code)) continue;
       const parent = categoriesByCode.get(seed.parentCode);
       if (!parent?.accountId) throw new ConflictException('Missing required seeded category ' + seed.parentCode + '.');
+      const existing = categoriesByCode.get(seed.code);
+      if (existing) {
+        if (existing.kind !== seed.kind) throw new ConflictException(`Existing category ${seed.code} conflicts with the required hierarchy category kind.`);
+        if (existing.parentId !== parent.id || existing.accountId !== parent.accountId) {
+          await transaction.financeCategory.update({ where: { id: existing.id }, data: { parentId: parent.id, accountId: parent.accountId } });
+          categoriesByCode.set(seed.code, { ...existing, parentId: parent.id, accountId: parent.accountId });
+        }
+        continue;
+      }
       const category = await transaction.financeCategory.create({
         data: {
           id: randomUUID(),
@@ -105,7 +130,7 @@ export class FinanceFoundationService {
           isPosting: true,
           sortOrder: seed.sortOrder,
         },
-        select: { id: true, code: true, accountId: true, parentId: true },
+        select: { id: true, code: true, accountId: true, parentId: true, kind: true },
       });
       categoriesByCode.set(category.code, category);
     }

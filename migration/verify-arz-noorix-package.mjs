@@ -2,10 +2,10 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import { NurixExcelImportService } from '../apps/api/dist/nurix-migration/nurix-excel-import.service.js';
 
-const suppliedPath = process.argv[2];
+const [suppliedPath, requestedSourceCompanyId, requestedTargetCompanyId] = process.argv.slice(2);
 const workbookPath = suppliedPath ? new URL(`../${suppliedPath.replace(/\\/g, '/')}`, import.meta.url) : new URL('../outputs/arz-noorix-comprehensive-dry-run-v3/arz-noorix-comprehensive-dry-run-v3.xlsx', import.meta.url);
-const sourceCompanyId = 'cmnf604ka009ay8lm556wgd9c';
-const targetCompanyId = '9643b3f9-6f07-40e5-bbb1-937ae28daf4d';
+const sourceCompanyId = requestedSourceCompanyId ?? 'cmnf604ka009ay8lm556wgd9c';
+const targetCompanyId = requestedTargetCompanyId ?? '9643b3f9-6f07-40e5-bbb1-937ae28daf4d';
 
 const database = {
   inTenantTransaction: async (_tenantId, callback) => callback({
@@ -22,7 +22,7 @@ const result = await service.dryRun(
     sourceCompanyId,
     templateVersion: 'nurix-excel-package/v3',
     workbook: {
-      fileName: 'arz-noorix-comprehensive-dry-run-v3.xlsx',
+      fileName: workbookPath.pathname.split('/').at(-1),
       mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       byteSize: bytes.length,
       exportedAt: '2026-08-29T00:00:00.000Z',

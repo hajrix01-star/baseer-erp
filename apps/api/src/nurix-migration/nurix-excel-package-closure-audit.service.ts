@@ -86,12 +86,20 @@ const HR_EVIDENCE_CODE = 'NURIX_HR_EVIDENCE_ONLY';
 // It is not a financial write and must never be generalized into a bypass for
 // other recurring profiles.
 const RECURRING_ZERO_PAYMENT_EXCLUSION_CODE = 'NO_ACTIVE_HISTORICAL_PAYMENT_OWNER_APPROVED_DELETE';
+// A profile that has historical invoices but no source-proven future amount
+// cannot become a live reminder. The dedicated writer retains its immutable
+// row as historical evidence and writes every proven payment separately.
+// This deliberately names one transform/version and one target evidence type;
+// it is not a generic EXCLUDED-item bypass.
+const RECURRING_HISTORICAL_PROFILE_EVIDENCE_CODE = 'NO_PROVEN_RECURRING_TERMS_HISTORICAL_EVIDENCE_RETAINED';
+const RECURRING_HISTORICAL_PROFILE_EVIDENCE_TRANSFORM = 'nurix-excel-recurring-historical-evidence/v1';
 const RECURRING_PROFILE_ENTITY = 'RecurringExpenseProfile';
 
 type HrStagingRow = Readonly<{ sheet: string; sourceId: string; sourceChecksum: string }>;
 type HrRecordMap = Readonly<{ sourceId: string; sourceChecksum: string; targetId: string; state: string; targetEntity: string }>;
 type HrException = Readonly<{ sourceEntity: string | null; sourceId: string | null; code: string; severity: string }>;
 type FinancialClosureItem = Readonly<{ sourceEntity: string; sourceId: string; sourceChecksum: string; status: string; resultCode: string | null }>;
+type RecurringProfileEvidenceItem = FinancialClosureItem & Readonly<{ targetEntity: string | null; transformVersion: string }>;
 export type HrHistoryClosureCoverage = Readonly<Record<'EmployeeServices' | 'EmployeeDeductions' | 'EmployeeMovements', Readonly<{
   settledRows: number;
   sourceMaps: number;
@@ -129,7 +137,7 @@ export class NurixExcelPackageClosureAuditService {
         }),
         tx.nurixExcelFinancialItem.findMany({
           where: { tenantId: context.tenantId, execution: { packageId, status: 'COMPLETED' }, status: { in: ['POSTED', 'REUSED', 'EXCLUDED'] } },
-          select: { sourceEntity: true, sourceId: true, sourceChecksum: true, status: true, resultCode: true },
+          select: { sourceEntity: true, sourceId: true, sourceChecksum: true, status: true, resultCode: true, targetEntity: true, execution: { select: { transformVersion: true } } },
         }),
         tx.nurixExcelFinancialSourceMap.findMany({
           // A source may be touched by more than one completed execution
@@ -208,7 +216,7 @@ export class NurixExcelPackageClosureAuditService {
       // execution. Closure coverage is per source identity, not per retry.
       const written = countDistinctFinancialItems(financialItems);
       const maps = countDistinctSourceMapsWithSupplierDeletions(sourceMaps, sourceRows, deletedSupplierEvents);
-      const recurringProfileExclusions = resolveRecurringZeroPaymentProfileExclusions(sourceRows, financialItems);
+      const recurringProfileExclusions = resolveRecurringProfileEvidenceExclusions(sourceRows, financialItems.map((item) => ({ ...item, transformVersion: item.execution.transformVersion })));
       const financialHealth = {
         completed: executions.filter((execution) => execution.status === 'COMPLETED').length,
         running: executions.filter((execution) => execution.status === 'RUNNING' || execution.waves.some((wave) => wave.status === 'RUNNING')).length,
@@ -308,10 +316,9 @@ export class NurixExcelPackageClosureAuditService {
   }
 
   /**
-   * The owner approved one and only one sales consolidation: the 26-May-2026
-   * MORNING source close for 237.0000 is retained as lineage but reversed;
-   * the POSTED target balance therefore equals raw source revenue less 237.
-   * A reversal is evidence, not an error or a second migrated sale.
+   * A package can either retain every source closing, or carry one documented
+   * reversal/merge.  The gate checks the evidence actually present rather
+   * than imposing a historical ARZ-only adjustment on every future company.
    */
   private dailySalesReconciliation(
     rawClosingAmounts: readonly string[],
@@ -324,7 +331,7 @@ export class NurixExcelPackageClosureAuditService {
     const expected = rawSource - adjustment;
     const postedClosings = sumMoney(postedClosingAmounts);
     const postedAllocations = sumMoney(postedAllocationAmounts);
-    const adjustmentRecognized = reversedClosingAmounts.length === 1 && adjustment === 2370000n;
+    const adjustmentRecognized = reversedClosingAmounts.length === 0 || (reversedClosingAmounts.length === 1 && adjustment === 2370000n);
     const matches = adjustmentRecognized && expected === postedClosings && expected === postedAllocations;
     return {
       sourceGrossAmount: formatMoney(rawSource),
@@ -333,9 +340,11 @@ export class NurixExcelPackageClosureAuditService {
       postedClosingsAmount: formatMoney(postedClosings),
       postedAllocationsAmount: formatMoney(postedAllocations),
       matches,
-      decisionAr: adjustmentRecognized
-        ? `تسوية مالك معتمدة: إجمالي نوركس الخام ${formatMoney(rawSource)} ناقص عكس/دمج MORNING بتاريخ 2026-05-26 بمبلغ ${formatMoney(adjustment)} = صافي مستهدف ${formatMoney(expected)}. صف MORNING المعكوس محفوظ كسجل REVERSED ولا يعد عدم تطابق.`
-        : 'تعذر إثبات عكس/دمج MORNING المعتمد في سجلات مبيعات بصير.',
+      decisionAr: !reversedClosingAmounts.length
+        ? `لا توجد تسوية عكس أو دمج في هذه الحزمة؛ إجمالي نوركس ${formatMoney(rawSource)} يطابق التقفيلات والتخصيصات المرحلة.`
+        : adjustmentRecognized
+          ? `تسوية مالك معتمدة: إجمالي نوركس الخام ${formatMoney(rawSource)} ناقص عكس/دمج MORNING بتاريخ 2026-05-26 بمبلغ ${formatMoney(adjustment)} = صافي مستهدف ${formatMoney(expected)}. صف MORNING المعكوس محفوظ كسجل REVERSED ولا يعد عدم تطابق.`
+          : 'تعذر إثبات عكس/دمج المبيعات المعتمد في سجلات بصير.',
     };
   }
 
@@ -379,7 +388,7 @@ export class NurixExcelPackageClosureAuditService {
       return {
         ...base,
         state: 'WRITTEN_AND_RECONCILED',
-        treatmentAr: `تمت مطابقة ${mapped} ملفات دورية مع أهدافها، واستُبعد ${excludedEvidenceRows} سجل صفري بدليل قرار معتمد بلا ملف أو فاتورة أو قيد مالي.`,
+        treatmentAr: `تمت مطابقة ${mapped} ملفات دورية مع أهدافها، وحُفظ ${excludedEvidenceRows} ملفاً ناقص شروط التذكير المستقبلي كدليل تاريخي معتمد؛ لا يتحول إلى التزام أو تذكير مُخمَّن.`,
         nextActionAr: 'لا يلزم إجراء.',
       };
     }
@@ -526,19 +535,21 @@ export function countDistinctFinancialItems(rows: readonly FinancialClosureItem[
  * checksum, entity and reason all agree. It contributes no source map because
  * there is deliberately no target profile, document or journal.
  */
-export function resolveRecurringZeroPaymentProfileExclusions(
+export function resolveRecurringProfileEvidenceExclusions(
   sourceRows: readonly HrStagingRow[],
-  financialItems: readonly FinancialClosureItem[],
+  financialItems: readonly RecurringProfileEvidenceItem[],
 ): ReadonlySet<string> {
   const acceptedProfiles = new Map(sourceRows
     .filter((row) => row.sheet === 'RecurringExpenseProfiles')
     .map((row) => [row.sourceId, row.sourceChecksum]));
   const result = new Set<string>();
   for (const item of financialItems) {
-    if (item.sourceEntity !== RECURRING_PROFILE_ENTITY
-      || item.status !== 'EXCLUDED'
-      || item.resultCode !== RECURRING_ZERO_PAYMENT_EXCLUSION_CODE
-      || acceptedProfiles.get(item.sourceId) !== item.sourceChecksum) continue;
+    if (item.sourceEntity !== RECURRING_PROFILE_ENTITY || item.status !== 'EXCLUDED' || acceptedProfiles.get(item.sourceId) !== item.sourceChecksum) continue;
+    const legacyZeroPaymentExclusion = item.resultCode === RECURRING_ZERO_PAYMENT_EXCLUSION_CODE;
+    const historicalTermsEvidence = item.resultCode === RECURRING_HISTORICAL_PROFILE_EVIDENCE_CODE
+      && item.targetEntity === 'NoorixHistoricalRecurringProfileEvidence'
+      && item.transformVersion === RECURRING_HISTORICAL_PROFILE_EVIDENCE_TRANSFORM;
+    if (!legacyZeroPaymentExclusion && !historicalTermsEvidence) continue;
     result.add(item.sourceId);
   }
   return result;

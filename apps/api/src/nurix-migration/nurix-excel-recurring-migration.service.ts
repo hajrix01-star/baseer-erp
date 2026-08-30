@@ -18,7 +18,7 @@ import {
 } from '../generated/prisma/client.js';
 import { FinanceCashPerformanceEventService } from '../finance/finance-cash-performance-event.service.js';
 import { JournalPostingService } from '../finance/journal/journal-posting.service.js';
-import { resolveArzV5VaultReference } from './nurix-excel-reference-mapping.js';
+import { resolveNoorixVaultReference } from './nurix-excel-reference-mapping.js';
 import { NurixExcelStagingStorageService } from './nurix-excel-staging-storage.service.js';
 
 type Row = Record<string, unknown>;
@@ -753,7 +753,7 @@ export class NurixExcelRecurringMigrationService {
       return { ...target, paymentMethod: target.paymentMethod as FinanceVaultPaymentMethod };
     }
     if (!source) throw new ConflictException(`Vault ${sourceId} was not proven by the approved recurring plan.`);
-    const resolution = resolveArzV5VaultReference({ sourceId, nameAr: source.nameAr });
+    const resolution = resolveNoorixVaultReference({ sourceId, nameAr: source.nameAr });
     if (resolution.status !== 'MATCHED') throw new ConflictException(`Vault ${sourceId} requires an approved identity map.`);
     const vaults = await tx.financeVault.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, status: FinanceVaultStatus.ACTIVE, isPaymentDestination: true }, select: { id: true, accountId: true, paymentMethod: true, paymentMethods: true, account: { select: { code: true } } } });
     const target = vaults.find((candidate) => candidate.account.code.replace(/^NURIX-/, '') === resolution.mapping.targetVaultCode && candidate.paymentMethods.includes(resolution.mapping.paymentMethod as FinanceVaultPaymentMethod));

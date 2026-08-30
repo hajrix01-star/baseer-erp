@@ -25,7 +25,7 @@ import {
   type NurixHistoricalMappingSnapshot,
 } from './nurix-excel-financial-import.service.js';
 import {
-  resolveArzV5VaultReference,
+  resolveNoorixVaultReference,
   resolveSupplierReference,
   type TargetSupplierReference,
 } from './nurix-excel-reference-mapping.js';
@@ -245,7 +245,7 @@ export class NurixExcelFinancialMigrationService {
       const vaultsBySourceId: Record<string, { id: string; active: boolean; paymentDestination: boolean; accountId: string; defaultPaymentMethod: string; paymentMethods: string[] }> = {};
       const sourceAccountsByCode = new Map(source.accounts.map((row) => [text(row.code), text(row.source_id)]));
       for (const sourceVault of source.vaults) {
-        const resolution = resolveArzV5VaultReference({ sourceId: text(sourceVault.source_id), nameAr: text(sourceVault.name_ar), nameEn: optionalText(sourceVault.name_en) });
+        const resolution = resolveNoorixVaultReference({ sourceId: text(sourceVault.source_id), nameAr: text(sourceVault.name_ar), nameEn: optionalText(sourceVault.name_en) });
         if (resolution.status !== 'MATCHED') throw new ConflictException(`Vault ${text(sourceVault.name_ar)} has no approved source-identity mapping.`);
         const accountSourceId = sourceAccountsByCode.get(resolution.mapping.targetVaultCode);
         const account = accountSourceId ? accountBySourceId.get(accountSourceId) : null;

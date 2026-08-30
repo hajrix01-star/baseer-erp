@@ -4,12 +4,12 @@ import dotenv from 'dotenv';
 import { NestFactory } from '@nestjs/core';
 
 const [scope, packageId, tenantId, actorUserId, waveSize = '50'] = process.argv.slice(2);
-const permittedScopes = new Set(['references', 'recurring', 'hr-history']);
+const permittedScopes = new Set(['master-data', 'references', 'recurring', 'hr-history', 'evidence']);
 if (!permittedScopes.has(scope) || !packageId || !tenantId || !actorUserId
   || !/^[0-9a-f-]{36}$/i.test(packageId)
   || !/^[0-9a-f-]{36}$/i.test(tenantId)
   || !/^[0-9a-f-]{36}$/i.test(actorUserId)) {
-  throw new Error('Usage: node scripts/run-local-nurix-import-wave.mjs <references|recurring|hr-history> <package-uuid> <tenant-uuid> <owner-user-uuid> [wave-size]');
+  throw new Error('Usage: node scripts/run-local-nurix-import-wave.mjs <master-data|references|recurring|hr-history|evidence> <package-uuid> <tenant-uuid> <owner-user-uuid> [wave-size]');
 }
 
 const parsedWaveSize = Number(waveSize);
@@ -27,15 +27,25 @@ const app = await NestFactory.createApplicationContext(AppModule, { logger: ['er
 const context = { tenantId, actorUserId, isOwner: true };
 try {
   let receipt;
-  if (scope === 'references') {
+  if (scope === 'master-data') {
+    const { NurixExcelImportService } = await import('../apps/api/dist/nurix-migration/nurix-excel-import.service.js');
+    receipt = await app.get(NurixExcelImportService).executeMasterData(context, packageId, {
+      reason: 'Owner authorized Noorix accounts, categories, and employees master-data import.', waveSize: parsedWaveSize,
+    });
+  } else if (scope === 'references') {
     const { NurixExcelReferenceAllocationMigrationService } = await import('../apps/api/dist/nurix-migration/nurix-excel-reference-allocation-migration.service.js');
     receipt = await app.get(NurixExcelReferenceAllocationMigrationService).execute(context, packageId, {
-      reason: 'Owner authorized ARZ Noorix reference and allocation lineage import.', waveSize: parsedWaveSize,
+      reason: 'Owner authorized Noorix reference and allocation lineage import.', waveSize: parsedWaveSize,
     });
   } else if (scope === 'recurring') {
     const { NurixExcelRecurringMigrationService } = await import('../apps/api/dist/nurix-migration/nurix-excel-recurring-migration.service.js');
     receipt = await app.get(NurixExcelRecurringMigrationService).execute(context, packageId, {
-      reason: 'Owner authorized ARZ Noorix historical recurring-expense import.', waveSize: parsedWaveSize,
+      reason: 'Owner authorized Noorix historical recurring-expense import.', waveSize: parsedWaveSize,
+    });
+  } else if (scope === 'evidence') {
+    const { NurixExcelEvidenceArchiveService } = await import('../apps/api/dist/nurix-migration/nurix-excel-evidence-archive.service.js');
+    receipt = await app.get(NurixExcelEvidenceArchiveService).execute(context, packageId, {
+      reason: 'Owner authorized Noorix historical evidence archive for controlled follow-up.', waveSize: parsedWaveSize,
     });
   } else {
     const { NurixExcelHrHistoryImportService } = await import('../apps/api/dist/nurix-migration/nurix-excel-hr-history-import.service.js');

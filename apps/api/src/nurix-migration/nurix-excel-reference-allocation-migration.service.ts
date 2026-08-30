@@ -6,7 +6,7 @@ import { BadRequestException, ConflictException, Injectable, NotFoundException }
 import type { TrustedTenantAdministratorContext } from '../administration/tenant-administration-context.service.js';
 import { DatabaseService } from '../database/database.service.js';
 import { FinanceSupplierStatus, FinanceVaultPaymentMethod, FinanceVaultStatus, Prisma } from '../generated/prisma/client.js';
-import { resolveArzV5VaultReference } from './nurix-excel-reference-mapping.js';
+import { resolveNoorixVaultReference } from './nurix-excel-reference-mapping.js';
 import { NurixExcelStagingStorageService } from './nurix-excel-staging-storage.service.js';
 
 type Row = Record<string, unknown>;
@@ -113,7 +113,7 @@ export function buildNurixExcelReferenceAllocationPlan(source: Readonly<{ suppli
     let reviewCode: string | null = null;
     if (!invoice || invoice.status !== 'active') reviewCode = 'SOURCE_INVOICE_NOT_ACTIVE';
     else if (!vault || vault.status !== 'active') reviewCode = 'SOURCE_VAULT_NOT_ACTIVE';
-    else if (resolveArzV5VaultReference({ sourceId: vault.sourceId, nameAr: vault.nameAr }).status !== 'MATCHED') reviewCode = 'SOURCE_VAULT_MAPPING_UNSAFE';
+    else if (resolveNoorixVaultReference({ sourceId: vault.sourceId, nameAr: vault.nameAr }).status !== 'MATCHED') reviewCode = 'SOURCE_VAULT_MAPPING_UNSAFE';
     allocationByInvoice.set(invoiceSourceId, (allocationByInvoice.get(invoiceSourceId) ?? new Prisma.Decimal(0)).plus(amount));
     return { sourceId, sourceChecksum: sha(row), invoiceSourceId, vaultSourceId, vaultSourceChecksum: vault?.sourceChecksum ?? '', amount, paymentMethod: paymentMethod(row.payment_method_source_id), reviewCode };
   });
@@ -246,13 +246,15 @@ export class NurixExcelReferenceAllocationMigrationService {
 
   private async prepare(context: TrustedTenantAdministratorContext, packageRow: Awaited<ReturnType<NurixExcelReferenceAllocationMigrationService['package']>>, plan: NurixExcelReferenceAllocationPlan, reason: string | undefined, waveSize: number) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      // InvoiceAllocation is a binding-only wave. Require the approved 647
-      // historical purchase/expense documents first, rather than letting a
-      // reference wave accidentally become a second financial import route.
+      // InvoiceAllocation is a binding-only wave. Require every active
+      // purchase/expense document declared by this immutable package first,
+      // rather than letting a reference wave accidentally become a second
+      // financial import route.
       const financial = await tx.nurixExcelFinancialExecution.findFirst({ where: { packageId: packageRow.id, tenantId: context.tenantId, transformVersion: FINANCIAL_VERSION, status: 'COMPLETED' }, select: { id: true } });
-      if (!financial) throw new ConflictException('The 647 historical purchase/expense invoices must complete before allocation lineage can run.');
+      const expectedInvoices = plan.invoices.filter((invoice) => invoice.status === 'active').length;
+      if (!financial) throw new ConflictException(`The ${expectedInvoices} historical purchase/expense invoices must complete before allocation lineage can run.`);
       const importedInvoices = await tx.nurixExcelFinancialSourceMap.count({ where: { executionId: financial.id, tenantId: context.tenantId, sourceEntity: 'Invoice', targetEntity: 'FinanceOutflowDocument', state: { in: ['APPLIED', 'REUSED'] } } });
-      if (importedInvoices !== 647) throw new ConflictException(`Expected 647 imported purchase/expense invoices before allocation lineage; found ${importedInvoices}.`);
+      if (importedInvoices !== expectedInvoices) throw new ConflictException(`Expected ${expectedInvoices} imported purchase/expense invoices before allocation lineage; found ${importedInvoices}.`);
       const existing = await tx.nurixExcelFinancialExecution.findFirst({ where: { packageId: packageRow.id, tenantId: context.tenantId, transformVersion: VERSION }, select: { id: true, status: true, waveSequence: true, financialPlanSha256: true } });
       if (existing) {
         if (existing.financialPlanSha256 !== plan.checksum) throw new ConflictException('The verified reference plan changed; create a new package revision instead of resuming it.');
@@ -439,7 +441,7 @@ export class NurixExcelReferenceAllocationMigrationService {
       if (existing.sourceChecksum !== source.sourceChecksum) return { status: 'UNSAFE', code: 'VAULT_SOURCE_CHECKSUM_CHANGED' };
       return { status: 'REUSED', targetId: existing.targetId };
     }
-    const resolution = resolveArzV5VaultReference({ sourceId: source.sourceId, nameAr: source.nameAr });
+    const resolution = resolveNoorixVaultReference({ sourceId: source.sourceId, nameAr: source.nameAr });
     if (resolution.status !== 'MATCHED') return { status: 'UNSAFE', code: 'SOURCE_VAULT_MAPPING_UNSAFE' };
     const codeOptions = [resolution.mapping.targetVaultCode, `NURIX-${resolution.mapping.targetVaultCode}`];
     // Target name is safe here only because the source id + source name were

@@ -25,7 +25,7 @@ const app = await NestFactory.createApplicationContext(AppModule, { logger: ['er
 try {
   const service = app.get(NurixExcelFinancialMigrationService);
   const receipt = await service.execute({ tenantId, actorUserId, isOwner: true }, packageId, {
-    reason: 'Owner authorized full ARZ Noorix historical financial import.',
+    reason: 'Owner authorized full Noorix historical financial import.',
     waveSize: Number(waveSize),
   });
   console.log(JSON.stringify(receipt));

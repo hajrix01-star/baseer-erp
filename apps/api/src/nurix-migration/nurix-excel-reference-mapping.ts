@@ -17,7 +17,7 @@ export type NurixExcelReferenceRow = Readonly<{
 export type ArzVaultReference = Readonly<{
   sourceId: string;
   sourceNameAr: string;
-  targetVaultCode: 'V-001' | 'V-002' | 'V-003' | 'V-004' | 'V-005';
+  targetVaultCode: 'V-001' | 'V-002' | 'V-003' | 'V-004' | 'V-005' | 'V-006';
   targetNameAr: string;
   vaultType: 'CASH' | 'BANK' | 'APP';
   paymentMethod: 'CASH' | 'BANK_TRANSFER' | 'BANK_CARD' | 'BANK_PAYMENT' | 'APP';
@@ -51,6 +51,21 @@ export const ARZ_V5_VAULT_REFERENCES: readonly ArzVaultReference[] = [
   { sourceId: 'cmsje77wt007tvj7eb63szg0y', sourceNameAr: 'عبدالجيل', targetVaultCode: 'V-005', targetNameAr: 'عبدالجيل', vaultType: 'CASH', paymentMethod: 'CASH', evidence: 'ARZ_V5_EXPLICIT_VAULT_DECISION' },
 ] as const;
 
+/**
+ * Explicit source-ID vault decisions approved for each migrated company.
+ * The resolver still requires both the immutable Noorix ID and the exact
+ * normalized source name, so a similarly named vault can never be inferred.
+ */
+export const NOORIX_VAULT_REFERENCES: readonly ArzVaultReference[] = [
+  ...ARZ_V5_VAULT_REFERENCES,
+  { sourceId: 'cmnaiviq8000xwavxoqjln3z7', sourceNameAr: 'البنك', targetVaultCode: 'V-002', targetNameAr: 'البنك', vaultType: 'BANK', paymentMethod: 'BANK_TRANSFER', evidence: 'ARZ_V5_EXPLICIT_VAULT_DECISION' },
+  { sourceId: 'cmnaiviq4000vwavxwjndkfev', sourceNameAr: 'نقد', targetVaultCode: 'V-001', targetNameAr: 'نقد', vaultType: 'CASH', paymentMethod: 'CASH', evidence: 'ARZ_V5_EXPLICIT_VAULT_DECISION' },
+  { sourceId: 'cmnazrhgy000g2646c45q6zi6', sourceNameAr: 'هنجر', targetVaultCode: 'V-003', targetNameAr: 'هنجر', vaultType: 'APP', paymentMethod: 'APP', evidence: 'ARZ_V5_EXPLICIT_VAULT_DECISION' },
+  { sourceId: 'cmngf3sp10020gwgiymgxlmdh', sourceNameAr: 'جاهز', targetVaultCode: 'V-004', targetNameAr: 'جاهز', vaultType: 'APP', paymentMethod: 'APP', evidence: 'ARZ_V5_EXPLICIT_VAULT_DECISION' },
+  { sourceId: 'cmngf47fp0027gwgizvpdbssf', sourceNameAr: 'كيتا', targetVaultCode: 'V-005', targetNameAr: 'كيتا', vaultType: 'APP', paymentMethod: 'APP', evidence: 'ARZ_V5_EXPLICIT_VAULT_DECISION' },
+  { sourceId: 'cmsje54c600ixp59837kw765d', sourceNameAr: 'عبدالجليل', targetVaultCode: 'V-006', targetNameAr: 'عبدالجليل', vaultType: 'CASH', paymentMethod: 'CASH', evidence: 'ARZ_V5_EXPLICIT_VAULT_DECISION' },
+] as const;
+
 /** Rejects a hand-edited decision set before it can be passed to an importer. */
 export function assertArzVaultReferencesAreSafe(references: readonly ArzVaultReference[] = ARZ_V5_VAULT_REFERENCES): void {
   const sourceIds = new Set<string>();
@@ -76,6 +91,10 @@ export function resolveArzV5VaultReference(source: NurixExcelReferenceRow, refer
   if (!mapping) return { status: 'REVIEW_REQUIRED', reason: 'UNKNOWN_SOURCE_VAULT' };
   if (!sourceName || sourceName !== normalizeNurixCounterpartyAlias(mapping.sourceNameAr)) return { status: 'REVIEW_REQUIRED', reason: 'SOURCE_VAULT_EVIDENCE_MISMATCH' };
   return { status: 'MATCHED', mapping };
+}
+
+export function resolveNoorixVaultReference(source: NurixExcelReferenceRow): ArzVaultReferenceResolution {
+  return resolveArzV5VaultReference(source, NOORIX_VAULT_REFERENCES);
 }
 
 /**
