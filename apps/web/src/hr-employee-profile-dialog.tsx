@@ -103,7 +103,11 @@ export function HrEmployeeProfileDialog({ detail, language, onClose, onEdit, onM
   useEffect(() => { let active = true; if (!canManageAttendance) { setEmployeeSchedule(null); return; } void refreshEmployeeSchedule().catch(() => { if (active) setEmployeeSchedule(null); }); return () => { active = false; }; }, [canManageAttendance, employeeId]);
   useEffect(() => {
     const session = activeSession();
-    if (!session || (tab !== "payroll" && tab !== "time" && tab !== "compliance") || loadedTabs.current.has(tab) || loadingTabs.current.has(tab)) return;
+    // Payroll can be written by a completed migration while an employee file
+    // remains open. Reload this tab whenever it is selected so a cached empty
+    // result never hides newly linked payroll lines; the other read-only tabs
+    // retain their lightweight first-load cache.
+    if (!session || (tab !== "payroll" && tab !== "time" && tab !== "compliance") || (tab !== "payroll" && loadedTabs.current.has(tab)) || loadingTabs.current.has(tab)) return;
     const requestedTab = tab;
     const version = employeeVersion.current;
     loadingTabs.current.add(requestedTab); setLoadingTab(requestedTab);
