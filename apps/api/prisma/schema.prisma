@@ -1041,6 +1041,7 @@ model Tenant {
   nurixExcelFinancialItems               NurixExcelFinancialItem[]
   nurixExcelFinancialSourceMaps          NurixExcelFinancialSourceMap[]
   nurixExcelFinancialReceipts            NurixExcelFinancialReceipt[]
+  noorixSourceAnnotations                NoorixSourceAnnotation[]
   financeCounterpartyIdentities          FinanceCounterpartyIdentity[]
   financeCounterpartyAliases             FinanceCounterpartyAlias[]
 }
@@ -1114,6 +1115,7 @@ model Company {
   memberships                                CompanyMembership[]
   audits                                     AuditEvent[]
   idempotencyReceipts                        IdempotencyReceipt[]
+  noorixSourceAnnotations                    NoorixSourceAnnotation[]
   documentSerialCounters                     DocumentSerialCounter[]
   fileMetadata                               FileMetadata[]
   financeProfile                             CompanyFinanceProfile?
@@ -1594,6 +1596,32 @@ model LegacyMigrationRecordMap {
   @@unique([runId, targetEntity, targetId])
   @@index([tenantId, targetCompanyId, sourceEntity])
   @@index([tenantId, sourceCompanyId, sourceEntity])
+}
+
+/// Immutable preservation of a source text when the operational target either
+/// has no note field or its business note must remain distinct from migration
+/// metadata.  It carries no financial amount, journal instruction or mutable
+/// source payload.
+model NoorixSourceAnnotation {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @db.Uuid
+  targetCompanyId String   @db.Uuid
+  sourceCompanyId String   @db.VarChar(120)
+  sourceEntity    String   @db.VarChar(120)
+  sourceId        String   @db.VarChar(160)
+  sourceChecksum  String   @db.Char(64)
+  targetEntity    String?  @db.VarChar(120)
+  targetId        String?  @db.VarChar(160)
+  field           String   @db.VarChar(120)
+  exactText       String   @db.Text
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+
+  tenant  Tenant  @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  company Company @relation(fields: [targetCompanyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+
+  @@unique([tenantId, targetCompanyId, sourceEntity, sourceId, field])
+  @@index([tenantId, targetCompanyId, targetEntity, targetId])
+  @@index([tenantId, targetCompanyId, sourceEntity, sourceId])
 }
 
 /// Immutable intake metadata. Workbook bytes stay in controlled file storage

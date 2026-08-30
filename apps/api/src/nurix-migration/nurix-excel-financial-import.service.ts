@@ -144,6 +144,10 @@ export type NurixHistoricalFinancialPlanItem = Readonly<{
   netAmount: string;
   taxAmount: string;
   grossAmount: string;
+  /** Original Noorix text; it is payload, not a migration annotation. */
+  sourceNotes?: string;
+  /** A ledger note has no dedicated target field, so it accompanies the document. */
+  sourceLedgerNotes?: string;
   journalLines: readonly Readonly<{ accountId: string; debitAmount: string; creditAmount: string }>[];
   allocations: readonly Readonly<{ sourceAllocationId: string; sourceChecksum: string; vaultId: string; grossAmount: string; paymentMethod: string }>[];
 }>;
@@ -263,6 +267,8 @@ export class NurixExcelFinancialImportService {
         netAmount: formatMoney(net),
         taxAmount: formatMoney(tax),
         grossAmount: amount,
+        ...(invoice.notes ? { sourceNotes: invoice.notes } : {}),
+        ...(ledger.notes ? { sourceLedgerNotes: ledger.notes } : {}),
         journalLines: Object.freeze([
           Object.freeze({ accountId: debitAccount.id, debitAmount: amount, creditAmount: '0.0000' }),
           Object.freeze({ accountId: creditAccount.id, debitAmount: '0.0000', creditAmount: amount }),
@@ -275,7 +281,7 @@ export class NurixExcelFinancialImportService {
     }
     const planChecksum = sha({
       version: 'nurix-historical-finance-plan/v1', packageId: input.packageId, workbookSha256: input.workbookSha256,
-      mappingChecksum: input.mapping.checksum, itemReceipts: items.map((item) => ({ invoice: item.sourceInvoiceId, invoiceChecksum: item.sourceInvoiceChecksum, ledger: item.sourceLedgerId, ledgerChecksum: item.sourceLedgerChecksum, sourceReference: item.sourceReference })),
+      mappingChecksum: input.mapping.checksum, itemReceipts: items.map((item) => ({ invoice: item.sourceInvoiceId, invoiceChecksum: item.sourceInvoiceChecksum, ledger: item.sourceLedgerId, ledgerChecksum: item.sourceLedgerChecksum, sourceReference: item.sourceReference, sourceNotes: item.sourceNotes ?? null, sourceLedgerNotes: item.sourceLedgerNotes ?? null })),
     });
     return Object.freeze({
       packageId: input.packageId, sourceCompanyId: input.sourceCompanyId, targetCompanyId: input.targetCompanyId,

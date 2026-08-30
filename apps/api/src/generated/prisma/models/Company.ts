@@ -288,6 +288,7 @@ export type CompanyWhereInput = {
   memberships?: Prisma.CompanyMembershipListRelationFilter
   audits?: Prisma.AuditEventListRelationFilter
   idempotencyReceipts?: Prisma.IdempotencyReceiptListRelationFilter
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationListRelationFilter
   documentSerialCounters?: Prisma.DocumentSerialCounterListRelationFilter
   fileMetadata?: Prisma.FileMetadataListRelationFilter
   financeProfile?: Prisma.XOR<Prisma.CompanyFinanceProfileNullableScalarRelationFilter, Prisma.CompanyFinanceProfileWhereInput> | null
@@ -449,6 +450,7 @@ export type CompanyOrderByWithRelationInput = {
   memberships?: Prisma.CompanyMembershipOrderByRelationAggregateInput
   audits?: Prisma.AuditEventOrderByRelationAggregateInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptOrderByRelationAggregateInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationOrderByRelationAggregateInput
   documentSerialCounters?: Prisma.DocumentSerialCounterOrderByRelationAggregateInput
   fileMetadata?: Prisma.FileMetadataOrderByRelationAggregateInput
   financeProfile?: Prisma.CompanyFinanceProfileOrderByWithRelationInput
@@ -614,6 +616,7 @@ export type CompanyWhereUniqueInput = Prisma.AtLeast<{
   memberships?: Prisma.CompanyMembershipListRelationFilter
   audits?: Prisma.AuditEventListRelationFilter
   idempotencyReceipts?: Prisma.IdempotencyReceiptListRelationFilter
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationListRelationFilter
   documentSerialCounters?: Prisma.DocumentSerialCounterListRelationFilter
   fileMetadata?: Prisma.FileMetadataListRelationFilter
   financeProfile?: Prisma.XOR<Prisma.CompanyFinanceProfileNullableScalarRelationFilter, Prisma.CompanyFinanceProfileWhereInput> | null
@@ -814,6 +817,7 @@ export type CompanyCreateInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -974,6 +978,7 @@ export type CompanyUncheckedCreateInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -1134,6 +1139,7 @@ export type CompanyUpdateInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -1294,6 +1300,7 @@ export type CompanyUncheckedUpdateInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -1769,6 +1776,20 @@ export type CompanyUpdateOneRequiredWithoutLegacyMigrationRecordMapsNestedInput 
   upsert?: Prisma.CompanyUpsertWithoutLegacyMigrationRecordMapsInput
   connect?: Prisma.CompanyWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutLegacyMigrationRecordMapsInput, Prisma.CompanyUpdateWithoutLegacyMigrationRecordMapsInput>, Prisma.CompanyUncheckedUpdateWithoutLegacyMigrationRecordMapsInput>
+}
+
+export type CompanyCreateNestedOneWithoutNoorixSourceAnnotationsInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutNoorixSourceAnnotationsInput, Prisma.CompanyUncheckedCreateWithoutNoorixSourceAnnotationsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutNoorixSourceAnnotationsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneRequiredWithoutNoorixSourceAnnotationsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutNoorixSourceAnnotationsInput, Prisma.CompanyUncheckedCreateWithoutNoorixSourceAnnotationsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutNoorixSourceAnnotationsInput
+  upsert?: Prisma.CompanyUpsertWithoutNoorixSourceAnnotationsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutNoorixSourceAnnotationsInput, Prisma.CompanyUpdateWithoutNoorixSourceAnnotationsInput>, Prisma.CompanyUncheckedUpdateWithoutNoorixSourceAnnotationsInput>
 }
 
 export type CompanyCreateNestedOneWithoutNurixExcelStagingPackagesInput = {
@@ -3663,6 +3684,7 @@ export type CompanyCreateWithoutTenantInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -3822,6 +3844,7 @@ export type CompanyUncheckedCreateWithoutTenantInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -4027,6 +4050,7 @@ export type CompanyCreateWithoutBrandingInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -4186,6 +4210,7 @@ export type CompanyUncheckedCreateWithoutBrandingInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -4361,6 +4386,7 @@ export type CompanyUpdateWithoutBrandingInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -4520,6 +4546,7 @@ export type CompanyUncheckedUpdateWithoutBrandingInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -4678,6 +4705,7 @@ export type CompanyCreateWithoutMembershipsInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -4837,6 +4865,7 @@ export type CompanyUncheckedCreateWithoutMembershipsInput = {
   updatedAt?: Date | string
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -5012,6 +5041,7 @@ export type CompanyUpdateWithoutMembershipsInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -5171,6 +5201,7 @@ export type CompanyUncheckedUpdateWithoutMembershipsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -5330,6 +5361,7 @@ export type CompanyCreateWithoutAuditsInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -5489,6 +5521,7 @@ export type CompanyUncheckedCreateWithoutAuditsInput = {
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -5664,6 +5697,7 @@ export type CompanyUpdateWithoutAuditsInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -5823,6 +5857,7 @@ export type CompanyUncheckedUpdateWithoutAuditsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -5982,6 +6017,7 @@ export type CompanyCreateWithoutIdempotencyReceiptsInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -6141,6 +6177,7 @@ export type CompanyUncheckedCreateWithoutIdempotencyReceiptsInput = {
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -6316,6 +6353,7 @@ export type CompanyUpdateWithoutIdempotencyReceiptsInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -6475,6 +6513,7 @@ export type CompanyUncheckedUpdateWithoutIdempotencyReceiptsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -6635,6 +6674,7 @@ export type CompanyCreateWithoutBackupPoliciesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -6794,6 +6834,7 @@ export type CompanyUncheckedCreateWithoutBackupPoliciesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -6969,6 +7010,7 @@ export type CompanyUpdateWithoutBackupPoliciesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -7128,6 +7170,7 @@ export type CompanyUncheckedUpdateWithoutBackupPoliciesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -7287,6 +7330,7 @@ export type CompanyCreateWithoutBackupJobsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -7446,6 +7490,7 @@ export type CompanyUncheckedCreateWithoutBackupJobsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -7621,6 +7666,7 @@ export type CompanyUpdateWithoutBackupJobsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -7780,6 +7826,7 @@ export type CompanyUncheckedUpdateWithoutBackupJobsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -7939,6 +7986,7 @@ export type CompanyCreateWithoutBackupArtifactsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -8098,6 +8146,7 @@ export type CompanyUncheckedCreateWithoutBackupArtifactsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -8273,6 +8322,7 @@ export type CompanyUpdateWithoutBackupArtifactsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -8432,6 +8482,7 @@ export type CompanyUncheckedUpdateWithoutBackupArtifactsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -8591,6 +8642,7 @@ export type CompanyCreateWithoutBackupAuditEventsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -8750,6 +8802,7 @@ export type CompanyUncheckedCreateWithoutBackupAuditEventsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -8925,6 +8978,7 @@ export type CompanyUpdateWithoutBackupAuditEventsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -9084,6 +9138,7 @@ export type CompanyUncheckedUpdateWithoutBackupAuditEventsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -9243,6 +9298,7 @@ export type CompanyCreateWithoutLegacyMigrationCompanyMapsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -9402,6 +9458,7 @@ export type CompanyUncheckedCreateWithoutLegacyMigrationCompanyMapsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -9577,6 +9634,7 @@ export type CompanyUpdateWithoutLegacyMigrationCompanyMapsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -9736,6 +9794,7 @@ export type CompanyUncheckedUpdateWithoutLegacyMigrationCompanyMapsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -9895,6 +9954,7 @@ export type CompanyCreateWithoutLegacyMigrationRecordMapsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -10054,6 +10114,7 @@ export type CompanyUncheckedCreateWithoutLegacyMigrationRecordMapsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -10229,6 +10290,7 @@ export type CompanyUpdateWithoutLegacyMigrationRecordMapsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -10388,6 +10450,7 @@ export type CompanyUncheckedUpdateWithoutLegacyMigrationRecordMapsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -10530,6 +10593,662 @@ export type CompanyUncheckedUpdateWithoutLegacyMigrationRecordMapsInput = {
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
+export type CompanyCreateWithoutNoorixSourceAnnotationsInput = {
+  id?: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: $Enums.CompanyStatus
+  migrationReviewLocked?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
+  memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionCreateNestedManyWithoutCompanyInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineCreateNestedManyWithoutCompanyInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingCreateNestedManyWithoutCompanyInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
+  reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
+  vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionCreateNestedManyWithoutCompanyInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileCreateNestedManyWithoutCompanyInput
+  marketingSalesTargets?: Prisma.MarketingSalesTargetCreateNestedManyWithoutCompanyInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionCreateNestedManyWithoutCompanyInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveCreateNestedManyWithoutCompanyInput
+  hrPayrollRuns?: Prisma.HrPayrollRunCreateNestedManyWithoutCompanyInput
+  hrPayrollLines?: Prisma.HrPayrollLineCreateNestedManyWithoutCompanyInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationCreateNestedManyWithoutCompanyInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationCreateNestedManyWithoutCompanyInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentCreateNestedManyWithoutCompanyInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
+  attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
+  attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
+  attendanceWorkSessions?: Prisma.AttendanceWorkSessionCreateNestedManyWithoutCompanyInput
+  attendanceScheduleTemplates?: Prisma.AttendanceScheduleTemplateCreateNestedManyWithoutCompanyInput
+  attendanceScheduleTemplateVersions?: Prisma.AttendanceScheduleTemplateVersionCreateNestedManyWithoutCompanyInput
+  attendanceSchedulePeriods?: Prisma.AttendanceSchedulePeriodCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeScheduleAssignments?: Prisma.AttendanceEmployeeScheduleAssignmentCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeWeeklyAdjustments?: Prisma.AttendanceEmployeeWeeklyAdjustmentCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeWeeklyAdjustmentPeriods?: Prisma.AttendanceEmployeeWeeklyAdjustmentPeriodCreateNestedManyWithoutCompanyInput
+  attendanceScheduleExceptions?: Prisma.AttendanceScheduleExceptionCreateNestedManyWithoutCompanyInput
+  attendanceScheduleExceptionPeriods?: Prisma.AttendanceScheduleExceptionPeriodCreateNestedManyWithoutCompanyInput
+  attendanceRosterPlans?: Prisma.AttendanceRosterPlanCreateNestedManyWithoutCompanyInput
+  attendanceRosterEntries?: Prisma.AttendanceRosterEntryCreateNestedManyWithoutCompanyInput
+  attendanceRosterEntryPeriods?: Prisma.AttendanceRosterEntryPeriodCreateNestedManyWithoutCompanyInput
+  attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
+  aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCompanyInput
+  aiInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutCompanyInput
+  aiInterpretationRuns?: Prisma.AiInterpretationRunCreateNestedManyWithoutCompanyInput
+  aiInterpretationPlacements?: Prisma.AiInterpretationPlacementCreateNestedManyWithoutCompanyInput
+  aiHumanInsights?: Prisma.AiHumanInsightCreateNestedManyWithoutCompanyInput
+  aiBudgetReservations?: Prisma.AiBudgetReservationCreateNestedManyWithoutCompanyInput
+  aiUsageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutCompanyInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
+  decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
+  decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
+  marketingCampaignAnalysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkCreateNestedManyWithoutCompanyInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkCreateNestedManyWithoutCompanyInput
+  marketingProviderConnections?: Prisma.MarketingProviderConnectionCreateNestedManyWithoutCompanyInput
+  marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyCreateNestedOneWithoutCompanyInput
+  operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
+  operationsCatalogCategories?: Prisma.OperationsCatalogCategoryCreateNestedManyWithoutCompanyInput
+  operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
+  operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
+  operationsItemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutCompanyInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionCreateNestedManyWithoutCompanyInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeCreateNestedManyWithoutCompanyInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionCreateNestedManyWithoutCompanyInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutCompanyInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileCreateNestedOneWithoutCompanyInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventCreateNestedManyWithoutCompanyInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceCreateNestedManyWithoutCompanyInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutCompanyInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutCompanyInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutCompanyInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutCompanyInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTargetCompanyInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTargetCompanyInput
+  nurixExcelStagingPackages?: Prisma.NurixExcelStagingPackageCreateNestedManyWithoutCompanyInput
+  nurixExcelMasterDataExecutions?: Prisma.NurixExcelMasterDataExecutionCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutNoorixSourceAnnotationsInput = {
+  id?: string
+  tenantId: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: $Enums.CompanyStatus
+  migrationReviewLocked?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUncheckedCreateNestedManyWithoutCompanyInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUncheckedCreateNestedManyWithoutCompanyInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedCreateNestedManyWithoutCompanyInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
+  reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedCreateNestedManyWithoutCompanyInput
+  marketingSalesTargets?: Prisma.MarketingSalesTargetUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUncheckedCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUncheckedCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollLines?: Prisma.HrPayrollLineUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceWorkSessions?: Prisma.AttendanceWorkSessionUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceScheduleTemplates?: Prisma.AttendanceScheduleTemplateUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceScheduleTemplateVersions?: Prisma.AttendanceScheduleTemplateVersionUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceSchedulePeriods?: Prisma.AttendanceSchedulePeriodUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeScheduleAssignments?: Prisma.AttendanceEmployeeScheduleAssignmentUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeWeeklyAdjustments?: Prisma.AttendanceEmployeeWeeklyAdjustmentUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeWeeklyAdjustmentPeriods?: Prisma.AttendanceEmployeeWeeklyAdjustmentPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceScheduleExceptions?: Prisma.AttendanceScheduleExceptionUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceScheduleExceptionPeriods?: Prisma.AttendanceScheduleExceptionPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceRosterPlans?: Prisma.AttendanceRosterPlanUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceRosterEntries?: Prisma.AttendanceRosterEntryUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceRosterEntryPeriods?: Prisma.AttendanceRosterEntryPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
+  aiInterpretations?: Prisma.AiInterpretationUncheckedCreateNestedManyWithoutCompanyInput
+  aiInterpretationRuns?: Prisma.AiInterpretationRunUncheckedCreateNestedManyWithoutCompanyInput
+  aiInterpretationPlacements?: Prisma.AiInterpretationPlacementUncheckedCreateNestedManyWithoutCompanyInput
+  aiHumanInsights?: Prisma.AiHumanInsightUncheckedCreateNestedManyWithoutCompanyInput
+  aiBudgetReservations?: Prisma.AiBudgetReservationUncheckedCreateNestedManyWithoutCompanyInput
+  aiUsageLedgerEntries?: Prisma.AiUsageLedgerUncheckedCreateNestedManyWithoutCompanyInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaignAnalysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUncheckedCreateNestedManyWithoutCompanyInput
+  marketingProviderConnections?: Prisma.MarketingProviderConnectionUncheckedCreateNestedManyWithoutCompanyInput
+  marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsCatalogCategories?: Prisma.OperationsCatalogCategoryUncheckedCreateNestedManyWithoutCompanyInput
+  operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
+  operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUncheckedCreateNestedManyWithoutCompanyInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUncheckedCreateNestedManyWithoutCompanyInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUncheckedCreateNestedOneWithoutCompanyInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUncheckedCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutCompanyInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutCompanyInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutCompanyInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutCompanyInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTargetCompanyInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTargetCompanyInput
+  nurixExcelStagingPackages?: Prisma.NurixExcelStagingPackageUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelMasterDataExecutions?: Prisma.NurixExcelMasterDataExecutionUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutNoorixSourceAnnotationsInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutNoorixSourceAnnotationsInput, Prisma.CompanyUncheckedCreateWithoutNoorixSourceAnnotationsInput>
+}
+
+export type CompanyUpsertWithoutNoorixSourceAnnotationsInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutNoorixSourceAnnotationsInput, Prisma.CompanyUncheckedUpdateWithoutNoorixSourceAnnotationsInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutNoorixSourceAnnotationsInput, Prisma.CompanyUncheckedCreateWithoutNoorixSourceAnnotationsInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutNoorixSourceAnnotationsInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutNoorixSourceAnnotationsInput, Prisma.CompanyUncheckedUpdateWithoutNoorixSourceAnnotationsInput>
+}
+
+export type CompanyUpdateWithoutNoorixSourceAnnotationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
+  memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUpdateManyWithoutCompanyNestedInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUpdateManyWithoutCompanyNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUpdateManyWithoutCompanyNestedInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
+  reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUpdateManyWithoutCompanyNestedInput
+  marketingSalesTargets?: Prisma.MarketingSalesTargetUpdateManyWithoutCompanyNestedInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUpdateManyWithoutCompanyNestedInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUpdateManyWithoutCompanyNestedInput
+  hrPayrollLines?: Prisma.HrPayrollLineUpdateManyWithoutCompanyNestedInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUpdateManyWithoutCompanyNestedInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUpdateManyWithoutCompanyNestedInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUpdateManyWithoutCompanyNestedInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
+  attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
+  attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
+  attendanceWorkSessions?: Prisma.AttendanceWorkSessionUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleTemplates?: Prisma.AttendanceScheduleTemplateUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleTemplateVersions?: Prisma.AttendanceScheduleTemplateVersionUpdateManyWithoutCompanyNestedInput
+  attendanceSchedulePeriods?: Prisma.AttendanceSchedulePeriodUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeScheduleAssignments?: Prisma.AttendanceEmployeeScheduleAssignmentUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeWeeklyAdjustments?: Prisma.AttendanceEmployeeWeeklyAdjustmentUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeWeeklyAdjustmentPeriods?: Prisma.AttendanceEmployeeWeeklyAdjustmentPeriodUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleExceptions?: Prisma.AttendanceScheduleExceptionUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleExceptionPeriods?: Prisma.AttendanceScheduleExceptionPeriodUpdateManyWithoutCompanyNestedInput
+  attendanceRosterPlans?: Prisma.AttendanceRosterPlanUpdateManyWithoutCompanyNestedInput
+  attendanceRosterEntries?: Prisma.AttendanceRosterEntryUpdateManyWithoutCompanyNestedInput
+  attendanceRosterEntryPeriods?: Prisma.AttendanceRosterEntryPeriodUpdateManyWithoutCompanyNestedInput
+  attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
+  aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCompanyNestedInput
+  aiInterpretations?: Prisma.AiInterpretationUpdateManyWithoutCompanyNestedInput
+  aiInterpretationRuns?: Prisma.AiInterpretationRunUpdateManyWithoutCompanyNestedInput
+  aiInterpretationPlacements?: Prisma.AiInterpretationPlacementUpdateManyWithoutCompanyNestedInput
+  aiHumanInsights?: Prisma.AiHumanInsightUpdateManyWithoutCompanyNestedInput
+  aiBudgetReservations?: Prisma.AiBudgetReservationUpdateManyWithoutCompanyNestedInput
+  aiUsageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutCompanyNestedInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
+  decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
+  decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
+  marketingCampaignAnalysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUpdateManyWithoutCompanyNestedInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUpdateManyWithoutCompanyNestedInput
+  marketingProviderConnections?: Prisma.MarketingProviderConnectionUpdateManyWithoutCompanyNestedInput
+  marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyUpdateOneWithoutCompanyNestedInput
+  operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
+  operationsCatalogCategories?: Prisma.OperationsCatalogCategoryUpdateManyWithoutCompanyNestedInput
+  operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
+  operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutCompanyNestedInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUpdateManyWithoutCompanyNestedInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUpdateManyWithoutCompanyNestedInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUpdateManyWithoutCompanyNestedInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutCompanyNestedInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUpdateOneWithoutCompanyNestedInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUpdateManyWithoutCompanyNestedInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUpdateManyWithoutCompanyNestedInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutCompanyNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutCompanyNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutCompanyNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutCompanyNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTargetCompanyNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTargetCompanyNestedInput
+  nurixExcelStagingPackages?: Prisma.NurixExcelStagingPackageUpdateManyWithoutCompanyNestedInput
+  nurixExcelMasterDataExecutions?: Prisma.NurixExcelMasterDataExecutionUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutNoorixSourceAnnotationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedUpdateManyWithoutCompanyNestedInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
+  reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingSalesTargets?: Prisma.MarketingSalesTargetUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUncheckedUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollLines?: Prisma.HrPayrollLineUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceWorkSessions?: Prisma.AttendanceWorkSessionUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleTemplates?: Prisma.AttendanceScheduleTemplateUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleTemplateVersions?: Prisma.AttendanceScheduleTemplateVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceSchedulePeriods?: Prisma.AttendanceSchedulePeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeScheduleAssignments?: Prisma.AttendanceEmployeeScheduleAssignmentUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeWeeklyAdjustments?: Prisma.AttendanceEmployeeWeeklyAdjustmentUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeWeeklyAdjustmentPeriods?: Prisma.AttendanceEmployeeWeeklyAdjustmentPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleExceptions?: Prisma.AttendanceScheduleExceptionUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleExceptionPeriods?: Prisma.AttendanceScheduleExceptionPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceRosterPlans?: Prisma.AttendanceRosterPlanUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceRosterEntries?: Prisma.AttendanceRosterEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceRosterEntryPeriods?: Prisma.AttendanceRosterEntryPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
+  aiInterpretations?: Prisma.AiInterpretationUncheckedUpdateManyWithoutCompanyNestedInput
+  aiInterpretationRuns?: Prisma.AiInterpretationRunUncheckedUpdateManyWithoutCompanyNestedInput
+  aiInterpretationPlacements?: Prisma.AiInterpretationPlacementUncheckedUpdateManyWithoutCompanyNestedInput
+  aiHumanInsights?: Prisma.AiHumanInsightUncheckedUpdateManyWithoutCompanyNestedInput
+  aiBudgetReservations?: Prisma.AiBudgetReservationUncheckedUpdateManyWithoutCompanyNestedInput
+  aiUsageLedgerEntries?: Prisma.AiUsageLedgerUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaignAnalysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingProviderConnections?: Prisma.MarketingProviderConnectionUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsCatalogCategories?: Prisma.OperationsCatalogCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUncheckedUpdateOneWithoutCompanyNestedInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUncheckedUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutCompanyNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutCompanyNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutCompanyNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutCompanyNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTargetCompanyNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTargetCompanyNestedInput
+  nurixExcelStagingPackages?: Prisma.NurixExcelStagingPackageUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelMasterDataExecutions?: Prisma.NurixExcelMasterDataExecutionUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
 export type CompanyCreateWithoutNurixExcelStagingPackagesInput = {
   id?: string
   nameAr: string
@@ -10547,6 +11266,7 @@ export type CompanyCreateWithoutNurixExcelStagingPackagesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -10706,6 +11426,7 @@ export type CompanyUncheckedCreateWithoutNurixExcelStagingPackagesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -10881,6 +11602,7 @@ export type CompanyUpdateWithoutNurixExcelStagingPackagesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -11040,6 +11762,7 @@ export type CompanyUncheckedUpdateWithoutNurixExcelStagingPackagesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -11199,6 +11922,7 @@ export type CompanyCreateWithoutNurixExcelMasterDataExecutionsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -11358,6 +12082,7 @@ export type CompanyUncheckedCreateWithoutNurixExcelMasterDataExecutionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -11533,6 +12258,7 @@ export type CompanyUpdateWithoutNurixExcelMasterDataExecutionsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -11692,6 +12418,7 @@ export type CompanyUncheckedUpdateWithoutNurixExcelMasterDataExecutionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -11851,6 +12578,7 @@ export type CompanyCreateWithoutNurixExcelFinancialExecutionsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -12010,6 +12738,7 @@ export type CompanyUncheckedCreateWithoutNurixExcelFinancialExecutionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -12185,6 +12914,7 @@ export type CompanyUpdateWithoutNurixExcelFinancialExecutionsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -12344,6 +13074,7 @@ export type CompanyUncheckedUpdateWithoutNurixExcelFinancialExecutionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -12503,6 +13234,7 @@ export type CompanyCreateWithoutNurixExcelFinancialWavesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -12662,6 +13394,7 @@ export type CompanyUncheckedCreateWithoutNurixExcelFinancialWavesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -12837,6 +13570,7 @@ export type CompanyUpdateWithoutNurixExcelFinancialWavesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -12996,6 +13730,7 @@ export type CompanyUncheckedUpdateWithoutNurixExcelFinancialWavesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -13155,6 +13890,7 @@ export type CompanyCreateWithoutNurixExcelFinancialItemsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -13314,6 +14050,7 @@ export type CompanyUncheckedCreateWithoutNurixExcelFinancialItemsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -13489,6 +14226,7 @@ export type CompanyUpdateWithoutNurixExcelFinancialItemsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -13648,6 +14386,7 @@ export type CompanyUncheckedUpdateWithoutNurixExcelFinancialItemsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -13807,6 +14546,7 @@ export type CompanyCreateWithoutNurixExcelFinancialSourceMapsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -13966,6 +14706,7 @@ export type CompanyUncheckedCreateWithoutNurixExcelFinancialSourceMapsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -14141,6 +14882,7 @@ export type CompanyUpdateWithoutNurixExcelFinancialSourceMapsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -14300,6 +15042,7 @@ export type CompanyUncheckedUpdateWithoutNurixExcelFinancialSourceMapsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -14459,6 +15202,7 @@ export type CompanyCreateWithoutNurixExcelFinancialReceiptsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -14618,6 +15362,7 @@ export type CompanyUncheckedCreateWithoutNurixExcelFinancialReceiptsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -14793,6 +15538,7 @@ export type CompanyUpdateWithoutNurixExcelFinancialReceiptsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -14952,6 +15698,7 @@ export type CompanyUncheckedUpdateWithoutNurixExcelFinancialReceiptsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -15111,6 +15858,7 @@ export type CompanyCreateWithoutDocumentSerialCountersInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
   financeAccounts?: Prisma.FinanceAccountCreateNestedManyWithoutCompanyInput
@@ -15270,6 +16018,7 @@ export type CompanyUncheckedCreateWithoutDocumentSerialCountersInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
   financeAccounts?: Prisma.FinanceAccountUncheckedCreateNestedManyWithoutCompanyInput
@@ -15445,6 +16194,7 @@ export type CompanyUpdateWithoutDocumentSerialCountersInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
   financeAccounts?: Prisma.FinanceAccountUpdateManyWithoutCompanyNestedInput
@@ -15604,6 +16354,7 @@ export type CompanyUncheckedUpdateWithoutDocumentSerialCountersInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
   financeAccounts?: Prisma.FinanceAccountUncheckedUpdateManyWithoutCompanyNestedInput
@@ -15763,6 +16514,7 @@ export type CompanyCreateWithoutFileMetadataInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
   financeAccounts?: Prisma.FinanceAccountCreateNestedManyWithoutCompanyInput
@@ -15922,6 +16674,7 @@ export type CompanyUncheckedCreateWithoutFileMetadataInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
   financeAccounts?: Prisma.FinanceAccountUncheckedCreateNestedManyWithoutCompanyInput
@@ -16097,6 +16850,7 @@ export type CompanyUpdateWithoutFileMetadataInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
   financeAccounts?: Prisma.FinanceAccountUpdateManyWithoutCompanyNestedInput
@@ -16256,6 +17010,7 @@ export type CompanyUncheckedUpdateWithoutFileMetadataInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
   financeAccounts?: Prisma.FinanceAccountUncheckedUpdateManyWithoutCompanyNestedInput
@@ -16415,6 +17170,7 @@ export type CompanyCreateWithoutFinanceProfileInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeAccounts?: Prisma.FinanceAccountCreateNestedManyWithoutCompanyInput
@@ -16574,6 +17330,7 @@ export type CompanyUncheckedCreateWithoutFinanceProfileInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeAccounts?: Prisma.FinanceAccountUncheckedCreateNestedManyWithoutCompanyInput
@@ -16749,6 +17506,7 @@ export type CompanyUpdateWithoutFinanceProfileInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeAccounts?: Prisma.FinanceAccountUpdateManyWithoutCompanyNestedInput
@@ -16908,6 +17666,7 @@ export type CompanyUncheckedUpdateWithoutFinanceProfileInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeAccounts?: Prisma.FinanceAccountUncheckedUpdateManyWithoutCompanyNestedInput
@@ -17067,6 +17826,7 @@ export type CompanyCreateWithoutFinanceAccountsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -17226,6 +17986,7 @@ export type CompanyUncheckedCreateWithoutFinanceAccountsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -17401,6 +18162,7 @@ export type CompanyUpdateWithoutFinanceAccountsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -17560,6 +18322,7 @@ export type CompanyUncheckedUpdateWithoutFinanceAccountsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -17719,6 +18482,7 @@ export type CompanyCreateWithoutPnlMappingVersionsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -17878,6 +18642,7 @@ export type CompanyUncheckedCreateWithoutPnlMappingVersionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -18053,6 +18818,7 @@ export type CompanyUpdateWithoutPnlMappingVersionsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -18212,6 +18978,7 @@ export type CompanyUncheckedUpdateWithoutPnlMappingVersionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -18371,6 +19138,7 @@ export type CompanyCreateWithoutPnlStatementLinesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -18530,6 +19298,7 @@ export type CompanyUncheckedCreateWithoutPnlStatementLinesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -18705,6 +19474,7 @@ export type CompanyUpdateWithoutPnlStatementLinesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -18864,6 +19634,7 @@ export type CompanyUncheckedUpdateWithoutPnlStatementLinesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -19023,6 +19794,7 @@ export type CompanyCreateWithoutPnlAccountMappingsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -19182,6 +19954,7 @@ export type CompanyUncheckedCreateWithoutPnlAccountMappingsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -19357,6 +20130,7 @@ export type CompanyUpdateWithoutPnlAccountMappingsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -19516,6 +20290,7 @@ export type CompanyUncheckedUpdateWithoutPnlAccountMappingsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -19675,6 +20450,7 @@ export type CompanyCreateWithoutLedgerRevisionInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -19834,6 +20610,7 @@ export type CompanyUncheckedCreateWithoutLedgerRevisionInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -20009,6 +20786,7 @@ export type CompanyUpdateWithoutLedgerRevisionInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -20168,6 +20946,7 @@ export type CompanyUncheckedUpdateWithoutLedgerRevisionInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -20327,6 +21106,7 @@ export type CompanyCreateWithoutReportRunsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -20486,6 +21266,7 @@ export type CompanyUncheckedCreateWithoutReportRunsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -20661,6 +21442,7 @@ export type CompanyUpdateWithoutReportRunsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -20820,6 +21602,7 @@ export type CompanyUncheckedUpdateWithoutReportRunsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -20979,6 +21762,7 @@ export type CompanyCreateWithoutDecisionMetricDefinitionsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -21138,6 +21922,7 @@ export type CompanyUncheckedCreateWithoutDecisionMetricDefinitionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -21313,6 +22098,7 @@ export type CompanyUpdateWithoutDecisionMetricDefinitionsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -21472,6 +22258,7 @@ export type CompanyUncheckedUpdateWithoutDecisionMetricDefinitionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -21631,6 +22418,7 @@ export type CompanyCreateWithoutDecisionSalesChangePolicyInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -21790,6 +22578,7 @@ export type CompanyUncheckedCreateWithoutDecisionSalesChangePolicyInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -21965,6 +22754,7 @@ export type CompanyUpdateWithoutDecisionSalesChangePolicyInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -22124,6 +22914,7 @@ export type CompanyUncheckedUpdateWithoutDecisionSalesChangePolicyInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -22283,6 +23074,7 @@ export type CompanyCreateWithoutDecisionRuleDefinitionsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -22442,6 +23234,7 @@ export type CompanyUncheckedCreateWithoutDecisionRuleDefinitionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -22617,6 +23410,7 @@ export type CompanyUpdateWithoutDecisionRuleDefinitionsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -22776,6 +23570,7 @@ export type CompanyUncheckedUpdateWithoutDecisionRuleDefinitionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -22935,6 +23730,7 @@ export type CompanyCreateWithoutDecisionCompanyContextEventsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -23094,6 +23890,7 @@ export type CompanyUncheckedCreateWithoutDecisionCompanyContextEventsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -23269,6 +24066,7 @@ export type CompanyUpdateWithoutDecisionCompanyContextEventsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -23428,6 +24226,7 @@ export type CompanyUncheckedUpdateWithoutDecisionCompanyContextEventsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -23587,6 +24386,7 @@ export type CompanyCreateWithoutDecisionEvaluationRunsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -23746,6 +24546,7 @@ export type CompanyUncheckedCreateWithoutDecisionEvaluationRunsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -23921,6 +24722,7 @@ export type CompanyUpdateWithoutDecisionEvaluationRunsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -24080,6 +24882,7 @@ export type CompanyUncheckedUpdateWithoutDecisionEvaluationRunsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -24239,6 +25042,7 @@ export type CompanyCreateWithoutDecisionEvidenceSnapshotsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -24398,6 +25202,7 @@ export type CompanyUncheckedCreateWithoutDecisionEvidenceSnapshotsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -24573,6 +25378,7 @@ export type CompanyUpdateWithoutDecisionEvidenceSnapshotsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -24732,6 +25538,7 @@ export type CompanyUncheckedUpdateWithoutDecisionEvidenceSnapshotsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -24891,6 +25698,7 @@ export type CompanyCreateWithoutDecisionAlertsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -25050,6 +25858,7 @@ export type CompanyUncheckedCreateWithoutDecisionAlertsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -25225,6 +26034,7 @@ export type CompanyUpdateWithoutDecisionAlertsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -25384,6 +26194,7 @@ export type CompanyUncheckedUpdateWithoutDecisionAlertsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -25543,6 +26354,7 @@ export type CompanyCreateWithoutDecisionAlertActionsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -25702,6 +26514,7 @@ export type CompanyUncheckedCreateWithoutDecisionAlertActionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -25877,6 +26690,7 @@ export type CompanyUpdateWithoutDecisionAlertActionsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -26036,6 +26850,7 @@ export type CompanyUncheckedUpdateWithoutDecisionAlertActionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -26195,6 +27010,7 @@ export type CompanyCreateWithoutDecisionFeedbackInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -26354,6 +27170,7 @@ export type CompanyUncheckedCreateWithoutDecisionFeedbackInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -26529,6 +27346,7 @@ export type CompanyUpdateWithoutDecisionFeedbackInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -26688,6 +27506,7 @@ export type CompanyUncheckedUpdateWithoutDecisionFeedbackInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -26847,6 +27666,7 @@ export type CompanyCreateWithoutMarketingCampaignsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -27006,6 +27826,7 @@ export type CompanyUncheckedCreateWithoutMarketingCampaignsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -27181,6 +28002,7 @@ export type CompanyUpdateWithoutMarketingCampaignsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -27340,6 +28162,7 @@ export type CompanyUncheckedUpdateWithoutMarketingCampaignsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -27499,6 +28322,7 @@ export type CompanyCreateWithoutMarketingCampaignAnalysisFeedbackInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -27658,6 +28482,7 @@ export type CompanyUncheckedCreateWithoutMarketingCampaignAnalysisFeedbackInput 
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -27833,6 +28658,7 @@ export type CompanyUpdateWithoutMarketingCampaignAnalysisFeedbackInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -27992,6 +28818,7 @@ export type CompanyUncheckedUpdateWithoutMarketingCampaignAnalysisFeedbackInput 
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -28151,6 +28978,7 @@ export type CompanyCreateWithoutMarketingCampaignFinancialLinksInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -28310,6 +29138,7 @@ export type CompanyUncheckedCreateWithoutMarketingCampaignFinancialLinksInput = 
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -28485,6 +29314,7 @@ export type CompanyUpdateWithoutMarketingCampaignFinancialLinksInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -28644,6 +29474,7 @@ export type CompanyUncheckedUpdateWithoutMarketingCampaignFinancialLinksInput = 
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -28803,6 +29634,7 @@ export type CompanyCreateWithoutMarketingCampaignContextLinksInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -28962,6 +29794,7 @@ export type CompanyUncheckedCreateWithoutMarketingCampaignContextLinksInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -29137,6 +29970,7 @@ export type CompanyUpdateWithoutMarketingCampaignContextLinksInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -29296,6 +30130,7 @@ export type CompanyUncheckedUpdateWithoutMarketingCampaignContextLinksInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -29455,6 +30290,7 @@ export type CompanyCreateWithoutMarketingSalesTargetsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -29614,6 +30450,7 @@ export type CompanyUncheckedCreateWithoutMarketingSalesTargetsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -29789,6 +30626,7 @@ export type CompanyUpdateWithoutMarketingSalesTargetsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -29948,6 +30786,7 @@ export type CompanyUncheckedUpdateWithoutMarketingSalesTargetsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -30107,6 +30946,7 @@ export type CompanyCreateWithoutMarketingProviderConnectionsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -30266,6 +31106,7 @@ export type CompanyUncheckedCreateWithoutMarketingProviderConnectionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -30441,6 +31282,7 @@ export type CompanyUpdateWithoutMarketingProviderConnectionsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -30600,6 +31442,7 @@ export type CompanyUncheckedUpdateWithoutMarketingProviderConnectionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -30759,6 +31602,7 @@ export type CompanyCreateWithoutMarketingReputationReplyPolicyInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -30918,6 +31762,7 @@ export type CompanyUncheckedCreateWithoutMarketingReputationReplyPolicyInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -31093,6 +31938,7 @@ export type CompanyUpdateWithoutMarketingReputationReplyPolicyInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -31252,6 +32098,7 @@ export type CompanyUncheckedUpdateWithoutMarketingReputationReplyPolicyInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -31411,6 +32258,7 @@ export type CompanyCreateWithoutReportDocumentsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -31570,6 +32418,7 @@ export type CompanyUncheckedCreateWithoutReportDocumentsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -31745,6 +32594,7 @@ export type CompanyUpdateWithoutReportDocumentsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -31904,6 +32754,7 @@ export type CompanyUncheckedUpdateWithoutReportDocumentsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -32063,6 +32914,7 @@ export type CompanyCreateWithoutVatSimulationsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -32222,6 +33074,7 @@ export type CompanyUncheckedCreateWithoutVatSimulationsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -32397,6 +33250,7 @@ export type CompanyUpdateWithoutVatSimulationsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -32556,6 +33410,7 @@ export type CompanyUncheckedUpdateWithoutVatSimulationsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -32715,6 +33570,7 @@ export type CompanyCreateWithoutCashPerformanceEventsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -32874,6 +33730,7 @@ export type CompanyUncheckedCreateWithoutCashPerformanceEventsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -33049,6 +33906,7 @@ export type CompanyUpdateWithoutCashPerformanceEventsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -33208,6 +34066,7 @@ export type CompanyUncheckedUpdateWithoutCashPerformanceEventsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -33367,6 +34226,7 @@ export type CompanyCreateWithoutCashPerformanceCoverageInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -33526,6 +34386,7 @@ export type CompanyUncheckedCreateWithoutCashPerformanceCoverageInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -33701,6 +34562,7 @@ export type CompanyUpdateWithoutCashPerformanceCoverageInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -33860,6 +34722,7 @@ export type CompanyUncheckedUpdateWithoutCashPerformanceCoverageInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -34019,6 +34882,7 @@ export type CompanyCreateWithoutCashPerformanceHistoricalImportsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -34178,6 +35042,7 @@ export type CompanyUncheckedCreateWithoutCashPerformanceHistoricalImportsInput =
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -34353,6 +35218,7 @@ export type CompanyUpdateWithoutCashPerformanceHistoricalImportsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -34512,6 +35378,7 @@ export type CompanyUncheckedUpdateWithoutCashPerformanceHistoricalImportsInput =
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -34671,6 +35538,7 @@ export type CompanyCreateWithoutVatSettlementsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -34830,6 +35698,7 @@ export type CompanyUncheckedCreateWithoutVatSettlementsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -35005,6 +35874,7 @@ export type CompanyUpdateWithoutVatSettlementsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -35164,6 +36034,7 @@ export type CompanyUncheckedUpdateWithoutVatSettlementsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -35323,6 +36194,7 @@ export type CompanyCreateWithoutFinanceCategoriesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -35482,6 +36354,7 @@ export type CompanyUncheckedCreateWithoutFinanceCategoriesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -35657,6 +36530,7 @@ export type CompanyUpdateWithoutFinanceCategoriesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -35816,6 +36690,7 @@ export type CompanyUncheckedUpdateWithoutFinanceCategoriesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -35975,6 +36850,7 @@ export type CompanyCreateWithoutFinanceSuppliersInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -36134,6 +37010,7 @@ export type CompanyUncheckedCreateWithoutFinanceSuppliersInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -36309,6 +37186,7 @@ export type CompanyUpdateWithoutFinanceSuppliersInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -36468,6 +37346,7 @@ export type CompanyUncheckedUpdateWithoutFinanceSuppliersInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -36627,6 +37506,7 @@ export type CompanyCreateWithoutFinanceFiscalPeriodsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -36786,6 +37666,7 @@ export type CompanyUncheckedCreateWithoutFinanceFiscalPeriodsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -36961,6 +37842,7 @@ export type CompanyUpdateWithoutFinanceFiscalPeriodsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -37120,6 +38002,7 @@ export type CompanyUncheckedUpdateWithoutFinanceFiscalPeriodsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -37279,6 +38162,7 @@ export type CompanyCreateWithoutFinanceVaultsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -37438,6 +38322,7 @@ export type CompanyUncheckedCreateWithoutFinanceVaultsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -37613,6 +38498,7 @@ export type CompanyUpdateWithoutFinanceVaultsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -37772,6 +38658,7 @@ export type CompanyUncheckedUpdateWithoutFinanceVaultsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -37931,6 +38818,7 @@ export type CompanyCreateWithoutFinanceVaultReconciliationsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -38090,6 +38978,7 @@ export type CompanyUncheckedCreateWithoutFinanceVaultReconciliationsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -38265,6 +39154,7 @@ export type CompanyUpdateWithoutFinanceVaultReconciliationsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -38424,6 +39314,7 @@ export type CompanyUncheckedUpdateWithoutFinanceVaultReconciliationsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -38583,6 +39474,7 @@ export type CompanyCreateWithoutFinanceSupplierDuesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -38742,6 +39634,7 @@ export type CompanyUncheckedCreateWithoutFinanceSupplierDuesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -38917,6 +39810,7 @@ export type CompanyUpdateWithoutFinanceSupplierDuesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -39076,6 +39970,7 @@ export type CompanyUncheckedUpdateWithoutFinanceSupplierDuesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -39235,6 +40130,7 @@ export type CompanyCreateWithoutFinanceSupplierDuePaymentsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -39394,6 +40290,7 @@ export type CompanyUncheckedCreateWithoutFinanceSupplierDuePaymentsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -39569,6 +40466,7 @@ export type CompanyUpdateWithoutFinanceSupplierDuePaymentsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -39728,6 +40626,7 @@ export type CompanyUncheckedUpdateWithoutFinanceSupplierDuePaymentsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -39887,6 +40786,7 @@ export type CompanyCreateWithoutFinanceJournalEntriesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -40046,6 +40946,7 @@ export type CompanyUncheckedCreateWithoutFinanceJournalEntriesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -40221,6 +41122,7 @@ export type CompanyUpdateWithoutFinanceJournalEntriesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -40380,6 +41282,7 @@ export type CompanyUncheckedUpdateWithoutFinanceJournalEntriesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -40539,6 +41442,7 @@ export type CompanyCreateWithoutOutflowDocumentsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -40698,6 +41602,7 @@ export type CompanyUncheckedCreateWithoutOutflowDocumentsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -40873,6 +41778,7 @@ export type CompanyUpdateWithoutOutflowDocumentsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -41032,6 +41938,7 @@ export type CompanyUncheckedUpdateWithoutOutflowDocumentsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -41191,6 +42098,7 @@ export type CompanyCreateWithoutOutflowDocumentRevisionsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -41350,6 +42258,7 @@ export type CompanyUncheckedCreateWithoutOutflowDocumentRevisionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -41525,6 +42434,7 @@ export type CompanyUpdateWithoutOutflowDocumentRevisionsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -41684,6 +42594,7 @@ export type CompanyUncheckedUpdateWithoutOutflowDocumentRevisionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -41843,6 +42754,7 @@ export type CompanyCreateWithoutOperationsAssetWarrantyAssetsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -42002,6 +42914,7 @@ export type CompanyUncheckedCreateWithoutOperationsAssetWarrantyAssetsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -42177,6 +43090,7 @@ export type CompanyUpdateWithoutOperationsAssetWarrantyAssetsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -42336,6 +43250,7 @@ export type CompanyUncheckedUpdateWithoutOperationsAssetWarrantyAssetsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -42495,6 +43410,7 @@ export type CompanyCreateWithoutOperationsAssetWarrantyLinesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -42654,6 +43570,7 @@ export type CompanyUncheckedCreateWithoutOperationsAssetWarrantyLinesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -42829,6 +43746,7 @@ export type CompanyUpdateWithoutOperationsAssetWarrantyLinesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -42988,6 +43906,7 @@ export type CompanyUncheckedUpdateWithoutOperationsAssetWarrantyLinesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -43147,6 +44066,7 @@ export type CompanyCreateWithoutOutflowBatchesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -43306,6 +44226,7 @@ export type CompanyUncheckedCreateWithoutOutflowBatchesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -43481,6 +44402,7 @@ export type CompanyUpdateWithoutOutflowBatchesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -43640,6 +44562,7 @@ export type CompanyUncheckedUpdateWithoutOutflowBatchesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -43799,6 +44722,7 @@ export type CompanyCreateWithoutHrEmployeesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -43958,6 +44882,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -44133,6 +45058,7 @@ export type CompanyUpdateWithoutHrEmployeesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -44292,6 +45218,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -44451,6 +45378,7 @@ export type CompanyCreateWithoutAttendanceCredentialsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -44610,6 +45538,7 @@ export type CompanyUncheckedCreateWithoutAttendanceCredentialsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -44785,6 +45714,7 @@ export type CompanyUpdateWithoutAttendanceCredentialsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -44944,6 +45874,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceCredentialsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -45103,6 +46034,7 @@ export type CompanyCreateWithoutAttendanceBranchesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -45262,6 +46194,7 @@ export type CompanyUncheckedCreateWithoutAttendanceBranchesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -45437,6 +46370,7 @@ export type CompanyUpdateWithoutAttendanceBranchesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -45596,6 +46530,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceBranchesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -45755,6 +46690,7 @@ export type CompanyCreateWithoutAttendanceRosterPlansInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -45914,6 +46850,7 @@ export type CompanyUncheckedCreateWithoutAttendanceRosterPlansInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -46089,6 +47026,7 @@ export type CompanyUpdateWithoutAttendanceRosterPlansInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -46248,6 +47186,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceRosterPlansInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -46407,6 +47346,7 @@ export type CompanyCreateWithoutAttendanceRosterPeakPeriodsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -46566,6 +47506,7 @@ export type CompanyUncheckedCreateWithoutAttendanceRosterPeakPeriodsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -46741,6 +47682,7 @@ export type CompanyUpdateWithoutAttendanceRosterPeakPeriodsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -46900,6 +47842,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceRosterPeakPeriodsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -47059,6 +48002,7 @@ export type CompanyCreateWithoutAttendanceRosterEntriesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -47218,6 +48162,7 @@ export type CompanyUncheckedCreateWithoutAttendanceRosterEntriesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -47393,6 +48338,7 @@ export type CompanyUpdateWithoutAttendanceRosterEntriesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -47552,6 +48498,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceRosterEntriesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -47711,6 +48658,7 @@ export type CompanyCreateWithoutAttendanceRosterEntryPeriodsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -47870,6 +48818,7 @@ export type CompanyUncheckedCreateWithoutAttendanceRosterEntryPeriodsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -48045,6 +48994,7 @@ export type CompanyUpdateWithoutAttendanceRosterEntryPeriodsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -48204,6 +49154,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceRosterEntryPeriodsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -48363,6 +49314,7 @@ export type CompanyCreateWithoutAttendanceScheduleTemplatesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -48522,6 +49474,7 @@ export type CompanyUncheckedCreateWithoutAttendanceScheduleTemplatesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -48697,6 +49650,7 @@ export type CompanyUpdateWithoutAttendanceScheduleTemplatesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -48856,6 +49810,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceScheduleTemplatesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -49015,6 +49970,7 @@ export type CompanyCreateWithoutAttendanceScheduleTemplateVersionsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -49174,6 +50130,7 @@ export type CompanyUncheckedCreateWithoutAttendanceScheduleTemplateVersionsInput
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -49349,6 +50306,7 @@ export type CompanyUpdateWithoutAttendanceScheduleTemplateVersionsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -49508,6 +50466,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceScheduleTemplateVersionsInput
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -49667,6 +50626,7 @@ export type CompanyCreateWithoutAttendanceSchedulePeriodsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -49826,6 +50786,7 @@ export type CompanyUncheckedCreateWithoutAttendanceSchedulePeriodsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -50001,6 +50962,7 @@ export type CompanyUpdateWithoutAttendanceSchedulePeriodsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -50160,6 +51122,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceSchedulePeriodsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -50319,6 +51282,7 @@ export type CompanyCreateWithoutAttendanceEmployeeScheduleAssignmentsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -50478,6 +51442,7 @@ export type CompanyUncheckedCreateWithoutAttendanceEmployeeScheduleAssignmentsIn
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -50653,6 +51618,7 @@ export type CompanyUpdateWithoutAttendanceEmployeeScheduleAssignmentsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -50812,6 +51778,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceEmployeeScheduleAssignmentsIn
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -50971,6 +51938,7 @@ export type CompanyCreateWithoutAttendanceEmployeeWeeklyAdjustmentsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -51130,6 +52098,7 @@ export type CompanyUncheckedCreateWithoutAttendanceEmployeeWeeklyAdjustmentsInpu
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -51305,6 +52274,7 @@ export type CompanyUpdateWithoutAttendanceEmployeeWeeklyAdjustmentsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -51464,6 +52434,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceEmployeeWeeklyAdjustmentsInpu
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -51623,6 +52594,7 @@ export type CompanyCreateWithoutAttendanceEmployeeWeeklyAdjustmentPeriodsInput =
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -51782,6 +52754,7 @@ export type CompanyUncheckedCreateWithoutAttendanceEmployeeWeeklyAdjustmentPerio
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -51957,6 +52930,7 @@ export type CompanyUpdateWithoutAttendanceEmployeeWeeklyAdjustmentPeriodsInput =
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -52116,6 +53090,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceEmployeeWeeklyAdjustmentPerio
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -52275,6 +53250,7 @@ export type CompanyCreateWithoutAttendanceScheduleExceptionsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -52434,6 +53410,7 @@ export type CompanyUncheckedCreateWithoutAttendanceScheduleExceptionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -52609,6 +53586,7 @@ export type CompanyUpdateWithoutAttendanceScheduleExceptionsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -52768,6 +53746,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceScheduleExceptionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -52927,6 +53906,7 @@ export type CompanyCreateWithoutAttendanceScheduleExceptionPeriodsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -53086,6 +54066,7 @@ export type CompanyUncheckedCreateWithoutAttendanceScheduleExceptionPeriodsInput
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -53261,6 +54242,7 @@ export type CompanyUpdateWithoutAttendanceScheduleExceptionPeriodsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -53420,6 +54402,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceScheduleExceptionPeriodsInput
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -53579,6 +54562,7 @@ export type CompanyCreateWithoutAttendanceEventsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -53738,6 +54722,7 @@ export type CompanyUncheckedCreateWithoutAttendanceEventsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -53913,6 +54898,7 @@ export type CompanyUpdateWithoutAttendanceEventsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -54072,6 +55058,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceEventsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -54231,6 +55218,7 @@ export type CompanyCreateWithoutAttendanceWorkSessionsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -54390,6 +55378,7 @@ export type CompanyUncheckedCreateWithoutAttendanceWorkSessionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -54565,6 +55554,7 @@ export type CompanyUpdateWithoutAttendanceWorkSessionsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -54724,6 +55714,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceWorkSessionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -54883,6 +55874,7 @@ export type CompanyCreateWithoutHrEmployeePromotionsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -55042,6 +56034,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeePromotionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -55217,6 +56210,7 @@ export type CompanyUpdateWithoutHrEmployeePromotionsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -55376,6 +56370,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeePromotionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -55535,6 +56530,7 @@ export type CompanyCreateWithoutHrEmployeeLeavesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -55694,6 +56690,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeLeavesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -55869,6 +56866,7 @@ export type CompanyUpdateWithoutHrEmployeeLeavesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -56028,6 +57026,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeLeavesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -56187,6 +57186,7 @@ export type CompanyCreateWithoutHrEmployeeDocumentBlobsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -56346,6 +57346,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeDocumentBlobsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -56521,6 +57522,7 @@ export type CompanyUpdateWithoutHrEmployeeDocumentBlobsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -56680,6 +57682,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeDocumentBlobsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -56839,6 +57842,7 @@ export type CompanyCreateWithoutHrEmployeeDocumentsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -56998,6 +58002,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeDocumentsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -57173,6 +58178,7 @@ export type CompanyUpdateWithoutHrEmployeeDocumentsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -57332,6 +58338,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeDocumentsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -57491,6 +58498,7 @@ export type CompanyCreateWithoutHrEmployeeLettersInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -57650,6 +58658,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeLettersInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -57825,6 +58834,7 @@ export type CompanyUpdateWithoutHrEmployeeLettersInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -57984,6 +58994,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeLettersInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -58143,6 +59154,7 @@ export type CompanyCreateWithoutHrEmployeeServicesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -58302,6 +59314,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeServicesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -58477,6 +59490,7 @@ export type CompanyUpdateWithoutHrEmployeeServicesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -58636,6 +59650,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeServicesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -58795,6 +59810,7 @@ export type CompanyCreateWithoutHrEmployeeFinancialMovementsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -58954,6 +59970,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeFinancialMovementsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -59129,6 +60146,7 @@ export type CompanyUpdateWithoutHrEmployeeFinancialMovementsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -59288,6 +60306,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeFinancialMovementsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -59447,6 +60466,7 @@ export type CompanyCreateWithoutHrFinalSettlementsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -59606,6 +60626,7 @@ export type CompanyUncheckedCreateWithoutHrFinalSettlementsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -59781,6 +60802,7 @@ export type CompanyUpdateWithoutHrFinalSettlementsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -59940,6 +60962,7 @@ export type CompanyUncheckedUpdateWithoutHrFinalSettlementsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -60099,6 +61122,7 @@ export type CompanyCreateWithoutHrEmployeeAdvancesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -60258,6 +61282,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvancesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -60433,6 +61458,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvancesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -60592,6 +61618,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvancesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -60751,6 +61778,7 @@ export type CompanyCreateWithoutHrEmployeeAdvanceAllocationsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -60910,6 +61938,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceAllocationsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -61085,6 +62114,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceAllocationsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -61244,6 +62274,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceAllocationsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -61403,6 +62434,7 @@ export type CompanyCreateWithoutHrEmployeeAdvanceSettlementsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -61562,6 +62594,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceSettlementsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -61737,6 +62770,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceSettlementsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -61896,6 +62930,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceSettlementsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -62055,6 +63090,7 @@ export type CompanyCreateWithoutHrEmployeeAdvanceDeferralsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -62214,6 +63250,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceDeferralsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -62389,6 +63426,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceDeferralsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -62548,6 +63586,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceDeferralsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -62707,6 +63746,7 @@ export type CompanyCreateWithoutHrEmployeeAdministrativeDeductionsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -62866,6 +63906,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdministrativeDeductionsInput
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -63041,6 +64082,7 @@ export type CompanyUpdateWithoutHrEmployeeAdministrativeDeductionsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -63200,6 +64242,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdministrativeDeductionsInput
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -63359,6 +64402,7 @@ export type CompanyCreateWithoutHrEmployeeAdministrativeDeductionActionsInput = 
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -63518,6 +64562,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdministrativeDeductionAction
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -63693,6 +64738,7 @@ export type CompanyUpdateWithoutHrEmployeeAdministrativeDeductionActionsInput = 
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -63852,6 +64898,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdministrativeDeductionAction
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -64011,6 +65058,7 @@ export type CompanyCreateWithoutHrEmployeeCompensationProfilesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -64170,6 +65218,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeCompensationProfilesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -64345,6 +65394,7 @@ export type CompanyUpdateWithoutHrEmployeeCompensationProfilesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -64504,6 +65554,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeCompensationProfilesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -64663,6 +65714,7 @@ export type CompanyCreateWithoutHrCompensationPoliciesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -64822,6 +65874,7 @@ export type CompanyUncheckedCreateWithoutHrCompensationPoliciesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -64997,6 +66050,7 @@ export type CompanyUpdateWithoutHrCompensationPoliciesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -65156,6 +66210,7 @@ export type CompanyUncheckedUpdateWithoutHrCompensationPoliciesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -65315,6 +66370,7 @@ export type CompanyCreateWithoutHrCompensationPolicyVersionsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -65474,6 +66530,7 @@ export type CompanyUncheckedCreateWithoutHrCompensationPolicyVersionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -65649,6 +66706,7 @@ export type CompanyUpdateWithoutHrCompensationPolicyVersionsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -65808,6 +66866,7 @@ export type CompanyUncheckedUpdateWithoutHrCompensationPolicyVersionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -65967,6 +67026,7 @@ export type CompanyCreateWithoutHrPayrollRunsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -66126,6 +67186,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollRunsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -66301,6 +67362,7 @@ export type CompanyUpdateWithoutHrPayrollRunsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -66460,6 +67522,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollRunsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -66619,6 +67682,7 @@ export type CompanyCreateWithoutHrPayrollLinesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -66778,6 +67842,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollLinesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -66953,6 +68018,7 @@ export type CompanyUpdateWithoutHrPayrollLinesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -67112,6 +68178,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollLinesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -67271,6 +68338,7 @@ export type CompanyCreateWithoutHrPayrollAdvanceApplicationsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -67430,6 +68498,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollAdvanceApplicationsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -67605,6 +68674,7 @@ export type CompanyUpdateWithoutHrPayrollAdvanceApplicationsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -67764,6 +68834,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollAdvanceApplicationsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -67923,6 +68994,7 @@ export type CompanyCreateWithoutHrPayrollDeductionApplicationsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -68082,6 +69154,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollDeductionApplicationsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -68257,6 +69330,7 @@ export type CompanyUpdateWithoutHrPayrollDeductionApplicationsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -68416,6 +69490,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollDeductionApplicationsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -68575,6 +69650,7 @@ export type CompanyCreateWithoutHrPayrollPaymentsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -68734,6 +69810,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollPaymentsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -68909,6 +69986,7 @@ export type CompanyUpdateWithoutHrPayrollPaymentsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -69068,6 +70146,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollPaymentsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -69227,6 +70306,7 @@ export type CompanyCreateWithoutHrPayrollPaymentAllocationsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -69386,6 +70466,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollPaymentAllocationsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -69561,6 +70642,7 @@ export type CompanyUpdateWithoutHrPayrollPaymentAllocationsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -69720,6 +70802,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollPaymentAllocationsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -69879,6 +70962,7 @@ export type CompanyCreateWithoutFinanceJournalLinesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -70038,6 +71122,7 @@ export type CompanyUncheckedCreateWithoutFinanceJournalLinesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -70213,6 +71298,7 @@ export type CompanyUpdateWithoutFinanceJournalLinesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -70372,6 +71458,7 @@ export type CompanyUncheckedUpdateWithoutFinanceJournalLinesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -70531,6 +71618,7 @@ export type CompanyCreateWithoutOperationalDaysInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -70690,6 +71778,7 @@ export type CompanyUncheckedCreateWithoutOperationalDaysInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -70865,6 +71954,7 @@ export type CompanyUpdateWithoutOperationalDaysInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -71024,6 +72114,7 @@ export type CompanyUncheckedUpdateWithoutOperationalDaysInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -71183,6 +72274,7 @@ export type CompanyCreateWithoutDailySalesClosingsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -71342,6 +72434,7 @@ export type CompanyUncheckedCreateWithoutDailySalesClosingsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -71517,6 +72610,7 @@ export type CompanyUpdateWithoutDailySalesClosingsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -71676,6 +72770,7 @@ export type CompanyUncheckedUpdateWithoutDailySalesClosingsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -71835,6 +72930,7 @@ export type CompanyCreateWithoutDailySalesAllocationsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -71994,6 +73090,7 @@ export type CompanyUncheckedCreateWithoutDailySalesAllocationsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -72169,6 +73266,7 @@ export type CompanyUpdateWithoutDailySalesAllocationsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -72328,6 +73426,7 @@ export type CompanyUncheckedUpdateWithoutDailySalesAllocationsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -72487,6 +73586,7 @@ export type CompanyCreateWithoutDailyFinancialSummariesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -72646,6 +73746,7 @@ export type CompanyUncheckedCreateWithoutDailyFinancialSummariesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -72821,6 +73922,7 @@ export type CompanyUpdateWithoutDailyFinancialSummariesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -72980,6 +74082,7 @@ export type CompanyUncheckedUpdateWithoutDailyFinancialSummariesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -73139,6 +74242,7 @@ export type CompanyCreateWithoutDailySalesChannelSummariesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -73298,6 +74402,7 @@ export type CompanyUncheckedCreateWithoutDailySalesChannelSummariesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -73473,6 +74578,7 @@ export type CompanyUpdateWithoutDailySalesChannelSummariesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -73632,6 +74738,7 @@ export type CompanyUncheckedUpdateWithoutDailySalesChannelSummariesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -73791,6 +74898,7 @@ export type CompanyCreateWithoutRecurringExpenseProfilesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -73950,6 +75058,7 @@ export type CompanyUncheckedCreateWithoutRecurringExpenseProfilesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -74125,6 +75234,7 @@ export type CompanyUpdateWithoutRecurringExpenseProfilesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -74284,6 +75394,7 @@ export type CompanyUncheckedUpdateWithoutRecurringExpenseProfilesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -74443,6 +75554,7 @@ export type CompanyCreateWithoutRecurringExpenseCoveragesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -74602,6 +75714,7 @@ export type CompanyUncheckedCreateWithoutRecurringExpenseCoveragesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -74777,6 +75890,7 @@ export type CompanyUpdateWithoutRecurringExpenseCoveragesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -74936,6 +76050,7 @@ export type CompanyUncheckedUpdateWithoutRecurringExpenseCoveragesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -75095,6 +76210,7 @@ export type CompanyCreateWithoutInclusiveLoansInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -75254,6 +76370,7 @@ export type CompanyUncheckedCreateWithoutInclusiveLoansInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -75429,6 +76546,7 @@ export type CompanyUpdateWithoutInclusiveLoansInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -75588,6 +76706,7 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoansInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -75747,6 +76866,7 @@ export type CompanyCreateWithoutInclusiveLoanPaymentsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -75906,6 +77026,7 @@ export type CompanyUncheckedCreateWithoutInclusiveLoanPaymentsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -76081,6 +77202,7 @@ export type CompanyUpdateWithoutInclusiveLoanPaymentsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -76240,6 +77362,7 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoanPaymentsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -76399,6 +77522,7 @@ export type CompanyCreateWithoutInclusiveLoanInstallmentsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -76558,6 +77682,7 @@ export type CompanyUncheckedCreateWithoutInclusiveLoanInstallmentsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -76733,6 +77858,7 @@ export type CompanyUpdateWithoutInclusiveLoanInstallmentsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -76892,6 +78018,7 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoanInstallmentsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -77051,6 +78178,7 @@ export type CompanyCreateWithoutAiCompanyIdentitiesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -77210,6 +78338,7 @@ export type CompanyUncheckedCreateWithoutAiCompanyIdentitiesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -77385,6 +78514,7 @@ export type CompanyUpdateWithoutAiCompanyIdentitiesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -77544,6 +78674,7 @@ export type CompanyUncheckedUpdateWithoutAiCompanyIdentitiesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -77703,6 +78834,7 @@ export type CompanyCreateWithoutAiCompanyContextsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -77862,6 +78994,7 @@ export type CompanyUncheckedCreateWithoutAiCompanyContextsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -78037,6 +79170,7 @@ export type CompanyUpdateWithoutAiCompanyContextsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -78196,6 +79330,7 @@ export type CompanyUncheckedUpdateWithoutAiCompanyContextsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -78355,6 +79490,7 @@ export type CompanyCreateWithoutAiSkillActivationsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -78514,6 +79650,7 @@ export type CompanyUncheckedCreateWithoutAiSkillActivationsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -78689,6 +79826,7 @@ export type CompanyUpdateWithoutAiSkillActivationsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -78848,6 +79986,7 @@ export type CompanyUncheckedUpdateWithoutAiSkillActivationsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -79007,6 +80146,7 @@ export type CompanyCreateWithoutAiExecutionReceiptsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -79166,6 +80306,7 @@ export type CompanyUncheckedCreateWithoutAiExecutionReceiptsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -79341,6 +80482,7 @@ export type CompanyUpdateWithoutAiExecutionReceiptsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -79500,6 +80642,7 @@ export type CompanyUncheckedUpdateWithoutAiExecutionReceiptsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -79659,6 +80802,7 @@ export type CompanyCreateWithoutAiInterpretationsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -79818,6 +80962,7 @@ export type CompanyUncheckedCreateWithoutAiInterpretationsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -79993,6 +81138,7 @@ export type CompanyUpdateWithoutAiInterpretationsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -80152,6 +81298,7 @@ export type CompanyUncheckedUpdateWithoutAiInterpretationsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -80311,6 +81458,7 @@ export type CompanyCreateWithoutAiInterpretationRunsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -80470,6 +81618,7 @@ export type CompanyUncheckedCreateWithoutAiInterpretationRunsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -80645,6 +81794,7 @@ export type CompanyUpdateWithoutAiInterpretationRunsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -80804,6 +81954,7 @@ export type CompanyUncheckedUpdateWithoutAiInterpretationRunsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -80963,6 +82114,7 @@ export type CompanyCreateWithoutAiBudgetReservationsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -81122,6 +82274,7 @@ export type CompanyUncheckedCreateWithoutAiBudgetReservationsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -81297,6 +82450,7 @@ export type CompanyUpdateWithoutAiBudgetReservationsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -81456,6 +82610,7 @@ export type CompanyUncheckedUpdateWithoutAiBudgetReservationsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -81615,6 +82770,7 @@ export type CompanyCreateWithoutAiUsageLedgerEntriesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -81774,6 +82930,7 @@ export type CompanyUncheckedCreateWithoutAiUsageLedgerEntriesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -81949,6 +83106,7 @@ export type CompanyUpdateWithoutAiUsageLedgerEntriesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -82108,6 +83266,7 @@ export type CompanyUncheckedUpdateWithoutAiUsageLedgerEntriesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -82267,6 +83426,7 @@ export type CompanyCreateWithoutAiInterpretationPlacementsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -82426,6 +83586,7 @@ export type CompanyUncheckedCreateWithoutAiInterpretationPlacementsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -82601,6 +83762,7 @@ export type CompanyUpdateWithoutAiInterpretationPlacementsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -82760,6 +83922,7 @@ export type CompanyUncheckedUpdateWithoutAiInterpretationPlacementsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -82919,6 +84082,7 @@ export type CompanyCreateWithoutAiHumanInsightsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -83078,6 +84242,7 @@ export type CompanyUncheckedCreateWithoutAiHumanInsightsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -83253,6 +84418,7 @@ export type CompanyUpdateWithoutAiHumanInsightsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -83412,6 +84578,7 @@ export type CompanyUncheckedUpdateWithoutAiHumanInsightsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -83571,6 +84738,7 @@ export type CompanyCreateWithoutAiEvaluationFeedbackInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -83730,6 +84898,7 @@ export type CompanyUncheckedCreateWithoutAiEvaluationFeedbackInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -83905,6 +85074,7 @@ export type CompanyUpdateWithoutAiEvaluationFeedbackInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -84064,6 +85234,7 @@ export type CompanyUncheckedUpdateWithoutAiEvaluationFeedbackInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -84223,6 +85394,7 @@ export type CompanyCreateWithoutAiSkillEvaluationRunsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -84382,6 +85554,7 @@ export type CompanyUncheckedCreateWithoutAiSkillEvaluationRunsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -84557,6 +85730,7 @@ export type CompanyUpdateWithoutAiSkillEvaluationRunsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -84716,6 +85890,7 @@ export type CompanyUncheckedUpdateWithoutAiSkillEvaluationRunsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -84875,6 +86050,7 @@ export type CompanyCreateWithoutOperationsSectionsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -85034,6 +86210,7 @@ export type CompanyUncheckedCreateWithoutOperationsSectionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -85209,6 +86386,7 @@ export type CompanyUpdateWithoutOperationsSectionsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -85368,6 +86546,7 @@ export type CompanyUncheckedUpdateWithoutOperationsSectionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -85527,6 +86706,7 @@ export type CompanyCreateWithoutOperationsUnitsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -85686,6 +86866,7 @@ export type CompanyUncheckedCreateWithoutOperationsUnitsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -85861,6 +87042,7 @@ export type CompanyUpdateWithoutOperationsUnitsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -86020,6 +87202,7 @@ export type CompanyUncheckedUpdateWithoutOperationsUnitsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -86179,6 +87362,7 @@ export type CompanyCreateWithoutOperationsCatalogCategoriesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -86338,6 +87522,7 @@ export type CompanyUncheckedCreateWithoutOperationsCatalogCategoriesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -86513,6 +87698,7 @@ export type CompanyUpdateWithoutOperationsCatalogCategoriesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -86672,6 +87858,7 @@ export type CompanyUncheckedUpdateWithoutOperationsCatalogCategoriesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -86831,6 +88018,7 @@ export type CompanyCreateWithoutOperationsItemsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -86990,6 +88178,7 @@ export type CompanyUncheckedCreateWithoutOperationsItemsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -87165,6 +88354,7 @@ export type CompanyUpdateWithoutOperationsItemsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -87324,6 +88514,7 @@ export type CompanyUncheckedUpdateWithoutOperationsItemsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -87483,6 +88674,7 @@ export type CompanyCreateWithoutOperationsItemUnitsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -87642,6 +88834,7 @@ export type CompanyUncheckedCreateWithoutOperationsItemUnitsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -87817,6 +89010,7 @@ export type CompanyUpdateWithoutOperationsItemUnitsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -87976,6 +89170,7 @@ export type CompanyUncheckedUpdateWithoutOperationsItemUnitsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -88135,6 +89330,7 @@ export type CompanyCreateWithoutOperationsConversionVersionsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -88294,6 +89490,7 @@ export type CompanyUncheckedCreateWithoutOperationsConversionVersionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -88469,6 +89666,7 @@ export type CompanyUpdateWithoutOperationsConversionVersionsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -88628,6 +89826,7 @@ export type CompanyUncheckedUpdateWithoutOperationsConversionVersionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -88787,6 +89986,7 @@ export type CompanyCreateWithoutOperationsConversionEdgesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -88946,6 +90146,7 @@ export type CompanyUncheckedCreateWithoutOperationsConversionEdgesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -89121,6 +90322,7 @@ export type CompanyUpdateWithoutOperationsConversionEdgesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -89280,6 +90482,7 @@ export type CompanyUncheckedUpdateWithoutOperationsConversionEdgesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -89439,6 +90642,7 @@ export type CompanyCreateWithoutOperationsInternalRegistrationsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -89598,6 +90802,7 @@ export type CompanyUncheckedCreateWithoutOperationsInternalRegistrationsInput = 
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -89773,6 +90978,7 @@ export type CompanyUpdateWithoutOperationsInternalRegistrationsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -89932,6 +91138,7 @@ export type CompanyUncheckedUpdateWithoutOperationsInternalRegistrationsInput = 
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -90091,6 +91298,7 @@ export type CompanyCreateWithoutOperationsInternalRegistrationLinesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -90250,6 +91458,7 @@ export type CompanyUncheckedCreateWithoutOperationsInternalRegistrationLinesInpu
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -90425,6 +91634,7 @@ export type CompanyUpdateWithoutOperationsInternalRegistrationLinesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -90584,6 +91794,7 @@ export type CompanyUncheckedUpdateWithoutOperationsInternalRegistrationLinesInpu
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -90743,6 +91954,7 @@ export type CompanyCreateWithoutOperationsInternalRegistrationConsumptionsInput 
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -90902,6 +92114,7 @@ export type CompanyUncheckedCreateWithoutOperationsInternalRegistrationConsumpti
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -91077,6 +92290,7 @@ export type CompanyUpdateWithoutOperationsInternalRegistrationConsumptionsInput 
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -91236,6 +92450,7 @@ export type CompanyUncheckedUpdateWithoutOperationsInternalRegistrationConsumpti
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -91395,6 +92610,7 @@ export type CompanyCreateWithoutOperationsRecipeVersionsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -91554,6 +92770,7 @@ export type CompanyUncheckedCreateWithoutOperationsRecipeVersionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -91729,6 +92946,7 @@ export type CompanyUpdateWithoutOperationsRecipeVersionsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -91888,6 +93106,7 @@ export type CompanyUncheckedUpdateWithoutOperationsRecipeVersionsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -92047,6 +93266,7 @@ export type CompanyCreateWithoutOperationsRecipeLinesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -92206,6 +93426,7 @@ export type CompanyUncheckedCreateWithoutOperationsRecipeLinesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -92381,6 +93602,7 @@ export type CompanyUpdateWithoutOperationsRecipeLinesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -92540,6 +93762,7 @@ export type CompanyUncheckedUpdateWithoutOperationsRecipeLinesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -92699,6 +93922,7 @@ export type CompanyCreateWithoutOperationsPurchaseRequestsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -92858,6 +94082,7 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseRequestsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -93033,6 +94258,7 @@ export type CompanyUpdateWithoutOperationsPurchaseRequestsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -93192,6 +94418,7 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseRequestsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -93351,6 +94578,7 @@ export type CompanyCreateWithoutOperationsPurchaseRequestLinesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -93510,6 +94738,7 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseRequestLinesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -93685,6 +94914,7 @@ export type CompanyUpdateWithoutOperationsPurchaseRequestLinesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -93844,6 +95074,7 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseRequestLinesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -94003,6 +95234,7 @@ export type CompanyCreateWithoutOperationsPurchaseReceiptsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -94162,6 +95394,7 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseReceiptsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -94337,6 +95570,7 @@ export type CompanyUpdateWithoutOperationsPurchaseReceiptsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -94496,6 +95730,7 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseReceiptsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -94655,6 +95890,7 @@ export type CompanyCreateWithoutOperationsPurchaseReceiptLinesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -94814,6 +96050,7 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseReceiptLinesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -94989,6 +96226,7 @@ export type CompanyUpdateWithoutOperationsPurchaseReceiptLinesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -95148,6 +96386,7 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseReceiptLinesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -95307,6 +96546,7 @@ export type CompanyCreateWithoutOperationsCustodyProfileInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -95466,6 +96706,7 @@ export type CompanyUncheckedCreateWithoutOperationsCustodyProfileInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -95641,6 +96882,7 @@ export type CompanyUpdateWithoutOperationsCustodyProfileInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -95800,6 +97042,7 @@ export type CompanyUncheckedUpdateWithoutOperationsCustodyProfileInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -95959,6 +97202,7 @@ export type CompanyCreateWithoutOperationsCustodyEventsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -96118,6 +97362,7 @@ export type CompanyUncheckedCreateWithoutOperationsCustodyEventsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -96293,6 +97538,7 @@ export type CompanyUpdateWithoutOperationsCustodyEventsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -96452,6 +97698,7 @@ export type CompanyUncheckedUpdateWithoutOperationsCustodyEventsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -96611,6 +97858,7 @@ export type CompanyCreateWithoutOperationsInventoryBalancesInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -96770,6 +98018,7 @@ export type CompanyUncheckedCreateWithoutOperationsInventoryBalancesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -96945,6 +98194,7 @@ export type CompanyUpdateWithoutOperationsInventoryBalancesInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -97104,6 +98354,7 @@ export type CompanyUncheckedUpdateWithoutOperationsInventoryBalancesInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -97263,6 +98514,7 @@ export type CompanyCreateWithoutOperationsInventoryMovementsInput = {
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
@@ -97422,6 +98674,7 @@ export type CompanyUncheckedCreateWithoutOperationsInventoryMovementsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
   fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
@@ -97597,6 +98850,7 @@ export type CompanyUpdateWithoutOperationsInventoryMovementsInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -97756,6 +99010,7 @@ export type CompanyUncheckedUpdateWithoutOperationsInventoryMovementsInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -97929,6 +99184,7 @@ export type CompanyUpdateWithoutTenantInput = {
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
@@ -98088,6 +99344,7 @@ export type CompanyUncheckedUpdateWithoutTenantInput = {
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
   idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
   documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
   fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
   financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
@@ -98255,6 +99512,7 @@ export type CompanyCountOutputType = {
   memberships: number
   audits: number
   idempotencyReceipts: number
+  noorixSourceAnnotations: number
   documentSerialCounters: number
   fileMetadata: number
   financeAccounts: number
@@ -98395,6 +99653,7 @@ export type CompanyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   memberships?: boolean | CompanyCountOutputTypeCountMembershipsArgs
   audits?: boolean | CompanyCountOutputTypeCountAuditsArgs
   idempotencyReceipts?: boolean | CompanyCountOutputTypeCountIdempotencyReceiptsArgs
+  noorixSourceAnnotations?: boolean | CompanyCountOutputTypeCountNoorixSourceAnnotationsArgs
   documentSerialCounters?: boolean | CompanyCountOutputTypeCountDocumentSerialCountersArgs
   fileMetadata?: boolean | CompanyCountOutputTypeCountFileMetadataArgs
   financeAccounts?: boolean | CompanyCountOutputTypeCountFinanceAccountsArgs
@@ -98560,6 +99819,13 @@ export type CompanyCountOutputTypeCountAuditsArgs<ExtArgs extends runtime.Types.
  */
 export type CompanyCountOutputTypeCountIdempotencyReceiptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.IdempotencyReceiptWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountNoorixSourceAnnotationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NoorixSourceAnnotationWhereInput
 }
 
 /**
@@ -99519,6 +100785,7 @@ export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   memberships?: boolean | Prisma.Company$membershipsArgs<ExtArgs>
   audits?: boolean | Prisma.Company$auditsArgs<ExtArgs>
   idempotencyReceipts?: boolean | Prisma.Company$idempotencyReceiptsArgs<ExtArgs>
+  noorixSourceAnnotations?: boolean | Prisma.Company$noorixSourceAnnotationsArgs<ExtArgs>
   documentSerialCounters?: boolean | Prisma.Company$documentSerialCountersArgs<ExtArgs>
   fileMetadata?: boolean | Prisma.Company$fileMetadataArgs<ExtArgs>
   financeProfile?: boolean | Prisma.Company$financeProfileArgs<ExtArgs>
@@ -99719,6 +100986,7 @@ export type CompanyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   memberships?: boolean | Prisma.Company$membershipsArgs<ExtArgs>
   audits?: boolean | Prisma.Company$auditsArgs<ExtArgs>
   idempotencyReceipts?: boolean | Prisma.Company$idempotencyReceiptsArgs<ExtArgs>
+  noorixSourceAnnotations?: boolean | Prisma.Company$noorixSourceAnnotationsArgs<ExtArgs>
   documentSerialCounters?: boolean | Prisma.Company$documentSerialCountersArgs<ExtArgs>
   fileMetadata?: boolean | Prisma.Company$fileMetadataArgs<ExtArgs>
   financeProfile?: boolean | Prisma.Company$financeProfileArgs<ExtArgs>
@@ -99876,6 +101144,7 @@ export type $CompanyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     memberships: Prisma.$CompanyMembershipPayload<ExtArgs>[]
     audits: Prisma.$AuditEventPayload<ExtArgs>[]
     idempotencyReceipts: Prisma.$IdempotencyReceiptPayload<ExtArgs>[]
+    noorixSourceAnnotations: Prisma.$NoorixSourceAnnotationPayload<ExtArgs>[]
     documentSerialCounters: Prisma.$DocumentSerialCounterPayload<ExtArgs>[]
     fileMetadata: Prisma.$FileMetadataPayload<ExtArgs>[]
     financeProfile: Prisma.$CompanyFinanceProfilePayload<ExtArgs> | null
@@ -100434,6 +101703,7 @@ export interface Prisma__CompanyClient<T, Null = never, ExtArgs extends runtime.
   memberships<T extends Prisma.Company$membershipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$membershipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CompanyMembershipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   audits<T extends Prisma.Company$auditsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$auditsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   idempotencyReceipts<T extends Prisma.Company$idempotencyReceiptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$idempotencyReceiptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IdempotencyReceiptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  noorixSourceAnnotations<T extends Prisma.Company$noorixSourceAnnotationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$noorixSourceAnnotationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NoorixSourceAnnotationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   documentSerialCounters<T extends Prisma.Company$documentSerialCountersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$documentSerialCountersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DocumentSerialCounterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   fileMetadata<T extends Prisma.Company$fileMetadataArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$fileMetadataArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FileMetadataPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   financeProfile<T extends Prisma.Company$financeProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$financeProfileArgs<ExtArgs>>): Prisma.Prisma__CompanyFinanceProfileClient<runtime.Types.Result.GetResult<Prisma.$CompanyFinanceProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -101087,6 +102357,30 @@ export type Company$idempotencyReceiptsArgs<ExtArgs extends runtime.Types.Extens
   take?: number
   skip?: number
   distinct?: Prisma.IdempotencyReceiptScalarFieldEnum | Prisma.IdempotencyReceiptScalarFieldEnum[]
+}
+
+/**
+ * Company.noorixSourceAnnotations
+ */
+export type Company$noorixSourceAnnotationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NoorixSourceAnnotation
+   */
+  select?: Prisma.NoorixSourceAnnotationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NoorixSourceAnnotation
+   */
+  omit?: Prisma.NoorixSourceAnnotationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NoorixSourceAnnotationInclude<ExtArgs> | null
+  where?: Prisma.NoorixSourceAnnotationWhereInput
+  orderBy?: Prisma.NoorixSourceAnnotationOrderByWithRelationInput | Prisma.NoorixSourceAnnotationOrderByWithRelationInput[]
+  cursor?: Prisma.NoorixSourceAnnotationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NoorixSourceAnnotationScalarFieldEnum | Prisma.NoorixSourceAnnotationScalarFieldEnum[]
 }
 
 /**

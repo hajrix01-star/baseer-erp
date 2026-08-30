@@ -113,6 +113,14 @@ export type LegacyMigrationCompanyMap = Prisma.LegacyMigrationCompanyMapModel
  */
 export type LegacyMigrationRecordMap = Prisma.LegacyMigrationRecordMapModel
 /**
+ * Model NoorixSourceAnnotation
+ * Immutable preservation of a source text when the operational target either
+ * has no note field or its business note must remain distinct from migration
+ * metadata.  It carries no financial amount, journal instruction or mutable
+ * source payload.
+ */
+export type NoorixSourceAnnotation = Prisma.NoorixSourceAnnotationModel
+/**
  * Model NurixExcelStagingPackage
  * Immutable intake metadata. Workbook bytes stay in controlled file storage
  * when that gate is enabled; this table stores only technical fingerprints.

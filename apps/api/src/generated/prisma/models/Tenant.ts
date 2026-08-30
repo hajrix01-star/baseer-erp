@@ -222,6 +222,7 @@ export type TenantWhereInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemListRelationFilter
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapListRelationFilter
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptListRelationFilter
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationListRelationFilter
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityListRelationFilter
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasListRelationFilter
 }
@@ -272,6 +273,7 @@ export type TenantOrderByWithRelationInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemOrderByRelationAggregateInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapOrderByRelationAggregateInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptOrderByRelationAggregateInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationOrderByRelationAggregateInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityOrderByRelationAggregateInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasOrderByRelationAggregateInput
 }
@@ -325,6 +327,7 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemListRelationFilter
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapListRelationFilter
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptListRelationFilter
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationListRelationFilter
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityListRelationFilter
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasListRelationFilter
 }, "id" | "code">
@@ -397,6 +400,7 @@ export type TenantCreateInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -447,6 +451,7 @@ export type TenantUncheckedCreateInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -497,6 +502,7 @@ export type TenantUpdateInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -547,6 +553,7 @@ export type TenantUncheckedUpdateInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -806,6 +813,20 @@ export type TenantUpdateOneRequiredWithoutLegacyMigrationRecordMapsNestedInput =
   upsert?: Prisma.TenantUpsertWithoutLegacyMigrationRecordMapsInput
   connect?: Prisma.TenantWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutLegacyMigrationRecordMapsInput, Prisma.TenantUpdateWithoutLegacyMigrationRecordMapsInput>, Prisma.TenantUncheckedUpdateWithoutLegacyMigrationRecordMapsInput>
+}
+
+export type TenantCreateNestedOneWithoutNoorixSourceAnnotationsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutNoorixSourceAnnotationsInput, Prisma.TenantUncheckedCreateWithoutNoorixSourceAnnotationsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutNoorixSourceAnnotationsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutNoorixSourceAnnotationsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutNoorixSourceAnnotationsInput, Prisma.TenantUncheckedCreateWithoutNoorixSourceAnnotationsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutNoorixSourceAnnotationsInput
+  upsert?: Prisma.TenantUpsertWithoutNoorixSourceAnnotationsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutNoorixSourceAnnotationsInput, Prisma.TenantUpdateWithoutNoorixSourceAnnotationsInput>, Prisma.TenantUncheckedUpdateWithoutNoorixSourceAnnotationsInput>
 }
 
 export type TenantCreateNestedOneWithoutNurixExcelStagingPackagesInput = {
@@ -1245,6 +1266,7 @@ export type TenantCreateWithoutUsersInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -1294,6 +1316,7 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -1359,6 +1382,7 @@ export type TenantUpdateWithoutUsersInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -1408,6 +1432,7 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -1457,6 +1482,7 @@ export type TenantCreateWithoutCompaniesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -1506,6 +1532,7 @@ export type TenantUncheckedCreateWithoutCompaniesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -1571,6 +1598,7 @@ export type TenantUpdateWithoutCompaniesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -1620,6 +1648,7 @@ export type TenantUncheckedUpdateWithoutCompaniesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -1669,6 +1698,7 @@ export type TenantCreateWithoutAdministrationAssignmentsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -1718,6 +1748,7 @@ export type TenantUncheckedCreateWithoutAdministrationAssignmentsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -1783,6 +1814,7 @@ export type TenantUpdateWithoutAdministrationAssignmentsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -1832,6 +1864,7 @@ export type TenantUncheckedUpdateWithoutAdministrationAssignmentsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -1881,6 +1914,7 @@ export type TenantCreateWithoutRolesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -1930,6 +1964,7 @@ export type TenantUncheckedCreateWithoutRolesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -1995,6 +2030,7 @@ export type TenantUpdateWithoutRolesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -2044,6 +2080,7 @@ export type TenantUncheckedUpdateWithoutRolesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -2093,6 +2130,7 @@ export type TenantCreateWithoutSessionsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -2142,6 +2180,7 @@ export type TenantUncheckedCreateWithoutSessionsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -2207,6 +2246,7 @@ export type TenantUpdateWithoutSessionsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -2256,6 +2296,7 @@ export type TenantUncheckedUpdateWithoutSessionsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -2305,6 +2346,7 @@ export type TenantCreateWithoutAuditsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -2354,6 +2396,7 @@ export type TenantUncheckedCreateWithoutAuditsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -2419,6 +2462,7 @@ export type TenantUpdateWithoutAuditsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -2468,6 +2512,7 @@ export type TenantUncheckedUpdateWithoutAuditsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -2517,6 +2562,7 @@ export type TenantCreateWithoutIdempotencyReceiptsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -2566,6 +2612,7 @@ export type TenantUncheckedCreateWithoutIdempotencyReceiptsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -2631,6 +2678,7 @@ export type TenantUpdateWithoutIdempotencyReceiptsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -2680,6 +2728,7 @@ export type TenantUncheckedUpdateWithoutIdempotencyReceiptsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -2729,6 +2778,7 @@ export type TenantCreateWithoutBackupPoliciesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -2778,6 +2828,7 @@ export type TenantUncheckedCreateWithoutBackupPoliciesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -2843,6 +2894,7 @@ export type TenantUpdateWithoutBackupPoliciesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -2892,6 +2944,7 @@ export type TenantUncheckedUpdateWithoutBackupPoliciesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -2941,6 +2994,7 @@ export type TenantCreateWithoutBackupJobsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -2990,6 +3044,7 @@ export type TenantUncheckedCreateWithoutBackupJobsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -3055,6 +3110,7 @@ export type TenantUpdateWithoutBackupJobsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -3104,6 +3160,7 @@ export type TenantUncheckedUpdateWithoutBackupJobsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -3153,6 +3210,7 @@ export type TenantCreateWithoutBackupArtifactsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -3202,6 +3260,7 @@ export type TenantUncheckedCreateWithoutBackupArtifactsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -3267,6 +3326,7 @@ export type TenantUpdateWithoutBackupArtifactsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -3316,6 +3376,7 @@ export type TenantUncheckedUpdateWithoutBackupArtifactsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -3365,6 +3426,7 @@ export type TenantCreateWithoutBackupAuditEventsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -3414,6 +3476,7 @@ export type TenantUncheckedCreateWithoutBackupAuditEventsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -3479,6 +3542,7 @@ export type TenantUpdateWithoutBackupAuditEventsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -3528,6 +3592,7 @@ export type TenantUncheckedUpdateWithoutBackupAuditEventsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -3577,6 +3642,7 @@ export type TenantCreateWithoutLegacyMigrationRunsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -3626,6 +3692,7 @@ export type TenantUncheckedCreateWithoutLegacyMigrationRunsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -3691,6 +3758,7 @@ export type TenantUpdateWithoutLegacyMigrationRunsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -3740,6 +3808,7 @@ export type TenantUncheckedUpdateWithoutLegacyMigrationRunsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -3789,6 +3858,7 @@ export type TenantCreateWithoutLegacyMigrationCompanyMapsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -3838,6 +3908,7 @@ export type TenantUncheckedCreateWithoutLegacyMigrationCompanyMapsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -3903,6 +3974,7 @@ export type TenantUpdateWithoutLegacyMigrationCompanyMapsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -3952,6 +4024,7 @@ export type TenantUncheckedUpdateWithoutLegacyMigrationCompanyMapsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -4001,6 +4074,7 @@ export type TenantCreateWithoutLegacyMigrationRecordMapsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -4050,6 +4124,7 @@ export type TenantUncheckedCreateWithoutLegacyMigrationRecordMapsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -4115,6 +4190,7 @@ export type TenantUpdateWithoutLegacyMigrationRecordMapsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -4150,6 +4226,223 @@ export type TenantUncheckedUpdateWithoutLegacyMigrationRecordMapsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
   legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
   legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  nurixExcelStagingPackages?: Prisma.NurixExcelStagingPackageUncheckedUpdateManyWithoutTenantNestedInput
+  nurixExcelStagingBatches?: Prisma.NurixExcelStagingBatchUncheckedUpdateManyWithoutTenantNestedInput
+  nurixExcelStagingRows?: Prisma.NurixExcelStagingRowUncheckedUpdateManyWithoutTenantNestedInput
+  nurixExcelMasterDataExecutions?: Prisma.NurixExcelMasterDataExecutionUncheckedUpdateManyWithoutTenantNestedInput
+  nurixExcelMasterDataItems?: Prisma.NurixExcelMasterDataItemUncheckedUpdateManyWithoutTenantNestedInput
+  nurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutTenantNestedInput
+  nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUncheckedUpdateManyWithoutTenantNestedInput
+  nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
+  nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
+  nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutNoorixSourceAnnotationsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateCreateNestedManyWithoutTenantInput
+  nurixExcelStagingPackages?: Prisma.NurixExcelStagingPackageCreateNestedManyWithoutTenantInput
+  nurixExcelStagingBatches?: Prisma.NurixExcelStagingBatchCreateNestedManyWithoutTenantInput
+  nurixExcelStagingRows?: Prisma.NurixExcelStagingRowCreateNestedManyWithoutTenantInput
+  nurixExcelMasterDataExecutions?: Prisma.NurixExcelMasterDataExecutionCreateNestedManyWithoutTenantInput
+  nurixExcelMasterDataItems?: Prisma.NurixExcelMasterDataItemCreateNestedManyWithoutTenantInput
+  nurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutTenantInput
+  nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveCreateNestedManyWithoutTenantInput
+  nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
+  nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
+  nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutNoorixSourceAnnotationsInput = {
+  id?: string
+  code: string
+  name: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  companies?: Prisma.CompanyUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutTenantInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutTenantInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutTenantInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutTenantInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutTenantInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutTenantInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedCreateNestedOneWithoutTenantInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedCreateNestedManyWithoutTenantInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedCreateNestedManyWithoutTenantInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedCreateNestedManyWithoutTenantInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutTenantInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutTenantInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutTenantInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedCreateNestedManyWithoutTenantInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUncheckedCreateNestedManyWithoutTenantInput
+  nurixExcelStagingPackages?: Prisma.NurixExcelStagingPackageUncheckedCreateNestedManyWithoutTenantInput
+  nurixExcelStagingBatches?: Prisma.NurixExcelStagingBatchUncheckedCreateNestedManyWithoutTenantInput
+  nurixExcelStagingRows?: Prisma.NurixExcelStagingRowUncheckedCreateNestedManyWithoutTenantInput
+  nurixExcelMasterDataExecutions?: Prisma.NurixExcelMasterDataExecutionUncheckedCreateNestedManyWithoutTenantInput
+  nurixExcelMasterDataItems?: Prisma.NurixExcelMasterDataItemUncheckedCreateNestedManyWithoutTenantInput
+  nurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutTenantInput
+  nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUncheckedCreateNestedManyWithoutTenantInput
+  nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
+  nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
+  nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutNoorixSourceAnnotationsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutNoorixSourceAnnotationsInput, Prisma.TenantUncheckedCreateWithoutNoorixSourceAnnotationsInput>
+}
+
+export type TenantUpsertWithoutNoorixSourceAnnotationsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutNoorixSourceAnnotationsInput, Prisma.TenantUncheckedUpdateWithoutNoorixSourceAnnotationsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutNoorixSourceAnnotationsInput, Prisma.TenantUncheckedCreateWithoutNoorixSourceAnnotationsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutNoorixSourceAnnotationsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutNoorixSourceAnnotationsInput, Prisma.TenantUncheckedUpdateWithoutNoorixSourceAnnotationsInput>
+}
+
+export type TenantUpdateWithoutNoorixSourceAnnotationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTenantNestedInput
+  legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUpdateManyWithoutTenantNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUpdateManyWithoutTenantNestedInput
+  legacyMigrationCounterpartyCandidates?: Prisma.LegacyMigrationCounterpartyCandidateUpdateManyWithoutTenantNestedInput
+  nurixExcelStagingPackages?: Prisma.NurixExcelStagingPackageUpdateManyWithoutTenantNestedInput
+  nurixExcelStagingBatches?: Prisma.NurixExcelStagingBatchUpdateManyWithoutTenantNestedInput
+  nurixExcelStagingRows?: Prisma.NurixExcelStagingRowUpdateManyWithoutTenantNestedInput
+  nurixExcelMasterDataExecutions?: Prisma.NurixExcelMasterDataExecutionUpdateManyWithoutTenantNestedInput
+  nurixExcelMasterDataItems?: Prisma.NurixExcelMasterDataItemUpdateManyWithoutTenantNestedInput
+  nurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutTenantNestedInput
+  nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUpdateManyWithoutTenantNestedInput
+  nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
+  nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
+  nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
+  financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutNoorixSourceAnnotationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  companies?: Prisma.CompanyUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutTenantNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutTenantNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  administrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceLabels?: Prisma.InboundEvidenceLabelUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceRules?: Prisma.InboundEvidenceRuleUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceCommands?: Prisma.InboundEvidenceCommandReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceGmailConnection?: Prisma.InboundEvidenceGmailConnectionUncheckedUpdateOneWithoutTenantNestedInput
+  inboundEvidenceOAuthStates?: Prisma.InboundEvidenceGmailOAuthStateUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceMessages?: Prisma.InboundEvidenceMessageUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceAttachments?: Prisma.InboundEvidenceAttachmentUncheckedUpdateManyWithoutTenantNestedInput
+  inboundEvidenceDocumentAnalyses?: Prisma.InboundEvidenceDocumentAnalysisUncheckedUpdateManyWithoutTenantNestedInput
+  ownerDailyBriefSnapshots?: Prisma.OwnerDailyBriefSnapshotUncheckedUpdateManyWithoutTenantNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutTenantNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutTenantNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutTenantNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTenantNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTenantNestedInput
   legacyMigrationExceptions?: Prisma.LegacyMigrationExceptionUncheckedUpdateManyWithoutTenantNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutTenantNestedInput
   legacyMigrationCounterpartyResolutions?: Prisma.LegacyMigrationCounterpartyResolutionUncheckedUpdateManyWithoutTenantNestedInput
@@ -4213,6 +4506,7 @@ export type TenantCreateWithoutNurixExcelStagingPackagesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -4262,6 +4556,7 @@ export type TenantUncheckedCreateWithoutNurixExcelStagingPackagesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -4327,6 +4622,7 @@ export type TenantUpdateWithoutNurixExcelStagingPackagesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -4376,6 +4672,7 @@ export type TenantUncheckedUpdateWithoutNurixExcelStagingPackagesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -4425,6 +4722,7 @@ export type TenantCreateWithoutNurixExcelStagingBatchesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -4474,6 +4772,7 @@ export type TenantUncheckedCreateWithoutNurixExcelStagingBatchesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -4539,6 +4838,7 @@ export type TenantUpdateWithoutNurixExcelStagingBatchesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -4588,6 +4888,7 @@ export type TenantUncheckedUpdateWithoutNurixExcelStagingBatchesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -4637,6 +4938,7 @@ export type TenantCreateWithoutNurixExcelStagingRowsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -4686,6 +4988,7 @@ export type TenantUncheckedCreateWithoutNurixExcelStagingRowsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -4751,6 +5054,7 @@ export type TenantUpdateWithoutNurixExcelStagingRowsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -4800,6 +5104,7 @@ export type TenantUncheckedUpdateWithoutNurixExcelStagingRowsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -4849,6 +5154,7 @@ export type TenantCreateWithoutNurixExcelMasterDataExecutionsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -4898,6 +5204,7 @@ export type TenantUncheckedCreateWithoutNurixExcelMasterDataExecutionsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -4963,6 +5270,7 @@ export type TenantUpdateWithoutNurixExcelMasterDataExecutionsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -5012,6 +5320,7 @@ export type TenantUncheckedUpdateWithoutNurixExcelMasterDataExecutionsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -5061,6 +5370,7 @@ export type TenantCreateWithoutNurixExcelMasterDataItemsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -5110,6 +5420,7 @@ export type TenantUncheckedCreateWithoutNurixExcelMasterDataItemsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -5175,6 +5486,7 @@ export type TenantUpdateWithoutNurixExcelMasterDataItemsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -5224,6 +5536,7 @@ export type TenantUncheckedUpdateWithoutNurixExcelMasterDataItemsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -5273,6 +5586,7 @@ export type TenantCreateWithoutNurixExcelFinancialExecutionsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -5322,6 +5636,7 @@ export type TenantUncheckedCreateWithoutNurixExcelFinancialExecutionsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -5387,6 +5702,7 @@ export type TenantUpdateWithoutNurixExcelFinancialExecutionsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -5436,6 +5752,7 @@ export type TenantUncheckedUpdateWithoutNurixExcelFinancialExecutionsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -5485,6 +5802,7 @@ export type TenantCreateWithoutNurixExcelFinancialWavesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -5534,6 +5852,7 @@ export type TenantUncheckedCreateWithoutNurixExcelFinancialWavesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -5599,6 +5918,7 @@ export type TenantUpdateWithoutNurixExcelFinancialWavesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -5648,6 +5968,7 @@ export type TenantUncheckedUpdateWithoutNurixExcelFinancialWavesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -5697,6 +6018,7 @@ export type TenantCreateWithoutNurixExcelFinancialItemsInput = {
   nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -5746,6 +6068,7 @@ export type TenantUncheckedCreateWithoutNurixExcelFinancialItemsInput = {
   nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -5811,6 +6134,7 @@ export type TenantUpdateWithoutNurixExcelFinancialItemsInput = {
   nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -5860,6 +6184,7 @@ export type TenantUncheckedUpdateWithoutNurixExcelFinancialItemsInput = {
   nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -5909,6 +6234,7 @@ export type TenantCreateWithoutNurixExcelFinancialSourceMapsInput = {
   nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveCreateNestedManyWithoutTenantInput
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -5958,6 +6284,7 @@ export type TenantUncheckedCreateWithoutNurixExcelFinancialSourceMapsInput = {
   nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -6023,6 +6350,7 @@ export type TenantUpdateWithoutNurixExcelFinancialSourceMapsInput = {
   nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -6072,6 +6400,7 @@ export type TenantUncheckedUpdateWithoutNurixExcelFinancialSourceMapsInput = {
   nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -6121,6 +6450,7 @@ export type TenantCreateWithoutNurixExcelFinancialReceiptsInput = {
   nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveCreateNestedManyWithoutTenantInput
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -6170,6 +6500,7 @@ export type TenantUncheckedCreateWithoutNurixExcelFinancialReceiptsInput = {
   nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -6235,6 +6566,7 @@ export type TenantUpdateWithoutNurixExcelFinancialReceiptsInput = {
   nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -6284,6 +6616,7 @@ export type TenantUncheckedUpdateWithoutNurixExcelFinancialReceiptsInput = {
   nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -6333,6 +6666,7 @@ export type TenantCreateWithoutLegacyMigrationExceptionsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -6382,6 +6716,7 @@ export type TenantUncheckedCreateWithoutLegacyMigrationExceptionsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -6447,6 +6782,7 @@ export type TenantUpdateWithoutLegacyMigrationExceptionsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -6496,6 +6832,7 @@ export type TenantUncheckedUpdateWithoutLegacyMigrationExceptionsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -6545,6 +6882,7 @@ export type TenantCreateWithoutLegacyMigrationReviewActionsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -6594,6 +6932,7 @@ export type TenantUncheckedCreateWithoutLegacyMigrationReviewActionsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -6659,6 +6998,7 @@ export type TenantUpdateWithoutLegacyMigrationReviewActionsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -6708,6 +7048,7 @@ export type TenantUncheckedUpdateWithoutLegacyMigrationReviewActionsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -6757,6 +7098,7 @@ export type TenantCreateWithoutOwnerDailyBriefSnapshotsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -6806,6 +7148,7 @@ export type TenantUncheckedCreateWithoutOwnerDailyBriefSnapshotsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -6871,6 +7214,7 @@ export type TenantUpdateWithoutOwnerDailyBriefSnapshotsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -6920,6 +7264,7 @@ export type TenantUncheckedUpdateWithoutOwnerDailyBriefSnapshotsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -6969,6 +7314,7 @@ export type TenantCreateWithoutDocumentSerialCountersInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -7018,6 +7364,7 @@ export type TenantUncheckedCreateWithoutDocumentSerialCountersInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -7083,6 +7430,7 @@ export type TenantUpdateWithoutDocumentSerialCountersInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -7132,6 +7480,7 @@ export type TenantUncheckedUpdateWithoutDocumentSerialCountersInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -7181,6 +7530,7 @@ export type TenantCreateWithoutFileMetadataInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -7230,6 +7580,7 @@ export type TenantUncheckedCreateWithoutFileMetadataInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -7295,6 +7646,7 @@ export type TenantUpdateWithoutFileMetadataInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -7344,6 +7696,7 @@ export type TenantUncheckedUpdateWithoutFileMetadataInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -7393,6 +7746,7 @@ export type TenantCreateWithoutInboundEvidenceLabelsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -7442,6 +7796,7 @@ export type TenantUncheckedCreateWithoutInboundEvidenceLabelsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -7507,6 +7862,7 @@ export type TenantUpdateWithoutInboundEvidenceLabelsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -7556,6 +7912,7 @@ export type TenantUncheckedUpdateWithoutInboundEvidenceLabelsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -7605,6 +7962,7 @@ export type TenantCreateWithoutInboundEvidenceRulesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -7654,6 +8012,7 @@ export type TenantUncheckedCreateWithoutInboundEvidenceRulesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -7719,6 +8078,7 @@ export type TenantUpdateWithoutInboundEvidenceRulesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -7768,6 +8128,7 @@ export type TenantUncheckedUpdateWithoutInboundEvidenceRulesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -7817,6 +8178,7 @@ export type TenantCreateWithoutInboundEvidenceCommandsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -7866,6 +8228,7 @@ export type TenantUncheckedCreateWithoutInboundEvidenceCommandsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -7931,6 +8294,7 @@ export type TenantUpdateWithoutInboundEvidenceCommandsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -7980,6 +8344,7 @@ export type TenantUncheckedUpdateWithoutInboundEvidenceCommandsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -8029,6 +8394,7 @@ export type TenantCreateWithoutInboundEvidenceGmailConnectionInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -8078,6 +8444,7 @@ export type TenantUncheckedCreateWithoutInboundEvidenceGmailConnectionInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -8143,6 +8510,7 @@ export type TenantUpdateWithoutInboundEvidenceGmailConnectionInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -8192,6 +8560,7 @@ export type TenantUncheckedUpdateWithoutInboundEvidenceGmailConnectionInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -8241,6 +8610,7 @@ export type TenantCreateWithoutInboundEvidenceOAuthStatesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -8290,6 +8660,7 @@ export type TenantUncheckedCreateWithoutInboundEvidenceOAuthStatesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -8355,6 +8726,7 @@ export type TenantUpdateWithoutInboundEvidenceOAuthStatesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -8404,6 +8776,7 @@ export type TenantUncheckedUpdateWithoutInboundEvidenceOAuthStatesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -8453,6 +8826,7 @@ export type TenantCreateWithoutInboundEvidenceMessagesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -8502,6 +8876,7 @@ export type TenantUncheckedCreateWithoutInboundEvidenceMessagesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -8567,6 +8942,7 @@ export type TenantUpdateWithoutInboundEvidenceMessagesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -8616,6 +8992,7 @@ export type TenantUncheckedUpdateWithoutInboundEvidenceMessagesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -8665,6 +9042,7 @@ export type TenantCreateWithoutInboundEvidenceAttachmentsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -8714,6 +9092,7 @@ export type TenantUncheckedCreateWithoutInboundEvidenceAttachmentsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -8779,6 +9158,7 @@ export type TenantUpdateWithoutInboundEvidenceAttachmentsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -8828,6 +9208,7 @@ export type TenantUncheckedUpdateWithoutInboundEvidenceAttachmentsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -8877,6 +9258,7 @@ export type TenantCreateWithoutInboundEvidenceDocumentAnalysesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -8926,6 +9308,7 @@ export type TenantUncheckedCreateWithoutInboundEvidenceDocumentAnalysesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -8991,6 +9374,7 @@ export type TenantUpdateWithoutInboundEvidenceDocumentAnalysesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -9040,6 +9424,7 @@ export type TenantUncheckedUpdateWithoutInboundEvidenceDocumentAnalysesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -9089,6 +9474,7 @@ export type TenantCreateWithoutReportDocumentsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -9138,6 +9524,7 @@ export type TenantUncheckedCreateWithoutReportDocumentsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -9203,6 +9590,7 @@ export type TenantUpdateWithoutReportDocumentsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -9252,6 +9640,7 @@ export type TenantUncheckedUpdateWithoutReportDocumentsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -9302,6 +9691,7 @@ export type TenantCreateWithoutFinanceCounterpartyIdentitiesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
 
@@ -9351,6 +9741,7 @@ export type TenantUncheckedCreateWithoutFinanceCounterpartyIdentitiesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -9416,6 +9807,7 @@ export type TenantUpdateWithoutFinanceCounterpartyIdentitiesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
 
@@ -9465,6 +9857,7 @@ export type TenantUncheckedUpdateWithoutFinanceCounterpartyIdentitiesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -9514,6 +9907,7 @@ export type TenantCreateWithoutFinanceCounterpartyAliasesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
 }
 
@@ -9563,6 +9957,7 @@ export type TenantUncheckedCreateWithoutFinanceCounterpartyAliasesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -9628,6 +10023,7 @@ export type TenantUpdateWithoutFinanceCounterpartyAliasesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
 }
 
@@ -9677,6 +10073,7 @@ export type TenantUncheckedUpdateWithoutFinanceCounterpartyAliasesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -9725,6 +10122,7 @@ export type TenantCreateWithoutLegacyMigrationCounterpartyResolutionsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -9774,6 +10172,7 @@ export type TenantUncheckedCreateWithoutLegacyMigrationCounterpartyResolutionsIn
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -9839,6 +10238,7 @@ export type TenantUpdateWithoutLegacyMigrationCounterpartyResolutionsInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -9888,6 +10288,7 @@ export type TenantUncheckedUpdateWithoutLegacyMigrationCounterpartyResolutionsIn
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -9937,6 +10338,7 @@ export type TenantCreateWithoutLegacyMigrationCounterpartyCandidatesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasCreateNestedManyWithoutTenantInput
 }
@@ -9986,6 +10388,7 @@ export type TenantUncheckedCreateWithoutLegacyMigrationCounterpartyCandidatesInp
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutTenantInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutTenantInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedCreateNestedManyWithoutTenantInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -10051,6 +10454,7 @@ export type TenantUpdateWithoutLegacyMigrationCounterpartyCandidatesInput = {
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUpdateManyWithoutTenantNestedInput
 }
@@ -10100,6 +10504,7 @@ export type TenantUncheckedUpdateWithoutLegacyMigrationCounterpartyCandidatesInp
   nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutTenantNestedInput
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutTenantNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyIdentities?: Prisma.FinanceCounterpartyIdentityUncheckedUpdateManyWithoutTenantNestedInput
   financeCounterpartyAliases?: Prisma.FinanceCounterpartyAliasUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -10149,6 +10554,7 @@ export type TenantCountOutputType = {
   nurixExcelFinancialItems: number
   nurixExcelFinancialSourceMaps: number
   nurixExcelFinancialReceipts: number
+  noorixSourceAnnotations: number
   financeCounterpartyIdentities: number
   financeCounterpartyAliases: number
 }
@@ -10193,6 +10599,7 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   nurixExcelFinancialItems?: boolean | TenantCountOutputTypeCountNurixExcelFinancialItemsArgs
   nurixExcelFinancialSourceMaps?: boolean | TenantCountOutputTypeCountNurixExcelFinancialSourceMapsArgs
   nurixExcelFinancialReceipts?: boolean | TenantCountOutputTypeCountNurixExcelFinancialReceiptsArgs
+  noorixSourceAnnotations?: boolean | TenantCountOutputTypeCountNoorixSourceAnnotationsArgs
   financeCounterpartyIdentities?: boolean | TenantCountOutputTypeCountFinanceCounterpartyIdentitiesArgs
   financeCounterpartyAliases?: boolean | TenantCountOutputTypeCountFinanceCounterpartyAliasesArgs
 }
@@ -10483,6 +10890,13 @@ export type TenantCountOutputTypeCountNurixExcelFinancialReceiptsArgs<ExtArgs ex
 /**
  * TenantCountOutputType without action
  */
+export type TenantCountOutputTypeCountNoorixSourceAnnotationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NoorixSourceAnnotationWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
 export type TenantCountOutputTypeCountFinanceCounterpartyIdentitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.FinanceCounterpartyIdentityWhereInput
 }
@@ -10541,6 +10955,7 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   nurixExcelFinancialItems?: boolean | Prisma.Tenant$nurixExcelFinancialItemsArgs<ExtArgs>
   nurixExcelFinancialSourceMaps?: boolean | Prisma.Tenant$nurixExcelFinancialSourceMapsArgs<ExtArgs>
   nurixExcelFinancialReceipts?: boolean | Prisma.Tenant$nurixExcelFinancialReceiptsArgs<ExtArgs>
+  noorixSourceAnnotations?: boolean | Prisma.Tenant$noorixSourceAnnotationsArgs<ExtArgs>
   financeCounterpartyIdentities?: boolean | Prisma.Tenant$financeCounterpartyIdentitiesArgs<ExtArgs>
   financeCounterpartyAliases?: boolean | Prisma.Tenant$financeCounterpartyAliasesArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
@@ -10612,6 +11027,7 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   nurixExcelFinancialItems?: boolean | Prisma.Tenant$nurixExcelFinancialItemsArgs<ExtArgs>
   nurixExcelFinancialSourceMaps?: boolean | Prisma.Tenant$nurixExcelFinancialSourceMapsArgs<ExtArgs>
   nurixExcelFinancialReceipts?: boolean | Prisma.Tenant$nurixExcelFinancialReceiptsArgs<ExtArgs>
+  noorixSourceAnnotations?: boolean | Prisma.Tenant$noorixSourceAnnotationsArgs<ExtArgs>
   financeCounterpartyIdentities?: boolean | Prisma.Tenant$financeCounterpartyIdentitiesArgs<ExtArgs>
   financeCounterpartyAliases?: boolean | Prisma.Tenant$financeCounterpartyAliasesArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
@@ -10662,6 +11078,7 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     nurixExcelFinancialItems: Prisma.$NurixExcelFinancialItemPayload<ExtArgs>[]
     nurixExcelFinancialSourceMaps: Prisma.$NurixExcelFinancialSourceMapPayload<ExtArgs>[]
     nurixExcelFinancialReceipts: Prisma.$NurixExcelFinancialReceiptPayload<ExtArgs>[]
+    noorixSourceAnnotations: Prisma.$NoorixSourceAnnotationPayload<ExtArgs>[]
     financeCounterpartyIdentities: Prisma.$FinanceCounterpartyIdentityPayload<ExtArgs>[]
     financeCounterpartyAliases: Prisma.$FinanceCounterpartyAliasPayload<ExtArgs>[]
   }
@@ -11105,6 +11522,7 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   nurixExcelFinancialItems<T extends Prisma.Tenant$nurixExcelFinancialItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$nurixExcelFinancialItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NurixExcelFinancialItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   nurixExcelFinancialSourceMaps<T extends Prisma.Tenant$nurixExcelFinancialSourceMapsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$nurixExcelFinancialSourceMapsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NurixExcelFinancialSourceMapPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   nurixExcelFinancialReceipts<T extends Prisma.Tenant$nurixExcelFinancialReceiptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$nurixExcelFinancialReceiptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NurixExcelFinancialReceiptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  noorixSourceAnnotations<T extends Prisma.Tenant$noorixSourceAnnotationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$noorixSourceAnnotationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NoorixSourceAnnotationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   financeCounterpartyIdentities<T extends Prisma.Tenant$financeCounterpartyIdentitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$financeCounterpartyIdentitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceCounterpartyIdentityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   financeCounterpartyAliases<T extends Prisma.Tenant$financeCounterpartyAliasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$financeCounterpartyAliasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceCounterpartyAliasPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -12486,6 +12904,30 @@ export type Tenant$nurixExcelFinancialReceiptsArgs<ExtArgs extends runtime.Types
   take?: number
   skip?: number
   distinct?: Prisma.NurixExcelFinancialReceiptScalarFieldEnum | Prisma.NurixExcelFinancialReceiptScalarFieldEnum[]
+}
+
+/**
+ * Tenant.noorixSourceAnnotations
+ */
+export type Tenant$noorixSourceAnnotationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NoorixSourceAnnotation
+   */
+  select?: Prisma.NoorixSourceAnnotationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NoorixSourceAnnotation
+   */
+  omit?: Prisma.NoorixSourceAnnotationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NoorixSourceAnnotationInclude<ExtArgs> | null
+  where?: Prisma.NoorixSourceAnnotationWhereInput
+  orderBy?: Prisma.NoorixSourceAnnotationOrderByWithRelationInput | Prisma.NoorixSourceAnnotationOrderByWithRelationInput[]
+  cursor?: Prisma.NoorixSourceAnnotationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NoorixSourceAnnotationScalarFieldEnum | Prisma.NoorixSourceAnnotationScalarFieldEnum[]
 }
 
 /**

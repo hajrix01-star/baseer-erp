@@ -69,6 +69,7 @@ export const ModelName = {
   LegacyMigrationRun: 'LegacyMigrationRun',
   LegacyMigrationCompanyMap: 'LegacyMigrationCompanyMap',
   LegacyMigrationRecordMap: 'LegacyMigrationRecordMap',
+  NoorixSourceAnnotation: 'NoorixSourceAnnotation',
   NurixExcelStagingPackage: 'NurixExcelStagingPackage',
   NurixExcelStagingBatch: 'NurixExcelStagingBatch',
   NurixExcelStagingRow: 'NurixExcelStagingRow',
@@ -558,6 +559,24 @@ export const LegacyMigrationRecordMapScalarFieldEnum = {
 } as const
 
 export type LegacyMigrationRecordMapScalarFieldEnum = (typeof LegacyMigrationRecordMapScalarFieldEnum)[keyof typeof LegacyMigrationRecordMapScalarFieldEnum]
+
+
+export const NoorixSourceAnnotationScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  targetCompanyId: 'targetCompanyId',
+  sourceCompanyId: 'sourceCompanyId',
+  sourceEntity: 'sourceEntity',
+  sourceId: 'sourceId',
+  sourceChecksum: 'sourceChecksum',
+  targetEntity: 'targetEntity',
+  targetId: 'targetId',
+  field: 'field',
+  exactText: 'exactText',
+  createdAt: 'createdAt'
+} as const
+
+export type NoorixSourceAnnotationScalarFieldEnum = (typeof NoorixSourceAnnotationScalarFieldEnum)[keyof typeof NoorixSourceAnnotationScalarFieldEnum]
 
 
 export const NurixExcelStagingPackageScalarFieldEnum = {
