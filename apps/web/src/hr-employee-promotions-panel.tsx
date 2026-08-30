@@ -99,13 +99,20 @@ export function HrEmployeePromotionsPanel({ employeeId, language, detail, onErro
   const currentSalary = canReadPayroll ? detail.compensation : null;
   const increaseRequested = Boolean(salaryIncreaseAmount.trim());
   const nextSalary = currentSalary && increaseRequested ? tryMoneyDecimal(() => addMoneyDecimals(currentSalary.monthlyGross, salaryIncreaseAmount.trim())) : null;
-  const salaryHistory = useMemo(() => compensationHistory.map((row, index, rows) => {
+  // A carry-forward profile is sometimes needed to preserve work terms after a
+  // migration boundary. It is not a salary change, so do not present an
+  // identical, note-free row as a separate event in the employee file.
+  const visibleCompensationHistory = useMemo(() => compensationHistory.filter((row, index, rows) => {
+    const previous = rows[index + 1];
+    return !previous || compareMoneyDecimals(row.monthlyGross, previous.monthlyGross) !== 0 || Boolean(row.notes);
+  }), [compensationHistory]);
+  const salaryHistory = useMemo(() => visibleCompensationHistory.map((row, index, rows) => {
     const previous = rows[index + 1];
     const comparison = previous ? compareMoneyDecimals(row.monthlyGross, previous.monthlyGross) : 0;
     const label = row.notes?.startsWith("ترقية") ? text.promotionSalaryIncrease : comparison > 0 ? text.salaryIncrease : comparison < 0 ? text.salaryDecrease : text.initialSalaryOrEdit;
     const difference = previous ? subtractMoneyDecimals(row.monthlyGross, previous.monthlyGross) : null;
     return { ...row, label, changeAmount: difference ? absoluteMoneyDecimal(difference) : null };
-  }), [compensationHistory, text]);
+  }), [text, visibleCompensationHistory]);
   const loadMoreCompensation = async () => { const session = activeSession(); if (!session || !compensationCursor) return; try { const receipt = await listHrEmployeeCompensationHistory(session, employeeId, { cursor: compensationCursor, pageSize: 50 }); setCompensationHistory((rows) => [...rows, ...receipt.compensationHistory.filter((profile) => !rows.some((row) => row.id === profile.id))]); setCompensationCursor(receipt.nextCursor); } catch (error) { showError(presentBaseerApiError(error, language, ar ? "تعذر تحميل سجل الراتب." : "Salary history could not be loaded.")); } };
 
   const resetPromotion = () => {
