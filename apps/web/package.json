@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --host 127.0.0.1 --port 5190",
+    "dev": "vite --host 127.0.0.1 --port 5194",
     "prebuild": "node ../../scripts/check-web-numeric-policy.mjs",
     "build": "tsc -b && vite build",
     "check": "tsc -b --pretty false",
