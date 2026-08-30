@@ -159,6 +159,7 @@ export function RecurringExpenseWorkspaceRuntime({
   const [creating, setCreating] = useState(false);
   const [editing, setEditing] = useState<Profile | null>(null);
   const [archiveTarget, setArchiveTarget] = useState<Profile | null>(null);
+  const [showArchived, setShowArchived] = useState(false);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{
     type: "idle" | "error" | "success";
@@ -169,6 +170,8 @@ export function RecurringExpenseWorkspaceRuntime({
       profile.status === "ACTIVE" &&
       profile.nextReminderDate.slice(0, 10) <= businessDate,
   ).length;
+  const activeProfiles = profiles.filter((profile) => profile.status === "ACTIVE");
+  const archivedProfiles = profiles.filter((profile) => profile.status === "ARCHIVED");
   const saveProfile = async (profileForm: ProfileForm) => {
     const current = activeSession();
     if (!current || saving) return;
@@ -241,6 +244,24 @@ export function RecurringExpenseWorkspaceRuntime({
       setSaving(false);
     }
   };
+  const restore = async (profile: Profile) => {
+    const current = activeSession();
+    if (!current || saving) return;
+    setSaving(true);
+    try {
+      await api(current, "/finance/recurring-expenses/restore", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ profileId: profile.id, idempotencyKey: requestId() }),
+      });
+      setMessage({ type: "success", text: language === "ar" ? "تمت استعادة المصروف الدوري وأصبح متاحاً للدفعات القادمة." : "The recurring expense was restored for future payments." });
+      await reload();
+    } catch (error) {
+      setMessage({ type: "error", text: presentBaseerApiError(error, language, text.archive) });
+    } finally {
+      setSaving(false);
+    }
+  };
   if (!session) return null;
   return (
     <section
@@ -252,13 +273,14 @@ export function RecurringExpenseWorkspaceRuntime({
           <h3>{text.recurringTitle}</h3>
           <span>{dueCount ? dueCount + " " + text.due : text.allTracked}</span>
         </div>
-        <BaseerButton
-          type="button"
-          variant="primary"
-          onClick={() => setCreating(true)}
-        >
-          {text.addRecurring}
-        </BaseerButton>
+        <div className="recurring-expense-heading__actions">
+          <BaseerButton type="button" variant="secondary" onClick={() => setShowArchived((visible) => !visible)}>
+            {language === "ar" ? `الأرشيف (${archivedProfiles.length})` : `Archive (${archivedProfiles.length})`}
+          </BaseerButton>
+          <BaseerButton type="button" variant="primary" onClick={() => setCreating(true)}>
+            {text.addRecurring}
+          </BaseerButton>
+        </div>
       </header>
       {message.type !== "idle" && (
         <p className={`daily-sales-message ${message.type}`}>{message.text}</p>
@@ -276,9 +298,7 @@ export function RecurringExpenseWorkspaceRuntime({
         />
       </Suspense>
       <div className="recurring-profile-list">
-        {profiles
-          .filter((profile) => profile.status === "ACTIVE")
-          .map((profile) => (
+        {activeProfiles.map((profile) => (
             <BaseerCard key={profile.id}>
               <article className="recurring-profile">
                 <div>
@@ -326,11 +346,15 @@ export function RecurringExpenseWorkspaceRuntime({
             </BaseerCard>
           ))}
       </div>
-      {!profiles.filter((profile) => profile.status === "ACTIVE").length && (
+      {!activeProfiles.length && (
         <BaseerCard>
           <p className="empty-results">{text.noRecurringDescription}</p>
         </BaseerCard>
       )}
+      {showArchived ? <section className="recurring-expense-archive" aria-label={language === "ar" ? "أرشيف المصاريف الدورية" : "Archived recurring expenses"}>
+        <header><h4>{language === "ar" ? "أرشيف المصاريف الدورية" : "Recurring expense archive"}</h4><span>{archivedProfiles.length}</span></header>
+        {archivedProfiles.length ? <div className="recurring-profile-list">{archivedProfiles.map((profile) => <BaseerCard key={profile.id} tone="muted"><article className="recurring-profile"><div><span className="eyebrow">{language === "ar" ? "مؤرشف" : "Archived"}</span><h4>{displayName(language, profile)}</h4><p>{displayName(language, { nameAr: profile.categoryNameAr, nameEn: profile.categoryNameEn })}{profile.supplierNameAr ? ` · ${displayName(language, { nameAr: profile.supplierNameAr, nameEn: profile.supplierNameEn })}` : ""}</p></div><div className="recurring-profile__amount"><span>{text.expected}</span><strong>SAR {money(profile.expectedAmount)}</strong></div><div className="recurring-profile__actions"><BaseerButton type="button" variant="secondary" disabled={saving} onClick={() => void restore(profile)}>{language === "ar" ? "استعادة من الأرشيف" : "Restore"}</BaseerButton></div></article></BaseerCard>)}</div> : <BaseerCard tone="muted"><p className="empty-results">{language === "ar" ? "لا توجد مصاريف دورية مؤرشفة." : "There are no archived recurring expenses."}</p></BaseerCard>}
+      </section> : null}
       <BaseerConfirmDialog
         open={archiveTarget !== null}
         title={text.archive}

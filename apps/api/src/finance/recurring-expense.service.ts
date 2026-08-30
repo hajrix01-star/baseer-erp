@@ -122,6 +122,26 @@ export class RecurringExpenseService {
     }).catch((error) => { if (error instanceof IdempotencyPayloadMismatchError) throw new ConflictException('The idempotency key was used with different recurring-expense data.'); throw error; });
   }
 
+  /** Restoring a profile resumes future reminders only after its references are still valid. */
+  async restoreProfile(context: TrustedCompanyActorContext, profileId: string, idempotencyKey: string) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const begun = await this.idempotency.beginInTransaction(tx, context, {
+        operation: 'finance.recurring_expense.profile.restore', key: idempotencyKey, request: { profileId },
+        expiresAt: new Date(Date.now() + 86_400_000),
+      });
+      if (begun.kind === 'replay') return begun.response.body as { id: string; status: 'ACTIVE'; replayed: boolean };
+      if (begun.kind === 'in-progress') throw new ConflictException('The recurring-expense restore is already being processed.');
+      const profile = await tx.financeRecurringExpenseProfile.findFirst({ where: { id: profileId, tenantId: context.tenantId, companyId: context.companyId } });
+      if (!profile) throw new NotFoundException('The recurring expense was not found.');
+      await this.assertReferences(tx, context, normaliseProfile(profile));
+      if (profile.status !== FinanceRecurringExpenseStatus.ACTIVE) await tx.financeRecurringExpenseProfile.update({ where: { id: profile.id }, data: { status: FinanceRecurringExpenseStatus.ACTIVE } });
+      const receipt = { id: profile.id, status: 'ACTIVE' as const, replayed: false };
+      await this.audit(tx, context, 'finance.recurring_expense.profile.restored', profile.id, { status: profile.status }, receipt);
+      await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 200, headers: null, body: receipt } });
+      return receipt;
+    }).catch((error) => { if (error instanceof IdempotencyPayloadMismatchError) throw new ConflictException('The idempotency key was used with different recurring-expense data.'); throw error; });
+  }
+
   private async assertReferences(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, value: NormalisedProfile) {
     const category = await tx.financeCategory.findFirst({ where: { id: value.categoryId, tenantId: context.tenantId, companyId: context.companyId, status: FinanceCategoryStatus.ACTIVE, isPosting: true, kind: FinanceCategoryKind.EXPENSE }, select: { id: true } });
     if (!category) throw new BadRequestException('A posting expense category is required for a recurring expense.');
@@ -148,6 +168,9 @@ function normalise(input: CreateRecurringExpenseProfileRequest): NormalisedProfi
   if (![1, 2, 3, 4, 6, 12].includes(input.intervalMonths)) throw new BadRequestException('Recurring intervals must be 1, 2, 3, 4, 6, or 12 months.');
   if (!(input.nextReminderDate instanceof Date) || Number.isNaN(input.nextReminderDate.valueOf())) throw new BadRequestException('A valid next due date is required.');
   return { nameAr, nameEn, categoryId: input.categoryId, supplierId: input.supplierId ?? null, serviceNumber: optional(input.serviceNumber, 160), expectedAmount: amount, intervalMonths: input.intervalMonths, nextReminderDate: input.nextReminderDate, defaultVaultId: input.defaultVaultId ?? null, allowAmountOverride: input.allowAmountOverride, notes: optional(input.notes, 2_000) };
+}
+function normaliseProfile(profile: { nameAr: string; nameEn: string; categoryId: string; supplierId: string | null; serviceNumber: string | null; expectedAmount: Prisma.Decimal; intervalMonths: number; nextReminderDate: Date; defaultVaultId: string | null; allowAmountOverride: boolean; notes: string | null }): NormalisedProfile {
+  return { nameAr: profile.nameAr, nameEn: profile.nameEn, categoryId: profile.categoryId, supplierId: profile.supplierId, serviceNumber: profile.serviceNumber, expectedAmount: profile.expectedAmount, intervalMonths: profile.intervalMonths, nextReminderDate: profile.nextReminderDate, defaultVaultId: profile.defaultVaultId, allowAmountOverride: profile.allowAmountOverride, notes: profile.notes };
 }
 function required(value: string, max: number, message: string) { const text = value?.trim(); if (!text || text.length > max) throw new BadRequestException(message); return text; }
 function optional(value: string | undefined, max: number) { const text = value?.trim(); if (!text) return null; if (text.length > max) throw new BadRequestException('Text exceeds the permitted length.'); return text; }

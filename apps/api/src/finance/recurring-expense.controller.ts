@@ -1,6 +1,7 @@
 import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Post, UnauthorizedException } from '@nestjs/common';
 import {
   archiveFinanceRecurringExpenseProfileRequestSchema,
+  restoreFinanceRecurringExpenseProfileRequestSchema,
   companyIdSchema,
   createFinanceRecurringExpensePaymentBatchRequestSchema,
   createFinanceRecurringExpensePaymentRequestSchema,
@@ -54,6 +55,14 @@ export class RecurringExpenseController {
     if (!request.success) throw new BadRequestException('Invalid recurring-expense archive request.');
     const context = await this.authorize(authorization, companyId, CREATE_CAPABILITY);
     return financeMasterDataEntityReceiptSchema.parse(await this.profiles.archiveProfile(context, request.data.profileId, request.data.idempotencyKey));
+  }
+
+  @Post('restore')
+  async restore(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const request = restoreFinanceRecurringExpenseProfileRequestSchema.safeParse(body);
+    if (!request.success) throw new BadRequestException('Invalid recurring-expense restore request.');
+    const context = await this.authorize(authorization, companyId, CREATE_CAPABILITY);
+    return financeMasterDataEntityReceiptSchema.parse(await this.profiles.restoreProfile(context, request.data.profileId, request.data.idempotencyKey));
   }
 
   @Post('payments')

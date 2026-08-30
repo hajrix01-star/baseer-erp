@@ -1259,6 +1259,11 @@ export const archiveFinanceRecurringExpenseProfileRequestSchema = z.object({
   idempotencyKey: idempotencyKeySchema,
 }).strict();
 
+export const restoreFinanceRecurringExpenseProfileRequestSchema = z.object({
+  profileId: z.string().uuid(),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+
 export const createFinanceRecurringExpensePaymentRequestSchema = z.object({
   profileId: z.string().uuid(),
   businessDate: financeDateSchema,

@@ -7,8 +7,13 @@
 .recurring-expense-grid input, .recurring-expense-grid select { min-height: 38px; }
 .recurring-expense-grid .recurring-span { grid-column: span 2; }
 .recurring-expense-form footer { display: flex; justify-content: flex-start; gap: 8px; }
+.recurring-expense-heading__actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+.recurring-expense-archive { display: grid; gap: 10px; padding-top: 4px; border-top: 1px solid var(--line); }
+.recurring-expense-archive > header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.recurring-expense-archive h4 { margin: 0; font-size: var(--font-body); }
+.recurring-expense-archive > header span { color: var(--muted); font-variant-numeric: tabular-nums; }
 @media (max-width: 840px) { .recurring-expense-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .recurring-expense-grid .recurring-span { grid-column: span 2; } }
-@media (max-width: 620px) { .recurring-expense-grid { grid-template-columns: 1fr; } .recurring-expense-grid .recurring-span { grid-column: auto; } }
+@media (max-width: 620px) { .recurring-expense-grid { grid-template-columns: 1fr; } .recurring-expense-grid .recurring-span { grid-column: auto; } .recurring-expense-heading__actions { justify-content: stretch; } .recurring-expense-heading__actions > .baseer-button { flex: 1; } }
 
 /* Runtime form spacing is aligned with the shared workspace scale. */
 .recurring-expense-form { gap: var(--space-card); }
