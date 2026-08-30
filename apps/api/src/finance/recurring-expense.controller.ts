@@ -5,6 +5,7 @@ import {
   createFinanceRecurringExpensePaymentBatchRequestSchema,
   createFinanceRecurringExpensePaymentRequestSchema,
   createFinanceRecurringExpenseProfileRequestSchema,
+  updateFinanceRecurringExpenseProfileRequestSchema,
   financeMasterDataEntityReceiptSchema,
   financeRecurringExpensePaymentBatchReceiptSchema,
   financeRecurringExpensePaymentReceiptSchema,
@@ -36,6 +37,15 @@ export class RecurringExpenseController {
     const context = await this.authorize(authorization, companyId, CREATE_CAPABILITY);
     const { idempotencyKey, ...profile } = request.data;
     return financeMasterDataEntityReceiptSchema.parse(await this.profiles.createProfile(context, profile, idempotencyKey));
+  }
+
+  @Post('update')
+  async update(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const request = updateFinanceRecurringExpenseProfileRequestSchema.safeParse(body);
+    if (!request.success) throw new BadRequestException('Invalid recurring-expense profile update request.');
+    const context = await this.authorize(authorization, companyId, CREATE_CAPABILITY);
+    const { profileId, idempotencyKey, ...profile } = request.data;
+    return financeMasterDataEntityReceiptSchema.parse(await this.profiles.updateProfile(context, profileId, profile, idempotencyKey));
   }
 
   @Post('archive')

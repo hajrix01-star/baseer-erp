@@ -28,6 +28,7 @@ import { displayName } from "./baseer-localization";
 import { financeText } from "./finance-copy";
 import { BaseerValidatedFormField as BaseerValidatedForm } from "./baseer-validated-form-field";
 import { hasActivePermission } from "./module-access";
+import { pageRouteHash } from "./page-registry";
 
 type Configuration = {
   profile: { vatAccountingEnabled: boolean; vatRateBasisPoints: number } | null;
@@ -661,6 +662,10 @@ function SettlementHistory({
   const documents = sourceDocuments.filter(
     (document) => document.kind === "EXPENSE",
   );
+  const openOperation = (document: Document) => {
+    window.sessionStorage.setItem("baseer-open-outflow-document", document.id);
+    window.location.hash = pageRouteHash("operations-purchases", "history");
+  };
   return (
     <BaseerCard>
       <div className="administration-section-heading">
@@ -671,7 +676,9 @@ function SettlementHistory({
       <div className="administration-list">
         {documents.map((document) => (
           <article key={document.id}>
-            <strong>{document.documentNumber}</strong>
+            <BaseerButton type="button" variant="quiet" onClick={() => openOperation(document)}>
+              {language === "ar" ? `فتح العملية ${document.documentNumber}` : `Open ${document.documentNumber}`}
+            </BaseerButton>
             <span><bdi dir="ltr">{formatDate(document.businessDate, language)}</bdi></span>
             <span>
               {displayName(language, {

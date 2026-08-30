@@ -157,6 +157,7 @@ export function RecurringExpenseWorkspaceRuntime({
   const text = financeText(language);
   const session = activeSession();
   const [creating, setCreating] = useState(false);
+  const [editing, setEditing] = useState<Profile | null>(null);
   const [archiveTarget, setArchiveTarget] = useState<Profile | null>(null);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{
@@ -174,10 +175,11 @@ export function RecurringExpenseWorkspaceRuntime({
     setSaving(true);
     setMessage({ type: "idle", text: "" });
     try {
-      await api(current, "/finance/recurring-expenses", {
+      await api(current, editing ? "/finance/recurring-expenses/update" : "/finance/recurring-expenses", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          ...(editing ? { profileId: editing.id } : {}),
           nameAr: profileForm.nameAr.trim(),
           ...(profileForm.nameEn.trim()
             ? { nameEn: profileForm.nameEn.trim() }
@@ -203,7 +205,8 @@ export function RecurringExpenseWorkspaceRuntime({
         }),
       });
       setCreating(false);
-      setMessage({ type: "success", text: text.recurringSaved });
+      setEditing(null);
+      setMessage({ type: "success", text: editing ? (language === "ar" ? "تم تعديل المصروف الدوري. التغييرات تخص الدفعات القادمة فقط." : "The recurring expense was updated. Changes apply to future payments only.") : text.recurringSaved });
       await reload();
     } catch (error) {
       setMessage({
@@ -262,12 +265,13 @@ export function RecurringExpenseWorkspaceRuntime({
       )}
       <Suspense fallback={null}>
         <LazyRecurringExpenseProfileDialog
-          open={creating}
+          open={creating || editing !== null}
           language={language}
           busy={saving}
           configuration={configuration}
           businessDate={businessDate}
-          onClose={() => setCreating(false)}
+          profile={editing}
+          onClose={() => { setCreating(false); setEditing(null); }}
           onSubmit={saveProfile}
         />
       </Suspense>
@@ -303,6 +307,13 @@ export function RecurringExpenseWorkspaceRuntime({
                   </small>
                 </div>
                 <div className="recurring-profile__actions">
+                  <BaseerButton
+                    type="button"
+                    variant="secondary"
+                    onClick={() => setEditing(profile)}
+                  >
+                    {language === "ar" ? "تعديل" : "Edit"}
+                  </BaseerButton>
                   <BaseerButton
                     type="button"
                     variant="primary"

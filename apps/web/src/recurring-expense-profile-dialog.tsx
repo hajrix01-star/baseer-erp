@@ -9,9 +9,10 @@ import { BaseerCheckbox, BaseerMoneyInput, BaseerTextInput } from "./baseer-form
 import { BaseerStaticSelect } from "./baseer-static-select";
 import { displayName } from "./baseer-localization";
 import { financeText } from "./finance-copy";
-import type { ProfileForm, RecurringExpenseConfiguration } from "./recurring-expense-workspace";
+import type { Profile, ProfileForm, RecurringExpenseConfiguration } from "./recurring-expense-workspace";
 
 const emptyProfile = (businessDate: string): ProfileForm => ({ nameAr: "", nameEn: "", categoryId: "", supplierId: "", serviceNumber: "", expectedAmount: "", intervalMonths: "1", nextReminderDate: businessDate, defaultVaultId: "", allowAmountOverride: true, notes: "" });
+const profileForm = (profile: Profile, businessDate: string): ProfileForm => ({ nameAr: profile.nameAr, nameEn: profile.nameEn, categoryId: profile.categoryId, supplierId: profile.supplierId ?? "", serviceNumber: profile.serviceNumber ?? "", expectedAmount: profile.expectedAmount, intervalMonths: String(profile.intervalMonths) as ProfileForm["intervalMonths"], nextReminderDate: profile.nextReminderDate || businessDate, defaultVaultId: profile.defaultVaultId ?? "", allowAmountOverride: profile.allowAmountOverride, notes: profile.notes ?? "" });
 function schema(ar: boolean) {
   return z.object({
     nameAr: z.string().trim().min(1, ar ? "أدخل اسم الالتزام بالعربية." : "Enter the recurring expense name in Arabic."),
@@ -22,7 +23,7 @@ function schema(ar: boolean) {
 }
 
 /** Local profile validation; creating and scheduling the financial obligation remains an API command. */
-export function RecurringExpenseProfileDialog({ open, language, busy, configuration, businessDate, onClose, onSubmit }: { open: boolean; language: "ar" | "en"; busy: boolean; configuration: RecurringExpenseConfiguration; businessDate: string; onClose: () => void; onSubmit: (value: ProfileForm) => Promise<void> | void }) {
+export function RecurringExpenseProfileDialog({ open, language, busy, configuration, businessDate, profile = null, onClose, onSubmit }: { open: boolean; language: "ar" | "en"; busy: boolean; configuration: RecurringExpenseConfiguration; businessDate: string; profile?: Profile | null; onClose: () => void; onSubmit: (value: ProfileForm) => Promise<void> | void }) {
   const text = financeText(language);
   const validation = useMemo(() => schema(language === "ar"), [language]);
   const form = useBaseerForm<ProfileForm>({ defaultValues: emptyProfile(businessDate), schema: validation, shouldFocusError: true });
@@ -34,9 +35,11 @@ export function RecurringExpenseProfileDialog({ open, language, busy, configurat
   const categories = configuration.categories.filter((item) => item.status === "ACTIVE" && item.kind === "EXPENSE");
   const suppliers = configuration.suppliers.filter((item) => item.status === "ACTIVE");
   const vaults = configuration.vaults.filter((item) => item.status === "ACTIVE" && item.isPaymentDestination);
-  useEffect(() => { if (open) form.reset(emptyProfile(businessDate)); }, [businessDate, form, open]);
-  return <BaseerDialog open={open} title={text.addRecurring} language={language} busy={busy} onClose={onClose} footer={<><BaseerButton type="button" variant="secondary" disabled={busy} onClick={onClose}>{text.cancel}</BaseerButton><BaseerButton type="submit" form="recurring-profile-form" variant="primary" disabled={busy}>{busy ? text.saving : text.saveRecurring}</BaseerButton></>}>
+  useEffect(() => { if (open) form.reset(profile ? profileForm(profile, businessDate) : emptyProfile(businessDate)); }, [businessDate, form, open, profile]);
+  const editing = profile !== null;
+  return <BaseerDialog open={open} title={editing ? (language === "ar" ? "تعديل المصروف الدوري" : "Edit recurring expense") : text.addRecurring} language={language} busy={busy} onClose={onClose} footer={<><BaseerButton type="button" variant="secondary" disabled={busy} onClick={onClose}>{text.cancel}</BaseerButton><BaseerButton type="submit" form="recurring-profile-form" variant="primary" disabled={busy}>{busy ? text.saving : editing ? (language === "ar" ? "حفظ التعديلات" : "Save changes") : text.saveRecurring}</BaseerButton></>}>
     <form id="recurring-profile-form" className="administration-form" data-baseer-rhf-form="true" noValidate onSubmit={form.handleSubmit((next) => void onSubmit(next))}>
+      {editing ? <p className="baseer-form-help">{language === "ar" ? "تعدل هذه البيانات التذكير والدفعات القادمة فقط؛ العمليات المالية الصادرة سابقاً لا تتغير." : "These changes affect future reminders and payments only; issued financial operations are not changed."}</p> : null}
       <label>{text.nameArabic}<BaseerTextInput autoFocus placeholder={language === "ar" ? "كهرباء الفرع" : "Branch electricity"} aria-invalid={Boolean(form.formState.errors.nameAr)} {...form.register("nameAr")} />{form.formState.errors.nameAr ? <small role="alert">{form.formState.errors.nameAr.message}</small> : null}</label>
       <label>{text.nameEnglish}<BaseerTextInput placeholder="Branch electricity" {...form.register("nameEn")} /></label>
       <label>{text.financialCategory}<BaseerCombobox required label={text.financialCategory} value={selectedCategory} placeholder={text.selectCategory} options={categories.map((item) => ({ id: item.id, label: displayName(language, item) }))} invalid={Boolean(form.formState.errors.categoryId)} onChange={(categoryId) => { form.setValue("categoryId", categoryId, { shouldDirty: true, shouldValidate: true }); const category = categories.find((item) => item.id === categoryId); form.setValue("supplierId", category?.suggestedSupplierId ?? "", { shouldDirty: true, shouldValidate: true }); }} />{form.formState.errors.categoryId ? <small role="alert">{form.formState.errors.categoryId.message}</small> : null}</label>

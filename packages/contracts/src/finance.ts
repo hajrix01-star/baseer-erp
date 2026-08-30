@@ -1248,6 +1248,12 @@ export const createFinanceRecurringExpenseProfileRequestSchema = z.object({
   idempotencyKey: idempotencyKeySchema,
 }).strict();
 
+/** Profile edits govern future reminders and payments only; issued documents stay immutable. */
+export const updateFinanceRecurringExpenseProfileRequestSchema = createFinanceRecurringExpenseProfileRequestSchema
+  .omit({ idempotencyKey: true })
+  .extend({ profileId: z.string().uuid(), idempotencyKey: idempotencyKeySchema })
+  .strict();
+
 export const archiveFinanceRecurringExpenseProfileRequestSchema = z.object({
   profileId: z.string().uuid(),
   idempotencyKey: idempotencyKeySchema,
@@ -1299,6 +1305,7 @@ export const financeRecurringExpensePaymentBatchReceiptSchema = z.object({
 }).strict();
 
 export type CreateFinanceRecurringExpenseProfileRequest = z.infer<typeof createFinanceRecurringExpenseProfileRequestSchema>;
+export type UpdateFinanceRecurringExpenseProfileRequest = z.infer<typeof updateFinanceRecurringExpenseProfileRequestSchema>;
 export type CreateFinanceRecurringExpensePaymentRequest = z.infer<typeof createFinanceRecurringExpensePaymentRequestSchema>;
 export type CreateFinanceRecurringExpensePaymentBatchRequest = z.infer<typeof createFinanceRecurringExpensePaymentBatchRequestSchema>;
 /** A bounded, server-authorized read model for the Operations expenses and obligations workspace. */

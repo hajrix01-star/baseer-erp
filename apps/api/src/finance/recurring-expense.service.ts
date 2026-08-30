@@ -80,6 +80,30 @@ export class RecurringExpenseService {
     }).catch((error) => { if (error instanceof IdempotencyPayloadMismatchError) throw new ConflictException('The idempotency key was used with different recurring-expense data.'); throw error; });
   }
 
+  /** Changes the standing instruction only. Posted recurring payments remain immutable documents. */
+  async updateProfile(context: TrustedCompanyActorContext, profileId: string, input: CreateRecurringExpenseProfileRequest, idempotencyKey: string) {
+    const payload = normalise(input);
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const begun = await this.idempotency.beginInTransaction(tx, context, {
+        operation: 'finance.recurring_expense.profile.update', key: idempotencyKey, request: { profileId, ...profilePayload(payload) },
+        expiresAt: new Date(Date.now() + 86_400_000),
+      });
+      if (begun.kind === 'replay') return begun.response.body as { id: string; status: 'ACTIVE'; replayed: boolean };
+      if (begun.kind === 'in-progress') throw new ConflictException('The recurring-expense update is already being processed.');
+      const profile = await tx.financeRecurringExpenseProfile.findFirst({
+        where: { id: profileId, tenantId: context.tenantId, companyId: context.companyId },
+      });
+      if (!profile) throw new NotFoundException('The recurring expense was not found.');
+      if (profile.status !== FinanceRecurringExpenseStatus.ACTIVE) throw new ConflictException('Archived recurring expenses cannot be edited.');
+      await this.assertReferences(tx, context, payload);
+      await tx.financeRecurringExpenseProfile.update({ where: { id: profile.id }, data: payload });
+      const receipt = { id: profile.id, status: 'ACTIVE' as const, replayed: false };
+      await this.audit(tx, context, 'finance.recurring_expense.profile.updated', profile.id, profilePayload({ ...profile, expectedAmount: profile.expectedAmount, nextReminderDate: profile.nextReminderDate }), { ...payload, expectedAmount: payload.expectedAmount.toFixed(4), nextReminderDate: payload.nextReminderDate.toISOString() });
+      await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 200, headers: null, body: receipt } });
+      return receipt;
+    }).catch((error) => { if (error instanceof IdempotencyPayloadMismatchError) throw new ConflictException('The idempotency key was used with different recurring-expense data.'); throw error; });
+  }
+
   async archiveProfile(context: TrustedCompanyActorContext, profileId: string, idempotencyKey: string) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const begun = await this.idempotency.beginInTransaction(tx, context, {
