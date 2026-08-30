@@ -109,6 +109,7 @@ type Document = {
     paymentMethod: string;
   }>;
 };
+const LINKED_OUTFLOW_DOCUMENT_KEY = "baseer-open-outflow-document";
 type CreditWorkspace = PurchaseCreditWorkspace;
 type BatchRow = {
   id: string;
@@ -311,6 +312,15 @@ export function PurchaseExpenseWorkspaceRuntime({
     const candidate = stage === "history" ? "history" : activeTab;
     setTab(availableTabs.some((item) => item.id === candidate) ? candidate : availableTabs[0]?.id ?? "entry");
   }, [activeTab, availableTabs]);
+  useEffect(() => {
+    const documentId = window.sessionStorage.getItem(LINKED_OUTFLOW_DOCUMENT_KEY);
+    if (!documentId) return;
+    const document = documents.find((candidate) => candidate.id === documentId);
+    if (!document) return;
+    setTab("history");
+    setViewTarget(document);
+    window.sessionStorage.removeItem(LINKED_OUTFLOW_DOCUMENT_KEY);
+  }, [documents]);
   useEffect(() => {
     if (tab === "credit" && canReadCredit)
       void loadCredit().catch((error) =>
