@@ -1213,7 +1213,23 @@ function compensationPolicySnapshot(value: Prisma.JsonValue | null) {
   return value === null ? null : value as unknown as { policyId: string; policyVersionId: string; policyCode: string; policyNameAr: string; policyNameEn: string | null; versionNumber: number; effectiveFrom: string; formulaCode: HrCompensationFormulaCode };
 }
 function parsePayrollCalculationSnapshot(value: Prisma.JsonValue | null) {
-  return value === null ? null : value as unknown as { formulaCode: HrPayrollCalculationFormulaCode; calculationPeriodStart: string; calculationPeriodEnd: string; eligibleDays: number; calendarDaysInMonth: number; prorationRatio: string; monthlyGrossAmount: string };
+  // Historical Noorix payroll imports retain their source snapshot for
+  // lineage, not a Baseer calculation formula.  A detail read must never
+  // fail merely because that archival payload cannot be represented as the
+  // current calculation contract.  Return null in that case so the UI shows
+  // the factual monetary line without claiming an invented proration method.
+  if (value === null || typeof value !== 'object' || Array.isArray(value)) return null;
+  const snapshot = value as Record<string, unknown>;
+  if (
+    (snapshot.formulaCode !== 'FULL_MONTH_V1' && snapshot.formulaCode !== 'PRORATED_NEW_HIRE_V1') ||
+    typeof snapshot.calculationPeriodStart !== 'string' ||
+    typeof snapshot.calculationPeriodEnd !== 'string' ||
+    typeof snapshot.eligibleDays !== 'number' ||
+    typeof snapshot.calendarDaysInMonth !== 'number' ||
+    typeof snapshot.prorationRatio !== 'string' ||
+    typeof snapshot.monthlyGrossAmount !== 'string'
+  ) return null;
+  return snapshot as unknown as { formulaCode: HrPayrollCalculationFormulaCode; calculationPeriodStart: string; calculationPeriodEnd: string; eligibleDays: number; calendarDaysInMonth: number; prorationRatio: string; monthlyGrossAmount: string };
 }
 function payrollCalculationSnapshot(period: PayrollCalculationPeriod, monthlyGross: Prisma.Decimal) {
   return { formulaCode: period.formulaCode, calculationPeriodStart: ymd(period.calculationPeriodStart), calculationPeriodEnd: ymd(period.calculationPeriodEnd), eligibleDays: period.eligibleDays, calendarDaysInMonth: period.calendarDaysInMonth, prorationRatio: fixed(period.prorationRatio), monthlyGrossAmount: fixed(monthlyGross) };
