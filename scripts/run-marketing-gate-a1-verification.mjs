@@ -15,10 +15,11 @@ let app;
 
 try {
   await seed();
-  const [{ AppModule }, { DatabaseService }, { MarketingService }] = await Promise.all([
+  const [{ AppModule }, { DatabaseService }, { MarketingService }, { marketingCalendarReadSchema }] = await Promise.all([
     import("../apps/api/dist/app.module.js"),
     import("../apps/api/dist/database/database.service.js"),
     import("../apps/api/dist/marketing/marketing.service.js"),
+    import("../packages/contracts/dist/marketing.js"),
   ]);
   app = await NestFactory.createApplicationContext(AppModule, { logger: false });
   const database = app.get(DatabaseService);
@@ -59,9 +60,29 @@ try {
   assert.equal(campaignAnalysis.spendResult.analysisBoundary, "DESCRIPTIVE_SPEND_SALES_ONLY_NOT_ROI_OR_CAUSATION", "Campaign spend results must remain descriptive, never causal or ROI.");
   await assert.rejects(() => marketing.linkFinancialDocument(context, created.id, { financialDocumentId: randomUUID(), idempotencyKey: randomUUID() }), /financial document was not found/i, "Marketing must reject an unknown Finance document rather than creating a financial record.");
   const calendar = await marketing.calendar(context, { from: new Date("2026-08-01T00:00:00.000Z"), to: new Date("2026-08-31T00:00:00.000Z") });
+  const parsedCalendar = marketingCalendarReadSchema.parse(calendar);
   assert.equal(calendar.campaigns.some((campaign) => campaign.id === created.id), true, "The marketing calendar must consume the campaign register for the selected period.");
   assert.equal(calendar.days.length, 31, "The calendar must return one server-owned point per requested Riyadh business day.");
+  assert.deepEqual(
+    parsedCalendar.days.find((entry) => entry.businessDate === "2026-08-01"),
+    {
+      businessDate: "2026-08-01", officialGrossSales: "115.0000", officialNetSales: "100.0000", customerCount: 2, salesDayQuality: "READY",
+      dailySalesTarget: null, targetStatus: "NO_TARGET", linkedActualSpend: "0.0000", linkedFinancialDocumentCount: 0, campaignSpend: [],
+      financialOutflows: "0.0000", financialOutflowDocumentCount: 0, purchaseOutflows: "0.0000", purchaseOutflowDocumentCount: 0, activeCampaignIds: [created.id],
+    },
+    "A ready calendar day must retain both VAT-inclusive and net sales from the server-owned daily summary.",
+  );
   assert.equal(calendar.days.every((entry) => entry.officialNetSales !== null || entry.salesDayQuality !== "READY"), true, "A missing, pending, or partial sales day must never become a zero-valued ready point.");
+  assert.equal(calendar.days.every((entry) => entry.officialGrossSales !== null || entry.salesDayQuality !== "READY"), true, "VAT-inclusive sales must also be absent, not zero, on unread days.");
+  assert.deepEqual(parsedCalendar.weekdayAverages.find((entry) => entry.weekday === 6), { weekday: 6, averageOfficialGrossSales: "115.0000", eligibleDayCount: 1 }, "Weekday averages must be server-calculated from VAT-inclusive completed daily sales only.");
+  assert.deepEqual(parsedCalendar.timeline.daily.rows.find((entry) => entry.label === "2026-08-01")?.sales, { amount: "115.0000", chartValue: 115, display: "115.00" }, "Daily chart values must be VAT-inclusive and precomputed by the server.");
+  const unreadTimelineRow = parsedCalendar.timeline.daily.rows.find((entry) => entry.salesDayQuality !== "READY");
+  assert.deepEqual(unreadTimelineRow?.sales, { amount: null, chartValue: null, display: null }, "An incomplete daily chart row must be unavailable, never a fabricated zero.");
+  const augustTimelineRow = parsedCalendar.timeline.monthly.rows.find((entry) => entry.label === "2026-08");
+  assert.deepEqual(augustTimelineRow?.sales, { amount: null, chartValue: null, display: null }, "A month containing incomplete sales data must not aggregate to a misleading zero or partial financial total.");
+  const unreadDays = parsedCalendar.days.filter((entry) => entry.officialNetSales === null);
+  assert.ok(unreadDays.length > 0, "The verification period must include unread days to prove the unavailable-value contract.");
+  assert.equal(unreadDays.every((entry) => entry.linkedActualSpend === null && entry.financialOutflows === null && entry.purchaseOutflows === null), true, "An unread day must use null for every comparable financial series; it must never be emitted as a financial zero.");
   assert.equal(calendar.days.some((entry) => entry.activeCampaignIds.includes(created.id)), true, "A dated campaign must appear in its daily timeline layer.");
   assert.equal(calendar.context.some((entry) => entry.id === companyEventId), true, "Published company context must appear as a calendar layer.");
   assert.equal(calendar.spendResult.googleAdsStatus, "NOT_CONNECTED", "Overview spend results must show Ads readiness honestly.");
@@ -105,6 +126,7 @@ async function seed() {
     await client.query('INSERT INTO "Tenant" ("id", "code", "name") VALUES ($1::uuid, $2, $3)', [fixture.tenantId, `marketing-${fixture.tenantId.slice(0, 8)}`, "Marketing verification tenant"]);
     await client.query('INSERT INTO "User" ("id", "tenantId", "loginNormalized", "nameAr", "nameEn", "passwordHash") VALUES ($1::uuid, $2::uuid, $3, $4, $5, $6)', [fixture.actorUserId, fixture.tenantId, `marketing-${fixture.actorUserId.slice(0, 8)}@baseer.test`, "مالك تحقق التسويق", "Marketing verification owner", "verification-only"]);
     await client.query('INSERT INTO "Company" ("id", "tenantId", "nameAr", "nameEn") VALUES ($1::uuid, $2::uuid, $3, $4), ($5::uuid, $2::uuid, $6, $7)', [fixture.companyId, fixture.tenantId, "شركة تحقق التسويق", "Marketing verification company", fixture.otherCompanyId, "شركة عزل أخرى", "Other isolation company"]);
+    await client.query('INSERT INTO "FinanceDailyFinancialSummary" ("id", "tenantId", "companyId", "businessDate", "salesGrossAmount", "salesNetAmount", "salesVatAmount", "salesClosingCount", "customerCount", "operationalDayStatus", "dataStatus", "sourceChecksum") VALUES ($1::uuid, $2::uuid, $3::uuid, $4::date, $5::decimal, $6::decimal, $7::decimal, $8, $9, $10::"FinanceOperationalDayStatus", $11::"FinanceDailySalesDataStatus", $12)', [randomUUID(), fixture.tenantId, fixture.companyId, "2026-08-01", "115.0000", "100.0000", "15.0000", 1, 2, "OPEN", "RECORDED", "a".repeat(64)]);
     await client.query("COMMIT");
   } catch (error) {
     await client.query("ROLLBACK");

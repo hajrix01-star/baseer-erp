@@ -27,6 +27,20 @@ import { RestoreAsNewService } from './backup/restore-as-new.service.js';
 import { BackupPolicyService } from './backup/backup-policy.service.js';
 import { NurixMigrationReviewController } from './nurix-migration/nurix-migration-review.controller.js';
 import { NurixMigrationReviewService } from './nurix-migration/nurix-migration-review.service.js';
+import { NurixExcelImportController } from './nurix-migration/nurix-excel-import.controller.js';
+import { NurixExcelImportService } from './nurix-migration/nurix-excel-import.service.js';
+import { NurixExcelFinancialImportService } from './nurix-migration/nurix-excel-financial-import.service.js';
+import { NurixExcelFinancialMigrationService } from './nurix-migration/nurix-excel-financial-migration.service.js';
+import { NurixExcelCompletionService } from './nurix-migration/nurix-excel-completion.service.js';
+import { NurixExcelDailySalesMigrationService } from './nurix-migration/nurix-excel-daily-sales-migration.service.js';
+import { NurixExcelPackageClosureAuditService } from './nurix-migration/nurix-excel-package-closure-audit.service.js';
+import { NurixExcelRecurringMigrationService } from './nurix-migration/nurix-excel-recurring-migration.service.js';
+import { NurixExcelReferenceAllocationMigrationService } from './nurix-migration/nurix-excel-reference-allocation-migration.service.js';
+import { NurixExcelEvidenceArchiveService } from './nurix-migration/nurix-excel-evidence-archive.service.js';
+import { NurixExcelHrHistoryImportService } from './nurix-migration/nurix-excel-hr-history-import.service.js';
+import { NurixExcelSupplierDuplicateCleanupService } from './nurix-migration/nurix-excel-supplier-duplicate-cleanup.service.js';
+import { NurixHistoricalPayrollMigrationService } from './nurix-migration/nurix-historical-payroll-migration.service.js';
+import { NurixExcelStagingStorageService } from './nurix-migration/nurix-excel-staging-storage.service.js';
 import { BackupScheduleDispatcherService, BackupScheduleRunnerService } from './backup/schedule-dispatcher.js';
 import { CompanyAccessController } from './company-context/company-access.controller.js';
 import { CompanyAccessService } from './company-context/company-access.service.js';
@@ -110,6 +124,7 @@ import { HrController } from './hr/hr.controller.js';
 import { HrService } from './hr/hr.service.js';
 import { HrAdvanceService } from './hr/hr-advance.service.js';
 import { HrAdministrativeDeductionService } from './hr/hr-administrative-deduction.service.js';
+import { HrHistoricalPayrollEvidenceReadService } from './hr/hr-historical-payroll-evidence-read.service.js';
 import { HrPayrollService } from './hr/hr-payroll.service.js';
 import { HrLeaveService } from './hr/hr-leave.service.js';
 import { HrEmployeeDocumentController } from './hr/hr-employee-document.controller.js';
@@ -147,6 +162,8 @@ import { InboundEvidenceDocumentIntelligenceService } from './inbound-evidence/i
 import { OwnerDailyBriefController } from './owner-daily-brief/owner-daily-brief.controller.js';
 import { OwnerDailyBriefService } from './owner-daily-brief/owner-daily-brief.service.js';
 import { OwnerDailyBriefSchedulerService } from './owner-daily-brief/owner-daily-brief-scheduler.service.js';
+import { OwnerDashboardController } from './owner-dashboard/owner-dashboard.controller.js';
+import { OwnerDashboardService } from './owner-dashboard/owner-dashboard.service.js';
 import { OfficialReportRunsController } from './reports/official-report-runs.controller.js';
 
 @Module({
@@ -166,7 +183,7 @@ import { OfficialReportRunsController } from './reports/official-report-runs.con
       ],
     }),
   ],
-  controllers: [AdministrationController, BackupController, NurixMigrationReviewController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinanceAccountsController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController, HrOverviewController, AttendanceController, ReportCatalogController, ReportsController, LedgerTrialBalanceController, InternalVatReportController, VatSimulationController, ReportDocumentController, OfficialReportRunsController, OperationsCatalogController, OperationsExecutionController, OperationsInternalRegistrationController, OperationsAssetsWarrantyController, OperationsOverviewController, DecisionIntelligenceController, MarketingController, InboundEvidenceController, OwnerDailyBriefController],
+  controllers: [AdministrationController, BackupController, NurixMigrationReviewController, NurixExcelImportController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinanceAccountsController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController, HrOverviewController, AttendanceController, ReportCatalogController, ReportsController, LedgerTrialBalanceController, InternalVatReportController, VatSimulationController, ReportDocumentController, OfficialReportRunsController, OperationsCatalogController, OperationsExecutionController, OperationsInternalRegistrationController, OperationsAssetsWarrantyController, OperationsOverviewController, DecisionIntelligenceController, MarketingController, InboundEvidenceController, OwnerDailyBriefController, OwnerDashboardController],
   providers: [
     DatabaseService,
     BackupService,
@@ -175,6 +192,19 @@ import { OfficialReportRunsController } from './reports/official-report-runs.con
     BackupWorkerService,
     BackupPolicyService,
     NurixMigrationReviewService,
+    NurixExcelStagingStorageService,
+    NurixExcelImportService,
+    NurixExcelFinancialImportService,
+    NurixExcelFinancialMigrationService,
+    NurixExcelCompletionService,
+    NurixExcelDailySalesMigrationService,
+    NurixExcelPackageClosureAuditService,
+    NurixExcelRecurringMigrationService,
+    NurixExcelReferenceAllocationMigrationService,
+    NurixExcelEvidenceArchiveService,
+    NurixExcelHrHistoryImportService,
+    NurixExcelSupplierDuplicateCleanupService,
+    NurixHistoricalPayrollMigrationService,
     BackupScheduleDispatcherService,
     BackupScheduleRunnerService,
     {
@@ -245,6 +275,7 @@ import { OfficialReportRunsController } from './reports/official-report-runs.con
     HrService,
     HrAdvanceService,
     HrAdministrativeDeductionService,
+    HrHistoricalPayrollEvidenceReadService,
     HrPayrollService,
     HrLeaveService,
     HrEmployeeDocumentService,
@@ -268,6 +299,7 @@ import { OfficialReportRunsController } from './reports/official-report-runs.con
     InboundEvidenceDocumentIntelligenceService,
     OwnerDailyBriefService,
     OwnerDailyBriefSchedulerService,
+    OwnerDashboardService,
   ],
 })
 export class AppModule {}

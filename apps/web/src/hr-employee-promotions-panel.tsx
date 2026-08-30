@@ -15,7 +15,6 @@ import { BaseerEmptyState, BaseerNotice } from "./baseer-workspace";
 import { BaseerDataGridField as BaseerDataGrid } from "./baseer-data-grid-field";
 import { activeSession, requestId } from "./daily-sales-client";
 import { absoluteMoneyDecimal, addMoneyDecimals, compareMoneyDecimals, isPositiveMoneyDecimal, subtractMoneyDecimals, tryMoneyDecimal } from "./decimal-string";
-import { HrCompensationAgreementDialog } from "./hr-compensation-agreement-dialog";
 import { createHrEmployeePromotion, listHrEmployeeCompensationHistory, listHrEmployeePromotions, setHrEmployeeCompensation, type HrCompensationProfile, type HrDetail, type HrEmployeePromotion } from "./hr-client";
 import { HrJobTitleSelect } from "./hr-job-titles";
 import { hrText } from "./hr-copy";
@@ -41,6 +40,7 @@ const nextMonth = () => {
   return `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, "0")}`;
 };
 
+
 /** Combines the employee's job path and compensation view while retaining two
  * governed records: promotion decisions and dated compensation profiles. */
 export function HrEmployeePromotionsPanel({ employeeId, language, detail, onError, onChanged }: { employeeId: string; language: Language; detail: Pick<HrDetail, "employee" | "compensation" | "compensationHistory" | "compensationHistoryCount">; onError: (message: string) => void; onChanged: () => Promise<void> }) {
@@ -56,7 +56,6 @@ export function HrEmployeePromotionsPanel({ employeeId, language, detail, onErro
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [promotionOpen, setPromotionOpen] = useState(false);
-  const [salaryOpen, setSalaryOpen] = useState(false);
   const [effectiveDate, setEffectiveDate] = useState(today());
   const [newJobTitle, setNewJobTitle] = useState("");
   const [decisionReference, setDecisionReference] = useState("");
@@ -175,9 +174,8 @@ export function HrEmployeePromotionsPanel({ employeeId, language, detail, onErro
 
   return <section className="hr-employment-compensation">
     {message ? <BaseerNotice tone={message.tone}>{message.text}</BaseerNotice> : null}
-    {canReadPayroll ? <section className="hr-employment-compensation__section" aria-labelledby="hr-compensation-heading"><header><h3 id="hr-compensation-heading">{ar ? "الراتب والبدلات" : "Salary & allowances"}</h3>{canManagePayroll ? <BaseerButton type="button" onClick={() => { setMessage(null); setSalaryOpen(true); }}>{currentSalary ? (ar ? "إدارة الراتب" : "Manage salary") : (ar ? "تحديد الراتب" : "Set salary")}</BaseerButton> : null}</header>{currentSalary ? <div className="hr-employment-compensation__salary-summary"><div><span>{ar ? "الإجمالي الشهري" : "Monthly total"}</span><strong><BaseerMoney value={currentSalary.monthlyGross} language={language} /></strong></div><div><span>{ar ? "الراتب الأساسي" : "Basic salary"}</span><strong><BaseerMoney value={tryMoneyDecimal(() => [currentSalary.foodAllowance, currentSalary.housingAllowance, currentSalary.transportAllowance, currentSalary.otherAllowance].reduce((value, allowance) => subtractMoneyDecimals(value, allowance), currentSalary.monthlyGross)) ?? "0"} language={language} /></strong></div><div><span>{ar ? "المسمى الحالي" : "Current title"}</span><strong>{employee?.jobTitle ?? "—"}</strong></div></div> : <BaseerEmptyState title={ar ? "لم يُحدد راتب بعد" : "Salary not set"} />}{salaryHistory.length ? <BaseerDataGrid ariaLabel={ar ? "سجل تغييرات الراتب" : "Salary history"} caption={ar ? "سجل تغييرات الراتب" : "Salary change history"} rows={salaryHistory} columns={salaryHistoryColumns} rowKey={(row) => row.id} /> : null}{compensationCursor ? <BaseerButton type="button" variant="secondary" onClick={() => void loadMoreCompensation()}>{ar ? "تحميل المزيد" : "Load more"}</BaseerButton> : null}</section> : null}
+    {canReadPayroll ? <section className="hr-employment-compensation__section" aria-labelledby="hr-compensation-heading"><header><h3 id="hr-compensation-heading">{ar ? "سجل تغييرات الراتب" : "Salary change history"}</h3></header>{salaryHistory.length ? <BaseerDataGrid ariaLabel={ar ? "سجل تغييرات الراتب" : "Salary history"} caption={ar ? "سجل تغييرات الراتب" : "Salary change history"} rows={salaryHistory} columns={salaryHistoryColumns} rowKey={(row) => row.id} /> : <BaseerEmptyState title={ar ? "لا توجد تغييرات راتب موثقة." : "No salary changes are recorded."} />}{compensationCursor ? <BaseerButton type="button" variant="secondary" onClick={() => void loadMoreCompensation()}>{ar ? "تحميل المزيد" : "Load more"}</BaseerButton> : null}</section> : null}
     <section className="hr-employment-compensation__section" aria-labelledby="hr-employment-heading"><header><h3 id="hr-employment-heading">{ar ? "المسار الوظيفي" : "Employment path"}</h3>{canManageEmployees ? <BaseerButton type="button" variant="secondary" onClick={() => { setMessage(null); setPromotionOpen(true); }}>{ar ? "تسجيل ترقية" : "Record promotion"}</BaseerButton> : null}</header>{loading && !promotions.length ? <BaseerCard>{ar ? "جارٍ تحميل المسار الوظيفي…" : "Loading employment history…"}</BaseerCard> : promotions.length ? <><BaseerDataGrid ariaLabel={ar ? "سجل الترقيات" : "Promotion history"} caption={ar ? "سجل الترقيات" : "Promotion history"} rows={promotions} columns={promotionColumns} rowKey={(row) => row.id} />{nextCursor ? <BaseerButton type="button" variant="secondary" disabled={loading} onClick={() => void load(nextCursor, true)}>{ar ? "تحميل المزيد" : "Load more"}</BaseerButton> : null}</> : <BaseerEmptyState title={ar ? "لا توجد ترقيات موثقة." : "No promotions are recorded."} />}</section>
-    {salaryOpen && employee && canManagePayroll ? <HrCompensationAgreementDialog open language={language} employees={[employee]} fixedEmployeeId={employee.id} profile={currentSalary} onClose={() => setSalaryOpen(false)} onSaved={async () => { await load(); await onChanged(); }} onError={onError} /> : null}
     {canManageEmployees ? <BaseerFormDialog open={promotionOpen} title={ar ? "تسجيل ترقية" : "Record promotion"} language={language} busy={busy} size="standard" formId="hr-employee-promotion" submitLabel={ar ? "حفظ الترقية" : "Save promotion"} onClose={() => setPromotionOpen(false)}>
       <form id="hr-employee-promotion" className="baseer-form hr-promotion-form" data-baseer-rhf-form="true" noValidate onSubmit={promotionForm.handleSubmit(() => void createPromotion())}>
         <BaseerFormSection title={ar ? "التغيير الوظيفي" : "Employment change"}>

@@ -73,6 +73,10 @@ import {
   hrPayrollRunDetailReceiptSchema,
   hrPayrollRunReceiptSchema,
   hrPayrollPreviewReceiptSchema,
+  hrHistoricalPayrollEvidenceQuerySchema,
+  hrHistoricalPayrollEvidenceReceiptSchema,
+  hrHistoricalPayrollEvidenceDetailQuerySchema,
+  hrHistoricalPayrollEvidenceDetailReceiptSchema,
   hrEmployeeLeavesReceiptSchema,
   hrEmployeeLeavesQuerySchema,
   hrEmployeeLeaveDetailReceiptSchema,
@@ -89,6 +93,7 @@ import { PurchaseExpenseService } from '../finance/purchase-expense.service.js';
 import { HrService } from './hr.service.js';
 import { HrAdvanceService } from './hr-advance.service.js';
 import { HrAdministrativeDeductionService } from './hr-administrative-deduction.service.js';
+import { HrHistoricalPayrollEvidenceReadService } from './hr-historical-payroll-evidence-read.service.js';
 import { HrPayrollService } from './hr-payroll.service.js';
 import { HrLeaveService } from './hr-leave.service.js';
 import { HrFinalSettlementService } from './hr-final-settlement.service.js';
@@ -103,6 +108,7 @@ export class HrController {
     private readonly hr: HrService,
     private readonly advances: HrAdvanceService,
     private readonly deductions: HrAdministrativeDeductionService,
+    private readonly historicalPayrollEvidence: HrHistoricalPayrollEvidenceReadService,
     private readonly payroll: HrPayrollService,
     private readonly leaves: HrLeaveService,
     private readonly documents: PurchaseExpenseService,
@@ -425,6 +431,35 @@ export class HrController {
     if (!parsed.success) throw new BadRequestException('Invalid payroll-run query.');
     const context = await this.authorize(authorization, companyId, 'hr.payroll.read');
     return hrPayrollRunsReceiptSchema.parse({ companyId: context.companyId, ...(await this.payroll.list(context, { pageSize: parsed.data.pageSize, ...(parsed.data.status ? { status: parsed.data.status } : {}), ...(parsed.data.periodFrom ? { periodFrom: parsed.data.periodFrom } : {}), ...(parsed.data.periodTo ? { periodTo: parsed.data.periodTo } : {}), ...(parsed.data.search ? { search: parsed.data.search } : {}), ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) })) });
+  }
+
+  /**
+   * Noorix archival evidence is intentionally served outside HrPayrollRun.
+   * This route has no write counterpart and evidence ids are not accepted by
+   * operational payroll routes.
+   */
+  @Get('payroll-history/nurix')
+  async listHistoricalNurixPayroll(@Query() query: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = hrHistoricalPayrollEvidenceQuerySchema.safeParse(query);
+    if (!parsed.success) throw new BadRequestException('Invalid historical payroll evidence query.');
+    const context = await this.authorize(authorization, companyId, 'hr.payroll.read');
+    return hrHistoricalPayrollEvidenceReceiptSchema.parse(await this.historicalPayrollEvidence.list(context, {
+      pageSize: 100,
+      ...(parsed.data.periodFrom ? { periodFrom: parsed.data.periodFrom } : {}),
+      ...(parsed.data.periodTo ? { periodTo: parsed.data.periodTo } : {}),
+      ...(parsed.data.search ? { search: parsed.data.search } : {}),
+    }));
+  }
+
+  @Get('payroll-history/nurix/:evidenceId')
+  async historicalNurixPayrollDetail(@Param('evidenceId', ParseUUIDPipe) evidenceId: string, @Query() query: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = hrHistoricalPayrollEvidenceDetailQuerySchema.safeParse(query);
+    if (!parsed.success) throw new BadRequestException('Invalid historical payroll evidence detail query.');
+    const context = await this.authorize(authorization, companyId, 'hr.payroll.read');
+    return hrHistoricalPayrollEvidenceDetailReceiptSchema.parse(await this.historicalPayrollEvidence.detail(context, evidenceId, {
+      linePageSize: parsed.data.linePageSize,
+      ...(parsed.data.lineCursor ? { lineCursor: parsed.data.lineCursor } : {}),
+    }));
   }
 
   @Get('payroll-runs/:payrollRunId')

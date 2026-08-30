@@ -203,3 +203,154 @@
 .hr-payroll-settlements__scroll { background: var(--card-surface); }
 .hr-payroll-settlements thead th { background: var(--table-header); }
 .hr-document-filters { background: var(--surface-subtle); }
+
+.hr-employee-compensation {
+  display: grid;
+  gap: 1rem;
+}
+
+.hr-employee-compensation > header,
+.hr-employee-compensation__allowances > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.hr-employee-compensation h3,
+.hr-employee-compensation h4,
+.hr-employee-compensation p {
+  margin: 0;
+}
+
+.hr-employee-compensation > header p,
+.hr-employee-compensation__allowances > p {
+  margin-top: .25rem;
+  color: var(--muted);
+  font-size: var(--font-label);
+}
+
+.hr-employee-compensation__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .75rem;
+}
+
+.hr-employee-compensation__grid section,
+.hr-employee-compensation__allowances {
+  display: grid;
+  gap: .3rem;
+  padding: .85rem;
+  border: 1px solid var(--line);
+  border-radius: .85rem;
+  background: var(--canvas);
+}
+
+.hr-employee-compensation__grid span,
+.hr-employee-compensation__grid small,
+.hr-employee-compensation__allowances header span {
+  color: var(--muted);
+  font-size: var(--font-label);
+}
+
+.hr-employee-compensation__grid strong {
+  color: var(--ink);
+  font-size: var(--font-title-sm);
+}
+
+.hr-employee-compensation__allowances dl {
+  display: grid;
+  gap: .45rem;
+  margin: 0;
+}
+
+.hr-employee-compensation__allowances dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: .45rem;
+  border-top: 1px solid color-mix(in srgb, var(--line) 75%, transparent);
+}
+
+.hr-employee-compensation__allowances dt { color: var(--muted); }
+.hr-employee-compensation__allowances dd { margin: 0; }
+
+/* Keep the 360 overview summary dense: salary details live in the current-salary card,
+   while the record snapshot remains a small set of indicators. */
+.hr-employee-profile__snapshot { align-self: start; }
+.hr-employee-profile__snapshot .baseer-card { padding: .8rem; }
+.hr-employee-profile__snapshot .baseer-card h3 { margin-bottom: .55rem; }
+.hr-employee-profile__stats { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .4rem; }
+.hr-employee-profile__stats span { min-block-size: 4.7rem; padding: .5rem; }
+.hr-employee-profile__stats strong { font-size: var(--font-title-sm); }
+
+.hr-current-compensation { display: grid; align-content: start; gap: .75rem; }
+.hr-current-compensation > header { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+.hr-current-compensation > header h3 { margin: 0; }
+.hr-current-compensation__allowances { padding-top: .65rem; border-top: 1px solid color-mix(in srgb, var(--line) 75%, transparent); }
+.hr-current-compensation__allowances h4,
+.hr-current-compensation__allowances p { margin: 0; }
+.hr-current-compensation__allowances h4 { font-size: var(--font-label); }
+.hr-current-compensation__allowances p { margin-top: .4rem; color: var(--muted); font-size: var(--font-caption); }
+.hr-current-compensation__allowances dl { margin-top: .45rem; }
+
+@media (max-width: 640px) {
+  .hr-employee-profile__stats { grid-template-columns: 1fr; }
+  .hr-employee-profile__stats span { min-block-size: 0; }
+  .hr-current-compensation > header { align-items: stretch; flex-direction: column; }
+}
+
+@media (max-width: 640px) {
+  .hr-employee-compensation__grid { grid-template-columns: 1fr; }
+  .hr-employee-compensation > header { align-items: stretch; flex-direction: column; }
+}
+
+/* The routed employee file stays inside the application workspace, preserving
+   the sidebar and the current theme instead of creating a screen overlay. */
+.hr-employee-profile-page .baseer-dialog:has(.hr-employee-profile) {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  min-block-size: 0;
+  max-block-size: none;
+  margin: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.hr-employee-profile-page .baseer-dialog:has(.hr-employee-profile) .daily-sales-dialog__header {
+  position: absolute;
+  z-index: 2;
+  inset-inline: 0;
+  inset-block-start: 0;
+  min-block-size: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.hr-employee-profile-page .baseer-dialog:has(.hr-employee-profile) .daily-sales-dialog__header h3 { display: none; }
+.hr-employee-profile-page .baseer-dialog:has(.hr-employee-profile) .daily-sales-dialog__header > .baseer-button { position: absolute; inset-block-start: 0; inset-inline-end: 0; }
+
+.hr-employee-profile-page .baseer-dialog:has(.hr-employee-profile) .daily-sales-dialog__body {
+  display: block;
+  padding: 0;
+  overflow: visible;
+}
+
+.hr-employee-profile-page .hr-employee-profile {
+  gap: .75rem;
+  padding-block: 0 1.25rem;
+}
+
+.hr-employee-profile-page .hr-employee-profile__hero {
+  padding-block: 0 .65rem;
+  padding-inline-end: 3.4rem;
+}
+
+.baseer-workspace:has(.hr-employee-profile-page) > :not(.hr-employee-profile-page) {
+  display: none;
+}

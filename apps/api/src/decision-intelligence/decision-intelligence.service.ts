@@ -76,6 +76,7 @@ type RelatedDecisionContext = Readonly<{
  */
 type DecisionSalesDailyDay = Readonly<{
   businessDate: string;
+  grossAmount: string | null;
   netAmount: string | null;
   customerCount: number | null;
   dayQuality: "READY" | "PENDING" | "PARTIAL" | "MISSING";
@@ -129,6 +130,7 @@ export class DecisionIntelligenceService {
             },
             select: {
               businessDate: true,
+              salesGrossAmount: true,
               salesNetAmount: true,
               customerCount: true,
               operationalDayStatus: true,
@@ -142,13 +144,13 @@ export class DecisionIntelligenceService {
           const businessDate = day(cursor);
           const summary = byDate.get(businessDate);
           if (!summary) {
-            days.push({ businessDate, netAmount: null, customerCount: null, dayQuality: "MISSING" });
+            days.push({ businessDate, grossAmount: null, netAmount: null, customerCount: null, dayQuality: "MISSING" });
           } else if (summary.dataStatus === "PENDING") {
-            days.push({ businessDate, netAmount: null, customerCount: null, dayQuality: "PENDING" });
+            days.push({ businessDate, grossAmount: null, netAmount: null, customerCount: null, dayQuality: "PENDING" });
           } else if (summary.operationalDayStatus === "PARTIAL") {
-            days.push({ businessDate, netAmount: null, customerCount: null, dayQuality: "PARTIAL" });
+            days.push({ businessDate, grossAmount: null, netAmount: null, customerCount: null, dayQuality: "PARTIAL" });
           } else {
-            days.push({ businessDate, netAmount: summary.salesNetAmount.toFixed(4), customerCount: summary.customerCount, dayQuality: "READY" });
+            days.push({ businessDate, grossAmount: summary.salesGrossAmount.toFixed(4), netAmount: summary.salesNetAmount.toFixed(4), customerCount: summary.customerCount, dayQuality: "READY" });
           }
         }
         return { metric, days };
@@ -157,7 +159,7 @@ export class DecisionIntelligenceService {
       const metric = unavailableSalesMetric(period);
       const days: DecisionSalesDailyDay[] = [];
       for (let cursor = new Date(period.from); cursor <= period.to; cursor = addDay(cursor)) {
-        days.push({ businessDate: day(cursor), netAmount: null, customerCount: null, dayQuality: "MISSING" });
+        days.push({ businessDate: day(cursor), grossAmount: null, netAmount: null, customerCount: null, dayQuality: "MISSING" });
       }
       return { metric, days };
     }
@@ -220,6 +222,7 @@ export class DecisionIntelligenceService {
           : stale
             ? "STALE"
             : "READY";
+      const valuesAvailable = quality === "READY";
       return {
         metricCode: "finance.sales.net.daily",
         metricDefinitionVersion: "finance.sales.net.daily.v1",
@@ -238,10 +241,12 @@ export class DecisionIntelligenceService {
         sourceReferences: sourceReferencesForSales(usable, period),
         payload: {
           currencyCode: "SAR",
-          netAmount: total.net.toFixed(4),
-          grossAmount: total.gross.toFixed(4),
-          vatAmount: total.vat.toFixed(4),
-          customerCount: total.customers,
+          // A partial or stale projection is evidence, not a presentable
+          // financial total. Never substitute its missing value with zero.
+          netAmount: valuesAvailable ? total.net.toFixed(4) : null,
+          grossAmount: valuesAvailable ? total.gross.toFixed(4) : null,
+          vatAmount: valuesAvailable ? total.vat.toFixed(4) : null,
+          customerCount: valuesAvailable ? total.customers : null,
         },
       };
   }
@@ -270,12 +275,6 @@ export class DecisionIntelligenceService {
       current = unavailableSalesMetric(period);
       comparison = unavailableSalesMetric({ from: comparisonFrom, to: comparisonTo });
     }
-    const currentNet = new Prisma.Decimal(current.payload.netAmount);
-    const comparisonNet = new Prisma.Decimal(comparison.payload.netAmount);
-    const difference = currentNet.minus(comparisonNet);
-    const percentDifference = current.dataQuality === "READY" && comparison.dataQuality === "READY" && !comparisonNet.isZero()
-      ? difference.dividedBy(comparisonNet).times(100).toFixed(2)
-      : null;
     return {
       metricCode: "finance.sales.net.period_comparison",
       metricDefinitionVersion: "finance.sales.net.period_comparison.v1",
@@ -284,15 +283,7 @@ export class DecisionIntelligenceService {
       dataQuality: comparisonQuality(current.dataQuality, comparison.dataQuality),
       current,
       comparison,
-      payload: {
-        currencyCode: "SAR",
-        currentNetAmount: currentNet.toFixed(4),
-        comparisonNetAmount: comparisonNet.toFixed(4),
-        differenceNetAmount: difference.toFixed(4),
-        percentDifference,
-        currentCustomerCount: current.payload.customerCount,
-        comparisonCustomerCount: comparison.payload.customerCount,
-      },
+      payload: salesComparisonPayload(current, comparison),
     };
   }
 
@@ -429,9 +420,9 @@ export class DecisionIntelligenceService {
       });
       const percent = comparison.payload.percentDifference === null ? null : new Prisma.Decimal(comparison.payload.percentDifference);
       const threshold = percent?.isNegative() ? new Prisma.Decimal(policy.decreaseThresholdBasisPoints).dividedBy(100) : new Prisma.Decimal(policy.increaseThresholdBasisPoints).dividedBy(100);
-      const baseline = new Prisma.Decimal(comparison.payload.comparisonNetAmount);
-      const difference = new Prisma.Decimal(comparison.payload.differenceNetAmount).abs();
-      const materialityMet = baseline.greaterThanOrEqualTo(policy.minimumBaselineAmount) && difference.greaterThanOrEqualTo(policy.minimumAbsoluteDifferenceAmount);
+      const baseline = comparison.payload.comparisonNetAmount === null ? null : new Prisma.Decimal(comparison.payload.comparisonNetAmount);
+      const difference = comparison.payload.differenceNetAmount === null ? null : new Prisma.Decimal(comparison.payload.differenceNetAmount).abs();
+      const materialityMet = baseline !== null && difference !== null && baseline.greaterThanOrEqualTo(policy.minimumBaselineAmount) && difference.greaterThanOrEqualTo(policy.minimumAbsoluteDifferenceAmount);
       const thresholdMet = comparison.dataQuality === "READY" && percent !== null && percent.abs().greaterThanOrEqualTo(threshold) && materialityMet;
       const outcome = comparison.dataQuality !== "READY" ? "DATA_QUALITY_BLOCKED" : !materialityMet ? "MATERIALITY_BLOCKED" : !thresholdMet ? "NO_THRESHOLD_ALERT" : percent!.isNegative() ? "DECREASE_ALERT" : "INCREASE_ALERT";
       const existing = await transaction.decisionEvaluationRun.findFirst({
@@ -1299,7 +1290,7 @@ function unavailableSalesMetric(period: Readonly<{ from: Date; to: Date }>): Dec
     sourceFreshAt: null,
     coverage: { requiredDays: missingDays.length, availableDays: 0, missingDays, excludedDays: [] },
     sourceReferences: [],
-    payload: { currencyCode: "SAR", netAmount: "0.0000", grossAmount: "0.0000", vatAmount: "0.0000", customerCount: 0 },
+    payload: { currencyCode: "SAR", netAmount: null, grossAmount: null, vatAmount: null, customerCount: null },
   };
 }
 
@@ -1311,20 +1302,53 @@ function salesComparisonRead(
   comparisonPolicyCode: "PREVIOUS_EQUAL_PERIOD" | "MATCHED_WEEKDAYS",
   comparisonPolicyVersion: "previous_equal_period.v1" | "matched_weekdays.v1",
 ): DecisionSalesComparisonRead {
-  const currentNet = new Prisma.Decimal(current.payload.netAmount);
-  const comparisonNet = new Prisma.Decimal(comparison.payload.netAmount);
-  const difference = currentNet.minus(comparisonNet);
-  const percentDifference = current.dataQuality === "READY" && comparison.dataQuality === "READY" && !comparisonNet.isZero()
-    ? difference.dividedBy(comparisonNet).times(100).toFixed(2)
-    : null;
   return {
     metricCode, metricDefinitionVersion, comparisonPolicyCode, comparisonPolicyVersion,
     dataQuality: comparisonQuality(current.dataQuality, comparison.dataQuality), current, comparison,
-    payload: {
-      currencyCode: "SAR", currentNetAmount: currentNet.toFixed(4), comparisonNetAmount: comparisonNet.toFixed(4),
-      differenceNetAmount: difference.toFixed(4), percentDifference,
-      currentCustomerCount: current.payload.customerCount, comparisonCustomerCount: comparison.payload.customerCount,
-    },
+    payload: salesComparisonPayload(current, comparison),
+  };
+}
+
+/** A comparison is a conclusion, so it is withheld unless both official
+ * periods are complete and presentation-safe. */
+function salesComparisonPayload(current: DecisionSalesMetricRead, comparison: DecisionSalesMetricRead) {
+  const currentNetText = current.payload.netAmount;
+  const comparisonNetText = comparison.payload.netAmount;
+  const currentGrossText = current.payload.grossAmount;
+  const comparisonGrossText = comparison.payload.grossAmount;
+  const ready = current.dataQuality === "READY" && comparison.dataQuality === "READY"
+    && currentNetText !== null && comparisonNetText !== null && currentGrossText !== null && comparisonGrossText !== null
+    && current.payload.customerCount !== null && comparison.payload.customerCount !== null;
+  if (!ready) {
+    return {
+      currencyCode: "SAR" as const,
+      currentNetAmount: null,
+      comparisonNetAmount: null,
+      differenceNetAmount: null,
+      currentGrossAmount: null,
+      comparisonGrossAmount: null,
+      differenceGrossAmount: null,
+      percentDifference: null,
+      currentCustomerCount: null,
+      comparisonCustomerCount: null,
+    };
+  }
+  const currentNet = new Prisma.Decimal(currentNetText);
+  const comparisonNet = new Prisma.Decimal(comparisonNetText);
+  const difference = currentNet.minus(comparisonNet);
+  const currentGross = new Prisma.Decimal(currentGrossText);
+  const comparisonGross = new Prisma.Decimal(comparisonGrossText);
+  return {
+    currencyCode: "SAR" as const,
+    currentNetAmount: currentNet.toFixed(4),
+    comparisonNetAmount: comparisonNet.toFixed(4),
+    differenceNetAmount: difference.toFixed(4),
+    currentGrossAmount: currentGross.toFixed(4),
+    comparisonGrossAmount: comparisonGross.toFixed(4),
+    differenceGrossAmount: currentGross.minus(comparisonGross).toFixed(4),
+    percentDifference: comparisonNet.isZero() ? null : difference.dividedBy(comparisonNet).times(100).toFixed(2),
+    currentCustomerCount: current.payload.customerCount,
+    comparisonCustomerCount: comparison.payload.customerCount,
   };
 }
 

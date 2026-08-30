@@ -25,10 +25,14 @@ export class OperationsOverviewService {
     const to = new Date(`${toBusinessDate}T00:00:00.000Z`);
     if ((to.getTime() - from.getTime()) / 86_400_000 > 365) throw new BadRequestException("The operations overview period must not exceed one year.");
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const [salesSummaries, purchaseDays] = await Promise.all([
+      const [salesSummaries, operationalDays, purchaseDays] = await Promise.all([
         tx.financeDailyFinancialSummary.findMany({
           where: { tenantId: context.tenantId, companyId: context.companyId, businessDate: { gte: from, lte: to } },
           select: { businessDate: true, salesGrossAmount: true, salesClosingCount: true, dataStatus: true, operationalDayStatus: true },
+        }),
+        tx.financeOperationalDay.findMany({
+          where: { tenantId: context.tenantId, companyId: context.companyId, businessDate: { gte: from, lte: to } },
+          select: { businessDate: true, status: true },
         }),
         tx.financeOutflowDocument.groupBy({
           by: ["businessDate"],
@@ -45,38 +49,103 @@ export class OperationsOverviewService {
         }),
       ]);
       const salesByDate = new Map(salesSummaries.map((summary) => [day(summary.businessDate), summary]));
+      const operationalByDate = new Map(operationalDays.map((operationalDay) => [day(operationalDay.businessDate), operationalDay]));
       const purchasesByDate = new Map(purchaseDays.map((purchase) => [day(purchase.businessDate), purchase]));
       const businessDates = datesInclusive(from, to);
-      const salesDays = businessDates.map((businessDate) => {
+      let salesTotal = new Prisma.Decimal(0);
+      let purchaseTotal = new Prisma.Decimal(0);
+      let salesClosingCount = 0;
+      let purchaseDocumentCount = 0;
+      let recordedOperatingDays = 0;
+      let requiredOperatingDays = 0;
+      let scheduledClosedDays = 0;
+      let missingDays = 0;
+      let partialDays = 0;
+      const timeline = businessDates.map((businessDate) => {
         const summary = salesByDate.get(businessDate);
-        if (!summary || summary.dataStatus === FinanceDailySalesDataStatus.PENDING || summary.operationalDayStatus === FinanceOperationalDayStatus.PARTIAL) return { businessDate, grossAmount: null };
-        return { businessDate, grossAmount: summary.salesGrossAmount.toFixed(4) };
-      });
-      const purchases = businessDates.map((businessDate) => {
+        const operationalStatus = operationalByDate.get(businessDate)?.status ?? summary?.operationalDayStatus ?? FinanceOperationalDayStatus.OPEN;
+        let salesDataQuality: "READY" | "INCOMPLETE" | "NO_DATA";
+        let salesAmount: Prisma.Decimal | null = null;
+        if (operationalStatus === FinanceOperationalDayStatus.CLOSED) {
+          scheduledClosedDays += 1;
+          salesDataQuality = "READY";
+          salesAmount = new Prisma.Decimal(0);
+        } else if (operationalStatus === FinanceOperationalDayStatus.PARTIAL) {
+          requiredOperatingDays += 1;
+          partialDays += 1;
+          salesDataQuality = "INCOMPLETE";
+        } else if (summary?.dataStatus === FinanceDailySalesDataStatus.RECORDED) {
+          requiredOperatingDays += 1;
+          recordedOperatingDays += 1;
+          salesDataQuality = "READY";
+          salesAmount = summary.salesGrossAmount;
+          salesTotal = salesTotal.plus(summary.salesGrossAmount);
+          salesClosingCount += summary.salesClosingCount;
+        } else {
+          requiredOperatingDays += 1;
+          missingDays += 1;
+          salesDataQuality = "INCOMPLETE";
+        }
         const purchase = purchasesByDate.get(businessDate);
-        return { businessDate, grossAmount: purchase?._sum.grossAmount?.toFixed(4) ?? "0.0000", documentCount: purchase?._count.id ?? 0 };
+        const purchaseAmount = purchase?._sum.grossAmount ?? new Prisma.Decimal(0);
+        const purchaseCount = purchase?._count.id ?? 0;
+        purchaseTotal = purchaseTotal.plus(purchaseAmount);
+        purchaseDocumentCount += purchaseCount;
+        return {
+          businessDate,
+          sales: {
+            dataQuality: salesDataQuality,
+            displayGrossAmount: salesAmount === null ? null : formatAmount(salesAmount),
+            plotValue: salesAmount === null ? null : plotValue(salesAmount),
+          },
+          purchases: {
+            dataQuality: "READY" as const,
+            displayGrossAmount: formatAmount(purchaseAmount),
+            displayDocumentCount: formatCount(purchaseCount),
+            plotValue: plotValue(purchaseAmount),
+          },
+        };
       });
-      const eligibleSales = salesDays.filter((item) => item.grossAmount !== null);
-      const salesTotal = eligibleSales.reduce((total, item) => total.plus(item.grossAmount!), new Prisma.Decimal(0));
-      const salesClosingCount = salesSummaries
-        .filter((summary) => summary.dataStatus !== FinanceDailySalesDataStatus.PENDING && summary.operationalDayStatus !== FinanceOperationalDayStatus.PARTIAL)
-        .reduce((total, summary) => total + summary.salesClosingCount, 0);
-      const purchaseTotal = purchases.reduce((total, item) => total.plus(item.grossAmount), new Prisma.Decimal(0));
-      const purchaseDocumentCount = purchases.reduce((total, item) => total + item.documentCount, 0);
-      const incompleteDayCount = salesDays.length - eligibleSales.length;
+      const salesDataQuality = businessDates.length === 0
+        ? "NO_DATA" as const
+        : missingDays || partialDays
+          ? "INCOMPLETE" as const
+          : "READY" as const;
+      const salesComplete = salesDataQuality === "READY";
       return {
         companyId: context.companyId,
         businessDate: current.businessDate,
+        currencyCode: "SAR" as const,
+        amountBasis: "GROSS_VAT_INCLUSIVE" as const,
+        vatInclusive: true as const,
+        source: {
+          sales: "FINANCE_DAILY_FINANCIAL_SUMMARY" as const,
+          purchases: "FINANCE_OUTFLOW_DOCUMENT_PURCHASE" as const,
+        },
         period: { fromBusinessDate, toBusinessDate, timezone: "Asia/Riyadh" as const },
         sales: {
-          grossAmount: eligibleSales.length ? salesTotal.toFixed(4) : null,
-          closingCount: salesClosingCount,
-          eligibleDayCount: eligibleSales.length,
-          incompleteDayCount,
-          dataQuality: eligibleSales.length === 0 ? "NO_DATA" as const : incompleteDayCount ? "INCOMPLETE" as const : "READY" as const,
-          days: salesDays,
+          dataQuality: salesDataQuality,
+          coverage: {
+            recordedOperatingDays,
+            requiredOperatingDays,
+            scheduledClosedDays,
+            missingDays,
+            partialDays,
+            display: `${formatCount(recordedOperatingDays)}/${formatCount(requiredOperatingDays)}`,
+          },
+          display: {
+            grossAmount: salesComplete ? formatAmount(salesTotal) : null,
+            closingCount: salesComplete ? formatCount(salesClosingCount) : null,
+          },
         },
-        purchases: { grossAmount: purchaseTotal.toFixed(4), documentCount: purchaseDocumentCount, days: purchases },
+        purchases: {
+          dataQuality: "READY" as const,
+          display: {
+            grossAmount: formatAmount(purchaseTotal),
+            documentCount: formatCount(purchaseDocumentCount),
+          },
+        },
+        timeline,
       };
     });
   }
@@ -87,4 +156,24 @@ function datesInclusive(from: Date, to: Date) {
   const dates: string[] = [];
   for (const cursor = new Date(from); cursor <= to; cursor.setUTCDate(cursor.getUTCDate() + 1)) dates.push(day(cursor));
   return dates;
+}
+
+function plotValue(value: Prisma.Decimal): number {
+  return Number(value.toDecimalPlaces(4).toFixed(4));
+}
+
+function formatAmount(value: Prisma.Decimal): string {
+  return formatDecimal(value, 2);
+}
+
+function formatCount(value: number): string {
+  return formatDecimal(new Prisma.Decimal(value), 0);
+}
+
+function formatDecimal(value: Prisma.Decimal, scale: number): string {
+  const fixed = value.toDecimalPlaces(scale).toFixed(scale);
+  const negative = fixed.startsWith("-");
+  const [whole, fraction] = (negative ? fixed.slice(1) : fixed).split(".");
+  const grouped = (whole ?? "0").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return `${negative ? "-" : ""}${grouped}${scale > 0 ? `.${fraction ?? "0".padStart(scale, "0")}` : ""}`;
 }

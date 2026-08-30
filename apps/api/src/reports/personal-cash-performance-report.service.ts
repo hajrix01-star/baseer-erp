@@ -16,6 +16,7 @@ import { interactiveReportPeriodMessage, interactiveReportSourceMessage } from '
 import { ReportRunService } from './report-run.service.js';
 
 const REPORT_CODE = 'personal_cash_performance';
+const DAY_MS = 24 * 60 * 60 * 1000;
 /**
  * v2 deliberately reads the sealed ledger lines on configured vault accounts.
  * It is not an event-feed report: every real movement is visible even when a
@@ -76,6 +77,13 @@ type AggregateRow = Readonly<{
   amount: Prisma.Decimal;
   eventCount: number;
 }>;
+type CashPerformanceComparison = Readonly<{
+  policy: 'PREVIOUS_EQUAL_PERIOD';
+  state: 'READY' | 'UNAVAILABLE';
+  previousNetCashResult: ReturnType<typeof money> | null;
+  netCashResultDifference: ReturnType<typeof money> | null;
+  netCashResultPercentChange: string | null;
+}>;
 
 /**
  * Server-side calculation for the owner's actual collection/payment view.
@@ -124,11 +132,12 @@ export class PersonalCashPerformanceReportService {
       );
     }
     const eligible = request.vatInclusive ? movements : movements.filter((movement) => movement.group !== 'vat');
+    const comparison = await this.comparisonFor(context, ledgerRevision, request, eligible);
     if (eligible.length === 0) {
       return {
         state: 'NO_DATA' as const,
         messageAr: 'لا توجد حركات مؤهلة ضمن الفترة المحددة.',
-        ...metadata(readySource, request, ledgerRevision),
+        ...metadata(readySource, request, ledgerRevision, comparison),
         rows: [],
         vaults: [],
         totals: zeroTotals(),
@@ -136,9 +145,10 @@ export class PersonalCashPerformanceReportService {
     }
     const aggregation = aggregateFinancialMovements(eligible);
     const salesCollections = aggregation.rows.find((row) => row.code === 'sales')?.amount ?? new Prisma.Decimal(0);
+    const rowMetrics = presentationMetrics(aggregation.rows, salesCollections);
     return {
       state: 'READY' as const,
-      ...metadata(readySource, request, ledgerRevision),
+      ...metadata(readySource, request, ledgerRevision, comparison),
       rows: aggregation.rows.map((row) => ({
         code: row.code, labelAr: row.labelAr, labelEn: row.labelEn,
         kind: row.kind, parentCode: row.parentCode,
@@ -146,6 +156,7 @@ export class PersonalCashPerformanceReportService {
         eventCount: row.eventCount,
         amount: money(row.amount),
         shareOfCollectedSalesPercent: percentOfSales(row.amount, salesCollections),
+        ...rowMetrics.get(row.code)!,
       })),
       vaults: aggregateVaultLedger(eligible).map((vault) => ({ vaultId: vault.vaultId, vaultNameAr: vault.vaultNameAr, vaultNameEn: vault.vaultNameEn, inflows: money(vault.inflows), outflows: money(vault.outflows), balance: money(vault.balance) })),
       totals: {
@@ -154,6 +165,32 @@ export class PersonalCashPerformanceReportService {
         netCashResult: money(aggregation.netCashResult),
         netCashResultShareOfCollectedSalesPercent: percentOfSales(aggregation.netCashResult, salesCollections),
       },
+    };
+  }
+
+  /** Comparison and ranking are server-owned because a visible subset of the
+   * hierarchy must never become the browser's financial denominator. */
+  private async comparisonFor(context: TrustedCompanyActorContext, ledgerRevision: bigint, request: PersonalCashPerformanceRequest, current: readonly VaultMovement[]): Promise<CashPerformanceComparison> {
+    if (request.months?.length) {
+      return { policy: 'PREVIOUS_EQUAL_PERIOD' as const, state: 'UNAVAILABLE' as const, previousNetCashResult: null, netCashResultDifference: null, netCashResultPercentChange: null };
+    }
+    const days = Math.floor((request.to.getTime() - request.from.getTime()) / DAY_MS) + 1;
+    const priorTo = addBusinessDays(request.from, -1);
+    const priorFrom = addBusinessDays(priorTo, -(days - 1));
+    const previousRequest = { from: priorFrom, to: priorTo, vatInclusive: request.vatInclusive };
+    const previousMovements = await this.loadVaultMovements(context, ledgerRevision, previousRequest);
+    if (!request.vatInclusive && previousMovements.some((movement) => movement.requiresVatEvidence && !movement.vatBreakdownKnown)) {
+      return { policy: 'PREVIOUS_EQUAL_PERIOD' as const, state: 'UNAVAILABLE' as const, previousNetCashResult: null, netCashResultDifference: null, netCashResultPercentChange: null };
+    }
+    const currentResult = aggregateFinancialMovements(current).netCashResult;
+    const previousResult = aggregateFinancialMovements(request.vatInclusive ? previousMovements : previousMovements.filter((movement) => movement.group !== 'vat')).netCashResult;
+    const difference = currentResult.minus(previousResult);
+    return {
+      policy: 'PREVIOUS_EQUAL_PERIOD' as const,
+      state: 'READY' as const,
+      previousNetCashResult: money(previousResult),
+      netCashResultDifference: money(difference),
+      netCashResultPercentChange: previousResult.isZero() ? null : difference.abs().mul(100).div(previousResult.abs()).toDecimalPlaces(4, Prisma.Decimal.ROUND_HALF_UP).toFixed(4),
     };
   }
 
@@ -776,7 +813,7 @@ function isOperational(kind: FinanceCashPerformanceEventKind): boolean {
     || kind === FinanceCashPerformanceEventKind.PURCHASE_PAYMENT
     || kind === FinanceCashPerformanceEventKind.OPERATING_EXPENSE_PAYMENT;
 }
-function metadata(source: { company: { nameAr: string; nameEn: string; businessTimezone: string }; profile: { functionalCurrencyCode: string } }, request: PersonalCashPerformanceRequest, ledgerRevision: bigint) {
+function metadata(source: { company: { nameAr: string; nameEn: string; businessTimezone: string }; profile: { functionalCurrencyCode: string } }, request: PersonalCashPerformanceRequest, ledgerRevision: bigint, comparison: CashPerformanceComparison) {
   return {
     reportCode: REPORT_CODE, definitionVersion: DEFINITION_VERSION,
     dataMode: 'LIVE' as const, ledgerRevision: ledgerRevision.toString(),
@@ -788,6 +825,7 @@ function metadata(source: { company: { nameAr: string; nameEn: string; businessT
     cancellationTreatmentAr: 'يبقى الأصل في تاريخ العملية ويظهر أثر الإلغاء في تاريخ إلغاء العمل.',
     dataCoverage: { state: 'COMPLETE', sourceKind: 'sealed_ledger_vault_lines' },
     roundingRule: 'Amounts are calculated to four decimal places and rounded to two decimal places for display.',
+    comparison,
   };
 }
 function unavailable(state: 'NOT_READY' | 'COVERAGE_INCOMPLETE', messageAr: string, extra: Record<string, unknown> = {}) { return { state, messageAr, ...extra }; }
@@ -799,6 +837,39 @@ function money(value: Prisma.Decimal) {
 export function percentOfSales(value: Prisma.Decimal, salesCollections: Prisma.Decimal): string | null {
   if (salesCollections.lte(0)) return null;
   return value.abs().mul(100).div(salesCollections).toDecimalPlaces(4, Prisma.Decimal.ROUND_HALF_UP).toFixed(4);
+}
+function percentOf(value: Prisma.Decimal, denominator: Prisma.Decimal): string | null {
+  if (denominator.lte(0)) return null;
+  return value.abs().mul(100).div(denominator).toDecimalPlaces(4, Prisma.Decimal.ROUND_HALF_UP).toFixed(4);
+}
+
+/** Each row gets its rank and shares from the complete immutable hierarchy.
+ * Parent totals are not mixed with their children in any denominator. */
+export function presentationMetrics(rows: readonly FinancialMovementRow[], salesCollections: Prisma.Decimal) {
+  const siblings = new Map<string, FinancialMovementRow[]>();
+  for (const row of rows) {
+    const key = row.parentCode ?? '__root__';
+    const group = siblings.get(key) ?? [];
+    group.push(row);
+    siblings.set(key, group);
+  }
+  const rootByDirection = new Map<FinanceCashPerformanceDirection, Prisma.Decimal>();
+  for (const row of rows.filter((item) => item.parentCode === null)) {
+    rootByDirection.set(row.direction, (rootByDirection.get(row.direction) ?? new Prisma.Decimal(0)).plus(row.amount.abs()));
+  }
+  const metrics = new Map<string, { rankWithinParent: number; shareOfDirectionPercent: string | null; shareOfParentPercent: string | null }>();
+  for (const [parent, group] of siblings) {
+    const total = group.reduce((sum, row) => sum.plus(row.amount.abs()), new Prisma.Decimal(0));
+    const ordered = [...group].sort((left, right) => right.amount.abs().cmp(left.amount.abs()) || left.code.localeCompare(right.code));
+    for (const [index, row] of ordered.entries()) {
+      metrics.set(row.code, {
+        rankWithinParent: index + 1,
+        shareOfDirectionPercent: parent === '__root__' ? percentOf(row.amount, rootByDirection.get(row.direction) ?? new Prisma.Decimal(0)) : null,
+        shareOfParentPercent: percentOf(row.amount, total),
+      });
+    }
+  }
+  return metrics;
 }
 function rowPredicate(rowCode: string): Prisma.FinanceCashPerformanceEventWhereInput {
   if (rowCode === 'net_cash_result') return { kind: { in: [FinanceCashPerformanceEventKind.SALES_COLLECTION, FinanceCashPerformanceEventKind.PURCHASE_PAYMENT, FinanceCashPerformanceEventKind.OPERATING_EXPENSE_PAYMENT, FinanceCashPerformanceEventKind.VAT_PAYMENT, FinanceCashPerformanceEventKind.VAT_REFUND] } };
@@ -858,5 +929,6 @@ function monthRange(month: string) {
   const to = new Date(Date.UTC(year, monthNumber, 0));
   return { gte: from, lte: to };
 }
+function addBusinessDays(value: Date, days: number) { return new Date(value.getTime() + days * DAY_MS); }
 function dateOnly(value: Date): boolean { return value instanceof Date && !Number.isNaN(value.valueOf()) && value.getUTCHours() === 0 && value.getUTCMinutes() === 0 && value.getUTCSeconds() === 0 && value.getUTCMilliseconds() === 0; }
 function dateText(value: Date): string { return value.toISOString().slice(0, 10); }

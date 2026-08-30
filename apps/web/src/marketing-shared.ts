@@ -50,7 +50,7 @@ export type MarketingSpendResult = {
   linkedPostedSpendOnly: true;
   spendDataQuality: string;
   excludedLinkedDocumentCount: number;
-  officialNetSales: string | null;
+  officialGrossSales: string | null;
   spendToSalesPercent: string | null;
   campaignCount: number;
   salesDataQuality: string;
@@ -61,10 +61,11 @@ export type MarketingSpendResult = {
 
 export type MarketingCalendarRead = {
   period: { fromBusinessDate: string; toBusinessDate: string };
-  sales: { dataQuality: string; payload: { netAmount: string } };
+  sales: { dataQuality: string; payload: { netAmount: string | null; grossAmount: string | null } };
   campaigns: MarketingCampaign[];
   days: Array<{
     businessDate: string;
+    officialGrossSales: string | null;
     officialNetSales: string | null;
     customerCount: number | null;
     salesDayQuality: "READY" | "PENDING" | "PARTIAL" | "MISSING";
@@ -77,6 +78,7 @@ export type MarketingCalendarRead = {
     purchaseOutflowDocumentCount: number;
     activeCampaignIds: string[];
   }>;
+  timeline: BaseerMarketingTimeline;
   context: Array<{
     id: string;
     scope: "GLOBAL" | "AREA" | "COMPANY";
@@ -91,3 +93,4 @@ export type MarketingCalendarRead = {
 };
 
 export const marketingIsArabic = (language: MarketingLanguage) => language === "ar";
+import type { BaseerMarketingTimeline } from "./baseer-chart";

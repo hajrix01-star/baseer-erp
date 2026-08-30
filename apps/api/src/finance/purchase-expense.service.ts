@@ -379,6 +379,32 @@ export class PurchaseExpenseService {
     }).catch((error) => { if (error instanceof IdempotencyPayloadMismatchError) throw new ConflictException('The idempotency key was used with different employee-service data.'); throw error; });
   }
 
+  /** Migration-only equivalent of the atomic service-and-invoice workflow.
+   * It is intentionally not exposed by an HTTP controller. */
+  async recordHistoricalEmployeeServiceAndIssueCost(input: { context: TrustedCompanyActorContext; idempotencyKey: string; request: RecordEmployeeServiceAndIssueCostRequest }): Promise<RecordEmployeeServiceAndIssueCostReceipt> {
+    return this.db.inTenantTransaction(input.context.tenantId, async (tx) => {
+      const request = this.normaliseRecordedEmployeeService(input.request);
+      const begun = await this.idem.beginInTransaction(tx, input.context, { operation: 'hr.employee_service.historical_record_and_issue', key: input.idempotencyKey, request: this.recordedEmployeeServicePayload(request), expiresAt: new Date(Date.now() + 86_400_000) });
+      if (begun.kind === 'replay') return begun.response.body as RecordEmployeeServiceAndIssueCostReceipt;
+      if (begun.kind === 'in-progress') throw new ConflictException('This historical employee-service request is already being processed.');
+      const service = await this.hr.createHistoricalServiceForFinancialIssueInTransaction(tx, input.context, this.employeeServiceCreateInput(request));
+      const document = await this.postDocument(tx, input.context, {
+        kind: 'EXPENSE', settlementKind: 'PAID', categoryId: request.categoryId, supplierId: request.supplierId,
+        businessDate: request.businessDate, grossAmount: request.grossAmount, isTaxable: request.isTaxable, allocations: request.allocations,
+        ...(request.supplierInvoiceNumber ? { supplierInvoiceNumber: request.supplierInvoiceNumber } : {}),
+        ...(request.supplierInvoiceMissingReason ? { supplierInvoiceMissingReason: request.supplierInvoiceMissingReason } : {}),
+        ...(request.supplierInvoiceDate ? { supplierInvoiceDate: request.supplierInvoiceDate } : {}),
+        ...(request.notes ? { notes: request.notes } : {}),
+      }, `hr-employee-service-historical-record:${input.idempotencyKey}`);
+      await tx.hrEmployeeService.update({ where: { id: service.id }, data: { status: HrEmployeeServiceStatus.ISSUED, outflowDocumentId: document.documentId } });
+      await tx.hrEmployeeFinancialMovement.create({ data: { id: randomUUID(), tenantId: input.context.tenantId, companyId: input.context.companyId, employeeId: service.employeeId, journalEntryId: document.journalEntryId, movementType: HrEmployeeFinancialMovementType.SERVICE_COST, businessDate: request.businessDate, amount: request.grossAmount, sourceReference: document.documentNumber, description: request.notes ?? null } });
+      const receipt: RecordEmployeeServiceAndIssueCostReceipt = { serviceId: service.id, documentId: document.documentId, documentNumber: document.documentNumber, journalEntryId: document.journalEntryId, replayed: false };
+      await tx.auditEvent.create({ data: { id: randomUUID(), tenantId: input.context.tenantId, companyId: input.context.companyId, actorUserId: input.context.actorUserId, action: 'hr.employee_service.historical_recorded_and_cost_issued', entityType: 'HrEmployeeService', entityId: service.id, requestId: `hr-employee-service-historical-record:${input.idempotencyKey}`, afterJson: receipt as unknown as Prisma.InputJsonValue } });
+      await this.idem.completeInTransaction(tx, input.context, { receiptId: begun.receiptId, response: { status: 201, headers: null, body: receipt } });
+      return receipt;
+    }).catch((error) => { if (error instanceof IdempotencyPayloadMismatchError) throw new ConflictException('The historical employee-service request was previously used with different data.'); throw error; });
+  }
+
   async createRecurringPayment(input: { context: TrustedCompanyActorContext; idempotencyKey: string; request: RecurringExpensePaymentRequest }): Promise<RecurringExpensePaymentReceipt> {
     return this.db.inTenantTransaction(input.context.tenantId, async (tx) => {
       const request = this.normaliseRecurringPayment(input.request);

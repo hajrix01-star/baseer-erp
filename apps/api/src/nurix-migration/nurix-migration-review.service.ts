@@ -129,7 +129,37 @@ export class NurixMigrationReviewService {
    * record map; identity linkage is optional and can be added later. No
    * category, payment, balance, invoice, or journal is imported here.
    */
+  /**
+   * Coordinator for large, committed supplier waves. Each call to the wave
+   * method below owns its own transaction, so a process interruption resumes
+   * from durable source maps rather than repeating already-created suppliers.
+   */
   async createProvisionalSuppliers(context: TrustedTenantAdministratorContext, runId: string, request: CreateNurixProvisionalSuppliersRequest) {
+    let created = 0;
+    // Only the first wave can describe records that existed before this
+    // coordinator started. Later waves observe this request's own checkpoints
+    // and must not inflate the owner-visible "reused" count.
+    let reused = 0;
+    let linkedToExistingIdentity = 0;
+    let processed = 0;
+    let total = 0;
+    let remaining = 0;
+    for (let wave = 1; wave <= 100; wave += 1) {
+      const receipt = await this.createProvisionalSupplierWave(context, runId, request);
+      created += receipt.created;
+      if (wave === 1) reused = receipt.reused;
+      linkedToExistingIdentity += receipt.linkedToExistingIdentity;
+      processed += receipt.processed;
+      total = receipt.total;
+      remaining = receipt.remaining;
+      if (receipt.completed) return { created, reused, linkedToExistingIdentity, total, processed, remaining, completed: true, waves: wave };
+      if (receipt.processed === 0) throw new ConflictException('Supplier migration wave made no progress; the run remains safely resumable.');
+    }
+    throw new ConflictException('Supplier migration paused after 100 committed waves; resume it from the same run without duplication.');
+  }
+
+  /** One bounded, independently committed checkpoint. */
+  async createProvisionalSupplierWave(context: TrustedTenantAdministratorContext, runId: string, request: CreateNurixProvisionalSuppliersRequest) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const run = await this.requireReviewableRun(tx, context.tenantId, runId);
       const [companyMaps, approvedActions, candidates, resolutions] = await Promise.all([
@@ -145,10 +175,19 @@ export class NurixMigrationReviewService {
       }
       if (!candidates.length) throw new ConflictException('There are no source suppliers in this immutable migration run.');
       const targetCompanyBySource = new Map(companyMaps.map((map) => [map.sourceCompanyId, map.targetCompanyId]));
+      const targetCompanyIds = [...new Set(companyMaps.map((map) => map.targetCompanyId))];
+      const targetCompanies = await tx.company.findMany({ where: { tenantId: context.tenantId, id: { in: targetCompanyIds } }, select: { id: true, status: true, migrationReviewLocked: true } });
+      const writableTargets = new Map(targetCompanies.map((company) => [company.id, company]));
+      if (targetCompanyIds.some((companyId) => {
+        const company = writableTargets.get(companyId);
+        return !company || company.status !== 'ACTIVE' || !company.migrationReviewLocked;
+      })) throw new ConflictException('Every target company must be active and locked for migration review before provisional suppliers are created.');
       const identityBySource = new Map(resolutions.map((item) => [`${item.sourceCompanyId}:${item.sourceSupplierId}`, item.identityId]));
       let created = 0;
       let reused = 0;
       let linkedToExistingIdentity = 0;
+      let processed = 0;
+      let remaining = 0;
       for (const candidate of candidates) {
         const targetCompanyId = targetCompanyBySource.get(candidate.sourceCompanyId);
         if (!targetCompanyId) throw new ConflictException('A source supplier has no approved target company map.');
@@ -159,6 +198,10 @@ export class NurixMigrationReviewService {
             throw new ConflictException('An existing provisional supplier map differs from the immutable source evidence.');
           }
           reused += 1;
+          continue;
+        }
+        if (processed >= request.waveSize) {
+          remaining += 1;
           continue;
         }
         const identityId = identityBySource.get(`${candidate.sourceCompanyId}:${candidate.sourceSupplierId}`) ?? null;
@@ -181,17 +224,20 @@ export class NurixMigrationReviewService {
             sourceCompanyId: candidate.sourceCompanyId, sourceEntity, sourceId: candidate.sourceSupplierId,
             targetEntity: PROVISIONAL_SUPPLIER_TARGET_ENTITY, targetId: supplier.id,
             transformVersion: PROVISIONAL_SUPPLIER_TRANSFORM_VERSION, sourceChecksum: candidate.sourceChecksum,
+            state: 'STAGED',
           },
         });
         created += 1;
+        processed += 1;
         if (identityId) linkedToExistingIdentity += 1;
       }
-      const receipt = { created, reused, linkedToExistingIdentity, total: candidates.length };
+      const receipt = { created, reused, linkedToExistingIdentity, total: candidates.length, processed, remaining, completed: remaining === 0, waves: 1 };
       await this.audit(tx, context, 'nurix_migration.provisional_suppliers_created', run.id, {
         ...receipt,
         transformVersion: PROVISIONAL_SUPPLIER_TRANSFORM_VERSION,
         supplierTypePolicy: 'EXPENSE_UNTIL_DOCUMENT_TRANSFORM',
         reviewReason: request.reason,
+        waveSize: request.waveSize,
       });
       return receipt;
     });

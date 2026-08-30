@@ -29,6 +29,7 @@ export type OperationsItemMinAggregateOutputType = {
   tenantId: string | null
   companyId: string | null
   sectionId: string | null
+  categoryId: string | null
   baseUnitId: string | null
   code: string | null
   nameAr: string | null
@@ -44,6 +45,7 @@ export type OperationsItemMaxAggregateOutputType = {
   tenantId: string | null
   companyId: string | null
   sectionId: string | null
+  categoryId: string | null
   baseUnitId: string | null
   code: string | null
   nameAr: string | null
@@ -59,6 +61,7 @@ export type OperationsItemCountAggregateOutputType = {
   tenantId: number
   companyId: number
   sectionId: number
+  categoryId: number
   baseUnitId: number
   code: number
   nameAr: number
@@ -76,6 +79,7 @@ export type OperationsItemMinAggregateInputType = {
   tenantId?: true
   companyId?: true
   sectionId?: true
+  categoryId?: true
   baseUnitId?: true
   code?: true
   nameAr?: true
@@ -91,6 +95,7 @@ export type OperationsItemMaxAggregateInputType = {
   tenantId?: true
   companyId?: true
   sectionId?: true
+  categoryId?: true
   baseUnitId?: true
   code?: true
   nameAr?: true
@@ -106,6 +111,7 @@ export type OperationsItemCountAggregateInputType = {
   tenantId?: true
   companyId?: true
   sectionId?: true
+  categoryId?: true
   baseUnitId?: true
   code?: true
   nameAr?: true
@@ -194,6 +200,7 @@ export type OperationsItemGroupByOutputType = {
   tenantId: string
   companyId: string
   sectionId: string | null
+  categoryId: string | null
   baseUnitId: string
   code: string
   nameAr: string
@@ -230,6 +237,7 @@ export type OperationsItemWhereInput = {
   tenantId?: Prisma.UuidFilter<"OperationsItem"> | string
   companyId?: Prisma.UuidFilter<"OperationsItem"> | string
   sectionId?: Prisma.UuidNullableFilter<"OperationsItem"> | string | null
+  categoryId?: Prisma.UuidNullableFilter<"OperationsItem"> | string | null
   baseUnitId?: Prisma.UuidFilter<"OperationsItem"> | string
   code?: Prisma.StringFilter<"OperationsItem"> | string
   nameAr?: Prisma.StringFilter<"OperationsItem"> | string
@@ -240,6 +248,7 @@ export type OperationsItemWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"OperationsItem"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   section?: Prisma.XOR<Prisma.OperationsSectionNullableScalarRelationFilter, Prisma.OperationsSectionWhereInput> | null
+  category?: Prisma.XOR<Prisma.OperationsCatalogCategoryNullableScalarRelationFilter, Prisma.OperationsCatalogCategoryWhereInput> | null
   baseUnit?: Prisma.XOR<Prisma.OperationsUnitScalarRelationFilter, Prisma.OperationsUnitWhereInput>
   itemUnits?: Prisma.OperationsItemUnitListRelationFilter
   conversionVersions?: Prisma.OperationsItemConversionVersionListRelationFilter
@@ -258,6 +267,7 @@ export type OperationsItemOrderByWithRelationInput = {
   tenantId?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
   sectionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   baseUnitId?: Prisma.SortOrder
   code?: Prisma.SortOrder
   nameAr?: Prisma.SortOrder
@@ -268,6 +278,7 @@ export type OperationsItemOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   company?: Prisma.CompanyOrderByWithRelationInput
   section?: Prisma.OperationsSectionOrderByWithRelationInput
+  category?: Prisma.OperationsCatalogCategoryOrderByWithRelationInput
   baseUnit?: Prisma.OperationsUnitOrderByWithRelationInput
   itemUnits?: Prisma.OperationsItemUnitOrderByRelationAggregateInput
   conversionVersions?: Prisma.OperationsItemConversionVersionOrderByRelationAggregateInput
@@ -291,6 +302,7 @@ export type OperationsItemWhereUniqueInput = Prisma.AtLeast<{
   tenantId?: Prisma.UuidFilter<"OperationsItem"> | string
   companyId?: Prisma.UuidFilter<"OperationsItem"> | string
   sectionId?: Prisma.UuidNullableFilter<"OperationsItem"> | string | null
+  categoryId?: Prisma.UuidNullableFilter<"OperationsItem"> | string | null
   baseUnitId?: Prisma.UuidFilter<"OperationsItem"> | string
   code?: Prisma.StringFilter<"OperationsItem"> | string
   nameAr?: Prisma.StringFilter<"OperationsItem"> | string
@@ -301,6 +313,7 @@ export type OperationsItemWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"OperationsItem"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   section?: Prisma.XOR<Prisma.OperationsSectionNullableScalarRelationFilter, Prisma.OperationsSectionWhereInput> | null
+  category?: Prisma.XOR<Prisma.OperationsCatalogCategoryNullableScalarRelationFilter, Prisma.OperationsCatalogCategoryWhereInput> | null
   baseUnit?: Prisma.XOR<Prisma.OperationsUnitScalarRelationFilter, Prisma.OperationsUnitWhereInput>
   itemUnits?: Prisma.OperationsItemUnitListRelationFilter
   conversionVersions?: Prisma.OperationsItemConversionVersionListRelationFilter
@@ -319,6 +332,7 @@ export type OperationsItemOrderByWithAggregationInput = {
   tenantId?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
   sectionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   baseUnitId?: Prisma.SortOrder
   code?: Prisma.SortOrder
   nameAr?: Prisma.SortOrder
@@ -340,6 +354,7 @@ export type OperationsItemScalarWhereWithAggregatesInput = {
   tenantId?: Prisma.UuidWithAggregatesFilter<"OperationsItem"> | string
   companyId?: Prisma.UuidWithAggregatesFilter<"OperationsItem"> | string
   sectionId?: Prisma.UuidNullableWithAggregatesFilter<"OperationsItem"> | string | null
+  categoryId?: Prisma.UuidNullableWithAggregatesFilter<"OperationsItem"> | string | null
   baseUnitId?: Prisma.UuidWithAggregatesFilter<"OperationsItem"> | string
   code?: Prisma.StringWithAggregatesFilter<"OperationsItem"> | string
   nameAr?: Prisma.StringWithAggregatesFilter<"OperationsItem"> | string
@@ -361,6 +376,7 @@ export type OperationsItemCreateInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutOperationsItemsInput
   section?: Prisma.OperationsSectionCreateNestedOneWithoutItemsInput
+  category?: Prisma.OperationsCatalogCategoryCreateNestedOneWithoutItemsInput
   baseUnit: Prisma.OperationsUnitCreateNestedOneWithoutBaseForItemsInput
   itemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutItemInput
   conversionVersions?: Prisma.OperationsItemConversionVersionCreateNestedManyWithoutItemInput
@@ -379,6 +395,7 @@ export type OperationsItemUncheckedCreateInput = {
   tenantId: string
   companyId: string
   sectionId?: string | null
+  categoryId?: string | null
   baseUnitId: string
   code: string
   nameAr: string
@@ -410,6 +427,7 @@ export type OperationsItemUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsItemsNestedInput
   section?: Prisma.OperationsSectionUpdateOneWithoutItemsNestedInput
+  category?: Prisma.OperationsCatalogCategoryUpdateOneWithoutItemsNestedInput
   baseUnit?: Prisma.OperationsUnitUpdateOneRequiredWithoutBaseForItemsNestedInput
   itemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutItemNestedInput
   conversionVersions?: Prisma.OperationsItemConversionVersionUpdateManyWithoutItemNestedInput
@@ -428,6 +446,7 @@ export type OperationsItemUncheckedUpdateInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   sectionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
@@ -453,6 +472,7 @@ export type OperationsItemCreateManyInput = {
   tenantId: string
   companyId: string
   sectionId?: string | null
+  categoryId?: string | null
   baseUnitId: string
   code: string
   nameAr: string
@@ -479,6 +499,7 @@ export type OperationsItemUncheckedUpdateManyInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   sectionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
@@ -515,6 +536,7 @@ export type OperationsItemCountOrderByAggregateInput = {
   tenantId?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
   sectionId?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
   baseUnitId?: Prisma.SortOrder
   code?: Prisma.SortOrder
   nameAr?: Prisma.SortOrder
@@ -530,6 +552,7 @@ export type OperationsItemMaxOrderByAggregateInput = {
   tenantId?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
   sectionId?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
   baseUnitId?: Prisma.SortOrder
   code?: Prisma.SortOrder
   nameAr?: Prisma.SortOrder
@@ -545,6 +568,7 @@ export type OperationsItemMinOrderByAggregateInput = {
   tenantId?: Prisma.SortOrder
   companyId?: Prisma.SortOrder
   sectionId?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
   baseUnitId?: Prisma.SortOrder
   code?: Prisma.SortOrder
   nameAr?: Prisma.SortOrder
@@ -683,6 +707,48 @@ export type OperationsItemUncheckedUpdateManyWithoutBaseUnitNestedInput = {
   connect?: Prisma.OperationsItemWhereUniqueInput | Prisma.OperationsItemWhereUniqueInput[]
   update?: Prisma.OperationsItemUpdateWithWhereUniqueWithoutBaseUnitInput | Prisma.OperationsItemUpdateWithWhereUniqueWithoutBaseUnitInput[]
   updateMany?: Prisma.OperationsItemUpdateManyWithWhereWithoutBaseUnitInput | Prisma.OperationsItemUpdateManyWithWhereWithoutBaseUnitInput[]
+  deleteMany?: Prisma.OperationsItemScalarWhereInput | Prisma.OperationsItemScalarWhereInput[]
+}
+
+export type OperationsItemCreateNestedManyWithoutCategoryInput = {
+  create?: Prisma.XOR<Prisma.OperationsItemCreateWithoutCategoryInput, Prisma.OperationsItemUncheckedCreateWithoutCategoryInput> | Prisma.OperationsItemCreateWithoutCategoryInput[] | Prisma.OperationsItemUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.OperationsItemCreateOrConnectWithoutCategoryInput | Prisma.OperationsItemCreateOrConnectWithoutCategoryInput[]
+  createMany?: Prisma.OperationsItemCreateManyCategoryInputEnvelope
+  connect?: Prisma.OperationsItemWhereUniqueInput | Prisma.OperationsItemWhereUniqueInput[]
+}
+
+export type OperationsItemUncheckedCreateNestedManyWithoutCategoryInput = {
+  create?: Prisma.XOR<Prisma.OperationsItemCreateWithoutCategoryInput, Prisma.OperationsItemUncheckedCreateWithoutCategoryInput> | Prisma.OperationsItemCreateWithoutCategoryInput[] | Prisma.OperationsItemUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.OperationsItemCreateOrConnectWithoutCategoryInput | Prisma.OperationsItemCreateOrConnectWithoutCategoryInput[]
+  createMany?: Prisma.OperationsItemCreateManyCategoryInputEnvelope
+  connect?: Prisma.OperationsItemWhereUniqueInput | Prisma.OperationsItemWhereUniqueInput[]
+}
+
+export type OperationsItemUpdateManyWithoutCategoryNestedInput = {
+  create?: Prisma.XOR<Prisma.OperationsItemCreateWithoutCategoryInput, Prisma.OperationsItemUncheckedCreateWithoutCategoryInput> | Prisma.OperationsItemCreateWithoutCategoryInput[] | Prisma.OperationsItemUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.OperationsItemCreateOrConnectWithoutCategoryInput | Prisma.OperationsItemCreateOrConnectWithoutCategoryInput[]
+  upsert?: Prisma.OperationsItemUpsertWithWhereUniqueWithoutCategoryInput | Prisma.OperationsItemUpsertWithWhereUniqueWithoutCategoryInput[]
+  createMany?: Prisma.OperationsItemCreateManyCategoryInputEnvelope
+  set?: Prisma.OperationsItemWhereUniqueInput | Prisma.OperationsItemWhereUniqueInput[]
+  disconnect?: Prisma.OperationsItemWhereUniqueInput | Prisma.OperationsItemWhereUniqueInput[]
+  delete?: Prisma.OperationsItemWhereUniqueInput | Prisma.OperationsItemWhereUniqueInput[]
+  connect?: Prisma.OperationsItemWhereUniqueInput | Prisma.OperationsItemWhereUniqueInput[]
+  update?: Prisma.OperationsItemUpdateWithWhereUniqueWithoutCategoryInput | Prisma.OperationsItemUpdateWithWhereUniqueWithoutCategoryInput[]
+  updateMany?: Prisma.OperationsItemUpdateManyWithWhereWithoutCategoryInput | Prisma.OperationsItemUpdateManyWithWhereWithoutCategoryInput[]
+  deleteMany?: Prisma.OperationsItemScalarWhereInput | Prisma.OperationsItemScalarWhereInput[]
+}
+
+export type OperationsItemUncheckedUpdateManyWithoutCategoryNestedInput = {
+  create?: Prisma.XOR<Prisma.OperationsItemCreateWithoutCategoryInput, Prisma.OperationsItemUncheckedCreateWithoutCategoryInput> | Prisma.OperationsItemCreateWithoutCategoryInput[] | Prisma.OperationsItemUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.OperationsItemCreateOrConnectWithoutCategoryInput | Prisma.OperationsItemCreateOrConnectWithoutCategoryInput[]
+  upsert?: Prisma.OperationsItemUpsertWithWhereUniqueWithoutCategoryInput | Prisma.OperationsItemUpsertWithWhereUniqueWithoutCategoryInput[]
+  createMany?: Prisma.OperationsItemCreateManyCategoryInputEnvelope
+  set?: Prisma.OperationsItemWhereUniqueInput | Prisma.OperationsItemWhereUniqueInput[]
+  disconnect?: Prisma.OperationsItemWhereUniqueInput | Prisma.OperationsItemWhereUniqueInput[]
+  delete?: Prisma.OperationsItemWhereUniqueInput | Prisma.OperationsItemWhereUniqueInput[]
+  connect?: Prisma.OperationsItemWhereUniqueInput | Prisma.OperationsItemWhereUniqueInput[]
+  update?: Prisma.OperationsItemUpdateWithWhereUniqueWithoutCategoryInput | Prisma.OperationsItemUpdateWithWhereUniqueWithoutCategoryInput[]
+  updateMany?: Prisma.OperationsItemUpdateManyWithWhereWithoutCategoryInput | Prisma.OperationsItemUpdateManyWithWhereWithoutCategoryInput[]
   deleteMany?: Prisma.OperationsItemScalarWhereInput | Prisma.OperationsItemScalarWhereInput[]
 }
 
@@ -844,6 +910,7 @@ export type OperationsItemCreateWithoutCompanyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   section?: Prisma.OperationsSectionCreateNestedOneWithoutItemsInput
+  category?: Prisma.OperationsCatalogCategoryCreateNestedOneWithoutItemsInput
   baseUnit: Prisma.OperationsUnitCreateNestedOneWithoutBaseForItemsInput
   itemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutItemInput
   conversionVersions?: Prisma.OperationsItemConversionVersionCreateNestedManyWithoutItemInput
@@ -860,6 +927,7 @@ export type OperationsItemCreateWithoutCompanyInput = {
 export type OperationsItemUncheckedCreateWithoutCompanyInput = {
   id?: string
   sectionId?: string | null
+  categoryId?: string | null
   baseUnitId: string
   code: string
   nameAr: string
@@ -914,6 +982,7 @@ export type OperationsItemScalarWhereInput = {
   tenantId?: Prisma.UuidFilter<"OperationsItem"> | string
   companyId?: Prisma.UuidFilter<"OperationsItem"> | string
   sectionId?: Prisma.UuidNullableFilter<"OperationsItem"> | string | null
+  categoryId?: Prisma.UuidNullableFilter<"OperationsItem"> | string | null
   baseUnitId?: Prisma.UuidFilter<"OperationsItem"> | string
   code?: Prisma.StringFilter<"OperationsItem"> | string
   nameAr?: Prisma.StringFilter<"OperationsItem"> | string
@@ -934,6 +1003,7 @@ export type OperationsItemCreateWithoutSectionInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutOperationsItemsInput
+  category?: Prisma.OperationsCatalogCategoryCreateNestedOneWithoutItemsInput
   baseUnit: Prisma.OperationsUnitCreateNestedOneWithoutBaseForItemsInput
   itemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutItemInput
   conversionVersions?: Prisma.OperationsItemConversionVersionCreateNestedManyWithoutItemInput
@@ -949,6 +1019,7 @@ export type OperationsItemCreateWithoutSectionInput = {
 
 export type OperationsItemUncheckedCreateWithoutSectionInput = {
   id?: string
+  categoryId?: string | null
   baseUnitId: string
   code: string
   nameAr: string
@@ -1006,6 +1077,7 @@ export type OperationsItemCreateWithoutBaseUnitInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutOperationsItemsInput
   section?: Prisma.OperationsSectionCreateNestedOneWithoutItemsInput
+  category?: Prisma.OperationsCatalogCategoryCreateNestedOneWithoutItemsInput
   itemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutItemInput
   conversionVersions?: Prisma.OperationsItemConversionVersionCreateNestedManyWithoutItemInput
   recipeOutputs?: Prisma.OperationsRecipeVersionCreateNestedManyWithoutOutputItemInput
@@ -1021,6 +1093,7 @@ export type OperationsItemCreateWithoutBaseUnitInput = {
 export type OperationsItemUncheckedCreateWithoutBaseUnitInput = {
   id?: string
   sectionId?: string | null
+  categoryId?: string | null
   code: string
   nameAr: string
   nameEn?: string | null
@@ -1066,6 +1139,79 @@ export type OperationsItemUpdateManyWithWhereWithoutBaseUnitInput = {
   data: Prisma.XOR<Prisma.OperationsItemUpdateManyMutationInput, Prisma.OperationsItemUncheckedUpdateManyWithoutBaseUnitInput>
 }
 
+export type OperationsItemCreateWithoutCategoryInput = {
+  id?: string
+  code: string
+  nameAr: string
+  nameEn?: string | null
+  kind: $Enums.OperationsItemKind
+  status?: $Enums.OperationsItemStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutOperationsItemsInput
+  section?: Prisma.OperationsSectionCreateNestedOneWithoutItemsInput
+  baseUnit: Prisma.OperationsUnitCreateNestedOneWithoutBaseForItemsInput
+  itemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutItemInput
+  conversionVersions?: Prisma.OperationsItemConversionVersionCreateNestedManyWithoutItemInput
+  recipeOutputs?: Prisma.OperationsRecipeVersionCreateNestedManyWithoutOutputItemInput
+  recipeIngredients?: Prisma.OperationsRecipeLineCreateNestedManyWithoutRawMaterialInput
+  requestLines?: Prisma.OperationsPurchaseRequestLineCreateNestedManyWithoutRawMaterialInput
+  receiptLines?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutRawMaterialInput
+  inventoryBalance?: Prisma.OperationsInventoryBalanceCreateNestedOneWithoutRawMaterialInput
+  inventoryMovements?: Prisma.OperationsInventoryMovementCreateNestedManyWithoutRawMaterialInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutMenuProductInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutRawMaterialInput
+}
+
+export type OperationsItemUncheckedCreateWithoutCategoryInput = {
+  id?: string
+  sectionId?: string | null
+  baseUnitId: string
+  code: string
+  nameAr: string
+  nameEn?: string | null
+  kind: $Enums.OperationsItemKind
+  status?: $Enums.OperationsItemStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  itemUnits?: Prisma.OperationsItemUnitUncheckedCreateNestedManyWithoutItemInput
+  conversionVersions?: Prisma.OperationsItemConversionVersionUncheckedCreateNestedManyWithoutItemInput
+  recipeOutputs?: Prisma.OperationsRecipeVersionUncheckedCreateNestedManyWithoutOutputItemInput
+  recipeIngredients?: Prisma.OperationsRecipeLineUncheckedCreateNestedManyWithoutRawMaterialInput
+  requestLines?: Prisma.OperationsPurchaseRequestLineUncheckedCreateNestedManyWithoutRawMaterialInput
+  receiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutRawMaterialInput
+  inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedCreateNestedOneWithoutRawMaterialInput
+  inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedCreateNestedManyWithoutRawMaterialInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutMenuProductInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutRawMaterialInput
+}
+
+export type OperationsItemCreateOrConnectWithoutCategoryInput = {
+  where: Prisma.OperationsItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.OperationsItemCreateWithoutCategoryInput, Prisma.OperationsItemUncheckedCreateWithoutCategoryInput>
+}
+
+export type OperationsItemCreateManyCategoryInputEnvelope = {
+  data: Prisma.OperationsItemCreateManyCategoryInput | Prisma.OperationsItemCreateManyCategoryInput[]
+  skipDuplicates?: boolean
+}
+
+export type OperationsItemUpsertWithWhereUniqueWithoutCategoryInput = {
+  where: Prisma.OperationsItemWhereUniqueInput
+  update: Prisma.XOR<Prisma.OperationsItemUpdateWithoutCategoryInput, Prisma.OperationsItemUncheckedUpdateWithoutCategoryInput>
+  create: Prisma.XOR<Prisma.OperationsItemCreateWithoutCategoryInput, Prisma.OperationsItemUncheckedCreateWithoutCategoryInput>
+}
+
+export type OperationsItemUpdateWithWhereUniqueWithoutCategoryInput = {
+  where: Prisma.OperationsItemWhereUniqueInput
+  data: Prisma.XOR<Prisma.OperationsItemUpdateWithoutCategoryInput, Prisma.OperationsItemUncheckedUpdateWithoutCategoryInput>
+}
+
+export type OperationsItemUpdateManyWithWhereWithoutCategoryInput = {
+  where: Prisma.OperationsItemScalarWhereInput
+  data: Prisma.XOR<Prisma.OperationsItemUpdateManyMutationInput, Prisma.OperationsItemUncheckedUpdateManyWithoutCategoryInput>
+}
+
 export type OperationsItemCreateWithoutItemUnitsInput = {
   id?: string
   code: string
@@ -1077,6 +1223,7 @@ export type OperationsItemCreateWithoutItemUnitsInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutOperationsItemsInput
   section?: Prisma.OperationsSectionCreateNestedOneWithoutItemsInput
+  category?: Prisma.OperationsCatalogCategoryCreateNestedOneWithoutItemsInput
   baseUnit: Prisma.OperationsUnitCreateNestedOneWithoutBaseForItemsInput
   conversionVersions?: Prisma.OperationsItemConversionVersionCreateNestedManyWithoutItemInput
   recipeOutputs?: Prisma.OperationsRecipeVersionCreateNestedManyWithoutOutputItemInput
@@ -1094,6 +1241,7 @@ export type OperationsItemUncheckedCreateWithoutItemUnitsInput = {
   tenantId: string
   companyId: string
   sectionId?: string | null
+  categoryId?: string | null
   baseUnitId: string
   code: string
   nameAr: string
@@ -1140,6 +1288,7 @@ export type OperationsItemUpdateWithoutItemUnitsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsItemsNestedInput
   section?: Prisma.OperationsSectionUpdateOneWithoutItemsNestedInput
+  category?: Prisma.OperationsCatalogCategoryUpdateOneWithoutItemsNestedInput
   baseUnit?: Prisma.OperationsUnitUpdateOneRequiredWithoutBaseForItemsNestedInput
   conversionVersions?: Prisma.OperationsItemConversionVersionUpdateManyWithoutItemNestedInput
   recipeOutputs?: Prisma.OperationsRecipeVersionUpdateManyWithoutOutputItemNestedInput
@@ -1157,6 +1306,7 @@ export type OperationsItemUncheckedUpdateWithoutItemUnitsInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   sectionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1187,6 +1337,7 @@ export type OperationsItemCreateWithoutConversionVersionsInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutOperationsItemsInput
   section?: Prisma.OperationsSectionCreateNestedOneWithoutItemsInput
+  category?: Prisma.OperationsCatalogCategoryCreateNestedOneWithoutItemsInput
   baseUnit: Prisma.OperationsUnitCreateNestedOneWithoutBaseForItemsInput
   itemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutItemInput
   recipeOutputs?: Prisma.OperationsRecipeVersionCreateNestedManyWithoutOutputItemInput
@@ -1204,6 +1355,7 @@ export type OperationsItemUncheckedCreateWithoutConversionVersionsInput = {
   tenantId: string
   companyId: string
   sectionId?: string | null
+  categoryId?: string | null
   baseUnitId: string
   code: string
   nameAr: string
@@ -1250,6 +1402,7 @@ export type OperationsItemUpdateWithoutConversionVersionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsItemsNestedInput
   section?: Prisma.OperationsSectionUpdateOneWithoutItemsNestedInput
+  category?: Prisma.OperationsCatalogCategoryUpdateOneWithoutItemsNestedInput
   baseUnit?: Prisma.OperationsUnitUpdateOneRequiredWithoutBaseForItemsNestedInput
   itemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutItemNestedInput
   recipeOutputs?: Prisma.OperationsRecipeVersionUpdateManyWithoutOutputItemNestedInput
@@ -1267,6 +1420,7 @@ export type OperationsItemUncheckedUpdateWithoutConversionVersionsInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   sectionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1297,6 +1451,7 @@ export type OperationsItemCreateWithoutInternalRegistrationLinesInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutOperationsItemsInput
   section?: Prisma.OperationsSectionCreateNestedOneWithoutItemsInput
+  category?: Prisma.OperationsCatalogCategoryCreateNestedOneWithoutItemsInput
   baseUnit: Prisma.OperationsUnitCreateNestedOneWithoutBaseForItemsInput
   itemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutItemInput
   conversionVersions?: Prisma.OperationsItemConversionVersionCreateNestedManyWithoutItemInput
@@ -1314,6 +1469,7 @@ export type OperationsItemUncheckedCreateWithoutInternalRegistrationLinesInput =
   tenantId: string
   companyId: string
   sectionId?: string | null
+  categoryId?: string | null
   baseUnitId: string
   code: string
   nameAr: string
@@ -1360,6 +1516,7 @@ export type OperationsItemUpdateWithoutInternalRegistrationLinesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsItemsNestedInput
   section?: Prisma.OperationsSectionUpdateOneWithoutItemsNestedInput
+  category?: Prisma.OperationsCatalogCategoryUpdateOneWithoutItemsNestedInput
   baseUnit?: Prisma.OperationsUnitUpdateOneRequiredWithoutBaseForItemsNestedInput
   itemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutItemNestedInput
   conversionVersions?: Prisma.OperationsItemConversionVersionUpdateManyWithoutItemNestedInput
@@ -1377,6 +1534,7 @@ export type OperationsItemUncheckedUpdateWithoutInternalRegistrationLinesInput =
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   sectionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1407,6 +1565,7 @@ export type OperationsItemCreateWithoutInternalRegistrationConsumptionsInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutOperationsItemsInput
   section?: Prisma.OperationsSectionCreateNestedOneWithoutItemsInput
+  category?: Prisma.OperationsCatalogCategoryCreateNestedOneWithoutItemsInput
   baseUnit: Prisma.OperationsUnitCreateNestedOneWithoutBaseForItemsInput
   itemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutItemInput
   conversionVersions?: Prisma.OperationsItemConversionVersionCreateNestedManyWithoutItemInput
@@ -1424,6 +1583,7 @@ export type OperationsItemUncheckedCreateWithoutInternalRegistrationConsumptions
   tenantId: string
   companyId: string
   sectionId?: string | null
+  categoryId?: string | null
   baseUnitId: string
   code: string
   nameAr: string
@@ -1470,6 +1630,7 @@ export type OperationsItemUpdateWithoutInternalRegistrationConsumptionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsItemsNestedInput
   section?: Prisma.OperationsSectionUpdateOneWithoutItemsNestedInput
+  category?: Prisma.OperationsCatalogCategoryUpdateOneWithoutItemsNestedInput
   baseUnit?: Prisma.OperationsUnitUpdateOneRequiredWithoutBaseForItemsNestedInput
   itemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutItemNestedInput
   conversionVersions?: Prisma.OperationsItemConversionVersionUpdateManyWithoutItemNestedInput
@@ -1487,6 +1648,7 @@ export type OperationsItemUncheckedUpdateWithoutInternalRegistrationConsumptions
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   sectionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1517,6 +1679,7 @@ export type OperationsItemCreateWithoutRecipeOutputsInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutOperationsItemsInput
   section?: Prisma.OperationsSectionCreateNestedOneWithoutItemsInput
+  category?: Prisma.OperationsCatalogCategoryCreateNestedOneWithoutItemsInput
   baseUnit: Prisma.OperationsUnitCreateNestedOneWithoutBaseForItemsInput
   itemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutItemInput
   conversionVersions?: Prisma.OperationsItemConversionVersionCreateNestedManyWithoutItemInput
@@ -1534,6 +1697,7 @@ export type OperationsItemUncheckedCreateWithoutRecipeOutputsInput = {
   tenantId: string
   companyId: string
   sectionId?: string | null
+  categoryId?: string | null
   baseUnitId: string
   code: string
   nameAr: string
@@ -1580,6 +1744,7 @@ export type OperationsItemUpdateWithoutRecipeOutputsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsItemsNestedInput
   section?: Prisma.OperationsSectionUpdateOneWithoutItemsNestedInput
+  category?: Prisma.OperationsCatalogCategoryUpdateOneWithoutItemsNestedInput
   baseUnit?: Prisma.OperationsUnitUpdateOneRequiredWithoutBaseForItemsNestedInput
   itemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutItemNestedInput
   conversionVersions?: Prisma.OperationsItemConversionVersionUpdateManyWithoutItemNestedInput
@@ -1597,6 +1762,7 @@ export type OperationsItemUncheckedUpdateWithoutRecipeOutputsInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   sectionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1627,6 +1793,7 @@ export type OperationsItemCreateWithoutRecipeIngredientsInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutOperationsItemsInput
   section?: Prisma.OperationsSectionCreateNestedOneWithoutItemsInput
+  category?: Prisma.OperationsCatalogCategoryCreateNestedOneWithoutItemsInput
   baseUnit: Prisma.OperationsUnitCreateNestedOneWithoutBaseForItemsInput
   itemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutItemInput
   conversionVersions?: Prisma.OperationsItemConversionVersionCreateNestedManyWithoutItemInput
@@ -1644,6 +1811,7 @@ export type OperationsItemUncheckedCreateWithoutRecipeIngredientsInput = {
   tenantId: string
   companyId: string
   sectionId?: string | null
+  categoryId?: string | null
   baseUnitId: string
   code: string
   nameAr: string
@@ -1690,6 +1858,7 @@ export type OperationsItemUpdateWithoutRecipeIngredientsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsItemsNestedInput
   section?: Prisma.OperationsSectionUpdateOneWithoutItemsNestedInput
+  category?: Prisma.OperationsCatalogCategoryUpdateOneWithoutItemsNestedInput
   baseUnit?: Prisma.OperationsUnitUpdateOneRequiredWithoutBaseForItemsNestedInput
   itemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutItemNestedInput
   conversionVersions?: Prisma.OperationsItemConversionVersionUpdateManyWithoutItemNestedInput
@@ -1707,6 +1876,7 @@ export type OperationsItemUncheckedUpdateWithoutRecipeIngredientsInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   sectionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1737,6 +1907,7 @@ export type OperationsItemCreateWithoutRequestLinesInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutOperationsItemsInput
   section?: Prisma.OperationsSectionCreateNestedOneWithoutItemsInput
+  category?: Prisma.OperationsCatalogCategoryCreateNestedOneWithoutItemsInput
   baseUnit: Prisma.OperationsUnitCreateNestedOneWithoutBaseForItemsInput
   itemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutItemInput
   conversionVersions?: Prisma.OperationsItemConversionVersionCreateNestedManyWithoutItemInput
@@ -1754,6 +1925,7 @@ export type OperationsItemUncheckedCreateWithoutRequestLinesInput = {
   tenantId: string
   companyId: string
   sectionId?: string | null
+  categoryId?: string | null
   baseUnitId: string
   code: string
   nameAr: string
@@ -1800,6 +1972,7 @@ export type OperationsItemUpdateWithoutRequestLinesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsItemsNestedInput
   section?: Prisma.OperationsSectionUpdateOneWithoutItemsNestedInput
+  category?: Prisma.OperationsCatalogCategoryUpdateOneWithoutItemsNestedInput
   baseUnit?: Prisma.OperationsUnitUpdateOneRequiredWithoutBaseForItemsNestedInput
   itemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutItemNestedInput
   conversionVersions?: Prisma.OperationsItemConversionVersionUpdateManyWithoutItemNestedInput
@@ -1817,6 +1990,7 @@ export type OperationsItemUncheckedUpdateWithoutRequestLinesInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   sectionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1847,6 +2021,7 @@ export type OperationsItemCreateWithoutReceiptLinesInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutOperationsItemsInput
   section?: Prisma.OperationsSectionCreateNestedOneWithoutItemsInput
+  category?: Prisma.OperationsCatalogCategoryCreateNestedOneWithoutItemsInput
   baseUnit: Prisma.OperationsUnitCreateNestedOneWithoutBaseForItemsInput
   itemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutItemInput
   conversionVersions?: Prisma.OperationsItemConversionVersionCreateNestedManyWithoutItemInput
@@ -1864,6 +2039,7 @@ export type OperationsItemUncheckedCreateWithoutReceiptLinesInput = {
   tenantId: string
   companyId: string
   sectionId?: string | null
+  categoryId?: string | null
   baseUnitId: string
   code: string
   nameAr: string
@@ -1910,6 +2086,7 @@ export type OperationsItemUpdateWithoutReceiptLinesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsItemsNestedInput
   section?: Prisma.OperationsSectionUpdateOneWithoutItemsNestedInput
+  category?: Prisma.OperationsCatalogCategoryUpdateOneWithoutItemsNestedInput
   baseUnit?: Prisma.OperationsUnitUpdateOneRequiredWithoutBaseForItemsNestedInput
   itemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutItemNestedInput
   conversionVersions?: Prisma.OperationsItemConversionVersionUpdateManyWithoutItemNestedInput
@@ -1927,6 +2104,7 @@ export type OperationsItemUncheckedUpdateWithoutReceiptLinesInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   sectionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1957,6 +2135,7 @@ export type OperationsItemCreateWithoutInventoryBalanceInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutOperationsItemsInput
   section?: Prisma.OperationsSectionCreateNestedOneWithoutItemsInput
+  category?: Prisma.OperationsCatalogCategoryCreateNestedOneWithoutItemsInput
   baseUnit: Prisma.OperationsUnitCreateNestedOneWithoutBaseForItemsInput
   itemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutItemInput
   conversionVersions?: Prisma.OperationsItemConversionVersionCreateNestedManyWithoutItemInput
@@ -1974,6 +2153,7 @@ export type OperationsItemUncheckedCreateWithoutInventoryBalanceInput = {
   tenantId: string
   companyId: string
   sectionId?: string | null
+  categoryId?: string | null
   baseUnitId: string
   code: string
   nameAr: string
@@ -2020,6 +2200,7 @@ export type OperationsItemUpdateWithoutInventoryBalanceInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsItemsNestedInput
   section?: Prisma.OperationsSectionUpdateOneWithoutItemsNestedInput
+  category?: Prisma.OperationsCatalogCategoryUpdateOneWithoutItemsNestedInput
   baseUnit?: Prisma.OperationsUnitUpdateOneRequiredWithoutBaseForItemsNestedInput
   itemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutItemNestedInput
   conversionVersions?: Prisma.OperationsItemConversionVersionUpdateManyWithoutItemNestedInput
@@ -2037,6 +2218,7 @@ export type OperationsItemUncheckedUpdateWithoutInventoryBalanceInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   sectionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2067,6 +2249,7 @@ export type OperationsItemCreateWithoutInventoryMovementsInput = {
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutOperationsItemsInput
   section?: Prisma.OperationsSectionCreateNestedOneWithoutItemsInput
+  category?: Prisma.OperationsCatalogCategoryCreateNestedOneWithoutItemsInput
   baseUnit: Prisma.OperationsUnitCreateNestedOneWithoutBaseForItemsInput
   itemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutItemInput
   conversionVersions?: Prisma.OperationsItemConversionVersionCreateNestedManyWithoutItemInput
@@ -2084,6 +2267,7 @@ export type OperationsItemUncheckedCreateWithoutInventoryMovementsInput = {
   tenantId: string
   companyId: string
   sectionId?: string | null
+  categoryId?: string | null
   baseUnitId: string
   code: string
   nameAr: string
@@ -2130,6 +2314,7 @@ export type OperationsItemUpdateWithoutInventoryMovementsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsItemsNestedInput
   section?: Prisma.OperationsSectionUpdateOneWithoutItemsNestedInput
+  category?: Prisma.OperationsCatalogCategoryUpdateOneWithoutItemsNestedInput
   baseUnit?: Prisma.OperationsUnitUpdateOneRequiredWithoutBaseForItemsNestedInput
   itemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutItemNestedInput
   conversionVersions?: Prisma.OperationsItemConversionVersionUpdateManyWithoutItemNestedInput
@@ -2147,6 +2332,7 @@ export type OperationsItemUncheckedUpdateWithoutInventoryMovementsInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   sectionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2169,6 +2355,7 @@ export type OperationsItemUncheckedUpdateWithoutInventoryMovementsInput = {
 export type OperationsItemCreateManyCompanyInput = {
   id?: string
   sectionId?: string | null
+  categoryId?: string | null
   baseUnitId: string
   code: string
   nameAr: string
@@ -2189,6 +2376,7 @@ export type OperationsItemUpdateWithoutCompanyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   section?: Prisma.OperationsSectionUpdateOneWithoutItemsNestedInput
+  category?: Prisma.OperationsCatalogCategoryUpdateOneWithoutItemsNestedInput
   baseUnit?: Prisma.OperationsUnitUpdateOneRequiredWithoutBaseForItemsNestedInput
   itemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutItemNestedInput
   conversionVersions?: Prisma.OperationsItemConversionVersionUpdateManyWithoutItemNestedInput
@@ -2205,6 +2393,7 @@ export type OperationsItemUpdateWithoutCompanyInput = {
 export type OperationsItemUncheckedUpdateWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   sectionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2228,6 +2417,7 @@ export type OperationsItemUncheckedUpdateWithoutCompanyInput = {
 export type OperationsItemUncheckedUpdateManyWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   sectionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2240,6 +2430,7 @@ export type OperationsItemUncheckedUpdateManyWithoutCompanyInput = {
 
 export type OperationsItemCreateManySectionInput = {
   id?: string
+  categoryId?: string | null
   baseUnitId: string
   code: string
   nameAr: string
@@ -2260,6 +2451,7 @@ export type OperationsItemUpdateWithoutSectionInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsItemsNestedInput
+  category?: Prisma.OperationsCatalogCategoryUpdateOneWithoutItemsNestedInput
   baseUnit?: Prisma.OperationsUnitUpdateOneRequiredWithoutBaseForItemsNestedInput
   itemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutItemNestedInput
   conversionVersions?: Prisma.OperationsItemConversionVersionUpdateManyWithoutItemNestedInput
@@ -2275,6 +2467,7 @@ export type OperationsItemUpdateWithoutSectionInput = {
 
 export type OperationsItemUncheckedUpdateWithoutSectionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2297,6 +2490,7 @@ export type OperationsItemUncheckedUpdateWithoutSectionInput = {
 
 export type OperationsItemUncheckedUpdateManyWithoutSectionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2310,6 +2504,7 @@ export type OperationsItemUncheckedUpdateManyWithoutSectionInput = {
 export type OperationsItemCreateManyBaseUnitInput = {
   id?: string
   sectionId?: string | null
+  categoryId?: string | null
   code: string
   nameAr: string
   nameEn?: string | null
@@ -2330,6 +2525,7 @@ export type OperationsItemUpdateWithoutBaseUnitInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsItemsNestedInput
   section?: Prisma.OperationsSectionUpdateOneWithoutItemsNestedInput
+  category?: Prisma.OperationsCatalogCategoryUpdateOneWithoutItemsNestedInput
   itemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutItemNestedInput
   conversionVersions?: Prisma.OperationsItemConversionVersionUpdateManyWithoutItemNestedInput
   recipeOutputs?: Prisma.OperationsRecipeVersionUpdateManyWithoutOutputItemNestedInput
@@ -2345,6 +2541,7 @@ export type OperationsItemUpdateWithoutBaseUnitInput = {
 export type OperationsItemUncheckedUpdateWithoutBaseUnitInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   sectionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   code?: Prisma.StringFieldUpdateOperationsInput | string
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2367,6 +2564,80 @@ export type OperationsItemUncheckedUpdateWithoutBaseUnitInput = {
 export type OperationsItemUncheckedUpdateManyWithoutBaseUnitInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   sectionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kind?: Prisma.EnumOperationsItemKindFieldUpdateOperationsInput | $Enums.OperationsItemKind
+  status?: Prisma.EnumOperationsItemStatusFieldUpdateOperationsInput | $Enums.OperationsItemStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type OperationsItemCreateManyCategoryInput = {
+  id?: string
+  sectionId?: string | null
+  baseUnitId: string
+  code: string
+  nameAr: string
+  nameEn?: string | null
+  kind: $Enums.OperationsItemKind
+  status?: $Enums.OperationsItemStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type OperationsItemUpdateWithoutCategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kind?: Prisma.EnumOperationsItemKindFieldUpdateOperationsInput | $Enums.OperationsItemKind
+  status?: Prisma.EnumOperationsItemStatusFieldUpdateOperationsInput | $Enums.OperationsItemStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutOperationsItemsNestedInput
+  section?: Prisma.OperationsSectionUpdateOneWithoutItemsNestedInput
+  baseUnit?: Prisma.OperationsUnitUpdateOneRequiredWithoutBaseForItemsNestedInput
+  itemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutItemNestedInput
+  conversionVersions?: Prisma.OperationsItemConversionVersionUpdateManyWithoutItemNestedInput
+  recipeOutputs?: Prisma.OperationsRecipeVersionUpdateManyWithoutOutputItemNestedInput
+  recipeIngredients?: Prisma.OperationsRecipeLineUpdateManyWithoutRawMaterialNestedInput
+  requestLines?: Prisma.OperationsPurchaseRequestLineUpdateManyWithoutRawMaterialNestedInput
+  receiptLines?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutRawMaterialNestedInput
+  inventoryBalance?: Prisma.OperationsInventoryBalanceUpdateOneWithoutRawMaterialNestedInput
+  inventoryMovements?: Prisma.OperationsInventoryMovementUpdateManyWithoutRawMaterialNestedInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutMenuProductNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutRawMaterialNestedInput
+}
+
+export type OperationsItemUncheckedUpdateWithoutCategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  sectionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kind?: Prisma.EnumOperationsItemKindFieldUpdateOperationsInput | $Enums.OperationsItemKind
+  status?: Prisma.EnumOperationsItemStatusFieldUpdateOperationsInput | $Enums.OperationsItemStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  itemUnits?: Prisma.OperationsItemUnitUncheckedUpdateManyWithoutItemNestedInput
+  conversionVersions?: Prisma.OperationsItemConversionVersionUncheckedUpdateManyWithoutItemNestedInput
+  recipeOutputs?: Prisma.OperationsRecipeVersionUncheckedUpdateManyWithoutOutputItemNestedInput
+  recipeIngredients?: Prisma.OperationsRecipeLineUncheckedUpdateManyWithoutRawMaterialNestedInput
+  requestLines?: Prisma.OperationsPurchaseRequestLineUncheckedUpdateManyWithoutRawMaterialNestedInput
+  receiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutRawMaterialNestedInput
+  inventoryBalance?: Prisma.OperationsInventoryBalanceUncheckedUpdateOneWithoutRawMaterialNestedInput
+  inventoryMovements?: Prisma.OperationsInventoryMovementUncheckedUpdateManyWithoutRawMaterialNestedInput
+  internalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutMenuProductNestedInput
+  internalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutRawMaterialNestedInput
+}
+
+export type OperationsItemUncheckedUpdateManyWithoutCategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  sectionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  baseUnitId?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   nameAr?: Prisma.StringFieldUpdateOperationsInput | string
   nameEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2484,6 +2755,7 @@ export type OperationsItemSelect<ExtArgs extends runtime.Types.Extensions.Intern
   tenantId?: boolean
   companyId?: boolean
   sectionId?: boolean
+  categoryId?: boolean
   baseUnitId?: boolean
   code?: boolean
   nameAr?: boolean
@@ -2494,6 +2766,7 @@ export type OperationsItemSelect<ExtArgs extends runtime.Types.Extensions.Intern
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   section?: boolean | Prisma.OperationsItem$sectionArgs<ExtArgs>
+  category?: boolean | Prisma.OperationsItem$categoryArgs<ExtArgs>
   baseUnit?: boolean | Prisma.OperationsUnitDefaultArgs<ExtArgs>
   itemUnits?: boolean | Prisma.OperationsItem$itemUnitsArgs<ExtArgs>
   conversionVersions?: boolean | Prisma.OperationsItem$conversionVersionsArgs<ExtArgs>
@@ -2513,6 +2786,7 @@ export type OperationsItemSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   tenantId?: boolean
   companyId?: boolean
   sectionId?: boolean
+  categoryId?: boolean
   baseUnitId?: boolean
   code?: boolean
   nameAr?: boolean
@@ -2523,6 +2797,7 @@ export type OperationsItemSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   section?: boolean | Prisma.OperationsItem$sectionArgs<ExtArgs>
+  category?: boolean | Prisma.OperationsItem$categoryArgs<ExtArgs>
   baseUnit?: boolean | Prisma.OperationsUnitDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["operationsItem"]>
 
@@ -2531,6 +2806,7 @@ export type OperationsItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   tenantId?: boolean
   companyId?: boolean
   sectionId?: boolean
+  categoryId?: boolean
   baseUnitId?: boolean
   code?: boolean
   nameAr?: boolean
@@ -2541,6 +2817,7 @@ export type OperationsItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   section?: boolean | Prisma.OperationsItem$sectionArgs<ExtArgs>
+  category?: boolean | Prisma.OperationsItem$categoryArgs<ExtArgs>
   baseUnit?: boolean | Prisma.OperationsUnitDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["operationsItem"]>
 
@@ -2549,6 +2826,7 @@ export type OperationsItemSelectScalar = {
   tenantId?: boolean
   companyId?: boolean
   sectionId?: boolean
+  categoryId?: boolean
   baseUnitId?: boolean
   code?: boolean
   nameAr?: boolean
@@ -2559,10 +2837,11 @@ export type OperationsItemSelectScalar = {
   updatedAt?: boolean
 }
 
-export type OperationsItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "sectionId" | "baseUnitId" | "code" | "nameAr" | "nameEn" | "kind" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["operationsItem"]>
+export type OperationsItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "sectionId" | "categoryId" | "baseUnitId" | "code" | "nameAr" | "nameEn" | "kind" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["operationsItem"]>
 export type OperationsItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   section?: boolean | Prisma.OperationsItem$sectionArgs<ExtArgs>
+  category?: boolean | Prisma.OperationsItem$categoryArgs<ExtArgs>
   baseUnit?: boolean | Prisma.OperationsUnitDefaultArgs<ExtArgs>
   itemUnits?: boolean | Prisma.OperationsItem$itemUnitsArgs<ExtArgs>
   conversionVersions?: boolean | Prisma.OperationsItem$conversionVersionsArgs<ExtArgs>
@@ -2579,11 +2858,13 @@ export type OperationsItemInclude<ExtArgs extends runtime.Types.Extensions.Inter
 export type OperationsItemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   section?: boolean | Prisma.OperationsItem$sectionArgs<ExtArgs>
+  category?: boolean | Prisma.OperationsItem$categoryArgs<ExtArgs>
   baseUnit?: boolean | Prisma.OperationsUnitDefaultArgs<ExtArgs>
 }
 export type OperationsItemIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   section?: boolean | Prisma.OperationsItem$sectionArgs<ExtArgs>
+  category?: boolean | Prisma.OperationsItem$categoryArgs<ExtArgs>
   baseUnit?: boolean | Prisma.OperationsUnitDefaultArgs<ExtArgs>
 }
 
@@ -2592,6 +2873,7 @@ export type $OperationsItemPayload<ExtArgs extends runtime.Types.Extensions.Inte
   objects: {
     company: Prisma.$CompanyPayload<ExtArgs>
     section: Prisma.$OperationsSectionPayload<ExtArgs> | null
+    category: Prisma.$OperationsCatalogCategoryPayload<ExtArgs> | null
     baseUnit: Prisma.$OperationsUnitPayload<ExtArgs>
     itemUnits: Prisma.$OperationsItemUnitPayload<ExtArgs>[]
     conversionVersions: Prisma.$OperationsItemConversionVersionPayload<ExtArgs>[]
@@ -2609,6 +2891,7 @@ export type $OperationsItemPayload<ExtArgs extends runtime.Types.Extensions.Inte
     tenantId: string
     companyId: string
     sectionId: string | null
+    categoryId: string | null
     baseUnitId: string
     code: string
     nameAr: string
@@ -3013,6 +3296,7 @@ export interface Prisma__OperationsItemClient<T, Null = never, ExtArgs extends r
   readonly [Symbol.toStringTag]: "PrismaPromise"
   company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   section<T extends Prisma.OperationsItem$sectionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsItem$sectionArgs<ExtArgs>>): Prisma.Prisma__OperationsSectionClient<runtime.Types.Result.GetResult<Prisma.$OperationsSectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  category<T extends Prisma.OperationsItem$categoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsItem$categoryArgs<ExtArgs>>): Prisma.Prisma__OperationsCatalogCategoryClient<runtime.Types.Result.GetResult<Prisma.$OperationsCatalogCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   baseUnit<T extends Prisma.OperationsUnitDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsUnitDefaultArgs<ExtArgs>>): Prisma.Prisma__OperationsUnitClient<runtime.Types.Result.GetResult<Prisma.$OperationsUnitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   itemUnits<T extends Prisma.OperationsItem$itemUnitsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsItem$itemUnitsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationsItemUnitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   conversionVersions<T extends Prisma.OperationsItem$conversionVersionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OperationsItem$conversionVersionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationsItemConversionVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3057,6 +3341,7 @@ export interface OperationsItemFieldRefs {
   readonly tenantId: Prisma.FieldRef<"OperationsItem", 'String'>
   readonly companyId: Prisma.FieldRef<"OperationsItem", 'String'>
   readonly sectionId: Prisma.FieldRef<"OperationsItem", 'String'>
+  readonly categoryId: Prisma.FieldRef<"OperationsItem", 'String'>
   readonly baseUnitId: Prisma.FieldRef<"OperationsItem", 'String'>
   readonly code: Prisma.FieldRef<"OperationsItem", 'String'>
   readonly nameAr: Prisma.FieldRef<"OperationsItem", 'String'>
@@ -3482,6 +3767,25 @@ export type OperationsItem$sectionArgs<ExtArgs extends runtime.Types.Extensions.
    */
   include?: Prisma.OperationsSectionInclude<ExtArgs> | null
   where?: Prisma.OperationsSectionWhereInput
+}
+
+/**
+ * OperationsItem.category
+ */
+export type OperationsItem$categoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OperationsCatalogCategory
+   */
+  select?: Prisma.OperationsCatalogCategorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OperationsCatalogCategory
+   */
+  omit?: Prisma.OperationsCatalogCategoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OperationsCatalogCategoryInclude<ExtArgs> | null
+  where?: Prisma.OperationsCatalogCategoryWhereInput
 }
 
 /**

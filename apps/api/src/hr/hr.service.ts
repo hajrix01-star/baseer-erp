@@ -185,8 +185,10 @@ export class HrService {
       if (begun.kind === 'in-progress') throw new ConflictException('The employee update is already being processed.');
       const prior = await tx.hrEmployee.findFirst({ where: { id: raw.employeeId, tenantId: context.tenantId, companyId: context.companyId } });
       if (!prior) throw new NotFoundException('The employee is not available for this company.');
-      if (input.status === HrEmployeeStatus.TERMINATED && !input.terminatedAt) throw new BadRequestException('A termination date is required when an employee is terminated.');
-      if (input.terminatedAt && input.terminatedAt.getTime() < prior.hireDate.getTime()) throw new BadRequestException('The termination date cannot be before the hire date.');
+      const needsStatusDetails = input.status === HrEmployeeStatus.TERMINATED || input.status === HrEmployeeStatus.ARCHIVED;
+      if (needsStatusDetails && !input.statusEffectiveAt) throw new BadRequestException('A status effective date is required for terminated or archived employees.');
+      if (needsStatusDetails && !input.statusReason) throw new BadRequestException('A status reason is required for terminated or archived employees.');
+      if (input.statusEffectiveAt && input.statusEffectiveAt.getTime() < prior.hireDate.getTime()) throw new BadRequestException('The status effective date cannot be before the hire date.');
       const updated = await tx.hrEmployee.update({ where: { id: prior.id }, data: input });
       const receipt = { id: updated.id, replayed: false };
       await this.audit(tx, context, 'hr.employee.updated', 'HrEmployee', updated.id, mapEmployee(prior), mapEmployee(updated));
@@ -285,6 +287,33 @@ export class HrService {
       select: { id: true, employeeId: true },
     });
     await this.audit(tx, context, 'hr.employee_service.recorded_with_cost', 'HrEmployeeService', id, null, input);
+    return service;
+  }
+
+  /**
+   * Restricted migration boundary for historical services whose original
+   * expiry dates are inconsistent. It deliberately keeps the ordinary
+   * employee-service rules unchanged: only a trusted migration writer can
+   * use it, and the writer must omit both dates rather than invent one.
+   */
+  async createHistoricalServiceForFinancialIssueInTransaction(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, raw: EmployeeServiceCreateInput) {
+    const input = serviceCreateInput(raw);
+    if (input.issueDate || input.expiryDate) throw new BadRequestException('Historical services with unknown dates must omit both issue and expiry dates.');
+    const employee = await tx.hrEmployee.findFirst({
+      where: { id: input.employeeId, tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrEmployeeStatus.ACTIVE, HrEmployeeStatus.ON_LEAVE] } },
+      select: { id: true },
+    });
+    if (!employee) throw new BadRequestException('Choose an active employee from this company.');
+    this.assertHistoricalServiceTypeRequirements(input.serviceType, input.referenceNumber, input.visaDurationMonths);
+    const references = await this.resolveServiceReferences(tx, context, input.serviceType, input.supplierId, input.categoryId);
+    await this.assertServiceReferences(tx, context, references.supplierId, references.categoryId);
+    if (!references.supplierId || !references.categoryId) throw new BadRequestException('Choose an active supplier and expense category before recording the service.');
+    const id = randomUUID();
+    const service = await tx.hrEmployeeService.create({
+      data: { id, tenantId: context.tenantId, companyId: context.companyId, ...input, ...references, status: HrEmployeeServiceStatus.DRAFT },
+      select: { id: true, employeeId: true },
+    });
+    await this.audit(tx, context, 'hr.employee_service.historical_recorded_with_cost', 'HrEmployeeService', id, null, input);
     return service;
   }
 
@@ -462,6 +491,12 @@ export class HrService {
     if (visaDurationMonths !== null && serviceType !== 'EXIT_REENTRY_VISA') throw new BadRequestException('Visa duration is allowed only for exit and re-entry visas.');
   }
 
+  private assertHistoricalServiceTypeRequirements(serviceType: string, referenceNumber: string | null, visaDurationMonths: number | null) {
+    if ((serviceType === 'IQAMA_ISSUANCE' || serviceType === 'IQAMA_RENEWAL') && !referenceNumber) throw new BadRequestException('Historical iqama services require a reference number.');
+    if (serviceType === 'EXIT_REENTRY_VISA' && (visaDurationMonths === null || visaDurationMonths < 1 || visaDurationMonths > 5)) throw new BadRequestException('Exit and re-entry visas require a duration from one to five months.');
+    if (visaDurationMonths !== null && serviceType !== 'EXIT_REENTRY_VISA') throw new BadRequestException('Visa duration is allowed only for exit and re-entry visas.');
+  }
+
   private async assertServiceReferences(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, supplierId: string | null, categoryId: string | null) {
     if (supplierId) {
       const supplier = await tx.financeSupplier.findFirst({ where: { id: supplierId, tenantId: context.tenantId, companyId: context.companyId, status: FinanceSupplierStatus.ACTIVE }, select: { id: true } });
@@ -495,7 +530,9 @@ function employeeCreateInput(value: EmployeeCreateInput) {
   return { nameAr: value.nameAr.trim(), nameEn: nullable(value.nameEn), jobTitle: nullable(value.jobTitle), phone: nullable(value.phone), email: nullable(value.email), iqamaNumber: nullable(value.iqamaNumber), workSchedule: nullable(value.workSchedule), hireDate: value.hireDate, notes: nullable(value.notes) };
 }
 function employeeUpdateInput(value: EmployeeUpdateInput) {
-  return { nameAr: value.nameAr.trim(), ...(value.nameEn !== undefined ? { nameEn: nullable(value.nameEn) } : {}), ...(value.jobTitle !== undefined ? { jobTitle: nullable(value.jobTitle) } : {}), ...(value.phone !== undefined ? { phone: nullable(value.phone) } : {}), ...(value.email !== undefined ? { email: nullable(value.email) } : {}), ...(value.iqamaNumber !== undefined ? { iqamaNumber: nullable(value.iqamaNumber) } : {}), ...(value.workSchedule !== undefined ? { workSchedule: nullable(value.workSchedule) } : {}), status: value.status, ...(value.terminatedAt !== undefined ? { terminatedAt: value.terminatedAt } : {}), ...(value.notes !== undefined ? { notes: nullable(value.notes) } : {}) };
+  const statusRequiresDetails = value.status === HrEmployeeStatus.TERMINATED || value.status === HrEmployeeStatus.ARCHIVED;
+  const statusEffectiveAt = statusRequiresDetails ? value.statusEffectiveAt ?? value.terminatedAt ?? null : null;
+  return { nameAr: value.nameAr.trim(), ...(value.nameEn !== undefined ? { nameEn: nullable(value.nameEn) } : {}), ...(value.jobTitle !== undefined ? { jobTitle: nullable(value.jobTitle) } : {}), ...(value.phone !== undefined ? { phone: nullable(value.phone) } : {}), ...(value.email !== undefined ? { email: nullable(value.email) } : {}), ...(value.iqamaNumber !== undefined ? { iqamaNumber: nullable(value.iqamaNumber) } : {}), ...(value.workSchedule !== undefined ? { workSchedule: nullable(value.workSchedule) } : {}), status: value.status, statusEffectiveAt, statusReason: statusRequiresDetails ? nullable(value.statusReason) : null, terminatedAt: value.status === HrEmployeeStatus.TERMINATED ? statusEffectiveAt : null, ...(value.notes !== undefined ? { notes: nullable(value.notes) } : {}) };
 }
 function promotionCreateInput(value: EmployeePromotionCreateInput) {
   return { employeeId: value.employeeId, effectiveDate: value.effectiveDate, newJobTitle: value.newJobTitle.trim(), decisionReference: value.decisionReference.trim(), reason: nullable(value.reason) };
@@ -541,7 +578,7 @@ function defaultCategoryCodeForService(serviceType: string) {
   }
 }
 function day(value: Date | null) { return value ? value.toISOString().slice(0, 10) : null; }
-function mapEmployee(value: { id: string; employeeNumber: string; nameAr: string; nameEn: string | null; jobTitle: string | null; phone: string | null; email: string | null; iqamaNumber: string | null; workSchedule: string | null; hireDate: Date; status: HrEmployeeStatus; terminatedAt: Date | null; notes: string | null }, currentMonthlyGross: Prisma.Decimal | null = null, profilePhotoVersionId: string | null = null) { return { id: value.id, employeeNumber: value.employeeNumber, nameAr: value.nameAr, nameEn: value.nameEn, jobTitle: value.jobTitle, phone: value.phone, email: value.email, iqamaNumber: value.iqamaNumber, workSchedule: value.workSchedule, hireDate: day(value.hireDate)!, currentMonthlyGross: currentMonthlyGross?.toFixed(4) ?? null, profilePhotoVersionId, status: value.status, terminatedAt: day(value.terminatedAt), notes: value.notes }; }
+function mapEmployee(value: { id: string; employeeNumber: string; nameAr: string; nameEn: string | null; jobTitle: string | null; phone: string | null; email: string | null; iqamaNumber: string | null; workSchedule: string | null; hireDate: Date; status: HrEmployeeStatus; terminatedAt: Date | null; statusEffectiveAt: Date | null; statusReason: string | null; notes: string | null }, currentMonthlyGross: Prisma.Decimal | null = null, profilePhotoVersionId: string | null = null) { return { id: value.id, employeeNumber: value.employeeNumber, nameAr: value.nameAr, nameEn: value.nameEn, jobTitle: value.jobTitle, phone: value.phone, email: value.email, iqamaNumber: value.iqamaNumber, workSchedule: value.workSchedule, hireDate: day(value.hireDate)!, currentMonthlyGross: currentMonthlyGross?.toFixed(4) ?? null, profilePhotoVersionId, status: value.status, terminatedAt: day(value.terminatedAt), statusEffectiveAt: day(value.statusEffectiveAt), statusReason: value.statusReason, notes: value.notes }; }
 function mapPromotion(value: { id: string; employeeId: string; effectiveDate: Date; previousJobTitle: string | null; newJobTitle: string; decisionReference: string; reason: string | null; createdAt: Date }) { return { id: value.id, employeeId: value.employeeId, effectiveDate: day(value.effectiveDate)!, previousJobTitle: value.previousJobTitle, newJobTitle: value.newJobTitle, decisionReference: value.decisionReference, reason: value.reason, createdAt: value.createdAt.toISOString() }; }
 function mapCompensation(value: { id: string; employeeId: string; policyVersionId: string | null; effectiveFrom: Date; effectiveTo: Date | null; monthlyGross: Prisma.Decimal; compensationMethod: string; foodAllowance: Prisma.Decimal; housingAllowance: Prisma.Decimal; transportAllowance: Prisma.Decimal; otherAllowance: Prisma.Decimal; scheduledHoursPerDay: number | null; scheduledWorkDays: number | null; notes: string | null }) { return { id: value.id, employeeId: value.employeeId, policyVersionId: value.policyVersionId, effectiveFrom: day(value.effectiveFrom)!, effectiveTo: day(value.effectiveTo), monthlyGross: value.monthlyGross.toFixed(4), compensationMethod: value.compensationMethod as 'FIXED_MONTHLY' | 'INCLUSIVE_OVERTIME', foodAllowance: value.foodAllowance.toFixed(4), housingAllowance: value.housingAllowance.toFixed(4), transportAllowance: value.transportAllowance.toFixed(4), otherAllowance: value.otherAllowance.toFixed(4), scheduledHoursPerDay: value.scheduledHoursPerDay, scheduledWorkDays: value.scheduledWorkDays, notes: value.notes }; }
 function mapService(value: { id: string; employeeId: string; serviceType: string; referenceNumber: string | null; issueDate: Date | null; expiryDate: Date | null; visaDurationMonths: number | null; renewalOfServiceId: string | null; supplier: { id: string; nameAr: string; nameEn: string | null } | null; category: { id: string; nameAr: string; nameEn: string } | null; outflowDocumentId: string | null; outflowDocument?: { status: FinanceOutflowDocumentStatus } | null; status: HrEmployeeServiceStatus; complianceStatus: HrEmployeeServiceComplianceStatus; notes: string | null; employee?: { id: string; employeeNumber: string; nameAr: string; nameEn: string | null } }) {

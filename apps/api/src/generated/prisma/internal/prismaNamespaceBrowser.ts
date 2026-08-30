@@ -69,6 +69,19 @@ export const ModelName = {
   LegacyMigrationRun: 'LegacyMigrationRun',
   LegacyMigrationCompanyMap: 'LegacyMigrationCompanyMap',
   LegacyMigrationRecordMap: 'LegacyMigrationRecordMap',
+  NurixExcelStagingPackage: 'NurixExcelStagingPackage',
+  NurixExcelStagingBatch: 'NurixExcelStagingBatch',
+  NurixExcelStagingRow: 'NurixExcelStagingRow',
+  NurixExcelMasterDataExecution: 'NurixExcelMasterDataExecution',
+  NurixExcelMasterDataItem: 'NurixExcelMasterDataItem',
+  NurixExcelFinancialExecution: 'NurixExcelFinancialExecution',
+  NurixExcelFinancialWave: 'NurixExcelFinancialWave',
+  NurixExcelFinancialItem: 'NurixExcelFinancialItem',
+  NurixExcelFinancialSourceMap: 'NurixExcelFinancialSourceMap',
+  NurixExcelFinancialReceipt: 'NurixExcelFinancialReceipt',
+  NurixHistoricalPayrollEvidence: 'NurixHistoricalPayrollEvidence',
+  NurixHistoricalPayrollLineEvidence: 'NurixHistoricalPayrollLineEvidence',
+  NurixHistoricalPayrollAccountingEvidence: 'NurixHistoricalPayrollAccountingEvidence',
   LegacyMigrationException: 'LegacyMigrationException',
   LegacyMigrationReviewAction: 'LegacyMigrationReviewAction',
   OwnerDailyBriefSnapshot: 'OwnerDailyBriefSnapshot',
@@ -214,6 +227,7 @@ export const ModelName = {
   AiSystemIdentity: 'AiSystemIdentity',
   OperationsSection: 'OperationsSection',
   OperationsUnit: 'OperationsUnit',
+  OperationsCatalogCategory: 'OperationsCatalogCategory',
   OperationsItem: 'OperationsItem',
   OperationsItemUnit: 'OperationsItemUnit',
   OperationsItemConversionVersion: 'OperationsItemConversionVersion',
@@ -544,6 +558,268 @@ export const LegacyMigrationRecordMapScalarFieldEnum = {
 } as const
 
 export type LegacyMigrationRecordMapScalarFieldEnum = (typeof LegacyMigrationRecordMapScalarFieldEnum)[keyof typeof LegacyMigrationRecordMapScalarFieldEnum]
+
+
+export const NurixExcelStagingPackageScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  targetCompanyId: 'targetCompanyId',
+  sourceCompanyId: 'sourceCompanyId',
+  templateVersion: 'templateVersion',
+  workbookSha256: 'workbookSha256',
+  sourceFingerprint: 'sourceFingerprint',
+  storageReference: 'storageReference',
+  encryptionIv: 'encryptionIv',
+  storedByteSize: 'storedByteSize',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NurixExcelStagingPackageScalarFieldEnum = (typeof NurixExcelStagingPackageScalarFieldEnum)[keyof typeof NurixExcelStagingPackageScalarFieldEnum]
+
+
+export const NurixExcelStagingBatchScalarFieldEnum = {
+  id: 'id',
+  packageId: 'packageId',
+  tenantId: 'tenantId',
+  sequence: 'sequence',
+  status: 'status',
+  rowsDeclared: 'rowsDeclared',
+  rowsAccepted: 'rowsAccepted',
+  rowsRejected: 'rowsRejected',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NurixExcelStagingBatchScalarFieldEnum = (typeof NurixExcelStagingBatchScalarFieldEnum)[keyof typeof NurixExcelStagingBatchScalarFieldEnum]
+
+
+export const NurixExcelStagingRowScalarFieldEnum = {
+  id: 'id',
+  packageId: 'packageId',
+  batchId: 'batchId',
+  tenantId: 'tenantId',
+  sheet: 'sheet',
+  sourceId: 'sourceId',
+  sourceChecksum: 'sourceChecksum',
+  status: 'status',
+  code: 'code',
+  createdAt: 'createdAt'
+} as const
+
+export type NurixExcelStagingRowScalarFieldEnum = (typeof NurixExcelStagingRowScalarFieldEnum)[keyof typeof NurixExcelStagingRowScalarFieldEnum]
+
+
+export const NurixExcelMasterDataExecutionScalarFieldEnum = {
+  id: 'id',
+  packageId: 'packageId',
+  tenantId: 'tenantId',
+  targetCompanyId: 'targetCompanyId',
+  status: 'status',
+  waveSequence: 'waveSequence',
+  reason: 'reason',
+  requestedByUserId: 'requestedByUserId',
+  leaseToken: 'leaseToken',
+  leaseExpiresAt: 'leaseExpiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NurixExcelMasterDataExecutionScalarFieldEnum = (typeof NurixExcelMasterDataExecutionScalarFieldEnum)[keyof typeof NurixExcelMasterDataExecutionScalarFieldEnum]
+
+
+export const NurixExcelMasterDataItemScalarFieldEnum = {
+  id: 'id',
+  executionId: 'executionId',
+  tenantId: 'tenantId',
+  entity: 'entity',
+  sourceId: 'sourceId',
+  sourceChecksum: 'sourceChecksum',
+  status: 'status',
+  targetId: 'targetId',
+  code: 'code',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NurixExcelMasterDataItemScalarFieldEnum = (typeof NurixExcelMasterDataItemScalarFieldEnum)[keyof typeof NurixExcelMasterDataItemScalarFieldEnum]
+
+
+export const NurixExcelFinancialExecutionScalarFieldEnum = {
+  id: 'id',
+  packageId: 'packageId',
+  tenantId: 'tenantId',
+  targetCompanyId: 'targetCompanyId',
+  transformVersion: 'transformVersion',
+  financialPlanSha256: 'financialPlanSha256',
+  status: 'status',
+  reason: 'reason',
+  requestedByUserId: 'requestedByUserId',
+  approvedByUserId: 'approvedByUserId',
+  approvedAt: 'approvedAt',
+  leaseToken: 'leaseToken',
+  leaseExpiresAt: 'leaseExpiresAt',
+  waveSequence: 'waveSequence',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NurixExcelFinancialExecutionScalarFieldEnum = (typeof NurixExcelFinancialExecutionScalarFieldEnum)[keyof typeof NurixExcelFinancialExecutionScalarFieldEnum]
+
+
+export const NurixExcelFinancialWaveScalarFieldEnum = {
+  id: 'id',
+  executionId: 'executionId',
+  tenantId: 'tenantId',
+  targetCompanyId: 'targetCompanyId',
+  sequence: 'sequence',
+  status: 'status',
+  plannedItems: 'plannedItems',
+  postedItems: 'postedItems',
+  reusedItems: 'reusedItems',
+  reviewItems: 'reviewItems',
+  failedItems: 'failedItems',
+  leaseToken: 'leaseToken',
+  leaseExpiresAt: 'leaseExpiresAt',
+  committedAt: 'committedAt',
+  reconciliationHash: 'reconciliationHash',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NurixExcelFinancialWaveScalarFieldEnum = (typeof NurixExcelFinancialWaveScalarFieldEnum)[keyof typeof NurixExcelFinancialWaveScalarFieldEnum]
+
+
+export const NurixExcelFinancialItemScalarFieldEnum = {
+  id: 'id',
+  executionId: 'executionId',
+  waveId: 'waveId',
+  tenantId: 'tenantId',
+  targetCompanyId: 'targetCompanyId',
+  sourceSheet: 'sourceSheet',
+  sourceEntity: 'sourceEntity',
+  sourceId: 'sourceId',
+  sourceChecksum: 'sourceChecksum',
+  operationKey: 'operationKey',
+  status: 'status',
+  targetEntity: 'targetEntity',
+  targetId: 'targetId',
+  resultCode: 'resultCode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NurixExcelFinancialItemScalarFieldEnum = (typeof NurixExcelFinancialItemScalarFieldEnum)[keyof typeof NurixExcelFinancialItemScalarFieldEnum]
+
+
+export const NurixExcelFinancialSourceMapScalarFieldEnum = {
+  id: 'id',
+  executionId: 'executionId',
+  tenantId: 'tenantId',
+  targetCompanyId: 'targetCompanyId',
+  sourceEntity: 'sourceEntity',
+  sourceId: 'sourceId',
+  sourceChecksum: 'sourceChecksum',
+  targetEntity: 'targetEntity',
+  targetId: 'targetId',
+  state: 'state',
+  createdAt: 'createdAt'
+} as const
+
+export type NurixExcelFinancialSourceMapScalarFieldEnum = (typeof NurixExcelFinancialSourceMapScalarFieldEnum)[keyof typeof NurixExcelFinancialSourceMapScalarFieldEnum]
+
+
+export const NurixExcelFinancialReceiptScalarFieldEnum = {
+  id: 'id',
+  executionId: 'executionId',
+  waveId: 'waveId',
+  tenantId: 'tenantId',
+  targetCompanyId: 'targetCompanyId',
+  sequence: 'sequence',
+  kind: 'kind',
+  receiptSha256: 'receiptSha256',
+  summaryJson: 'summaryJson',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type NurixExcelFinancialReceiptScalarFieldEnum = (typeof NurixExcelFinancialReceiptScalarFieldEnum)[keyof typeof NurixExcelFinancialReceiptScalarFieldEnum]
+
+
+export const NurixHistoricalPayrollEvidenceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  executionId: 'executionId',
+  sourceCompanyId: 'sourceCompanyId',
+  sourceRunId: 'sourceRunId',
+  sourceChecksum: 'sourceChecksum',
+  sourceRunNumber: 'sourceRunNumber',
+  payrollMonth: 'payrollMonth',
+  sourceAccruedAt: 'sourceAccruedAt',
+  sourceStatus: 'sourceStatus',
+  employeeCount: 'employeeCount',
+  grossAmount: 'grossAmount',
+  deductionsAmount: 'deductionsAmount',
+  appliedAdvancesAmount: 'appliedAdvancesAmount',
+  sourceAdvancesAmount: 'sourceAdvancesAmount',
+  advanceCarryoverEvidenceAmount: 'advanceCarryoverEvidenceAmount',
+  netAmount: 'netAmount',
+  paymentEvidenceKind: 'paymentEvidenceKind',
+  paymentEvidenceAmount: 'paymentEvidenceAmount',
+  paymentEvidenceAt: 'paymentEvidenceAt',
+  sourceInvoiceEvidence: 'sourceInvoiceEvidence',
+  sourceJournalEvidence: 'sourceJournalEvidence',
+  status: 'status',
+  notes: 'notes',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type NurixHistoricalPayrollEvidenceScalarFieldEnum = (typeof NurixHistoricalPayrollEvidenceScalarFieldEnum)[keyof typeof NurixHistoricalPayrollEvidenceScalarFieldEnum]
+
+
+export const NurixHistoricalPayrollLineEvidenceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  executionId: 'executionId',
+  runEvidenceId: 'runEvidenceId',
+  sourceItemId: 'sourceItemId',
+  sourceChecksum: 'sourceChecksum',
+  employeeSourceId: 'employeeSourceId',
+  employeeId: 'employeeId',
+  grossSalary: 'grossSalary',
+  allowancesAdd: 'allowancesAdd',
+  deductionsAmount: 'deductionsAmount',
+  sourceAdvancesAmount: 'sourceAdvancesAmount',
+  appliedAdvancesAmount: 'appliedAdvancesAmount',
+  advanceCarryoverEvidence: 'advanceCarryoverEvidence',
+  netSalary: 'netSalary',
+  createdAt: 'createdAt'
+} as const
+
+export type NurixHistoricalPayrollLineEvidenceScalarFieldEnum = (typeof NurixHistoricalPayrollLineEvidenceScalarFieldEnum)[keyof typeof NurixHistoricalPayrollLineEvidenceScalarFieldEnum]
+
+
+export const NurixHistoricalPayrollAccountingEvidenceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  executionId: 'executionId',
+  runEvidenceId: 'runEvidenceId',
+  evidenceKind: 'evidenceKind',
+  sourceRecordId: 'sourceRecordId',
+  sourceChecksum: 'sourceChecksum',
+  sourceNumber: 'sourceNumber',
+  sourceDate: 'sourceDate',
+  vaultSourceId: 'vaultSourceId',
+  amount: 'amount',
+  createdAt: 'createdAt'
+} as const
+
+export type NurixHistoricalPayrollAccountingEvidenceScalarFieldEnum = (typeof NurixHistoricalPayrollAccountingEvidenceScalarFieldEnum)[keyof typeof NurixHistoricalPayrollAccountingEvidenceScalarFieldEnum]
 
 
 export const LegacyMigrationExceptionScalarFieldEnum = {
@@ -1840,6 +2116,8 @@ export const HrEmployeeScalarFieldEnum = {
   hireDate: 'hireDate',
   status: 'status',
   terminatedAt: 'terminatedAt',
+  statusEffectiveAt: 'statusEffectiveAt',
+  statusReason: 'statusReason',
   notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -3252,11 +3530,28 @@ export const OperationsUnitScalarFieldEnum = {
 export type OperationsUnitScalarFieldEnum = (typeof OperationsUnitScalarFieldEnum)[keyof typeof OperationsUnitScalarFieldEnum]
 
 
+export const OperationsCatalogCategoryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  code: 'code',
+  nameAr: 'nameAr',
+  nameEn: 'nameEn',
+  isActive: 'isActive',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OperationsCatalogCategoryScalarFieldEnum = (typeof OperationsCatalogCategoryScalarFieldEnum)[keyof typeof OperationsCatalogCategoryScalarFieldEnum]
+
+
 export const OperationsItemScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
   companyId: 'companyId',
   sectionId: 'sectionId',
+  categoryId: 'categoryId',
   baseUnitId: 'baseUnitId',
   code: 'code',
   nameAr: 'nameAr',

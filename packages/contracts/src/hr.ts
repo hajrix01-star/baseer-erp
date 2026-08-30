@@ -101,6 +101,8 @@ export const updateHrEmployeeRequestSchema = z.object({
   workSchedule: z.string().trim().max(160).nullable().optional(),
   status: hrEmployeeStatusSchema,
   terminatedAt: hrDateSchema.nullable().optional(),
+  statusEffectiveAt: hrDateSchema.nullable().optional(),
+  statusReason: z.string().trim().max(240).nullable().optional(),
   notes: z.string().trim().max(2_000).nullable().optional(),
   idempotencyKey: idempotencyKeySchema,
 }).strict();
@@ -466,6 +468,8 @@ export const hrEmployeeSchema = z.object({
   profilePhotoVersionId: z.string().uuid().nullable(),
   status: hrEmployeeStatusSchema,
   terminatedAt: businessDateSchema.nullable(),
+  statusEffectiveAt: businessDateSchema.nullable(),
+  statusReason: z.string().max(240).nullable(),
   notes: z.string().max(2_000).nullable(),
 }).strict();
 
@@ -647,6 +651,61 @@ export const hrPayrollRunSchema = z.object({
 }).strict();
 export const hrPayrollRunDetailSchema = z.object({ payrollRun: hrPayrollRunSchema, lines: z.array(hrPayrollLineSchema).max(1_000), payments: z.array(hrPayrollPaymentSchema).max(500) }).strict();
 
+/**
+ * Noorix historical payroll is archival migration evidence.  It is never an
+ * HrPayrollRun and deliberately has no actionable payroll state.
+ */
+export const hrHistoricalPayrollEvidenceStatusSchema = z.literal("EVIDENCE_ONLY");
+export const hrHistoricalPayrollPaymentEvidenceKindSchema = z.enum(["NONE", "AMOUNT_ONLY"]);
+export const hrNurixHistoricalPayrollStatusSchema = z.enum(["SOURCE_PAID_RECONCILED", "SOURCE_EVIDENCE_INCOMPLETE", "SOURCE_CANCELLED_SUPERSEDED"]);
+export const hrHistoricalPayrollEvidenceSchema = z.object({
+  id: z.string().uuid(),
+  runNumber: z.string().min(1).max(80),
+  payrollMonth: businessDateSchema,
+  sourceTransactionDate: businessDateSchema.nullable(),
+  sourcePostedAt: businessDateSchema.nullable(),
+  sourceStatus: z.string().min(1).max(40),
+  employeeCount: z.number().int().positive(),
+  grossAmount: hrAmountSchema,
+  deductionsAmount: hrAmountSchema,
+  advancesAmount: hrAmountSchema,
+  netAmount: hrAmountSchema,
+  invoiceNumber: z.string().max(160).nullable(),
+  invoiceStatus: z.string().max(80).nullable(),
+  ledgerEntryCount: z.number().int().nonnegative(),
+  vaultAllocationCount: z.number().int().nonnegative(),
+  historicalStatus: hrNurixHistoricalPayrollStatusSchema,
+  targetFinancialStatus: z.literal("NOT_POSTED_IN_BASEER"),
+}).strict();
+export const hrHistoricalPayrollEvidenceLineSchema = z.object({
+  id: z.string().uuid(),
+  employeeId: hrEmployeeIdSchema.nullable(),
+  employeeNumber: z.string().max(80).nullable(),
+  employeeNameAr: z.string().min(1).max(160),
+  employeeNameEn: z.string().max(160).nullable(),
+  grossSalary: hrAmountSchema,
+  deductionsAmount: hrAmountSchema,
+  advancesAmount: hrAmountSchema,
+  netAmount: hrAmountSchema,
+  notes: z.string().max(2_000).nullable(),
+}).strict();
+export const hrHistoricalPayrollEvidenceDetailSchema = z.object({
+  payrollRun: hrHistoricalPayrollEvidenceSchema,
+  lines: z.array(hrHistoricalPayrollEvidenceLineSchema).max(1_000),
+  invoice: z.object({
+    id: z.string().uuid(), number: z.string().min(1).max(160), transactionDate: businessDateSchema,
+    amount: hrAmountSchema, status: z.string().min(1).max(80),
+  }).strict().nullable(),
+  ledgerEntries: z.array(z.object({
+    id: z.string().uuid(), reference: z.string().min(1).max(160), transactionDate: businessDateSchema,
+    postedAt: businessDateSchema.nullable(), amount: hrAmountSchema, status: z.string().min(1).max(80),
+    vaultNameAr: z.string().max(200).nullable(), vaultNameEn: z.string().max(200).nullable(),
+  }).strict()).max(100),
+  vaultAllocations: z.array(z.object({
+    id: z.string().uuid(), vaultNameAr: z.string().min(1).max(200), vaultNameEn: z.string().max(200).nullable(), amount: hrAmountSchema,
+  }).strict()).max(100),
+}).strict();
+
 export const hrEmployeeDetailQuerySchema = z.object({
   cursor: z.string().uuid().optional(),
   pageSize: z.coerce.number().int().min(1).max(100).optional().default(25),
@@ -661,11 +720,22 @@ export const hrEmployeeAdvancesQuerySchema = z.object({ ...hrPageQueryShape, emp
 export const hrEmployeeAdministrativeDeductionsQuerySchema = z.object({ ...hrPageQueryShape, employeeId: hrEmployeeIdSchema.optional(), status: hrEmployeeAdministrativeDeductionStatusSchema.optional(), search: hrSearchSchema.optional() }).strict();
 export const hrEmployeeLeavesQuerySchema = z.object({ ...hrPageQueryShape, employeeId: hrEmployeeIdSchema.optional(), status: hrEmployeeLeaveStatusSchema.optional(), leaveType: hrEmployeeLeaveTypeSchema.optional(), periodFrom: businessDateSchema.transform((value) => new Date(`${value}T00:00:00.000Z`)).optional(), periodTo: businessDateSchema.transform((value) => new Date(`${value}T00:00:00.000Z`)).optional(), search: hrSearchSchema.optional(), sortDirection: z.enum(['asc', 'desc']).optional().default('desc') }).strict();
 export const hrPayrollRunsQuerySchema = z.object({ ...hrPageQueryShape, status: z.enum(["DRAFT", "APPROVED", "PARTIALLY_PAID", "PAID", "REVERSED"]).optional(), periodFrom: businessDateSchema.transform((value) => new Date(`${value}T00:00:00.000Z`)).optional(), periodTo: businessDateSchema.transform((value) => new Date(`${value}T00:00:00.000Z`)).optional(), search: hrSearchSchema.optional() }).strict();
+/** Read-only archive query.  It intentionally has no action/status filter. */
+export const hrHistoricalPayrollEvidenceQuerySchema = z.object({
+  ...hrPageQueryShape,
+  periodFrom: businessDateSchema.transform((value) => new Date(`${value}T00:00:00.000Z`)).optional(),
+  periodTo: businessDateSchema.transform((value) => new Date(`${value}T00:00:00.000Z`)).optional(),
+  search: hrSearchSchema.optional(),
+}).strict();
 export const hrPayrollRunDetailQuerySchema = z.object({
   lineCursor: z.string().uuid().optional(),
   linePageSize: z.coerce.number().int().min(1).max(1_000).optional().default(1_000),
   paymentCursor: z.string().uuid().optional(),
   paymentPageSize: z.coerce.number().int().min(1).max(500).optional().default(500),
+}).strict();
+export const hrHistoricalPayrollEvidenceDetailQuerySchema = z.object({
+  lineCursor: z.string().uuid().optional(),
+  linePageSize: z.coerce.number().int().min(1).max(1_000).optional().default(1_000),
 }).strict();
 export const hrEmployeePayrollHistoryQuerySchema = z.object({ ...hrPageQueryShape }).strict();
 
@@ -692,6 +762,16 @@ export const hrPayrollRunDetailReceiptSchema = z.object({
   nextLineCursor: z.string().uuid().nullable(),
   hasMorePayments: z.boolean(),
   nextPaymentCursor: z.string().uuid().nullable(),
+}).strict();
+export const hrHistoricalPayrollEvidenceReceiptSchema = z.object({
+  payrollRuns: z.array(hrHistoricalPayrollEvidenceSchema).max(100),
+  summary: z.object({
+    count: z.number().int().nonnegative(), grossAmount: hrAmountSchema, deductionsAmount: hrAmountSchema,
+    advancesAmount: hrAmountSchema, netAmount: hrAmountSchema,
+  }).strict(),
+}).strict();
+export const hrHistoricalPayrollEvidenceDetailReceiptSchema = z.object({
+  ...hrHistoricalPayrollEvidenceDetailSchema.shape,
 }).strict();
 export const hrEmployeePayrollHistoryReceiptSchema = z.object({ companyId: companyIdSchema, lines: z.array(hrEmployeePayrollHistoryLineSchema).max(100), hasMore: z.boolean(), nextCursor: z.string().uuid().nullable() }).strict();
 export const hrPayrollRunReceiptSchema = z.object({ id: z.string().uuid(), runNumber: z.string().max(80), replayed: z.boolean() }).strict();

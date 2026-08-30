@@ -6,6 +6,7 @@ const AdministrationWorkspace = lazy(async () => ({ default: (await import("./ad
 const BackupRecoveryWorkspace = lazy(async () => ({ default: (await import("./backup-recovery-workspace")).BackupRecoveryWorkspace }));
 const NurixMigrationWorkspace = lazy(async () => ({ default: (await import("./nurix-migration-workspace")).NurixMigrationWorkspace }));
 const CommandCenterSalesCalendar = lazy(async () => ({ default: (await import("./command-center-workspace")).CommandCenterWorkspace }));
+const OwnerDashboardWorkspace = lazy(async () => ({ default: (await import("./owner-dashboard-workspace")).OwnerDashboardWorkspace }));
 const DecisionIntelligenceWorkspace = lazy(async () => ({ default: (await import("./decision-intelligence-workspace")).DecisionIntelligenceWorkspace }));
 const MarketingWorkspace = lazy(async () => ({ default: (await import("./marketing-workspace")).MarketingWorkspace }));
 const OperationsOverviewWorkspace = lazy(async () => ({ default: (await import("./operations-overview-workspace")).OperationsOverviewWorkspace }));
@@ -52,6 +53,7 @@ export function WorkspacePageContent({ route, language, permissionCodes, onStage
     : route.moduleId === "administration" && route.pageId === "administration-nurix-migration" ? <NurixMigrationWorkspace language={language} />
     : route.moduleId === "operations" && route.section === 0 ? <OperationsOverviewWorkspace language={language} />
     : route.moduleId === "command" && route.section === 2 ? <SalesAnalyticsWorkspace language={language} />
+    : route.moduleId === "command" && route.section === 3 ? <OwnerDashboardWorkspace language={language} />
     : route.moduleId === "decision" ? <DecisionIntelligenceWorkspace language={language} section={route.section} permissionCodes={permissionCodes} />
     : route.moduleId === "marketing" ? <MarketingWorkspace language={language} section={route.section} permissionCodes={permissionCodes} />
     : route.moduleId === "operations" && route.section === 9 ? <OperationsAssetsWarrantyWorkspace language={language} />

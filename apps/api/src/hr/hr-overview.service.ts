@@ -18,7 +18,7 @@ import {
 export const HR_OVERVIEW_CAPABILITIES = [
   'hr.employees.read',
   'hr.advances.read',
-  'hr.deductions.manage',
+  'hr.deductions.read',
   'hr.leaves.read',
   'hr.payroll.read',
   'hr.final_settlements.read',
@@ -47,15 +47,21 @@ export class HrOverviewService {
       expiryCutoff.setUTCDate(expiryCutoff.getUTCDate() + 30);
       const scope = { tenantId: context.tenantId, companyId: context.companyId } as const;
 
+      // The overview is a composed read model. One unavailable optional HR
+      // feature (for example, a settlement table pending deployment) must not
+      // hide every otherwise-readable operational metric.
+      const safely = async <T>(read: () => Promise<T>): Promise<T | null> => {
+        try { return await read(); } catch { return null; }
+      };
       const [workforce, financial, payroll, services, leaves, finalSettlements] = await Promise.all([
-        can('hr.employees.read') ? this.workforce(tx, scope) : null,
-        can('hr.advances.read') || can('hr.deductions.manage')
-          ? this.financial(tx, scope, can('hr.advances.read'), can('hr.deductions.manage'))
+        can('hr.employees.read') ? safely(() => this.workforce(tx, scope)) : null,
+        can('hr.advances.read') || can('hr.deductions.read')
+          ? safely(() => this.financial(tx, scope, can('hr.advances.read'), can('hr.deductions.read')))
           : null,
-        can('hr.payroll.read') ? this.payroll(tx, scope) : null,
-        can('hr.employees.read') ? this.services(tx, scope, businessDate, expiryCutoff) : null,
-        can('hr.leaves.read') ? this.leaves(tx, scope, businessDate) : null,
-        can('hr.final_settlements.read') ? this.finalSettlements(tx, scope) : null,
+        can('hr.payroll.read') ? safely(() => this.payroll(tx, scope)) : null,
+        can('hr.employees.read') ? safely(() => this.services(tx, scope, businessDate, expiryCutoff)) : null,
+        can('hr.leaves.read') ? safely(() => this.leaves(tx, scope, businessDate)) : null,
+        can('hr.final_settlements.read') ? safely(() => this.finalSettlements(tx, scope)) : null,
       ]);
 
       return { businessDate: dateResolution.businessDate, workforce, financial, payroll, services, leaves, finalSettlements };

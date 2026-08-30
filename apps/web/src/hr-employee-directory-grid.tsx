@@ -87,6 +87,10 @@ export function HrEmployeeDirectoryGrid({ employees, language, onOpen }: { emplo
   return <div className="hr-employee-directory-grid" role="list" aria-label={ar ? "بطاقات الموظفين" : "Employee cards"}>
     {employees.map((employee) => {
       const name = ar ? employee.nameAr : employee.nameEn ?? employee.nameAr;
+      const inactive = employee.status === "TERMINATED" || employee.status === "ARCHIVED";
+      const statusDateLabel = employee.status === "TERMINATED" ? (ar ? "تاريخ انتهاء الخدمة" : "End-of-service date") : ar ? "تاريخ الأرشفة" : "Archive date";
+      const statusReasonLabel = employee.status === "TERMINATED" ? (ar ? "سبب انتهاء الخدمة" : "End-of-service reason") : ar ? "سبب الأرشفة" : "Archive reason";
+      const missingStatusValue = ar ? "غير مسجل" : "Not recorded";
       return <BaseerCardButton key={employee.id} type="button" className="hr-employee-directory-card" role="listitem" onClick={() => onOpen(employee)}>
         <header>
           <HrEmployeeDirectoryAvatar employee={employee} name={name} />
@@ -95,8 +99,8 @@ export function HrEmployeeDirectoryGrid({ employees, language, onOpen }: { emplo
         </header>
         <dl>
           <div><dt>{ar ? "المسمى الوظيفي" : "Job title"}</dt><dd>{employee.jobTitle ?? "—"}</dd></div>
-          <div><dt>{ar ? "تاريخ الانضمام" : "Hire date"}</dt><dd dir="ltr">{employee.hireDate}</dd></div>
-          <div><dt>{ar ? "شفت الدوام" : "Work shift"}</dt><dd>{scheduleNameByEmployee[employee.id] || "—"}</dd></div>
+          <div><dt>{inactive ? statusDateLabel : ar ? "تاريخ الانضمام" : "Hire date"}</dt><dd dir="ltr">{inactive ? employee.statusEffectiveAt ?? employee.terminatedAt ?? missingStatusValue : employee.hireDate}</dd></div>
+          <div><dt>{inactive ? statusReasonLabel : ar ? "شفت الدوام" : "Work shift"}</dt><dd>{inactive ? employee.statusReason ?? missingStatusValue : scheduleNameByEmployee[employee.id] || "—"}</dd></div>
           <div><dt>{ar ? "الراتب الشهري" : "Monthly salary"}</dt><dd>{employee.currentMonthlyGross ? <BaseerMoney value={employee.currentMonthlyGross} language={language} /> : "—"}</dd></div>
         </dl>
         <footer>{ar ? "فتح ملف الموظف" : "Open employee file"}<span aria-hidden="true">←</span></footer>

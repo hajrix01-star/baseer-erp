@@ -59,7 +59,11 @@ async function bootstrap(): Promise<void> {
   // intermediaries from retaining a stale financial workspace response.
   const fastify = app.getHttpAdapter().getInstance() as {
     addHook(name: 'onSend', handler: (request: { headers: Record<string, string | string[] | undefined> }, reply: { header(name: string, value: string): unknown }) => Promise<void>): void;
+    addContentTypeParser(contentType: string, options: { parseAs: 'string'; bodyLimit: number }, parser: (request: unknown, body: string, done: (error: Error | null, value?: unknown) => void) => void): void;
   };
+  // Only the Excel dry-run route may receive a bounded Base64 envelope. This
+  // avoids raising the JSON body limit for ordinary ERP endpoints.
+  fastify.addContentTypeParser('application/vnd.baseer-erp.nurix-excel+json', { parseAs: 'string', bodyLimit: 8 * 1024 * 1024 }, (_request, body, done) => done(null, body));
   fastify.addHook('onSend', async (request, reply) => {
     if (request.headers.authorization) {
       reply.header('Cache-Control', 'no-store, private');

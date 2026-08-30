@@ -290,7 +290,7 @@ export class MarketingService {
   }
 
   async calendar(context: TrustedCompanyActorContext, period: Readonly<{ from: Date; to: Date }>) {
-    const [dailySales, timeline, financialOutflowsByDay, data] = await Promise.all([this.decisions.readSalesDailySeries(context, period), this.decisions.listTimeline(context, period), this.cashPerformance.dailyOutflows(context, period), this.database.inTenantTransaction(context.tenantId, async (tx) => {
+    const [dailySales, contextTimeline, financialOutflowsByDay, data] = await Promise.all([this.decisions.readSalesDailySeries(context, period), this.decisions.listTimeline(context, period), this.cashPerformance.dailyOutflows(context, period), this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const [campaigns, links, salesTargets, purchasePayments] = await Promise.all([
         tx.marketingCampaign.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, startsOn: { not: null, lte: period.to }, endsOn: { not: null, gte: period.from }, status: { not: "ARCHIVED" } }, orderBy: { startsOn: "asc" }, take: 1_000 }),
         tx.marketingCampaignFinancialLink.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, financialDocument: { status: "POSTED", businessDate: { gte: period.from, lte: period.to } } }, include: { financialDocument: { select: { businessDate: true, grossAmount: true } } }, take: 1_000 }),
@@ -325,7 +325,7 @@ export class MarketingService {
     const days = dailySales.days.map((salesDay) => {
       // Financial zero is meaningful only when that daily read exists. A map
       // fallback must never turn a future/unread day into a plotted zero.
-      const isReadableDay = salesDay.netAmount !== null;
+      const isReadableDay = salesDay.grossAmount !== null;
       const linked = linkedSpendByDay.get(salesDay.businessDate) ?? { amount: new Prisma.Decimal(0), count: 0 };
       const campaignSpend = [...(linkedSpendByCampaignDay.get(salesDay.businessDate) ?? new Map()).entries()].map(([campaignId, value]) => ({ campaignId, amount: value.amount.toFixed(4), documentCount: value.count }));
       const outflows = financialOutflowsByDay.get(salesDay.businessDate) ?? { amount: new Prisma.Decimal(0), count: 0, purchaseAmount: new Prisma.Decimal(0), purchaseCount: 0 };
@@ -336,11 +336,12 @@ export class MarketingService {
         .map((campaign) => campaign.id);
       return {
         businessDate: salesDay.businessDate,
+        officialGrossSales: salesDay.grossAmount,
         officialNetSales: salesDay.netAmount,
         customerCount: salesDay.customerCount,
         salesDayQuality: salesDay.dayQuality,
         dailySalesTarget: target ? target.amount.div(daysInMonth(salesDay.businessDate)).toFixed(4) : null,
-        targetStatus: targetStatus(salesDay.netAmount, target?.amount.div(daysInMonth(salesDay.businessDate)) ?? null),
+        targetStatus: targetStatus(salesDay.grossAmount, target?.amount.div(daysInMonth(salesDay.businessDate)) ?? null),
         linkedActualSpend: isReadableDay ? linked.amount.toFixed(4) : null,
         linkedFinancialDocumentCount: linked.count,
         campaignSpend,
@@ -353,21 +354,22 @@ export class MarketingService {
     });
     const weekdayAmounts: Prisma.Decimal[][] = Array.from({ length: 7 }, () => []);
     for (const salesDay of dailySales.days) {
-      if (salesDay.netAmount === null) continue;
+      if (salesDay.grossAmount === null) continue;
       const weekday = new Date(`${salesDay.businessDate}T00:00:00.000Z`).getUTCDay();
-      weekdayAmounts[weekday]!.push(new Prisma.Decimal(salesDay.netAmount));
+      weekdayAmounts[weekday]!.push(new Prisma.Decimal(salesDay.grossAmount));
     }
     const weekdayAverages = weekdayAmounts.map((amounts, weekday) => ({
       weekday,
-      averageOfficialNetSales: amounts.length
+      averageOfficialGrossSales: amounts.length
         ? amounts.reduce((total, amount) => total.plus(amount), new Prisma.Decimal(0)).div(amounts.length).toFixed(4)
         : null,
       eligibleDayCount: amounts.length,
     }));
+    const timeline = calendarTimeline(days, data.campaigns.map((campaign) => campaign.id));
     const plannedCampaignCost = data.campaigns.reduce((total, campaign) => total.plus(campaign.plannedCost ?? new Prisma.Decimal(0)), new Prisma.Decimal(0));
-    return { period: { fromBusinessDate: day(period.from)!, toBusinessDate: day(period.to)!, timezone: "Asia/Riyadh" as const }, sales, campaigns: data.campaigns.map(publicCampaign), days, weekdayAverages,
+    return { period: { fromBusinessDate: day(period.from)!, toBusinessDate: day(period.to)!, timezone: "Asia/Riyadh" as const }, sales, campaigns: data.campaigns.map(publicCampaign), days, timeline, weekdayAverages,
       salesTargets: data.salesTargets.map((target) => ({ periodMonth: monthKey(target.periodMonth), amount: target.amount.toFixed(4) })),
-      context: timeline.map((event) => ({ id: event.id, scope: event.scope, eventKind: event.eventKind, titleAr: event.titleAr, startsOn: event.startsOn, endsOn: event.endsOn, verificationStatus: event.verificationStatus })),
+      context: contextTimeline.map((event) => ({ id: event.id, scope: event.scope, eventKind: event.eventKind, titleAr: event.titleAr, startsOn: event.startsOn, endsOn: event.endsOn, verificationStatus: event.verificationStatus })),
       linkedActualGrossAmount: data.linkedActualGrossAmount, spendResult: spendResult(sales, plannedCampaignCost, new Prisma.Decimal(data.linkedActualGrossAmount), data.campaigns.length), dataQuality: sales.dataQuality, analysisBoundary: "TEMPORAL_CONTEXT_ONLY_NOT_CAUSATION" as const };
   }
 
@@ -517,25 +519,103 @@ function publicProviderConnection(
         : "Google Ads needs approved central setup (Google project, developer token, and read-only policy) before self-service connection begins. No data or spending authority exists now.",
   };
 }
+type CalendarTimelineInputDay = Readonly<{
+  businessDate: string; officialGrossSales: string | null; customerCount: number | null;
+  salesDayQuality: "READY" | "PENDING" | "PARTIAL" | "MISSING";
+  linkedActualSpend: string | null; purchaseOutflows: string | null; activeCampaignIds: readonly string[];
+  campaignSpend: readonly Readonly<{ campaignId: string; amount: string; documentCount: number }>[];
+}>;
+type CalendarTimelineBucket = Readonly<{
+  label: string; fromBusinessDate: string; toBusinessDate: string;
+  sales: Prisma.Decimal | null; campaignSpend: Prisma.Decimal | null; purchases: Prisma.Decimal | null; customerCount: number | null;
+  salesDayQuality: "READY" | "PENDING" | "PARTIAL" | "MISSING"; activeCampaignIds: readonly string[];
+  campaignSpendByCampaign: ReadonlyMap<string, Readonly<{ amount: Prisma.Decimal; documentCount: number }>>;
+}>;
+
+/** Produces immutable chart-ready daily and monthly views from official
+ * calendar facts. Financial aggregation and visual scaling never leave the server. */
+function calendarTimeline(days: readonly CalendarTimelineInputDay[], campaignIds: readonly string[]) {
+  const daily = days.map((item) => timelineBucketForDays(item.businessDate, [item]));
+  const byMonth = new Map<string, CalendarTimelineInputDay[]>();
+  for (const item of days) {
+    const month = item.businessDate.slice(0, 7); const bucket = byMonth.get(month) ?? [];
+    bucket.push(item); byMonth.set(month, bucket);
+  }
+  const monthly = [...byMonth.entries()].map(([month, items]) => timelineBucketForDays(month, items));
+  return { daily: timelineDataset(daily, campaignIds), monthly: timelineDataset(monthly, campaignIds) };
+}
+function timelineBucketForDays(label: string, days: readonly CalendarTimelineInputDay[]): CalendarTimelineBucket {
+  const allSalesReady = days.every((item) => item.officialGrossSales !== null);
+  const allSpendReady = days.every((item) => item.linkedActualSpend !== null);
+  const allPurchasesReady = days.every((item) => item.purchaseOutflows !== null);
+  const allCustomersReady = days.every((item) => item.customerCount !== null);
+  const campaignSpendByCampaign = new Map<string, { amount: Prisma.Decimal; documentCount: number }>();
+  for (const item of days) for (const entry of item.campaignSpend) {
+    const current = campaignSpendByCampaign.get(entry.campaignId) ?? { amount: new Prisma.Decimal(0), documentCount: 0 };
+    campaignSpendByCampaign.set(entry.campaignId, { amount: current.amount.plus(entry.amount), documentCount: current.documentCount + entry.documentCount });
+  }
+  return {
+    label, fromBusinessDate: days[0]!.businessDate, toBusinessDate: days.at(-1)!.businessDate,
+    sales: allSalesReady ? sumTimelineAmounts(days.map((item) => item.officialGrossSales!)) : null,
+    campaignSpend: allSpendReady ? sumTimelineAmounts(days.map((item) => item.linkedActualSpend!)) : null,
+    purchases: allPurchasesReady ? sumTimelineAmounts(days.map((item) => item.purchaseOutflows!)) : null,
+    customerCount: allCustomersReady ? days.reduce((total, item) => total + item.customerCount!, 0) : null,
+    salesDayQuality: timelineQuality(days.map((item) => item.salesDayQuality)),
+    activeCampaignIds: [...new Set(days.flatMap((item) => item.activeCampaignIds))], campaignSpendByCampaign,
+  };
+}
+function timelineDataset(buckets: readonly CalendarTimelineBucket[], campaignIds: readonly string[]) {
+  const maximum = buckets.reduce((current, bucket) => {
+    for (const item of bucket.campaignSpendByCampaign.values()) if (item.amount.gt(current)) current = item.amount;
+    return current;
+  }, new Prisma.Decimal(0));
+  const metric = (amount: Prisma.Decimal | null) => amount === null ? { amount: null, chartValue: null, display: null } : { amount: amount.toFixed(4), chartValue: amount.toNumber(), display: amount.toFixed(2) };
+  const campaignMetric = (campaignId: string, item: Readonly<{ amount: Prisma.Decimal; documentCount: number }> | null) => ({
+    campaignId, ...metric(item?.amount ?? null), documentCount: item?.documentCount ?? 0,
+    barHeightPercent: item === null || item.amount.lte(0) || maximum.lte(0) ? 0 : Math.max(15, Math.round(item.amount.div(maximum).mul(100).toNumber())),
+  });
+  const rows = buckets.map((bucket) => ({
+    label: bucket.label, fromBusinessDate: bucket.fromBusinessDate, toBusinessDate: bucket.toBusinessDate,
+    sales: metric(bucket.sales), campaignSpend: metric(bucket.campaignSpend), purchases: metric(bucket.purchases),
+    customerCount: bucket.customerCount, salesDayQuality: bucket.salesDayQuality, activeCampaignIds: bucket.activeCampaignIds,
+    campaignSpendByCampaign: [...bucket.campaignSpendByCampaign.entries()].map(([campaignId, item]) => campaignMetric(campaignId, item)),
+  }));
+  const laneIds = [...new Set([...campaignIds, ...buckets.flatMap((bucket) => [...bucket.campaignSpendByCampaign.keys()])])];
+  const campaignLanes = laneIds.map((campaignId) => {
+    const activeIndexes = buckets.flatMap((bucket, index) => bucket.activeCampaignIds.includes(campaignId) ? [index] : []);
+    const unknown = buckets.some((bucket) => bucket.activeCampaignIds.includes(campaignId) && bucket.campaignSpend === null);
+    const total = unknown ? null : sumTimelineAmounts(buckets.map((bucket) => bucket.campaignSpendByCampaign.get(campaignId)?.amount.toFixed(4) ?? "0.0000"));
+    return { campaignId, activeIndexes, totalSpend: metric(total), spendBars: buckets.map((bucket) => campaignMetric(campaignId, bucket.campaignSpendByCampaign.get(campaignId) ?? null)) };
+  });
+  return { rows, campaignLanes };
+}
+function sumTimelineAmounts(values: readonly string[]) { return values.reduce((total, value) => total.plus(value), new Prisma.Decimal(0)); }
+function timelineQuality(values: readonly CalendarTimelineInputDay["salesDayQuality"][]) {
+  if (values.every((value) => value === "READY")) return "READY" as const;
+  if (values.includes("PARTIAL")) return "PARTIAL" as const;
+  if (values.includes("PENDING")) return "PENDING" as const;
+  return "MISSING" as const;
+}
+
 function spendResult(sales: Awaited<ReturnType<DecisionIntelligenceService["readSalesMetric"]>> | null, plannedCampaignCost: Prisma.Decimal | null, linkedActualSpend: Prisma.Decimal, campaignCount: number, excludedLinkedDocumentCount = 0) {
   const salesReady = sales?.dataQuality === "READY";
-  const officialNetSales = salesReady ? new Prisma.Decimal(sales.payload.netAmount) : null;
-  const spendToSalesPercent = officialNetSales && !officialNetSales.isZero() ? linkedActualSpend.div(officialNetSales).mul(100).toFixed(2) : null;
+  const officialGrossSales = salesReady && sales?.payload.grossAmount !== null ? new Prisma.Decimal(sales.payload.grossAmount) : null;
+  const spendToSalesPercent = officialGrossSales && !officialGrossSales.isZero() ? linkedActualSpend.div(officialGrossSales).mul(100).toFixed(2) : null;
   const hasSpend = linkedActualSpend.gt(0);
-  const conclusionAr = !sales ? "أضف فترة للحملة لقراءة المبيعات الرسمية ونتيجة الصرف الوصفية." : !salesReady ? "لا يمكن مقارنة الصرف بالمبيعات لأن جودة قراءة المبيعات ليست جاهزة؛ لا تتحول البيانات الناقصة إلى صفر." : !hasSpend ? "لا توجد مصروفات تسويقية مثبتة مرتبطة في هذه الفترة؛ لا يمكن تقييم نتيجة الصرف بعد." : `المصروف المرتبط المثبت ${linkedActualSpend.toFixed(4)} ر.س مقابل مبيعات رسمية ${officialNetSales!.toFixed(4)} ر.س${spendToSalesPercent ? ` (${spendToSalesPercent}% من مبيعات الفترة)` : ""}. هذه قراءة وصفية زمنية وليست ROI أو إثباتاً للأثر.`;
-  const conclusionEn = !sales ? "Add campaign dates to read official sales and descriptive spend results." : !salesReady ? "Spend cannot be compared with sales because sales data quality is not ready; incomplete data is never turned into zero." : !hasSpend ? "There is no posted campaign-linked spend in this period, so spend results cannot yet be assessed." : `Posted linked spend is ${linkedActualSpend.toFixed(4)} SAR against official net sales of ${officialNetSales!.toFixed(4)} SAR${spendToSalesPercent ? ` (${spendToSalesPercent}% of period sales)` : ""}. This is a descriptive temporal read, not ROI or proof of impact.`;
-  return { plannedCampaignCost: plannedCampaignCost?.toFixed(4) ?? null, linkedActualSpend: linkedActualSpend.toFixed(4), linkedPostedSpendOnly: true as const, spendDataQuality: excludedLinkedDocumentCount > 0 ? "CONFLICTED" as const : linkedActualSpend.gt(0) ? "READY" as const : "NO_DATA" as const, excludedLinkedDocumentCount, officialNetSales: officialNetSales?.toFixed(4) ?? null, spendToSalesPercent, campaignCount, salesDataQuality: sales?.dataQuality ?? "NO_DATA", googleAdsStatus: "NOT_CONNECTED" as const, conclusionAr, conclusionEn, analysisBoundary: "DESCRIPTIVE_SPEND_SALES_ONLY_NOT_ROI_OR_CAUSATION" as const };
+  const conclusionAr = !sales ? "أضف فترة للحملة لقراءة المبيعات الرسمية ونتيجة الصرف الوصفية." : !salesReady || !officialGrossSales ? "لا يمكن مقارنة الصرف بالمبيعات لأن جودة قراءة المبيعات ليست جاهزة؛ لا تتحول البيانات الناقصة إلى صفر." : !hasSpend ? "لا توجد مصروفات تسويقية مثبتة مرتبطة في هذه الفترة؛ لا يمكن تقييم نتيجة الصرف بعد." : `المصروف المرتبط المثبت ${linkedActualSpend.toFixed(4)} ر.س مقابل مبيعات رسمية شاملة الضريبة ${officialGrossSales.toFixed(4)} ر.س${spendToSalesPercent ? ` (${spendToSalesPercent}% من مبيعات الفترة)` : ""}. هذه قراءة وصفية زمنية وليست ROI أو إثباتاً للأثر.`;
+  const conclusionEn = !sales ? "Add campaign dates to read official sales and descriptive spend results." : !salesReady || !officialGrossSales ? "Spend cannot be compared with sales because sales data quality is not ready; incomplete data is never turned into zero." : !hasSpend ? "There is no posted campaign-linked spend in this period, so spend results cannot yet be assessed." : `Posted linked spend is ${linkedActualSpend.toFixed(4)} SAR against VAT-inclusive official sales of ${officialGrossSales.toFixed(4)} SAR${spendToSalesPercent ? ` (${spendToSalesPercent}% of period sales)` : ""}. This is a descriptive temporal read, not ROI or proof of impact.`;
+  return { plannedCampaignCost: plannedCampaignCost?.toFixed(4) ?? null, linkedActualSpend: linkedActualSpend.toFixed(4), linkedPostedSpendOnly: true as const, spendDataQuality: excludedLinkedDocumentCount > 0 ? "CONFLICTED" as const : linkedActualSpend.gt(0) ? "READY" as const : "NO_DATA" as const, excludedLinkedDocumentCount, officialGrossSales: officialGrossSales?.toFixed(4) ?? null, spendToSalesPercent, campaignCount, salesDataQuality: sales?.dataQuality ?? "NO_DATA", googleAdsStatus: "NOT_CONNECTED" as const, conclusionAr, conclusionEn, analysisBoundary: "DESCRIPTIVE_SPEND_SALES_ONLY_NOT_ROI_OR_CAUSATION" as const };
 }
 
 function campaignManagerSummary(comparison: Awaited<ReturnType<DecisionIntelligenceService["readSalesComparison"]>>, spend: ReturnType<typeof spendResult>, context: Array<{ titleAr: string }>) {
-  const sales = comparison.current.dataQuality === "READY" ? comparison.payload.currentNetAmount : null;
+  const sales = comparison.current.dataQuality === "READY" ? comparison.payload.currentGrossAmount : null;
   const change = comparison.dataQuality === "READY" && comparison.payload.percentDifference !== null
-    ? ` مقارنة بالفترة السابقة المساوية تغيرت المبيعات ${comparison.payload.differenceNetAmount} ر.س (${comparison.payload.percentDifference}%).`
+    ? ` مقارنة بالفترة السابقة المساوية تغيرت المبيعات الشاملة للضريبة ${comparison.payload.differenceGrossAmount} ر.س (${comparison.payload.percentDifference}%).`
     : " لا يمكن إصدار مقارنة عادلة للمبيعات قبل اكتمال بيانات الفترتين وخط الأساس.";
   const contextText = context.length ? ` وتزامن معها: ${context.slice(0, 3).map((event) => event.titleAr).join("، ")}.` : "";
   return sales === null
     ? `بيانات مبيعات الحملة غير مكتملة أو غير متاحة. الصرف المثبت المرتبط ضمن الفترة ${spend.linkedActualSpend} ر.س.${contextText} هذه قراءة وصفية ولا تثبت سبباً.`
-    : `خلال الحملة سُجل صرف مثبت مرتبط ضمن الفترة قدره ${spend.linkedActualSpend} ر.س، ومبيعات رسمية صافية ${sales} ر.س.${change}${contextText} هذه قراءة وصفية ولا تثبت أن الحملة سببت التغير.`;
+    : `خلال الحملة سُجل صرف مثبت مرتبط ضمن الفترة قدره ${spend.linkedActualSpend} ر.س، ومبيعات رسمية شاملة الضريبة ${sales} ر.س.${change}${contextText} هذه قراءة وصفية ولا تثبت أن الحملة سببت التغير.`;
 }
 
 function campaignLimitations(comparison: Awaited<ReturnType<DecisionIntelligenceService["readSalesComparison"]>>, spend: ReturnType<typeof spendResult>) {

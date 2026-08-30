@@ -7,12 +7,12 @@ const BaseerSectionIcon = lazy(async () => ({ default: (await import('./baseer-s
 const CompanySessionControl = lazy(async () => ({ default: (await import('./company-session-control')).CompanySessionControl }));
 const InboundEvidenceWorkspace = lazy(async () => ({ default: (await import('./inbound-evidence-workspace')).InboundEvidenceWorkspace }));
 const OperationsInternalRegistrationWorkspace = lazy(async () => ({ default: (await import('./operations-internal-registration-workspace')).OperationsInternalRegistrationWorkspace }));
-const OwnerDailyBriefWorkspace = lazy(async () => ({ default: (await import('./owner-daily-brief-workspace')).OwnerDailyBriefWorkspace }));
+const OwnerDashboardWorkspace = lazy(async () => ({ default: (await import('./owner-dashboard-workspace')).OwnerDashboardWorkspace }));
 const QuickAdvanceDialog = lazy(async () => ({ default: (await import('./quick-advance-dialog')).QuickAdvanceDialog }));
 const AttendanceEmployeePortal = lazy(async () => ({ default: (await import('./attendance-employee-portal')).AttendanceEmployeePortal }));
 const WorkspacePageContent = lazy(async () => ({ default: (await import('./workspace-page-content')).WorkspacePageContent }));
 import { getModule, modules, type ModuleId } from './modules';
-import { activeSession, clearActiveSession, listAvailableCompanies, signOutActiveSession } from './daily-sales-client';
+import { activeSession, clearActiveSession, listAvailableCompanies, selectActiveCompany, signOutActiveSession } from './daily-sales-client';
 import { canOpenRoute, setActivePermissionCodes, visibleModules } from './module-access';
 import { appText } from './app-copy';
 import { getPage, getPageByLegacySection, pageRouteHash, pagesForModule, type PageId } from './page-registry';
@@ -20,7 +20,7 @@ import { getPage, getPageByLegacySection, pageRouteHash, pagesForModule, type Pa
 type Language = 'ar' | 'en';
 type Theme = 'green' | 'blue' | 'plum' | 'classic';
 type Appearance = 'light' | 'dark' | 'system';
-type AppBackground = 'product-light' | 'product-white' | 'product-soft' | 'product-gray' | 'product-dark' | 'product-dimmed' | 'product-night';
+type AppBackground = 'product-light' | 'product-white' | 'product-soft' | 'product-beige' | 'product-gray' | 'product-dark' | 'product-dimmed' | 'product-night';
 type ContainerSurface = 'white' | 'soft' | 'tinted' | 'beige' | 'gray';
 type ResolvedRoute = { moduleId: ModuleId; section: number; pageId: PageId; stage?: string };
 
@@ -51,7 +51,7 @@ function ThemePicker({ language, theme, onTheme, background, onBackground }: { l
   const text = appText(language);
   const [appearance, setAppearance] = useState<Appearance>(readAppearancePreference);
   const colors: Record<Theme, string> = { green: "#087f54", blue: "#1268a7", plum: "#7650a7", classic: "#9a7139" };
-  const backgrounds: ReadonlyArray<{ id: AppBackground; ar: string; en: string; color: string }> = [{ id: 'product-white', ar: 'أبيض عالمي', en: 'Global white', color: '#ffffff' }, { id: 'product-light', ar: 'محايد نهاري', en: 'Product light', color: '#f6f8fa' }, { id: 'product-soft', ar: 'محايد ناعم', en: 'Soft neutral', color: '#f4f7f4' }, { id: 'product-gray', ar: 'رمادي متوسط', en: 'Medium gray', color: '#8c8c8c' }, { id: 'product-dark', ar: 'ليلي عميق', en: 'Product dark', color: '#0d1117' }, { id: 'product-dimmed', ar: 'داكن هادئ', en: 'Product dimmed', color: '#22272e' }, { id: 'product-night', ar: 'فحمي ليلي', en: 'Product night', color: '#161b22' }];
+  const backgrounds: ReadonlyArray<{ id: AppBackground; ar: string; en: string; color: string }> = [{ id: 'product-white', ar: 'أبيض عالمي', en: 'Global white', color: '#ffffff' }, { id: 'product-light', ar: 'محايد نهاري', en: 'Product light', color: '#f6f8fa' }, { id: 'product-soft', ar: 'محايد ناعم', en: 'Soft neutral', color: '#f4f7f4' }, { id: 'product-beige', ar: 'بيج فاتح', en: 'Light beige', color: '#f7f1e6' }, { id: 'product-gray', ar: 'رمادي متوسط', en: 'Medium gray', color: '#8c8c8c' }, { id: 'product-dark', ar: 'ليلي عميق', en: 'Product dark', color: '#0d1117' }, { id: 'product-dimmed', ar: 'داكن هادئ', en: 'Product dimmed', color: '#22272e' }, { id: 'product-night', ar: 'فحمي ليلي', en: 'Product night', color: '#161b22' }];
   const containerSurfaces: ReadonlyArray<{ id: ContainerSurface; ar: string; en: string; color: string }> = [{ id: 'white', ar: 'أبيض صلب', en: 'Solid white', color: '#ffffff' }, { id: 'soft', ar: 'هادئ', en: 'Soft neutral', color: '#f5f8f6' }, { id: 'tinted', ar: 'من لون النظام', en: 'Brand tint', color: '#e8f4ed' }, { id: 'beige', ar: 'بيج هادئ', en: 'Soft beige', color: '#f6f0e6' }, { id: 'gray', ar: 'رمادي فاتح', en: 'Light gray', color: '#f1f3f5' }];
   const [containerSurface, setContainerSurface] = useState<ContainerSurface>(() => {
     try {
@@ -116,7 +116,8 @@ function parseRouteValue(value: string): Route {
   const sectionValue = params.get('section');
   const stage = params.get('stage');
   const module = modules.find((item) => item.id === moduleId);
-  if (!module || (stage !== null && !/^[a-z][a-z0-9-]{0,31}$/.test(stage))) return null;
+  const isEmployeeProfileStage = moduleId === "hr" && /^employee-[a-z0-9-]{1,80}$/.test(stage ?? "");
+  if (!module || (stage !== null && !/^[a-z][a-z0-9-]{0,31}$/.test(stage) && !isEmployeeProfileStage)) return null;
 
   const legacySection = sectionValue === null ? undefined : Number(sectionValue);
   const page = pageId === null
@@ -292,7 +293,7 @@ function ModuleWorkspaceContents({ route, language, theme, background, onLanguag
   const navigation = <Navigation moduleId={module.id} active={route} language={language} onSelect={onRoute} permissionCodes={permissionCodes} />;
   const header = <AppHeader language={language} theme={theme} background={background} activeModuleId={route.moduleId} permissionCodes={permissionCodes} onLanguage={onLanguage} onTheme={onTheme} onBackground={onBackground} onModules={onModules} onOpenModule={onOpenModule} onQuickAdvance={onQuickAdvance} onSignOut={onSignOut} />;
   const shell = (content: React.ReactNode, options?: { navigation?: boolean; pageClassName?: string }) => <BaseerAppShell header={header} moduleTitle={module.title[language]} currentModuleLabel={text.currentModule} sectionTitle={sectionTitle} sectionsLabel={text.sections} closeLabel={text.close} onModules={onModules} navigation={options?.navigation === false ? undefined : navigation} navigationKey={routeIdentity(route)} pageClassName={options?.pageClassName}>{content}</BaseerAppShell>;
-  if (route.moduleId === "command" && route.section === 3) return shell(<Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><OwnerDailyBriefWorkspace language={language} /></Suspense>);
+  if (route.moduleId === "command" && route.section === 3) return shell(<Suspense fallback={<section className="module-page__placeholder">{text.loading}</section>}><OwnerDashboardWorkspace language={language} /></Suspense>);
   // This is deliberately a focused workstation. A bar/kitchen employee who
   // only has the registration capability is never shown the wider operations
   // navigation or any financial/management screen.
@@ -317,7 +318,7 @@ export function App() {
   });
   const [background, setBackground] = useState<AppBackground>(() => {
     const stored = localStorage.getItem(launcherBackgroundStorageKey);
-    return stored === 'product-light' || stored === 'product-white' || stored === 'product-soft' || stored === 'product-gray' || stored === 'product-dark' || stored === 'product-dimmed' || stored === 'product-night' ? stored : 'product-white';
+    return stored === 'product-light' || stored === 'product-white' || stored === 'product-soft' || stored === 'product-beige' || stored === 'product-gray' || stored === 'product-dark' || stored === 'product-dimmed' || stored === 'product-night' ? stored : 'product-white';
   });
   const [route, setRoute] = useState<Route>(parseRoute);
   const [permissionCodes, setPermissionCodes] = useState<string[] | null>(null);
@@ -358,6 +359,20 @@ export function App() {
     void listAvailableCompanies(session).then((companies) => {
       const active = companies.find((company) => company.id === session.companyId);
       if (!cancelled) {
+        // A development reset or a revoked membership can leave a valid token
+        // pointing at a company that no longer belongs to this session. When
+        // exactly one company is available, recover the selection without
+        // making the person sign in again; otherwise return to sign-in rather
+        // than rendering every protected page as a generic 403 failure.
+        if (!active) {
+          if (companies.length === 1) {
+            selectActiveCompany(companies[0].id);
+          } else {
+            clearActiveSession();
+          }
+          window.location.reload();
+          return;
+        }
         const codes = active?.permissionCodes ?? [];
         setPermissionCodes(codes);
         setActiveCompanyIsOwner(companyIsOwner(active));

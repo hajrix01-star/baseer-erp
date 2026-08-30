@@ -20,7 +20,9 @@ assert.match(client, /sessionExpiresAt:\s*string/, "The browser session must ret
 assert.match(client, /persistActiveSession/, "Only the central session writer may persist a sign-in session.");
 assert.match(client, /refreshInFlight/, "Concurrent 401 responses must share one refresh request.");
 assert.match(client, /\/auth\/refresh/, "Expired access tokens must use the server refresh endpoint.");
-assert.match(client, /return await requestWithTransientReadRetry<T>\(refreshed, path, options\)/, "The original request must retry once after refresh.");
+assert.match(client, /for \(let refreshAttempt = 0; refreshAttempt < 2; refreshAttempt \+= 1\)/, "The original request must retry once after a successful refresh, with a bounded recovery loop.");
+assert.match(client, /return await requestWithTransientReadRetry<T>\(current, path, options\)/, "Each recovery attempt must use the current authenticated session.");
+assert.match(client, /const refreshed = await refreshSessionOnce\(current\.accessToken\);\s*if \(!refreshed\) throw error;\s*current = refreshed;/, "A successful refresh must replace the session used by the retried request.");
 assert.match(client, /if \(error instanceof BaseerApiError && error\.status === 401\) \{\s*clearExpiredSession\(\)/, "Only an authentication rejection from refresh may clear the session.");
 assert.doesNotMatch(client, /if \(error instanceof BaseerApiError && error\.status === 401\)\s*clearExpiredSession\(\);\s*throw error;/, "A normal 401 must not immediately log the user out.");
 assert.match(client, /requestWithTransientReadRetry/, "Safe GET reads must retry a transient transport failure once.");

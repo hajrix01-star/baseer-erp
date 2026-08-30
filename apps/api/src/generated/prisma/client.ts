@@ -137,6 +137,86 @@ export type LegacyMigrationCompanyMap = Prisma.LegacyMigrationCompanyMapModel
  */
 export type LegacyMigrationRecordMap = Prisma.LegacyMigrationRecordMapModel
 /**
+ * Model NurixExcelStagingPackage
+ * Immutable intake metadata. Workbook bytes stay in controlled file storage
+ * when that gate is enabled; this table stores only technical fingerprints.
+ */
+export type NurixExcelStagingPackage = Prisma.NurixExcelStagingPackageModel
+/**
+ * Model NurixExcelStagingBatch
+ * A checkpointable parse/validation batch. It cannot carry financial payloads.
+ */
+export type NurixExcelStagingBatch = Prisma.NurixExcelStagingBatchModel
+/**
+ * Model NurixExcelStagingRow
+ * One canonical source-row receipt. Hashes make resume/idempotency decisions
+ * without retaining raw financial or employee payloads in the control plane.
+ */
+export type NurixExcelStagingRow = Prisma.NurixExcelStagingRowModel
+/**
+ * Model NurixExcelMasterDataExecution
+ * The durable control plane for Excel master-data waves. It deliberately
+ * has no financial-document relationship or financial payload.
+ */
+export type NurixExcelMasterDataExecution = Prisma.NurixExcelMasterDataExecutionModel
+/**
+ * Model NurixExcelMasterDataItem
+ * An immutable technical receipt for one source master row. Sensitive raw
+ * cells stay encrypted in the workbook; this table retains only keys,
+ * checksum, target reference and outcome required for safe resume.
+ */
+export type NurixExcelMasterDataItem = Prisma.NurixExcelMasterDataItemModel
+/**
+ * Model NurixExcelFinancialExecution
+ * Financial execution is intentionally independent from master-data waves.
+ * It cannot store invoice cells or create postings by itself; it supplies the
+ * durable, tenant-scoped approval and resume boundary for a future writer.
+ */
+export type NurixExcelFinancialExecution = Prisma.NurixExcelFinancialExecutionModel
+/**
+ * Model NurixExcelFinancialWave
+ * A bounded wave lease permits safe resume after an interrupted financial
+ * worker. Financial facts are deliberately not related here.
+ */
+export type NurixExcelFinancialWave = Prisma.NurixExcelFinancialWaveModel
+/**
+ * Model NurixExcelFinancialItem
+ * One item per exact source record and transform. The operation key is a
+ * deterministic writer idempotency key; it never contains source payload.
+ */
+export type NurixExcelFinancialItem = Prisma.NurixExcelFinancialItemModel
+/**
+ * Model NurixExcelFinancialSourceMap
+ * Immutable source-to-target lineage. A source identity can map once per
+ * execution, which prevents a resumed writer from creating it twice.
+ */
+export type NurixExcelFinancialSourceMap = Prisma.NurixExcelFinancialSourceMapModel
+/**
+ * Model NurixExcelFinancialReceipt
+ * Append-only technical proof for a financial wave. The JSON summary is
+ * limited to reconciliation counts/totals and never stores raw source rows.
+ */
+export type NurixExcelFinancialReceipt = Prisma.NurixExcelFinancialReceiptModel
+/**
+ * Model NurixHistoricalPayrollEvidence
+ * Immutable historical payroll header. It is intentionally isolated from
+ * HrPayrollRun, journals, payments, and employee financial movements: Noorix
+ * approval evidence must not become a current Baseer financial obligation.
+ */
+export type NurixHistoricalPayrollEvidence = Prisma.NurixHistoricalPayrollEvidenceModel
+/**
+ * Model NurixHistoricalPayrollLineEvidence
+ * Immutable historical payroll source line. employeeId is optional because
+ * it is a lineage reference only; it never licenses a payroll or debt write.
+ */
+export type NurixHistoricalPayrollLineEvidence = Prisma.NurixHistoricalPayrollLineEvidenceModel
+/**
+ * Model NurixHistoricalPayrollAccountingEvidence
+ * Source-only invoice/journal/vault-allocation proof for a historical payroll
+ * header. It has no relation to Baseer operational finance documents.
+ */
+export type NurixHistoricalPayrollAccountingEvidence = Prisma.NurixHistoricalPayrollAccountingEvidenceModel
+/**
  * Model LegacyMigrationException
  * A safe exception ledger: codes and technical references only, never source
  * rows, passwords, storage keys, files, or unredacted PII.
@@ -981,6 +1061,13 @@ export type OperationsSection = Prisma.OperationsSectionModel
  * 
  */
 export type OperationsUnit = Prisma.OperationsUnitModel
+/**
+ * Model OperationsCatalogCategory
+ * A non-financial catalogue grouping. It is separate from OperationsSection
+ * (the internal producing area) and from finance categories, so imported
+ * source classifications stay meaningful without affecting accounting.
+ */
+export type OperationsCatalogCategory = Prisma.OperationsCatalogCategoryModel
 /**
  * Model OperationsItem
  * 

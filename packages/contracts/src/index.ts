@@ -23,5 +23,6 @@ export * from './operations.js';
 export * from './marketing.js';
 export * from './inbound-evidence.js';
 export * from './owner-daily-brief.js';
+export * from './owner-dashboard.js';
 export * from './backup.js';
 export * from './nurix-migration.js';

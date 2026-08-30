@@ -9,6 +9,7 @@ import { BaseerEmptyState, BaseerNotice, BaseerSectionHeader, BaseerWorkspace } 
 import { activeSession, type ActiveSession } from './daily-sales-client';
 import { DailySalesSignIn } from './daily-sales-sign-in';
 import { formatCount, formatDateTime } from './number-format';
+import { NurixExcelImportPanel } from './nurix-excel-import-panel';
 import { acknowledgeNurixMigrationException, approveNurixCompanyMaps, approveNurixDirectCandidates, createCommercialNurixCounterparty, createCommercialNurixCounterpartyReviewGroup, createNurixProvisionalSuppliers, loadNurixCounterpartyQueue, loadNurixCounterpartyReviewGroups, loadNurixCounterpartySuggestions, loadNurixMigrationReview, loadNurixMigrationRuns, resolveNurixCounterparty, resolveNurixCounterpartyReviewGroup, type NurixCounterpartyQueue, type NurixCounterpartyReviewGroups, type NurixCounterpartySuggestions, type NurixMigrationReview, type NurixMigrationRun } from './nurix-migration-client';
 
 type Language = 'ar' | 'en';
@@ -101,7 +102,8 @@ function NurixMigrationContent({ language, session }: { language: Language; sess
 
   if (loading && !review) return <section className="module-page__placeholder">{text.load}</section>;
   return <BaseerWorkspace className="nurix-migration-workspace">
-    <BaseerSectionHeader eyebrow={text.eyebrow} title={text.title} description={text.description} actions={<BaseerStatusBadge tone="warning">{text.stage}</BaseerStatusBadge>} />
+      <BaseerSectionHeader eyebrow={text.eyebrow} title={text.title} description={text.description} actions={<BaseerStatusBadge tone="warning">{text.stage}</BaseerStatusBadge>} />
+      <NurixExcelImportPanel language={language} session={session} />
     <BaseerNotice tone="warning" title={text.safeTitle}>{text.safe}</BaseerNotice>
     {message ? <BaseerNotice tone="danger">{message}</BaseerNotice> : null}
     {runs.length === 0 ? <BaseerEmptyState title={text.noRuns} /> : <>

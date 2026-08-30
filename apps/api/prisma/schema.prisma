@@ -90,6 +90,126 @@ enum LegacyMigrationExceptionSeverity {
   WARNING
 }
 
+/// Durable, non-financial intake states for an Excel migration package.
+enum NurixExcelStagingPackageStatus {
+  RECEIVED
+  PARSED
+  QUARANTINED
+  READY_FOR_RECONCILIATION
+  FAILED
+}
+
+enum NurixExcelStagingBatchStatus {
+  PENDING
+  PARSED
+  VALIDATED
+  QUARANTINED
+  FAILED
+}
+
+enum NurixExcelStagingRowStatus {
+  ACCEPTED
+  QUARANTINED
+  REJECTED
+  SKIPPED
+}
+
+/// Lease-backed, non-financial master-data execution states. A failed or
+/// interrupted worker can be resumed from its durable item receipts.
+enum NurixExcelMasterDataExecutionStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+/// A source master row is never overwritten. An existing Baseer record is
+/// either reused when compatible or held for owner review.
+enum NurixExcelMasterDataItemStatus {
+  PENDING
+  CREATED
+  REUSED
+  REVIEW_REQUIRED
+}
+
+/// Financial migration has a separate, approval-gated control plane. Its
+/// records retain technical lineage and reconciliation evidence only; a
+/// future writer must still create financial facts in its own transaction.
+enum NurixExcelFinancialExecutionStatus {
+  PENDING
+  READY_FOR_APPROVAL
+  APPROVED
+  RUNNING
+  RECONCILING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+/// Each committed financial wave is a bounded resume checkpoint.
+enum NurixExcelFinancialWaveStatus {
+  PENDING
+  RUNNING
+  COMMITTED
+  FAILED
+  CANCELLED
+}
+
+/// An item receipt is immutable source lineage, never a financial payload.
+enum NurixExcelFinancialItemStatus {
+  PENDING
+  PLANNED
+  POSTED
+  REUSED
+  REVIEW_REQUIRED
+  FAILED
+  EXCLUDED
+}
+
+/// Source-to-target maps are the idempotency boundary for a financial writer.
+enum NurixExcelFinancialSourceMapState {
+  PLANNED
+  APPLIED
+  REUSED
+  REVERSED
+}
+
+enum NurixExcelFinancialReceiptKind {
+  DRY_RUN
+  WAVE_COMMITTED
+  RECONCILIATION
+  FAILURE
+  CANCELLATION
+}
+
+/// A Noorix payroll snapshot is historical evidence, never a Baseer payroll
+/// lifecycle state. No value in this enum may be approved, paid, posted, or
+/// converted into an employee balance by a financial service.
+enum NurixHistoricalPayrollEvidenceStatus {
+  EVIDENCE_ONLY
+  REVIEW_REQUIRED
+}
+
+/// This is evidence about the Noorix source only. It is deliberately not a
+/// Baseer payment state and cannot unlock payroll payment or journal posting.
+enum NurixHistoricalPayrollPaymentEvidenceKind {
+  NONE
+  AMOUNT_ONLY
+}
+
+/// Availability is a source-evidence statement, never a target financial
+/// state. A missing Noorix invoice or journal is explicitly preserved as NONE.
+enum NurixHistoricalPayrollAccountingEvidenceAvailability {
+  NONE
+  PRESENT
+}
+
+enum NurixHistoricalPayrollAccountingEvidenceKind {
+  PAYROLL_INVOICE
+  JOURNAL_ENTRY
+  VAULT_ALLOCATION
+}
+
 /// A human review record is immutable. It can attest to technically direct
 /// candidate maps or acknowledge a blocker, but never changes a source map.
 enum LegacyMigrationReviewActionKind {
@@ -881,38 +1001,48 @@ model Tenant {
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   updatedAt DateTime @updatedAt @db.Timestamptz(6)
 
-  users                           User[]
-  companies                       Company[]
-  roles                           Role[]
-  sessions                        AppSession[]
-  audits                          AuditEvent[]
-  idempotencyReceipts             IdempotencyReceipt[]
-  documentSerialCounters          DocumentSerialCounter[]
-  fileMetadata                    FileMetadata[]
-  reportDocuments                 ReportDocument[]
-  administrationAssignments       TenantAdministrationAssignment[]
-  inboundEvidenceLabels           InboundEvidenceLabel[]
-  inboundEvidenceRules            InboundEvidenceRule[]
-  inboundEvidenceCommands         InboundEvidenceCommandReceipt[]
-  inboundEvidenceGmailConnection  InboundEvidenceGmailConnection?
-  inboundEvidenceOAuthStates      InboundEvidenceGmailOAuthState[]
-  inboundEvidenceMessages         InboundEvidenceMessage[]
-  inboundEvidenceAttachments      InboundEvidenceAttachment[]
-  inboundEvidenceDocumentAnalyses InboundEvidenceDocumentAnalysis[]
-  ownerDailyBriefSnapshots        OwnerDailyBriefSnapshot[]
-  backupPolicies                  BackupPolicy[]
-  backupJobs                      BackupJob[]
-  backupArtifacts                 BackupArtifact[]
-  backupAuditEvents               BackupAuditEvent[]
-  legacyMigrationRuns             LegacyMigrationRun[]
-  legacyMigrationCompanyMaps      LegacyMigrationCompanyMap[]
-  legacyMigrationRecordMaps       LegacyMigrationRecordMap[]
-  legacyMigrationExceptions       LegacyMigrationException[]
-  legacyMigrationReviewActions    LegacyMigrationReviewAction[]
+  users                                  User[]
+  companies                              Company[]
+  roles                                  Role[]
+  sessions                               AppSession[]
+  audits                                 AuditEvent[]
+  idempotencyReceipts                    IdempotencyReceipt[]
+  documentSerialCounters                 DocumentSerialCounter[]
+  fileMetadata                           FileMetadata[]
+  reportDocuments                        ReportDocument[]
+  administrationAssignments              TenantAdministrationAssignment[]
+  inboundEvidenceLabels                  InboundEvidenceLabel[]
+  inboundEvidenceRules                   InboundEvidenceRule[]
+  inboundEvidenceCommands                InboundEvidenceCommandReceipt[]
+  inboundEvidenceGmailConnection         InboundEvidenceGmailConnection?
+  inboundEvidenceOAuthStates             InboundEvidenceGmailOAuthState[]
+  inboundEvidenceMessages                InboundEvidenceMessage[]
+  inboundEvidenceAttachments             InboundEvidenceAttachment[]
+  inboundEvidenceDocumentAnalyses        InboundEvidenceDocumentAnalysis[]
+  ownerDailyBriefSnapshots               OwnerDailyBriefSnapshot[]
+  backupPolicies                         BackupPolicy[]
+  backupJobs                             BackupJob[]
+  backupArtifacts                        BackupArtifact[]
+  backupAuditEvents                      BackupAuditEvent[]
+  legacyMigrationRuns                    LegacyMigrationRun[]
+  legacyMigrationCompanyMaps             LegacyMigrationCompanyMap[]
+  legacyMigrationRecordMaps              LegacyMigrationRecordMap[]
+  legacyMigrationExceptions              LegacyMigrationException[]
+  legacyMigrationReviewActions           LegacyMigrationReviewAction[]
   legacyMigrationCounterpartyResolutions LegacyMigrationCounterpartyResolution[]
-  legacyMigrationCounterpartyCandidates LegacyMigrationCounterpartyCandidate[]
-  financeCounterpartyIdentities   FinanceCounterpartyIdentity[]
-  financeCounterpartyAliases      FinanceCounterpartyAlias[]
+  legacyMigrationCounterpartyCandidates  LegacyMigrationCounterpartyCandidate[]
+  nurixExcelStagingPackages              NurixExcelStagingPackage[]
+  nurixExcelStagingBatches               NurixExcelStagingBatch[]
+  nurixExcelStagingRows                  NurixExcelStagingRow[]
+  nurixExcelMasterDataExecutions         NurixExcelMasterDataExecution[]
+  nurixExcelMasterDataItems              NurixExcelMasterDataItem[]
+  nurixExcelFinancialExecutions          NurixExcelFinancialExecution[]
+  nurixExcelFinancialWaves               NurixExcelFinancialWave[]
+  nurixExcelFinancialItems               NurixExcelFinancialItem[]
+  nurixExcelFinancialSourceMaps          NurixExcelFinancialSourceMap[]
+  nurixExcelFinancialReceipts            NurixExcelFinancialReceipt[]
+  financeCounterpartyIdentities          FinanceCounterpartyIdentity[]
+  financeCounterpartyAliases             FinanceCounterpartyAlias[]
 }
 
 model User {
@@ -949,11 +1079,14 @@ model User {
   suspendedAiSkillActivations        AiSkillActivation[]                      @relation("AiSkillActivationSuspender")
   aiEvaluationFeedback               AiEvaluationFeedback[]
   aiSkillEvaluationRuns              AiSkillEvaluationRun[]
-  requestedBackupJobs                 BackupJob[]             @relation("BackupJobRequester")
-  createdBackupPolicies               BackupPolicy[]          @relation("BackupPolicyCreator")
-  backupAuditEvents                   BackupAuditEvent[]
-  initiatedLegacyMigrationRuns        LegacyMigrationRun[]    @relation("LegacyMigrationRunCreator")
-  legacyMigrationReviewActions        LegacyMigrationReviewAction[] @relation("LegacyMigrationReviewActionCreator")
+  requestedBackupJobs                BackupJob[]                              @relation("BackupJobRequester")
+  createdBackupPolicies              BackupPolicy[]                           @relation("BackupPolicyCreator")
+  backupAuditEvents                  BackupAuditEvent[]
+  initiatedLegacyMigrationRuns       LegacyMigrationRun[]                     @relation("LegacyMigrationRunCreator")
+  legacyMigrationReviewActions       LegacyMigrationReviewAction[]            @relation("LegacyMigrationReviewActionCreator")
+  requestedNurixExcelFinancialExecutions NurixExcelFinancialExecution[]       @relation("NurixExcelFinancialExecutionRequester")
+  approvedNurixExcelFinancialExecutions  NurixExcelFinancialExecution[]       @relation("NurixExcelFinancialExecutionApprover")
+  createdNurixExcelFinancialReceipts     NurixExcelFinancialReceipt[]         @relation("NurixExcelFinancialReceiptCreator")
 
   @@unique([tenantId, loginNormalized])
   @@unique([id, tenantId])
@@ -1087,6 +1220,7 @@ model Company {
   marketingProviderConnections               MarketingProviderConnection[]
   marketingReputationReplyPolicy             MarketingReputationReplyPolicy?
   operationsSections                         OperationsSection[]
+  operationsCatalogCategories                OperationsCatalogCategory[]
   operationsUnits                            OperationsUnit[]
   operationsItems                            OperationsItem[]
   operationsItemUnits                        OperationsItemUnit[]
@@ -1108,12 +1242,19 @@ model Company {
   operationsAssetWarrantyAssets              OperationsAssetWarrantyAsset[]
   operationsAssetWarrantyLines               OperationsAssetWarrantyLine[]
   branding                                   CompanyBranding?
-  backupPolicies                            BackupPolicy[]
-  backupJobs                                BackupJob[]
-  backupArtifacts                           BackupArtifact[]
-  backupAuditEvents                         BackupAuditEvent[]
-  legacyMigrationCompanyMaps                LegacyMigrationCompanyMap[]
-  legacyMigrationRecordMaps                 LegacyMigrationRecordMap[]
+  backupPolicies                             BackupPolicy[]
+  backupJobs                                 BackupJob[]
+  backupArtifacts                            BackupArtifact[]
+  backupAuditEvents                          BackupAuditEvent[]
+  legacyMigrationCompanyMaps                 LegacyMigrationCompanyMap[]
+  legacyMigrationRecordMaps                  LegacyMigrationRecordMap[]
+  nurixExcelStagingPackages                  NurixExcelStagingPackage[]
+  nurixExcelMasterDataExecutions             NurixExcelMasterDataExecution[]
+  nurixExcelFinancialExecutions              NurixExcelFinancialExecution[]
+  nurixExcelFinancialWaves                   NurixExcelFinancialWave[]
+  nurixExcelFinancialItems                   NurixExcelFinancialItem[]
+  nurixExcelFinancialSourceMaps              NurixExcelFinancialSourceMap[]
+  nurixExcelFinancialReceipts                NurixExcelFinancialReceipt[]
 
   @@unique([id, tenantId])
   @@index([tenantId, contextLocationCode])
@@ -1286,40 +1427,40 @@ model BackupPolicy {
 /// Mutable progress is durable and therefore survives API/worker restarts.
 /// The actual archive exporter is deliberately not part of this foundation.
 model BackupJob {
-  id                String          @id @default(uuid()) @db.Uuid
-  tenantId          String          @db.Uuid
-  companyId         String          @db.Uuid
-  policyId          String?         @db.Uuid
-  requestedByUserId String          @db.Uuid
-  kind              BackupJobKind
-  status            BackupJobStatus @default(QUEUED)
-  stage             String          @default("QUEUED") @db.VarChar(80)
-  idempotencyKey    String          @db.VarChar(255)
-  requestHash       String          @db.Char(64)
-  correlationId     String          @db.Uuid
-  progressPercent   Int             @default(0)
-  checkpointJson    Json?
-  recordsProcessed  Int             @default(0)
-  recordsTotal      Int?
-  bytesProcessed    BigInt          @default(0)
-  bytesTotal        BigInt?
-  attemptCount      Int             @default(0)
-  workerLeaseOwnerId String?        @db.Uuid
-  workerLeaseFence   BigInt         @default(0)
-  workerLeaseExpiresAt DateTime?    @db.Timestamptz(6)
-  workerHeartbeatAt  DateTime?      @db.Timestamptz(6)
-  lastErrorCode     String?         @db.VarChar(120)
-  lastErrorMessage  String?         @db.VarChar(1000)
-  queuedAt          DateTime        @default(now()) @db.Timestamptz(6)
-  startedAt         DateTime?       @db.Timestamptz(6)
-  completedAt       DateTime?       @db.Timestamptz(6)
-  createdAt         DateTime        @default(now()) @db.Timestamptz(6)
-  updatedAt         DateTime        @updatedAt @db.Timestamptz(6)
+  id                   String          @id @default(uuid()) @db.Uuid
+  tenantId             String          @db.Uuid
+  companyId            String          @db.Uuid
+  policyId             String?         @db.Uuid
+  requestedByUserId    String          @db.Uuid
+  kind                 BackupJobKind
+  status               BackupJobStatus @default(QUEUED)
+  stage                String          @default("QUEUED") @db.VarChar(80)
+  idempotencyKey       String          @db.VarChar(255)
+  requestHash          String          @db.Char(64)
+  correlationId        String          @db.Uuid
+  progressPercent      Int             @default(0)
+  checkpointJson       Json?
+  recordsProcessed     Int             @default(0)
+  recordsTotal         Int?
+  bytesProcessed       BigInt          @default(0)
+  bytesTotal           BigInt?
+  attemptCount         Int             @default(0)
+  workerLeaseOwnerId   String?         @db.Uuid
+  workerLeaseFence     BigInt          @default(0)
+  workerLeaseExpiresAt DateTime?       @db.Timestamptz(6)
+  workerHeartbeatAt    DateTime?       @db.Timestamptz(6)
+  lastErrorCode        String?         @db.VarChar(120)
+  lastErrorMessage     String?         @db.VarChar(1000)
+  queuedAt             DateTime        @default(now()) @db.Timestamptz(6)
+  startedAt            DateTime?       @db.Timestamptz(6)
+  completedAt          DateTime?       @db.Timestamptz(6)
+  createdAt            DateTime        @default(now()) @db.Timestamptz(6)
+  updatedAt            DateTime        @updatedAt @db.Timestamptz(6)
 
-  tenant      Tenant        @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  company     Company       @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  policy      BackupPolicy? @relation(fields: [policyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  requester   User          @relation("BackupJobRequester", fields: [requestedByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  tenant      Tenant             @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  company     Company            @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  policy      BackupPolicy?      @relation(fields: [policyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  requester   User               @relation("BackupJobRequester", fields: [requestedByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
   artifacts   BackupArtifact[]
   auditEvents BackupAuditEvent[]
 
@@ -1395,14 +1536,14 @@ model LegacyMigrationRun {
   createdAt         DateTime                 @default(now()) @db.Timestamptz(6)
   updatedAt         DateTime                 @updatedAt @db.Timestamptz(6)
 
-  tenant      Tenant                      @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  initiatedBy User                        @relation("LegacyMigrationRunCreator", fields: [initiatedByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  companyMaps LegacyMigrationCompanyMap[]
-  recordMaps  LegacyMigrationRecordMap[]
-  exceptions  LegacyMigrationException[]
-  reviewActions LegacyMigrationReviewAction[]
+  tenant                  Tenant                                  @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  initiatedBy             User                                    @relation("LegacyMigrationRunCreator", fields: [initiatedByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  companyMaps             LegacyMigrationCompanyMap[]
+  recordMaps              LegacyMigrationRecordMap[]
+  exceptions              LegacyMigrationException[]
+  reviewActions           LegacyMigrationReviewAction[]
   counterpartyResolutions LegacyMigrationCounterpartyResolution[]
-  counterpartyCandidates LegacyMigrationCounterpartyCandidate[]
+  counterpartyCandidates  LegacyMigrationCounterpartyCandidate[]
 
   @@unique([tenantId, sourceSystem, sourceFingerprint, transformVersion])
   @@unique([id, tenantId])
@@ -1455,6 +1596,381 @@ model LegacyMigrationRecordMap {
   @@index([tenantId, sourceCompanyId, sourceEntity])
 }
 
+/// Immutable intake metadata. Workbook bytes stay in controlled file storage
+/// when that gate is enabled; this table stores only technical fingerprints.
+model NurixExcelStagingPackage {
+  id                String                         @id @default(uuid()) @db.Uuid
+  tenantId          String                         @db.Uuid
+  targetCompanyId   String                         @db.Uuid
+  sourceCompanyId   String                         @db.VarChar(120)
+  templateVersion   String                         @db.VarChar(80)
+  workbookSha256    String                         @db.Char(64)
+  sourceFingerprint String?                        @db.Char(64)
+  storageReference  String?                        @db.VarChar(500)
+  encryptionIv      String?                        @db.VarChar(40)
+  storedByteSize    BigInt?
+  status            NurixExcelStagingPackageStatus @default(RECEIVED)
+  createdAt         DateTime                       @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime                       @updatedAt @db.Timestamptz(6)
+
+  tenant               Tenant                          @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  company              Company                         @relation(fields: [targetCompanyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  batches              NurixExcelStagingBatch[]
+  rows                 NurixExcelStagingRow[]
+  masterDataExecutions NurixExcelMasterDataExecution[]
+  financialExecutions  NurixExcelFinancialExecution[]
+
+  @@unique([id, tenantId])
+  @@unique([tenantId, targetCompanyId, workbookSha256])
+  @@index([tenantId, targetCompanyId, status, createdAt])
+}
+
+/// A checkpointable parse/validation batch. It cannot carry financial payloads.
+model NurixExcelStagingBatch {
+  id           String                       @id @default(uuid()) @db.Uuid
+  packageId    String                       @db.Uuid
+  tenantId     String                       @db.Uuid
+  sequence     Int
+  status       NurixExcelStagingBatchStatus @default(PENDING)
+  rowsDeclared Int                          @default(0)
+  rowsAccepted Int                          @default(0)
+  rowsRejected Int                          @default(0)
+  createdAt    DateTime                     @default(now()) @db.Timestamptz(6)
+  updatedAt    DateTime                     @updatedAt @db.Timestamptz(6)
+
+  package NurixExcelStagingPackage @relation(fields: [packageId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  tenant  Tenant                   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  rows    NurixExcelStagingRow[]
+
+  @@unique([id, tenantId])
+  @@unique([packageId, sequence])
+  @@index([tenantId, packageId, status, sequence])
+}
+
+/// One canonical source-row receipt. Hashes make resume/idempotency decisions
+/// without retaining raw financial or employee payloads in the control plane.
+model NurixExcelStagingRow {
+  id             String                     @id @default(uuid()) @db.Uuid
+  packageId      String                     @db.Uuid
+  batchId        String                     @db.Uuid
+  tenantId       String                     @db.Uuid
+  sheet          String                     @db.VarChar(80)
+  sourceId       String                     @db.VarChar(160)
+  sourceChecksum String                     @db.Char(64)
+  status         NurixExcelStagingRowStatus
+  code           String                     @db.VarChar(120)
+  createdAt      DateTime                   @default(now()) @db.Timestamptz(6)
+
+  package NurixExcelStagingPackage @relation(fields: [packageId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  batch   NurixExcelStagingBatch   @relation(fields: [batchId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  tenant  Tenant                   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+
+  @@unique([id, tenantId])
+  @@unique([packageId, sheet, sourceId])
+  @@index([tenantId, packageId, status, sheet])
+  @@index([tenantId, sourceChecksum])
+}
+
+/// The durable control plane for Excel master-data waves. It deliberately
+/// has no financial-document relationship or financial payload.
+model NurixExcelMasterDataExecution {
+  id                String                              @id @default(uuid()) @db.Uuid
+  packageId         String                              @db.Uuid
+  tenantId          String                              @db.Uuid
+  targetCompanyId   String                              @db.Uuid
+  status            NurixExcelMasterDataExecutionStatus @default(PENDING)
+  waveSequence      Int                                 @default(0)
+  reason            String?                             @db.VarChar(500)
+  requestedByUserId String                              @db.Uuid
+  leaseToken        String?                             @db.Uuid
+  leaseExpiresAt    DateTime?                           @db.Timestamptz(6)
+  createdAt         DateTime                            @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime                            @updatedAt @db.Timestamptz(6)
+
+  package NurixExcelStagingPackage   @relation(fields: [packageId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  tenant  Tenant                     @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  company Company                    @relation(fields: [targetCompanyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  items   NurixExcelMasterDataItem[]
+
+  @@unique([id, tenantId])
+  @@unique([packageId, tenantId])
+  @@index([tenantId, targetCompanyId, status, updatedAt])
+}
+
+/// An immutable technical receipt for one source master row. Sensitive raw
+/// cells stay encrypted in the workbook; this table retains only keys,
+/// checksum, target reference and outcome required for safe resume.
+model NurixExcelMasterDataItem {
+  id             String                         @id @default(uuid()) @db.Uuid
+  executionId    String                         @db.Uuid
+  tenantId       String                         @db.Uuid
+  entity         String                         @db.VarChar(40)
+  sourceId       String                         @db.VarChar(160)
+  sourceChecksum String                         @db.Char(64)
+  status         NurixExcelMasterDataItemStatus @default(PENDING)
+  targetId       String?                        @db.Uuid
+  code           String?                        @db.VarChar(120)
+  createdAt      DateTime                       @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime                       @updatedAt @db.Timestamptz(6)
+
+  execution NurixExcelMasterDataExecution @relation(fields: [executionId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  tenant    Tenant                        @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+
+  @@unique([executionId, entity, sourceId])
+  @@index([tenantId, executionId, status, entity, sourceId])
+}
+
+/// Financial execution is intentionally independent from master-data waves.
+/// It cannot store invoice cells or create postings by itself; it supplies the
+/// durable, tenant-scoped approval and resume boundary for a future writer.
+model NurixExcelFinancialExecution {
+  id                   String                            @id @default(uuid()) @db.Uuid
+  packageId            String                            @db.Uuid
+  tenantId             String                            @db.Uuid
+  targetCompanyId      String                            @db.Uuid
+  transformVersion     String                            @db.VarChar(80)
+  financialPlanSha256  String                            @db.Char(64)
+  status               NurixExcelFinancialExecutionStatus @default(PENDING)
+  reason               String?                           @db.VarChar(500)
+  requestedByUserId    String                            @db.Uuid
+  approvedByUserId     String?                           @db.Uuid
+  approvedAt           DateTime?                         @db.Timestamptz(6)
+  leaseToken           String?                           @db.Uuid
+  leaseExpiresAt       DateTime?                         @db.Timestamptz(6)
+  waveSequence         Int                               @default(0)
+  createdAt            DateTime                          @default(now()) @db.Timestamptz(6)
+  updatedAt            DateTime                          @updatedAt @db.Timestamptz(6)
+
+  package     NurixExcelStagingPackage @relation(fields: [packageId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  tenant      Tenant                   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  company     Company                  @relation(fields: [targetCompanyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  requester   User                     @relation("NurixExcelFinancialExecutionRequester", fields: [requestedByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  approver    User?                    @relation("NurixExcelFinancialExecutionApprover", fields: [approvedByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  waves       NurixExcelFinancialWave[]
+  items       NurixExcelFinancialItem[]
+  sourceMaps  NurixExcelFinancialSourceMap[]
+  receipts    NurixExcelFinancialReceipt[]
+
+  @@unique([id, tenantId])
+  @@unique([id, tenantId, targetCompanyId])
+  @@unique([packageId, tenantId, transformVersion])
+  @@index([tenantId, targetCompanyId, status, updatedAt])
+  @@index([tenantId, packageId, status])
+}
+
+/// A bounded wave lease permits safe resume after an interrupted financial
+/// worker. Financial facts are deliberately not related here.
+model NurixExcelFinancialWave {
+  id                 String                        @id @default(uuid()) @db.Uuid
+  executionId        String                        @db.Uuid
+  tenantId           String                        @db.Uuid
+  targetCompanyId    String                        @db.Uuid
+  sequence           Int
+  status             NurixExcelFinancialWaveStatus @default(PENDING)
+  plannedItems       Int                           @default(0)
+  postedItems        Int                           @default(0)
+  reusedItems        Int                           @default(0)
+  reviewItems        Int                           @default(0)
+  failedItems        Int                           @default(0)
+  leaseToken         String?                       @db.Uuid
+  leaseExpiresAt     DateTime?                     @db.Timestamptz(6)
+  committedAt        DateTime?                     @db.Timestamptz(6)
+  reconciliationHash String?                       @db.Char(64)
+  createdAt          DateTime                      @default(now()) @db.Timestamptz(6)
+  updatedAt          DateTime                      @updatedAt @db.Timestamptz(6)
+
+  execution NurixExcelFinancialExecution @relation(fields: [executionId, tenantId, targetCompanyId], references: [id, tenantId, targetCompanyId], onDelete: Restrict)
+  tenant    Tenant                       @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  company   Company                      @relation(fields: [targetCompanyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  items     NurixExcelFinancialItem[]
+  receipts  NurixExcelFinancialReceipt[]
+
+  @@unique([id, tenantId])
+  @@unique([id, tenantId, targetCompanyId])
+  @@unique([executionId, sequence])
+  @@index([tenantId, targetCompanyId, status, updatedAt])
+  @@index([tenantId, executionId, status, sequence])
+}
+
+/// One item per exact source record and transform. The operation key is a
+/// deterministic writer idempotency key; it never contains source payload.
+model NurixExcelFinancialItem {
+  id              String                      @id @default(uuid()) @db.Uuid
+  executionId     String                      @db.Uuid
+  waveId          String                      @db.Uuid
+  tenantId        String                      @db.Uuid
+  targetCompanyId String                      @db.Uuid
+  sourceSheet     String                      @db.VarChar(80)
+  sourceEntity    String                      @db.VarChar(120)
+  sourceId        String                      @db.VarChar(160)
+  sourceChecksum  String                      @db.Char(64)
+  operationKey    String                      @db.Char(64)
+  status          NurixExcelFinancialItemStatus @default(PENDING)
+  targetEntity    String?                     @db.VarChar(120)
+  targetId        String?                     @db.VarChar(160)
+  resultCode      String?                     @db.VarChar(120)
+  createdAt       DateTime                    @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime                    @updatedAt @db.Timestamptz(6)
+
+  execution NurixExcelFinancialExecution @relation(fields: [executionId, tenantId, targetCompanyId], references: [id, tenantId, targetCompanyId], onDelete: Restrict)
+  wave      NurixExcelFinancialWave      @relation(fields: [waveId, tenantId, targetCompanyId], references: [id, tenantId, targetCompanyId], onDelete: Restrict)
+  tenant    Tenant                       @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  company   Company                      @relation(fields: [targetCompanyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+
+  @@unique([id, tenantId])
+  @@unique([executionId, sourceEntity, sourceId])
+  @@unique([executionId, operationKey])
+  @@index([tenantId, targetCompanyId, status, sourceEntity, sourceId])
+  @@index([tenantId, waveId, status])
+}
+
+/// Immutable source-to-target lineage. A source identity can map once per
+/// execution, which prevents a resumed writer from creating it twice.
+model NurixExcelFinancialSourceMap {
+  id              String                           @id @default(uuid()) @db.Uuid
+  executionId     String                           @db.Uuid
+  tenantId        String                           @db.Uuid
+  targetCompanyId String                           @db.Uuid
+  sourceEntity    String                           @db.VarChar(120)
+  sourceId        String                           @db.VarChar(160)
+  sourceChecksum  String                           @db.Char(64)
+  targetEntity    String                           @db.VarChar(120)
+  targetId        String                           @db.VarChar(160)
+  state           NurixExcelFinancialSourceMapState @default(PLANNED)
+  createdAt       DateTime                         @default(now()) @db.Timestamptz(6)
+
+  execution NurixExcelFinancialExecution @relation(fields: [executionId, tenantId, targetCompanyId], references: [id, tenantId, targetCompanyId], onDelete: Restrict)
+  tenant    Tenant                       @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  company   Company                      @relation(fields: [targetCompanyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+
+  @@unique([id, tenantId])
+  @@unique([executionId, sourceEntity, sourceId])
+  @@index([tenantId, targetCompanyId, targetEntity, targetId])
+  @@index([tenantId, executionId, state])
+}
+
+/// Append-only technical proof for a financial wave. The JSON summary is
+/// limited to reconciliation counts/totals and never stores raw source rows.
+model NurixExcelFinancialReceipt {
+  id              String                         @id @default(uuid()) @db.Uuid
+  executionId     String                         @db.Uuid
+  waveId          String                         @db.Uuid
+  tenantId        String                         @db.Uuid
+  targetCompanyId String                         @db.Uuid
+  sequence        Int
+  kind            NurixExcelFinancialReceiptKind
+  receiptSha256   String                         @db.Char(64)
+  summaryJson     Json
+  createdByUserId String                         @db.Uuid
+  createdAt       DateTime                       @default(now()) @db.Timestamptz(6)
+
+  execution NurixExcelFinancialExecution @relation(fields: [executionId, tenantId, targetCompanyId], references: [id, tenantId, targetCompanyId], onDelete: Restrict)
+  wave      NurixExcelFinancialWave      @relation(fields: [waveId, tenantId, targetCompanyId], references: [id, tenantId, targetCompanyId], onDelete: Restrict)
+  tenant    Tenant                       @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  company   Company                      @relation(fields: [targetCompanyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  creator   User                         @relation("NurixExcelFinancialReceiptCreator", fields: [createdByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
+
+  @@unique([id, tenantId])
+  @@unique([executionId, sequence])
+  @@index([tenantId, targetCompanyId, createdAt])
+  @@index([tenantId, waveId, kind, createdAt])
+}
+
+/// Immutable historical payroll header. It is intentionally isolated from
+/// HrPayrollRun, journals, payments, and employee financial movements: Noorix
+/// approval evidence must not become a current Baseer financial obligation.
+model NurixHistoricalPayrollEvidence {
+  id                              String                               @id @default(uuid()) @db.Uuid
+  tenantId                        String                               @db.Uuid
+  companyId                       String                               @db.Uuid
+  executionId                     String                               @db.Uuid
+  sourceCompanyId                 String                               @db.VarChar(120)
+  sourceRunId                     String                               @db.VarChar(160)
+  sourceChecksum                  String                               @db.Char(64)
+  sourceRunNumber                 String                               @db.VarChar(80)
+  payrollMonth                    DateTime                             @db.Date
+  sourceAccruedAt                 DateTime                             @db.Timestamptz(6)
+  sourceStatus                    String                               @db.VarChar(40)
+  employeeCount                   Int
+  grossAmount                     Decimal                              @db.Decimal(18, 4)
+  deductionsAmount                Decimal                              @db.Decimal(18, 4)
+  appliedAdvancesAmount           Decimal                              @db.Decimal(18, 4)
+  sourceAdvancesAmount            Decimal                              @db.Decimal(18, 4)
+  advanceCarryoverEvidenceAmount  Decimal                              @db.Decimal(18, 4)
+  netAmount                       Decimal                              @db.Decimal(18, 4)
+  paymentEvidenceKind             NurixHistoricalPayrollPaymentEvidenceKind @default(NONE)
+  paymentEvidenceAmount           Decimal?                             @db.Decimal(18, 4)
+  paymentEvidenceAt               DateTime?                            @db.Timestamptz(6)
+  sourceInvoiceEvidence           NurixHistoricalPayrollAccountingEvidenceAvailability @default(NONE)
+  sourceJournalEvidence           NurixHistoricalPayrollAccountingEvidenceAvailability @default(NONE)
+  status                          NurixHistoricalPayrollEvidenceStatus @default(EVIDENCE_ONLY)
+  notes                           String?                              @db.VarChar(1000)
+  createdByUserId                 String                               @db.Uuid
+  createdAt                       DateTime                             @default(now()) @db.Timestamptz(6)
+
+  lines              NurixHistoricalPayrollLineEvidence[]
+  accountingEvidence NurixHistoricalPayrollAccountingEvidence[]
+
+  @@unique([id, tenantId])
+  @@unique([tenantId, executionId, sourceRunId])
+  @@unique([id, tenantId, companyId, executionId])
+  @@index([tenantId, companyId, payrollMonth])
+  @@index([tenantId, companyId, status, createdAt])
+}
+
+/// Immutable historical payroll source line. employeeId is optional because
+/// it is a lineage reference only; it never licenses a payroll or debt write.
+model NurixHistoricalPayrollLineEvidence {
+  id                         String                          @id @default(uuid()) @db.Uuid
+  tenantId                   String                          @db.Uuid
+  companyId                  String                          @db.Uuid
+  executionId                String                          @db.Uuid
+  runEvidenceId              String                          @db.Uuid
+  sourceItemId               String                          @db.VarChar(160)
+  sourceChecksum             String                          @db.Char(64)
+  employeeSourceId           String                          @db.VarChar(160)
+  employeeId                 String?                         @db.Uuid
+  grossSalary                Decimal                         @db.Decimal(18, 4)
+  allowancesAdd              Decimal                         @db.Decimal(18, 4)
+  deductionsAmount           Decimal                         @db.Decimal(18, 4)
+  sourceAdvancesAmount       Decimal                         @db.Decimal(18, 4)
+  appliedAdvancesAmount      Decimal                         @db.Decimal(18, 4)
+  advanceCarryoverEvidence   Decimal                         @db.Decimal(18, 4)
+  netSalary                  Decimal                         @db.Decimal(18, 4)
+  createdAt                  DateTime                        @default(now()) @db.Timestamptz(6)
+
+  run NurixHistoricalPayrollEvidence @relation(fields: [runEvidenceId, tenantId, companyId, executionId], references: [id, tenantId, companyId, executionId], onDelete: Restrict)
+
+  @@unique([id, tenantId])
+  @@unique([tenantId, executionId, sourceItemId])
+  @@index([tenantId, companyId, runEvidenceId])
+  @@index([tenantId, companyId, employeeId])
+}
+
+/// Source-only invoice/journal/vault-allocation proof for a historical payroll
+/// header. It has no relation to Baseer operational finance documents.
+model NurixHistoricalPayrollAccountingEvidence {
+  id              String                                      @id @db.Uuid
+  tenantId        String                                      @db.Uuid
+  companyId       String                                      @db.Uuid
+  executionId     String                                      @db.Uuid
+  runEvidenceId   String                                      @db.Uuid
+  evidenceKind    NurixHistoricalPayrollAccountingEvidenceKind
+  sourceRecordId  String                                      @db.VarChar(160)
+  sourceChecksum  String                                      @db.Char(64)
+  sourceNumber    String?                                     @db.VarChar(160)
+  sourceDate      DateTime?                                   @db.Timestamptz(6)
+  vaultSourceId   String?                                     @db.VarChar(160)
+  amount          Decimal?                                    @db.Decimal(18, 4)
+  createdAt       DateTime                                    @default(now()) @db.Timestamptz(6)
+
+  run NurixHistoricalPayrollEvidence @relation(fields: [runEvidenceId, tenantId, companyId, executionId], references: [id, tenantId, companyId, executionId], onDelete: Restrict)
+
+  @@unique([id, tenantId])
+  @@unique([tenantId, executionId, evidenceKind, sourceRecordId])
+  @@index([tenantId, companyId, runEvidenceId, evidenceKind])
+}
+
 /// A safe exception ledger: codes and technical references only, never source
 /// rows, passwords, storage keys, files, or unredacted PII.
 model LegacyMigrationException {
@@ -1492,7 +2008,7 @@ model LegacyMigrationReviewAction {
   createdByUserId      String                          @db.Uuid
   createdAt            DateTime                        @default(now()) @db.Timestamptz(6)
 
-  run       LegacyMigrationRun       @relation(fields: [runId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  run       LegacyMigrationRun        @relation(fields: [runId, tenantId], references: [id, tenantId], onDelete: Restrict)
   exception LegacyMigrationException? @relation(fields: [exceptionId, tenantId], references: [id, tenantId], onDelete: Restrict)
   tenant    Tenant                    @relation(fields: [tenantId], references: [id], onDelete: Restrict)
   createdBy User                      @relation("LegacyMigrationReviewActionCreator", fields: [createdByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
@@ -2733,21 +3249,21 @@ model FinanceCategory {
 }
 
 model FinanceSupplier {
-  id              String                @id @default(uuid()) @db.Uuid
-  tenantId        String                @db.Uuid
-  companyId       String                @db.Uuid
-  counterpartyIdentityId String?        @db.Uuid
-  categoryId      String?               @db.Uuid
-  supplierType    FinanceSupplierType
-  nameAr          String                @db.VarChar(160)
-  nameEn          String?               @db.VarChar(160)
-  phone           String?               @db.VarChar(30)
-  taxNumber       String?               @db.VarChar(32)
-  isTaxRegistered Boolean               @default(false)
-  isFavorite      Boolean               @default(false)
-  status          FinanceSupplierStatus @default(ACTIVE)
-  createdAt       DateTime              @default(now()) @db.Timestamptz(6)
-  updatedAt       DateTime              @updatedAt @db.Timestamptz(6)
+  id                     String                @id @default(uuid()) @db.Uuid
+  tenantId               String                @db.Uuid
+  companyId              String                @db.Uuid
+  counterpartyIdentityId String?               @db.Uuid
+  categoryId             String?               @db.Uuid
+  supplierType           FinanceSupplierType
+  nameAr                 String                @db.VarChar(160)
+  nameEn                 String?               @db.VarChar(160)
+  phone                  String?               @db.VarChar(30)
+  taxNumber              String?               @db.VarChar(32)
+  isTaxRegistered        Boolean               @default(false)
+  isFavorite             Boolean               @default(false)
+  status                 FinanceSupplierStatus @default(ACTIVE)
+  createdAt              DateTime              @default(now()) @db.Timestamptz(6)
+  updatedAt              DateTime              @updatedAt @db.Timestamptz(6)
 
   company                  Company                          @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   counterpartyIdentity     FinanceCounterpartyIdentity?     @relation(fields: [counterpartyIdentityId, tenantId], references: [id, tenantId], onDelete: Restrict)
@@ -2781,9 +3297,9 @@ model FinanceCounterpartyIdentity {
   createdAt       DateTime                @default(now()) @db.Timestamptz(6)
   updatedAt       DateTime                @updatedAt @db.Timestamptz(6)
 
-  tenant    Tenant                    @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  aliases   FinanceCounterpartyAlias[]
-  suppliers FinanceSupplier[]
+  tenant               Tenant                                  @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  aliases              FinanceCounterpartyAlias[]
+  suppliers            FinanceSupplier[]
   migrationResolutions LegacyMigrationCounterpartyResolution[]
 
   @@unique([id, tenantId])
@@ -2794,16 +3310,16 @@ model FinanceCounterpartyIdentity {
 /// An alias is explicit evidence, never a fuzzy-name guess. Its normalized
 /// value can belong to one identity only within a tenant.
 model FinanceCounterpartyAlias {
-  id              String                      @id @default(uuid()) @db.Uuid
-  tenantId        String                      @db.Uuid
-  identityId      String                      @db.Uuid
-  normalizedAlias String                      @db.VarChar(200)
-  nameAr          String?                     @db.VarChar(160)
-  nameEn          String?                     @db.VarChar(160)
+  id              String                       @id @default(uuid()) @db.Uuid
+  tenantId        String                       @db.Uuid
+  identityId      String                       @db.Uuid
+  normalizedAlias String                       @db.VarChar(200)
+  nameAr          String?                      @db.VarChar(160)
+  nameEn          String?                      @db.VarChar(160)
   kind            FinanceCounterpartyAliasKind
-  createdAt       DateTime                    @default(now()) @db.Timestamptz(6)
+  createdAt       DateTime                     @default(now()) @db.Timestamptz(6)
 
-  tenant   Tenant                     @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  tenant   Tenant                      @relation(fields: [tenantId], references: [id], onDelete: Restrict)
   identity FinanceCounterpartyIdentity @relation(fields: [identityId, tenantId], references: [id, tenantId], onDelete: Restrict)
 
   @@unique([id, tenantId])
@@ -2815,19 +3331,19 @@ model FinanceCounterpartyAlias {
 /// FinanceSupplier map: company-specific supplier creation remains a later,
 /// reviewed migration step.
 model LegacyMigrationCounterpartyResolution {
-  id               String                                  @id @default(uuid()) @db.Uuid
-  runId            String                                  @db.Uuid
-  tenantId         String                                  @db.Uuid
-  sourceCompanyId  String                                  @db.VarChar(120)
-  sourceSupplierId String                                  @db.VarChar(160)
-  identityId       String                                  @db.Uuid
+  id               String                                    @id @default(uuid()) @db.Uuid
+  runId            String                                    @db.Uuid
+  tenantId         String                                    @db.Uuid
+  sourceCompanyId  String                                    @db.VarChar(120)
+  sourceSupplierId String                                    @db.VarChar(160)
+  identityId       String                                    @db.Uuid
   kind             LegacyMigrationCounterpartyResolutionKind
-  transformVersion String                                  @db.VarChar(80)
-  sourceChecksum   String                                  @db.Char(64)
-  createdAt        DateTime                                @default(now()) @db.Timestamptz(6)
+  transformVersion String                                    @db.VarChar(80)
+  sourceChecksum   String                                    @db.Char(64)
+  createdAt        DateTime                                  @default(now()) @db.Timestamptz(6)
 
-  run      LegacyMigrationRun        @relation(fields: [runId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  tenant   Tenant                    @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  run      LegacyMigrationRun          @relation(fields: [runId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  tenant   Tenant                      @relation(fields: [tenantId], references: [id], onDelete: Restrict)
   identity FinanceCounterpartyIdentity @relation(fields: [identityId, tenantId], references: [id, tenantId], onDelete: Restrict)
 
   @@unique([runId, sourceCompanyId, sourceSupplierId])
@@ -2837,16 +3353,16 @@ model LegacyMigrationCounterpartyResolution {
 /// A constrained copy of supplier identity evidence used only by the staging
 /// owner-review queue. It is immutable and cannot create a supplier itself.
 model LegacyMigrationCounterpartyCandidate {
-  id               String                                  @id @default(uuid()) @db.Uuid
-  runId            String                                  @db.Uuid
-  tenantId         String                                  @db.Uuid
-  sourceCompanyId  String                                  @db.VarChar(120)
-  sourceSupplierId String                                  @db.VarChar(160)
-  nameAr           String                                  @db.VarChar(160)
-  nameEn           String?                                 @db.VarChar(160)
+  id               String                                   @id @default(uuid()) @db.Uuid
+  runId            String                                   @db.Uuid
+  tenantId         String                                   @db.Uuid
+  sourceCompanyId  String                                   @db.VarChar(120)
+  sourceSupplierId String                                   @db.VarChar(160)
+  nameAr           String                                   @db.VarChar(160)
+  nameEn           String?                                  @db.VarChar(160)
   kind             LegacyMigrationCounterpartyCandidateKind
-  sourceChecksum   String                                  @db.Char(64)
-  createdAt        DateTime                                @default(now()) @db.Timestamptz(6)
+  sourceChecksum   String                                   @db.Char(64)
+  createdAt        DateTime                                 @default(now()) @db.Timestamptz(6)
 
   run    LegacyMigrationRun @relation(fields: [runId, tenantId], references: [id, tenantId], onDelete: Restrict)
   tenant Tenant             @relation(fields: [tenantId], references: [id], onDelete: Restrict)
@@ -3272,25 +3788,27 @@ model HrEmployee {
   hireDate       DateTime         @db.Date
   status         HrEmployeeStatus @default(ACTIVE)
   terminatedAt   DateTime?        @db.Date
+  statusEffectiveAt DateTime?     @db.Date
+  statusReason   String?          @db.VarChar(240)
   notes          String?          @db.VarChar(2000)
   createdAt      DateTime         @default(now()) @db.Timestamptz(6)
   updatedAt      DateTime         @updatedAt @db.Timestamptz(6)
 
-  company                  Company                             @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  services                 HrEmployeeService[]
-  financialMovements       HrEmployeeFinancialMovement[]
-  advances                 HrEmployeeAdvance[]
-  administrativeDeductions HrEmployeeAdministrativeDeduction[]
-  compensationProfiles     HrEmployeeCompensationProfile[]
-  promotions               HrEmployeePromotion[]
-  leaves                   HrEmployeeLeave[]
-  payrollLines             HrPayrollLine[]
-  finalSettlements         HrFinalSettlement[]
-  documents                HrEmployeeDocument[]
-  letters                  HrEmployeeLetter[]
-  attendanceCredential     AttendanceEmployeeCredential?
-  attendanceEvents         AttendanceEvent[]
-  attendanceWorkSessions   AttendanceWorkSession[]
+  company                       Company                                @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  services                      HrEmployeeService[]
+  financialMovements            HrEmployeeFinancialMovement[]
+  advances                      HrEmployeeAdvance[]
+  administrativeDeductions      HrEmployeeAdministrativeDeduction[]
+  compensationProfiles          HrEmployeeCompensationProfile[]
+  promotions                    HrEmployeePromotion[]
+  leaves                        HrEmployeeLeave[]
+  payrollLines                  HrPayrollLine[]
+  finalSettlements              HrFinalSettlement[]
+  documents                     HrEmployeeDocument[]
+  letters                       HrEmployeeLetter[]
+  attendanceCredential          AttendanceEmployeeCredential?
+  attendanceEvents              AttendanceEvent[]
+  attendanceWorkSessions        AttendanceWorkSession[]
   attendanceScheduleAssignments AttendanceEmployeeScheduleAssignment[]
   attendanceWeeklyAdjustments   AttendanceEmployeeWeeklyAdjustment[]
   attendanceScheduleExceptions  AttendanceScheduleException[]
@@ -3306,18 +3824,18 @@ model HrEmployee {
 /// Authentication material for the employee-facing PWA.  It deliberately has
 /// no User, AppSession, device, biometric, or raw-PIN relationship.
 model AttendanceEmployeeCredential {
-  id             String   @id @default(uuid()) @db.Uuid
-  tenantId       String   @db.Uuid
-  companyId      String   @db.Uuid
-  employeeId     String   @db.Uuid
-  pinHash        String   @db.VarChar(100)
-  pinLookupHash  String   @db.Char(64)
-  pinCiphertext  String?  @db.Text
-  failedAttempts Int      @default(0)
+  id             String    @id @default(uuid()) @db.Uuid
+  tenantId       String    @db.Uuid
+  companyId      String    @db.Uuid
+  employeeId     String    @db.Uuid
+  pinHash        String    @db.VarChar(100)
+  pinLookupHash  String    @db.Char(64)
+  pinCiphertext  String?   @db.Text
+  failedAttempts Int       @default(0)
   lockedUntil    DateTime? @db.Timestamptz(6)
-  rotatedAt      DateTime @default(now()) @db.Timestamptz(6)
-  createdAt      DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt      DateTime @updatedAt @db.Timestamptz(6)
+  rotatedAt      DateTime  @default(now()) @db.Timestamptz(6)
+  createdAt      DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime  @updatedAt @db.Timestamptz(6)
 
   company  Company    @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   employee HrEmployee @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Cascade)
@@ -3344,7 +3862,7 @@ model AttendanceBranch {
   createdAt         DateTime @default(now()) @db.Timestamptz(6)
   updatedAt         DateTime @updatedAt @db.Timestamptz(6)
 
-  company      Company                @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  company      Company                 @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   events       AttendanceEvent[]
   workSessions AttendanceWorkSession[]
 
@@ -3401,24 +3919,24 @@ enum AttendanceRosterApprovalMode {
 }
 
 model AttendanceRosterPlan {
-  id              String                       @id @default(uuid()) @db.Uuid
-  tenantId        String                       @db.Uuid
-  companyId       String                       @db.Uuid
-  weekStart       DateTime                     @db.Date
-  status          AttendanceRosterPlanStatus   @default(DRAFT)
-  approvalMode    AttendanceRosterApprovalMode?
-  effectiveFrom   DateTime?                    @db.Date
-  effectiveUntil  DateTime?                    @db.Date
-  revision        Int                          @default(1)
-  createdByUserId String                       @db.Uuid
-  approvedByUserId String?                     @db.Uuid
-  approvedAt      DateTime?                    @db.Timestamptz(6)
-  createdAt       DateTime                     @default(now()) @db.Timestamptz(6)
-  updatedAt       DateTime                     @updatedAt @db.Timestamptz(6)
+  id               String                        @id @default(uuid()) @db.Uuid
+  tenantId         String                        @db.Uuid
+  companyId        String                        @db.Uuid
+  weekStart        DateTime                      @db.Date
+  status           AttendanceRosterPlanStatus    @default(DRAFT)
+  approvalMode     AttendanceRosterApprovalMode?
+  effectiveFrom    DateTime?                     @db.Date
+  effectiveUntil   DateTime?                     @db.Date
+  revision         Int                           @default(1)
+  createdByUserId  String                        @db.Uuid
+  approvedByUserId String?                       @db.Uuid
+  approvedAt       DateTime?                     @db.Timestamptz(6)
+  createdAt        DateTime                      @default(now()) @db.Timestamptz(6)
+  updatedAt        DateTime                      @updatedAt @db.Timestamptz(6)
 
-  company         Company                      @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  entries         AttendanceRosterEntry[]
-  peakPeriods     AttendanceRosterPeakPeriod[]
+  company     Company                      @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  entries     AttendanceRosterEntry[]
+  peakPeriods AttendanceRosterPeakPeriod[]
 
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, weekStart, status, updatedAt])
@@ -3428,17 +3946,17 @@ model AttendanceRosterPlan {
 /// Peak-demand windows are operational planning guidance only. They never
 /// alter attendance evidence, working hours, overtime, or payroll.
 model AttendanceRosterPeakPeriod {
-  id           String                @id @default(uuid()) @db.Uuid
-  tenantId     String                @db.Uuid
-  companyId    String                @db.Uuid
-  planId       String                @db.Uuid
-  businessDate DateTime              @db.Date
+  id           String   @id @default(uuid()) @db.Uuid
+  tenantId     String   @db.Uuid
+  companyId    String   @db.Uuid
+  planId       String   @db.Uuid
+  businessDate DateTime @db.Date
   startMinute  Int
   endMinute    Int
-  createdAt    DateTime              @default(now()) @db.Timestamptz(6)
+  createdAt    DateTime @default(now()) @db.Timestamptz(6)
 
-  company      Company               @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  plan         AttendanceRosterPlan  @relation(fields: [planId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Cascade)
+  company Company              @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  plan    AttendanceRosterPlan @relation(fields: [planId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Cascade)
 
   @@unique([id, tenantId, companyId])
   @@unique([planId, businessDate, startMinute, endMinute])
@@ -3446,19 +3964,19 @@ model AttendanceRosterPeakPeriod {
 }
 
 model AttendanceRosterEntry {
-  id          String                    @id @default(uuid()) @db.Uuid
-  tenantId    String                    @db.Uuid
-  companyId   String                    @db.Uuid
-  planId      String                    @db.Uuid
-  employeeId  String                    @db.Uuid
-  businessDate DateTime                 @db.Date
-  kind        AttendanceWeeklyAdjustmentKind
-  createdAt   DateTime                  @default(now()) @db.Timestamptz(6)
+  id           String                         @id @default(uuid()) @db.Uuid
+  tenantId     String                         @db.Uuid
+  companyId    String                         @db.Uuid
+  planId       String                         @db.Uuid
+  employeeId   String                         @db.Uuid
+  businessDate DateTime                       @db.Date
+  kind         AttendanceWeeklyAdjustmentKind
+  createdAt    DateTime                       @default(now()) @db.Timestamptz(6)
 
-  company     Company                   @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  plan        AttendanceRosterPlan      @relation(fields: [planId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Cascade)
-  employee    HrEmployee                @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  periods     AttendanceRosterEntryPeriod[]
+  company  Company                       @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  plan     AttendanceRosterPlan          @relation(fields: [planId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Cascade)
+  employee HrEmployee                    @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  periods  AttendanceRosterEntryPeriod[]
 
   @@unique([id, tenantId, companyId])
   @@unique([planId, employeeId, businessDate])
@@ -3466,34 +3984,34 @@ model AttendanceRosterEntry {
 }
 
 model AttendanceRosterEntryPeriod {
-  id          String                 @id @default(uuid()) @db.Uuid
-  tenantId    String                 @db.Uuid
-  companyId   String                 @db.Uuid
-  entryId     String                 @db.Uuid
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @db.Uuid
+  companyId   String   @db.Uuid
+  entryId     String   @db.Uuid
   startMinute Int
   endMinute   Int
-  endsNextDay Boolean                @default(false)
-  createdAt   DateTime               @default(now()) @db.Timestamptz(6)
+  endsNextDay Boolean  @default(false)
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
 
-  company     Company                @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  entry       AttendanceRosterEntry  @relation(fields: [entryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Cascade)
+  company Company               @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  entry   AttendanceRosterEntry @relation(fields: [entryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Cascade)
 
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, entryId, startMinute])
 }
 
 model AttendanceScheduleTemplate {
-  id          String                           @id @default(uuid()) @db.Uuid
-  tenantId    String                           @db.Uuid
-  companyId   String                           @db.Uuid
-  nameAr      String                           @db.VarChar(160)
-  nameEn      String?                          @db.VarChar(160)
-  status      AttendanceScheduleTemplateStatus @default(ACTIVE)
-  archivedAt  DateTime?                        @db.Timestamptz(6)
-  createdAt   DateTime                         @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime                         @updatedAt @db.Timestamptz(6)
+  id         String                           @id @default(uuid()) @db.Uuid
+  tenantId   String                           @db.Uuid
+  companyId  String                           @db.Uuid
+  nameAr     String                           @db.VarChar(160)
+  nameEn     String?                          @db.VarChar(160)
+  status     AttendanceScheduleTemplateStatus @default(ACTIVE)
+  archivedAt DateTime?                        @db.Timestamptz(6)
+  createdAt  DateTime                         @default(now()) @db.Timestamptz(6)
+  updatedAt  DateTime                         @updatedAt @db.Timestamptz(6)
 
-  company     Company                               @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  company     Company                                @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   versions    AttendanceScheduleTemplateVersion[]
   assignments AttendanceEmployeeScheduleAssignment[]
 
@@ -3504,18 +4022,18 @@ model AttendanceScheduleTemplate {
 /// The row and its periods are append-only snapshots.  A later version takes
 /// effect from its own date, so historical reporting remains reproducible.
 model AttendanceScheduleTemplateVersion {
-  id            String                     @id @default(uuid()) @db.Uuid
-  tenantId      String                     @db.Uuid
-  companyId     String                     @db.Uuid
-  templateId    String                     @db.Uuid
-  versionNumber Int
-  effectiveFrom DateTime                   @db.Date
-  createdByUserId String                   @db.Uuid
-  createdAt     DateTime                   @default(now()) @db.Timestamptz(6)
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @db.Uuid
+  companyId       String   @db.Uuid
+  templateId      String   @db.Uuid
+  versionNumber   Int
+  effectiveFrom   DateTime @db.Date
+  createdByUserId String   @db.Uuid
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
 
-  company       Company                    @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  template      AttendanceScheduleTemplate @relation(fields: [templateId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  periods       AttendanceSchedulePeriod[]
+  company  Company                    @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  template AttendanceScheduleTemplate @relation(fields: [templateId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  periods  AttendanceSchedulePeriod[]
 
   @@unique([id, tenantId, companyId])
   @@unique([templateId, versionNumber])
@@ -3526,18 +4044,18 @@ model AttendanceScheduleTemplateVersion {
 /// ISO weekday: 1 Monday through 7 Sunday. `endsNextDay` is explicit so
 /// 15:00-03:00 is a single overnight work period rather than an ambiguous day.
 model AttendanceSchedulePeriod {
-  id          String                            @id @default(uuid()) @db.Uuid
-  tenantId    String                            @db.Uuid
-  companyId   String                            @db.Uuid
-  versionId   String                            @db.Uuid
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @db.Uuid
+  companyId   String   @db.Uuid
+  versionId   String   @db.Uuid
   dayOfWeek   Int
   startMinute Int
   endMinute   Int
-  endsNextDay Boolean                           @default(false)
-  createdAt   DateTime                          @default(now()) @db.Timestamptz(6)
+  endsNextDay Boolean  @default(false)
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
 
-  company     Company                           @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  version     AttendanceScheduleTemplateVersion @relation(fields: [versionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Cascade)
+  company Company                           @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  version AttendanceScheduleTemplateVersion @relation(fields: [versionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Cascade)
 
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, versionId, dayOfWeek, startMinute])
@@ -3546,18 +4064,18 @@ model AttendanceSchedulePeriod {
 /// Adding a new row changes an employee's template only from its effective
 /// date.  Historic assignments are immutable and never deleted.
 model AttendanceEmployeeScheduleAssignment {
-  id            String                     @id @default(uuid()) @db.Uuid
-  tenantId      String                     @db.Uuid
-  companyId     String                     @db.Uuid
-  employeeId    String                     @db.Uuid
-  templateId    String                     @db.Uuid
-  effectiveFrom DateTime                   @db.Date
-  createdByUserId String                   @db.Uuid
-  createdAt     DateTime                   @default(now()) @db.Timestamptz(6)
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @db.Uuid
+  companyId       String   @db.Uuid
+  employeeId      String   @db.Uuid
+  templateId      String   @db.Uuid
+  effectiveFrom   DateTime @db.Date
+  createdByUserId String   @db.Uuid
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
 
-  company       Company                    @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  employee      HrEmployee                 @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  template      AttendanceScheduleTemplate @relation(fields: [templateId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  company  Company                    @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  employee HrEmployee                 @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  template AttendanceScheduleTemplate @relation(fields: [templateId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
 
   @@unique([id, tenantId, companyId])
   @@unique([employeeId, effectiveFrom])
@@ -3568,19 +4086,19 @@ model AttendanceEmployeeScheduleAssignment {
 /// row with the same weekday and a later effective date supersedes it only for
 /// future business dates.
 model AttendanceEmployeeWeeklyAdjustment {
-  id            String                       @id @default(uuid()) @db.Uuid
-  tenantId      String                       @db.Uuid
-  companyId     String                       @db.Uuid
-  employeeId    String                       @db.Uuid
-  dayOfWeek     Int
-  effectiveFrom DateTime                     @db.Date
-  kind          AttendanceWeeklyAdjustmentKind
-  createdByUserId String                     @db.Uuid
-  createdAt     DateTime                     @default(now()) @db.Timestamptz(6)
+  id              String                         @id @default(uuid()) @db.Uuid
+  tenantId        String                         @db.Uuid
+  companyId       String                         @db.Uuid
+  employeeId      String                         @db.Uuid
+  dayOfWeek       Int
+  effectiveFrom   DateTime                       @db.Date
+  kind            AttendanceWeeklyAdjustmentKind
+  createdByUserId String                         @db.Uuid
+  createdAt       DateTime                       @default(now()) @db.Timestamptz(6)
 
-  company       Company                      @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  employee      HrEmployee                   @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  periods       AttendanceEmployeeWeeklyAdjustmentPeriod[]
+  company  Company                                    @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  employee HrEmployee                                 @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  periods  AttendanceEmployeeWeeklyAdjustmentPeriod[]
 
   @@unique([id, tenantId, companyId])
   @@unique([employeeId, dayOfWeek, effectiveFrom])
@@ -3588,58 +4106,58 @@ model AttendanceEmployeeWeeklyAdjustment {
 }
 
 model AttendanceEmployeeWeeklyAdjustmentPeriod {
-  id           String                             @id @default(uuid()) @db.Uuid
-  tenantId     String                             @db.Uuid
-  companyId    String                             @db.Uuid
-  adjustmentId String                             @db.Uuid
+  id           String   @id @default(uuid()) @db.Uuid
+  tenantId     String   @db.Uuid
+  companyId    String   @db.Uuid
+  adjustmentId String   @db.Uuid
   startMinute  Int
   endMinute    Int
-  endsNextDay  Boolean                            @default(false)
-  createdAt    DateTime                           @default(now()) @db.Timestamptz(6)
+  endsNextDay  Boolean  @default(false)
+  createdAt    DateTime @default(now()) @db.Timestamptz(6)
 
-  company      Company                            @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  adjustment   AttendanceEmployeeWeeklyAdjustment @relation(fields: [adjustmentId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Cascade)
+  company    Company                            @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  adjustment AttendanceEmployeeWeeklyAdjustment @relation(fields: [adjustmentId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Cascade)
 
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, adjustmentId, startMinute])
 }
 
 model AttendanceScheduleException {
-  id             String                            @id @default(uuid()) @db.Uuid
-  tenantId       String                            @db.Uuid
-  companyId      String                            @db.Uuid
-  employeeId     String                            @db.Uuid
-  businessDate   DateTime                          @db.Date
-  kind           AttendanceWeeklyAdjustmentKind
-  status         AttendanceScheduleExceptionStatus @default(PENDING)
-  reason         String                            @db.VarChar(2000)
-  requestedByUserId String                         @db.Uuid
-  decidedByUserId String?                          @db.Uuid
-  decidedAt      DateTime?                         @db.Timestamptz(6)
-  decisionNote   String?                           @db.VarChar(2000)
-  createdAt      DateTime                          @default(now()) @db.Timestamptz(6)
-  updatedAt      DateTime                          @updatedAt @db.Timestamptz(6)
+  id                String                            @id @default(uuid()) @db.Uuid
+  tenantId          String                            @db.Uuid
+  companyId         String                            @db.Uuid
+  employeeId        String                            @db.Uuid
+  businessDate      DateTime                          @db.Date
+  kind              AttendanceWeeklyAdjustmentKind
+  status            AttendanceScheduleExceptionStatus @default(PENDING)
+  reason            String                            @db.VarChar(2000)
+  requestedByUserId String                            @db.Uuid
+  decidedByUserId   String?                           @db.Uuid
+  decidedAt         DateTime?                         @db.Timestamptz(6)
+  decisionNote      String?                           @db.VarChar(2000)
+  createdAt         DateTime                          @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime                          @updatedAt @db.Timestamptz(6)
 
-  company        Company                           @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  employee       HrEmployee                        @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  periods        AttendanceScheduleExceptionPeriod[]
+  company  Company                             @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  employee HrEmployee                          @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  periods  AttendanceScheduleExceptionPeriod[]
 
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, employeeId, businessDate, status])
 }
 
 model AttendanceScheduleExceptionPeriod {
-  id          String                      @id @default(uuid()) @db.Uuid
-  tenantId    String                      @db.Uuid
-  companyId   String                      @db.Uuid
-  exceptionId String                      @db.Uuid
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @db.Uuid
+  companyId   String   @db.Uuid
+  exceptionId String   @db.Uuid
   startMinute Int
   endMinute   Int
-  endsNextDay Boolean                     @default(false)
-  createdAt   DateTime                    @default(now()) @db.Timestamptz(6)
+  endsNextDay Boolean  @default(false)
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
 
-  company     Company                     @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  exception   AttendanceScheduleException @relation(fields: [exceptionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Cascade)
+  company   Company                     @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  exception AttendanceScheduleException @relation(fields: [exceptionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Cascade)
 
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, exceptionId, startMinute])
@@ -3648,28 +4166,28 @@ model AttendanceScheduleExceptionPeriod {
 /// Immutable evidence from an attendance operation. Coordinates remain here
 /// for authorised review and are never copied into generic audit payloads.
 model AttendanceEvent {
-  id            String              @id @default(uuid()) @db.Uuid
-  tenantId      String              @db.Uuid
-  companyId     String              @db.Uuid
-  branchId      String              @db.Uuid
-  employeeId    String              @db.Uuid
-  sessionId     String              @db.Uuid
-  eventType     AttendanceEventType
+  id             String              @id @default(uuid()) @db.Uuid
+  tenantId       String              @db.Uuid
+  companyId      String              @db.Uuid
+  branchId       String              @db.Uuid
+  employeeId     String              @db.Uuid
+  sessionId      String              @db.Uuid
+  eventType      AttendanceEventType
   /// The operational workday is owned by the server and keeps an overnight
   /// checkout attached to the business date on which the work session started.
-  businessDate  DateTime            @db.Date
-  occurredAt    DateTime            @default(now()) @db.Timestamptz(6)
-  latitude      Decimal             @db.Decimal(10, 7)
-  longitude     Decimal             @db.Decimal(10, 7)
-  accuracyMeters Decimal            @db.Decimal(10, 2)
-  qrTokenHash   String              @db.Char(64)
-  requestKey    String              @db.VarChar(255)
-  createdAt     DateTime            @default(now()) @db.Timestamptz(6)
+  businessDate   DateTime            @db.Date
+  occurredAt     DateTime            @default(now()) @db.Timestamptz(6)
+  latitude       Decimal             @db.Decimal(10, 7)
+  longitude      Decimal             @db.Decimal(10, 7)
+  accuracyMeters Decimal             @db.Decimal(10, 2)
+  qrTokenHash    String              @db.Char(64)
+  requestKey     String              @db.VarChar(255)
+  createdAt      DateTime            @default(now()) @db.Timestamptz(6)
 
-  company  Company                @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  branch   AttendanceBranch       @relation(fields: [branchId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  employee HrEmployee             @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  session  AttendanceWorkSession  @relation(fields: [sessionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  company  Company               @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  branch   AttendanceBranch      @relation(fields: [branchId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  employee HrEmployee            @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  session  AttendanceWorkSession @relation(fields: [sessionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
 
   @@unique([id, tenantId, companyId])
   @@unique([companyId, requestKey])
@@ -3694,21 +4212,21 @@ model AttendanceQrScanUse {
 }
 
 model AttendanceWorkSession {
-  id          String                      @id @default(uuid()) @db.Uuid
-  tenantId    String                      @db.Uuid
-  companyId   String                      @db.Uuid
-  branchId    String                      @db.Uuid
-  employeeId  String                      @db.Uuid
-  status      AttendanceWorkSessionStatus @default(OPEN)
+  id           String                      @id @default(uuid()) @db.Uuid
+  tenantId     String                      @db.Uuid
+  companyId    String                      @db.Uuid
+  branchId     String                      @db.Uuid
+  employeeId   String                      @db.Uuid
+  status       AttendanceWorkSessionStatus @default(OPEN)
   businessDate DateTime                    @db.Date
-  checkInAt   DateTime                    @db.Timestamptz(6)
-  checkOutAt  DateTime?                   @db.Timestamptz(6)
-  createdAt   DateTime                    @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime                    @updatedAt @db.Timestamptz(6)
+  checkInAt    DateTime                    @db.Timestamptz(6)
+  checkOutAt   DateTime?                   @db.Timestamptz(6)
+  createdAt    DateTime                    @default(now()) @db.Timestamptz(6)
+  updatedAt    DateTime                    @updatedAt @db.Timestamptz(6)
 
-  company  Company          @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  branch   AttendanceBranch @relation(fields: [branchId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  employee HrEmployee       @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  company  Company           @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  branch   AttendanceBranch  @relation(fields: [branchId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  employee HrEmployee        @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   events   AttendanceEvent[]
 
   @@unique([id, tenantId, companyId])
@@ -5267,11 +5785,35 @@ model OperationsUnit {
   @@index([tenantId, companyId, dimension, isActive])
 }
 
+/// A non-financial catalogue grouping. It is separate from OperationsSection
+/// (the internal producing area) and from finance categories, so imported
+/// source classifications stay meaningful without affecting accounting.
+model OperationsCatalogCategory {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @db.Uuid
+  companyId String   @db.Uuid
+  code      String   @db.VarChar(80)
+  nameAr    String   @db.VarChar(160)
+  nameEn    String?  @db.VarChar(160)
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  company Company          @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  items   OperationsItem[]
+
+  @@unique([id, tenantId, companyId])
+  @@unique([companyId, code])
+  @@index([tenantId, companyId, isActive, sortOrder])
+}
+
 model OperationsItem {
   id         String               @id @default(uuid()) @db.Uuid
   tenantId   String               @db.Uuid
   companyId  String               @db.Uuid
   sectionId  String?              @db.Uuid
+  categoryId String?              @db.Uuid
   baseUnitId String               @db.Uuid
   code       String               @db.VarChar(80)
   nameAr     String               @db.VarChar(160)
@@ -5283,6 +5825,7 @@ model OperationsItem {
 
   company                          Company                                     @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   section                          OperationsSection?                          @relation(fields: [sectionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  category                         OperationsCatalogCategory?                  @relation(fields: [categoryId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   baseUnit                         OperationsUnit                              @relation("OperationsItemBaseUnit", fields: [baseUnitId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   itemUnits                        OperationsItemUnit[]
   conversionVersions               OperationsItemConversionVersion[]
@@ -5299,6 +5842,7 @@ model OperationsItem {
   @@unique([companyId, code])
   @@index([tenantId, companyId, kind, status])
   @@index([tenantId, companyId, sectionId])
+  @@index([tenantId, companyId, categoryId])
 }
 
 model OperationsItemUnit {

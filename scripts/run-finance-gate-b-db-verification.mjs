@@ -306,10 +306,53 @@ try {
   const cancelledTransferActivity = await services.treasury.activity(context, master.bankVaultId, { to: date("2026-08-20"), pageSize: 50 });
   assert.equal(cancelledTransferActivity.summary.inflow, "35.0000", "Activity must retain original inflows for an auditable ledger history.");
   assert.equal(cancelledTransferActivity.summary.outflow, "10.0000", "Activity must include the cancellation entry as an offsetting outflow.");
+  const concurrentTransferKey = randomUUID();
+  const concurrentTransferInput = {
+    fromVaultId: master.vaultId,
+    toVaultId: master.bankVaultId,
+    amount: "7.5000",
+    businessDate: date("2026-08-20"),
+    idempotencyKey: concurrentTransferKey,
+  };
+  const concurrentTransfers = await Promise.all(
+    Array.from({ length: 10 }, () => services.treasury.transfer(context, concurrentTransferInput)),
+  );
+  const concurrentJournalEntryId = concurrentTransfers[0]?.journalEntryId;
+  assert.ok(concurrentJournalEntryId, "A concurrent vault transfer must produce a journal receipt.");
+  assert.equal(
+    new Set(concurrentTransfers.map((receipt) => receipt.journalEntryId)).size,
+    1,
+    "Concurrent retries with the same idempotency key must all return the one posted journal.",
+  );
+  const concurrentProof = await database.inTenantTransaction(fixture.tenantId, async (transaction) => ({
+    journalCount: await transaction.financeJournalEntry.count({
+      where: { id: concurrentJournalEntryId, tenantId: fixture.tenantId, companyId: fixture.companyId },
+    }),
+    auditCount: await transaction.auditEvent.count({
+      where: {
+        tenantId: fixture.tenantId,
+        companyId: fixture.companyId,
+        action: "finance.vault.transferred",
+        entityId: concurrentTransfers[0]?.transferReference,
+      },
+    }),
+    receiptCount: await transaction.idempotencyReceipt.count({
+      where: {
+        tenantId: fixture.tenantId,
+        companyId: fixture.companyId,
+        actorUserId: fixture.userId,
+        operation: "finance.vault.transfer",
+        idempotencyKey: concurrentTransferKey,
+      },
+    }),
+  }));
+  assert.equal(concurrentProof.journalCount, 1, "Concurrent transfer retries must post only one journal.");
+  assert.equal(concurrentProof.auditCount, 1, "Concurrent transfer retries must write one audit event.");
+  assert.equal(concurrentProof.receiptCount, 1, "Concurrent transfer retries must retain one idempotency receipt.");
   await verifySealedBalancedJournals();
   await verifySealedLineCannotChange(due.journalEntryId);
 
-  console.log('Finance Gate B database verification passed: journal seal/balance/immutability, company isolation, supplier favorites, supplier dues, inclusive loans, recurring coverage and atomic recurring batches, payable batches and idempotent ledger-derived vault transfers.');
+  console.log('Finance Gate B database verification passed: journal seal/balance/immutability, company isolation, supplier favorites, supplier dues, inclusive loans, recurring coverage and atomic recurring batches, payable batches and idempotent, concurrent ledger-derived vault transfers.');
 } finally {
   if (database) await database.onModuleDestroy();
   await pool.end();

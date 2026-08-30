@@ -491,7 +491,7 @@ html[dir="rtl"] .header-signout svg { transform: scaleX(-1); }
 }
 .nav-item.active {
   color: #fff;
-  background: #086b49;
+  background: var(--brand);
   font-weight: 700;
 }
 .nav-item:hover {
@@ -1431,6 +1431,7 @@ body[data-color-scheme="dark"] :is(.baseer-status-badge--danger, .hr-overview__s
 body[data-launcher-background="product-light"] { --app-canvas: #f6f8fa; --content-canvas: #f6f8fa; }
 body[data-launcher-background="product-white"] { --app-canvas: #fff; --content-canvas: #fff; }
 body[data-launcher-background="product-soft"] { --app-canvas: #f4f7f4; --content-canvas: #f4f7f4; }
+body[data-launcher-background="product-beige"] { --app-canvas: #f7f1e6; --content-canvas: #f7f1e6; }
 body[data-launcher-background="product-gray"] { --app-canvas: #8c8c8c; --content-canvas: #8c8c8c; }
 body[data-launcher-background="product-dark"] { --app-canvas: #0d1117; --content-canvas: #0d1117; }
 body[data-launcher-background="product-dimmed"] { --app-canvas: #22272e; --content-canvas: #22272e; }

@@ -11,8 +11,18 @@ const quantitySchema = z.string().trim().regex(/^\d{1,16}(?:\.\d{1,8})?$/).refin
 const moneySchema = z.string().trim().regex(/^\d{1,14}(?:\.\d{1,4})?$/).refine((value) => Number(value) > 0, "Amount must be positive.");
 const nullableAmountSchema = moneySchema.nullable();
 const nullableNonNegativeMoneySchema = z.string().trim().regex(/^\d{1,14}(?:\.\d{1,4})?$/).nullable();
-const operationsOverviewAmountSchema = z.string().trim().regex(/^\d{1,14}(?:\.\d{1,4})?$/);
 const operationsOverviewDateSchema = z.string().date();
+const operationsOverviewDisplayAmountSchema = z.string().trim().regex(/^-?[\d,]+(?:\.\d{2})?$/).max(64);
+const operationsOverviewDisplayCountSchema = z.string().trim().regex(/^\d[\d,]*$/).max(64);
+const operationsOverviewDataQualitySchema = z.enum(["READY", "INCOMPLETE", "NO_DATA"]);
+const operationsOverviewCoverageSchema = z.object({
+  recordedOperatingDays: z.number().int().nonnegative(),
+  requiredOperatingDays: z.number().int().nonnegative(),
+  scheduledClosedDays: z.number().int().nonnegative(),
+  missingDays: z.number().int().nonnegative(),
+  partialDays: z.number().int().nonnegative(),
+  display: z.string().min(1).max(64),
+}).strict();
 
 export const operationsUnitSchema = z.object({
   id: operationsIdSchema,
@@ -100,30 +110,53 @@ export const operationsOverviewQuerySchema = z.object({
   toBusinessDate: operationsOverviewDateSchema.optional(),
 }).strict();
 
-/** Server-owned execution read for a selected business period. Sales remain
- * absent where a day is missing or incomplete; the dashboard must never
- * convert that to 0. */
+/** Server-owned, VAT-inclusive executive read. `display` and `timeline` are
+ * presentation-ready; browser clients must not format, aggregate, align, or
+ * infer a financial amount. */
 export const operationsOverviewReadSchema = z.object({
   companyId: companyIdSchema,
   businessDate: operationsOverviewDateSchema,
+  currencyCode: z.literal("SAR"),
+  amountBasis: z.literal("GROSS_VAT_INCLUSIVE"),
+  vatInclusive: z.literal(true),
+  source: z.object({
+    sales: z.literal("FINANCE_DAILY_FINANCIAL_SUMMARY"),
+    purchases: z.literal("FINANCE_OUTFLOW_DOCUMENT_PURCHASE"),
+  }).strict(),
   period: z.object({
     fromBusinessDate: operationsOverviewDateSchema,
     toBusinessDate: operationsOverviewDateSchema,
     timezone: z.literal("Asia/Riyadh"),
   }).strict(),
   sales: z.object({
-    grossAmount: operationsOverviewAmountSchema.nullable(),
-    closingCount: z.number().int().nonnegative(),
-    eligibleDayCount: z.number().int().nonnegative(),
-    incompleteDayCount: z.number().int().nonnegative(),
-    dataQuality: z.enum(["READY", "INCOMPLETE", "NO_DATA"]),
-    days: z.array(z.object({ businessDate: operationsOverviewDateSchema, grossAmount: operationsOverviewAmountSchema.nullable() }).strict()).max(366),
+    dataQuality: operationsOverviewDataQualitySchema,
+    coverage: operationsOverviewCoverageSchema,
+    display: z.object({
+      grossAmount: operationsOverviewDisplayAmountSchema.nullable(),
+      closingCount: operationsOverviewDisplayCountSchema.nullable(),
+    }).strict(),
   }).strict(),
   purchases: z.object({
-    grossAmount: operationsOverviewAmountSchema,
-    documentCount: z.number().int().nonnegative(),
-    days: z.array(z.object({ businessDate: operationsOverviewDateSchema, grossAmount: operationsOverviewAmountSchema, documentCount: z.number().int().nonnegative() }).strict()).max(366),
+    dataQuality: z.literal("READY"),
+    display: z.object({
+      grossAmount: operationsOverviewDisplayAmountSchema,
+      documentCount: operationsOverviewDisplayCountSchema,
+    }).strict(),
   }).strict(),
+  timeline: z.array(z.object({
+    businessDate: operationsOverviewDateSchema,
+    sales: z.object({
+      dataQuality: operationsOverviewDataQualitySchema,
+      displayGrossAmount: operationsOverviewDisplayAmountSchema.nullable(),
+      plotValue: z.number().finite().nonnegative().nullable(),
+    }).strict(),
+    purchases: z.object({
+      dataQuality: z.literal("READY"),
+      displayGrossAmount: operationsOverviewDisplayAmountSchema,
+      displayDocumentCount: operationsOverviewDisplayCountSchema,
+      plotValue: z.number().finite().nonnegative(),
+    }).strict(),
+  }).strict()).max(366),
 }).strict();
 
 export const createOperationsUnitRequestSchema = z.object({

@@ -768,6 +768,13 @@ export const dailySalesClosingsQuerySchema = dailySalesCalendarQuerySchema.exten
   pageSize: z.coerce.number().int().min(1).max(100).optional().default(50),
 }).strict();
 
+const dailySalesAnalyticsMonthSchema = z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/);
+export const dailySalesAnalyticsQuerySchema = z.object({
+  year: z.coerce.number().int().min(2000).max(2100),
+  primaryMonth: dailySalesAnalyticsMonthSchema,
+  comparisonMonth: dailySalesAnalyticsMonthSchema,
+}).strict();
+
 const dailySalesAllocationReceiptSchema = z
   .object({ vaultId: z.string().uuid(), grossAmount: financeAmountSchema })
   .strict();
@@ -829,8 +836,13 @@ export const dailySalesCalendarItemSchema = z
     dataStatus: dailySalesDataStatusSchema,
     source: operationalDaySourceSchema.nullable(),
     hasActiveClosing: z.boolean(),
-    salesGrossAmount: financeAmountSchema,
-    customerCount: z.number().int().min(0),
+    // These facts are unknown until the operating day is fully recorded. A
+    // pending/partial day must never be serialized as a financial zero.
+    amountBasis: z.literal("GROSS_VAT_INCLUSIVE"),
+    vatInclusive: z.literal(true),
+    dataAuthority: z.literal("BACKEND_DAILY_FINANCIAL_SUMMARY"),
+    salesGrossAmount: financeAmountSchema.nullable(),
+    customerCount: z.number().int().min(0).nullable(),
   })
   .strict();
 
@@ -884,6 +896,75 @@ export const dailySalesClosingsReceiptSchema = z
     nextCursor: z.string().uuid().nullable(),
   })
   .strict();
+
+/**
+ * The shared financial presentation contract for executive sales analytics.
+ * `display` values are already formatted by the server; clients may render
+ * them but must not parse, aggregate, format, or derive financial facts.
+ */
+export const financialAmountBasisSchema = z.enum(["GROSS_VAT_INCLUSIVE", "NET_EXCLUDING_VAT"]);
+export const financialDataQualitySchema = z.enum(["READY", "INCOMPLETE", "NOT_STARTED"]);
+export const financialCoverageSchema = z.object({
+  recordedSalesDays: z.number().int().nonnegative(),
+  requiredOperatingDays: z.number().int().nonnegative(),
+  scheduledClosedDays: z.number().int().nonnegative(),
+  missingDays: z.number().int().nonnegative(),
+  partialDays: z.number().int().nonnegative(),
+}).strict();
+const dailySalesAnalyticsDisplaySchema = z.object({
+  salesGrossAmount: z.string().min(1).max(64).nullable(),
+  applicationSalesGrossAmount: z.string().min(1).max(64).nullable(),
+  dailyAverageSalesAmount: z.string().min(1).max(64).nullable(),
+  recordedCustomerCount: z.string().min(1).max(64).nullable(),
+  dailyAverageCustomerCount: z.string().min(1).max(64).nullable(),
+  applicationSalesSharePercent: z.string().min(1).max(64).nullable(),
+  // A plotting coordinate only. The visible percentage remains the server
+  // formatted string above, so the client does not format or calculate it.
+  applicationSalesSharePlotValue: z.number().finite().min(0).max(100).nullable(),
+}).strict();
+const dailySalesAnalyticsChangeSchema = z.object({
+  dailyAverageSalesPercent: z.string().min(1).max(64).nullable(),
+  dailyAverageSalesDirection: z.enum(["POSITIVE", "NEGATIVE", "NEUTRAL"]).nullable(),
+  dailyAverageCustomerCountPercent: z.string().min(1).max(64).nullable(),
+  dailyAverageCustomerCountDirection: z.enum(["POSITIVE", "NEGATIVE", "NEUTRAL"]).nullable(),
+}).strict();
+const dailySalesAnalyticsPeriodSchema = z.object({
+  fromBusinessDate: businessDateSchema,
+  toBusinessDate: businessDateSchema,
+  amountBasis: z.literal("GROSS_VAT_INCLUSIVE"),
+  vatInclusive: z.literal(true),
+  dataQuality: financialDataQualitySchema,
+  coverage: financialCoverageSchema,
+  display: dailySalesAnalyticsDisplaySchema,
+}).strict();
+
+export const dailySalesAnalyticsReceiptSchema = z.object({
+  companyId: companyIdSchema,
+  currencyCode: z.literal("SAR"),
+  amountBasis: z.literal("GROSS_VAT_INCLUSIVE"),
+  vatInclusive: z.literal(true),
+  source: z.object({
+    kind: z.literal("FINANCE_DAILY_FINANCIAL_SUMMARY"),
+    reconciliation: z.literal("DAILY_SALES_POSTED_CLOSINGS"),
+  }).strict(),
+  asOfBusinessDate: businessDateSchema,
+  annualMonths: z.array(dailySalesAnalyticsPeriodSchema.extend({
+    month: dailySalesAnalyticsMonthSchema,
+    changeFromPreviousMonth: dailySalesAnalyticsChangeSchema,
+  }).strict()).length(12),
+  primary: z.object({
+    month: dailySalesAnalyticsMonthSchema,
+    monthSummary: dailySalesAnalyticsPeriodSchema,
+    weeks: z.array(dailySalesAnalyticsPeriodSchema.extend({
+      changeFromComparison: dailySalesAnalyticsChangeSchema,
+    }).strict()).min(4).max(5),
+  }).strict(),
+  comparison: z.object({
+    month: dailySalesAnalyticsMonthSchema,
+    monthSummary: dailySalesAnalyticsPeriodSchema,
+    weeks: z.array(dailySalesAnalyticsPeriodSchema).min(4).max(5),
+  }).strict(),
+}).strict();
 
 export const dailySalesCashHandoverItemSchema = z
   .object({

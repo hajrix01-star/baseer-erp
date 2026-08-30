@@ -40,9 +40,8 @@ export function refreshIdentityTracker(request: RequestLike): string {
 }
 
 /**
- * Local development needs a short recovery loop while testing credentials.
- * Production retains the deliberately stricter fifteen-minute lockout.
+ * Authentication throttling is a security boundary, so local and test runs
+ * use the same fifteen-minute lockout as production. A shorter development
+ * window would hide brute-force and retry-after regressions before release.
  */
-export const AUTH_THROTTLE_WINDOW_MS = process.env.NODE_ENV === "production"
-  ? 15 * 60 * 1_000
-  : 60 * 1_000;
+export const AUTH_THROTTLE_WINDOW_MS = 15 * 60 * 1_000;

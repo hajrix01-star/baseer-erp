@@ -13,6 +13,7 @@ import { BaseerComboboxField as BaseerCombobox } from "./baseer-combobox-field";
 import { BaseerStaticSelect } from "./baseer-static-select";
 import { activeSession, requestId } from "./daily-sales-client";
 import { addMoneyDecimals, isPositiveMoneyDecimal, normalizeMoneyDecimal, subtractMoneyDecimals, tryMoneyDecimal } from "./decimal-string";
+import { compensationBreakdown } from "./hr-compensation-breakdown";
 import { setHrEmployeeCompensation, type HrCompensationMethod, type HrCompensationProfile, type HrEmployee } from "./hr-client";
 
 type Language = "ar" | "en";
@@ -87,6 +88,30 @@ export function HrCompensationAgreementDialog({ open, language, employees, fixed
   const fullEdit = operation === "FULL";
   const requiresOvertimeSchedule = fullEdit && draft.compensationMethod === "INCLUSIVE_OVERTIME";
   const selectedEmployee = activeEmployees.find((employee) => employee.id === draft.employeeId);
+  const compensationPreview = useMemo(() => {
+    const monthlyGross = nextSalary;
+    const source = fullEdit ? draft : existingSalary;
+    if (!monthlyGross || !isPositiveMoneyDecimal(monthlyGross) || !source) return null;
+    const compensationMethod = source.compensationMethod;
+    const scheduledHoursPerDay = compensationMethod === "INCLUSIVE_OVERTIME" ? Number(source.scheduledHoursPerDay) : null;
+    const scheduledWorkDays = compensationMethod === "INCLUSIVE_OVERTIME" ? Number(source.scheduledWorkDays) : null;
+    return compensationBreakdown({
+      id: "preview",
+      employeeId: draft.employeeId,
+      policyVersionId: draft.policyVersionId || null,
+      effectiveFrom: draft.effectiveFrom,
+      effectiveTo: null,
+      monthlyGross,
+      compensationMethod,
+      foodAllowance: source.foodAllowance || "0",
+      housingAllowance: source.housingAllowance || "0",
+      transportAllowance: source.transportAllowance || "0",
+      otherAllowance: source.otherAllowance || "0",
+      scheduledHoursPerDay: Number.isInteger(scheduledHoursPerDay) ? scheduledHoursPerDay : null,
+      scheduledWorkDays: Number.isInteger(scheduledWorkDays) ? scheduledWorkDays : null,
+      notes: null,
+    });
+  }, [draft, existingSalary, fullEdit, nextSalary]);
   const salarySchema = useMemo(() => {
     const decimal = baseerDecimalString(ar ? "أدخل مبلغاً عشرياً صحيحاً." : "Enter a valid decimal amount.", 4, 14);
     const optionalDecimal = z.string().refine((value) => !value.trim() || decimal.safeParse(value.trim()).success, ar ? "أدخل مبلغاً عشرياً صحيحاً." : "Enter a valid decimal amount.");
@@ -153,6 +178,10 @@ export function HrCompensationAgreementDialog({ open, language, employees, fixed
       <BaseerFormSection title={selectedEmployee ? (ar ? `راتب ${selectedEmployee.nameAr}` : `${selectedEmployee.nameEn ?? selectedEmployee.nameAr} salary`) : (ar ? "بيانات الراتب" : "Salary details")}>
         {existingSalary ? <div className="hr-salary-manager__operations" role="group" aria-label={ar ? "نوع عملية الراتب" : "Salary operation"}>{(["FULL", "INCREASE", "DECREASE"] as const).map((value) => <BaseerButton key={value} type="button" variant={operation === value ? "primary" : "secondary"} className="hr-salary-manager__operation" disabled={busy} onClick={() => setOperation(value)}><span>{operationCopy(language, value).label}</span><small>{operationCopy(language, value).description}</small></BaseerButton>)}</div> : null}
         {existingSalary ? <div className="hr-salary-manager__summary"><div><span>{ar ? "الراتب الحالي" : "Current salary"}</span><strong><BaseerMoney value={existingSalary.monthlyGross} language={language} /></strong></div><div><span>{ar ? "بعد العملية" : "After change"}</span><strong><BaseerMoney value={nextSalary && isPositiveMoneyDecimal(nextSalary) ? nextSalary : "0"} language={language} /></strong></div></div> : null}
+        <section className="hr-salary-manager__preview" aria-live="polite" aria-label={ar ? "معاينة تقسيم الراتب" : "Salary breakdown preview"}>
+          <header><div><h4>{ar ? "المعاينة اللحظية لتقسيم الراتب" : "Live salary breakdown"}</h4><p>{ar ? "تتحدث القيم فورًا عند تغيير الإجمالي أو البدلات أو جدول الأوفر تايم." : "Updates instantly when salary, allowances, or overtime schedule changes."}</p></div></header>
+          {compensationPreview ? <div><section><span>{ar ? "الإجمالي الشهري" : "Monthly total"}</span><strong><BaseerMoney value={nextSalary!} language={language} /></strong></section><section><span>{ar ? "الراتب الأساسي" : "Basic salary"}</span><strong>{compensationPreview.basicSalary ? <BaseerMoney value={compensationPreview.basicSalary} language={language} /> : "—"}</strong></section><section><span>{ar ? "الأوفر تايم" : "Overtime"}</span><strong><BaseerMoney value={compensationPreview.includedOvertime ?? "0"} language={language} /></strong></section></div> : <p className="hr-salary-manager__preview-empty">{ar ? "أدخل إجمالي راتب صحيحًا لعرض التقسيم." : "Enter a valid monthly salary to preview the breakdown."}</p>}
+        </section>
         <BaseerFormGrid className="hr-salary-manager__fields">
           {!fixedEmployeeId ? <label className="baseer-form-field baseer-form-field--full">{ar ? "الموظف" : "Employee"}<BaseerCombobox required label={ar ? "الموظف" : "Employee"} value={draft.employeeId} placeholder={ar ? "اختر الموظف" : "Select employee"} options={activeEmployees.map((employee) => ({ id: employee.id, label: employeeLabel(language, employee) }))} onChange={(employeeId) => setDraft((value) => ({ ...value, employeeId }))} />{salaryForm.formState.errors.employeeId ? <small role="alert">{salaryForm.formState.errors.employeeId.message}</small> : null}</label> : null}
           <label className="baseer-form-field">{ar ? "شهر التطبيق" : "Effective month"}<BaseerMonthPicker required min={month(existingSalary ? 1 : 0)} value={draft.effectiveFrom.slice(0, 7)} onChange={(event) => setDraft((value) => ({ ...value, effectiveFrom: `${event.target.value}-01` }))} /></label>

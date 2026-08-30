@@ -297,6 +297,9 @@ export type UserWhereInput = {
   backupAuditEvents?: Prisma.BackupAuditEventListRelationFilter
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunListRelationFilter
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionListRelationFilter
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionListRelationFilter
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionListRelationFilter
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -337,6 +340,9 @@ export type UserOrderByWithRelationInput = {
   backupAuditEvents?: Prisma.BackupAuditEventOrderByRelationAggregateInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunOrderByRelationAggregateInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionOrderByRelationAggregateInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionOrderByRelationAggregateInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionOrderByRelationAggregateInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -382,6 +388,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   backupAuditEvents?: Prisma.BackupAuditEventListRelationFilter
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunListRelationFilter
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionListRelationFilter
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionListRelationFilter
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionListRelationFilter
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptListRelationFilter
 }, "id" | "tenantId_loginNormalized" | "id_tenantId">
 
 export type UserOrderByWithAggregationInput = {
@@ -459,6 +468,9 @@ export type UserCreateInput = {
   backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -498,6 +510,9 @@ export type UserUncheckedCreateInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUpdateInput = {
@@ -537,6 +552,9 @@ export type UserUpdateInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -576,6 +594,9 @@ export type UserUncheckedUpdateInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -889,6 +910,50 @@ export type UserUpdateOneRequiredWithoutInitiatedLegacyMigrationRunsNestedInput 
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInitiatedLegacyMigrationRunsInput, Prisma.UserUpdateWithoutInitiatedLegacyMigrationRunsInput>, Prisma.UserUncheckedUpdateWithoutInitiatedLegacyMigrationRunsInput>
 }
 
+export type UserCreateNestedOneWithoutRequestedNurixExcelFinancialExecutionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRequestedNurixExcelFinancialExecutionsInput, Prisma.UserUncheckedCreateWithoutRequestedNurixExcelFinancialExecutionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRequestedNurixExcelFinancialExecutionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutApprovedNurixExcelFinancialExecutionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovedNurixExcelFinancialExecutionsInput, Prisma.UserUncheckedCreateWithoutApprovedNurixExcelFinancialExecutionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovedNurixExcelFinancialExecutionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutRequestedNurixExcelFinancialExecutionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRequestedNurixExcelFinancialExecutionsInput, Prisma.UserUncheckedCreateWithoutRequestedNurixExcelFinancialExecutionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRequestedNurixExcelFinancialExecutionsInput
+  upsert?: Prisma.UserUpsertWithoutRequestedNurixExcelFinancialExecutionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRequestedNurixExcelFinancialExecutionsInput, Prisma.UserUpdateWithoutRequestedNurixExcelFinancialExecutionsInput>, Prisma.UserUncheckedUpdateWithoutRequestedNurixExcelFinancialExecutionsInput>
+}
+
+export type UserUpdateOneWithoutApprovedNurixExcelFinancialExecutionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovedNurixExcelFinancialExecutionsInput, Prisma.UserUncheckedCreateWithoutApprovedNurixExcelFinancialExecutionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovedNurixExcelFinancialExecutionsInput
+  upsert?: Prisma.UserUpsertWithoutApprovedNurixExcelFinancialExecutionsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutApprovedNurixExcelFinancialExecutionsInput, Prisma.UserUpdateWithoutApprovedNurixExcelFinancialExecutionsInput>, Prisma.UserUncheckedUpdateWithoutApprovedNurixExcelFinancialExecutionsInput>
+}
+
+export type UserCreateNestedOneWithoutCreatedNurixExcelFinancialReceiptsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedNurixExcelFinancialReceiptsInput, Prisma.UserUncheckedCreateWithoutCreatedNurixExcelFinancialReceiptsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedNurixExcelFinancialReceiptsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCreatedNurixExcelFinancialReceiptsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedNurixExcelFinancialReceiptsInput, Prisma.UserUncheckedCreateWithoutCreatedNurixExcelFinancialReceiptsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedNurixExcelFinancialReceiptsInput
+  upsert?: Prisma.UserUpsertWithoutCreatedNurixExcelFinancialReceiptsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedNurixExcelFinancialReceiptsInput, Prisma.UserUpdateWithoutCreatedNurixExcelFinancialReceiptsInput>, Prisma.UserUncheckedUpdateWithoutCreatedNurixExcelFinancialReceiptsInput>
+}
+
 export type UserCreateNestedOneWithoutLegacyMigrationReviewActionsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutLegacyMigrationReviewActionsInput, Prisma.UserUncheckedCreateWithoutLegacyMigrationReviewActionsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutLegacyMigrationReviewActionsInput
@@ -1139,6 +1204,9 @@ export type UserCreateWithoutTenantInput = {
   backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutTenantInput = {
@@ -1177,6 +1245,9 @@ export type UserUncheckedCreateWithoutTenantInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutTenantInput = {
@@ -1259,6 +1330,9 @@ export type UserCreateWithoutTenantAdministrationAssignmentsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutTenantAdministrationAssignmentsInput = {
@@ -1297,6 +1371,9 @@ export type UserUncheckedCreateWithoutTenantAdministrationAssignmentsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutTenantAdministrationAssignmentsInput = {
@@ -1351,6 +1428,9 @@ export type UserUpdateWithoutTenantAdministrationAssignmentsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTenantAdministrationAssignmentsInput = {
@@ -1389,6 +1469,9 @@ export type UserUncheckedUpdateWithoutTenantAdministrationAssignmentsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutMembershipsInput = {
@@ -1427,6 +1510,9 @@ export type UserCreateWithoutMembershipsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutMembershipsInput = {
@@ -1465,6 +1551,9 @@ export type UserUncheckedCreateWithoutMembershipsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutMembershipsInput = {
@@ -1519,6 +1608,9 @@ export type UserUpdateWithoutMembershipsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMembershipsInput = {
@@ -1557,6 +1649,9 @@ export type UserUncheckedUpdateWithoutMembershipsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -1595,6 +1690,9 @@ export type UserCreateWithoutSessionsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -1633,6 +1731,9 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -1687,6 +1788,9 @@ export type UserUpdateWithoutSessionsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -1725,6 +1829,9 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutAuditEventsInput = {
@@ -1763,6 +1870,9 @@ export type UserCreateWithoutAuditEventsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutAuditEventsInput = {
@@ -1801,6 +1911,9 @@ export type UserUncheckedCreateWithoutAuditEventsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutAuditEventsInput = {
@@ -1855,6 +1968,9 @@ export type UserUpdateWithoutAuditEventsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditEventsInput = {
@@ -1893,6 +2009,9 @@ export type UserUncheckedUpdateWithoutAuditEventsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutIdempotencyReceiptsInput = {
@@ -1931,6 +2050,9 @@ export type UserCreateWithoutIdempotencyReceiptsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutIdempotencyReceiptsInput = {
@@ -1969,6 +2091,9 @@ export type UserUncheckedCreateWithoutIdempotencyReceiptsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutIdempotencyReceiptsInput = {
@@ -2023,6 +2148,9 @@ export type UserUpdateWithoutIdempotencyReceiptsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutIdempotencyReceiptsInput = {
@@ -2061,6 +2189,9 @@ export type UserUncheckedUpdateWithoutIdempotencyReceiptsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutCreatedBackupPoliciesInput = {
@@ -2099,6 +2230,9 @@ export type UserCreateWithoutCreatedBackupPoliciesInput = {
   backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutCreatedBackupPoliciesInput = {
@@ -2137,6 +2271,9 @@ export type UserUncheckedCreateWithoutCreatedBackupPoliciesInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutCreatedBackupPoliciesInput = {
@@ -2191,6 +2328,9 @@ export type UserUpdateWithoutCreatedBackupPoliciesInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedBackupPoliciesInput = {
@@ -2229,6 +2369,9 @@ export type UserUncheckedUpdateWithoutCreatedBackupPoliciesInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutRequestedBackupJobsInput = {
@@ -2267,6 +2410,9 @@ export type UserCreateWithoutRequestedBackupJobsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutRequestedBackupJobsInput = {
@@ -2305,6 +2451,9 @@ export type UserUncheckedCreateWithoutRequestedBackupJobsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutRequestedBackupJobsInput = {
@@ -2359,6 +2508,9 @@ export type UserUpdateWithoutRequestedBackupJobsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRequestedBackupJobsInput = {
@@ -2397,6 +2549,9 @@ export type UserUncheckedUpdateWithoutRequestedBackupJobsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutBackupAuditEventsInput = {
@@ -2435,6 +2590,9 @@ export type UserCreateWithoutBackupAuditEventsInput = {
   createdBackupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutCreatorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutBackupAuditEventsInput = {
@@ -2473,6 +2631,9 @@ export type UserUncheckedCreateWithoutBackupAuditEventsInput = {
   createdBackupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutCreatorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutBackupAuditEventsInput = {
@@ -2527,6 +2688,9 @@ export type UserUpdateWithoutBackupAuditEventsInput = {
   createdBackupPolicies?: Prisma.BackupPolicyUpdateManyWithoutCreatorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBackupAuditEventsInput = {
@@ -2565,6 +2729,9 @@ export type UserUncheckedUpdateWithoutBackupAuditEventsInput = {
   createdBackupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutCreatorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutInitiatedLegacyMigrationRunsInput = {
@@ -2603,6 +2770,9 @@ export type UserCreateWithoutInitiatedLegacyMigrationRunsInput = {
   createdBackupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutCreatorInput
   backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutInitiatedLegacyMigrationRunsInput = {
@@ -2641,6 +2811,9 @@ export type UserUncheckedCreateWithoutInitiatedLegacyMigrationRunsInput = {
   createdBackupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutCreatorInput
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutInitiatedLegacyMigrationRunsInput = {
@@ -2695,6 +2868,9 @@ export type UserUpdateWithoutInitiatedLegacyMigrationRunsInput = {
   createdBackupPolicies?: Prisma.BackupPolicyUpdateManyWithoutCreatorNestedInput
   backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutInitiatedLegacyMigrationRunsInput = {
@@ -2733,6 +2909,549 @@ export type UserUncheckedUpdateWithoutInitiatedLegacyMigrationRunsInput = {
   createdBackupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutCreatorNestedInput
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserCreateWithoutRequestedNurixExcelFinancialExecutionsInput = {
+  id?: string
+  loginNormalized: string
+  nameAr: string
+  nameEn: string
+  preferredLanguage?: string
+  avatarKind?: string
+  passwordHash: string
+  status?: $Enums.UserStatus
+  sessionVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
+  memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutUserInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutActorInput
+  createdFileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCreatedByInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCreatedByInput
+  createdReportRuns?: Prisma.ReportRunCreateNestedManyWithoutCreatedByInput
+  createdReportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCreatedByInput
+  createdVatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCreatedByInput
+  updatedVatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutUpdatedByInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutImportedByInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCreatedByInput
+  requestedBackupJobs?: Prisma.BackupJobCreateNestedManyWithoutRequesterInput
+  createdBackupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutCreatorInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
+  initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
+}
+
+export type UserUncheckedCreateWithoutRequestedNurixExcelFinancialExecutionsInput = {
+  id?: string
+  tenantId: string
+  loginNormalized: string
+  nameAr: string
+  nameEn: string
+  preferredLanguage?: string
+  avatarKind?: string
+  passwordHash: string
+  status?: $Enums.UserStatus
+  sessionVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutActorInput
+  createdFileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCreatedByInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCreatedByInput
+  createdReportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCreatedByInput
+  createdReportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+  createdVatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedVatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutUpdatedByInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutImportedByInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedBackupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutRequesterInput
+  createdBackupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutCreatorInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
+  initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
+}
+
+export type UserCreateOrConnectWithoutRequestedNurixExcelFinancialExecutionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutRequestedNurixExcelFinancialExecutionsInput, Prisma.UserUncheckedCreateWithoutRequestedNurixExcelFinancialExecutionsInput>
+}
+
+export type UserCreateWithoutApprovedNurixExcelFinancialExecutionsInput = {
+  id?: string
+  loginNormalized: string
+  nameAr: string
+  nameEn: string
+  preferredLanguage?: string
+  avatarKind?: string
+  passwordHash: string
+  status?: $Enums.UserStatus
+  sessionVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
+  memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutUserInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutActorInput
+  createdFileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCreatedByInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCreatedByInput
+  createdReportRuns?: Prisma.ReportRunCreateNestedManyWithoutCreatedByInput
+  createdReportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCreatedByInput
+  createdVatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCreatedByInput
+  updatedVatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutUpdatedByInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutImportedByInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCreatedByInput
+  requestedBackupJobs?: Prisma.BackupJobCreateNestedManyWithoutRequesterInput
+  createdBackupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutCreatorInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
+  initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
+}
+
+export type UserUncheckedCreateWithoutApprovedNurixExcelFinancialExecutionsInput = {
+  id?: string
+  tenantId: string
+  loginNormalized: string
+  nameAr: string
+  nameEn: string
+  preferredLanguage?: string
+  avatarKind?: string
+  passwordHash: string
+  status?: $Enums.UserStatus
+  sessionVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutActorInput
+  createdFileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCreatedByInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCreatedByInput
+  createdReportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCreatedByInput
+  createdReportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+  createdVatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedVatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutUpdatedByInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutImportedByInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedBackupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutRequesterInput
+  createdBackupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutCreatorInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
+  initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
+}
+
+export type UserCreateOrConnectWithoutApprovedNurixExcelFinancialExecutionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprovedNurixExcelFinancialExecutionsInput, Prisma.UserUncheckedCreateWithoutApprovedNurixExcelFinancialExecutionsInput>
+}
+
+export type UserUpsertWithoutRequestedNurixExcelFinancialExecutionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutRequestedNurixExcelFinancialExecutionsInput, Prisma.UserUncheckedUpdateWithoutRequestedNurixExcelFinancialExecutionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutRequestedNurixExcelFinancialExecutionsInput, Prisma.UserUncheckedCreateWithoutRequestedNurixExcelFinancialExecutionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutRequestedNurixExcelFinancialExecutionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutRequestedNurixExcelFinancialExecutionsInput, Prisma.UserUncheckedUpdateWithoutRequestedNurixExcelFinancialExecutionsInput>
+}
+
+export type UserUpdateWithoutRequestedNurixExcelFinancialExecutionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginNormalized?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
+  memberships?: Prisma.CompanyMembershipUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutActorNestedInput
+  createdFileMetadata?: Prisma.FileMetadataUpdateManyWithoutCreatedByNestedInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCreatedByNestedInput
+  createdReportRuns?: Prisma.ReportRunUpdateManyWithoutCreatedByNestedInput
+  createdReportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCreatedByNestedInput
+  createdVatSimulations?: Prisma.VatSimulationUpdateManyWithoutCreatedByNestedInput
+  updatedVatSimulations?: Prisma.VatSimulationUpdateManyWithoutUpdatedByNestedInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutImportedByNestedInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCreatedByNestedInput
+  requestedBackupJobs?: Prisma.BackupJobUpdateManyWithoutRequesterNestedInput
+  createdBackupPolicies?: Prisma.BackupPolicyUpdateManyWithoutCreatorNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
+  initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutRequestedNurixExcelFinancialExecutionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  loginNormalized?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutActorNestedInput
+  createdFileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdReportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdReportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdVatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedVatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutUpdatedByNestedInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutImportedByNestedInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedBackupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutRequesterNestedInput
+  createdBackupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutCreatorNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
+  initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserUpsertWithoutApprovedNurixExcelFinancialExecutionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutApprovedNurixExcelFinancialExecutionsInput, Prisma.UserUncheckedUpdateWithoutApprovedNurixExcelFinancialExecutionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprovedNurixExcelFinancialExecutionsInput, Prisma.UserUncheckedCreateWithoutApprovedNurixExcelFinancialExecutionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutApprovedNurixExcelFinancialExecutionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutApprovedNurixExcelFinancialExecutionsInput, Prisma.UserUncheckedUpdateWithoutApprovedNurixExcelFinancialExecutionsInput>
+}
+
+export type UserUpdateWithoutApprovedNurixExcelFinancialExecutionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginNormalized?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
+  memberships?: Prisma.CompanyMembershipUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutActorNestedInput
+  createdFileMetadata?: Prisma.FileMetadataUpdateManyWithoutCreatedByNestedInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCreatedByNestedInput
+  createdReportRuns?: Prisma.ReportRunUpdateManyWithoutCreatedByNestedInput
+  createdReportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCreatedByNestedInput
+  createdVatSimulations?: Prisma.VatSimulationUpdateManyWithoutCreatedByNestedInput
+  updatedVatSimulations?: Prisma.VatSimulationUpdateManyWithoutUpdatedByNestedInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutImportedByNestedInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCreatedByNestedInput
+  requestedBackupJobs?: Prisma.BackupJobUpdateManyWithoutRequesterNestedInput
+  createdBackupPolicies?: Prisma.BackupPolicyUpdateManyWithoutCreatorNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
+  initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutApprovedNurixExcelFinancialExecutionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  loginNormalized?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutActorNestedInput
+  createdFileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdReportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdReportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdVatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedVatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutUpdatedByNestedInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutImportedByNestedInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedBackupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutRequesterNestedInput
+  createdBackupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutCreatorNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
+  initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserCreateWithoutCreatedNurixExcelFinancialReceiptsInput = {
+  id?: string
+  loginNormalized: string
+  nameAr: string
+  nameEn: string
+  preferredLanguage?: string
+  avatarKind?: string
+  passwordHash: string
+  status?: $Enums.UserStatus
+  sessionVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
+  memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutUserInput
+  sessions?: Prisma.AppSessionCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutActorInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutActorInput
+  createdFileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCreatedByInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCreatedByInput
+  createdReportRuns?: Prisma.ReportRunCreateNestedManyWithoutCreatedByInput
+  createdReportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCreatedByInput
+  createdVatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCreatedByInput
+  updatedVatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutUpdatedByInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageCreateNestedManyWithoutActivatedByInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutImportedByInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCreatedByInput
+  requestedBackupJobs?: Prisma.BackupJobCreateNestedManyWithoutRequesterInput
+  createdBackupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutCreatorInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
+  initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+}
+
+export type UserUncheckedCreateWithoutCreatedNurixExcelFinancialReceiptsInput = {
+  id?: string
+  tenantId: string
+  loginNormalized: string
+  nameAr: string
+  nameEn: string
+  preferredLanguage?: string
+  avatarKind?: string
+  passwordHash: string
+  status?: $Enums.UserStatus
+  sessionVersion?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.AppSessionUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutActorInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutActorInput
+  createdFileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCreatedByInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCreatedByInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCreatedByInput
+  createdReportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCreatedByInput
+  createdReportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCreatedByInput
+  createdVatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCreatedByInput
+  updatedVatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutUpdatedByInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedManyWithoutActivatedByInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutImportedByInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedCreateNestedManyWithoutUserInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutApprovedByInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutApprovedByInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutSuspendedByInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCreatedByInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedBackupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutRequesterInput
+  createdBackupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutCreatorInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
+  initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+}
+
+export type UserCreateOrConnectWithoutCreatedNurixExcelFinancialReceiptsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedNurixExcelFinancialReceiptsInput, Prisma.UserUncheckedCreateWithoutCreatedNurixExcelFinancialReceiptsInput>
+}
+
+export type UserUpsertWithoutCreatedNurixExcelFinancialReceiptsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedNurixExcelFinancialReceiptsInput, Prisma.UserUncheckedUpdateWithoutCreatedNurixExcelFinancialReceiptsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedNurixExcelFinancialReceiptsInput, Prisma.UserUncheckedCreateWithoutCreatedNurixExcelFinancialReceiptsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCreatedNurixExcelFinancialReceiptsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedNurixExcelFinancialReceiptsInput, Prisma.UserUncheckedUpdateWithoutCreatedNurixExcelFinancialReceiptsInput>
+}
+
+export type UserUpdateWithoutCreatedNurixExcelFinancialReceiptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  loginNormalized?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
+  memberships?: Prisma.CompanyMembershipUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.AppSessionUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutActorNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutActorNestedInput
+  createdFileMetadata?: Prisma.FileMetadataUpdateManyWithoutCreatedByNestedInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCreatedByNestedInput
+  createdReportRuns?: Prisma.ReportRunUpdateManyWithoutCreatedByNestedInput
+  createdReportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCreatedByNestedInput
+  createdVatSimulations?: Prisma.VatSimulationUpdateManyWithoutCreatedByNestedInput
+  updatedVatSimulations?: Prisma.VatSimulationUpdateManyWithoutUpdatedByNestedInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUpdateManyWithoutActivatedByNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutImportedByNestedInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCreatedByNestedInput
+  requestedBackupJobs?: Prisma.BackupJobUpdateManyWithoutRequesterNestedInput
+  createdBackupPolicies?: Prisma.BackupPolicyUpdateManyWithoutCreatorNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
+  initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCreatedNurixExcelFinancialReceiptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  loginNormalized?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  preferredLanguage?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarKind?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.AppSessionUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutActorNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutActorNestedInput
+  createdFileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCreatedByNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdReportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdReportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdVatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCreatedByNestedInput
+  updatedVatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutUpdatedByNestedInput
+  cashPerformanceCoverageActivations?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateManyWithoutActivatedByNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutImportedByNestedInput
+  tenantAdministrationAssignments?: Prisma.TenantAdministrationAssignmentUncheckedUpdateManyWithoutUserNestedInput
+  approvedAiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutApprovedByNestedInput
+  approvedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutApprovedByNestedInput
+  suspendedAiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutSuspendedByNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCreatedByNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedBackupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutRequesterNestedInput
+  createdBackupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutCreatorNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
+  initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
+  legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
 }
 
 export type UserCreateWithoutLegacyMigrationReviewActionsInput = {
@@ -2771,6 +3490,9 @@ export type UserCreateWithoutLegacyMigrationReviewActionsInput = {
   createdBackupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutCreatorInput
   backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutLegacyMigrationReviewActionsInput = {
@@ -2809,6 +3531,9 @@ export type UserUncheckedCreateWithoutLegacyMigrationReviewActionsInput = {
   createdBackupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutCreatorInput
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutLegacyMigrationReviewActionsInput = {
@@ -2863,6 +3588,9 @@ export type UserUpdateWithoutLegacyMigrationReviewActionsInput = {
   createdBackupPolicies?: Prisma.BackupPolicyUpdateManyWithoutCreatorNestedInput
   backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLegacyMigrationReviewActionsInput = {
@@ -2901,6 +3629,9 @@ export type UserUncheckedUpdateWithoutLegacyMigrationReviewActionsInput = {
   createdBackupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutCreatorNestedInput
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutCreatedFileMetadataInput = {
@@ -2939,6 +3670,9 @@ export type UserCreateWithoutCreatedFileMetadataInput = {
   backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutCreatedFileMetadataInput = {
@@ -2977,6 +3711,9 @@ export type UserUncheckedCreateWithoutCreatedFileMetadataInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutCreatedFileMetadataInput = {
@@ -3031,6 +3768,9 @@ export type UserUpdateWithoutCreatedFileMetadataInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedFileMetadataInput = {
@@ -3069,6 +3809,9 @@ export type UserUncheckedUpdateWithoutCreatedFileMetadataInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutCreatedReportRunsInput = {
@@ -3107,6 +3850,9 @@ export type UserCreateWithoutCreatedReportRunsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutCreatedReportRunsInput = {
@@ -3145,6 +3891,9 @@ export type UserUncheckedCreateWithoutCreatedReportRunsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutCreatedReportRunsInput = {
@@ -3199,6 +3948,9 @@ export type UserUpdateWithoutCreatedReportRunsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedReportRunsInput = {
@@ -3237,6 +3989,9 @@ export type UserUncheckedUpdateWithoutCreatedReportRunsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutCreatedReportDocumentsInput = {
@@ -3275,6 +4030,9 @@ export type UserCreateWithoutCreatedReportDocumentsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutCreatedReportDocumentsInput = {
@@ -3313,6 +4071,9 @@ export type UserUncheckedCreateWithoutCreatedReportDocumentsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutCreatedReportDocumentsInput = {
@@ -3367,6 +4128,9 @@ export type UserUpdateWithoutCreatedReportDocumentsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedReportDocumentsInput = {
@@ -3405,6 +4169,9 @@ export type UserUncheckedUpdateWithoutCreatedReportDocumentsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutCreatedVatSimulationsInput = {
@@ -3443,6 +4210,9 @@ export type UserCreateWithoutCreatedVatSimulationsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutCreatedVatSimulationsInput = {
@@ -3481,6 +4251,9 @@ export type UserUncheckedCreateWithoutCreatedVatSimulationsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutCreatedVatSimulationsInput = {
@@ -3524,6 +4297,9 @@ export type UserCreateWithoutUpdatedVatSimulationsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutUpdatedVatSimulationsInput = {
@@ -3562,6 +4338,9 @@ export type UserUncheckedCreateWithoutUpdatedVatSimulationsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutUpdatedVatSimulationsInput = {
@@ -3616,6 +4395,9 @@ export type UserUpdateWithoutCreatedVatSimulationsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedVatSimulationsInput = {
@@ -3654,6 +4436,9 @@ export type UserUncheckedUpdateWithoutCreatedVatSimulationsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUpsertWithoutUpdatedVatSimulationsInput = {
@@ -3703,6 +4488,9 @@ export type UserUpdateWithoutUpdatedVatSimulationsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUpdatedVatSimulationsInput = {
@@ -3741,6 +4529,9 @@ export type UserUncheckedUpdateWithoutUpdatedVatSimulationsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutCashPerformanceCoverageActivationsInput = {
@@ -3779,6 +4570,9 @@ export type UserCreateWithoutCashPerformanceCoverageActivationsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutCashPerformanceCoverageActivationsInput = {
@@ -3817,6 +4611,9 @@ export type UserUncheckedCreateWithoutCashPerformanceCoverageActivationsInput = 
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutCashPerformanceCoverageActivationsInput = {
@@ -3871,6 +4668,9 @@ export type UserUpdateWithoutCashPerformanceCoverageActivationsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCashPerformanceCoverageActivationsInput = {
@@ -3909,6 +4709,9 @@ export type UserUncheckedUpdateWithoutCashPerformanceCoverageActivationsInput = 
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutCashPerformanceHistoricalImportsInput = {
@@ -3947,6 +4750,9 @@ export type UserCreateWithoutCashPerformanceHistoricalImportsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutCashPerformanceHistoricalImportsInput = {
@@ -3985,6 +4791,9 @@ export type UserUncheckedCreateWithoutCashPerformanceHistoricalImportsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutCashPerformanceHistoricalImportsInput = {
@@ -4039,6 +4848,9 @@ export type UserUpdateWithoutCashPerformanceHistoricalImportsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCashPerformanceHistoricalImportsInput = {
@@ -4077,6 +4889,9 @@ export type UserUncheckedUpdateWithoutCashPerformanceHistoricalImportsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutCreatedJournalEntriesInput = {
@@ -4115,6 +4930,9 @@ export type UserCreateWithoutCreatedJournalEntriesInput = {
   backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutCreatedJournalEntriesInput = {
@@ -4153,6 +4971,9 @@ export type UserUncheckedCreateWithoutCreatedJournalEntriesInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutCreatedJournalEntriesInput = {
@@ -4207,6 +5028,9 @@ export type UserUpdateWithoutCreatedJournalEntriesInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedJournalEntriesInput = {
@@ -4245,6 +5069,9 @@ export type UserUncheckedUpdateWithoutCreatedJournalEntriesInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutOutflowDocumentRevisionsInput = {
@@ -4283,6 +5110,9 @@ export type UserCreateWithoutOutflowDocumentRevisionsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutOutflowDocumentRevisionsInput = {
@@ -4321,6 +5151,9 @@ export type UserUncheckedCreateWithoutOutflowDocumentRevisionsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutOutflowDocumentRevisionsInput = {
@@ -4375,6 +5208,9 @@ export type UserUpdateWithoutOutflowDocumentRevisionsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOutflowDocumentRevisionsInput = {
@@ -4413,6 +5249,9 @@ export type UserUncheckedUpdateWithoutOutflowDocumentRevisionsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutApprovedAiCompanyContextsInput = {
@@ -4451,6 +5290,9 @@ export type UserCreateWithoutApprovedAiCompanyContextsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutApprovedAiCompanyContextsInput = {
@@ -4489,6 +5331,9 @@ export type UserUncheckedCreateWithoutApprovedAiCompanyContextsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutApprovedAiCompanyContextsInput = {
@@ -4543,6 +5388,9 @@ export type UserUpdateWithoutApprovedAiCompanyContextsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutApprovedAiCompanyContextsInput = {
@@ -4581,6 +5429,9 @@ export type UserUncheckedUpdateWithoutApprovedAiCompanyContextsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutApprovedAiSkillActivationsInput = {
@@ -4619,6 +5470,9 @@ export type UserCreateWithoutApprovedAiSkillActivationsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutApprovedAiSkillActivationsInput = {
@@ -4657,6 +5511,9 @@ export type UserUncheckedCreateWithoutApprovedAiSkillActivationsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutApprovedAiSkillActivationsInput = {
@@ -4700,6 +5557,9 @@ export type UserCreateWithoutSuspendedAiSkillActivationsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutSuspendedAiSkillActivationsInput = {
@@ -4738,6 +5598,9 @@ export type UserUncheckedCreateWithoutSuspendedAiSkillActivationsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutSuspendedAiSkillActivationsInput = {
@@ -4792,6 +5655,9 @@ export type UserUpdateWithoutApprovedAiSkillActivationsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutApprovedAiSkillActivationsInput = {
@@ -4830,6 +5696,9 @@ export type UserUncheckedUpdateWithoutApprovedAiSkillActivationsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUpsertWithoutSuspendedAiSkillActivationsInput = {
@@ -4879,6 +5748,9 @@ export type UserUpdateWithoutSuspendedAiSkillActivationsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSuspendedAiSkillActivationsInput = {
@@ -4917,6 +5789,9 @@ export type UserUncheckedUpdateWithoutSuspendedAiSkillActivationsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutAiEvaluationFeedbackInput = {
@@ -4955,6 +5830,9 @@ export type UserCreateWithoutAiEvaluationFeedbackInput = {
   backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutAiEvaluationFeedbackInput = {
@@ -4993,6 +5871,9 @@ export type UserUncheckedCreateWithoutAiEvaluationFeedbackInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutAiEvaluationFeedbackInput = {
@@ -5047,6 +5928,9 @@ export type UserUpdateWithoutAiEvaluationFeedbackInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAiEvaluationFeedbackInput = {
@@ -5085,6 +5969,9 @@ export type UserUncheckedUpdateWithoutAiEvaluationFeedbackInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutAiSkillEvaluationRunsInput = {
@@ -5123,6 +6010,9 @@ export type UserCreateWithoutAiSkillEvaluationRunsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutAiSkillEvaluationRunsInput = {
@@ -5161,6 +6051,9 @@ export type UserUncheckedCreateWithoutAiSkillEvaluationRunsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutActorInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedCreateNestedManyWithoutInitiatedByInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedCreateNestedManyWithoutCreatedByInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutRequesterInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutApproverInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutAiSkillEvaluationRunsInput = {
@@ -5215,6 +6108,9 @@ export type UserUpdateWithoutAiSkillEvaluationRunsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAiSkillEvaluationRunsInput = {
@@ -5253,6 +6149,9 @@ export type UserUncheckedUpdateWithoutAiSkillEvaluationRunsInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateManyTenantInput = {
@@ -5305,6 +6204,9 @@ export type UserUpdateWithoutTenantInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTenantInput = {
@@ -5343,6 +6245,9 @@ export type UserUncheckedUpdateWithoutTenantInput = {
   backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutActorNestedInput
   initiatedLegacyMigrationRuns?: Prisma.LegacyMigrationRunUncheckedUpdateManyWithoutInitiatedByNestedInput
   legacyMigrationReviewActions?: Prisma.LegacyMigrationReviewActionUncheckedUpdateManyWithoutCreatedByNestedInput
+  requestedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutRequesterNestedInput
+  approvedNurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutApproverNestedInput
+  createdNurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutTenantInput = {
@@ -5389,6 +6294,9 @@ export type UserCountOutputType = {
   backupAuditEvents: number
   initiatedLegacyMigrationRuns: number
   legacyMigrationReviewActions: number
+  requestedNurixExcelFinancialExecutions: number
+  approvedNurixExcelFinancialExecutions: number
+  createdNurixExcelFinancialReceipts: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -5416,6 +6324,9 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   backupAuditEvents?: boolean | UserCountOutputTypeCountBackupAuditEventsArgs
   initiatedLegacyMigrationRuns?: boolean | UserCountOutputTypeCountInitiatedLegacyMigrationRunsArgs
   legacyMigrationReviewActions?: boolean | UserCountOutputTypeCountLegacyMigrationReviewActionsArgs
+  requestedNurixExcelFinancialExecutions?: boolean | UserCountOutputTypeCountRequestedNurixExcelFinancialExecutionsArgs
+  approvedNurixExcelFinancialExecutions?: boolean | UserCountOutputTypeCountApprovedNurixExcelFinancialExecutionsArgs
+  createdNurixExcelFinancialReceipts?: boolean | UserCountOutputTypeCountCreatedNurixExcelFinancialReceiptsArgs
 }
 
 /**
@@ -5596,6 +6507,27 @@ export type UserCountOutputTypeCountLegacyMigrationReviewActionsArgs<ExtArgs ext
   where?: Prisma.LegacyMigrationReviewActionWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountRequestedNurixExcelFinancialExecutionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NurixExcelFinancialExecutionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountApprovedNurixExcelFinancialExecutionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NurixExcelFinancialExecutionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCreatedNurixExcelFinancialReceiptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NurixExcelFinancialReceiptWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -5635,6 +6567,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   backupAuditEvents?: boolean | Prisma.User$backupAuditEventsArgs<ExtArgs>
   initiatedLegacyMigrationRuns?: boolean | Prisma.User$initiatedLegacyMigrationRunsArgs<ExtArgs>
   legacyMigrationReviewActions?: boolean | Prisma.User$legacyMigrationReviewActionsArgs<ExtArgs>
+  requestedNurixExcelFinancialExecutions?: boolean | Prisma.User$requestedNurixExcelFinancialExecutionsArgs<ExtArgs>
+  approvedNurixExcelFinancialExecutions?: boolean | Prisma.User$approvedNurixExcelFinancialExecutionsArgs<ExtArgs>
+  createdNurixExcelFinancialReceipts?: boolean | Prisma.User$createdNurixExcelFinancialReceiptsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -5712,6 +6647,9 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   backupAuditEvents?: boolean | Prisma.User$backupAuditEventsArgs<ExtArgs>
   initiatedLegacyMigrationRuns?: boolean | Prisma.User$initiatedLegacyMigrationRunsArgs<ExtArgs>
   legacyMigrationReviewActions?: boolean | Prisma.User$legacyMigrationReviewActionsArgs<ExtArgs>
+  requestedNurixExcelFinancialExecutions?: boolean | Prisma.User$requestedNurixExcelFinancialExecutionsArgs<ExtArgs>
+  approvedNurixExcelFinancialExecutions?: boolean | Prisma.User$approvedNurixExcelFinancialExecutionsArgs<ExtArgs>
+  createdNurixExcelFinancialReceipts?: boolean | Prisma.User$createdNurixExcelFinancialReceiptsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -5749,6 +6687,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     backupAuditEvents: Prisma.$BackupAuditEventPayload<ExtArgs>[]
     initiatedLegacyMigrationRuns: Prisma.$LegacyMigrationRunPayload<ExtArgs>[]
     legacyMigrationReviewActions: Prisma.$LegacyMigrationReviewActionPayload<ExtArgs>[]
+    requestedNurixExcelFinancialExecutions: Prisma.$NurixExcelFinancialExecutionPayload<ExtArgs>[]
+    approvedNurixExcelFinancialExecutions: Prisma.$NurixExcelFinancialExecutionPayload<ExtArgs>[]
+    createdNurixExcelFinancialReceipts: Prisma.$NurixExcelFinancialReceiptPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -6182,6 +7123,9 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   backupAuditEvents<T extends Prisma.User$backupAuditEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$backupAuditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BackupAuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   initiatedLegacyMigrationRuns<T extends Prisma.User$initiatedLegacyMigrationRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$initiatedLegacyMigrationRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LegacyMigrationRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   legacyMigrationReviewActions<T extends Prisma.User$legacyMigrationReviewActionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$legacyMigrationReviewActionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LegacyMigrationReviewActionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  requestedNurixExcelFinancialExecutions<T extends Prisma.User$requestedNurixExcelFinancialExecutionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$requestedNurixExcelFinancialExecutionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NurixExcelFinancialExecutionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  approvedNurixExcelFinancialExecutions<T extends Prisma.User$approvedNurixExcelFinancialExecutionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$approvedNurixExcelFinancialExecutionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NurixExcelFinancialExecutionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdNurixExcelFinancialReceipts<T extends Prisma.User$createdNurixExcelFinancialReceiptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdNurixExcelFinancialReceiptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NurixExcelFinancialReceiptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7197,6 +8141,78 @@ export type User$legacyMigrationReviewActionsArgs<ExtArgs extends runtime.Types.
   take?: number
   skip?: number
   distinct?: Prisma.LegacyMigrationReviewActionScalarFieldEnum | Prisma.LegacyMigrationReviewActionScalarFieldEnum[]
+}
+
+/**
+ * User.requestedNurixExcelFinancialExecutions
+ */
+export type User$requestedNurixExcelFinancialExecutionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NurixExcelFinancialExecution
+   */
+  select?: Prisma.NurixExcelFinancialExecutionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NurixExcelFinancialExecution
+   */
+  omit?: Prisma.NurixExcelFinancialExecutionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NurixExcelFinancialExecutionInclude<ExtArgs> | null
+  where?: Prisma.NurixExcelFinancialExecutionWhereInput
+  orderBy?: Prisma.NurixExcelFinancialExecutionOrderByWithRelationInput | Prisma.NurixExcelFinancialExecutionOrderByWithRelationInput[]
+  cursor?: Prisma.NurixExcelFinancialExecutionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NurixExcelFinancialExecutionScalarFieldEnum | Prisma.NurixExcelFinancialExecutionScalarFieldEnum[]
+}
+
+/**
+ * User.approvedNurixExcelFinancialExecutions
+ */
+export type User$approvedNurixExcelFinancialExecutionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NurixExcelFinancialExecution
+   */
+  select?: Prisma.NurixExcelFinancialExecutionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NurixExcelFinancialExecution
+   */
+  omit?: Prisma.NurixExcelFinancialExecutionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NurixExcelFinancialExecutionInclude<ExtArgs> | null
+  where?: Prisma.NurixExcelFinancialExecutionWhereInput
+  orderBy?: Prisma.NurixExcelFinancialExecutionOrderByWithRelationInput | Prisma.NurixExcelFinancialExecutionOrderByWithRelationInput[]
+  cursor?: Prisma.NurixExcelFinancialExecutionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NurixExcelFinancialExecutionScalarFieldEnum | Prisma.NurixExcelFinancialExecutionScalarFieldEnum[]
+}
+
+/**
+ * User.createdNurixExcelFinancialReceipts
+ */
+export type User$createdNurixExcelFinancialReceiptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NurixExcelFinancialReceipt
+   */
+  select?: Prisma.NurixExcelFinancialReceiptSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NurixExcelFinancialReceipt
+   */
+  omit?: Prisma.NurixExcelFinancialReceiptOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NurixExcelFinancialReceiptInclude<ExtArgs> | null
+  where?: Prisma.NurixExcelFinancialReceiptWhereInput
+  orderBy?: Prisma.NurixExcelFinancialReceiptOrderByWithRelationInput | Prisma.NurixExcelFinancialReceiptOrderByWithRelationInput[]
+  cursor?: Prisma.NurixExcelFinancialReceiptWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NurixExcelFinancialReceiptScalarFieldEnum | Prisma.NurixExcelFinancialReceiptScalarFieldEnum[]
 }
 
 /**

@@ -11,6 +11,8 @@ import {
   dailySalesWorkspaceReceiptSchema,
   dailySalesClosingsQuerySchema,
   dailySalesClosingsReceiptSchema,
+  dailySalesAnalyticsQuerySchema,
+  dailySalesAnalyticsReceiptSchema,
   dailySalesCalendarReceiptSchema,
   dailySalesClosingReceiptSchema,
   dailySalesClosingBatchReceiptSchema,
@@ -170,6 +172,31 @@ export class DailySalesController {
       closings: closingPage.closings,
       hasMore: closingPage.hasMore,
       nextCursor: closingPage.nextCursor,
+    });
+  }
+
+  @Get("daily-sales/analytics")
+  async getSalesAnalytics(
+    @Query() query: unknown,
+    @Headers("authorization") authorization?: string,
+    @Headers("x-baseer-company-id") companyId?: string,
+  ) {
+    const parsed = dailySalesAnalyticsQuerySchema.safeParse(query);
+    if (!parsed.success) throw new BadRequestException("Invalid daily-sales analytics query.");
+    const context = await this.authorize(authorization, companyId, DAILY_SALES_FULL_HISTORY_CAPABILITY);
+    const current = await this.businessDates.currentForTrustedContext(context);
+    const analytics = await this.reads.salesAnalytics(context, { ...parsed.data, asOfBusinessDate: current.businessDate });
+    return dailySalesAnalyticsReceiptSchema.parse({
+      companyId: context.companyId,
+      currencyCode: "SAR",
+      amountBasis: "GROSS_VAT_INCLUSIVE",
+      vatInclusive: true,
+      source: {
+        kind: "FINANCE_DAILY_FINANCIAL_SUMMARY",
+        reconciliation: "DAILY_SALES_POSTED_CLOSINGS",
+      },
+      asOfBusinessDate: current.businessDate,
+      ...analytics,
     });
   }
 

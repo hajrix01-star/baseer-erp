@@ -2,8 +2,9 @@ import { lazy, Suspense } from "react";
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
 import { BaseerCompanyReadQuery } from "./baseer-company-read-query";
+import { BaseerApiError } from "./baseer-api-error";
 import { BaseerNotice, BaseerSectionHeader, BaseerWorkspace } from "./baseer-workspace";
-import { activeSession, type ActiveSession } from "./daily-sales-client";
+import { activeSession, clearActiveSession, type ActiveSession } from "./daily-sales-client";
 import { getHrOverview, type HrFinalSettlementStatus, type HrOverviewReceipt, type HrPayrollStatus, type HrService } from "./hr-client";
 import { formatNumber } from "./number-format";
 import { hasActivePermission } from "./module-access";
@@ -34,10 +35,10 @@ function settlementStatusLabel(value: HrFinalSettlementStatus, language: Languag
 export function HrOverviewWorkspace({ language }: { language: Language }) {
   const session = activeSession();
   if (!session) return null;
-  return <BaseerCompanyReadQuery session={session} resource="hr-overview" load={getHrOverview}>{({ data, loading, error, refetch }) => <HrOverviewContent language={language} data={data} loading={loading} error={error ? true : false} refetch={refetch} />}</BaseerCompanyReadQuery>;
+  return <BaseerCompanyReadQuery session={session} resource="hr-overview" load={getHrOverview}>{({ data, loading, error, refetch }) => <HrOverviewContent language={language} data={data} loading={loading} error={error} refetch={refetch} />}</BaseerCompanyReadQuery>;
 }
 
-function HrOverviewContent({ language, data, loading, error, refetch }: { language: Language; data: HrOverviewReceipt | undefined; loading: boolean; error: boolean; refetch: () => void }) {
+function HrOverviewContent({ language, data, loading, error, refetch }: { language: Language; data: HrOverviewReceipt | undefined; loading: boolean; error: unknown; refetch: () => void }) {
   const ar = language === "ar";
 
   const workforce = data?.workforce ?? null;
@@ -57,6 +58,7 @@ function HrOverviewContent({ language, data, loading, error, refetch }: { langua
   const canManageLeaves = hasActivePermission("hr.leaves.manage");
   const canRecordService = hasActivePermission("hr.employees.write") && hasActivePermission("finance.purchase_expense.create");
   const hasQuickAction = canOnboardEmployee || canCreatePayroll || canManageLeaves || canRecordService;
+  const companyAccessLost = error instanceof BaseerApiError && error.code === "AUTHORIZATION_DENIED";
   const countLabel = (value: number | null | undefined) => value == null ? "—" : formatNumber(value);
   const task = (section: number, className: string, icon: string, title: string, detail: string, count: number | null) => <button type="button" className={className} disabled={count == null} onClick={() => routeTo(section)}><span className="hr-overview__task-icon" aria-hidden="true">{icon}</span><span><strong>{title}</strong><small>{count == null ? unavailable : detail}</small></span><b>{countLabel(count)}</b></button>;
   const businessDateMs = data ? dateValue(data.businessDate) : Date.now();
@@ -64,7 +66,7 @@ function HrOverviewContent({ language, data, loading, error, refetch }: { langua
 
   return <BaseerWorkspace className="hr-overview">
     <BaseerSectionHeader eyebrow={ar ? "مركز عمل الموارد البشرية" : "HR operations hub"} title={ar ? "اليوم في الموارد البشرية" : "Today in human resources"} actions={<BaseerButton type="button" variant="primary" onClick={() => routeTo(1)}>{ar ? "إدارة الموظفين" : "Manage employees"}</BaseerButton>} />
-    {error ? <BaseerNotice tone="danger" title={ar ? "تعذر التحديث" : "Unable to refresh"}>{ar ? "تعذر تحميل ملخص الموارد البشرية. حاول مرة أخرى." : "The HR overview could not be loaded. Please try again."}<div className="hr-overview__notice-action"><BaseerButton type="button" onClick={refetch}>{ar ? "إعادة المحاولة" : "Try again"}</BaseerButton></div></BaseerNotice> : null}
+    {error ? <BaseerNotice tone="danger" title={companyAccessLost ? (ar ? "تحتاج إلى إعادة بدء الجلسة" : "Session needs to be restarted") : (ar ? "تعذر التحديث" : "Unable to refresh")}>{companyAccessLost ? (ar ? "الشركة المحفوظة في جلسة المتصفح لم تعد متاحة. أعد بدء الجلسة ثم اختر الشركة الصحيحة." : "The company saved in this browser session is no longer available. Restart the session and select the correct company.") : (ar ? "تعذر تحميل ملخص الموارد البشرية. حاول مرة أخرى." : "The HR overview could not be loaded. Please try again.")}<div className="hr-overview__notice-action">{companyAccessLost ? <BaseerButton type="button" onClick={() => { clearActiveSession(); window.location.reload(); }}>{ar ? "إعادة بدء الجلسة" : "Restart session"}</BaseerButton> : <BaseerButton type="button" onClick={refetch}>{ar ? "إعادة المحاولة" : "Try again"}</BaseerButton>}</div></BaseerNotice> : null}
     <section className="hr-overview__metrics" aria-label={ar ? "ملخص الموارد البشرية" : "Human resources summary"}>
       <button type="button" disabled={!workforce} onClick={() => routeTo(1)}><small>{ar ? "الموظفون النشطون" : "Active employees"}</small><strong>{countLabel(workforce?.activeEmployees)}</strong><span>{workforce ? (ar ? "فتح سجل الموظفين" : "Open employees") : unavailable}</span></button>
       <button type="button" disabled={!workforce} onClick={() => routeTo(2)}><small>{ar ? "في إجازة حالياً" : "Currently on leave"}</small><strong>{countLabel(workforce?.employeesOnLeave)}</strong><span>{workforce ? (ar ? "متابعة الإجازات والعودة" : "Review leave and return") : unavailable}</span></button>

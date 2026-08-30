@@ -46,8 +46,9 @@ export type DailySalesCalendarItem = Readonly<{
   dataStatus: FinanceDailySalesDataStatus;
   source: FinanceOperationalDaySource | null;
   hasActiveClosing: boolean;
-  salesGrossAmount: string;
-  customerCount: number;
+  /** Null means the day has not produced a complete, displayable daily financial projection. */
+  salesGrossAmount: string | null;
+  customerCount: number | null;
 }>;
 
 @Injectable()
@@ -184,14 +185,20 @@ export class OperationalCalendarService {
             ? FinanceDailySalesDataStatus.CLOSED
             : FinanceDailySalesDataStatus.PENDING
         );
+        const hasCompleteFinancialProjection = operationalStatus === FinanceOperationalDayStatus.OPEN
+          && dataStatus === FinanceDailySalesDataStatus.RECORDED;
         return {
           businessDate,
           operationalStatus,
           dataStatus,
+          amountBasis: "GROSS_VAT_INCLUSIVE" as const,
+          vatInclusive: true as const,
+          dataAuthority: "BACKEND_DAILY_FINANCIAL_SUMMARY" as const,
           source: day?.source ?? null,
           hasActiveClosing: (summary?.salesClosingCount ?? 0) > 0,
-          salesGrossAmount: summary?.salesGrossAmount.toFixed(4) ?? '0.0000',
-          customerCount: summary?.customerCount ?? 0,
+          // A PENDING or PARTIAL day is unknown/incomplete, never a zero-sales or zero-customer day.
+          salesGrossAmount: hasCompleteFinancialProjection ? summary?.salesGrossAmount.toFixed(4) ?? null : null,
+          customerCount: hasCompleteFinancialProjection ? summary?.customerCount ?? null : null,
         };
       });
     });

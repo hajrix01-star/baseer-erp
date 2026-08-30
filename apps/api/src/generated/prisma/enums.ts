@@ -125,6 +125,150 @@ export const LegacyMigrationExceptionSeverity = {
 export type LegacyMigrationExceptionSeverity = (typeof LegacyMigrationExceptionSeverity)[keyof typeof LegacyMigrationExceptionSeverity]
 
 
+export const NurixExcelStagingPackageStatus = {
+  RECEIVED: 'RECEIVED',
+  PARSED: 'PARSED',
+  QUARANTINED: 'QUARANTINED',
+  READY_FOR_RECONCILIATION: 'READY_FOR_RECONCILIATION',
+  FAILED: 'FAILED'
+} as const
+
+export type NurixExcelStagingPackageStatus = (typeof NurixExcelStagingPackageStatus)[keyof typeof NurixExcelStagingPackageStatus]
+
+
+export const NurixExcelStagingBatchStatus = {
+  PENDING: 'PENDING',
+  PARSED: 'PARSED',
+  VALIDATED: 'VALIDATED',
+  QUARANTINED: 'QUARANTINED',
+  FAILED: 'FAILED'
+} as const
+
+export type NurixExcelStagingBatchStatus = (typeof NurixExcelStagingBatchStatus)[keyof typeof NurixExcelStagingBatchStatus]
+
+
+export const NurixExcelStagingRowStatus = {
+  ACCEPTED: 'ACCEPTED',
+  QUARANTINED: 'QUARANTINED',
+  REJECTED: 'REJECTED',
+  SKIPPED: 'SKIPPED'
+} as const
+
+export type NurixExcelStagingRowStatus = (typeof NurixExcelStagingRowStatus)[keyof typeof NurixExcelStagingRowStatus]
+
+
+export const NurixExcelMasterDataExecutionStatus = {
+  PENDING: 'PENDING',
+  RUNNING: 'RUNNING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+} as const
+
+export type NurixExcelMasterDataExecutionStatus = (typeof NurixExcelMasterDataExecutionStatus)[keyof typeof NurixExcelMasterDataExecutionStatus]
+
+
+export const NurixExcelMasterDataItemStatus = {
+  PENDING: 'PENDING',
+  CREATED: 'CREATED',
+  REUSED: 'REUSED',
+  REVIEW_REQUIRED: 'REVIEW_REQUIRED'
+} as const
+
+export type NurixExcelMasterDataItemStatus = (typeof NurixExcelMasterDataItemStatus)[keyof typeof NurixExcelMasterDataItemStatus]
+
+
+export const NurixExcelFinancialExecutionStatus = {
+  PENDING: 'PENDING',
+  READY_FOR_APPROVAL: 'READY_FOR_APPROVAL',
+  APPROVED: 'APPROVED',
+  RUNNING: 'RUNNING',
+  RECONCILING: 'RECONCILING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type NurixExcelFinancialExecutionStatus = (typeof NurixExcelFinancialExecutionStatus)[keyof typeof NurixExcelFinancialExecutionStatus]
+
+
+export const NurixExcelFinancialWaveStatus = {
+  PENDING: 'PENDING',
+  RUNNING: 'RUNNING',
+  COMMITTED: 'COMMITTED',
+  FAILED: 'FAILED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type NurixExcelFinancialWaveStatus = (typeof NurixExcelFinancialWaveStatus)[keyof typeof NurixExcelFinancialWaveStatus]
+
+
+export const NurixExcelFinancialItemStatus = {
+  PENDING: 'PENDING',
+  PLANNED: 'PLANNED',
+  POSTED: 'POSTED',
+  REUSED: 'REUSED',
+  REVIEW_REQUIRED: 'REVIEW_REQUIRED',
+  FAILED: 'FAILED',
+  EXCLUDED: 'EXCLUDED'
+} as const
+
+export type NurixExcelFinancialItemStatus = (typeof NurixExcelFinancialItemStatus)[keyof typeof NurixExcelFinancialItemStatus]
+
+
+export const NurixExcelFinancialSourceMapState = {
+  PLANNED: 'PLANNED',
+  APPLIED: 'APPLIED',
+  REUSED: 'REUSED',
+  REVERSED: 'REVERSED'
+} as const
+
+export type NurixExcelFinancialSourceMapState = (typeof NurixExcelFinancialSourceMapState)[keyof typeof NurixExcelFinancialSourceMapState]
+
+
+export const NurixExcelFinancialReceiptKind = {
+  DRY_RUN: 'DRY_RUN',
+  WAVE_COMMITTED: 'WAVE_COMMITTED',
+  RECONCILIATION: 'RECONCILIATION',
+  FAILURE: 'FAILURE',
+  CANCELLATION: 'CANCELLATION'
+} as const
+
+export type NurixExcelFinancialReceiptKind = (typeof NurixExcelFinancialReceiptKind)[keyof typeof NurixExcelFinancialReceiptKind]
+
+
+export const NurixHistoricalPayrollEvidenceStatus = {
+  EVIDENCE_ONLY: 'EVIDENCE_ONLY',
+  REVIEW_REQUIRED: 'REVIEW_REQUIRED'
+} as const
+
+export type NurixHistoricalPayrollEvidenceStatus = (typeof NurixHistoricalPayrollEvidenceStatus)[keyof typeof NurixHistoricalPayrollEvidenceStatus]
+
+
+export const NurixHistoricalPayrollPaymentEvidenceKind = {
+  NONE: 'NONE',
+  AMOUNT_ONLY: 'AMOUNT_ONLY'
+} as const
+
+export type NurixHistoricalPayrollPaymentEvidenceKind = (typeof NurixHistoricalPayrollPaymentEvidenceKind)[keyof typeof NurixHistoricalPayrollPaymentEvidenceKind]
+
+
+export const NurixHistoricalPayrollAccountingEvidenceAvailability = {
+  NONE: 'NONE',
+  PRESENT: 'PRESENT'
+} as const
+
+export type NurixHistoricalPayrollAccountingEvidenceAvailability = (typeof NurixHistoricalPayrollAccountingEvidenceAvailability)[keyof typeof NurixHistoricalPayrollAccountingEvidenceAvailability]
+
+
+export const NurixHistoricalPayrollAccountingEvidenceKind = {
+  PAYROLL_INVOICE: 'PAYROLL_INVOICE',
+  JOURNAL_ENTRY: 'JOURNAL_ENTRY',
+  VAULT_ALLOCATION: 'VAULT_ALLOCATION'
+} as const
+
+export type NurixHistoricalPayrollAccountingEvidenceKind = (typeof NurixHistoricalPayrollAccountingEvidenceKind)[keyof typeof NurixHistoricalPayrollAccountingEvidenceKind]
+
+
 export const LegacyMigrationReviewActionKind = {
   APPROVE_DIRECT_CANDIDATES: 'APPROVE_DIRECT_CANDIDATES',
   APPROVE_COMPANY_MAPS: 'APPROVE_COMPANY_MAPS',

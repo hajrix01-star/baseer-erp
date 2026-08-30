@@ -3,7 +3,7 @@ import { randomUUID } from "node:crypto";
 
 import dotenv from "dotenv";
 import { NestFactory } from "@nestjs/core";
-import { operationsCatalogReceiptSchema } from "@baseer-erp/contracts";
+import { operationsCatalogReceiptSchema, operationsOverviewReadSchema } from "@baseer-erp/contracts";
 import pg from "pg";
 
 dotenv.config({ path: "apps/api/.env.baseer-test" });
@@ -25,16 +25,18 @@ let app;
 
 try {
   await seedFixture();
-  const [{ AppModule }, { OperationsCatalogService }, { OperationsExecutionService }, { OperationsInternalRegistrationService }] = await Promise.all([
+  const [{ AppModule }, { OperationsCatalogService }, { OperationsExecutionService }, { OperationsInternalRegistrationService }, { OperationsOverviewService }] = await Promise.all([
     import("../apps/api/dist/app.module.js"),
     import("../apps/api/dist/operations/operations-catalog.service.js"),
     import("../apps/api/dist/operations/operations-execution.service.js"),
     import("../apps/api/dist/operations/operations-internal-registration.service.js"),
+    import("../apps/api/dist/operations/operations-overview.service.js"),
   ]);
   app = await NestFactory.createApplicationContext(AppModule, { logger: false });
   const catalog = app.get(OperationsCatalogService);
   const execution = app.get(OperationsExecutionService);
   const internalRegistration = app.get(OperationsInternalRegistrationService);
+  const overview = app.get(OperationsOverviewService);
 
   const kilogram = await catalog.createUnit(context, { code: `KG-${suffix}`, nameAr: "كيلوغرام", nameEn: "Kilogram", dimension: "MASS" }, randomUUID());
   const tomato = await catalog.createItem(context, {
@@ -121,7 +123,27 @@ try {
   assert.equal(rawCatalogPage.nextCursor, null, "A bounded one-row catalog result must not advertise another page.");
   await assert.rejects(() => catalog.catalog(context, { kind: "RAW_MATERIAL", status: "ACTIVE", cursor: randomUUID(), pageSize: 10 }), /outside this company and filter scope/, "A cursor outside the live company/filter scope must be rejected.");
 
-  console.log(JSON.stringify({ ok: true, companyId: fixture.companyId, companyNameAr: "شركة تحقق دورة العمليات", verified: ["cash", "custody", "bank_transfer", "inventory", "materials_report", "custody_report", "owner_correction", "recipe", "internal_registration", "inventory_consumption", "catalog_filtering", "catalog_cursor_scope"] }));
+  const operationsOverview = operationsOverviewReadSchema.parse(await overview.period(context, {
+    fromBusinessDate: "2026-08-21",
+    toBusinessDate: "2026-08-21",
+  }));
+  assert.equal(operationsOverview.amountBasis, "GROSS_VAT_INCLUSIVE", "The operations overview must declare its VAT-inclusive amount basis.");
+  assert.equal(operationsOverview.vatInclusive, true);
+  assert.deepEqual(operationsOverview.source, {
+    sales: "FINANCE_DAILY_FINANCIAL_SUMMARY",
+    purchases: "FINANCE_OUTFLOW_DOCUMENT_PURCHASE",
+  }, "The overview must identify both server-owned financial sources.");
+  assert.equal(operationsOverview.sales.dataQuality, "INCOMPLETE", "A missing sales summary must remain incomplete, not a zero-sales day.");
+  assert.equal(operationsOverview.sales.display.grossAmount, null, "An incomplete period must not expose a partial sales total.");
+  assert.equal(operationsOverview.sales.display.closingCount, null, "An incomplete period must not expose a partial closing count.");
+  assert.deepEqual(operationsOverview.timeline[0]?.sales, {
+    dataQuality: "INCOMPLETE",
+    displayGrossAmount: null,
+    plotValue: null,
+  }, "The server must send a null sales timeline value for an incomplete day.");
+  assert.equal(typeof operationsOverview.timeline[0]?.purchases.displayGrossAmount, "string", "The server must provide display-ready purchase values on the aligned timeline.");
+
+  console.log(JSON.stringify({ ok: true, companyId: fixture.companyId, companyNameAr: "شركة تحقق دورة العمليات", verified: ["cash", "custody", "bank_transfer", "inventory", "materials_report", "custody_report", "owner_correction", "recipe", "internal_registration", "inventory_consumption", "catalog_filtering", "catalog_cursor_scope", "operations_overview_financial_authority", "operations_overview_incomplete_null_timeline"] }));
 } finally {
   await app?.close();
   await pool.end();

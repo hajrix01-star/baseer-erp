@@ -280,6 +280,11 @@ try {
     calendar.json().days.map((day) => day.dataStatus),
     ["RECORDED", "CLOSED"],
   );
+  assert.equal(calendar.json().days[0].amountBasis, "GROSS_VAT_INCLUSIVE");
+  assert.equal(calendar.json().days[0].vatInclusive, true);
+  assert.equal(calendar.json().days[0].dataAuthority, "BACKEND_DAILY_FINANCIAL_SUMMARY");
+  assert.equal(calendar.json().days[1].salesGrossAmount, null, "A closed day must not be represented as a zero-sales day.");
+  assert.equal(calendar.json().days[1].customerCount, null, "A closed day must not be represented as a zero-customer day.");
   const channelVaults = await server.inject({
     method: "GET",
     url: "/v1/finance/daily-sales/channel-vaults",
@@ -344,6 +349,64 @@ try {
   assert.equal(cashierHistory.statusCode, 200, cashierHistory.body);
   assert.equal(cashierHistory.json().historyLimit, 7, "Cashiers must be limited by the server.");
   assert.equal(cashierHistory.json().closings.length, 1, "Cashier history remains company-scoped.");
+  for (const businessDate of ["2026-08-17", "2026-08-18", "2026-08-19", "2026-08-20", "2026-08-21"]) {
+    const closedDay = await server.inject({
+      method: "POST",
+      url: "/v1/finance/operational-calendar/days",
+      headers,
+      payload: {
+        businessDate,
+        status: "CLOSED",
+        source: "HOLIDAY",
+        note: "DAY_OFF: analytics coverage verification",
+        idempotencyKey: randomUUID(),
+      },
+    });
+    assert.equal(closedDay.statusCode, 200, closedDay.body);
+  }
+  const salesAnalytics = await server.inject({
+    method: "GET",
+    url: "/v1/finance/daily-sales/analytics?year=2026&primaryMonth=2026-08&comparisonMonth=2026-07",
+    headers,
+  });
+  assert.equal(salesAnalytics.statusCode, 200, salesAnalytics.body);
+  assert.equal(salesAnalytics.json().amountBasis, "GROSS_VAT_INCLUSIVE", "Analytics must declare the VAT-inclusive amount basis.");
+  assert.equal(salesAnalytics.json().vatInclusive, true, "Analytics must expose VAT-inclusive sales.");
+  assert.deepEqual(salesAnalytics.json().source, {
+    kind: "FINANCE_DAILY_FINANCIAL_SUMMARY",
+    reconciliation: "DAILY_SALES_POSTED_CLOSINGS",
+  }, "Analytics must identify its server-owned reconciled source.");
+  assert.equal(salesAnalytics.json().annualMonths.length, 12, "Analytics must return the complete requested year in one server-owned read.");
+  assert.equal(salesAnalytics.json().primary.monthSummary.fromBusinessDate, "2026-08-01", "The selected month summary must be server-owned even when it lies outside the requested annual grid.");
+  assert.equal(salesAnalytics.json().comparison.monthSummary.fromBusinessDate, "2026-07-01", "The comparison month summary must not depend on a browser month calculation.");
+  assert.equal(salesAnalytics.json().primary.weeks.length, 5, "Analytics must return all calendar weeks for the month.");
+  assert.ok(salesAnalytics.json().primary.weeks.some((week) => week.coverage.recordedSalesDays > 0), "Analytics must use recorded daily financial summaries, not a browser closing page.");
+  const incompleteWeek = salesAnalytics.json().primary.weeks.find((week) => week.dataQuality === "INCOMPLETE");
+  assert.ok(incompleteWeek, "Analytics must mark missing operating days incomplete instead of presenting a partial average.");
+  assert.equal(incompleteWeek.display.dailyAverageSalesAmount, null, "Incomplete sales coverage must not have a display-ready sales average.");
+  assert.equal(incompleteWeek.display.dailyAverageCustomerCount, null, "Incomplete sales coverage must not have a display-ready customer average.");
+  assert.equal(incompleteWeek.display.applicationSalesSharePercent, null, "Incomplete sales coverage must not have a display-ready application share.");
+  assert.equal(incompleteWeek.changeFromComparison.dailyAverageSalesPercent, null, "A change must be unavailable when its source week is incomplete.");
+  const readyWeek = salesAnalytics.json().primary.weeks.find((week) => week.dataQuality === "READY" && week.coverage.recordedSalesDays === 1);
+  assert.ok(readyWeek, "A fully covered operating week must be available after its remaining days are documented as closed.");
+  assert.equal(readyWeek.amountBasis, "GROSS_VAT_INCLUSIVE");
+  assert.equal(readyWeek.vatInclusive, true);
+  assert.deepEqual(readyWeek.coverage, { recordedSalesDays: 1, requiredOperatingDays: 1, scheduledClosedDays: 6, missingDays: 0, partialDays: 0 });
+  assert.deepEqual(readyWeek.display, {
+    salesGrossAmount: "115.00",
+    applicationSalesGrossAmount: "0.00",
+    dailyAverageSalesAmount: "115.00",
+    recordedCustomerCount: "2",
+    dailyAverageCustomerCount: "2.00",
+    applicationSalesSharePercent: "0.00%",
+    applicationSalesSharePlotValue: 0,
+  }, "All visible analytics values, including customer averages and application share, must be formatted and calculated by the server.");
+  const cashierAnalytics = await server.inject({
+    method: "GET",
+    url: "/v1/finance/daily-sales/analytics?year=2026&primaryMonth=2026-08&comparisonMonth=2026-07",
+    headers: { authorization: `Bearer ${cashierSession.accessToken}`, "x-baseer-company-id": fixture.companyId },
+  });
+  assert.equal(cashierAnalytics.statusCode, 403, "Analytics must not silently downgrade to the cashier's seven-closing history limit.");
   const cashierHeaders = {
     authorization: `Bearer ${cashierSession.accessToken}`,
     "x-baseer-company-id": fixture.companyId,
@@ -490,8 +553,8 @@ async function seedFixture() {
       ],
     );
     await client.query(
-      'INSERT INTO "RolePermission" ("tenantId", "roleId", "permissionCode") VALUES ($1::uuid, $2::uuid, $3), ($1::uuid, $2::uuid, $4), ($1::uuid, $2::uuid, $5)',
-      [fixture.tenantId, roleId, "finance.configuration.read", "finance.loans.read", "finance.purchase_expense.read"],
+      'INSERT INTO "RolePermission" ("tenantId", "roleId", "permissionCode") VALUES ($1::uuid, $2::uuid, $3), ($1::uuid, $2::uuid, $4), ($1::uuid, $2::uuid, $5), ($1::uuid, $2::uuid, $6)',
+      [fixture.tenantId, roleId, "finance.configuration.read", "finance.loans.read", "finance.purchase_expense.read", "finance.supplier_dues.read"],
     );
     await client.query(
       'INSERT INTO "RolePermission" ("tenantId", "roleId", "permissionCode") VALUES ($1::uuid, $2::uuid, $3), ($1::uuid, $2::uuid, $4), ($1::uuid, $2::uuid, $5)',

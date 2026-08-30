@@ -1,0 +1,52 @@
+.nurix-excel-import { display: grid; gap: var(--section-gap); }
+.nurix-excel-import__header, .nurix-excel-import__history > header, .nurix-excel-import__actions, .nurix-excel-import__package-title { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+.nurix-excel-import__header h3, .nurix-excel-import__header p, .nurix-excel-import__history h4 { margin: 0; }
+.nurix-excel-import__header h3, .nurix-excel-import__history h4 { color: var(--ink); font-size: var(--font-body); }
+.nurix-excel-import__header p { margin-top: .2rem; color: var(--muted); font-size: var(--font-label); line-height: 1.6; }
+.nurix-excel-import__stages { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
+.nurix-excel-import__stages li { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: .45rem; color: var(--muted); font-size: var(--font-caption); }
+.nurix-excel-import__stages span { display: grid; place-items: center; inline-size: 1.55rem; block-size: 1.55rem; border: 1px solid var(--border-subtle); border-radius: 999px; background: var(--surface-raised); font-variant-numeric: tabular-nums; }
+.nurix-excel-import__stages li.is-current { color: var(--ink); }
+.nurix-excel-import__stages li.is-current span { border-color: var(--brand); color: var(--brand); }
+.nurix-excel-import__stages li.is-complete { color: var(--ink); }
+.nurix-excel-import__stages li.is-complete span { border-color: var(--brand); background: var(--brand); color: var(--surface-raised); }
+.nurix-excel-import__form { display: grid; grid-template-columns: repeat(2, minmax(13rem, 1fr)); gap: var(--section-gap); }
+.nurix-excel-import__form > label { display: grid; align-content: start; gap: var(--space-2); color: var(--ink); font-size: var(--font-label); font-weight: 700; }
+.nurix-excel-import__form select { inline-size: 100%; min-block-size: 2.75rem; border: 1px solid var(--field-border); border-radius: var(--control-radius); padding: .5rem .6rem; color: var(--ink); background: var(--surface-raised); font: inherit; }
+.nurix-excel-import__form small, .nurix-excel-import__selected-file small, .nurix-excel-import__actions small, .nurix-excel-import__package small { color: var(--muted); font-size: var(--font-caption); font-weight: 400; line-height: 1.5; }
+.nurix-excel-import__selected-file { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem; min-block-size: 2.75rem; }
+.nurix-excel-import__selected-file > span { overflow: hidden; max-inline-size: 28rem; text-overflow: ellipsis; white-space: nowrap; color: var(--ink); font-size: var(--font-caption); }
+.nurix-excel-import__actions { grid-column: 1 / -1; align-items: end; padding-top: var(--space-2); border-top: 1px solid var(--line); }
+.nurix-excel-import__actions > div { display: grid; gap: .2rem; }
+.nurix-excel-import__actions strong { color: var(--ink); font-size: var(--font-label); }
+.nurix-excel-import__history { display: grid; gap: var(--space-2); }
+.nurix-excel-import__package-list { display: grid; gap: var(--space-2); }
+.nurix-excel-import__package { display: grid; gap: var(--space-3); }
+.nurix-excel-import__package-title > div { display: grid; gap: .2rem; min-width: 0; }
+.nurix-excel-import__package-title strong { overflow: hidden; max-inline-size: 34rem; color: var(--ink); font-size: var(--font-label); text-overflow: ellipsis; white-space: nowrap; }
+.nurix-excel-import__package dl { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-2); margin: 0; }
+.nurix-excel-import__package dl > div { display: grid; gap: .15rem; }
+.nurix-excel-import__package dt { color: var(--muted); font-size: var(--font-caption); }
+.nurix-excel-import__package dd { margin: 0; color: var(--ink); font-size: var(--font-label); font-variant-numeric: tabular-nums; }
+.nurix-excel-import__master { display: grid; gap: var(--space-2); padding: var(--space-3); border: 1px solid var(--border-subtle); border-radius: var(--card-radius); background: color-mix(in srgb, var(--surface-raised) 82%, var(--brand-soft)); }
+.nurix-excel-import__master h5 { margin: 0; color: var(--ink); font-size: var(--font-label); }
+.nurix-excel-import__master dl { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.nurix-excel-import__master-receipt { display: grid; gap: var(--space-3); border: 1px solid var(--brand); background: color-mix(in srgb, var(--surface-raised) 76%, var(--brand-soft)); }
+.nurix-excel-import__master-receipt dl { display: grid; gap: var(--space-2); margin: 0; }
+.nurix-excel-import__master-receipt dl > div { display: grid; gap: .15rem; }
+.nurix-excel-import__master-receipt dt, .nurix-excel-import__master-receipt small { color: var(--muted); font-size: var(--font-caption); }
+.nurix-excel-import__master-receipt dd { margin: 0; color: var(--ink); font-size: var(--font-label); font-variant-numeric: tabular-nums; }
+.nurix-excel-import__package progress { inline-size: 100%; accent-color: var(--brand); }
+.nurix-excel-import__template { display: grid; gap: var(--space-2); }
+.nurix-excel-import__template > div { display: grid; gap: .55rem; }
+.nurix-excel-import__template > div > div { display: grid; grid-template-columns: minmax(10rem, .35fr) minmax(0, 1fr); gap: var(--space-2); padding-top: .55rem; border-top: 1px solid var(--line); }
+.nurix-excel-import__template strong { color: var(--ink); font-size: var(--font-label); }
+.nurix-excel-import__template small { color: var(--muted); font-size: var(--font-caption); overflow-wrap: anywhere; }
+.nurix-excel-import__checks { display: grid; gap: .5rem; margin: 0; padding: 0; list-style: none; }
+.nurix-excel-import__checks li { display: flex; align-items: start; gap: .45rem; color: var(--muted); font-size: var(--font-caption); line-height: 1.5; }
+.nurix-excel-import__issues { display: grid; gap: .55rem; padding-top: var(--space-2); border-top: 1px solid var(--line); }
+.nurix-excel-import__issues h5 { margin: 0; color: var(--ink); font-size: var(--font-label); }
+.nurix-excel-import__issues ul { display: grid; gap: .35rem; margin: 0; padding: 0; list-style: none; }
+.nurix-excel-import__issues li { display: flex; flex-wrap: wrap; gap: .45rem; color: var(--muted); font-size: var(--font-caption); }
+.nurix-excel-import__issues li strong { color: var(--ink); }
+@media (max-width: 720px) { .nurix-excel-import__header, .nurix-excel-import__actions { align-items: stretch; flex-direction: column; }.nurix-excel-import__stages { grid-template-columns: 1fr; }.nurix-excel-import__form, .nurix-excel-import__template > div > div { grid-template-columns: 1fr; }.nurix-excel-import__package dl, .nurix-excel-import__master dl { grid-template-columns: repeat(2, minmax(0, 1fr)); }.nurix-excel-import__package-title { align-items: start; }.nurix-excel-import__package-title strong { max-inline-size: 15rem; } }

@@ -4,6 +4,11 @@
   gap: var(--space-section);
 }
 
+.baseer-workspace.hr-employees-workspace { gap: .55rem; }
+.hr-employees-workspace .hr-employee-view-switch { margin-block: -.2rem -.5rem; }
+.hr-employees-workspace .hr-employee-directory-grid { gap: .75rem; }
+.hr-employees-workspace .hr-employee-directory-card { margin-block-start: .75rem; }
+
 .module-page--hr .hr-employee-directory-card { padding-inline: var(--space-card); padding-block-end: var(--space-card); border-color: var(--border-subtle); background: var(--surface-raised); }
 
 .hr-employee-view-switch {

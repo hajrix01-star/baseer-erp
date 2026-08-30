@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto';
 
 import { personalCashPerformanceLiveEvidenceReceiptSchema } from '@baseer-erp/contracts';
 import { FinanceCashPerformanceDirection, FinanceCashPerformanceEventKind, Prisma } from '../generated/prisma/client.js';
-import { aggregateCashPerformanceEvents, aggregateFinancialMovements, percentOfSales, type VaultMovement } from './personal-cash-performance-report.service.js';
+import { aggregateCashPerformanceEvents, aggregateFinancialMovements, percentOfSales, presentationMetrics, type VaultMovement } from './personal-cash-performance-report.service.js';
 
 const event = (kind: FinanceCashPerformanceEventKind, direction: FinanceCashPerformanceDirection, gross: string, net: string, vatBreakdownKnown = true, settlementDestinationsJson: Prisma.JsonValue | null = null) => ({
   id: randomUUID(), kind, direction,
@@ -73,6 +73,17 @@ assert.equal(actualMovements.rows.find((row) => row.code === 'employee_payments:
 assert.equal(percentOfSales(new Prisma.Decimal('-1025'), new Prisma.Decimal('10780')), '9.5083');
 assert.equal(percentOfSales(new Prisma.Decimal('6400'), new Prisma.Decimal('10780')), '59.3692');
 assert.equal(percentOfSales(new Prisma.Decimal('1'), new Prisma.Decimal('0')), null);
+const presentation = presentationMetrics(actualMovements.rows, new Prisma.Decimal('10780'));
+assert.deepEqual(presentation.get('sales'), {
+  rankWithinParent: 1,
+  shareOfDirectionPercent: '100.0000',
+  shareOfParentPercent: '67.5439',
+});
+assert.deepEqual(presentation.get('employee_payments:payroll'), {
+  rankWithinParent: 1,
+  shareOfDirectionPercent: null,
+  shareOfParentPercent: '84.0000',
+});
 
 const categoryHierarchy = aggregateFinancialMovements([
   movement('purchases', '-115', 'فاتورة مشتريات', {

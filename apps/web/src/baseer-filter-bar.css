@@ -1,0 +1,31 @@
+.baseer-filter-bar--odoo .baseer-filter-bar__menu-button {
+  position: absolute;
+  inset-inline-end: .35rem;
+  inset-block-start: 50%;
+  display: inline-flex;
+  align-items: center;
+  gap: .32rem;
+  min-block-size: 2.15rem;
+  padding: 0 .55rem;
+  border: 1px solid color-mix(in srgb, var(--brand) 38%, var(--line));
+  border-radius: var(--control-radius);
+  color: var(--brand-deep);
+  background: var(--surface);
+  font: inherit;
+  font-size: var(--font-label);
+  font-weight: 750;
+  line-height: 1;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.baseer-filter-bar--odoo .baseer-filter-bar__menu-button:hover,
+.baseer-filter-bar--odoo .baseer-filter-bar__menu-button[aria-expanded="true"] {
+  border-color: var(--brand);
+  background: color-mix(in srgb, var(--brand) 9%, var(--surface));
+}
+
+.baseer-filter-bar--odoo .baseer-filter-bar__menu-button:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--brand) 46%, transparent);
+  outline-offset: 2px;
+}

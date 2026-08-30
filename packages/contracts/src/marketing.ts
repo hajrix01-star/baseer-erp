@@ -145,7 +145,8 @@ export const marketingSpendResultSchema = z.object({
   linkedPostedSpendOnly: z.literal(true),
   spendDataQuality: decisionDataQualityStatusSchema,
   excludedLinkedDocumentCount: z.number().int().nonnegative(),
-  officialNetSales: marketingAmountSchema.nullable(),
+  /** Campaign spend is compared with VAT-inclusive official sales. */
+  officialGrossSales: marketingAmountSchema.nullable(),
   spendToSalesPercent: z.string().regex(/^\d+(\.\d{1,2})?$/).nullable(),
   campaignCount: z.number().int().nonnegative(),
   salesDataQuality: decisionDataQualityStatusSchema,
@@ -200,25 +201,30 @@ export const marketingCalendarQuerySchema = z.object({
   .refine((value) => value.from <= value.to, { path: ["to"], message: "Calendar end must not precede its start." })
   .refine((value) => Date.parse(`${value.to}T00:00:00.000Z`) - Date.parse(`${value.from}T00:00:00.000Z`) <= 365 * 24 * 60 * 60 * 1_000, { path: ["to"], message: "Calendar range cannot exceed 366 days." });
 
-/** Daily visual payload. A missing, pending, or partial sales day has no
- * amount. This makes it impossible for a chart consumer to draw it as zero. */
+/** Daily visual payload. An unread day has no comparable time-series value.
+ * `null` means unavailable; the string value "0.0000" is reserved for a
+ * completed day with a confirmed zero. This distinction prevents charts from
+ * drawing future/unread financial activity on the zero baseline. */
 export const marketingCalendarDaySchema = z.object({
   businessDate: marketingDateSchema,
+  /** VAT-inclusive sales for collection-aligned operational summaries. */
+  officialGrossSales: marketingAmountSchema.nullable(),
   officialNetSales: marketingAmountSchema.nullable(),
   /** Customer count is only available when the daily sales read is complete. */
   customerCount: z.number().int().nonnegative().nullable(),
   salesDayQuality: z.enum(["READY", "PENDING", "PARTIAL", "MISSING"]),
   dailySalesTarget: marketingAmountSchema.nullable(),
   targetStatus: z.enum(["NO_TARGET", "NO_SALES", "BELOW", "NEAR", "MET", "EXCEEDED"]),
-  linkedActualSpend: marketingAmountSchema,
+  /** Posted campaign spend is unavailable when this daily read is unavailable. */
+  linkedActualSpend: marketingAmountSchema.nullable(),
   linkedFinancialDocumentCount: z.number().int().nonnegative(),
   /** Posted financial spend grouped by the campaign explicitly linked to each document. */
   campaignSpend: z.array(z.object({ campaignId: marketingIdSchema, amount: marketingAmountSchema, documentCount: z.number().int().nonnegative() }).strict()).max(1_000),
   /** Uses the same sealed-vault scope as the financial movement report. */
-  financialOutflows: marketingAmountSchema,
+  financialOutflows: marketingAmountSchema.nullable(),
   financialOutflowDocumentCount: z.number().int().nonnegative(),
   /** Purchase movements from the same sealed financial-movement scope as the purchases card. */
-  purchaseOutflows: marketingAmountSchema,
+  purchaseOutflows: marketingAmountSchema.nullable(),
   purchaseOutflowDocumentCount: z.number().int().nonnegative(),
   activeCampaignIds: z.array(marketingIdSchema).max(1_000),
 }).strict();
@@ -228,8 +234,53 @@ export const marketingCalendarDaySchema = z.object({
  * misleading zero in the weekday header. Sunday is 0 through Saturday 6. */
 export const marketingCalendarWeekdayAverageSchema = z.object({
   weekday: z.number().int().min(0).max(6),
-  averageOfficialNetSales: marketingAmountSchema.nullable(),
+  /** Server-owned VAT-inclusive daily average for completed days only. */
+  averageOfficialGrossSales: marketingAmountSchema.nullable(),
   eligibleDayCount: z.number().int().nonnegative(),
+}).strict();
+
+/** Precomputed chart data. Values are derived in the Marketing read model so
+ * the browser never parses, sums, divides, or rounds financial facts. */
+const marketingTimelineAmountSchema = z.object({
+  amount: marketingAmountSchema.nullable(),
+  chartValue: z.number().finite().nonnegative().nullable(),
+  display: z.string().regex(/^\d+\.\d{2}$/).nullable(),
+}).strict();
+
+const marketingTimelineCampaignAmountSchema = marketingTimelineAmountSchema.extend({
+  campaignId: marketingIdSchema,
+  documentCount: z.number().int().nonnegative(),
+  barHeightPercent: z.number().int().min(0).max(100),
+}).strict();
+
+const marketingTimelineRowSchema = z.object({
+  label: z.string().min(7).max(10),
+  fromBusinessDate: marketingDateSchema,
+  toBusinessDate: marketingDateSchema,
+  sales: marketingTimelineAmountSchema,
+  campaignSpend: marketingTimelineAmountSchema,
+  purchases: marketingTimelineAmountSchema,
+  customerCount: z.number().int().nonnegative().nullable(),
+  salesDayQuality: z.enum(["READY", "PENDING", "PARTIAL", "MISSING"]),
+  activeCampaignIds: z.array(marketingIdSchema).max(1_000),
+  campaignSpendByCampaign: z.array(marketingTimelineCampaignAmountSchema).max(1_000),
+}).strict();
+
+const marketingTimelineCampaignLaneSchema = z.object({
+  campaignId: marketingIdSchema,
+  activeIndexes: z.array(z.number().int().nonnegative()).max(366),
+  totalSpend: marketingTimelineAmountSchema,
+  spendBars: z.array(marketingTimelineCampaignAmountSchema).max(366),
+}).strict();
+
+const marketingTimelineDatasetSchema = z.object({
+  rows: z.array(marketingTimelineRowSchema).max(366),
+  campaignLanes: z.array(marketingTimelineCampaignLaneSchema).max(1_000),
+}).strict();
+
+export const marketingCalendarTimelineSchema = z.object({
+  daily: marketingTimelineDatasetSchema,
+  monthly: marketingTimelineDatasetSchema,
 }).strict();
 
 /** A company-owned monthly sales target. Calendar days receive an explicit
@@ -259,6 +310,7 @@ export const marketingCalendarReadSchema = z.object({
   sales: decisionSalesMetricReadSchema,
   campaigns: z.array(marketingCampaignSchema).max(1_000),
   days: z.array(marketingCalendarDaySchema).max(366),
+  timeline: marketingCalendarTimelineSchema,
   weekdayAverages: z.array(marketingCalendarWeekdayAverageSchema).length(7),
   salesTargets: z.array(marketingSalesTargetSchema).max(13),
   context: z.array(marketingCalendarContextSchema).max(500),

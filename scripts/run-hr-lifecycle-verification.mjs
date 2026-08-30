@@ -458,12 +458,12 @@ try {
 
   for (const key of ['zero', 'reverse', 'paid']) {
     const employee = employees.get(key);
-    await hr.updateEmployee(creator, { employeeId: employee.id, nameAr: employee.nameAr, status: 'TERMINATED', terminatedAt: today }, randomUUID());
+    await hr.updateEmployee(creator, { employeeId: employee.id, nameAr: employee.nameAr, status: 'TERMINATED', terminatedAt: today, statusReason: 'Lifecycle verification termination' }, randomUUID());
   }
   const yesterday = addDays(today, -1);
   for (const key of ['late-final']) {
     const employee = employees.get(key);
-    await hr.updateEmployee(creator, { employeeId: employee.id, nameAr: employee.nameAr, status: 'TERMINATED', terminatedAt: yesterday }, randomUUID());
+    await hr.updateEmployee(creator, { employeeId: employee.id, nameAr: employee.nameAr, status: 'TERMINATED', terminatedAt: yesterday, statusReason: 'Lifecycle chronology verification' }, randomUUID());
   }
 
   for (const [key, deduction, expectedMessage] of [['late-final', lateFinalDeduction, /cannot predate its creation date/]]) {

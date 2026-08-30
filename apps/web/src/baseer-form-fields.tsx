@@ -1,4 +1,4 @@
-import { forwardRef, type ComponentProps } from "react";
+import { forwardRef, useState, type ComponentProps } from "react";
 import { normalizeBaseerNumericInput } from "./number-format";
 import "./baseer-form.css";
 export { BaseerTextInput } from "./baseer-text-input";
@@ -18,13 +18,22 @@ export function normalizeBaseerAmount(value: string) {
  * a decimal string. This keeps a stored value such as `12.75` intact.
  */
 export function formatBaseerEditableAmount(value: string | number) {
-  if (typeof value === "string") return normalizeBaseerNumericInput(value);
+  if (typeof value === "string") return trimEditableAmountZeros(normalizeBaseerNumericInput(value));
   return Number.isFinite(value) ? String(value) : "";
 }
 
+/** Removes insignificant trailing fractional zeros for display only; API precision is unchanged. */
+export function trimEditableAmountZeros(value: string) {
+  if (!/^-?\d+\.\d+$/.test(value)) return value;
+  const compact = value.replace(/0+$/, "");
+  return compact.endsWith(".") ? compact.slice(0, -1) : compact;
+}
+
 /** Shared monetary input: accepts Arabic digits but emits ASCII/LTR text. */
-export function BaseerMoneyInput({ value, onValueChange, className, ...props }: MoneyInputProps) {
-  return <input {...props} className={["baseer-money-input", className].filter(Boolean).join(" ")} value={normalizeBaseerNumericInput(value)} inputMode="decimal" dir="ltr" lang="en" onChange={(event) => onValueChange(normalizeBaseerNumericInput(event.target.value))} />;
+export function BaseerMoneyInput({ value, onValueChange, className, onFocus, onBlur, ...props }: MoneyInputProps) {
+  const [draft, setDraft] = useState<string | null>(null);
+  const normalizedValue = normalizeBaseerNumericInput(value);
+  return <input {...props} className={["baseer-money-input", className].filter(Boolean).join(" ")} value={draft ?? trimEditableAmountZeros(normalizedValue)} inputMode="decimal" dir="ltr" lang="en" onFocus={(event) => { setDraft(trimEditableAmountZeros(normalizedValue)); onFocus?.(event); }} onBlur={(event) => { const compact = trimEditableAmountZeros(normalizeBaseerNumericInput(event.target.value)); setDraft(null); if (compact !== normalizedValue) onValueChange(compact); onBlur?.(event); }} onChange={(event) => { const next = normalizeBaseerNumericInput(event.target.value); setDraft(next); onValueChange(next); }} />;
 }
 
 type IntegerInputProps = Omit<ComponentProps<"input">, "type" | "value" | "onChange"> & {

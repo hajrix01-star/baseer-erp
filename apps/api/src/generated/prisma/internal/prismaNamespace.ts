@@ -415,6 +415,19 @@ export const ModelName = {
   LegacyMigrationRun: 'LegacyMigrationRun',
   LegacyMigrationCompanyMap: 'LegacyMigrationCompanyMap',
   LegacyMigrationRecordMap: 'LegacyMigrationRecordMap',
+  NurixExcelStagingPackage: 'NurixExcelStagingPackage',
+  NurixExcelStagingBatch: 'NurixExcelStagingBatch',
+  NurixExcelStagingRow: 'NurixExcelStagingRow',
+  NurixExcelMasterDataExecution: 'NurixExcelMasterDataExecution',
+  NurixExcelMasterDataItem: 'NurixExcelMasterDataItem',
+  NurixExcelFinancialExecution: 'NurixExcelFinancialExecution',
+  NurixExcelFinancialWave: 'NurixExcelFinancialWave',
+  NurixExcelFinancialItem: 'NurixExcelFinancialItem',
+  NurixExcelFinancialSourceMap: 'NurixExcelFinancialSourceMap',
+  NurixExcelFinancialReceipt: 'NurixExcelFinancialReceipt',
+  NurixHistoricalPayrollEvidence: 'NurixHistoricalPayrollEvidence',
+  NurixHistoricalPayrollLineEvidence: 'NurixHistoricalPayrollLineEvidence',
+  NurixHistoricalPayrollAccountingEvidence: 'NurixHistoricalPayrollAccountingEvidence',
   LegacyMigrationException: 'LegacyMigrationException',
   LegacyMigrationReviewAction: 'LegacyMigrationReviewAction',
   OwnerDailyBriefSnapshot: 'OwnerDailyBriefSnapshot',
@@ -560,6 +573,7 @@ export const ModelName = {
   AiSystemIdentity: 'AiSystemIdentity',
   OperationsSection: 'OperationsSection',
   OperationsUnit: 'OperationsUnit',
+  OperationsCatalogCategory: 'OperationsCatalogCategory',
   OperationsItem: 'OperationsItem',
   OperationsItemUnit: 'OperationsItemUnit',
   OperationsItemConversionVersion: 'OperationsItemConversionVersion',
@@ -592,7 +606,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "backupPolicy" | "backupJob" | "backupArtifact" | "backupAuditEvent" | "legacyMigrationRun" | "legacyMigrationCompanyMap" | "legacyMigrationRecordMap" | "legacyMigrationException" | "legacyMigrationReviewAction" | "ownerDailyBriefSnapshot" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financePnlMappingVersion" | "financePnlStatementLine" | "financePnlAccountMapping" | "financeLedgerRevision" | "reportRun" | "decisionMetricDefinition" | "decisionSalesChangePolicy" | "decisionRuleDefinition" | "decisionContextSource" | "decisionContextImportRun" | "decisionContextResearchRun" | "decisionContextCandidate" | "decisionGlobalContextEvent" | "decisionGlobalContextEventRevision" | "decisionGlobalContextReviewAction" | "decisionCompanyContextEvent" | "decisionEvaluationRun" | "decisionEvidenceSnapshot" | "decisionAlert" | "decisionAlertAction" | "decisionFeedback" | "inboundEvidenceLabel" | "inboundEvidenceRule" | "inboundEvidenceCommandReceipt" | "inboundEvidenceGmailConnection" | "inboundEvidenceGmailOAuthState" | "inboundEvidenceMessage" | "inboundEvidenceAttachment" | "inboundEvidenceDocumentAnalysis" | "inboundEvidenceMessageLabel" | "marketingCampaign" | "marketingCampaignAnalysisFeedback" | "marketingCampaignFinancialLink" | "marketingCampaignContextLink" | "marketingSalesTarget" | "marketingProviderConnection" | "marketingProviderOAuthState" | "marketingReputationReplyPolicy" | "reportDocument" | "vatSimulation" | "financeCashPerformanceEvent" | "financeCashPerformanceCoverage" | "financeCashPerformanceHistoricalImport" | "financeVatSettlement" | "financeCategory" | "financeSupplier" | "financeCounterpartyIdentity" | "financeCounterpartyAlias" | "legacyMigrationCounterpartyResolution" | "legacyMigrationCounterpartyCandidate" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowDocumentRevision" | "operationsAssetWarrantyAsset" | "operationsAssetWarrantyLine" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "attendanceEmployeeCredential" | "attendanceBranch" | "attendanceRosterPlan" | "attendanceRosterPeakPeriod" | "attendanceRosterEntry" | "attendanceRosterEntryPeriod" | "attendanceScheduleTemplate" | "attendanceScheduleTemplateVersion" | "attendanceSchedulePeriod" | "attendanceEmployeeScheduleAssignment" | "attendanceEmployeeWeeklyAdjustment" | "attendanceEmployeeWeeklyAdjustmentPeriod" | "attendanceScheduleException" | "attendanceScheduleExceptionPeriod" | "attendanceEvent" | "attendanceQrScanUse" | "attendanceWorkSession" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiCompanyContext" | "aiSkillActivation" | "aiExecutionReceipt" | "aiInterpretation" | "aiInterpretationRun" | "aiModelPriceRevision" | "aiBudgetReservation" | "aiUsageLedger" | "aiInterpretationPlacement" | "aiHumanInsight" | "aiEvaluationFeedback" | "aiSkillEvaluationRun" | "aiSystemIdentity" | "operationsSection" | "operationsUnit" | "operationsItem" | "operationsItemUnit" | "operationsItemConversionVersion" | "operationsItemConversionEdge" | "operationsInternalRegistration" | "operationsInternalRegistrationLine" | "operationsInternalRegistrationConsumption" | "operationsRecipeVersion" | "operationsRecipeLine" | "operationsPurchaseRequest" | "operationsPurchaseRequestLine" | "operationsPurchaseReceipt" | "operationsPurchaseReceiptLine" | "operationsCustodyProfile" | "operationsCustodyEvent" | "operationsInventoryBalance" | "operationsInventoryMovement"
+    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "backupPolicy" | "backupJob" | "backupArtifact" | "backupAuditEvent" | "legacyMigrationRun" | "legacyMigrationCompanyMap" | "legacyMigrationRecordMap" | "nurixExcelStagingPackage" | "nurixExcelStagingBatch" | "nurixExcelStagingRow" | "nurixExcelMasterDataExecution" | "nurixExcelMasterDataItem" | "nurixExcelFinancialExecution" | "nurixExcelFinancialWave" | "nurixExcelFinancialItem" | "nurixExcelFinancialSourceMap" | "nurixExcelFinancialReceipt" | "nurixHistoricalPayrollEvidence" | "nurixHistoricalPayrollLineEvidence" | "nurixHistoricalPayrollAccountingEvidence" | "legacyMigrationException" | "legacyMigrationReviewAction" | "ownerDailyBriefSnapshot" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financePnlMappingVersion" | "financePnlStatementLine" | "financePnlAccountMapping" | "financeLedgerRevision" | "reportRun" | "decisionMetricDefinition" | "decisionSalesChangePolicy" | "decisionRuleDefinition" | "decisionContextSource" | "decisionContextImportRun" | "decisionContextResearchRun" | "decisionContextCandidate" | "decisionGlobalContextEvent" | "decisionGlobalContextEventRevision" | "decisionGlobalContextReviewAction" | "decisionCompanyContextEvent" | "decisionEvaluationRun" | "decisionEvidenceSnapshot" | "decisionAlert" | "decisionAlertAction" | "decisionFeedback" | "inboundEvidenceLabel" | "inboundEvidenceRule" | "inboundEvidenceCommandReceipt" | "inboundEvidenceGmailConnection" | "inboundEvidenceGmailOAuthState" | "inboundEvidenceMessage" | "inboundEvidenceAttachment" | "inboundEvidenceDocumentAnalysis" | "inboundEvidenceMessageLabel" | "marketingCampaign" | "marketingCampaignAnalysisFeedback" | "marketingCampaignFinancialLink" | "marketingCampaignContextLink" | "marketingSalesTarget" | "marketingProviderConnection" | "marketingProviderOAuthState" | "marketingReputationReplyPolicy" | "reportDocument" | "vatSimulation" | "financeCashPerformanceEvent" | "financeCashPerformanceCoverage" | "financeCashPerformanceHistoricalImport" | "financeVatSettlement" | "financeCategory" | "financeSupplier" | "financeCounterpartyIdentity" | "financeCounterpartyAlias" | "legacyMigrationCounterpartyResolution" | "legacyMigrationCounterpartyCandidate" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowDocumentRevision" | "operationsAssetWarrantyAsset" | "operationsAssetWarrantyLine" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "attendanceEmployeeCredential" | "attendanceBranch" | "attendanceRosterPlan" | "attendanceRosterPeakPeriod" | "attendanceRosterEntry" | "attendanceRosterEntryPeriod" | "attendanceScheduleTemplate" | "attendanceScheduleTemplateVersion" | "attendanceSchedulePeriod" | "attendanceEmployeeScheduleAssignment" | "attendanceEmployeeWeeklyAdjustment" | "attendanceEmployeeWeeklyAdjustmentPeriod" | "attendanceScheduleException" | "attendanceScheduleExceptionPeriod" | "attendanceEvent" | "attendanceQrScanUse" | "attendanceWorkSession" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiCompanyContext" | "aiSkillActivation" | "aiExecutionReceipt" | "aiInterpretation" | "aiInterpretationRun" | "aiModelPriceRevision" | "aiBudgetReservation" | "aiUsageLedger" | "aiInterpretationPlacement" | "aiHumanInsight" | "aiEvaluationFeedback" | "aiSkillEvaluationRun" | "aiSystemIdentity" | "operationsSection" | "operationsUnit" | "operationsCatalogCategory" | "operationsItem" | "operationsItemUnit" | "operationsItemConversionVersion" | "operationsItemConversionEdge" | "operationsInternalRegistration" | "operationsInternalRegistrationLine" | "operationsInternalRegistrationConsumption" | "operationsRecipeVersion" | "operationsRecipeLine" | "operationsPurchaseRequest" | "operationsPurchaseRequestLine" | "operationsPurchaseReceipt" | "operationsPurchaseReceiptLine" | "operationsCustodyProfile" | "operationsCustodyEvent" | "operationsInventoryBalance" | "operationsInventoryMovement"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1925,6 +1939,968 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.LegacyMigrationRecordMapCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.LegacyMigrationRecordMapCountAggregateOutputType> | number
+        }
+      }
+    }
+    NurixExcelStagingPackage: {
+      payload: Prisma.$NurixExcelStagingPackagePayload<ExtArgs>
+      fields: Prisma.NurixExcelStagingPackageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NurixExcelStagingPackageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingPackagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NurixExcelStagingPackageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingPackagePayload>
+        }
+        findFirst: {
+          args: Prisma.NurixExcelStagingPackageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingPackagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NurixExcelStagingPackageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingPackagePayload>
+        }
+        findMany: {
+          args: Prisma.NurixExcelStagingPackageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingPackagePayload>[]
+        }
+        create: {
+          args: Prisma.NurixExcelStagingPackageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingPackagePayload>
+        }
+        createMany: {
+          args: Prisma.NurixExcelStagingPackageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NurixExcelStagingPackageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingPackagePayload>[]
+        }
+        delete: {
+          args: Prisma.NurixExcelStagingPackageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingPackagePayload>
+        }
+        update: {
+          args: Prisma.NurixExcelStagingPackageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingPackagePayload>
+        }
+        deleteMany: {
+          args: Prisma.NurixExcelStagingPackageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NurixExcelStagingPackageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NurixExcelStagingPackageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingPackagePayload>[]
+        }
+        upsert: {
+          args: Prisma.NurixExcelStagingPackageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingPackagePayload>
+        }
+        aggregate: {
+          args: Prisma.NurixExcelStagingPackageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNurixExcelStagingPackage>
+        }
+        groupBy: {
+          args: Prisma.NurixExcelStagingPackageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NurixExcelStagingPackageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NurixExcelStagingPackageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NurixExcelStagingPackageCountAggregateOutputType> | number
+        }
+      }
+    }
+    NurixExcelStagingBatch: {
+      payload: Prisma.$NurixExcelStagingBatchPayload<ExtArgs>
+      fields: Prisma.NurixExcelStagingBatchFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NurixExcelStagingBatchFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingBatchPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NurixExcelStagingBatchFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingBatchPayload>
+        }
+        findFirst: {
+          args: Prisma.NurixExcelStagingBatchFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingBatchPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NurixExcelStagingBatchFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingBatchPayload>
+        }
+        findMany: {
+          args: Prisma.NurixExcelStagingBatchFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingBatchPayload>[]
+        }
+        create: {
+          args: Prisma.NurixExcelStagingBatchCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingBatchPayload>
+        }
+        createMany: {
+          args: Prisma.NurixExcelStagingBatchCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NurixExcelStagingBatchCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingBatchPayload>[]
+        }
+        delete: {
+          args: Prisma.NurixExcelStagingBatchDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingBatchPayload>
+        }
+        update: {
+          args: Prisma.NurixExcelStagingBatchUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingBatchPayload>
+        }
+        deleteMany: {
+          args: Prisma.NurixExcelStagingBatchDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NurixExcelStagingBatchUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NurixExcelStagingBatchUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingBatchPayload>[]
+        }
+        upsert: {
+          args: Prisma.NurixExcelStagingBatchUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingBatchPayload>
+        }
+        aggregate: {
+          args: Prisma.NurixExcelStagingBatchAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNurixExcelStagingBatch>
+        }
+        groupBy: {
+          args: Prisma.NurixExcelStagingBatchGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NurixExcelStagingBatchGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NurixExcelStagingBatchCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NurixExcelStagingBatchCountAggregateOutputType> | number
+        }
+      }
+    }
+    NurixExcelStagingRow: {
+      payload: Prisma.$NurixExcelStagingRowPayload<ExtArgs>
+      fields: Prisma.NurixExcelStagingRowFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NurixExcelStagingRowFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingRowPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NurixExcelStagingRowFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingRowPayload>
+        }
+        findFirst: {
+          args: Prisma.NurixExcelStagingRowFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingRowPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NurixExcelStagingRowFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingRowPayload>
+        }
+        findMany: {
+          args: Prisma.NurixExcelStagingRowFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingRowPayload>[]
+        }
+        create: {
+          args: Prisma.NurixExcelStagingRowCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingRowPayload>
+        }
+        createMany: {
+          args: Prisma.NurixExcelStagingRowCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NurixExcelStagingRowCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingRowPayload>[]
+        }
+        delete: {
+          args: Prisma.NurixExcelStagingRowDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingRowPayload>
+        }
+        update: {
+          args: Prisma.NurixExcelStagingRowUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingRowPayload>
+        }
+        deleteMany: {
+          args: Prisma.NurixExcelStagingRowDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NurixExcelStagingRowUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NurixExcelStagingRowUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingRowPayload>[]
+        }
+        upsert: {
+          args: Prisma.NurixExcelStagingRowUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelStagingRowPayload>
+        }
+        aggregate: {
+          args: Prisma.NurixExcelStagingRowAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNurixExcelStagingRow>
+        }
+        groupBy: {
+          args: Prisma.NurixExcelStagingRowGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NurixExcelStagingRowGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NurixExcelStagingRowCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NurixExcelStagingRowCountAggregateOutputType> | number
+        }
+      }
+    }
+    NurixExcelMasterDataExecution: {
+      payload: Prisma.$NurixExcelMasterDataExecutionPayload<ExtArgs>
+      fields: Prisma.NurixExcelMasterDataExecutionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NurixExcelMasterDataExecutionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelMasterDataExecutionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NurixExcelMasterDataExecutionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelMasterDataExecutionPayload>
+        }
+        findFirst: {
+          args: Prisma.NurixExcelMasterDataExecutionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelMasterDataExecutionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NurixExcelMasterDataExecutionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelMasterDataExecutionPayload>
+        }
+        findMany: {
+          args: Prisma.NurixExcelMasterDataExecutionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelMasterDataExecutionPayload>[]
+        }
+        create: {
+          args: Prisma.NurixExcelMasterDataExecutionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelMasterDataExecutionPayload>
+        }
+        createMany: {
+          args: Prisma.NurixExcelMasterDataExecutionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NurixExcelMasterDataExecutionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelMasterDataExecutionPayload>[]
+        }
+        delete: {
+          args: Prisma.NurixExcelMasterDataExecutionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelMasterDataExecutionPayload>
+        }
+        update: {
+          args: Prisma.NurixExcelMasterDataExecutionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelMasterDataExecutionPayload>
+        }
+        deleteMany: {
+          args: Prisma.NurixExcelMasterDataExecutionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NurixExcelMasterDataExecutionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NurixExcelMasterDataExecutionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelMasterDataExecutionPayload>[]
+        }
+        upsert: {
+          args: Prisma.NurixExcelMasterDataExecutionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelMasterDataExecutionPayload>
+        }
+        aggregate: {
+          args: Prisma.NurixExcelMasterDataExecutionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNurixExcelMasterDataExecution>
+        }
+        groupBy: {
+          args: Prisma.NurixExcelMasterDataExecutionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NurixExcelMasterDataExecutionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NurixExcelMasterDataExecutionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NurixExcelMasterDataExecutionCountAggregateOutputType> | number
+        }
+      }
+    }
+    NurixExcelMasterDataItem: {
+      payload: Prisma.$NurixExcelMasterDataItemPayload<ExtArgs>
+      fields: Prisma.NurixExcelMasterDataItemFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NurixExcelMasterDataItemFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelMasterDataItemPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NurixExcelMasterDataItemFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelMasterDataItemPayload>
+        }
+        findFirst: {
+          args: Prisma.NurixExcelMasterDataItemFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelMasterDataItemPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NurixExcelMasterDataItemFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelMasterDataItemPayload>
+        }
+        findMany: {
+          args: Prisma.NurixExcelMasterDataItemFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelMasterDataItemPayload>[]
+        }
+        create: {
+          args: Prisma.NurixExcelMasterDataItemCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelMasterDataItemPayload>
+        }
+        createMany: {
+          args: Prisma.NurixExcelMasterDataItemCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NurixExcelMasterDataItemCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelMasterDataItemPayload>[]
+        }
+        delete: {
+          args: Prisma.NurixExcelMasterDataItemDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelMasterDataItemPayload>
+        }
+        update: {
+          args: Prisma.NurixExcelMasterDataItemUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelMasterDataItemPayload>
+        }
+        deleteMany: {
+          args: Prisma.NurixExcelMasterDataItemDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NurixExcelMasterDataItemUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NurixExcelMasterDataItemUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelMasterDataItemPayload>[]
+        }
+        upsert: {
+          args: Prisma.NurixExcelMasterDataItemUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelMasterDataItemPayload>
+        }
+        aggregate: {
+          args: Prisma.NurixExcelMasterDataItemAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNurixExcelMasterDataItem>
+        }
+        groupBy: {
+          args: Prisma.NurixExcelMasterDataItemGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NurixExcelMasterDataItemGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NurixExcelMasterDataItemCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NurixExcelMasterDataItemCountAggregateOutputType> | number
+        }
+      }
+    }
+    NurixExcelFinancialExecution: {
+      payload: Prisma.$NurixExcelFinancialExecutionPayload<ExtArgs>
+      fields: Prisma.NurixExcelFinancialExecutionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NurixExcelFinancialExecutionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialExecutionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NurixExcelFinancialExecutionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialExecutionPayload>
+        }
+        findFirst: {
+          args: Prisma.NurixExcelFinancialExecutionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialExecutionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NurixExcelFinancialExecutionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialExecutionPayload>
+        }
+        findMany: {
+          args: Prisma.NurixExcelFinancialExecutionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialExecutionPayload>[]
+        }
+        create: {
+          args: Prisma.NurixExcelFinancialExecutionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialExecutionPayload>
+        }
+        createMany: {
+          args: Prisma.NurixExcelFinancialExecutionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NurixExcelFinancialExecutionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialExecutionPayload>[]
+        }
+        delete: {
+          args: Prisma.NurixExcelFinancialExecutionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialExecutionPayload>
+        }
+        update: {
+          args: Prisma.NurixExcelFinancialExecutionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialExecutionPayload>
+        }
+        deleteMany: {
+          args: Prisma.NurixExcelFinancialExecutionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NurixExcelFinancialExecutionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NurixExcelFinancialExecutionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialExecutionPayload>[]
+        }
+        upsert: {
+          args: Prisma.NurixExcelFinancialExecutionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialExecutionPayload>
+        }
+        aggregate: {
+          args: Prisma.NurixExcelFinancialExecutionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNurixExcelFinancialExecution>
+        }
+        groupBy: {
+          args: Prisma.NurixExcelFinancialExecutionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NurixExcelFinancialExecutionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NurixExcelFinancialExecutionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NurixExcelFinancialExecutionCountAggregateOutputType> | number
+        }
+      }
+    }
+    NurixExcelFinancialWave: {
+      payload: Prisma.$NurixExcelFinancialWavePayload<ExtArgs>
+      fields: Prisma.NurixExcelFinancialWaveFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NurixExcelFinancialWaveFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialWavePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NurixExcelFinancialWaveFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialWavePayload>
+        }
+        findFirst: {
+          args: Prisma.NurixExcelFinancialWaveFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialWavePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NurixExcelFinancialWaveFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialWavePayload>
+        }
+        findMany: {
+          args: Prisma.NurixExcelFinancialWaveFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialWavePayload>[]
+        }
+        create: {
+          args: Prisma.NurixExcelFinancialWaveCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialWavePayload>
+        }
+        createMany: {
+          args: Prisma.NurixExcelFinancialWaveCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NurixExcelFinancialWaveCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialWavePayload>[]
+        }
+        delete: {
+          args: Prisma.NurixExcelFinancialWaveDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialWavePayload>
+        }
+        update: {
+          args: Prisma.NurixExcelFinancialWaveUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialWavePayload>
+        }
+        deleteMany: {
+          args: Prisma.NurixExcelFinancialWaveDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NurixExcelFinancialWaveUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NurixExcelFinancialWaveUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialWavePayload>[]
+        }
+        upsert: {
+          args: Prisma.NurixExcelFinancialWaveUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialWavePayload>
+        }
+        aggregate: {
+          args: Prisma.NurixExcelFinancialWaveAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNurixExcelFinancialWave>
+        }
+        groupBy: {
+          args: Prisma.NurixExcelFinancialWaveGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NurixExcelFinancialWaveGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NurixExcelFinancialWaveCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NurixExcelFinancialWaveCountAggregateOutputType> | number
+        }
+      }
+    }
+    NurixExcelFinancialItem: {
+      payload: Prisma.$NurixExcelFinancialItemPayload<ExtArgs>
+      fields: Prisma.NurixExcelFinancialItemFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NurixExcelFinancialItemFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialItemPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NurixExcelFinancialItemFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialItemPayload>
+        }
+        findFirst: {
+          args: Prisma.NurixExcelFinancialItemFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialItemPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NurixExcelFinancialItemFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialItemPayload>
+        }
+        findMany: {
+          args: Prisma.NurixExcelFinancialItemFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialItemPayload>[]
+        }
+        create: {
+          args: Prisma.NurixExcelFinancialItemCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialItemPayload>
+        }
+        createMany: {
+          args: Prisma.NurixExcelFinancialItemCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NurixExcelFinancialItemCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialItemPayload>[]
+        }
+        delete: {
+          args: Prisma.NurixExcelFinancialItemDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialItemPayload>
+        }
+        update: {
+          args: Prisma.NurixExcelFinancialItemUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialItemPayload>
+        }
+        deleteMany: {
+          args: Prisma.NurixExcelFinancialItemDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NurixExcelFinancialItemUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NurixExcelFinancialItemUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialItemPayload>[]
+        }
+        upsert: {
+          args: Prisma.NurixExcelFinancialItemUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialItemPayload>
+        }
+        aggregate: {
+          args: Prisma.NurixExcelFinancialItemAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNurixExcelFinancialItem>
+        }
+        groupBy: {
+          args: Prisma.NurixExcelFinancialItemGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NurixExcelFinancialItemGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NurixExcelFinancialItemCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NurixExcelFinancialItemCountAggregateOutputType> | number
+        }
+      }
+    }
+    NurixExcelFinancialSourceMap: {
+      payload: Prisma.$NurixExcelFinancialSourceMapPayload<ExtArgs>
+      fields: Prisma.NurixExcelFinancialSourceMapFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NurixExcelFinancialSourceMapFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialSourceMapPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NurixExcelFinancialSourceMapFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialSourceMapPayload>
+        }
+        findFirst: {
+          args: Prisma.NurixExcelFinancialSourceMapFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialSourceMapPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NurixExcelFinancialSourceMapFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialSourceMapPayload>
+        }
+        findMany: {
+          args: Prisma.NurixExcelFinancialSourceMapFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialSourceMapPayload>[]
+        }
+        create: {
+          args: Prisma.NurixExcelFinancialSourceMapCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialSourceMapPayload>
+        }
+        createMany: {
+          args: Prisma.NurixExcelFinancialSourceMapCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NurixExcelFinancialSourceMapCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialSourceMapPayload>[]
+        }
+        delete: {
+          args: Prisma.NurixExcelFinancialSourceMapDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialSourceMapPayload>
+        }
+        update: {
+          args: Prisma.NurixExcelFinancialSourceMapUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialSourceMapPayload>
+        }
+        deleteMany: {
+          args: Prisma.NurixExcelFinancialSourceMapDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NurixExcelFinancialSourceMapUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NurixExcelFinancialSourceMapUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialSourceMapPayload>[]
+        }
+        upsert: {
+          args: Prisma.NurixExcelFinancialSourceMapUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialSourceMapPayload>
+        }
+        aggregate: {
+          args: Prisma.NurixExcelFinancialSourceMapAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNurixExcelFinancialSourceMap>
+        }
+        groupBy: {
+          args: Prisma.NurixExcelFinancialSourceMapGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NurixExcelFinancialSourceMapGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NurixExcelFinancialSourceMapCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NurixExcelFinancialSourceMapCountAggregateOutputType> | number
+        }
+      }
+    }
+    NurixExcelFinancialReceipt: {
+      payload: Prisma.$NurixExcelFinancialReceiptPayload<ExtArgs>
+      fields: Prisma.NurixExcelFinancialReceiptFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NurixExcelFinancialReceiptFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialReceiptPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NurixExcelFinancialReceiptFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialReceiptPayload>
+        }
+        findFirst: {
+          args: Prisma.NurixExcelFinancialReceiptFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialReceiptPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NurixExcelFinancialReceiptFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialReceiptPayload>
+        }
+        findMany: {
+          args: Prisma.NurixExcelFinancialReceiptFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialReceiptPayload>[]
+        }
+        create: {
+          args: Prisma.NurixExcelFinancialReceiptCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialReceiptPayload>
+        }
+        createMany: {
+          args: Prisma.NurixExcelFinancialReceiptCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NurixExcelFinancialReceiptCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialReceiptPayload>[]
+        }
+        delete: {
+          args: Prisma.NurixExcelFinancialReceiptDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialReceiptPayload>
+        }
+        update: {
+          args: Prisma.NurixExcelFinancialReceiptUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialReceiptPayload>
+        }
+        deleteMany: {
+          args: Prisma.NurixExcelFinancialReceiptDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NurixExcelFinancialReceiptUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NurixExcelFinancialReceiptUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialReceiptPayload>[]
+        }
+        upsert: {
+          args: Prisma.NurixExcelFinancialReceiptUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixExcelFinancialReceiptPayload>
+        }
+        aggregate: {
+          args: Prisma.NurixExcelFinancialReceiptAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNurixExcelFinancialReceipt>
+        }
+        groupBy: {
+          args: Prisma.NurixExcelFinancialReceiptGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NurixExcelFinancialReceiptGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NurixExcelFinancialReceiptCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NurixExcelFinancialReceiptCountAggregateOutputType> | number
+        }
+      }
+    }
+    NurixHistoricalPayrollEvidence: {
+      payload: Prisma.$NurixHistoricalPayrollEvidencePayload<ExtArgs>
+      fields: Prisma.NurixHistoricalPayrollEvidenceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NurixHistoricalPayrollEvidenceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollEvidencePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NurixHistoricalPayrollEvidenceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollEvidencePayload>
+        }
+        findFirst: {
+          args: Prisma.NurixHistoricalPayrollEvidenceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollEvidencePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NurixHistoricalPayrollEvidenceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollEvidencePayload>
+        }
+        findMany: {
+          args: Prisma.NurixHistoricalPayrollEvidenceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollEvidencePayload>[]
+        }
+        create: {
+          args: Prisma.NurixHistoricalPayrollEvidenceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollEvidencePayload>
+        }
+        createMany: {
+          args: Prisma.NurixHistoricalPayrollEvidenceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NurixHistoricalPayrollEvidenceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollEvidencePayload>[]
+        }
+        delete: {
+          args: Prisma.NurixHistoricalPayrollEvidenceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollEvidencePayload>
+        }
+        update: {
+          args: Prisma.NurixHistoricalPayrollEvidenceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollEvidencePayload>
+        }
+        deleteMany: {
+          args: Prisma.NurixHistoricalPayrollEvidenceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NurixHistoricalPayrollEvidenceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NurixHistoricalPayrollEvidenceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollEvidencePayload>[]
+        }
+        upsert: {
+          args: Prisma.NurixHistoricalPayrollEvidenceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollEvidencePayload>
+        }
+        aggregate: {
+          args: Prisma.NurixHistoricalPayrollEvidenceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNurixHistoricalPayrollEvidence>
+        }
+        groupBy: {
+          args: Prisma.NurixHistoricalPayrollEvidenceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NurixHistoricalPayrollEvidenceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NurixHistoricalPayrollEvidenceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NurixHistoricalPayrollEvidenceCountAggregateOutputType> | number
+        }
+      }
+    }
+    NurixHistoricalPayrollLineEvidence: {
+      payload: Prisma.$NurixHistoricalPayrollLineEvidencePayload<ExtArgs>
+      fields: Prisma.NurixHistoricalPayrollLineEvidenceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NurixHistoricalPayrollLineEvidenceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollLineEvidencePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NurixHistoricalPayrollLineEvidenceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollLineEvidencePayload>
+        }
+        findFirst: {
+          args: Prisma.NurixHistoricalPayrollLineEvidenceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollLineEvidencePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NurixHistoricalPayrollLineEvidenceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollLineEvidencePayload>
+        }
+        findMany: {
+          args: Prisma.NurixHistoricalPayrollLineEvidenceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollLineEvidencePayload>[]
+        }
+        create: {
+          args: Prisma.NurixHistoricalPayrollLineEvidenceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollLineEvidencePayload>
+        }
+        createMany: {
+          args: Prisma.NurixHistoricalPayrollLineEvidenceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NurixHistoricalPayrollLineEvidenceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollLineEvidencePayload>[]
+        }
+        delete: {
+          args: Prisma.NurixHistoricalPayrollLineEvidenceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollLineEvidencePayload>
+        }
+        update: {
+          args: Prisma.NurixHistoricalPayrollLineEvidenceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollLineEvidencePayload>
+        }
+        deleteMany: {
+          args: Prisma.NurixHistoricalPayrollLineEvidenceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NurixHistoricalPayrollLineEvidenceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NurixHistoricalPayrollLineEvidenceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollLineEvidencePayload>[]
+        }
+        upsert: {
+          args: Prisma.NurixHistoricalPayrollLineEvidenceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollLineEvidencePayload>
+        }
+        aggregate: {
+          args: Prisma.NurixHistoricalPayrollLineEvidenceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNurixHistoricalPayrollLineEvidence>
+        }
+        groupBy: {
+          args: Prisma.NurixHistoricalPayrollLineEvidenceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NurixHistoricalPayrollLineEvidenceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NurixHistoricalPayrollLineEvidenceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NurixHistoricalPayrollLineEvidenceCountAggregateOutputType> | number
+        }
+      }
+    }
+    NurixHistoricalPayrollAccountingEvidence: {
+      payload: Prisma.$NurixHistoricalPayrollAccountingEvidencePayload<ExtArgs>
+      fields: Prisma.NurixHistoricalPayrollAccountingEvidenceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NurixHistoricalPayrollAccountingEvidenceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollAccountingEvidencePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NurixHistoricalPayrollAccountingEvidenceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollAccountingEvidencePayload>
+        }
+        findFirst: {
+          args: Prisma.NurixHistoricalPayrollAccountingEvidenceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollAccountingEvidencePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NurixHistoricalPayrollAccountingEvidenceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollAccountingEvidencePayload>
+        }
+        findMany: {
+          args: Prisma.NurixHistoricalPayrollAccountingEvidenceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollAccountingEvidencePayload>[]
+        }
+        create: {
+          args: Prisma.NurixHistoricalPayrollAccountingEvidenceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollAccountingEvidencePayload>
+        }
+        createMany: {
+          args: Prisma.NurixHistoricalPayrollAccountingEvidenceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.NurixHistoricalPayrollAccountingEvidenceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollAccountingEvidencePayload>[]
+        }
+        delete: {
+          args: Prisma.NurixHistoricalPayrollAccountingEvidenceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollAccountingEvidencePayload>
+        }
+        update: {
+          args: Prisma.NurixHistoricalPayrollAccountingEvidenceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollAccountingEvidencePayload>
+        }
+        deleteMany: {
+          args: Prisma.NurixHistoricalPayrollAccountingEvidenceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NurixHistoricalPayrollAccountingEvidenceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.NurixHistoricalPayrollAccountingEvidenceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollAccountingEvidencePayload>[]
+        }
+        upsert: {
+          args: Prisma.NurixHistoricalPayrollAccountingEvidenceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NurixHistoricalPayrollAccountingEvidencePayload>
+        }
+        aggregate: {
+          args: Prisma.NurixHistoricalPayrollAccountingEvidenceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNurixHistoricalPayrollAccountingEvidence>
+        }
+        groupBy: {
+          args: Prisma.NurixHistoricalPayrollAccountingEvidenceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NurixHistoricalPayrollAccountingEvidenceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NurixHistoricalPayrollAccountingEvidenceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NurixHistoricalPayrollAccountingEvidenceCountAggregateOutputType> | number
         }
       }
     }
@@ -12658,6 +13634,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    OperationsCatalogCategory: {
+      payload: Prisma.$OperationsCatalogCategoryPayload<ExtArgs>
+      fields: Prisma.OperationsCatalogCategoryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OperationsCatalogCategoryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationsCatalogCategoryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OperationsCatalogCategoryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationsCatalogCategoryPayload>
+        }
+        findFirst: {
+          args: Prisma.OperationsCatalogCategoryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationsCatalogCategoryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OperationsCatalogCategoryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationsCatalogCategoryPayload>
+        }
+        findMany: {
+          args: Prisma.OperationsCatalogCategoryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationsCatalogCategoryPayload>[]
+        }
+        create: {
+          args: Prisma.OperationsCatalogCategoryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationsCatalogCategoryPayload>
+        }
+        createMany: {
+          args: Prisma.OperationsCatalogCategoryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OperationsCatalogCategoryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationsCatalogCategoryPayload>[]
+        }
+        delete: {
+          args: Prisma.OperationsCatalogCategoryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationsCatalogCategoryPayload>
+        }
+        update: {
+          args: Prisma.OperationsCatalogCategoryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationsCatalogCategoryPayload>
+        }
+        deleteMany: {
+          args: Prisma.OperationsCatalogCategoryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OperationsCatalogCategoryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OperationsCatalogCategoryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationsCatalogCategoryPayload>[]
+        }
+        upsert: {
+          args: Prisma.OperationsCatalogCategoryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OperationsCatalogCategoryPayload>
+        }
+        aggregate: {
+          args: Prisma.OperationsCatalogCategoryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOperationsCatalogCategory>
+        }
+        groupBy: {
+          args: Prisma.OperationsCatalogCategoryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OperationsCatalogCategoryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OperationsCatalogCategoryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OperationsCatalogCategoryCountAggregateOutputType> | number
+        }
+      }
+    }
     OperationsItem: {
       payload: Prisma.$OperationsItemPayload<ExtArgs>
       fields: Prisma.OperationsItemFieldRefs
@@ -14252,6 +15302,268 @@ export const LegacyMigrationRecordMapScalarFieldEnum = {
 export type LegacyMigrationRecordMapScalarFieldEnum = (typeof LegacyMigrationRecordMapScalarFieldEnum)[keyof typeof LegacyMigrationRecordMapScalarFieldEnum]
 
 
+export const NurixExcelStagingPackageScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  targetCompanyId: 'targetCompanyId',
+  sourceCompanyId: 'sourceCompanyId',
+  templateVersion: 'templateVersion',
+  workbookSha256: 'workbookSha256',
+  sourceFingerprint: 'sourceFingerprint',
+  storageReference: 'storageReference',
+  encryptionIv: 'encryptionIv',
+  storedByteSize: 'storedByteSize',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NurixExcelStagingPackageScalarFieldEnum = (typeof NurixExcelStagingPackageScalarFieldEnum)[keyof typeof NurixExcelStagingPackageScalarFieldEnum]
+
+
+export const NurixExcelStagingBatchScalarFieldEnum = {
+  id: 'id',
+  packageId: 'packageId',
+  tenantId: 'tenantId',
+  sequence: 'sequence',
+  status: 'status',
+  rowsDeclared: 'rowsDeclared',
+  rowsAccepted: 'rowsAccepted',
+  rowsRejected: 'rowsRejected',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NurixExcelStagingBatchScalarFieldEnum = (typeof NurixExcelStagingBatchScalarFieldEnum)[keyof typeof NurixExcelStagingBatchScalarFieldEnum]
+
+
+export const NurixExcelStagingRowScalarFieldEnum = {
+  id: 'id',
+  packageId: 'packageId',
+  batchId: 'batchId',
+  tenantId: 'tenantId',
+  sheet: 'sheet',
+  sourceId: 'sourceId',
+  sourceChecksum: 'sourceChecksum',
+  status: 'status',
+  code: 'code',
+  createdAt: 'createdAt'
+} as const
+
+export type NurixExcelStagingRowScalarFieldEnum = (typeof NurixExcelStagingRowScalarFieldEnum)[keyof typeof NurixExcelStagingRowScalarFieldEnum]
+
+
+export const NurixExcelMasterDataExecutionScalarFieldEnum = {
+  id: 'id',
+  packageId: 'packageId',
+  tenantId: 'tenantId',
+  targetCompanyId: 'targetCompanyId',
+  status: 'status',
+  waveSequence: 'waveSequence',
+  reason: 'reason',
+  requestedByUserId: 'requestedByUserId',
+  leaseToken: 'leaseToken',
+  leaseExpiresAt: 'leaseExpiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NurixExcelMasterDataExecutionScalarFieldEnum = (typeof NurixExcelMasterDataExecutionScalarFieldEnum)[keyof typeof NurixExcelMasterDataExecutionScalarFieldEnum]
+
+
+export const NurixExcelMasterDataItemScalarFieldEnum = {
+  id: 'id',
+  executionId: 'executionId',
+  tenantId: 'tenantId',
+  entity: 'entity',
+  sourceId: 'sourceId',
+  sourceChecksum: 'sourceChecksum',
+  status: 'status',
+  targetId: 'targetId',
+  code: 'code',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NurixExcelMasterDataItemScalarFieldEnum = (typeof NurixExcelMasterDataItemScalarFieldEnum)[keyof typeof NurixExcelMasterDataItemScalarFieldEnum]
+
+
+export const NurixExcelFinancialExecutionScalarFieldEnum = {
+  id: 'id',
+  packageId: 'packageId',
+  tenantId: 'tenantId',
+  targetCompanyId: 'targetCompanyId',
+  transformVersion: 'transformVersion',
+  financialPlanSha256: 'financialPlanSha256',
+  status: 'status',
+  reason: 'reason',
+  requestedByUserId: 'requestedByUserId',
+  approvedByUserId: 'approvedByUserId',
+  approvedAt: 'approvedAt',
+  leaseToken: 'leaseToken',
+  leaseExpiresAt: 'leaseExpiresAt',
+  waveSequence: 'waveSequence',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NurixExcelFinancialExecutionScalarFieldEnum = (typeof NurixExcelFinancialExecutionScalarFieldEnum)[keyof typeof NurixExcelFinancialExecutionScalarFieldEnum]
+
+
+export const NurixExcelFinancialWaveScalarFieldEnum = {
+  id: 'id',
+  executionId: 'executionId',
+  tenantId: 'tenantId',
+  targetCompanyId: 'targetCompanyId',
+  sequence: 'sequence',
+  status: 'status',
+  plannedItems: 'plannedItems',
+  postedItems: 'postedItems',
+  reusedItems: 'reusedItems',
+  reviewItems: 'reviewItems',
+  failedItems: 'failedItems',
+  leaseToken: 'leaseToken',
+  leaseExpiresAt: 'leaseExpiresAt',
+  committedAt: 'committedAt',
+  reconciliationHash: 'reconciliationHash',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NurixExcelFinancialWaveScalarFieldEnum = (typeof NurixExcelFinancialWaveScalarFieldEnum)[keyof typeof NurixExcelFinancialWaveScalarFieldEnum]
+
+
+export const NurixExcelFinancialItemScalarFieldEnum = {
+  id: 'id',
+  executionId: 'executionId',
+  waveId: 'waveId',
+  tenantId: 'tenantId',
+  targetCompanyId: 'targetCompanyId',
+  sourceSheet: 'sourceSheet',
+  sourceEntity: 'sourceEntity',
+  sourceId: 'sourceId',
+  sourceChecksum: 'sourceChecksum',
+  operationKey: 'operationKey',
+  status: 'status',
+  targetEntity: 'targetEntity',
+  targetId: 'targetId',
+  resultCode: 'resultCode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NurixExcelFinancialItemScalarFieldEnum = (typeof NurixExcelFinancialItemScalarFieldEnum)[keyof typeof NurixExcelFinancialItemScalarFieldEnum]
+
+
+export const NurixExcelFinancialSourceMapScalarFieldEnum = {
+  id: 'id',
+  executionId: 'executionId',
+  tenantId: 'tenantId',
+  targetCompanyId: 'targetCompanyId',
+  sourceEntity: 'sourceEntity',
+  sourceId: 'sourceId',
+  sourceChecksum: 'sourceChecksum',
+  targetEntity: 'targetEntity',
+  targetId: 'targetId',
+  state: 'state',
+  createdAt: 'createdAt'
+} as const
+
+export type NurixExcelFinancialSourceMapScalarFieldEnum = (typeof NurixExcelFinancialSourceMapScalarFieldEnum)[keyof typeof NurixExcelFinancialSourceMapScalarFieldEnum]
+
+
+export const NurixExcelFinancialReceiptScalarFieldEnum = {
+  id: 'id',
+  executionId: 'executionId',
+  waveId: 'waveId',
+  tenantId: 'tenantId',
+  targetCompanyId: 'targetCompanyId',
+  sequence: 'sequence',
+  kind: 'kind',
+  receiptSha256: 'receiptSha256',
+  summaryJson: 'summaryJson',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type NurixExcelFinancialReceiptScalarFieldEnum = (typeof NurixExcelFinancialReceiptScalarFieldEnum)[keyof typeof NurixExcelFinancialReceiptScalarFieldEnum]
+
+
+export const NurixHistoricalPayrollEvidenceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  executionId: 'executionId',
+  sourceCompanyId: 'sourceCompanyId',
+  sourceRunId: 'sourceRunId',
+  sourceChecksum: 'sourceChecksum',
+  sourceRunNumber: 'sourceRunNumber',
+  payrollMonth: 'payrollMonth',
+  sourceAccruedAt: 'sourceAccruedAt',
+  sourceStatus: 'sourceStatus',
+  employeeCount: 'employeeCount',
+  grossAmount: 'grossAmount',
+  deductionsAmount: 'deductionsAmount',
+  appliedAdvancesAmount: 'appliedAdvancesAmount',
+  sourceAdvancesAmount: 'sourceAdvancesAmount',
+  advanceCarryoverEvidenceAmount: 'advanceCarryoverEvidenceAmount',
+  netAmount: 'netAmount',
+  paymentEvidenceKind: 'paymentEvidenceKind',
+  paymentEvidenceAmount: 'paymentEvidenceAmount',
+  paymentEvidenceAt: 'paymentEvidenceAt',
+  sourceInvoiceEvidence: 'sourceInvoiceEvidence',
+  sourceJournalEvidence: 'sourceJournalEvidence',
+  status: 'status',
+  notes: 'notes',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type NurixHistoricalPayrollEvidenceScalarFieldEnum = (typeof NurixHistoricalPayrollEvidenceScalarFieldEnum)[keyof typeof NurixHistoricalPayrollEvidenceScalarFieldEnum]
+
+
+export const NurixHistoricalPayrollLineEvidenceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  executionId: 'executionId',
+  runEvidenceId: 'runEvidenceId',
+  sourceItemId: 'sourceItemId',
+  sourceChecksum: 'sourceChecksum',
+  employeeSourceId: 'employeeSourceId',
+  employeeId: 'employeeId',
+  grossSalary: 'grossSalary',
+  allowancesAdd: 'allowancesAdd',
+  deductionsAmount: 'deductionsAmount',
+  sourceAdvancesAmount: 'sourceAdvancesAmount',
+  appliedAdvancesAmount: 'appliedAdvancesAmount',
+  advanceCarryoverEvidence: 'advanceCarryoverEvidence',
+  netSalary: 'netSalary',
+  createdAt: 'createdAt'
+} as const
+
+export type NurixHistoricalPayrollLineEvidenceScalarFieldEnum = (typeof NurixHistoricalPayrollLineEvidenceScalarFieldEnum)[keyof typeof NurixHistoricalPayrollLineEvidenceScalarFieldEnum]
+
+
+export const NurixHistoricalPayrollAccountingEvidenceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  executionId: 'executionId',
+  runEvidenceId: 'runEvidenceId',
+  evidenceKind: 'evidenceKind',
+  sourceRecordId: 'sourceRecordId',
+  sourceChecksum: 'sourceChecksum',
+  sourceNumber: 'sourceNumber',
+  sourceDate: 'sourceDate',
+  vaultSourceId: 'vaultSourceId',
+  amount: 'amount',
+  createdAt: 'createdAt'
+} as const
+
+export type NurixHistoricalPayrollAccountingEvidenceScalarFieldEnum = (typeof NurixHistoricalPayrollAccountingEvidenceScalarFieldEnum)[keyof typeof NurixHistoricalPayrollAccountingEvidenceScalarFieldEnum]
+
+
 export const LegacyMigrationExceptionScalarFieldEnum = {
   id: 'id',
   runId: 'runId',
@@ -15546,6 +16858,8 @@ export const HrEmployeeScalarFieldEnum = {
   hireDate: 'hireDate',
   status: 'status',
   terminatedAt: 'terminatedAt',
+  statusEffectiveAt: 'statusEffectiveAt',
+  statusReason: 'statusReason',
   notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -16958,11 +18272,28 @@ export const OperationsUnitScalarFieldEnum = {
 export type OperationsUnitScalarFieldEnum = (typeof OperationsUnitScalarFieldEnum)[keyof typeof OperationsUnitScalarFieldEnum]
 
 
+export const OperationsCatalogCategoryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  code: 'code',
+  nameAr: 'nameAr',
+  nameEn: 'nameEn',
+  isActive: 'isActive',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OperationsCatalogCategoryScalarFieldEnum = (typeof OperationsCatalogCategoryScalarFieldEnum)[keyof typeof OperationsCatalogCategoryScalarFieldEnum]
+
+
 export const OperationsItemScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
   companyId: 'companyId',
   sectionId: 'sectionId',
+  categoryId: 'categoryId',
   baseUnitId: 'baseUnitId',
   code: 'code',
   nameAr: 'nameAr',
@@ -17568,6 +18899,202 @@ export type EnumLegacyMigrationRecordMapStateFieldRefInput<$PrismaModel> = Field
  * Reference to a field of type 'LegacyMigrationRecordMapState[]'
  */
 export type ListEnumLegacyMigrationRecordMapStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LegacyMigrationRecordMapState[]'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixExcelStagingPackageStatus'
+ */
+export type EnumNurixExcelStagingPackageStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixExcelStagingPackageStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixExcelStagingPackageStatus[]'
+ */
+export type ListEnumNurixExcelStagingPackageStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixExcelStagingPackageStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixExcelStagingBatchStatus'
+ */
+export type EnumNurixExcelStagingBatchStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixExcelStagingBatchStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixExcelStagingBatchStatus[]'
+ */
+export type ListEnumNurixExcelStagingBatchStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixExcelStagingBatchStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixExcelStagingRowStatus'
+ */
+export type EnumNurixExcelStagingRowStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixExcelStagingRowStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixExcelStagingRowStatus[]'
+ */
+export type ListEnumNurixExcelStagingRowStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixExcelStagingRowStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixExcelMasterDataExecutionStatus'
+ */
+export type EnumNurixExcelMasterDataExecutionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixExcelMasterDataExecutionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixExcelMasterDataExecutionStatus[]'
+ */
+export type ListEnumNurixExcelMasterDataExecutionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixExcelMasterDataExecutionStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixExcelMasterDataItemStatus'
+ */
+export type EnumNurixExcelMasterDataItemStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixExcelMasterDataItemStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixExcelMasterDataItemStatus[]'
+ */
+export type ListEnumNurixExcelMasterDataItemStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixExcelMasterDataItemStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixExcelFinancialExecutionStatus'
+ */
+export type EnumNurixExcelFinancialExecutionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixExcelFinancialExecutionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixExcelFinancialExecutionStatus[]'
+ */
+export type ListEnumNurixExcelFinancialExecutionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixExcelFinancialExecutionStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixExcelFinancialWaveStatus'
+ */
+export type EnumNurixExcelFinancialWaveStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixExcelFinancialWaveStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixExcelFinancialWaveStatus[]'
+ */
+export type ListEnumNurixExcelFinancialWaveStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixExcelFinancialWaveStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixExcelFinancialItemStatus'
+ */
+export type EnumNurixExcelFinancialItemStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixExcelFinancialItemStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixExcelFinancialItemStatus[]'
+ */
+export type ListEnumNurixExcelFinancialItemStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixExcelFinancialItemStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixExcelFinancialSourceMapState'
+ */
+export type EnumNurixExcelFinancialSourceMapStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixExcelFinancialSourceMapState'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixExcelFinancialSourceMapState[]'
+ */
+export type ListEnumNurixExcelFinancialSourceMapStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixExcelFinancialSourceMapState[]'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixExcelFinancialReceiptKind'
+ */
+export type EnumNurixExcelFinancialReceiptKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixExcelFinancialReceiptKind'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixExcelFinancialReceiptKind[]'
+ */
+export type ListEnumNurixExcelFinancialReceiptKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixExcelFinancialReceiptKind[]'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixHistoricalPayrollPaymentEvidenceKind'
+ */
+export type EnumNurixHistoricalPayrollPaymentEvidenceKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixHistoricalPayrollPaymentEvidenceKind'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixHistoricalPayrollPaymentEvidenceKind[]'
+ */
+export type ListEnumNurixHistoricalPayrollPaymentEvidenceKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixHistoricalPayrollPaymentEvidenceKind[]'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixHistoricalPayrollAccountingEvidenceAvailability'
+ */
+export type EnumNurixHistoricalPayrollAccountingEvidenceAvailabilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixHistoricalPayrollAccountingEvidenceAvailability'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixHistoricalPayrollAccountingEvidenceAvailability[]'
+ */
+export type ListEnumNurixHistoricalPayrollAccountingEvidenceAvailabilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixHistoricalPayrollAccountingEvidenceAvailability[]'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixHistoricalPayrollEvidenceStatus'
+ */
+export type EnumNurixHistoricalPayrollEvidenceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixHistoricalPayrollEvidenceStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixHistoricalPayrollEvidenceStatus[]'
+ */
+export type ListEnumNurixHistoricalPayrollEvidenceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixHistoricalPayrollEvidenceStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixHistoricalPayrollAccountingEvidenceKind'
+ */
+export type EnumNurixHistoricalPayrollAccountingEvidenceKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixHistoricalPayrollAccountingEvidenceKind'>
+    
+
+
+/**
+ * Reference to a field of type 'NurixHistoricalPayrollAccountingEvidenceKind[]'
+ */
+export type ListEnumNurixHistoricalPayrollAccountingEvidenceKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NurixHistoricalPayrollAccountingEvidenceKind[]'>
     
 
 
@@ -19461,6 +20988,19 @@ export type GlobalOmitConfig = {
   legacyMigrationRun?: Prisma.LegacyMigrationRunOmit
   legacyMigrationCompanyMap?: Prisma.LegacyMigrationCompanyMapOmit
   legacyMigrationRecordMap?: Prisma.LegacyMigrationRecordMapOmit
+  nurixExcelStagingPackage?: Prisma.NurixExcelStagingPackageOmit
+  nurixExcelStagingBatch?: Prisma.NurixExcelStagingBatchOmit
+  nurixExcelStagingRow?: Prisma.NurixExcelStagingRowOmit
+  nurixExcelMasterDataExecution?: Prisma.NurixExcelMasterDataExecutionOmit
+  nurixExcelMasterDataItem?: Prisma.NurixExcelMasterDataItemOmit
+  nurixExcelFinancialExecution?: Prisma.NurixExcelFinancialExecutionOmit
+  nurixExcelFinancialWave?: Prisma.NurixExcelFinancialWaveOmit
+  nurixExcelFinancialItem?: Prisma.NurixExcelFinancialItemOmit
+  nurixExcelFinancialSourceMap?: Prisma.NurixExcelFinancialSourceMapOmit
+  nurixExcelFinancialReceipt?: Prisma.NurixExcelFinancialReceiptOmit
+  nurixHistoricalPayrollEvidence?: Prisma.NurixHistoricalPayrollEvidenceOmit
+  nurixHistoricalPayrollLineEvidence?: Prisma.NurixHistoricalPayrollLineEvidenceOmit
+  nurixHistoricalPayrollAccountingEvidence?: Prisma.NurixHistoricalPayrollAccountingEvidenceOmit
   legacyMigrationException?: Prisma.LegacyMigrationExceptionOmit
   legacyMigrationReviewAction?: Prisma.LegacyMigrationReviewActionOmit
   ownerDailyBriefSnapshot?: Prisma.OwnerDailyBriefSnapshotOmit
@@ -19606,6 +21146,7 @@ export type GlobalOmitConfig = {
   aiSystemIdentity?: Prisma.AiSystemIdentityOmit
   operationsSection?: Prisma.OperationsSectionOmit
   operationsUnit?: Prisma.OperationsUnitOmit
+  operationsCatalogCategory?: Prisma.OperationsCatalogCategoryOmit
   operationsItem?: Prisma.OperationsItemOmit
   operationsItemUnit?: Prisma.OperationsItemUnitOmit
   operationsItemConversionVersion?: Prisma.OperationsItemConversionVersionOmit

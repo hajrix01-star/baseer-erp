@@ -72,6 +72,61 @@
   font-variant-numeric: tabular-nums;
 }
 
+.hr-salary-manager__preview {
+  display: grid;
+  gap: .6rem;
+  padding: .8rem;
+  border: 1px solid color-mix(in srgb, var(--brand) 28%, var(--line));
+  border-radius: .8rem;
+  background: color-mix(in srgb, var(--brand) 5%, var(--surface));
+}
+
+.hr-salary-manager__preview header h4,
+.hr-salary-manager__preview header p,
+.hr-salary-manager__preview-empty {
+  margin: 0;
+}
+
+.hr-salary-manager__preview header h4 {
+  color: var(--ink);
+  font-size: var(--font-label);
+}
+
+.hr-salary-manager__preview header p,
+.hr-salary-manager__preview-empty {
+  margin-top: .18rem;
+  color: var(--muted);
+  font-size: var(--font-caption);
+}
+
+.hr-salary-manager__preview > div {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .5rem;
+}
+
+.hr-salary-manager__preview section {
+  display: grid;
+  gap: .2rem;
+  min-inline-size: 0;
+  padding: .6rem;
+  border: 1px solid color-mix(in srgb, var(--line) 82%, transparent);
+  border-radius: .65rem;
+  background: var(--surface);
+}
+
+.hr-salary-manager__preview span {
+  color: var(--muted);
+  font-size: var(--font-caption);
+}
+
+.hr-salary-manager__preview strong {
+  color: var(--brand-deep);
+  font-size: var(--font-label);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
 .hr-salary-manager .baseer-form-advanced {
   margin-top: -.1rem;
 }
@@ -95,7 +150,8 @@
   }
 
   .hr-salary-manager__operations,
-  .hr-salary-manager__summary {
+  .hr-salary-manager__summary,
+  .hr-salary-manager__preview > div {
     grid-template-columns: 1fr;
   }
 

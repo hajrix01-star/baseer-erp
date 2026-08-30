@@ -63,7 +63,11 @@ export class OwnerDailyBriefService {
       ORDER BY "reportDate" DESC
       LIMIT ${query.limit}
     `);
-    return rows.map((row) => ownerDailyBriefReceiptSchema.parse(row.receiptJson));
+    // Legacy immutable snapshots predate the financial-basis and coverage
+    // contract. Do not surface them as if they carried the newer guarantees.
+    return rows
+      .map((row) => ownerDailyBriefReceiptSchema.parse(row.receiptJson))
+      .filter((receipt) => receipt.financialContract !== undefined);
   }
 
   async read(context: TrustedTenantAdministratorContext, query: OwnerDailyBriefQuery): Promise<OwnerDailyBriefReceipt> {
@@ -73,11 +77,11 @@ export class OwnerDailyBriefService {
       throw new BadRequestException("The owner daily brief cannot be generated for a future or unfinished business date.");
     }
     const snapshot = await this.loadSnapshot(context.tenantId, reportDate);
-    if (snapshot?.companies.every((company) => company.sales.trend !== undefined)) return snapshot;
+    if (snapshot?.financialContract && snapshot.companies.every((company) => company.sales.trend !== undefined)) return snapshot;
     const monthStart = `${reportDate.slice(0, 7)}-01`;
     const from = dateAtUtcStart(monthStart);
     const to = dateAtUtcStart(reportDate);
-    const reportDayCount = inclusiveDayCount(from, to);
+    const monthEnd = new Date(Date.UTC(to.getUTCFullYear(), to.getUTCMonth() + 1, 0));
     const trendFrom = addUtcDays(to, -11);
     const priorPeriodFrom = previousMonthStart(from);
     const priorPeriodTo = sameDayPreviousMonth(to);
@@ -95,10 +99,14 @@ export class OwnerDailyBriefService {
       });
       const companyIds = companies.map((company) => company.id);
       const empty = companyIds.length === 0;
-      const [salesSummaries, trendSummaries, priorPeriodSummaries, yesterdayPurchases, monthPurchases, activeCampaigns, linkedSpend, providerConnections, labelCount, enabledRuleCount] = await Promise.all([
+      const [salesSummaries, operationalDays, trendSummaries, priorPeriodSummaries, yesterdayPurchases, monthPurchases, activeCampaigns, linkedSpend, providerConnections, labelCount, enabledRuleCount] = await Promise.all([
         empty ? [] : tx.financeDailyFinancialSummary.findMany({
           where: { tenantId: context.tenantId, companyId: { in: companyIds }, businessDate: { gte: from, lte: to } },
           select: { companyId: true, businessDate: true, salesGrossAmount: true, salesClosingCount: true, dataStatus: true, operationalDayStatus: true },
+        }),
+        empty ? [] : tx.financeOperationalDay.findMany({
+          where: { tenantId: context.tenantId, companyId: { in: companyIds }, businessDate: { gte: priorPeriodFrom, lte: monthEnd } },
+          select: { companyId: true, businessDate: true, status: true },
         }),
         empty ? [] : tx.financeDailyFinancialSummary.findMany({
           where: { tenantId: context.tenantId, companyId: { in: companyIds }, businessDate: { gte: trendFrom, lte: to } },
@@ -158,6 +166,12 @@ export class OwnerDailyBriefService {
         current.push(summary);
         priorPeriodByCompany.set(summary.companyId, current);
       }
+      const operationalDaysByCompany = new Map<string, Map<string, FinanceOperationalDayStatus>>();
+      for (const operationalDay of operationalDays) {
+        const current = operationalDaysByCompany.get(operationalDay.companyId) ?? new Map<string, FinanceOperationalDayStatus>();
+        current.set(ymd(operationalDay.businessDate), operationalDay.status);
+        operationalDaysByCompany.set(operationalDay.companyId, current);
+      }
       const yesterdayPurchasesByCompany = new Map(yesterdayPurchases.map((row) => [row.companyId, row]));
       const monthPurchasesByCompany = new Map(monthPurchases.map((row) => [row.companyId, row]));
       const currencyCodes = [...new Set(companies.map((company) => company.financeProfile?.functionalCurrencyCode ?? null))];
@@ -168,51 +182,77 @@ export class OwnerDailyBriefService {
         const summaries = summariesByCompany.get(company.id) ?? [];
         const trend = trendByCompany.get(company.id) ?? [];
         const priorPeriod = priorPeriodByCompany.get(company.id) ?? [];
+        const operationalStatuses = operationalDaysByCompany.get(company.id) ?? new Map<string, FinanceOperationalDayStatus>();
         const yesterday = summaries.find((summary) => ymd(summary.businessDate) === reportDate);
-        const eligible = summaries.filter(isEligibleSalesSummary);
-        const eligibleGross = eligible.reduce((total, summary) => total.plus(summary.salesGrossAmount), new Prisma.Decimal(0));
-        const eligibleClosingCount = eligible.reduce((total, summary) => total + summary.salesClosingCount, 0);
-        const priorEligible = priorPeriod.filter(isEligibleSalesSummary);
-        const priorEligibleGross = priorEligible.reduce((total, summary) => total.plus(summary.salesGrossAmount), new Prisma.Decimal(0));
-        const incompleteDayCount = reportDayCount - eligible.length;
-        const yesterdayStatus = salesStatus(yesterday);
-        const monthToDateStatus: SalesStatus = summaries.length === 0 ? "NO_DATA" : incompleteDayCount > 0 ? "INCOMPLETE" : "READY";
+        const coverage = salesCoverage(from, to, summaries, operationalStatuses);
+        const priorCoverage = salesCoverage(priorPeriodFrom, priorPeriodTo, priorPeriod, operationalStatuses);
+        const forecastOperatingMonthDayCount = operatingDayCount(from, monthEnd, operationalStatuses);
+        const yesterdayStatus = salesStatus(yesterday, operationalStatuses.get(reportDate));
+        const monthToDateStatus = coverage.status;
         const yesterdayPurchase = yesterdayPurchasesByCompany.get(company.id);
         const monthPurchase = monthPurchasesByCompany.get(company.id);
-        const yesterdaySalesAmount = yesterday && isEligibleSalesSummary(yesterday) ? yesterday.salesGrossAmount : null;
-        const monthToDateSalesAmount = eligible.length > 0 ? eligibleGross : null;
+        const yesterdaySalesAmount = yesterdayStatus === "READY" ? yesterday?.salesGrossAmount ?? null : null;
+        const monthToDateSalesAmount = monthToDateStatus === "READY" ? coverage.grossAmount : null;
         const priorDay = trend.find((summary) => ymd(summary.businessDate) === ymd(addUtcDays(to, -1)));
-        const priorDaySalesAmount = priorDay && isEligibleSalesSummary(priorDay) ? priorDay.salesGrossAmount : null;
+        const priorDaySalesAmount = salesStatus(priorDay, operationalStatuses.get(ymd(addUtcDays(to, -1)))) === "READY" ? priorDay?.salesGrossAmount ?? null : null;
         const dailyChangeGrossAmount = yesterdaySalesAmount && priorDaySalesAmount ? yesterdaySalesAmount.minus(priorDaySalesAmount) : null;
-        const dailyAverageGrossAmount = eligible.length > 0 ? eligibleGross.div(eligible.length) : null;
-        const monthEndForecastGrossAmount = dailyAverageGrossAmount ? dailyAverageGrossAmount.mul(daysInMonth(to)) : null;
-        const priorPeriodTrendPercent = eligible.length === reportDayCount && priorEligible.length === reportDayCount
-          ? percentageChange(eligibleGross, priorEligibleGross)
+        const dailyAverageGrossAmount = monthToDateStatus === "READY" && coverage.recordedOperatingDayCount > 0
+          ? coverage.grossAmount.div(coverage.recordedOperatingDayCount)
+          : null;
+        const monthEndForecastGrossAmount = dailyAverageGrossAmount ? dailyAverageGrossAmount.mul(forecastOperatingMonthDayCount) : null;
+        const priorPeriodTrendPercent = monthToDateStatus === "READY" && priorCoverage.status === "READY"
+          ? percentageChange(coverage.grossAmount, priorCoverage.grossAmount)
           : null;
         const yesterdayPurchaseAmount = yesterdayPurchase?._sum.grossAmount ?? new Prisma.Decimal(0);
         const monthPurchaseAmount = monthPurchase?._sum.grossAmount ?? new Prisma.Decimal(0);
+        const companyCurrencyCode = company.financeProfile?.functionalCurrencyCode ?? null;
+        const trendPoints = businessDays(trendFrom, to).map((businessDate) => {
+          const summary = trend.find((candidate) => ymd(candidate.businessDate) === businessDate);
+          const grossAmount = salesStatus(summary, operationalStatuses.get(businessDate)) === "READY" ? summary?.salesGrossAmount ?? null : null;
+          return { businessDate, grossAmount };
+        });
+        const trendPeak = trendPoints.reduce((peak, point) => point.grossAmount && point.grossAmount.gt(peak) ? point.grossAmount : peak, new Prisma.Decimal(0));
         return {
           companyId: company.id,
           nameAr: company.nameAr,
           nameEn: company.nameEn,
-          currencyCode: company.financeProfile?.functionalCurrencyCode ?? null,
+          currencyCode: companyCurrencyCode,
           sales: {
             yesterdayGrossAmount: amountOrNull(yesterdaySalesAmount),
             monthToDateGrossAmount: amountOrNull(monthToDateSalesAmount),
-            yesterdayClosingCount: yesterday && isEligibleSalesSummary(yesterday) ? yesterday.salesClosingCount : 0,
-            monthToDateClosingCount: eligibleClosingCount,
+            yesterdayClosingCount: yesterdayStatus === "READY" ? yesterday?.salesClosingCount ?? null : null,
+            monthToDateClosingCount: monthToDateStatus === "READY" ? coverage.closingCount : null,
             yesterdayStatus,
             monthToDateStatus,
-            eligibleMonthToDateDayCount: eligible.length,
-            incompleteMonthToDateDayCount: incompleteDayCount,
+            eligibleMonthToDateDayCount: coverage.recordedOperatingDayCount,
+            incompleteMonthToDateDayCount: coverage.partialOperatingDayCount + coverage.missingOperatingDayCount,
+            requiredMonthToDateOperatingDayCount: coverage.requiredOperatingDayCount,
+            recordedMonthToDateDayCount: coverage.recordedOperatingDayCount,
+            scheduledClosedMonthToDateDayCount: coverage.scheduledClosedDayCount,
+            partialMonthToDateDayCount: coverage.partialOperatingDayCount,
+            missingMonthToDateDayCount: coverage.missingOperatingDayCount,
+            forecastOperatingMonthDayCount,
             dailyChangeGrossAmount: signedAmountOrNull(dailyChangeGrossAmount),
             dailyAverageGrossAmount: amountOrNull(dailyAverageGrossAmount),
             monthEndForecastGrossAmount: amountOrNull(monthEndForecastGrossAmount),
             priorPeriodTrendPercent: signedAmountOrNull(priorPeriodTrendPercent),
-            trend: businessDays(trendFrom, to).map((businessDate) => {
-              const summary = trend.find((candidate) => ymd(candidate.businessDate) === businessDate);
-              return { businessDate, grossAmount: summary && isEligibleSalesSummary(summary) ? amountOrNull(summary.salesGrossAmount) : null };
-            }),
+            trend: trendPoints.map((point) => ({
+              businessDate: point.businessDate,
+              grossAmount: amountOrNull(point.grossAmount),
+              grossAmountDisplay: displayGrossAmount(point.grossAmount, companyCurrencyCode),
+              barHeightPercent: point.grossAmount && trendPeak.gt(0)
+                ? Math.max(8, point.grossAmount.div(trendPeak).mul(100).toNumber())
+                : null,
+            })),
+            display: {
+              yesterdayGrossAmount: displayGrossAmount(yesterdaySalesAmount, companyCurrencyCode),
+              monthToDateGrossAmount: displayGrossAmount(monthToDateSalesAmount, companyCurrencyCode),
+              dailyChangeGrossAmount: displayGrossAmount(dailyChangeGrossAmount, companyCurrencyCode),
+              dailyAverageGrossAmount: displayGrossAmount(dailyAverageGrossAmount, companyCurrencyCode),
+              monthEndForecastGrossAmount: displayGrossAmount(monthEndForecastGrossAmount, companyCurrencyCode),
+              priorPeriodTrendPercent: displayPercent(priorPeriodTrendPercent),
+              purchaseToSalesPercent: displayPercent(percentDecimal(monthPurchaseAmount, monthToDateSalesAmount)),
+            },
           },
           purchases: {
             yesterdayGrossAmount: yesterdayPurchaseAmount.toFixed(4),
@@ -228,6 +268,9 @@ export class OwnerDailyBriefService {
       const incompleteCompanyCount = companyReceipts.filter((company) => company.sales.yesterdayStatus === "INCOMPLETE").length;
       const noDataCompanyCount = companyReceipts.filter((company) => company.sales.yesterdayStatus === "NO_DATA").length;
       const totals = canConsolidate ? consolidate(companyReceipts) : null;
+      const totalPurchaseToSalesPercent = totals && totals.monthPurchases !== null && totals.monthSales !== null
+        ? percent(new Prisma.Decimal(totals.monthPurchases), new Prisma.Decimal(totals.monthSales))
+        : null;
       const providerCounts = new Map(providerConnections.map((row) => [row.status, row._count.id]));
       const plannedCostAmount = canConsolidate && activeCampaigns.every((campaign) => !campaign.plannedCost || campaign.plannedCurrencyCode === currencyCode)
         ? activeCampaigns.reduce((total, campaign) => total.plus(campaign.plannedCost ?? 0), new Prisma.Decimal(0)).toFixed(4)
@@ -239,6 +282,10 @@ export class OwnerDailyBriefService {
         timezone: "Asia/Riyadh" as const,
         period: { fromBusinessDate: monthStart, toBusinessDate: reportDate },
         currency: { code: currencyCode, status: canConsolidate ? "SINGLE_CURRENCY" as const : "MIXED_OR_UNCONFIGURED" as const },
+        financialContract: {
+          amountBasis: "GROSS_VAT_INCLUSIVE" as const,
+          dataAuthority: "BACKEND_DAILY_FINANCIAL_SUMMARY" as const,
+        },
         totals: {
           activeCompanyCount: companies.length,
           readyCompanyCount,
@@ -248,13 +295,24 @@ export class OwnerDailyBriefService {
           yesterdayPurchasesGrossAmount: totals?.yesterdayPurchases ?? null,
           monthToDateSalesGrossAmount: totals?.monthSales ?? null,
           monthToDatePurchasesGrossAmount: totals?.monthPurchases ?? null,
-          purchaseToSalesPercent: totals ? percent(new Prisma.Decimal(totals.monthPurchases), new Prisma.Decimal(totals.monthSales)) : null,
+          purchaseToSalesPercent: totalPurchaseToSalesPercent,
+          display: {
+            yesterdaySalesGrossAmount: displayGrossAmountString(totals?.yesterdaySales ?? null, currencyCode),
+            yesterdayPurchasesGrossAmount: displayGrossAmountString(totals?.yesterdayPurchases ?? null, currencyCode),
+            monthToDateSalesGrossAmount: displayGrossAmountString(totals?.monthSales ?? null, currencyCode),
+            monthToDatePurchasesGrossAmount: displayGrossAmountString(totals?.monthPurchases ?? null, currencyCode),
+            purchaseToSalesPercent: displayPercentString(totalPurchaseToSalesPercent),
+          },
         },
         companies: companyReceipts,
         marketing: {
           activeCampaignCount: activeCampaigns.length,
           plannedCostAmount,
           linkedPostedSpendMonthToDate: canConsolidate ? linkedPostedSpend.toFixed(4) : null,
+          display: {
+            plannedCostAmount: displayGrossAmountString(plannedCostAmount, currencyCode),
+            linkedPostedSpendMonthToDate: canConsolidate ? displayGrossAmount(linkedPostedSpend, currencyCode) : null,
+          },
           googleAdsConnectionCounts: {
             notConnected: providerCounts.get(MarketingProviderConnectionStatus.NOT_CONNECTED) ?? 0,
             setupRequested: providerCounts.get(MarketingProviderConnectionStatus.SETUP_REQUESTED) ?? 0,
@@ -289,13 +347,11 @@ const SYSTEM_ACTOR_ID = "00000000-0000-0000-0000-000000000000";
 
 function dateAtUtcStart(value: string) { return new Date(`${value}T00:00:00.000Z`); }
 function ymd(value: Date) { return value.toISOString().slice(0, 10); }
-function inclusiveDayCount(from: Date, to: Date) { return Math.floor((to.getTime() - from.getTime()) / 86_400_000) + 1; }
 function addUtcDays(value: Date, days: number) {
   const result = new Date(value);
   result.setUTCDate(result.getUTCDate() + days);
   return result;
 }
-function daysInMonth(value: Date) { return new Date(Date.UTC(value.getUTCFullYear(), value.getUTCMonth() + 1, 0)).getUTCDate(); }
 function previousMonthStart(value: Date) { return new Date(Date.UTC(value.getUTCFullYear(), value.getUTCMonth() - 1, 1)); }
 function sameDayPreviousMonth(value: Date) {
   const previousMonthLastDay = new Date(Date.UTC(value.getUTCFullYear(), value.getUTCMonth(), 0)).getUTCDate();
@@ -312,16 +368,102 @@ function percentageChange(current: Prisma.Decimal, prior: Prisma.Decimal) {
   return prior.isZero() ? null : current.minus(prior).mul(100).div(prior).toDecimalPlaces(4);
 }
 function percent(numerator: Prisma.Decimal, denominator: Prisma.Decimal | null) {
-  return !denominator || denominator.isZero() ? null : numerator.mul(100).div(denominator).toDecimalPlaces(4).toFixed(4);
+  const value = percentDecimal(numerator, denominator);
+  return value?.toFixed(4) ?? null;
 }
-function isEligibleSalesSummary(summary: { dataStatus: FinanceDailySalesDataStatus; operationalDayStatus: FinanceOperationalDayStatus }) {
-  return summary.dataStatus !== FinanceDailySalesDataStatus.PENDING && summary.operationalDayStatus !== FinanceOperationalDayStatus.PARTIAL;
+function percentDecimal(numerator: Prisma.Decimal, denominator: Prisma.Decimal | null) {
+  return !denominator || denominator.isZero() ? null : numerator.mul(100).div(denominator).toDecimalPlaces(4);
 }
-function salesStatus(summary: { dataStatus: FinanceDailySalesDataStatus; operationalDayStatus: FinanceOperationalDayStatus } | undefined): SalesStatus {
-  return !summary ? "NO_DATA" : isEligibleSalesSummary(summary) ? "READY" : "INCOMPLETE";
+function displayGrossAmount(value: Prisma.Decimal | null, currencyCode: string | null) {
+  return value && currencyCode ? `${groupDecimal(value.toFixed(2))} ${currencyCode}` : null;
+}
+function displayGrossAmountString(value: string | null, currencyCode: string | null) {
+  return value && currencyCode ? displayGrossAmount(new Prisma.Decimal(value), currencyCode) : null;
+}
+function displayPercent(value: Prisma.Decimal | null) {
+  return value ? `${groupDecimal(value.toFixed(1))}%` : null;
+}
+function displayPercentString(value: string | null) {
+  return value ? displayPercent(new Prisma.Decimal(value)) : null;
+}
+function groupDecimal(value: string) {
+  const negative = value.startsWith("-");
+  const unsigned = negative ? value.slice(1) : value;
+  const [integer = "0", fraction] = unsigned.split(".");
+  return `${negative ? "-" : ""}${integer.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}${fraction === undefined ? "" : `.${fraction}`}`;
+}
+function isEligibleSalesSummary(
+  summary: { dataStatus: FinanceDailySalesDataStatus; operationalDayStatus: FinanceOperationalDayStatus } | undefined,
+  operationalStatus = summary?.operationalDayStatus,
+) {
+  return summary !== undefined
+    && summary.dataStatus === FinanceDailySalesDataStatus.RECORDED
+    && operationalStatus === FinanceOperationalDayStatus.OPEN;
+}
+function salesStatus(
+  summary: { dataStatus: FinanceDailySalesDataStatus; operationalDayStatus: FinanceOperationalDayStatus } | undefined,
+  operationalStatus = summary?.operationalDayStatus,
+): SalesStatus {
+  if (operationalStatus === FinanceOperationalDayStatus.CLOSED) return "NO_DATA";
+  return isEligibleSalesSummary(summary, operationalStatus) ? "READY" : "INCOMPLETE";
+}
+function salesCoverage(
+  from: Date,
+  to: Date,
+  summaries: ReadonlyArray<{ businessDate: Date; salesGrossAmount: Prisma.Decimal; salesClosingCount: number; dataStatus: FinanceDailySalesDataStatus; operationalDayStatus: FinanceOperationalDayStatus }>,
+  operationalStatuses: ReadonlyMap<string, FinanceOperationalDayStatus>,
+) {
+  const summariesByBusinessDate = new Map(summaries.map((summary) => [ymd(summary.businessDate), summary]));
+  let requiredOperatingDayCount = 0;
+  let recordedOperatingDayCount = 0;
+  let scheduledClosedDayCount = 0;
+  let partialOperatingDayCount = 0;
+  let missingOperatingDayCount = 0;
+  let grossAmount = new Prisma.Decimal(0);
+  let closingCount = 0;
+  for (const businessDate of businessDays(from, to)) {
+    const summary = summariesByBusinessDate.get(businessDate);
+    const operationalStatus = operationalStatuses.get(businessDate) ?? summary?.operationalDayStatus ?? FinanceOperationalDayStatus.OPEN;
+    if (operationalStatus === FinanceOperationalDayStatus.CLOSED) {
+      scheduledClosedDayCount += 1;
+      continue;
+    }
+    requiredOperatingDayCount += 1;
+    if (operationalStatus === FinanceOperationalDayStatus.PARTIAL) {
+      partialOperatingDayCount += 1;
+      continue;
+    }
+    if (summary && isEligibleSalesSummary(summary, operationalStatus)) {
+      recordedOperatingDayCount += 1;
+      grossAmount = grossAmount.plus(summary.salesGrossAmount);
+      closingCount += summary.salesClosingCount;
+      continue;
+    }
+    missingOperatingDayCount += 1;
+  }
+  const status: SalesStatus = requiredOperatingDayCount === 0
+    ? "NO_DATA"
+    : partialOperatingDayCount > 0 || missingOperatingDayCount > 0
+      ? "INCOMPLETE"
+      : "READY";
+  return {
+    status,
+    grossAmount,
+    closingCount,
+    requiredOperatingDayCount,
+    recordedOperatingDayCount,
+    scheduledClosedDayCount,
+    partialOperatingDayCount,
+    missingOperatingDayCount,
+  };
+}
+function operatingDayCount(from: Date, to: Date, operationalStatuses: ReadonlyMap<string, FinanceOperationalDayStatus>) {
+  return businessDays(from, to).filter((businessDate) => operationalStatuses.get(businessDate) !== FinanceOperationalDayStatus.CLOSED).length;
 }
 function consolidate(companies: Array<{ sales: { yesterdayGrossAmount: string | null; monthToDateGrossAmount: string | null }; purchases: { yesterdayGrossAmount: string; monthToDateGrossAmount: string } }>) {
-  const sum = (values: Array<string | null>) => values.reduce((total, value) => total.plus(value ?? 0), new Prisma.Decimal(0)).toFixed(4);
+  const sum = (values: Array<string | null>) => values.every((value) => value !== null)
+    ? values.reduce((total, value) => total.plus(value!), new Prisma.Decimal(0)).toFixed(4)
+    : null;
   return {
     yesterdaySales: sum(companies.map((company) => company.sales.yesterdayGrossAmount)),
     yesterdayPurchases: sum(companies.map((company) => company.purchases.yesterdayGrossAmount)),

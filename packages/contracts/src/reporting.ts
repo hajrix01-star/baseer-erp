@@ -36,6 +36,11 @@ const personalCashPerformanceRowSchema = z.object({
   kind: z.enum(['SECTION', 'LINE']), parentCode: z.string().min(1).max(160).nullable(),
   direction: z.enum(['INFLOW', 'OUTFLOW']), eventCount: z.number().int().positive(), amount: reportMoneyDisplaySchema,
   shareOfCollectedSalesPercent: reportPercentSchema.nullable(),
+  /** Presentation-ready category measures.  The client must not recompute
+   * ranks or financial denominators from visible rows. */
+  rankWithinParent: z.number().int().positive(),
+  shareOfDirectionPercent: reportPercentSchema.nullable(),
+  shareOfParentPercent: reportPercentSchema.nullable(),
 }).strict();
 
 const personalCashPerformanceVaultSchema = z.object({
@@ -60,6 +65,13 @@ const personalCashPerformanceMetadataSchema = z.object({
     sourceKind: z.literal('sealed_ledger_vault_lines'),
   }).strict(),
   roundingRule: z.string().min(1).max(500),
+  comparison: z.object({
+    policy: z.literal('PREVIOUS_EQUAL_PERIOD'),
+    state: z.enum(['READY', 'UNAVAILABLE']),
+    previousNetCashResult: reportMoneyDisplaySchema.nullable(),
+    netCashResultDifference: reportMoneyDisplaySchema.nullable(),
+    netCashResultPercentChange: reportPercentSchema.nullable(),
+  }).strict(),
 });
 
 export const personalCashPerformanceResultSchema = z.discriminatedUnion('state', [

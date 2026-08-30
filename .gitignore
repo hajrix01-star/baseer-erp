@@ -16,3 +16,7 @@ test-results/
 .codex-remote-attachments/
 apps/api/storage/
 backups/
+.tmp-noorix-db-inspection/
+outputs/
+archify-trial/
+hr-chart-lab/

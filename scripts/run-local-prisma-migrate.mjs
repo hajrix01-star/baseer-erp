@@ -4,8 +4,9 @@ import { resolve } from 'node:path';
 import dotenv from 'dotenv';
 
 const action = process.argv[2];
-if (!['status', 'deploy'].includes(action)) {
-  throw new Error('Usage: node scripts/run-local-prisma-migrate.mjs <status|deploy>');
+const attendanceIndexFailure = '20260829030000_attendance_session_employee_date_index';
+if (!['status', 'deploy', 'resolve-attendance-index-failure'].includes(action)) {
+  throw new Error('Usage: node scripts/run-local-prisma-migrate.mjs <status|deploy|resolve-attendance-index-failure>');
 }
 
 const loaded = dotenv.config({ path: resolve('apps/api/.env.baseer-test'), override: true, quiet: true });
@@ -45,10 +46,13 @@ function localMigratorUrl() {
   return url.toString();
 }
 
-const prismaDatabaseUrl = action === 'deploy' ? localMigratorUrl() : databaseUrl.toString();
+const prismaDatabaseUrl = action === 'status' ? databaseUrl.toString() : localMigratorUrl();
+const prismaArgs = action === 'resolve-attendance-index-failure'
+  ? ['migrate', 'resolve', '--rolled-back', attendanceIndexFailure, '--config', 'apps/api/prisma.config.ts']
+  : ['migrate', action, '--config', 'apps/api/prisma.config.ts'];
 
 const prismaCli = resolve('node_modules/prisma/build/index.js');
-const result = spawnSync(process.execPath, [prismaCli, 'migrate', action, '--config', 'apps/api/prisma.config.ts'], {
+const result = spawnSync(process.execPath, [prismaCli, ...prismaArgs], {
   cwd: process.cwd(),
   env: { ...process.env, DATABASE_URL: prismaDatabaseUrl },
   stdio: 'inherit',

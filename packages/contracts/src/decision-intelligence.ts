@@ -70,11 +70,18 @@ export const decisionSalesMetricReadSchema = decisionMetricReadEnvelopeSchema.ex
   metricCode: z.literal("finance.sales.net.daily"),
   payload: z.object({
     currencyCode: z.literal("SAR"),
-    netAmount: z.string().regex(/^-?\d+(\.\d{1,4})?$/),
-    grossAmount: z.string().regex(/^-?\d+(\.\d{1,4})?$/),
-    vatAmount: z.string().regex(/^-?\d+(\.\d{1,4})?$/),
-    customerCount: z.number().int().nonnegative(),
+    /** Null means the financial read is not fit for presentation.  It must
+     * never be represented as a zero-value trading day. */
+    netAmount: z.string().regex(/^-?\d+(\.\d{1,4})?$/).nullable(),
+    grossAmount: z.string().regex(/^-?\d+(\.\d{1,4})?$/).nullable(),
+    vatAmount: z.string().regex(/^-?\d+(\.\d{1,4})?$/).nullable(),
+    customerCount: z.number().int().nonnegative().nullable(),
   }).strict(),
+}).superRefine((value, context) => {
+  if (value.dataQuality === "READY") return;
+  if (value.payload.netAmount !== null || value.payload.grossAmount !== null || value.payload.vatAmount !== null || value.payload.customerCount !== null) {
+    context.addIssue({ code: z.ZodIssueCode.custom, path: ["payload"], message: "A non-ready sales read must not expose a financial zero or partial total as a presentable value." });
+  }
 });
 export type DecisionSalesMetricRead = z.infer<typeof decisionSalesMetricReadSchema>;
 
@@ -92,14 +99,23 @@ export const decisionSalesComparisonReadSchema = z.object({
   comparison: decisionSalesMetricReadSchema,
   payload: z.object({
     currencyCode: z.literal("SAR"),
-    currentNetAmount: z.string().regex(/^-?\d+(\.\d{1,4})?$/),
-    comparisonNetAmount: z.string().regex(/^-?\d+(\.\d{1,4})?$/),
-    differenceNetAmount: z.string().regex(/^-?\d+(\.\d{1,4})?$/),
+    currentNetAmount: z.string().regex(/^-?\d+(\.\d{1,4})?$/).nullable(),
+    comparisonNetAmount: z.string().regex(/^-?\d+(\.\d{1,4})?$/).nullable(),
+    differenceNetAmount: z.string().regex(/^-?\d+(\.\d{1,4})?$/).nullable(),
+    currentGrossAmount: z.string().regex(/^-?\d+(\.\d{1,4})?$/).nullable(),
+    comparisonGrossAmount: z.string().regex(/^-?\d+(\.\d{1,4})?$/).nullable(),
+    differenceGrossAmount: z.string().regex(/^-?\d+(\.\d{1,4})?$/).nullable(),
     percentDifference: z.string().regex(/^-?\d+(\.\d{1,2})?$/).nullable(),
-    currentCustomerCount: z.number().int().nonnegative(),
-    comparisonCustomerCount: z.number().int().nonnegative(),
+    currentCustomerCount: z.number().int().nonnegative().nullable(),
+    comparisonCustomerCount: z.number().int().nonnegative().nullable(),
   }).strict(),
-}).strict();
+}).strict().superRefine((value, context) => {
+  if (value.dataQuality === "READY") return;
+  const { currentNetAmount, comparisonNetAmount, differenceNetAmount, currentGrossAmount, comparisonGrossAmount, differenceGrossAmount, currentCustomerCount, comparisonCustomerCount } = value.payload;
+  if ([currentNetAmount, comparisonNetAmount, differenceNetAmount, currentGrossAmount, comparisonGrossAmount, differenceGrossAmount, currentCustomerCount, comparisonCustomerCount].some((item) => item !== null)) {
+    context.addIssue({ code: z.ZodIssueCode.custom, path: ["payload"], message: "A non-ready comparison must not expose a financial difference or customer total." });
+  }
+});
 export type DecisionSalesComparisonRead = z.infer<typeof decisionSalesComparisonReadSchema>;
 
 export const decisionAlertFeedbackRequestSchema = z.object({
