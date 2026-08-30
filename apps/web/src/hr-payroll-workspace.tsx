@@ -6,7 +6,7 @@ import { BaseerBatchPanel, BaseerWorkspaceTabs } from "./baseer-batch-layout";
 import { BaseerCard } from "./baseer-card";
 import { BaseerDialog } from "./baseer-dialog";
 import { BaseerFilterBar } from "./baseer-filter-bar";
-import { BaseerPeriodFilter, defaultBaseerPeriodRange, type BaseerPeriodRange } from "./baseer-period-filter";
+import { BaseerPeriodFilter, baseerPeriodRange, type BaseerPeriodRange } from "./baseer-period-filter";
 import { BaseerOutputActions } from "./baseer-output-actions";
 import { BaseerSummaryMetric, BaseerSummaryMetricGrid } from "./baseer-summary-metric";
 import type { BaseerDataGridColumn } from "./baseer-data-grid";
@@ -92,7 +92,10 @@ export function HrPayrollWorkspace({ language, stage }: { language: Language; st
   const [runs, setRuns] = useState<HrPayrollRun[]>([]);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [search, setSearch] = useState("");
-  const [period, setPeriod] = useState<BaseerPeriodRange>(defaultBaseerPeriodRange);
+  // Payroll is a monthly register, but opening it on a full year makes
+  // completed historical runs discoverable immediately after migration.
+  // Users can still narrow it to a month from the period control.
+  const [period, setPeriod] = useState<BaseerPeriodRange>(() => baseerPeriodRange("YEAR"));
   const [serverSearch, setServerSearch] = useState("");
   const [summary, setSummary] = useState({ count: 0, cancelledCount: 0, grossAmount: "0", advanceSettlementAmount: "0", administrativeDeductionAmount: "0", netPayableAmount: "0" });
   const [historicalRuns, setHistoricalRuns] = useState<HrNurixHistoricalPayroll[]>([]);
@@ -172,7 +175,7 @@ export function HrPayrollWorkspace({ language, stage }: { language: Language; st
     {tab === "operational" ? <BaseerBatchPanel id="hr-payroll-workspace-panel-operational" labelledBy="hr-payroll-workspace-operational">
       <BaseerSummaryMetricGrid ariaLabel={ar ? "ملخص مسيرات الرواتب" : "Payroll summary"}><BaseerSummaryMetric label={ar ? "إجمالي الاستحقاق" : "Gross entitlement"} value={money(summary.grossAmount)} /><BaseerSummaryMetric label={ar ? "تسوية السلف" : "Advance settlements"} value={money(summary.advanceSettlementAmount)} /><BaseerSummaryMetric label={ar ? "الخصومات الإدارية" : "Administrative deductions"} value={money(summary.administrativeDeductionAmount)} /><BaseerSummaryMetric label={ar ? "صافي المستحق" : "Net payable"} value={money(summary.netPayableAmount)} /><BaseerSummaryMetric tone="muted" label={ar ? "مسيرات ملغاة" : "Cancelled runs"} value={String(summary.cancelledCount)} /></BaseerSummaryMetricGrid>
       <BaseerFilterBar language={language} search={search} searchLabel={ar ? "البحث في المسيرات" : "Search payroll"} searchPlaceholder={ar ? "ابحث برقم المسير أو الحالة" : "Search run number or status"} onSearchChange={setSearch} controls={<BaseerPeriodFilter language={language} value={period} onChange={setPeriod} allowNonContiguousMonths={false} />} />
-      {loading ? <BaseerCard>{ar ? "جارٍ تحميل مسيرات الرواتب…" : "Loading payroll runs…"}</BaseerCard> : runs.length ? <BaseerDataGrid<HrPayrollRun> ariaLabel={ar ? "سجل مسيرات الرواتب" : "Payroll run register"} caption={ar ? "سجل مسيرات الرواتب" : "Payroll run register"} rows={runs} columns={columns} rowKey={(row) => row.id} /> : <BaseerCard>{ar ? "لا توجد مسيرات رواتب لهذه الشركة." : "No payroll runs exist for this company."}</BaseerCard>}
+      {loading ? <BaseerCard>{ar ? "جارٍ تحميل مسيرات الرواتب…" : "Loading payroll runs…"}</BaseerCard> : runs.length ? <BaseerDataGrid<HrPayrollRun> ariaLabel={ar ? "سجل مسيرات الرواتب" : "Payroll run register"} caption={ar ? "سجل مسيرات الرواتب" : "Payroll run register"} rows={runs} columns={columns} rowKey={(row) => row.id} /> : <BaseerCard>{ar ? "لا توجد مسيرات رواتب ضمن الفترة المختارة." : "No payroll runs match the selected period."}</BaseerCard>}
       {nextCursor ? <BaseerButton type="button" variant="secondary" onClick={() => void load(nextCursor, true)}>{ar ? "تحميل المزيد" : "Load more"}</BaseerButton> : null}
       <BaseerOutputActions session={session} reportCode="hr.payroll-runs" language={language} />
     </BaseerBatchPanel> : <BaseerBatchPanel id="hr-payroll-workspace-panel-nurix-history" labelledBy="hr-payroll-workspace-nurix-history">
