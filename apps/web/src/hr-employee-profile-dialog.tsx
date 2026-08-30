@@ -179,7 +179,7 @@ export function HrEmployeeProfileDialog({ detail, language, onClose, onEdit, onM
   ].filter((allowance) => Number(allowance.amount) > 0) : [];
   const tabs = useMemo<readonly { id: ProfileTab; label: string }[]>(() => [
     { id: "overview", label: ar ? "نظرة 360" : "360 overview" },
-    { id: "employment", label: ar ? "المسار والتعويض" : "Employment & compensation" },
+    { id: "employment", label: ar ? "المسار والتعويض والزيادات" : "Employment, compensation & raises" },
     ...((canReadPayroll || canReadAdvances || canManageDeductions || canReadFinalSettlements) ? [{ id: "payroll" as const, label: ar ? "الرواتب والتسويات" : "Payroll & settlements" }] : []),
     ...(canReadLeaves ? [{ id: "time" as const, label: ar ? "الإجازات" : "Leaves" }] : []),
     { id: "compliance", label: ar ? "الخدمات والامتثال" : "Services & compliance" },
