@@ -31,6 +31,8 @@ const money = (value: string) => formatNumber(value);
 export function HrPayrollDetailDialog({ runId, runNumber, language, onClose, onChanged, onError }: { runId: string; runNumber?: string; language: Language; onClose: () => void; onChanged: () => Promise<void>; onError: (message: string) => void }) {
   const ar = language === "ar";
   const [detail, setDetail] = useState<HrPayrollDetail | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [vaults, setVaults] = useState<Vault[]>([]);
   const [vaultsLoaded, setVaultsLoaded] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -53,9 +55,18 @@ export function HrPayrollDetailDialog({ runId, runNumber, language, onClose, onC
   const paymentReverseForm = useBaseerForm<PayrollPaymentReversalForm>({ schema: useMemo(() => z.object({ businessDate: dateSchema, reason: z.string().trim().min(1, ar ? "أدخل سبب الإلغاء." : "Enter the cancellation reason.") }), [ar, dateSchema]), defaultValues: { businessDate: today(), reason: "" } });
   const payValues = payForm.watch();
   const load = async () => {
-    const session = activeSession(); if (!session) return;
+    const session = activeSession();
+    setLoading(true); setLoadError(null);
+    if (!session) {
+      setLoading(false);
+      setLoadError(ar ? "انتهت جلسة العمل. سجّل الدخول ثم أعد المحاولة." : "Your session has ended. Sign in, then try again.");
+      return;
+    }
     try { setDetail(await getHrPayrollRun(session, runId, { linePageSize: 250, paymentPageSize: 100 })); }
-    catch (error) { onError(presentBaseerApiError(error, language, ar ? "فتح المسير" : "Opening payroll run")); }
+    catch (error) {
+      const message = presentBaseerApiError(error, language, ar ? "فتح المسير" : "Opening payroll run");
+      setLoadError(message); onError(message);
+    } finally { setLoading(false); }
   };
   const loadMoreLines = async () => {
     const session = activeSession(); if (!session || !detail?.nextLineCursor || busy) return;
@@ -96,7 +107,9 @@ export function HrPayrollDetailDialog({ runId, runNumber, language, onClose, onC
   const pay = async (values: PayrollPaymentForm) => { const session = activeSession(); if (!session || !detail || busy) return; setBusy(true); try { await payHrPayrollRun(session, { payrollRunId: detail.payrollRun.id, businessDate: values.businessDate, allocations: values.allocations.map((allocation) => ({ ...allocation, paymentMethod: allocation.paymentMethod || undefined })), idempotencyKey: requestId() }); setPayOpen(false); await load(); await onChanged(); } catch (error) { onError(presentBaseerApiError(error, language, ar ? "سداد المسير" : "Paying payroll")); } finally { setBusy(false); } };
   const reverse = async (values: PayrollReversalForm) => { const session = activeSession(); if (!session || !detail || busy) return; setBusy(true); try { await reverseHrPayrollRun(session, { payrollRunId: detail.payrollRun.id, businessDate: today(), reason: values.reason, idempotencyKey: requestId() }); setReverseOpen(false); reverseForm.reset({ reason: "" }); await load(); await onChanged(); } catch (error) { onError(presentBaseerApiError(error, language, ar ? "تعذر إلغاء المسير." : "The payroll run could not be cancelled.")); } finally { setBusy(false); } };
   const reversePayment = async (values: PayrollPaymentReversalForm) => { const session = activeSession(); if (!session || !paymentToReverse || busy) return; setBusy(true); try { await reverseHrPayrollPayment(session, { payrollPaymentId: paymentToReverse.id, businessDate: values.businessDate, reason: values.reason.trim(), idempotencyKey: requestId() }); setPaymentToReverse(null); paymentReverseForm.reset({ businessDate: today(), reason: "" }); await load(); await onChanged(); } catch (error) { onError(presentBaseerApiError(error, language, ar ? "تعذر إلغاء دفعة المسير." : "The payroll payment could not be cancelled.")); } finally { setBusy(false); } };
-  if (!detail) return <BaseerDialog open title={runNumber ?? (ar ? "فتح المسير" : "Opening payroll")} size="wide" className="hr-payroll-create-dialog" language={language} busy={busy} onClose={onClose}><p className="hr-payroll-create__loading-shell" role="status">{ar ? "جارٍ فتح المسير…" : "Opening payroll…"}</p></BaseerDialog>;
+  if (!detail) return <BaseerDialog open title={runNumber ?? (ar ? "فتح المسير" : "Opening payroll")} size="wide" className="hr-payroll-create-dialog" language={language} busy={busy || loading} onClose={onClose}>
+    {loading ? <p className="hr-payroll-create__loading-shell" role="status">{ar ? "جارٍ فتح المسير…" : "Opening payroll…"}</p> : <div className="hr-payroll-create__loading-shell" role="alert"><p>{loadError ?? (ar ? "تعذر فتح المسير." : "The payroll run could not be opened.")}</p><BaseerButton type="button" variant="secondary" onClick={() => void load()}>{ar ? "إعادة المحاولة" : "Retry"}</BaseerButton></div>}
+  </BaseerDialog>;
   const selectedApplications = (items: Array<{ id: string; amount: string; referenceNumber: string }>) => items.length ? <div className="hr-payroll-create__application-list hr-payroll-detail__applications">{items.map((item) => <label key={item.id} className="is-selected"><BaseerCheckbox checked disabled aria-label={item.referenceNumber} /><span>{item.referenceNumber}</span><b dir="ltr">{money(item.amount)}</b></label>)}</div> : "—";
   const paymentColumns = [{ id: "number", header: ar ? "رقم الدفعة" : "Payment no.", cell: (payment: HrPayment) => payment.paymentNumber }, { id: "date", header: ar ? "التاريخ" : "Date", cell: (payment: HrPayment) => payment.businessDate }, { id: "amount", header: ar ? "المبلغ" : "Amount", cell: (payment: HrPayment) => money(payment.amount) }, { id: "status", header: ar ? "الحالة" : "Status", cell: (payment: HrPayment) => payment.status === "POSTED" ? (ar ? "مثبت" : "Posted") : (ar ? "ملغى" : "Cancelled") }, { id: "action", header: ar ? "الإجراء" : "Action", cell: (payment: HrPayment) => hasActivePermission("hr.payroll.reverse") && payment.status === "POSTED" ? <BaseerButton type="button" variant="danger" onClick={() => { paymentReverseForm.reset({ businessDate: today(), reason: "" }); setPaymentToReverse(payment); }}>{ar ? "إلغاء الدفعة" : "Cancel payment"}</BaseerButton> : "—" }];
   const isDraft = status === "DRAFT";
