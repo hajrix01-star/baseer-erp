@@ -34,21 +34,21 @@
 .module-page--hr .baseer-filter-bar.hr-advances-filter-bar > .baseer-inline-actions { grid-column: 1 / -1; justify-content: center; }
 @media (max-width: 46rem) { .module-page--hr .baseer-filter-bar.hr-advances-filter-bar { grid-template-columns: minmax(0, 1fr); } .module-page--hr .baseer-filter-bar.hr-advances-filter-bar > .baseer-inline-actions { grid-column: auto; } }
 .hr-advance-groups { overflow: hidden; border: 1px solid var(--line); border-radius: .85rem; background: var(--surface); }
-.hr-advance-groups__header, .hr-advance-group > summary { display: grid; grid-template-columns: minmax(15rem, 1.55fr) minmax(5rem, .55fr) repeat(3, minmax(8rem, .95fr)) minmax(6.75rem, auto); align-items: center; column-gap: .8rem; padding: .72rem 1rem; }
+.hr-advance-groups__header, .hr-advance-group > button { display: grid; grid-template-columns: minmax(15rem, 1.55fr) minmax(5rem, .55fr) repeat(3, minmax(8rem, .95fr)) minmax(6.75rem, auto); align-items: center; column-gap: .8rem; padding: .72rem 1rem; }
 .hr-advance-groups__header { border-bottom: 1px solid var(--line); color: var(--muted); background: color-mix(in srgb, var(--brand) 7%, var(--surface)); font-size: var(--font-caption); font-weight: 800; }
 .hr-advance-group { background: var(--surface); }
 .hr-advance-group + .hr-advance-group { border-top: 1px solid var(--line); }
-.hr-advance-group > summary { cursor: pointer; list-style: none; }
-.hr-advance-group > summary::-webkit-details-marker { display: none; }
-.hr-advance-group > summary:hover { background: color-mix(in srgb, var(--brand) 6%, var(--surface)); }
-.hr-advance-group > summary:focus-visible { outline: 2px solid var(--brand); outline-offset: -2px; }
-.hr-advance-group > summary span { display: grid; gap: .15rem; min-inline-size: 0; }
-.hr-advance-group > summary small { color: var(--muted); font-size: var(--font-caption); font-weight: 700; }
+.hr-advance-group > button { width: 100%; border: 0; color: var(--ink); background: var(--surface); font: inherit; text-align: inherit; cursor: pointer; }
+.hr-advance-group > button:hover { background: color-mix(in srgb, var(--brand) 6%, var(--surface)); }
+.hr-advance-group > button:focus-visible { outline: 2px solid var(--brand); outline-offset: -2px; }
+.hr-advance-group > button span { display: grid; gap: .15rem; min-inline-size: 0; }
+.hr-advance-group > button small { color: var(--muted); font-size: var(--font-caption); font-weight: 700; }
+.hr-advance-groups__header span:not(:first-child), .hr-advance-group > button > span:not(:first-child) { justify-items: center; text-align: center; }
 .hr-advance-group__employee strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .hr-advance-group__expand { color: var(--brand-deep); font-size: var(--font-label); white-space: nowrap; }
 .hr-advance-group__details { border-top: 1px solid var(--line); padding: .6rem; background: color-mix(in srgb, var(--canvas) 55%, var(--surface)); }
-@media (max-width: 64rem) { .hr-advance-groups__header, .hr-advance-group > summary { grid-template-columns: minmax(11rem, 1.35fr) minmax(4rem, .45fr) repeat(3, minmax(6rem, .85fr)) minmax(5.5rem, auto); column-gap: .55rem; padding: .7rem; } }
-@media (max-width: 46rem) { .hr-advance-groups__header { display: none; } .hr-advance-group > summary { grid-template-columns: minmax(0, 1fr) repeat(2, minmax(0, 1fr)); row-gap: .55rem; } .hr-advance-group__employee { grid-column: 1 / -1; } .hr-advance-group__expand { grid-column: 1 / -1; } }
+@media (max-width: 64rem) { .hr-advance-groups__header, .hr-advance-group > button { grid-template-columns: minmax(11rem, 1.35fr) minmax(4rem, .45fr) repeat(3, minmax(6rem, .85fr)) minmax(5.5rem, auto); column-gap: .55rem; padding: .7rem; } }
+@media (max-width: 46rem) { .hr-advance-groups__header { display: none; } .hr-advance-group > button { grid-template-columns: minmax(0, 1fr) repeat(2, minmax(0, 1fr)); row-gap: .55rem; } .hr-advance-group__employee { grid-column: 1 / -1; } .hr-advance-group__expand { grid-column: 1 / -1; } }
 .hr-overview { gap: 1rem; }
 .hr-overview__metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .75rem; }
 .hr-overview__metrics > button { display: grid; min-height: 7rem; padding: 1rem; border: 1px solid var(--line); border-radius: 1rem; color: var(--ink); background: var(--surface); box-shadow: 0 8px 24px rgb(11 36 26 / 5%); text-align: start; cursor: pointer; transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease; }
