@@ -143,7 +143,7 @@ export class HrAdvanceService {
       ]);
       if (query.settlementCursor && !settlementCursor) throw new BadRequestException('The advance-settlement cursor is invalid.');
       if (query.deferralCursor && !deferralCursor) throw new BadRequestException('The advance-deferral cursor is invalid.');
-      const [settlementRows, deferralRows] = await Promise.all([
+      const [settlementRows, deferralRows, sourceAnnotations] = await Promise.all([
         tx.hrEmployeeAdvanceSettlement.findMany({
           where: settlementCursor ? { AND: [childScope, { OR: [{ businessDate: { lt: settlementCursor.businessDate } }, { businessDate: settlementCursor.businessDate, id: { lt: settlementCursor.id } }] }] } : childScope,
           orderBy: [{ businessDate: 'desc' }, { id: 'desc' }], take: query.settlementPageSize + 1,
@@ -152,6 +152,17 @@ export class HrAdvanceService {
         tx.hrEmployeeAdvanceDeferral.findMany({
           where: deferralCursor ? { AND: [childScope, { OR: [{ businessDate: { lt: deferralCursor.businessDate } }, { businessDate: deferralCursor.businessDate, id: { lt: deferralCursor.id } }] }] } : childScope,
           orderBy: [{ businessDate: 'desc' }, { id: 'desc' }], take: query.deferralPageSize + 1,
+        }),
+        tx.noorixSourceAnnotation.findMany({
+          where: {
+            tenantId: context.tenantId,
+            targetCompanyId: context.companyId,
+            targetEntity: 'HrEmployeeAdvance',
+            targetId: advance.id,
+          },
+          orderBy: [{ sourceEntity: 'asc' }, { sourceId: 'asc' }, { field: 'asc' }],
+          take: 25,
+          select: { sourceEntity: true, sourceId: true, field: true, exactText: true },
         }),
       ]);
       const hasMoreSettlements = settlementRows.length > query.settlementPageSize;
@@ -165,6 +176,10 @@ export class HrAdvanceService {
           nextSettlementDate: advance.nextSettlementDate ? day(advance.nextSettlementDate) : null, notes: advance.notes, journalEntryId: advance.issueJournalEntryId,
           allocations: advance.allocations.map((allocation) => ({ vaultId: allocation.vaultId, vaultNameAr: allocation.vault.nameAr, vaultNameEn: allocation.vault.nameEn, paymentMethod: allocation.paymentMethod, amount: allocation.amount.toFixed(4) })),
         },
+        // The operational note is already rendered separately.  Keep this
+        // disclosure list for additional source text only, avoiding a
+        // duplicate of the same original Noorix note in the dialog.
+        sourceAnnotations: sourceAnnotations.filter((annotation) => annotation.exactText !== advance.notes),
         settlements: settlements.map((settlement) => ({ id: settlement.id, source: settlement.source, businessDate: day(settlement.businessDate), amount: settlement.amount.toFixed(4), journalEntryId: settlement.journalEntryId, sourceReference: settlement.journalEntry?.sourceReference ?? null })),
         hasMoreSettlements,
         nextSettlementCursor: hasMoreSettlements ? settlements.at(-1)?.id ?? null : null,
