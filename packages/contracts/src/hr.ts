@@ -560,7 +560,7 @@ export const hrEmployeeAdvanceDetailSchema = z.object({
     field: z.string().min(1).max(120),
     exactText: z.string().min(1),
   }).strict()).max(25),
-  settlements: z.array(z.object({ id: z.string().uuid(), source: z.enum(["PAYROLL", "MANUAL_RECEIPT", "FINAL_SETTLEMENT"]), businessDate: businessDateSchema, amount: hrAmountSchema, journalEntryId: z.string().uuid().nullable(), sourceReference: z.string().max(160).nullable() }).strict()).max(100),
+  settlements: z.array(z.object({ id: z.string().uuid(), source: z.enum(["PAYROLL", "MANUAL_RECEIPT", "FINAL_SETTLEMENT"]), businessDate: businessDateSchema, amount: hrAmountSchema, journalEntryId: z.string().uuid().nullable(), sourceReference: z.string().max(160).nullable(), sourceNotes: z.array(z.string().min(1)).max(25) }).strict()).max(100),
   hasMoreSettlements: z.boolean(), nextSettlementCursor: z.string().uuid().nullable(),
   deferrals: z.array(z.object({ id: z.string().uuid(), businessDate: businessDateSchema, deferredUntil: businessDateSchema, reason: z.string().max(1_000) }).strict()).max(100),
   hasMoreDeferrals: z.boolean(), nextDeferralCursor: z.string().uuid().nullable(),

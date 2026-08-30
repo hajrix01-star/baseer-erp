@@ -169,6 +169,26 @@ export class HrAdvanceService {
       const settlements = hasMoreSettlements ? settlementRows.slice(0, query.settlementPageSize) : settlementRows;
       const hasMoreDeferrals = deferralRows.length > query.deferralPageSize;
       const deferrals = hasMoreDeferrals ? deferralRows.slice(0, query.deferralPageSize) : deferralRows;
+      const settlementAnnotations = settlements.length
+        ? await tx.noorixSourceAnnotation.findMany({
+          where: {
+            tenantId: context.tenantId,
+            targetCompanyId: context.companyId,
+            targetEntity: 'HrEmployeeAdvanceSettlement',
+            targetId: { in: settlements.map((settlement) => settlement.id) },
+          },
+          orderBy: [{ targetId: 'asc' }, { sourceEntity: 'asc' }, { sourceId: 'asc' }, { field: 'asc' }],
+          take: 2_500,
+          select: { targetId: true, exactText: true },
+        })
+        : [];
+      const settlementNotesById = new Map<string, string[]>();
+      for (const annotation of settlementAnnotations) {
+        if (!annotation.targetId) continue;
+        const notes = settlementNotesById.get(annotation.targetId) ?? [];
+        notes.push(annotation.exactText);
+        settlementNotesById.set(annotation.targetId, notes);
+      }
       return {
         advance: {
           id: advance.id, employeeId: advance.employeeId, employeeNameAr: advance.employee.nameAr, employeeNameEn: advance.employee.nameEn,
@@ -180,7 +200,7 @@ export class HrAdvanceService {
         // disclosure list for additional source text only, avoiding a
         // duplicate of the same original Noorix note in the dialog.
         sourceAnnotations: sourceAnnotations.filter((annotation) => annotation.exactText !== advance.notes),
-        settlements: settlements.map((settlement) => ({ id: settlement.id, source: settlement.source, businessDate: day(settlement.businessDate), amount: settlement.amount.toFixed(4), journalEntryId: settlement.journalEntryId, sourceReference: settlement.journalEntry?.sourceReference ?? null })),
+        settlements: settlements.map((settlement) => ({ id: settlement.id, source: settlement.source, businessDate: day(settlement.businessDate), amount: settlement.amount.toFixed(4), journalEntryId: settlement.journalEntryId, sourceReference: settlement.journalEntry?.sourceReference ?? null, sourceNotes: settlementNotesById.get(settlement.id) ?? [] })),
         hasMoreSettlements,
         nextSettlementCursor: hasMoreSettlements ? settlements.at(-1)?.id ?? null : null,
         deferrals: deferrals.map((deferral) => ({ id: deferral.id, businessDate: day(deferral.businessDate), deferredUntil: day(deferral.deferredUntil), reason: deferral.reason })),
