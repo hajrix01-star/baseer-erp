@@ -11,14 +11,14 @@ export class OperationsExecutionController {
 
   @Get("execution-workspace")
   async workspace(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
-    return operationsExecutionWorkspaceReceiptSchema.parse(await this.operations.workspace(await this.authorize(authorization, companyId, "operations.catalog.manage")));
+    return operationsExecutionWorkspaceReceiptSchema.parse(await this.operations.workspace(await this.authorize(authorization, companyId, "operations.catalog.read")));
   }
 
   /** Bounded first-paint receipt. It is separate from the established
    * management workspace response so existing detailed clients stay intact. */
   @Get("execution-workspace/summary")
   async workspaceSummary(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
-    return operationsExecutionWorkspaceSummaryReceiptSchema.parse(await this.operations.workspaceSummary(await this.authorize(authorization, companyId, "operations.catalog.manage")));
+    return operationsExecutionWorkspaceSummaryReceiptSchema.parse(await this.operations.workspaceSummary(await this.authorize(authorization, companyId, "operations.catalog.read")));
   }
 
   @Get("reports/materials-received")

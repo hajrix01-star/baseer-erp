@@ -1,4 +1,5 @@
 import {
+  ConflictException,
   ForbiddenException,
   Injectable,
   UnauthorizedException,
@@ -34,6 +35,22 @@ const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const MAX_PERMISSION_CODE_LENGTH = 120;
 const COMPANY_MANAGER_CAPABILITIES: readonly string[] = SYSTEM_ROLE_TEMPLATES.find((role) => role.code === "BASEER_COMPANY_MANAGER")?.permissions ?? [];
+/**
+ * Migration review is read-only, but several legitimate read actions do not
+ * use the older `.read` suffix. Keep this policy explicit: never infer a
+ * financial operation from the spelling of its permission code.
+ */
+const MIGRATION_REVIEW_READ_CAPABILITIES = new Set([
+  "backup.audit.view",
+  "finance.daily_sales.history.read_all",
+  "hr.employee_documents.download",
+  "platform.output.export",
+  "platform.output.preview",
+]);
+
+function isMigrationReviewReadCapability(capability: string): boolean {
+  return capability.endsWith(".read") || MIGRATION_REVIEW_READ_CAPABILITIES.has(capability);
+}
 
 @Injectable()
 export class CompanyContextService {
@@ -129,8 +146,8 @@ export class CompanyContextService {
           throw this.unauthorized();
         if (!company || company.status !== CompanyStatus.ACTIVE)
           throw this.forbidden();
-        if (company.migrationReviewLocked && requestedCapabilities.some((capability) => !capability.endsWith(".read")))
-          throw new ForbiddenException("This company is active for migration review only; operational changes are locked.");
+        if (company.migrationReviewLocked && requestedCapabilities.some((capability) => !isMigrationReviewReadCapability(capability)))
+          throw new ConflictException("This company is active for migration review only; operational changes are locked.");
         if (owner)
           return {
             principal: { tenantId: claims.tenantId, userId: claims.userId },

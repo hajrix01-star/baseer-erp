@@ -127,6 +127,12 @@ const tokenStorageKey = "baseer.erp.access-token";
 const refreshTokenStorageKey = "baseer.erp.refresh-token";
 const sessionExpiryStorageKey = "baseer.erp.session-expires-at";
 const companyStorageKey = "baseer.erp.company-id";
+/**
+ * The session token rotates in-place after a 401 recovery. React shells must
+ * observe that change so their company capabilities cannot remain bound to an
+ * expired token or a previously selected company.
+ */
+export const activeSessionChangedEvent = "baseer.erp.active-session-changed";
 let sessionExpiryReloadScheduled = false;
 let refreshInFlight: Promise<ActiveSession | null> | null = null;
 let refreshRateLimit: { accessToken: string; until: number; error: BaseerApiError } | null = null;
@@ -212,6 +218,7 @@ export function persistActiveSession(receipt: AuthSessionReceipt, companyId: str
   sessionStorage.setItem(refreshTokenStorageKey, receipt.refreshToken);
   sessionStorage.setItem(sessionExpiryStorageKey, receipt.sessionExpiresAt);
   sessionStorage.setItem(companyStorageKey, companyId);
+  window.dispatchEvent(new Event(activeSessionChangedEvent));
 }
 
 export function clearActiveSession(): void {
@@ -219,6 +226,7 @@ export function clearActiveSession(): void {
   sessionStorage.removeItem(refreshTokenStorageKey);
   sessionStorage.removeItem(sessionExpiryStorageKey);
   sessionStorage.removeItem(companyStorageKey);
+  window.dispatchEvent(new Event(activeSessionChangedEvent));
 }
 
 /** Best-effort server revocation. Callers clear local state regardless of network outcome. */
@@ -238,6 +246,7 @@ function clearExpiredSession(): void {
 
 export function selectActiveCompany(companyId: string): void {
   sessionStorage.setItem(companyStorageKey, companyId);
+  window.dispatchEvent(new Event(activeSessionChangedEvent));
 }
 
 export async function listAvailableCompanies(

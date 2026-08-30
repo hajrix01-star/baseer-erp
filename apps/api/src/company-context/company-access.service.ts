@@ -83,28 +83,6 @@ export class CompanyAccessService {
               })),
             );
         }
-        // The paired SQL migrations cover normal deployments. This idempotent
-        // guard repairs existing system-manager roles as soon as a non-owner
-        // signs in; owners receive their permissions directly and must not
-        // mutate role grants merely to list their available companies.
-        const companyManager = await transaction.role.findFirst({
-          where: {
-            tenantId: claims.tenantId,
-            code: "BASEER_COMPANY_MANAGER",
-            isSystem: true,
-          },
-          select: { id: true },
-        });
-        if (companyManager && COMPANY_MANAGER_CAPABILITIES.length) {
-          await transaction.rolePermission.createMany({
-            data: COMPANY_MANAGER_CAPABILITIES.map((permissionCode) => ({
-              tenantId: claims.tenantId,
-              roleId: companyManager.id,
-              permissionCode,
-            })),
-            skipDuplicates: true,
-          });
-        }
         return transaction.companyMembership
           .findMany({
             where: {
@@ -117,7 +95,7 @@ export class CompanyAccessService {
             select: {
               company: { select: { id: true, nameAr: true, nameEn: true } },
               role: {
-                select: { grants: { select: { permissionCode: true } } },
+                select: { code: true, isSystem: true, grants: { select: { permissionCode: true } } },
               },
             },
           })
@@ -125,9 +103,10 @@ export class CompanyAccessService {
             memberships.map((membership) => ({
               ...membership.company,
               isOwner: false,
-              permissionCodes: membership.role.grants.map(
-                (grant) => grant.permissionCode,
-              ),
+              permissionCodes: [...new Set([
+                ...membership.role.grants.map((grant) => grant.permissionCode),
+                ...(membership.role.isSystem && membership.role.code === "BASEER_COMPANY_MANAGER" ? COMPANY_MANAGER_CAPABILITIES : []),
+              ])],
             })),
           );
       },

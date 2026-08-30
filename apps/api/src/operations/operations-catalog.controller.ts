@@ -11,7 +11,7 @@ export class OperationsCatalogController {
   @Get()
   async read(@Query() query: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
     const parsed = operationsCatalogQuerySchema.safeParse(query); if (!parsed.success) throw new BadRequestException("Invalid operations catalog query.");
-    return operationsCatalogReceiptSchema.parse(await this.catalog.catalog(await this.authorize(authorization, companyId, "operations.catalog.manage"), parsed.data));
+    return operationsCatalogReceiptSchema.parse(await this.catalog.catalog(await this.authorize(authorization, companyId, "operations.catalog.read"), parsed.data));
   }
 
   @Post("units") @HttpCode(201)

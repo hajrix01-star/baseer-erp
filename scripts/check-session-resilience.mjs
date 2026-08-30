@@ -4,8 +4,9 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const read = (path) => readFile(new URL(`../${path}`, import.meta.url), "utf8");
-const [client, login, importer, researcher, database, migration, errorPresenter, main] = await Promise.all([
+const [client, app, login, importer, researcher, database, migration, errorPresenter, main] = await Promise.all([
   read("apps/web/src/daily-sales-client.ts"),
+  read("apps/web/src/App.tsx"),
   read("apps/web/src/baseer-login.tsx"),
   read("apps/api/src/decision-intelligence/decision-context-import.service.ts"),
   read("apps/api/src/decision-intelligence/decision-context-research.service.ts"),
@@ -19,6 +20,10 @@ assert.match(client, /refreshToken:\s*string/, "The browser session must include
 assert.match(client, /sessionExpiresAt:\s*string/, "The browser session must retain the refresh expiry.");
 assert.match(client, /persistActiveSession/, "Only the central session writer may persist a sign-in session.");
 assert.match(client, /refreshInFlight/, "Concurrent 401 responses must share one refresh request.");
+assert.match(client, /activeSessionChangedEvent/, "Token rotation and company selection must notify the application shell.");
+assert.match(client, /window\.dispatchEvent\(new Event\(activeSessionChangedEvent\)\)/, "Every central session mutation must notify the application shell.");
+assert.match(app, /window\.addEventListener\(activeSessionChangedEvent, listener\)/, "The application shell must react to central session changes.");
+assert.match(app, /sessionRevision/, "Company capabilities must reload after session rotation or company selection.");
 assert.match(client, /\/auth\/refresh/, "Expired access tokens must use the server refresh endpoint.");
 assert.match(client, /for \(let refreshAttempt = 0; refreshAttempt < 2; refreshAttempt \+= 1\)/, "The original request must retry once after a successful refresh, with a bounded recovery loop.");
 assert.match(client, /return await requestWithTransientReadRetry<T>\(current, path, options\)/, "Each recovery attempt must use the current authenticated session.");

@@ -4,7 +4,7 @@ const source = readFileSync("apps/api/src/administration/administration-permissi
 const catalog = new Set([...source.matchAll(/code:\s*"([^"]+)"/g)].map((match) => match[1]));
 const required = [
   "finance.setup.write", "finance.configuration.read", "finance.periods.write", "finance.vaults.write",
-  "finance.foundation.write", "finance.suppliers.read", "finance.supplier_dues.read", "finance.supplier_dues.write",
+  "finance.foundation.write", "finance.suppliers.read", "finance.suppliers.write", "finance.categories.write", "finance.supplier_dues.read", "finance.supplier_dues.write",
   "finance.loans.read", "finance.loans.write", "finance.daily_sales.read", "finance.daily_sales.history.read_all", "finance.daily_sales.create",
   "finance.daily_sales.correct", "finance.daily_sales.reverse", "finance.operational_calendar.manage",
   "backup.read", "backup.create", "backup.download", "backup.schedule.manage", "backup.restore.request",

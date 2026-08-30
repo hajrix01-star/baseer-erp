@@ -12,7 +12,7 @@ const QuickAdvanceDialog = lazy(async () => ({ default: (await import('./quick-a
 const AttendanceEmployeePortal = lazy(async () => ({ default: (await import('./attendance-employee-portal')).AttendanceEmployeePortal }));
 const WorkspacePageContent = lazy(async () => ({ default: (await import('./workspace-page-content')).WorkspacePageContent }));
 import { getModule, modules, type ModuleId } from './modules';
-import { activeSession, clearActiveSession, listAvailableCompanies, selectActiveCompany, signOutActiveSession } from './daily-sales-client';
+import { activeSession, activeSessionChangedEvent, clearActiveSession, listAvailableCompanies, selectActiveCompany, signOutActiveSession } from './daily-sales-client';
 import { canOpenRoute, setActivePermissionCodes, visibleModules } from './module-access';
 import { appText } from './app-copy';
 import { getPage, getPageByLegacySection, pageRouteHash, pagesForModule, type PageId } from './page-registry';
@@ -311,6 +311,7 @@ function ModuleWorkspace(props: Parameters<typeof ModuleWorkspaceContents>[0]) {
 
 export function App() {
   const [authenticationRevision, setAuthenticationRevision] = useState(0);
+  const [sessionRevision, setSessionRevision] = useState(0);
   const [language, setLanguage] = useState<Language>(readLanguagePreference);
   const [theme, setTheme] = useState<Theme>(() => {
     const stored = localStorage.getItem(themeStorageKey);
@@ -344,6 +345,11 @@ export function App() {
     const listener = () => setRoute(parseRoute());
     window.addEventListener("hashchange", listener);
     return () => window.removeEventListener("hashchange", listener);
+  }, []);
+  useEffect(() => {
+    const listener = () => setSessionRevision((current) => current + 1);
+    window.addEventListener(activeSessionChangedEvent, listener);
+    return () => window.removeEventListener(activeSessionChangedEvent, listener);
   }, []);
   useEffect(() => {
     if (!route || !window.location.hash || window.location.hash.slice(1) === routeHash(route)) return;
@@ -390,7 +396,7 @@ export function App() {
       if (permissionRetry < 1) window.setTimeout(() => setPermissionRetry((attempt) => attempt + 1), 900);
     });
     return () => { cancelled = true; };
-  }, [authenticationRevision, permissionRetry, route?.moduleId, route?.section]);
+  }, [authenticationRevision, permissionRetry, sessionRevision, route?.moduleId, route?.section]);
 
   const open = (next: ResolvedRoute) => {
     persistRecent(next);
