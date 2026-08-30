@@ -88,6 +88,8 @@ export function HrWorkspaceCore({ language, section, stage }: { language: Langua
   const [nextEmployeeCursor, setNextEmployeeCursor] = useState<string | null>(null);
   const [nextAdvanceCursor, setNextAdvanceCursor] = useState<string | null>(null);
   const [nextDeductionCursor, setNextDeductionCursor] = useState<string | null>(null);
+  const [advanceLoadError, setAdvanceLoadError] = useState<string | null>(null);
+  const [deductionLoadError, setDeductionLoadError] = useState<string | null>(null);
   const [configuration, setConfiguration] = useState<FinanceConfiguration | null>(null);
   const [search, setSearch] = useState("");
   const [employeeSearch, setEmployeeSearch] = useState("");
@@ -169,8 +171,25 @@ export function HrWorkspaceCore({ language, section, stage }: { language: Langua
       if (requestNumber !== loadRequestRef.current) return false;
       setEmployees(employeeReceipt.employees); setOverview(employeeReceipt.summary); setNextEmployeeCursor(employeeReceipt.nextCursor);
       if (isAdvance) {
-        const [advanceReceipt, deductionReceipt] = await Promise.all([listHrAdvances(current, { employeeId: employeeFilter || undefined, search: employeeSearch || undefined }), listHrAdministrativeDeductions(current, { employeeId: employeeFilter || undefined, search: employeeSearch || undefined })]);
-        setAdvances(advanceReceipt.advances); setDeductions(deductionReceipt.deductions); setNextAdvanceCursor(advanceReceipt.nextCursor); setNextDeductionCursor(deductionReceipt.nextCursor);
+        // These registers are independent. A permission or service failure in
+        // deductions must never make the migrated advances look absent (and vice versa).
+        const [advanceResult, deductionResult] = await Promise.allSettled([
+          listHrAdvances(current, { employeeId: employeeFilter || undefined, search: employeeSearch || undefined }),
+          listHrAdministrativeDeductions(current, { employeeId: employeeFilter || undefined, search: employeeSearch || undefined }),
+        ]);
+        if (requestNumber !== loadRequestRef.current) return false;
+        if (advanceResult.status === "fulfilled") {
+          setAdvances(advanceResult.value.advances); setNextAdvanceCursor(advanceResult.value.nextCursor); setAdvanceLoadError(null);
+        } else {
+          const message = presentBaseerLoadError(advanceResult.reason, language, { ar: "السلف", en: "advances" });
+          setAdvances([]); setNextAdvanceCursor(null); setAdvanceLoadError(message);
+        }
+        if (deductionResult.status === "fulfilled") {
+          setDeductions(deductionResult.value.deductions); setNextDeductionCursor(deductionResult.value.nextCursor); setDeductionLoadError(null);
+        } else {
+          const message = presentBaseerLoadError(deductionResult.reason, language, { ar: "الخصومات الإدارية", en: "administrative deductions" });
+          setDeductions([]); setNextDeductionCursor(null); setDeductionLoadError(message);
+        }
       }
       return true;
     }
@@ -299,8 +318,8 @@ export function HrWorkspaceCore({ language, section, stage }: { language: Langua
         <BaseerFilterBar controlsPresentation={section === 1 ? "menu" : "inline"} language={language} search={search} searchLabel={sectionTitle} searchPlaceholder={sectionTitle} onSearchChange={setSearch} controls={section === 1 ? <BaseerFilterSelect label={language === "ar" ? "نوع الموظف" : "Employee status"} value={employeeStatusFilter} onChange={(event) => setEmployeeStatusFilter(event.target.value as HrEmployeeStatus | "ALL")}>{employeeStatusOptions.map((option) => <option key={option.id} value={option.id}>{option.label}</option>)}</BaseerFilterSelect> : isAdvance ? <BaseerCombobox label={text.selectEmployee} value={employeeFilter} placeholder={text.selectEmployee} options={activeEmployees.map((item) => ({ id: item.id, label: `${item.employeeNumber} · ${language === "ar" ? item.nameAr : (item.nameEn ?? item.nameAr)}` }))} remoteSearch={searchEmployeeOptions} scopeKey={session?.companyId ?? "signed-out"} onChange={setEmployeeFilter} /> : undefined} appliedFilters={[...(search ? [{ id: "q", label: search, onRemove: () => setSearch("") }] : []), ...(section === 1 && employeeStatusFilter !== "ACTIVE" ? [{ id: "employee-status", label: employeeStatusOptions.find((item) => item.id === employeeStatusFilter)?.label ?? employeeStatusFilter, onRemove: () => setEmployeeStatusFilter("ACTIVE") }] : []), ...(employeeFilter ? [{ id: "employee", label: activeEmployees.find((item) => item.id === employeeFilter)?.nameAr ?? employeeFilter, onRemove: () => setEmployeeFilter("") }] : [])]} onClear={() => { setSearch(""); setEmployeeFilter(""); setEmployeeStatusFilter("ACTIVE"); }} />
         {loading ? <BaseerCard><p>{text.loading}</p></BaseerCard> : isAdvance ? (
           <>
-            {visibleAdvances.length ? <BaseerDataGrid ariaLabel={text.advances} caption={text.advances} columns={advanceColumns} rows={visibleAdvances} rowKey={(row) => row.id} /> : <BaseerEmptyState title={language === "ar" ? "لا توجد سلف مسجلة" : "No advances recorded"} />}
-            {visibleDeductions.length ? <BaseerDataGrid ariaLabel={text.administrativeDeductions} caption={text.administrativeDeductions} columns={deductionColumns} rows={visibleDeductions} rowKey={(row) => row.id} /> : <BaseerEmptyState title={language === "ar" ? "لا توجد خصومات إدارية" : "No administrative deductions"} />}
+            {advanceLoadError ? <BaseerNotice tone="danger" title={language === "ar" ? "تعذر تحميل السلف" : "Unable to load advances"}>{advanceLoadError} <BaseerButton type="button" variant="quiet" onClick={() => void load()}>{language === "ar" ? "إعادة المحاولة" : "Retry"}</BaseerButton></BaseerNotice> : visibleAdvances.length ? <BaseerDataGrid ariaLabel={text.advances} caption={text.advances} columns={advanceColumns} rows={visibleAdvances} rowKey={(row) => row.id} /> : <BaseerEmptyState title={language === "ar" ? "لا توجد سلف مسجلة" : "No advances recorded"} />}
+            {deductionLoadError ? <BaseerNotice tone="danger" title={language === "ar" ? "تعذر تحميل الخصومات" : "Unable to load deductions"}>{deductionLoadError} <BaseerButton type="button" variant="quiet" onClick={() => void load()}>{language === "ar" ? "إعادة المحاولة" : "Retry"}</BaseerButton></BaseerNotice> : visibleDeductions.length ? <BaseerDataGrid ariaLabel={text.administrativeDeductions} caption={text.administrativeDeductions} columns={deductionColumns} rows={visibleDeductions} rowKey={(row) => row.id} /> : <BaseerEmptyState title={language === "ar" ? "لا توجد خصومات إدارية" : "No administrative deductions"} />}
           </>
         ) : visibleEmployees.length ? <><div className="hr-employee-view-switch" role="group" aria-label={language === "ar" ? "طريقة عرض الموظفين" : "Employee display mode"}><BaseerButton type="button" className="hr-employee-view-switch__button" variant={employeeView === "cards" ? "primary" : "secondary"} onClick={() => setEmployeeView("cards")} aria-label={language === "ar" ? "عرض البطاقات" : "Card view"} title={language === "ar" ? "عرض البطاقات" : "Card view"} aria-pressed={employeeView === "cards"}><EmployeeViewIcon view="cards" /></BaseerButton><BaseerButton type="button" className="hr-employee-view-switch__button" variant={employeeView === "table" ? "primary" : "secondary"} onClick={() => setEmployeeView("table")} aria-label={language === "ar" ? "عرض الجدول" : "Table view"} title={language === "ar" ? "عرض الجدول" : "Table view"} aria-pressed={employeeView === "table"}><EmployeeViewIcon view="table" /></BaseerButton></div>{employeeView === "cards" ? <HrEmployeeDirectoryGrid employees={visibleEmployees} language={language} onOpen={(employee) => void showDetail(employee)} /> : <BaseerDataGrid ariaLabel={sectionTitle} caption={sectionTitle} columns={employeeColumns} rows={visibleEmployees} rowKey={(row) => row.id} />}</> : <BaseerEmptyState title={text.noEmployees} action={createEmployeeAction} />}
       </>
