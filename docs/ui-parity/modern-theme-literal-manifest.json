@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "classifications": [
+    {
+      "id": "semantic-token",
+      "role": "design-token-definition",
+      "owner": "واجهة بصير / نظام التصميم",
+      "rationale": "قيمة لون معرفة في CSS custom property؛ الاستخدامات المرئية يجب أن تقرأ المتغير الدلالي بدل literal."
+    },
+    {
+      "id": "product-swatch",
+      "role": "product-owned-colour-data",
+      "owner": "مالك نطاق المنتج المعني",
+      "rationale": "لون بيانات أو اختيار منتج ثابت له معنى مستقل عن presentation؛ لا يستخدم كبديل لسطح أو حالة أو سلسلة رسم عامة."
+    }
+  ],
+  "productSwatches": [
+    {
+      "literal": "#526D87",
+      "contextPattern": "colorHex",
+      "role": "evidence-label-default",
+      "owner": "البريد والأدلة",
+      "rationale": "القيمة الافتراضية للّون الذي يختاره المستخدم لتسمية دليل جديدة؛ اللون جزء من بيانات التسمية وليس لون واجهة."
+    },
+    {
+      "literal": "#fff4c9",
+      "contextPattern": "owner-paper|paper-tone-swatch",
+      "role": "owner-notebook-paper-warm",
+      "owner": "لوحة المالك",
+      "rationale": "درجة ورق يختارها المستخدم لدفتر المالك؛ هي سمة منتج للمستند وليست سطح واجهة عام."
+    },
+    {
+      "literal": "#fff",
+      "contextPattern": "--owner-paper: #fff|paper-tone-swatch.is-pure-white",
+      "role": "owner-notebook-paper-white",
+      "owner": "لوحة المالك",
+      "rationale": "درجة الورق البيضاء المحددة لدفتر المالك؛ لا تستخدم كبديل لسطح واجهة عام."
+    },
+    {
+      "literal": "#fffbe9",
+      "contextPattern": "owner-paper|paper-tone-swatch",
+      "role": "owner-notebook-paper-soft-yellow",
+      "owner": "لوحة المالك",
+      "rationale": "درجة ورق خفيفة يختارها المستخدم لدفتر المالك؛ هي سمة منتج للمستند وليست سطح واجهة عام."
+    },
+    {
+      "literal": "#102e20",
+      "contextPattern": "toDataURL\\(qr.token.*color",
+      "role": "attendance-qr-finder-dark",
+      "owner": "الحضور والانصراف",
+      "rationale": "لون وحدات QR الداكنة ضمن صورة قابلة لقراءة الكاميرا؛ لا يمثل سطحًا أو حالة في الواجهة."
+    },
+    {
+      "literal": "#ffffff",
+      "contextPattern": "toDataURL\\(qr.token.*color",
+      "role": "attendance-qr-finder-light",
+      "owner": "الحضور والانصراف",
+      "rationale": "خلفية QR البيضاء ضمن صورة قابلة لقراءة الكاميرا؛ لا تمثل سطحًا أو حالة في الواجهة."
+    },
+    {
+      "literal": "#087f54", "contextPattern": "const colors", "role": "legacy-theme-green-choice", "owner": "إعدادات المظهر", "rationale": "اختيار مستخدم قديم معزول عن modern presentation."
+    },
+    {
+      "literal": "#1268a7", "contextPattern": "const colors", "role": "legacy-theme-blue-choice", "owner": "إعدادات المظهر", "rationale": "اختيار مستخدم قديم معزول عن modern presentation."
+    },
+    {
+      "literal": "#7650a7", "contextPattern": "const colors", "role": "legacy-theme-plum-choice", "owner": "إعدادات المظهر", "rationale": "اختيار مستخدم قديم معزول عن modern presentation."
+    },
+    {
+      "literal": "#9a7139", "contextPattern": "const colors", "role": "legacy-theme-classic-choice", "owner": "إعدادات المظهر", "rationale": "اختيار مستخدم قديم معزول عن modern presentation."
+    },
+    {
+      "literal": "#ffffff", "contextPattern": "const backgrounds", "role": "legacy-background-white-choice", "owner": "إعدادات المظهر", "rationale": "اختيار خلفية مستخدم قديم معزول عن modern presentation."
+    },
+    {
+      "literal": "#f6f8fa", "contextPattern": "const backgrounds", "role": "legacy-background-light-choice", "owner": "إعدادات المظهر", "rationale": "اختيار خلفية مستخدم قديم معزول عن modern presentation."
+    },
+    {
+      "literal": "#f4f7f4", "contextPattern": "const backgrounds", "role": "legacy-background-soft-choice", "owner": "إعدادات المظهر", "rationale": "اختيار خلفية مستخدم قديم معزول عن modern presentation."
+    },
+    {
+      "literal": "#f7f1e6", "contextPattern": "const backgrounds", "role": "legacy-background-beige-choice", "owner": "إعدادات المظهر", "rationale": "اختيار خلفية مستخدم قديم معزول عن modern presentation."
+    },
+    {
+      "literal": "#8c8c8c", "contextPattern": "const backgrounds", "role": "legacy-background-gray-choice", "owner": "إعدادات المظهر", "rationale": "اختيار خلفية مستخدم قديم معزول عن modern presentation."
+    },
+    {
+      "literal": "#0d1117", "contextPattern": "const backgrounds", "role": "legacy-background-dark-choice", "owner": "إعدادات المظهر", "rationale": "اختيار خلفية مستخدم قديم معزول عن modern presentation."
+    },
+    {
+      "literal": "#22272e", "contextPattern": "const backgrounds", "role": "legacy-background-dimmed-choice", "owner": "إعدادات المظهر", "rationale": "اختيار خلفية مستخدم قديم معزول عن modern presentation."
+    },
+    {
+      "literal": "#161b22", "contextPattern": "const backgrounds", "role": "legacy-background-night-choice", "owner": "إعدادات المظهر", "rationale": "اختيار خلفية مستخدم قديم معزول عن modern presentation."
+    },
+    {
+      "literal": "#ffffff", "contextPattern": "const containerSurfaces", "role": "legacy-container-white-choice", "owner": "إعدادات المظهر", "rationale": "اختيار حاوية مستخدم قديم معزول عن modern presentation."
+    },
+    {
+      "literal": "#f5f8f6", "contextPattern": "const containerSurfaces", "role": "legacy-container-soft-choice", "owner": "إعدادات المظهر", "rationale": "اختيار حاوية مستخدم قديم معزول عن modern presentation."
+    },
+    {
+      "literal": "#e8f4ed", "contextPattern": "const containerSurfaces", "role": "legacy-container-tinted-choice", "owner": "إعدادات المظهر", "rationale": "اختيار حاوية مستخدم قديم معزول عن modern presentation."
+    },
+    {
+      "literal": "#f6f0e6", "contextPattern": "const containerSurfaces", "role": "legacy-container-beige-choice", "owner": "إعدادات المظهر", "rationale": "اختيار حاوية مستخدم قديم معزول عن modern presentation."
+    },
+    {
+      "literal": "#f1f3f5", "contextPattern": "const containerSurfaces", "role": "legacy-container-gray-choice", "owner": "إعدادات المظهر", "rationale": "اختيار حاوية مستخدم قديم معزول عن modern presentation."
+    }
+  ]
+}

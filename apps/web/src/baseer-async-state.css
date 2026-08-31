@@ -26,8 +26,8 @@
 }
 
 .baseer-async-state--empty { background: color-mix(in srgb, var(--surface) 94%, var(--brand)); }
-.baseer-async-state--error { border-color: color-mix(in srgb, #a12c25 45%, var(--line)); background: color-mix(in srgb, #a12c25 5%, var(--surface)); }
-.baseer-async-state--stale { grid-template-columns: minmax(0, 1fr); border-color: color-mix(in srgb, #ad7300 42%, var(--line)); background: color-mix(in srgb, #ad7300 6%, var(--surface)); }
+.baseer-async-state--error { border-color: color-mix(in srgb, var(--status-danger) 45%, var(--line)); background: color-mix(in srgb, var(--status-danger) 5%, var(--surface)); }
+.baseer-async-state--stale { grid-template-columns: minmax(0, 1fr); border-color: color-mix(in srgb, var(--status-warning) 42%, var(--line)); background: color-mix(in srgb, var(--status-warning) 6%, var(--surface)); }
 .baseer-async-state__stale-content { min-inline-size: 0; }
 
 @keyframes baseer-async-state-spin { to { transform: rotate(1turn); } }

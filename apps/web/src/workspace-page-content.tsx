@@ -11,8 +11,7 @@ const DecisionIntelligenceWorkspace = lazy(async () => ({ default: (await import
 const MarketingWorkspace = lazy(async () => ({ default: (await import("./marketing-workspace")).MarketingWorkspace }));
 const OperationsOverviewWorkspace = lazy(async () => ({ default: (await import("./operations-overview-workspace")).OperationsOverviewWorkspace }));
 const DailySalesWorkspace = lazy(async () => ({ default: (await import("./daily-sales-workspace")).DailySalesWorkspace }));
-const OperationsExecutionWorkspace = lazy(async () => ({ default: (await import("./operations-execution-workspace")).OperationsExecutionWorkspace }));
-const OperationsReportsWorkspace = lazy(async () => ({ default: (await import("./operations-reports-workspace")).OperationsReportsWorkspace }));
+const OperationsRequestsWorkspace = lazy(async () => ({ default: (await import("./operations-requests-workspace")).OperationsRequestsWorkspace }));
 const OperationsAssetsWarrantyWorkspace = lazy(async () => ({ default: (await import("./operations-assets-warranty-workspace")).OperationsAssetsWarrantyWorkspace }));
 const SalesAnalyticsWorkspace = lazy(async () => ({ default: (await import("./sales-analytics-workspace")).SalesAnalyticsWorkspace }));
 const PurchaseExpenseWorkspace = lazy(async () => ({ default: (await import("./purchase-expense-workspace")).PurchaseExpenseWorkspace }));
@@ -28,7 +27,6 @@ const ReportsOverviewWorkspace = lazy(async () => ({ default: (await import("./r
 const ReportsWorkspace = lazy(async () => ({ default: (await import("./reports-workspace")).ReportsWorkspace }));
 const InternalVatReportWorkspace = lazy(async () => ({ default: (await import("./internal-vat-report-workspace")).InternalVatReportWorkspace }));
 const ReportDocumentsWorkspace = lazy(async () => ({ default: (await import("./report-documents-workspace")).ReportDocumentsWorkspace }));
-const OperationsCatalogWorkspace = lazy(async () => ({ default: (await import("./operations-catalog-workspace")).OperationsCatalogWorkspace }));
 const VatSimulationWorkspace = lazy(async () => ({ default: (await import("./vat-simulation-workspace")).VatSimulationWorkspace }));
 
 type Props = {
@@ -67,9 +65,7 @@ export function WorkspacePageContent({ route, language, permissionCodes, onStage
     : route.moduleId === "operations" && route.section === 2 ? <PurchaseExpenseWorkspace language={language} activeTab={route.stage === "credit" ? "credit" : "entry"} onTabChange={onStage} />
     : route.moduleId === "operations" && route.section === 3 ? <ExpensesObligationsWorkspace language={language} activeTab={route.stage === "batch" || route.stage === "history" ? route.stage : "items"} onTabChange={onStage} />
     : route.moduleId === "operations" && route.section === 4 ? <FinanceSetupWorkspace language={language} view="suppliers" />
-    : route.moduleId === "operations" && route.section === 5 ? <OperationsCatalogWorkspace language={language} />
-    : route.moduleId === "operations" && route.section === 6 ? <OperationsExecutionWorkspace language={language} />
-    : route.moduleId === "operations" && route.section === 8 ? <OperationsReportsWorkspace language={language} />
+    : route.moduleId === "operations" && (route.section === 5 || route.section === 6 || route.section === 7 || route.section === 8) ? <OperationsRequestsWorkspace language={language} initialTab={route.section === 5 ? "catalog" : route.section === 6 ? "requests" : route.section === 7 ? "registration" : "reports"} />
     : route.moduleId === "finance" && route.pageId === "finance-settings" ? <FinanceSetupWorkspace language={language} />
     : route.moduleId === "finance" && route.pageId === "finance-ledger" ? <InvoiceRegisterWorkspace language={language} />
     : route.moduleId === "finance" && route.pageId === "finance-treasury" ? <TreasuryWorkspace language={language} />

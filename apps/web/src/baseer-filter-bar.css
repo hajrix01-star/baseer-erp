@@ -1,3 +1,7 @@
+.baseer-filter-bar--odoo .baseer-filter-bar__search {
+  position: relative;
+}
+
 .baseer-filter-bar--odoo .baseer-filter-bar__menu-button {
   position: absolute;
   inset-inline-end: .35rem;

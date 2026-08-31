@@ -1,0 +1,168 @@
+/* Whole-interface themes.  They override semantic tokens and the shared
+   shell/primitives only; accounting meaning, routes, permissions and data
+   remain untouched. */
+:root {
+  --chart-primary: #08744d;
+  --chart-primary-soft: #23a982;
+  --chart-primary-deep: #075943;
+  --chart-secondary: #d98c27;
+  --chart-danger: #c34a52;
+  --chart-info: #7956c7;
+  --chart-axis: #45665a;
+  --chart-grid: rgb(24 74 63 / 12%);
+  --chart-tooltip: #113d32;
+  --chart-tooltip-ink: #fff;
+  --chart-tooltip-surface: #fffdf8;
+  --chart-tooltip-border: #d7e5dd;
+}
+
+body[data-ui-theme="modern-1"] {
+  /* Exact tokens from the GPT Theme 1 (calm) reference. */
+  --ink: #123028;
+  --muted: #6c7e76;
+  --line: #dce5df;
+  --canvas: #f4f6f2;
+  --app-canvas: #f4f6f2;
+  --content-canvas: #f4f6f2;
+  --surface: #fff;
+  --surface-raised: #fff;
+  --surface-subtle: #f0f4f1;
+  --card-surface: #fff;
+  --table-header: #f0f4f1;
+  --tab-rail: #f0f4f1;
+  --tab-active: #fff;
+  --border-subtle: #dce5df;
+  --field-border: #dce5df;
+  --brand: #16815f;
+  --brand-deep: #102c24;
+  --brand-soft: #dcf6e7;
+  --on-brand: #fff;
+  --status-success: #087a59;
+  --status-success-surface: #dcf6e7;
+  --status-danger: #b64750;
+  --status-danger-surface: #fae8e9;
+  --status-warning: #9b681c;
+  --status-warning-surface: #fbefd9;
+  --status-info: #526d91;
+  --status-info-surface: #e8eef6;
+  --shadow: 0 16px 42px rgb(10 58 45 / 10%);
+  /* Reference Theme 1: 18px reading cards and 9px controls. Page-owned
+     padding remains local: compact command cards and larger report cards
+     intentionally have different data density. */
+  --card-radius: 1.125rem;
+  --control-radius: .5625rem;
+  --card-padding: 1.1rem;
+  --nav-row-height: 2.7rem;
+  --chart-primary: #16815f;
+  --chart-primary-soft: #dcf6e7;
+  --chart-primary-deep: #102c24;
+  --chart-secondary: #d6a15c;
+  --chart-danger: #be5760;
+  --chart-info: #6f67bd;
+  --chart-axis: #8c9993;
+  --chart-grid: rgb(220 229 223 / 70%);
+  --chart-tooltip: #102c24;
+  --chart-tooltip-ink: #fff;
+  --chart-tooltip-surface: #fff;
+  --chart-tooltip-border: #dce5df;
+}
+
+body[data-ui-theme="modern-2"] {
+  /* Exact tokens from the GPT Theme 2 (editorial) reference. */
+  --ink: #292822;
+  --muted: #77736b;
+  --line: #dfdbd2;
+  --canvas: #f7f4ef;
+  --app-canvas: #f7f4ef;
+  --content-canvas: #f7f4ef;
+  --surface: #fffdfa;
+  --surface-raised: #fffdfa;
+  --surface-subtle: #f5efe7;
+  --card-surface: #fffdfa;
+  --table-header: #f5efe7;
+  --tab-rail: #f5efe7;
+  --tab-active: #fffdfa;
+  --border-subtle: #dfdbd2;
+  --field-border: #dfdbd2;
+  --brand: #9c4f28;
+  --brand-deep: #6b351d;
+  --brand-soft: #f8e6d8;
+  --on-brand: #fffaf5;
+  --status-success: #5c786b;
+  --status-success-surface: #e7eee9;
+  --status-danger: #a64c4f;
+  --status-danger-surface: #f7e6e4;
+  --status-warning: #98661f;
+  --status-warning-surface: #f8eddc;
+  --status-info: #596b89;
+  --status-info-surface: #e8edf3;
+  --shadow: 0 18px 46px rgb(73 43 28 / 11%);
+  /* Reference Theme 2: ledger surfaces share a precise 5px outer corner.
+     Page-owned card padding remains intentionally local. */
+  --card-radius: .3125rem;
+  --control-radius: .5625rem;
+  --card-padding: 1.15rem;
+  --nav-row-height: 2.7rem;
+  --font-heading-weight: 800;
+  --chart-primary: #9c4f28;
+  --chart-primary-soft: #f8e6d8;
+  --chart-primary-deep: #6b351d;
+  --chart-secondary: #9c4f28;
+  --chart-danger: #af4850;
+  --chart-info: #526d91;
+  --chart-axis: #88766a;
+  --chart-grid: rgb(223 219 210 / 70%);
+  --chart-tooltip: #292822;
+  --chart-tooltip-ink: #fffdfa;
+  --chart-tooltip-surface: #fffdfa;
+  --chart-tooltip-border: #dfdbd2;
+}
+
+body[data-ui-theme="modern-1"] :is(.topbar, .launcher-topbar),
+body[data-ui-theme="modern-2"] :is(.topbar, .launcher-topbar) {
+  background: color-mix(in srgb, var(--surface) 85%, transparent);
+  border-bottom-color: var(--border-subtle);
+  box-shadow: none;
+}
+body[data-ui-theme="modern-2"] :is(.topbar, .launcher-topbar) { background: var(--surface); }
+
+body[data-ui-theme="modern-1"] .module-sidebar,
+body[data-ui-theme="modern-1"] .mobile-drawer__panel { background: var(--chart-tooltip); }
+body[data-ui-theme="modern-2"] .module-sidebar,
+body[data-ui-theme="modern-2"] .mobile-drawer__panel { background: var(--chart-tooltip); }
+body[data-ui-theme="modern-1"] .module-sidebar .overline { color: var(--chart-primary-soft); }
+body[data-ui-theme="modern-2"] .module-sidebar .overline { color: var(--chart-primary-soft); }
+body[data-ui-theme="modern-1"] .nav-item.active { background: var(--brand); }
+body[data-ui-theme="modern-2"] .nav-item.active { background: var(--brand); }
+
+body[data-ui-theme="modern-1"] :is(.baseer-card, .baseer-chart, .baseer-data-table),
+body[data-ui-theme="modern-2"] :is(.baseer-card, .baseer-chart, .baseer-data-table) {
+  border-color: var(--border-subtle);
+  box-shadow: var(--shadow);
+}
+body[data-ui-theme="modern-1"] .baseer-card--interactive:hover,
+body[data-ui-theme="modern-2"] .baseer-card--interactive:hover { border-color: color-mix(in srgb, var(--brand) 45%, var(--border-subtle)); }
+body[data-ui-theme="modern-2"] .baseer-metric::before { width: 4px; background: var(--brand); }
+body[data-ui-theme="modern-2"] .baseer-data-table th { font-weight: 800; }
+
+.interface-theme-control { display: inline-flex; align-items: center; gap: .45rem; min-height: 40px; color: var(--muted); font-size: var(--font-caption); font-weight: 800; white-space: nowrap; }
+.interface-theme-control select { min-height: 34px; max-width: 8.3rem; padding: .32rem 1.8rem .32rem .55rem; border: 1px solid var(--field-border); border-radius: var(--control-radius); color: var(--brand-deep); background: var(--surface); font: inherit; font-weight: 800; }
+.interface-theme-control select:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+body[data-color-scheme="dark"][data-ui-theme="modern-1"] {
+  --ink: #e8f4ef; --muted: #acc5bc; --line: #35564c; --canvas: #0d1d19; --app-canvas: #0d1d19; --content-canvas: #0d1d19; --surface: #142923; --surface-raised: #142923; --surface-subtle: #19352d; --card-surface: #142923; --table-header: #1b382f; --tab-rail: #19352d; --tab-active: #142923; --border-subtle: #35564c; --field-border: #4a7064; --brand: #52c69a; --brand-deep: #c9f4df; --on-brand: #082219; --status-success: #7ee1b4; --status-success-surface: #173d31; --status-danger: #ffaaa9; --status-danger-surface: #472a2c; --status-warning: #ffd28c; --status-warning-surface: #49391f; --status-info: #acc8f1; --status-info-surface: #23384f; --chart-primary: #52c69a; --chart-primary-soft: #8fe1bc; --chart-primary-deep: #2e9b73; --chart-axis: #b7d1c7; --chart-grid: rgb(163 221 194 / 19%); --chart-tooltip: #071711; --chart-tooltip-ink: #effff7; --chart-tooltip-surface: #183128; --chart-tooltip-border: #496c60;
+}
+body[data-color-scheme="dark"][data-ui-theme="modern-2"] {
+  --ink: #f5e8db; --muted: #ceb8a6; --line: #654b40; --canvas: #211712; --app-canvas: #211712; --content-canvas: #211712; --surface: #30211a; --surface-raised: #30211a; --surface-subtle: #3b2920; --card-surface: #30211a; --table-header: #402d22; --tab-rail: #3b2920; --tab-active: #30211a; --border-subtle: #654b40; --field-border: #7b5a4b; --brand: #ef9b70; --brand-deep: #ffe2ce; --on-brand: #35180f; --status-success: #b3d5b9; --status-success-surface: #2d4335; --status-danger: #ffa9a2; --status-danger-surface: #4b2928; --status-warning: #ffd08d; --status-warning-surface: #4b3923; --status-info: #b8c9e5; --status-info-surface: #2c394f; --chart-primary: #ef9b70; --chart-primary-soft: #f5b28d; --chart-primary-deep: #d9774e; --chart-axis: #ddc3b1; --chart-grid: rgb(247 214 189 / 19%); --chart-tooltip: #1c110d; --chart-tooltip-ink: #fff6ee; --chart-tooltip-surface: #37241b; --chart-tooltip-border: #78584a;
+}
+
+@media (max-width: 800px) {
+  .topbar, .launcher-topbar { gap: .25rem; padding-inline: .5rem; }
+  .launcher-topbar .launcher-brand-anchor { display: none; }
+  .interface-theme-control { flex: 0 1 5.75rem; min-width: 0; max-width: 5.75rem; }
+  .interface-theme-control > span { display: none; }
+  .interface-theme-control select { width: 100%; min-width: 0; max-width: 100%; padding-inline: .35rem 1.3rem; font-size: .73rem; }
+  .topbar .interface-theme-control, .launcher-topbar .interface-theme-control { display: inline-flex; }
+  .topbar .company-selector, .launcher-topbar .company-selector { flex: 0 1 6.25rem; max-width: 6.25rem; min-width: 0; padding-inline: .25rem; }
+  .topbar .company-selector span:nth-of-type(2), .launcher-topbar .company-selector span:nth-of-type(2) { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}

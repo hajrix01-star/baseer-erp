@@ -1,0 +1,482 @@
+/* Modern admin presentation
+ *
+ * A high-clarity operational surface inspired by contemporary ERP dashboards.
+ * It deliberately changes only shared presentation roles: data, permissions,
+ * financial semantics, and existing interaction contracts stay in Baseer.
+ */
+body[data-ui-theme="modern-3"] {
+  --ink: #182c4b;
+  --muted: #66758c;
+  --line: #e1e7f0;
+  --canvas: #f7f9fc;
+  --app-canvas: #f7f9fc;
+  --content-canvas: #f7f9fc;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --surface-subtle: #f6f8fb;
+  --card-surface: #ffffff;
+  --table-header: #f7f9fc;
+  --tab-rail: #f1f5f9;
+  --tab-active: #ffffff;
+  --border-subtle: #e1e7f0;
+  --field-border: #dbe3ee;
+  --brand: #127f73;
+  --brand-deep: #172c4a;
+  --brand-soft: #dff5ef;
+  --on-brand: #ffffff;
+  --status-success: #068c6b;
+  --status-success-surface: #e4f7f0;
+  --status-danger: #c53838;
+  --status-danger-surface: #fdecec;
+  --status-warning: #d77a10;
+  --status-warning-surface: #fff2df;
+  --status-info: #3853b8;
+  --status-info-surface: #e9edff;
+  --shadow: 0 .55rem 1.8rem rgb(29 47 77 / 6%);
+  --card-radius: .62rem;
+  --control-radius: .5rem;
+  --card-padding: 1rem;
+  --card-padding-compact: .9rem;
+  --metric-card-radius: .5rem;
+  --nav-row-height: 2.45rem;
+  --chart-primary: #128f84;
+  --chart-primary-soft: #6ed2c6;
+  --chart-primary-deep: #0b655e;
+  --chart-secondary: #eb751c;
+  --chart-danger: #d44242;
+  --chart-info: #5b25ac;
+  --chart-axis: #75839a;
+  --chart-grid: rgb(106 126 156 / 15%);
+  --chart-tooltip: #172c4a;
+  --chart-tooltip-ink: #ffffff;
+  --chart-tooltip-surface: #ffffff;
+  --chart-tooltip-border: #dfe7f0;
+  --nav-tree-ink: #43536b;
+  --nav-tree-hover-surface: #f1f6f8;
+  --nav-section-ink: #607087;
+  --nav-item-ink: #45546b;
+  --nav-item-hover-surface: #eff8f6;
+  --table-header-ink: #53627a;
+  --table-row-hover-surface: #f4fbf9;
+}
+
+body[data-ui-theme="modern-3"] :is(.topbar, .launcher-topbar) {
+  min-block-size: 3.75rem;
+  padding-inline: 1rem;
+  border-bottom-color: var(--border-subtle);
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  box-shadow: 0 .35rem 1.2rem rgb(29 47 77 / 4%);
+}
+
+@media (min-width: 801px) {
+  body[data-ui-theme="modern-3"] .topbar { margin-inline-start: 15.25rem; }
+  body[data-ui-theme="modern-3"] .workspace { padding-inline-start: 15.25rem; }
+  body[data-ui-theme="modern-3"] .module-sidebar { inline-size: 15.25rem; width: 15.25rem; }
+}
+
+body[data-ui-theme="modern-3"] .module-sidebar,
+body[data-ui-theme="modern-3"] .mobile-drawer__panel {
+  background: var(--surface);
+  color: var(--ink);
+  border-inline-end: 1px solid var(--border-subtle);
+  box-shadow: .25rem 0 1.2rem rgb(29 47 77 / 4%);
+}
+body[data-ui-theme="modern-3"] .module-sidebar .sidebar-product,
+body[data-ui-theme="modern-3"] .module-sidebar .sidebar-head {
+  border-bottom-color: var(--border-subtle);
+}
+body[data-ui-theme="modern-3"] .module-sidebar {
+  overflow-x: clip;
+  scrollbar-gutter: auto;
+}
+body[data-ui-theme="modern-3"] .module-sidebar .sidebar-product {
+  min-block-size: 3.75rem;
+}
+body[data-ui-theme="modern-3"] .module-sidebar .sidebar-brand {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 3.75rem;
+}
+body[data-ui-theme="modern-3"] .module-sidebar .sidebar-brand .baseer-brand__image {
+  filter: brightness(0) saturate(100%) invert(17%) sepia(15%) saturate(1762%) hue-rotate(104deg) brightness(90%) contrast(91%);
+}
+body[data-ui-theme="modern-3"] .module-sidebar .sidebar-brand .baseer-brand__erp { color: var(--brand); }
+/* Dream-style navigation grammar: modules are compact hierarchy rows, not a
+ * stack of cards. The active module owns the one solid selection surface. */
+body[data-ui-theme="modern-3"] .module-sidebar .sidebar-head { display: none; }
+body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree {
+  gap: .14rem;
+  padding: .55rem .45rem .9rem;
+  overflow-x: clip;
+}
+body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__tree-node {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__tree-node > summary {
+  grid-template-columns: 1.15rem minmax(0, 1fr) 1rem;
+  gap: .58rem;
+  min-block-size: 2.45rem;
+  padding: .5rem .6rem;
+  border-radius: .48rem;
+  color: var(--nav-tree-ink);
+}
+body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__tree-node > summary:hover {
+  color: var(--brand-deep);
+  background: var(--nav-item-hover-surface);
+}
+body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__tree-node.is-current-module > summary {
+  color: var(--on-brand);
+  background: var(--brand-deep);
+}
+body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__module-symbol {
+  inline-size: 1.15rem;
+  block-size: 1.15rem;
+  border-radius: .25rem;
+  color: var(--theme-navigation-module);
+  background: transparent;
+  box-shadow: none;
+}
+body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__tree-node.is-current-module .theme-navigation__module-symbol { color: var(--on-brand); }
+body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__module-symbol svg { inline-size: 1rem; block-size: 1rem; }
+body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__module-title { font-size: .8rem; font-weight: 780; }
+body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__count { display: none; }
+body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__tree-node > summary::after { grid-column: 3; color: currentColor; font-size: .85rem; }
+body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__branches {
+  gap: .04rem;
+  margin: .08rem .25rem .32rem;
+  padding-block: .1rem;
+  padding-inline: 1.2rem .05rem;
+  border-inline-start: 0;
+}
+body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__section-branch::before { display: none; }
+body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__section {
+  min-block-size: 2.1rem;
+  padding: .3rem .5rem;
+  border: 0;
+  border-radius: .4rem;
+  color: var(--nav-section-ink);
+  font-size: .76rem;
+  font-weight: 680;
+}
+body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__section:hover { color: var(--brand-deep); background: var(--nav-tree-hover-surface); }
+body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__section.is-active {
+  padding-inline-start: .34rem;
+  border-inline-start: .22rem solid var(--theme-navigation-module);
+  color: var(--theme-navigation-module);
+  background: color-mix(in srgb, var(--theme-navigation-module) 10%, var(--surface));
+  font-weight: 820;
+}
+body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__section.is-active svg { color: var(--theme-navigation-module); }
+body[data-ui-theme="modern-3"] .module-sidebar .overline,
+body[data-ui-theme="modern-3"] .mobile-drawer__panel .overline { color: var(--muted); }
+body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .nav-item {
+  margin-inline: .42rem;
+  border-radius: .44rem;
+  color: var(--nav-item-ink);
+}
+body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .nav-item:hover {
+  color: var(--brand-deep);
+  background: var(--nav-tree-hover-surface);
+}
+body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .nav-item.active {
+  color: var(--on-brand);
+  background: var(--brand-deep);
+  box-shadow: none;
+}
+body[data-ui-theme="modern-3"] .mobile-drawer__panel .close-button {
+  color: var(--ink);
+  border-color: var(--border-subtle);
+  background: var(--surface);
+}
+
+body[data-ui-theme="modern-3"] .module-page {
+  max-inline-size: 100%;
+  padding: 1.3rem clamp(1rem, 2vw, 1.8rem) 2.5rem;
+}
+body[data-ui-theme="modern-3"] .page-breadcrumb { color: var(--muted); font-size: .72rem; }
+body[data-ui-theme="modern-3"] .page-heading { margin-block: .15rem 1.1rem; }
+body[data-ui-theme="modern-3"] .page-heading h1 {
+  color: var(--brand-deep);
+  font-size: clamp(1.35rem, 2vw, 1.75rem);
+  letter-spacing: -.025em;
+}
+
+/* Surface hierarchy: the page is the canvas; a border alone denotes ordinary
+ * reading/work space. Elevation is reserved for a dialog, a form/receipt, or
+ * an interactive item, so a page never turns into cards inside cards. */
+body[data-ui-theme="modern-3"] :is(.baseer-card, .baseer-chart, .baseer-data-table) {
+  border-color: var(--border-subtle);
+  box-shadow: none;
+}
+body[data-ui-theme="modern-3"] .baseer-card:has(> .baseer-card__context-icon) { position: relative; }
+body[data-ui-theme="modern-3"] .baseer-card__context-icon {
+  display: grid;
+  position: absolute;
+  inset-block-start: .72rem;
+  inset-inline-start: .72rem;
+  place-items: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  border: 1px solid color-mix(in srgb, var(--brand) 14%, var(--border-subtle));
+  border-radius: .5rem;
+  color: var(--brand);
+  background: color-mix(in srgb, var(--brand) 7%, var(--surface));
+  pointer-events: none;
+  z-index: 0;
+}
+body[data-ui-theme="modern-3"] .baseer-card__context-icon svg { inline-size: 1.1rem; block-size: 1.1rem; }
+body[data-ui-theme="modern-3"] .baseer-card:has(> .baseer-card__context-icon) > :not(.baseer-card__context-icon) { position: relative; z-index: 1; }
+body[data-ui-theme="modern-3"] :is(.baseer-dialog, .baseer-card--form-or-receipt) {
+  box-shadow: var(--shadow);
+}
+body[data-ui-theme="modern-3"] .baseer-card:is(.baseer-card--metric, .baseer-metric) {
+  position: relative;
+  overflow: hidden;
+  min-block-size: 7.1rem;
+  border: 1px solid color-mix(in srgb, var(--metric-accent, var(--brand)) 18%, var(--border-subtle));
+  border-radius: .72rem;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--metric-accent, var(--brand)) 5%, var(--surface)), var(--surface) 46%);
+  box-shadow: 0 .45rem 1.25rem rgb(29 47 77 / 5%);
+}
+body[data-ui-theme="modern-3"] .baseer-metric {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: .75rem;
+}
+body[data-ui-theme="modern-3"] .baseer-metric__content { display: grid; align-content: space-between; gap: .4rem; min-inline-size: 0; }
+body[data-ui-theme="modern-3"] .baseer-metric::before,
+body[data-ui-theme="modern-3"] .baseer-metric::after { display: none; }
+body[data-ui-theme="modern-3"] .baseer-metric--brand { --metric-accent: var(--chart-primary); --metric-accent-surface: color-mix(in srgb, var(--chart-primary) 13%, var(--surface)); }
+body[data-ui-theme="modern-3"] .baseer-metric--success { --metric-accent: var(--status-success); --metric-accent-surface: var(--status-success-surface); }
+body[data-ui-theme="modern-3"] .baseer-metric--warning { --metric-accent: var(--status-warning); --metric-accent-surface: var(--status-warning-surface); }
+body[data-ui-theme="modern-3"] .baseer-metric--info { --metric-accent: var(--status-info); --metric-accent-surface: var(--status-info-surface); }
+body[data-ui-theme="modern-3"] .baseer-metric--danger { --metric-accent: var(--status-danger); --metric-accent-surface: var(--status-danger-surface); }
+body[data-ui-theme="modern-3"] .baseer-metric__icon {
+  display: grid;
+  place-items: center;
+  inline-size: 2.4rem;
+  block-size: 2.4rem;
+  border-radius: .46rem;
+  color: var(--metric-icon-color);
+  background: var(--metric-icon-surface);
+}
+body[data-ui-theme="modern-3"] .baseer-metric__icon svg { inline-size: 1.22rem; block-size: 1.22rem; }
+body[data-ui-theme="modern-3"] .baseer-metric__icon--brand { --metric-icon-color: var(--chart-primary); --metric-icon-surface: color-mix(in srgb, var(--chart-primary) 13%, var(--surface)); }
+body[data-ui-theme="modern-3"] .baseer-metric__icon--success { --metric-icon-color: var(--status-success); --metric-icon-surface: var(--status-success-surface); }
+body[data-ui-theme="modern-3"] .baseer-metric__icon--warning { --metric-icon-color: var(--status-warning); --metric-icon-surface: var(--status-warning-surface); }
+body[data-ui-theme="modern-3"] .baseer-metric__icon--info { --metric-icon-color: var(--status-info); --metric-icon-surface: var(--status-info-surface); }
+body[data-ui-theme="modern-3"] .baseer-metric__icon--danger { --metric-icon-color: var(--status-danger); --metric-icon-surface: var(--status-danger-surface); }
+body[data-ui-theme="modern-3"] .baseer-metric small { color: var(--muted); font-weight: 750; }
+body[data-ui-theme="modern-3"] .baseer-metric strong { color: var(--brand-deep); font-size: clamp(1.3rem, 2vw, 1.7rem); }
+body[data-ui-theme="modern-3"] .baseer-metric-card__icon,
+body[data-ui-theme="modern-3"] .baseer-vault-glyph { border-radius: .5rem; }
+body[data-ui-theme="modern-3"] .baseer-card--interactive:hover {
+  border-color: color-mix(in srgb, var(--brand) 38%, var(--border-subtle));
+  box-shadow: 0 .8rem 2rem rgb(29 47 77 / 10%);
+}
+
+/* KPI values are the deliberate exception to the no-card-by-default rule:
+ * each one is a distinct summary question, so it gets a compact professional
+ * card.  The grid itself stays transparent and never becomes a second frame. */
+body[data-ui-theme="modern-3"] .baseer-metric-grid {
+  gap: .75rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+/* Trial motif — Decision Centre only.  These are quiet static silhouettes,
+ * not status signals or animated decoration: the label, value and badge
+ * remain the authoritative reading. */
+body[data-ui-theme="modern-3"] .decision-workspace .baseer-metric {
+  isolation: isolate;
+}
+body[data-ui-theme="modern-3"] .decision-workspace .baseer-metric > :is(.baseer-metric__content, .baseer-metric__icon) {
+  position: relative;
+  z-index: 1;
+}
+body[data-ui-theme="modern-3"] .decision-workspace .baseer-metric::after {
+  content: "";
+  display: block;
+  position: absolute;
+  inset-inline-start: auto;
+  inset-inline-end: -.9rem;
+  inset-block-end: -1.15rem;
+  inline-size: 4.8rem;
+  block-size: 4.8rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--metric-accent, var(--brand)) 17%, transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+body[data-ui-theme="modern-3"] .decision-workspace .baseer-metric:nth-child(4n + 2)::after {
+  inset-inline-start: auto;
+  inset-inline-end: -.8rem;
+  inset-block-start: auto;
+  inset-block-end: -1rem;
+  inline-size: 3.55rem;
+  block-size: 3.55rem;
+  border: 0;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--metric-accent, var(--brand)) 16%, transparent);
+}
+body[data-ui-theme="modern-3"] .decision-workspace .baseer-metric:nth-child(4n + 3)::after {
+  inset-inline-start: auto;
+  inset-inline-end: -.75rem;
+  inset-block-end: -.75rem;
+  inline-size: 3.1rem;
+  block-size: 3.1rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--metric-accent, var(--brand)) 20%, transparent);
+  box-shadow: none;
+}
+body[data-ui-theme="modern-3"] .decision-workspace .baseer-metric:nth-child(4n)::after {
+  inset-inline-start: auto;
+  inset-inline-end: -.45rem;
+  inset-block-end: -.35rem;
+  inline-size: 4.1rem;
+  block-size: 4.1rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--metric-accent, var(--brand)) 15%, transparent);
+}
+
+body[data-ui-theme="modern-3"] :is(.baseer-filter-bar, .administration-companies-toolbar) {
+  border: 0;
+  border-block: 1px solid var(--border-subtle);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Related notices are one decision surface with internal dividers.  This
+ * prevents warning-on-warning card stacks while preserving the full wording,
+ * status and any action in each notice. */
+body[data-ui-theme="modern-3"] .baseer-notice-group {
+  display: grid;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--status-warning) 28%, var(--border-subtle));
+  border-radius: var(--card-radius);
+  background: color-mix(in srgb, var(--status-warning) 5%, var(--surface));
+}
+body[data-ui-theme="modern-3"] .baseer-notice-group > :is(.baseer-notice, .decision-workspace__notice) {
+  margin: 0;
+  padding: 1rem 1.1rem;
+  border: 0;
+  border-inline-start: 3px solid var(--status-warning);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+body[data-ui-theme="modern-3"] .baseer-notice-group > :is(.baseer-notice, .decision-workspace__notice) + :is(.baseer-notice, .decision-workspace__notice) {
+  border-block-start: 1px solid color-mix(in srgb, var(--status-warning) 24%, var(--border-subtle));
+}
+
+/* Administration pages previously used an outer decorative panel around
+ * already-independent company, user, role, and governance work surfaces.
+ * The shell is now page rhythm only; entity cards, forms, and data registers
+ * keep their own border because they have independent operational meaning. */
+body[data-ui-theme="modern-3"] .administration-shell > .administration-section {
+  padding-inline: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+/* Permission modules are meaningful scopes. Their internal sections are not
+ * separate surfaces, so a divider is sufficient and keeps long RTL forms
+ * visibly lighter without losing the scope boundary. */
+body[data-ui-theme="modern-3"] .administration-permission-module .administration-permission-section {
+  border: 0;
+  border-block-start: 1px solid var(--border-subtle);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+body[data-ui-theme="modern-3"] :is(.baseer-filter-bar__search input, .baseer-filter-bar__select, .baseer-aria-date-picker__group, .baseer-period-filter__trigger) {
+  border-color: var(--field-border);
+  border-radius: .42rem;
+  background: var(--surface);
+}
+body[data-ui-theme="modern-3"] .baseer-data-table th {
+  color: var(--table-header-ink);
+  background: var(--table-header);
+  font-size: .72rem;
+  font-weight: 850;
+}
+body[data-ui-theme="modern-3"] .baseer-data-table tbody tr:hover { background: var(--table-row-hover-surface); }
+body[data-ui-theme="modern-3"] .baseer-button--primary { background: var(--brand-deep); }
+body[data-ui-theme="modern-3"] .baseer-button--secondary { border-color: var(--field-border); background: var(--surface); }
+body[data-ui-theme="modern-3"] .baseer-status-badge { border-radius: .35rem; }
+
+body[data-ui-theme="modern-3"] .baseer-chart,
+body[data-ui-theme="modern-3"] .baseer-marketing-timeline--command {
+  border-radius: var(--card-radius);
+  background: var(--surface);
+}
+body[data-ui-theme="modern-3"] .baseer-marketing-timeline--command .baseer-marketing-timeline__toolbar {
+  border-block-color: var(--border-subtle);
+  background: var(--surface-subtle);
+}
+
+body[data-color-scheme="dark"][data-ui-theme="modern-3"] {
+  --ink: #e8edf7;
+  --muted: #aab6c9;
+  --line: #34425a;
+  --canvas: #111a2a;
+  --app-canvas: #111a2a;
+  --content-canvas: #111a2a;
+  --surface: #172235;
+  --surface-raised: #172235;
+  --surface-subtle: #1d2a40;
+  --card-surface: #172235;
+  --table-header: #1d2a40;
+  --tab-rail: #1d2a40;
+  --tab-active: #172235;
+  --border-subtle: #34425a;
+  --field-border: #465775;
+  --brand: #55c7b7;
+  --brand-deep: #b5eee4;
+  --brand-soft: #1a4e4a;
+  --on-brand: #10201e;
+  --status-success: #74e0bd;
+  --status-success-surface: #193f3b;
+  --status-danger: #ffa7a7;
+  --status-danger-surface: #4a2d35;
+  --status-warning: #ffd18e;
+  --status-warning-surface: #4a3822;
+  --status-info: #b3c3ff;
+  --status-info-surface: #29375e;
+  --chart-primary: #55c7b7;
+  --chart-primary-soft: #8ee4d6;
+  --chart-primary-deep: #36a996;
+  --chart-secondary: #f9a64f;
+  --chart-danger: #ff9a9a;
+  --chart-info: #c1a3f3;
+  --chart-axis: #b3c0d4;
+  --chart-grid: rgb(169 190 225 / 16%);
+  --chart-tooltip: #0d1523;
+  --chart-tooltip-ink: #eef6ff;
+  --chart-tooltip-surface: #1a2940;
+  --chart-tooltip-border: #425571;
+  --nav-tree-ink: #c2cede;
+  --nav-tree-hover-surface: #1f3a4b;
+  --nav-section-ink: #c2cede;
+  --nav-item-ink: #c2cede;
+  --nav-item-hover-surface: #1f3a4b;
+  --table-header-ink: #c2cede;
+  --table-row-hover-surface: #1f3a4b;
+}
+body[data-color-scheme="dark"][data-ui-theme="modern-3"] .module-sidebar,
+body[data-color-scheme="dark"][data-ui-theme="modern-3"] .mobile-drawer__panel { background: var(--surface); }
+body[data-color-scheme="dark"][data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .nav-item { color: var(--nav-item-ink); }
+body[data-color-scheme="dark"][data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .nav-item:hover { background: var(--nav-item-hover-surface); }
+body[data-color-scheme="dark"][data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .nav-item.active { color: var(--on-brand); background: var(--brand); }
+
+@media (max-width: 800px) {
+  body[data-ui-theme="modern-3"] .module-page { padding: 1rem .7rem 2rem; }
+  body[data-ui-theme="modern-3"] .baseer-metric { min-block-size: 6.15rem; }
+  body[data-ui-theme="modern-3"] :is(.topbar, .launcher-topbar) { min-block-size: 3.5rem; }
+}

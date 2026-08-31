@@ -1,0 +1,46 @@
+/*
+ * Entry surfaces are intentionally not part of ERP navigation: no company
+ * switcher, A/B navigation, or interface picker is rendered before a trusted
+ * session exists.  They inherit the selected stored presentation only as a
+ * visual treatment through shared semantic roles.
+ */
+body[data-ui-theme="modern-1"] .baseer-login__panel {
+  border-color: color-mix(in srgb, var(--brand) 20%, var(--border-subtle));
+  border-radius: 1.05rem;
+  background: color-mix(in srgb, var(--surface-raised) 96%, var(--brand-soft));
+  box-shadow: var(--modern-card-shadow, var(--shadow));
+}
+body[data-ui-theme="modern-1"] .baseer-login__field {
+  border-color: color-mix(in srgb, var(--brand) 22%, var(--field-border));
+  background: var(--surface-raised);
+}
+body[data-ui-theme="modern-2"] .baseer-login__panel {
+  border-color: var(--border-subtle);
+  border-radius: .3125rem;
+  background: var(--surface-raised);
+  box-shadow: .35rem .5rem 0 color-mix(in srgb, var(--brand) 8%, transparent);
+}
+body[data-ui-theme="modern-2"] .baseer-login__heading :is(p, h1) {
+  font-family: inherit;
+}
+body[data-ui-theme="modern-2"] .baseer-login__field,
+body[data-ui-theme="modern-2"] .baseer-login__submit {
+  border-radius: .3125rem;
+}
+body[data-ui-theme] .baseer-login__form .daily-sales-message.error {
+  color: var(--status-danger);
+  background: var(--status-danger-surface);
+}
+body[data-color-scheme="dark"][data-ui-theme] .baseer-login__field {
+  border-color: var(--field-border);
+  background: var(--surface-raised);
+  box-shadow: none;
+}
+body[data-color-scheme="dark"][data-ui-theme] .baseer-login__field:focus-within {
+  background: var(--surface-raised);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand) 18%, transparent);
+}
+@media (max-width: 520px) {
+  body[data-ui-theme="modern-1"] .baseer-login__panel { border-radius: .9rem; }
+  body[data-ui-theme="modern-2"] .baseer-login__panel { border-radius: .3125rem; }
+}

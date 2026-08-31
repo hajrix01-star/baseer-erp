@@ -6,6 +6,12 @@ export default defineConfig({
     plugins: [react()],
     build: { target: "esnext", manifest: true, minify: "terser", terserOptions: { compress: { passes: 3 }, format: { comments: false } } },
     server: {
+        // Tailscale Serve is authenticated at the network edge and forwards its
+        // tailnet host header unchanged. Permit that trusted reverse proxy.
+        allowedHosts: true,
+        // The externally viewed development instance must never leave a mobile
+        // browser with an earlier UI module after a theme change.
+        headers: { "Cache-Control": "no-store" },
         proxy: {
             "/v1": {
                 target: apiProxyTarget,

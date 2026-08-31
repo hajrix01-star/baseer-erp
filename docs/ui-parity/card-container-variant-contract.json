@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "acceptanceMatrix": {
+    "presentations": ["modern-1", "modern-2"],
+    "viewports": ["desktop-chromium", "mobile-chromium"],
+    "directions": ["rtl"],
+    "appearances": ["light", "dark"]
+  },
+  "variants": [
+    {
+      "id": "surface-card",
+      "role": "General information, chart, and record surface",
+      "selectors": [".baseer-card", ".baseer-card--default", ".baseer-card--muted"],
+      "centralUsage": "Shared card surface; domain pages compose content inside it rather than setting presentation literals.",
+      "referenceArchetype": "Trend, priority, and records cards",
+      "owner": "واجهة بصير / نظام التصميم",
+      "evidence": {
+        "status": "measured",
+        "test": "apps/web/e2e/interface-theme-presentation.spec.ts",
+        "asserts": ["radius", "dark surface", "presentation palette"]
+      }
+    },
+    {
+      "id": "metric-card",
+      "role": "Compact key metric within a metric grid",
+      "selectors": [".baseer-metric-grid", ".baseer-metric"],
+      "centralUsage": "Shared metric anatomy and joined/independent layout are controlled by the presentation layer.",
+      "referenceArchetype": "Metric grid",
+      "owner": "واجهة بصير / نظام التصميم",
+      "evidence": {
+        "status": "measured",
+        "test": "apps/web/e2e/interface-theme-presentation.spec.ts",
+        "asserts": ["min-height", "padding", "radius", "gap", "joined desktop/mobile fallback"]
+      }
+    },
+    {
+      "id": "data-register",
+      "role": "Ledger and records table container",
+      "selectors": [".baseer-data-table"],
+      "centralUsage": "Shared table radius and header/cell cadence; domains own columns and business states.",
+      "referenceArchetype": "Records card/table",
+      "owner": "واجهة بصير / نظام التصميم",
+      "evidence": {
+        "status": "measured",
+        "test": "apps/web/e2e/interface-theme-presentation.spec.ts",
+        "asserts": ["container radius", "header padding", "cell padding"]
+      }
+    },
+    {
+      "id": "filter-workbench",
+      "role": "Search, select, and period filter container",
+      "selectors": [".baseer-filter-bar", ".baseer-period-filter__trigger"],
+      "centralUsage": "Presentation controls the outer workbench; a domain chooses which filters are meaningful.",
+      "referenceArchetype": "Filter and compare workbench",
+      "owner": "واجهة بصير / نظام التصميم",
+      "evidence": {
+        "status": "partial",
+        "test": "apps/web/e2e/interface-theme-presentation.spec.ts",
+        "asserts": ["filter-bar padding"],
+        "remaining": "Period/date popover geometry and multi-filter comparison fixture."
+      }
+    },
+    {
+      "id": "dialog-surface",
+      "role": "Dialog and drill-down surface",
+      "selectors": [".baseer-dialog"],
+      "centralUsage": "Shared dialog shell; domains own fields, detail rows, and approval actions.",
+      "referenceArchetype": "Detail and evidence dialog",
+      "owner": "واجهة بصير / نظام التصميم",
+      "evidence": {
+        "status": "partial",
+        "test": "apps/web/e2e/interface-theme-presentation.spec.ts",
+        "asserts": ["dialog radius"],
+        "remaining": "Width, scroll region, and nested table/form measurements."
+      }
+    },
+    {
+      "id": "workflow-panel",
+      "role": "Batch, stepper, and staged workspace panel",
+      "selectors": [".baseer-batch-panel", ".baseer-stepper__panel", ".baseer-workspace-tabs"],
+      "centralUsage": "Shared workflow frame; each business process owns its stages and permissions.",
+      "referenceArchetype": "Structured form and tabbed record workflow",
+      "owner": "واجهة بصير / نظام التصميم",
+      "evidence": {
+        "status": "pending",
+        "remaining": "No mounted computed-style fixture yet."
+      }
+    }
+  ],
+  "exceptions": [
+    {
+      "id": "operations-pos-and-receipt",
+      "scope": "POS, receipt, catalog, execution, recipe, internal registration",
+      "owner": "العمليات",
+      "rationale": "Interactive transaction and print layouts require an explicit receipt/form variant; they must not be normalized by a blanket card rule.",
+      "evidenceStatus": "pending"
+    },
+    {
+      "id": "hr-people-workflows",
+      "scope": "Attendance roster, employee profile, onboarding, payroll dialogs, employee PWA",
+      "owner": "الموارد البشرية",
+      "rationale": "People workflow grids and the employee portal have interaction and privacy constraints outside the generic shell.",
+      "evidenceStatus": "pending"
+    },
+    {
+      "id": "finance-and-report-drawers",
+      "scope": "Safe bindings: accounts/invoice loading and empty records, report overview/documents records, VAT scope/table. Exception: treasury/ledger density and the report prototype canvas/drawer.",
+      "owner": "المالية والتقارير",
+      "rationale": "The safe surfaces use BaseerCard record, form-or-receipt, or joined-ledger variants. The financial report canvas and drawers remain custom because their evidence layout and scroll regions need a dedicated geometry fixture rather than a blanket card rule.",
+      "evidenceStatus": "partial",
+      "evidence": {
+        "test": "apps/web/e2e/finance-reports-modern-data.spec.ts",
+        "asserts": ["read/detail receipts for ledger, treasury, P&L and VAT pass on modern-1/modern-2 in RTL desktop and mobile", "ledger record radius is 18px/5px and header/cell cadence is 11px/12px", "VAT header/cell cadence is 12px/12px", "treasury activity reaches its journal source and P&L/VAT dialogs mount"],
+        "remaining": "Read/detail fixture acceptance is complete for this finance/reports exception. Mutation workflows and unrelated report families remain outside this bounded contract."
+      }
+    },
+    {
+      "id": "insight-domain-containers",
+      "scope": "Decision timeline, marketing timeline/campaigns, inbound evidence rules and labels",
+      "owner": "القرار والتسويق والأدلة",
+      "rationale": "Timelines and evidence labels are data-rich semantic surfaces; bridge CSS is not a geometry acceptance proof.",
+      "evidenceStatus": "pending"
+    }
+  ]
+}

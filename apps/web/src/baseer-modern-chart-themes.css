@@ -1,0 +1,74 @@
+/* Chart presentation layer derived from the approved GPT reference: quiet
+   horizontal grid, clear legend tokens, and one composed visual surface. The
+   underlying ECharts series, accounting labels, and server-derived values are
+   deliberately unchanged. */
+/* One responsive height scale shared by every operational chart surface.
+   Individual charts choose a role rather than owning a screen-specific magic
+   number, so Theme 1 and Theme 2 cannot drift apart as new dashboards land. */
+body[data-ui-theme] {
+  --baseer-chart-height-standard: 15rem;
+  --baseer-chart-height-timeline: 20rem;
+  --baseer-chart-height-analysis: 25rem;
+  --baseer-chart-height-operational: 21rem;
+  --baseer-chart-height-radial: 15.5rem;
+}
+body[data-ui-theme="modern-1"] .baseer-chart {
+  gap: .8rem;
+  padding: 1.125rem;
+  border-color: var(--border-subtle);
+  border-radius: .875rem;
+  background: var(--surface-raised);
+  box-shadow: var(--modern-card-shadow, var(--shadow));
+}
+body[data-ui-theme="modern-1"] .baseer-chart > header { align-items: flex-start; }
+body[data-ui-theme="modern-1"] .baseer-chart h3 { font-size: 1rem; letter-spacing: -.018em; }
+body[data-ui-theme="modern-1"] .baseer-chart__plot {
+  min-block-size: var(--baseer-chart-height-standard);
+  border-radius: .625rem;
+  background: repeating-linear-gradient(to bottom, transparent 0, transparent 2.68rem, color-mix(in srgb, var(--chart-grid) 78%, transparent) 2.74rem);
+}
+body[data-ui-theme="modern-1"] .baseer-marketing-timeline__legend,
+body[data-ui-theme="modern-1"] .baseer-marketing-timeline__metrics-toggle { gap: .7rem; }
+body[data-ui-theme="modern-1"] .baseer-marketing-timeline__legend-button {
+  min-block-size: 2.25rem;
+  padding: .3rem .45rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+}
+body[data-ui-theme="modern-1"] .baseer-marketing-timeline__legend-button:hover { background: color-mix(in srgb, var(--chart-primary-soft) 36%, transparent); }
+body[data-ui-theme="modern-1"] .baseer-marketing-timeline__campaign-lanes { background: color-mix(in srgb, var(--surface-raised) 93%, var(--chart-primary-soft)); }
+
+/* GPT Theme 2 is an editorial ledger: flat, dense, warm, and deliberately
+   free of the rounded-card language used by Theme 1. */
+body[data-ui-theme="modern-2"] .baseer-chart {
+  gap: .65rem;
+  padding: 1rem 1.0625rem;
+  border-color: var(--border-subtle);
+  border-radius: .3125rem;
+  background: var(--surface-raised);
+  box-shadow: .25rem .35rem 0 color-mix(in srgb, var(--brand) 7%, transparent);
+}
+body[data-ui-theme="modern-2"] .baseer-chart h3 { font-family: Georgia, serif; font-size: 1.05rem; font-weight: 700; }
+body[data-ui-theme="modern-2"] .baseer-chart__plot {
+  min-block-size: var(--baseer-chart-height-standard);
+  border-radius: 0;
+  background: repeating-linear-gradient(to bottom, transparent 0, transparent 2.68rem, color-mix(in srgb, var(--chart-grid) 88%, transparent) 2.74rem);
+}
+body[data-ui-theme="modern-2"] .baseer-marketing-timeline__legend-button { border-radius: .25rem; background: var(--surface-subtle); }
+body[data-ui-theme="modern-2"] .baseer-marketing-timeline__campaign-lanes { border-color: var(--border-subtle); background: var(--surface-subtle); }
+body[data-ui-theme="modern-2"] .baseer-marketing-timeline__campaign-spend { border-radius: .18rem .18rem 0 0; }
+
+@media (max-width: 740px) {
+  body[data-ui-theme] {
+    --baseer-chart-height-standard: 13.75rem;
+    --baseer-chart-height-timeline: 13.75rem;
+    --baseer-chart-height-analysis: 18rem;
+    --baseer-chart-height-operational: 15.5rem;
+    --baseer-chart-height-radial: 14rem;
+  }
+  body[data-ui-theme] .baseer-chart { padding: .9rem; }
+  body[data-ui-theme] .baseer-chart__plot { min-block-size: var(--baseer-chart-height-standard); }
+  body[data-ui-theme] .baseer-marketing-timeline__legend { gap: .35rem; }
+  body[data-ui-theme] .baseer-marketing-timeline__legend-button { min-block-size: 2.15rem; padding: .28rem .38rem; }
+}

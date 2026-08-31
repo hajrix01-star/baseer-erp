@@ -2,6 +2,7 @@ import { type ReactNode, useEffect, useId, useRef } from "react";
 import { createPortal } from "react-dom";
 
 import { BASEER_OVERLAY_LAYER } from "./baseer-overlay-policy";
+import { BaseerBrand } from "./baseer-brand";
 import "./baseer-navigation-drawer.css";
 
 type Props = {
@@ -82,7 +83,10 @@ export function BaseerNavigationDrawer({ open, title, eyebrow, closeLabel, onClo
       <div className="mobile-drawer__backdrop" aria-hidden="true" onClick={(event) => { event.preventDefault(); onClose(); }} />
       <aside ref={panelRef} className="mobile-drawer__panel" role="dialog" aria-modal="true" aria-labelledby={titleId}>
         <header>
-          <div><p className="overline">{eyebrow}</p><h2 id={titleId}>{title}</h2></div>
+          <div className="mobile-drawer__identity">
+            <BaseerBrand className="mobile-drawer__brand" />
+            <div className="mobile-drawer__context"><p className="overline">{eyebrow}</p><h2 id={titleId}>{title}</h2></div>
+          </div>
           <button className="close-button" type="button" onClick={onClose} aria-label={closeLabel}>×</button>
         </header>
         {children}

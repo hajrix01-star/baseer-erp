@@ -1,0 +1,137 @@
+/* Presentation bridge for Decision Intelligence, Marketing and Inbound
+   Evidence.  It is intentionally CSS-only: alert semantics, campaign state,
+   filters, charts and permission boundaries continue to come from their
+   existing components and APIs. */
+
+body[data-ui-theme] :is(.decision-workspace, .marketing-workspace, .inbound-evidence-workspace) {
+  --insight-panel: var(--surface-raised);
+  --insight-subtle: var(--surface-subtle);
+  --insight-border: var(--border-subtle);
+}
+
+/* Decision: preserve evidence and policy hierarchy, but avoid legacy green,
+   blue and amber literals leaking into a presentation. */
+body[data-ui-theme] .decision-workspace__notice {
+  border-inline-start-color: var(--status-warning);
+  background: color-mix(in srgb, var(--status-warning-surface) 42%, var(--insight-panel));
+}
+body[data-ui-theme] .decision-workspace__notice strong { color: var(--status-warning); }
+body[data-ui-theme] .decision-timeline {
+  border-color: var(--insight-border);
+  background: var(--insight-panel);
+}
+body[data-ui-theme] .decision-timeline li { border-bottom-color: var(--insight-border); }
+body[data-ui-theme] .decision-timeline__scope {
+  color: var(--status-info);
+  background: var(--status-info-surface);
+}
+body[data-ui-theme] .decision-timeline__scope.is-company {
+  color: var(--status-success);
+  background: var(--status-success-surface);
+}
+body[data-ui-theme] .decision-basira-explanation__summary {
+  border-color: color-mix(in srgb, var(--brand) 24%, var(--insight-border));
+  background: color-mix(in srgb, var(--brand) 8%, var(--insight-panel));
+}
+body[data-ui-theme] :is(.decision-quality-card, .decision-policy, .decision-alert) :is(footer, li, dl > div) {
+  border-color: var(--insight-border);
+}
+body[data-ui-theme] .decision-sales-policy :is(input, select, textarea) {
+  border-color: var(--field-border);
+  color: var(--ink);
+  background: var(--insight-panel);
+}
+
+/* Marketing: campaign cards, consent boundaries and filter/form surfaces are
+   tied to semantic roles while chart series remain supplied by chart tokens. */
+body[data-ui-theme] :is(.marketing-workspace__boundary, .marketing-campaign, .marketing-reputation .baseer-card, .marketing-calendar) {
+  border-color: var(--insight-border);
+  background: var(--insight-panel);
+}
+body[data-ui-theme] :is(.marketing-campaign footer, .marketing-reputation__automation, .marketing-reputation__form fieldset) {
+  border-color: var(--insight-border);
+}
+body[data-ui-theme] .marketing-reputation__form fieldset {
+  background: color-mix(in srgb, var(--insight-subtle) 72%, var(--insight-panel));
+}
+body[data-ui-theme] :is(.marketing-campaign-form, .marketing-reputation__form) :is(input, select, textarea) {
+  border-color: var(--field-border);
+  color: var(--ink);
+  background: var(--insight-panel);
+}
+body[data-ui-theme] .marketing-workspace__message { color: var(--status-danger); }
+body[data-ui-theme] .marketing-campaign-register__filters {
+  border-color: var(--insight-border);
+  background: color-mix(in srgb, var(--insight-subtle) 76%, var(--insight-panel));
+}
+
+/* Inbound evidence is read-only evidence.  Labels retain their supplied colour
+   swatch, while the surrounding cards/forms never impose a foreign palette. */
+body[data-ui-theme] .inbound-evidence-workspace__content :is(.baseer-card, .baseer-empty-state, .inbound-evidence-rule, .inbound-evidence-label) {
+  border-color: var(--insight-border);
+  background: var(--insight-panel);
+}
+body[data-ui-theme] .inbound-evidence-workspace__content :is(input, select, textarea) {
+  border-color: var(--field-border);
+  color: var(--ink);
+  background: var(--insight-panel);
+}
+body[data-ui-theme] .inbound-evidence-workspace__content .baseer-status-badge--warning {
+  color: var(--status-warning);
+  background: var(--status-warning-surface);
+}
+
+/* Theme 1 keeps the analytical pages light and separated, matching its calm
+   dashboard composition without changing any grid or interaction contract. */
+body[data-ui-theme="modern-1"] :is(.decision-workspace, .marketing-workspace, .inbound-evidence-workspace) :is(.baseer-card, .decision-timeline, .marketing-calendar, .marketing-workspace__boundary) {
+  box-shadow: var(--modern-card-shadow, var(--shadow));
+}
+body[data-ui-theme="modern-1"] .marketing-campaign-register__filters,
+body[data-ui-theme="modern-1"] .decision-sales-policy :is(input, select, textarea) {
+  border-radius: .7rem;
+}
+
+/* Theme 2 is the dense editorial alternative: lists become ledger-like
+   surfaces on desktop; mobile returns to independent touchable cards. */
+body[data-ui-theme="modern-2"] :is(.decision-workspace, .marketing-workspace, .inbound-evidence-workspace) :is(.baseer-card, .decision-timeline, .marketing-calendar, .marketing-workspace__boundary, .marketing-reputation__form fieldset) {
+  border-radius: .3125rem;
+  box-shadow: .22rem .3rem 0 color-mix(in srgb, var(--brand) 7%, transparent);
+}
+body[data-ui-theme="modern-2"] :is(.decision-workspace, .marketing-workspace) .baseer-metric-grid {
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid var(--insight-border);
+  border-radius: .3125rem;
+  background: var(--insight-border);
+}
+body[data-ui-theme="modern-2"] :is(.decision-workspace, .marketing-workspace) .baseer-metric-grid > .baseer-metric {
+  border: 0;
+  border-inline-start: 1px solid var(--insight-border);
+  border-radius: 0;
+  background: var(--insight-panel);
+}
+body[data-ui-theme="modern-2"] :is(.decision-workspace, .marketing-workspace) .baseer-metric-grid > .baseer-metric:first-child { border-inline-start: 0; }
+body[data-ui-theme="modern-2"] :is(.decision-workspace, .marketing-workspace, .inbound-evidence-workspace) :is(input, select, textarea, .baseer-filter-bar) {
+  border-radius: .3125rem;
+}
+
+@media (max-width: 760px) {
+  body[data-ui-theme="modern-2"] :is(.decision-workspace, .marketing-workspace) .baseer-metric-grid {
+    gap: .5rem;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  body[data-ui-theme="modern-2"] :is(.decision-workspace, .marketing-workspace) .baseer-metric-grid > .baseer-metric {
+    border: 1px solid var(--insight-border);
+    border-inline-start: 4px solid var(--brand);
+    border-radius: .3125rem;
+  }
+  body[data-ui-theme] :is(.decision-workspace, .marketing-workspace, .inbound-evidence-workspace) :is(.baseer-card, .decision-alert, .marketing-campaign) { min-inline-size: 0; }
+}
+
+body[data-color-scheme="dark"][data-ui-theme] :is(.decision-workspace, .marketing-workspace, .inbound-evidence-workspace) {
+  --insight-panel: var(--card-surface);
+  --insight-subtle: var(--surface-subtle);
+}

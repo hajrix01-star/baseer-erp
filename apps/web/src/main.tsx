@@ -2,6 +2,13 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import './styles.css';
+import './baseer-theme-variants.css';
+import './baseer-modern-theme-layouts.css';
+import './baseer-modern-domain-themes.css';
+import './baseer-modern-insights-themes.css';
+import './baseer-modern-entry-themes.css';
+import './baseer-modern-chart-themes.css';
+import './baseer-modern-admin-theme.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

@@ -3,8 +3,14 @@ import { BaseerBrand } from "./baseer-brand";
 
 const BaseerNavigationDrawer = lazy(async () => ({ default: (await import("./baseer-navigation-drawer")).BaseerNavigationDrawer }));
 
+export type BaseerShellHeaderContext = Readonly<{
+  hasNavigation: boolean;
+  drawerOpen: boolean;
+  onOpenNavigation: () => void;
+}>;
+
 type Props = {
-  header: ReactNode;
+  header: (context: BaseerShellHeaderContext) => ReactNode;
   moduleTitle: string;
   currentModuleLabel: string;
   sectionTitle: string;
@@ -29,12 +35,12 @@ export function BaseerAppShell({ header, moduleTitle, currentModuleLabel, sectio
   const closeDrawer = () => setDrawerOpen(false);
   useEffect(() => { setDrawerOpen(false); }, [navigationKey]);
   return <>
-    {header}
+    {header({ hasNavigation, drawerOpen, onOpenNavigation: () => setDrawerOpen(true) })}
     <main className="workspace">
-      {hasNavigation ? <aside className="module-sidebar"><div className="sidebar-product"><button className="sidebar-brand brand-button" style={{ transform: "translateY(11px)" }} onClick={onModules} type="button"><BaseerBrand /></button></div><div className="sidebar-head"><p className="overline">{currentModuleLabel}</p><h2>{moduleTitle}</h2></div>{navigation}</aside> : null}
+      {hasNavigation ? <aside className="module-sidebar"><div className="sidebar-product"><button className="sidebar-brand brand-button" onClick={onModules} type="button"><BaseerBrand /></button></div><div className="sidebar-head"><p className="overline">{currentModuleLabel}</p><h2>{moduleTitle}</h2></div>{navigation}</aside> : null}
       <section className={["module-page", pageClassName].filter(Boolean).join(" ")}>
         <div className="page-breadcrumb">{breadcrumbPrefix} / {moduleTitle}</div>
-        <div className="page-heading"><div><h1>{sectionTitle}</h1></div>{hasNavigation ? <div className="page-actions"><button className="mobile-sections" type="button" onClick={() => setDrawerOpen(true)} aria-haspopup="dialog" aria-expanded={drawerOpen}>☰ {sectionsLabel}</button></div> : null}</div>
+        <div className="page-heading"><div><h1>{sectionTitle}</h1></div></div>
         {children}
       </section>
     </main>

@@ -1,0 +1,406 @@
+/* Theme 1/2 navigation patterns. Uses Baseer's color tokens so dark mode and
+   presentation palettes stay coherent without duplicating permission logic. */
+.theme-navigation {
+  display: grid;
+  gap: .42rem;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  padding: .35rem .6rem .75rem;
+  color: var(--ink);
+}
+
+.theme-navigation__tree-node,
+.theme-navigation__module-card {
+  box-sizing: border-box;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  border: 1px solid color-mix(in srgb, var(--border-subtle) 82%, transparent);
+  border-radius: 13px;
+  background: color-mix(in srgb, var(--surface-raised) 94%, var(--theme-navigation-module) 6%);
+  overflow: clip;
+}
+
+.theme-navigation__tree-node > summary,
+.theme-navigation__module-card-toggle {
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: .52rem;
+  inline-size: 100%;
+  min-inline-size: 0;
+  box-sizing: border-box;
+  min-block-size: 3.15rem;
+  padding: .55rem .62rem;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  text-align: start;
+}
+
+.theme-navigation__tree-node > summary { list-style: none; }
+.theme-navigation__tree-node > summary::-webkit-details-marker { display: none; }
+.theme-navigation__tree-node > summary::after {
+  content: "⌄";
+  grid-column: 3;
+  transition: transform .18s ease;
+  color: var(--muted);
+}
+.theme-navigation__tree-node:not([open]) > summary::after { transform: rotate(-90deg); }
+
+/* A is deliberately a map, not a stack of B-style cards. The hierarchy stays
+   expanded on entry and uses a continuous branch line to make the module →
+   section relationship scannable in the persistent desktop sidebar. */
+.theme-navigation--tree { gap: .12rem; padding-block-start: .2rem; }
+.theme-navigation--tree .theme-navigation__tree-node {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+}
+.theme-navigation--tree .theme-navigation__tree-node > summary {
+  min-block-size: 2.55rem;
+  padding: .38rem .45rem;
+  border-radius: 8px;
+}
+.theme-navigation--tree .theme-navigation__tree-node > summary:hover,
+.theme-navigation--tree .theme-navigation__tree-node.is-current-module > summary {
+  background: color-mix(in srgb, var(--theme-navigation-module) 8%, var(--surface-raised));
+}
+.theme-navigation--tree .theme-navigation__branches {
+  position: relative;
+  gap: .08rem;
+  margin: 0 .25rem .28rem;
+  padding: .16rem .1rem .08rem .72rem;
+  border-inline-start-color: color-mix(in srgb, var(--theme-navigation-module) 42%, var(--border-subtle));
+}
+.theme-navigation--tree .theme-navigation__section {
+  min-block-size: 2.05rem;
+  padding-block: .28rem;
+}
+.theme-navigation--tree .theme-navigation__section-branch { position: relative; }
+.theme-navigation--tree .theme-navigation__section-branch::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 1.02rem;
+  inset-inline-start: -.72rem;
+  inline-size: .54rem;
+  border-block-start: 1px solid color-mix(in srgb, var(--theme-navigation-module) 42%, var(--border-subtle));
+}
+
+.theme-navigation__module-symbol {
+  display: grid;
+  place-items: center;
+  inline-size: 1.72rem;
+  block-size: 1.72rem;
+  border-radius: 9px;
+  color: var(--on-brand);
+  background: linear-gradient(145deg, var(--theme-navigation-module), var(--theme-navigation-module-alt));
+  box-shadow: 0 4px 10px color-mix(in srgb, var(--theme-navigation-module) 23%, transparent);
+}
+.theme-navigation__module-symbol svg { inline-size: 1.05rem; block-size: 1.05rem; }
+/* White glyphs are not sufficiently legible on Theme 1's gold and muted
+   module accents. Keep their visible mark high-contrast without changing the
+   shared module palette or any accounting meaning. */
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation :is([data-module-id="marketing"], [data-module-id="finance"], [data-module-id="administration"]) .theme-navigation__module-symbol { color: var(--chart-tooltip); }
+.theme-navigation__module-title,
+.theme-navigation__module-card-toggle strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .84rem; font-weight: 760; }
+.theme-navigation__count {
+  display: grid;
+  place-items: center;
+  min-inline-size: 1.35rem;
+  block-size: 1.35rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--theme-navigation-module) 13%, transparent);
+  color: var(--theme-navigation-module);
+  font-size: .7rem;
+  font-weight: 800;
+}
+
+.theme-navigation__branches {
+  display: grid;
+  gap: .15rem;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  box-sizing: border-box;
+  margin: 0 .55rem .52rem;
+  padding: .25rem .1rem .05rem .55rem;
+  border-inline-start: 1px solid color-mix(in srgb, var(--theme-navigation-module) 32%, var(--border-subtle));
+}
+.theme-navigation__section {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  min-block-size: 2.4375rem;
+  inline-size: 100%;
+  min-inline-size: 0;
+  box-sizing: border-box;
+  padding: .36rem .42rem;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: .78rem;
+  font-weight: 650;
+  text-align: start;
+}
+.theme-navigation__section svg { flex: 0 0 auto; inline-size: 1rem; block-size: 1rem; color: var(--theme-navigation-module); }
+.theme-navigation__section > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.theme-navigation__section:hover { border-color: color-mix(in srgb, var(--theme-navigation-module) 23%, var(--border-subtle)); background: color-mix(in srgb, var(--theme-navigation-module) 7%, transparent); color: var(--ink); }
+.theme-navigation__section.is-active { border-color: color-mix(in srgb, var(--theme-navigation-module) 34%, transparent); color: var(--theme-navigation-module); background: color-mix(in srgb, var(--theme-navigation-module) 13%, var(--surface-raised)); font-weight: 800; }
+.theme-navigation__section:focus-visible,
+.theme-navigation__module-card-toggle:focus-visible,
+.theme-navigation__tree-node > summary:focus-visible { outline: 2px solid var(--focus-ring, var(--brand)); outline-offset: -2px; }
+
+.theme-navigation--modules { gap: .58rem; }
+.theme-navigation__module-card { box-shadow: 0 6px 16px color-mix(in srgb, var(--ink) 4%, transparent); }
+.theme-navigation__module-card.is-current-module { border-color: color-mix(in srgb, var(--theme-navigation-module) 42%, var(--border-subtle)); }
+.theme-navigation__module-card-toggle > span:nth-child(2) { display: grid; gap: .12rem; min-inline-size: 0; }
+.theme-navigation__module-card-toggle small { color: var(--muted); font-size: .68rem; font-weight: 650; }
+.theme-navigation__disclosure { color: var(--muted); font-size: 1.1rem; transition: transform .18s ease; }
+.theme-navigation__module-card:not(.is-expanded) .theme-navigation__disclosure { transform: rotate(-90deg); }
+
+/* Stable URL stages use the same compact tab grammar as workspace tabs, but
+   live directly below their active page branch in either navigation mode. */
+.theme-navigation__page-tabs {
+  display: flex;
+  gap: .22rem;
+  overflow-x: auto;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  box-sizing: border-box;
+  margin: .05rem .35rem .35rem 1.1rem;
+  padding: .22rem;
+  border: 1px solid color-mix(in srgb, var(--theme-navigation-module) 18%, var(--border-subtle));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--theme-navigation-module) 5%, var(--surface-raised));
+  scrollbar-width: thin;
+}
+.theme-navigation__page-tabs button {
+  flex: 0 0 auto;
+  min-block-size: 1.82rem;
+  padding: .25rem .42rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: .68rem;
+  font-weight: 750;
+  white-space: nowrap;
+}
+.theme-navigation__page-tabs button:hover { color: var(--theme-navigation-module); background: color-mix(in srgb, var(--theme-navigation-module) 9%, transparent); }
+.theme-navigation__page-tabs button.is-active { border-color: color-mix(in srgb, var(--theme-navigation-module) 32%, transparent); color: var(--on-brand); background: var(--theme-navigation-module); }
+.theme-navigation__page-tabs button:focus-visible { outline: 2px solid var(--focus-ring, var(--brand)); outline-offset: 1px; }
+
+.theme-navigation-control {
+  display: inline-flex;
+  align-items: center;
+  gap: .125rem;
+  padding: .1875rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: .5rem;
+  background: var(--surface-raised);
+}
+.theme-navigation-control button {
+  display: inline-flex;
+  align-items: center;
+  gap: .18rem;
+  min-block-size: 2.4375rem;
+  padding: .3125rem .5rem;
+  border: 0;
+  border-radius: .3125rem;
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: .625rem;
+  font-weight: 750;
+}
+.theme-navigation-control button.is-active { color: var(--on-brand); background: var(--brand); box-shadow: 0 2px 5px color-mix(in srgb, var(--brand) 28%, transparent); }
+.theme-navigation-control button:focus-visible { outline: 2px solid var(--focus-ring, var(--brand)); outline-offset: 2px; }
+.theme-navigation-control b { font-size: .625rem; }
+.theme-navigation-control__title { padding: 0 .3125rem; color: var(--muted); font-size: .5625rem; font-weight: 800; white-space: nowrap; }
+
+@media (max-width: 740px) {
+  .theme-navigation-control { display: none; }
+  .theme-navigation { padding-inline: .25rem; }
+  .theme-navigation__tree-node > summary,
+  .theme-navigation__module-card-toggle { min-block-size: 3.35rem; }
+  .theme-navigation--tree .theme-navigation__tree-node > summary { min-block-size: 2.9rem; }
+}
+
+/* The tree sits on the shell's dark navigation surface in Theme 1.  Its
+   internal component must inherit that contrast instead of resetting to the
+   page-canvas ink token (which made inactive branches unreadable). */
+.module-sidebar .theme-navigation,
+.mobile-drawer__panel .theme-navigation { color: inherit; }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation__tree-node > summary,
+body[data-color-scheme="dark"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation__tree-node > summary { color: color-mix(in srgb, var(--on-brand) 94%, transparent); }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation__section,
+body[data-color-scheme="dark"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation__section { color: color-mix(in srgb, var(--on-brand) 82%, transparent); }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation__section:hover,
+body[data-color-scheme="dark"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation__section:hover { color: var(--on-brand); background: color-mix(in srgb, var(--on-brand) 9%, transparent); }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__tree-node > summary:hover,
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__tree-node.is-current-module > summary,
+body[data-color-scheme="dark"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__tree-node > summary:hover,
+body[data-color-scheme="dark"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__tree-node.is-current-module > summary { background: color-mix(in srgb, var(--on-brand) 9%, transparent); }
+
+/*
+ * The A/B navigation follows the reference dashboard's compact grammar.
+ * Tree mode is an unboxed map (39px module headers, 36px pages); module mode
+ * is a set of 49px drill-in cards.  Keeping these dimensions here makes the
+ * same navigation read identically in the fixed desktop rail and the mobile
+ * drawer instead of inheriting the older Baseer menu's larger rhythm.
+ */
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation,
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation {
+  gap: .25rem;
+  padding: 0;
+  overflow-x: clip;
+}
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree,
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree { gap: .125rem; }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__tree-node > summary,
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__tree-node > summary {
+  grid-template-columns: 1rem minmax(0, 1fr) 1rem;
+  gap: .5625rem;
+  min-block-size: 2.4375rem;
+  padding: .5625rem .625rem;
+  border-radius: .5rem;
+}
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__module-symbol,
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__module-symbol {
+  inline-size: 1rem;
+  block-size: 1rem;
+  border-radius: 0;
+  color: currentColor;
+  background: transparent;
+  box-shadow: none;
+}
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__module-symbol svg,
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__module-symbol svg { inline-size: 1rem; block-size: 1rem; }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__module-title,
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__module-title {
+  font-size: .8125rem;
+  font-weight: 800;
+}
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__count,
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__count { display: none; }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__branches,
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__branches {
+  gap: .0625rem;
+  margin: 0;
+  padding: 0 .3125rem .3125rem;
+  border: 0;
+}
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__section,
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__section {
+  min-block-size: 2.25rem;
+  padding: .5rem .625rem;
+  border: 0;
+  border-radius: .5rem;
+  font-size: .75rem;
+}
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__section-branch::before,
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__section-branch::before { display: none; }
+
+/* Reference page-tabs are a vertical continuation of their selected page,
+   not a horizontally scrollable pill rail.  This also closes the historical
+   3–31px horizontal overflow in narrow sidebars. */
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation__page-tabs,
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation__page-tabs {
+  display: grid;
+  gap: .125rem;
+  overflow: visible;
+  margin: 0 1.375rem .3125rem .4375rem;
+  padding: .3125rem .4375rem;
+  border: 0;
+  border-inline-start: 1px solid color-mix(in srgb, var(--border-subtle) 80%, transparent);
+  border-radius: 0;
+  background: transparent;
+}
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation__page-tabs button,
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation__page-tabs button {
+  inline-size: 100%;
+  min-block-size: 0;
+  padding: .3125rem .4375rem;
+  border: 0;
+  border-radius: .375rem;
+  text-align: start;
+  font-size: .6875rem;
+}
+
+/* Theme 1: signal/dark rail. */
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__tree-node > summary { color: color-mix(in srgb, var(--on-brand) 92%, transparent); }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__tree-node > summary:hover { background: color-mix(in srgb, var(--on-brand) 8%, transparent); }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__section { color: color-mix(in srgb, var(--on-brand) 82%, transparent); }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__section svg { color: inherit; }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__section:hover { color: var(--on-brand); background: color-mix(in srgb, var(--on-brand) 6%, transparent); }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__section.is-active {
+  color: var(--chart-tooltip);
+  background: color-mix(in srgb, var(--brand-soft) 84%, var(--on-brand));
+  font-weight: 800;
+}
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation__page-tabs { border-inline-start-color: color-mix(in srgb, var(--on-brand) 38%, transparent); }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation__page-tabs button { color: color-mix(in srgb, var(--on-brand) 74%, transparent); }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation__page-tabs button:hover,
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation__page-tabs button.is-active { color: var(--chart-tooltip); background: color-mix(in srgb, var(--brand-soft) 84%, var(--on-brand)); }
+
+/* Theme 2: editorial/light rail. */
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__tree-node > summary { color: color-mix(in srgb, var(--ink) 76%, var(--muted)); }
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__tree-node > summary:hover { background: var(--surface-subtle); }
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__section { color: color-mix(in srgb, var(--ink) 76%, var(--muted)); }
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__section svg { color: inherit; }
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__section:hover { color: var(--ink); background: var(--surface-subtle); }
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__section.is-active { color: var(--on-brand); background: var(--brand); font-weight: 800; }
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation__page-tabs { border-inline-start-color: color-mix(in srgb, var(--brand) 34%, var(--border-subtle)); }
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation__page-tabs button { color: var(--muted); }
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation__page-tabs button:hover,
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation__page-tabs button.is-active { color: var(--on-brand); background: var(--brand); }
+
+/* B keeps its visual identity separate from A: a card opens a compact,
+   bounded child panel instead of borrowing the tree's branch treatment. */
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules,
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules { gap: .4375rem; }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__module-card,
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__module-card { border-radius: .6875rem; box-shadow: none; }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__module-card-toggle,
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__module-card-toggle { min-block-size: 3.0625rem; padding: .625rem; }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__module-symbol,
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__module-symbol { inline-size: 1.8125rem; block-size: 1.8125rem; border-radius: .5rem; box-shadow: none; }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__module-card-toggle strong,
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__module-card-toggle strong { font-size: .8125rem; font-weight: 800; }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__module-card-toggle small,
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__module-card-toggle small { font-size: .625rem; }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__branches,
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__branches { gap: .0625rem; margin: 0 .375rem .1875rem; padding: .25rem; border-radius: .5625rem; }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__module-card { border-color: transparent; color: color-mix(in srgb, var(--on-brand) 88%, transparent); background: color-mix(in srgb, var(--on-brand) 5%, transparent); }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__module-card.is-expanded { color: var(--chart-tooltip); background: color-mix(in srgb, var(--brand-soft) 84%, var(--on-brand)); }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__module-card.is-expanded .theme-navigation__module-symbol { color: var(--on-brand); background: var(--brand); }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__branches { border-inline-start: 0; background: color-mix(in srgb, var(--on-brand) 5%, transparent); }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__section { min-block-size: 2.25rem; padding: .5rem .625rem; border: 0; color: color-mix(in srgb, var(--on-brand) 82%, transparent); }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__section.is-active { color: var(--chart-tooltip); background: color-mix(in srgb, var(--brand-soft) 84%, var(--on-brand)); }
+
+/* An expanded Theme 1 module deliberately becomes a light reading surface.
+   Its child controls must switch back to ink; the inherited rail foreground
+   was near-white and made labels such as التقويم invisible on mobile. */
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__module-card.is-expanded .theme-navigation__branches { background: color-mix(in srgb, var(--brand) 5%, var(--surface-raised)); }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__module-card.is-expanded .theme-navigation__section { color: color-mix(in srgb, var(--chart-tooltip) 86%, var(--muted)); }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__module-card.is-expanded .theme-navigation__section svg { color: var(--brand); }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__module-card.is-expanded .theme-navigation__section:hover { color: var(--chart-tooltip); background: color-mix(in srgb, var(--brand) 10%, var(--surface-raised)); }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__module-card.is-expanded .theme-navigation__section.is-active { color: var(--on-brand); background: var(--brand); }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__module-card.is-expanded .theme-navigation__page-tabs { border-inline-start-color: color-mix(in srgb, var(--brand) 34%, var(--border-subtle)); }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__module-card.is-expanded .theme-navigation__page-tabs button { color: color-mix(in srgb, var(--chart-tooltip) 82%, var(--muted)); }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__module-card.is-expanded .theme-navigation__page-tabs button:hover { color: var(--chart-tooltip); background: color-mix(in srgb, var(--brand) 10%, var(--surface-raised)); }
+body[data-ui-theme="modern-1"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__module-card.is-expanded .theme-navigation__page-tabs button.is-active { color: var(--on-brand); background: var(--brand); }
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__module-card { border-color: var(--border-subtle); color: color-mix(in srgb, var(--ink) 76%, var(--muted)); background: var(--surface-raised); }
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__module-card.is-expanded { color: var(--on-brand); border-color: var(--brand); background: var(--brand); }
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__module-card.is-expanded .theme-navigation__module-symbol { color: var(--brand); background: var(--on-brand); }
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__branches { border-inline-start: 0; border: 1px solid var(--border-subtle); background: var(--surface-subtle); }
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__section { min-block-size: 2.25rem; padding: .5rem .625rem; border: 0; color: color-mix(in srgb, var(--ink) 76%, var(--muted)); }
+body[data-ui-theme="modern-2"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--modules .theme-navigation__section.is-active { color: var(--on-brand); background: var(--brand); }

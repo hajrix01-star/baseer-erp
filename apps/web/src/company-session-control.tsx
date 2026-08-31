@@ -13,6 +13,15 @@ import { pageRouteHash } from "./page-registry";
 
 type Language = "ar" | "en";
 
+function clearCompanyScopedStage() {
+  if (!window.location.hash) return;
+  const route = new URLSearchParams(window.location.hash.slice(1));
+  if (!route.has("stage")) return;
+  route.delete("stage");
+  const nextHash = route.toString();
+  window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}${nextHash ? `#${nextHash}` : ""}`);
+}
+
 export function CompanySessionControl({ language }: { language: Language }) {
   const copy = uiCopy(language);
   const [companies, setCompanies] = useState<AvailableCompany[]>([]);
@@ -86,6 +95,9 @@ export function CompanySessionControl({ language }: { language: Language }) {
                   setOpen(false);
                   return;
                 }
+                // Stages can contain a company-scoped record id. They must
+                // never be carried into another company's reload.
+                clearCompanyScopedStage();
                 selectActiveCompany(company.id);
                 window.location.reload();
               }}
