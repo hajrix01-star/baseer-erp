@@ -921,6 +921,11 @@ const dailySalesAnalyticsDisplaySchema = z.object({
   // A plotting coordinate only. The visible percentage remains the server
   // formatted string above, so the client does not format or calculate it.
   applicationSalesSharePlotValue: z.number().finite().min(0).max(100).nullable(),
+  // Plot coordinates are deliberately separate from the financial display
+  // strings: chart components receive server-authoritative values without
+  // parsing, formatting, or aggregating money in the browser.
+  salesGrossPlotValue: z.number().finite().nullable(),
+  applicationSalesGrossPlotValue: z.number().finite().nullable(),
 }).strict();
 const dailySalesAnalyticsChangeSchema = z.object({
   dailyAverageSalesPercent: z.string().min(1).max(64).nullable(),

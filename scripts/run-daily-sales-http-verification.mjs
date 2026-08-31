@@ -400,6 +400,8 @@ try {
     dailyAverageCustomerCount: "2.00",
     applicationSalesSharePercent: "0.00%",
     applicationSalesSharePlotValue: 0,
+    salesGrossPlotValue: 115,
+    applicationSalesGrossPlotValue: 0,
   }, "All visible analytics values, including customer averages and application share, must be formatted and calculated by the server.");
   const cashierAnalytics = await server.inject({
     method: "GET",

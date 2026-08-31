@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { activeSession, api, monthRange } from "./daily-sales-client";
-import { presentBaseerApiError } from "./baseer-api-error";
+import { activeSession, activeSessionChangedEvent, api, monthRange } from "./daily-sales-client";
+import { canRetryBaseerApiError, presentBaseerApiError } from "./baseer-api-error";
+import { BaseerAsyncState } from "./baseer-async-state";
 import { BaseerStaticSelect } from "./baseer-static-select";
 import { MonthlyApplicationSalesShareChart } from "./monthly-application-sales-share-chart";
 
@@ -11,13 +12,14 @@ type AnalyticsChange = Readonly<{ dailyAverageSalesPercent: string | null; daily
 type AnalyticsPeriod = Readonly<{
   fromBusinessDate: string; toBusinessDate: string; amountBasis: "GROSS_VAT_INCLUSIVE"; vatInclusive: true; dataQuality: DataQuality;
   coverage: { recordedSalesDays: number; requiredOperatingDays: number; scheduledClosedDays: number; missingDays: number; partialDays: number };
-  display: { salesGrossAmount: string | null; applicationSalesGrossAmount: string | null; dailyAverageSalesAmount: string | null; recordedCustomerCount: string | null; dailyAverageCustomerCount: string | null; applicationSalesSharePercent: string | null; applicationSalesSharePlotValue: number | null };
+  display: { salesGrossAmount: string | null; applicationSalesGrossAmount: string | null; dailyAverageSalesAmount: string | null; recordedCustomerCount: string | null; dailyAverageCustomerCount: string | null; applicationSalesSharePercent: string | null; applicationSalesSharePlotValue: number | null; salesGrossPlotValue: number | null; applicationSalesGrossPlotValue: number | null };
 }>;
 type AnalyticsReceipt = Readonly<{
   annualMonths: ReadonlyArray<AnalyticsPeriod & { month: MonthValue; changeFromPreviousMonth: AnalyticsChange }>;
   primary: { month: MonthValue; weeks: ReadonlyArray<AnalyticsPeriod & { changeFromComparison: AnalyticsChange }> };
   comparison: { month: MonthValue; weeks: ReadonlyArray<AnalyticsPeriod> };
 }>;
+type AnalyticsError = Readonly<{ message: string; canRetry: boolean }>;
 
 const monthNamesAr = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
 const monthNamesEn = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -49,21 +51,39 @@ export function SalesAnalyticsWorkspace({ language }: { language: Language }) {
   const [year, setYear] = useState(Number(currentMonth.slice(0, 4)));
   const [data, setData] = useState<AnalyticsReceipt | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<AnalyticsError | null>(null);
+  const [retryRevision, setRetryRevision] = useState(0);
+  const [sessionRevision, setSessionRevision] = useState(0);
   const ar = language === "ar";
 
   useEffect(() => {
+    const refreshSession = () => setSessionRevision((current) => current + 1);
+    window.addEventListener(activeSessionChangedEvent, refreshSession);
+    return () => window.removeEventListener(activeSessionChangedEvent, refreshSession);
+  }, []);
+
+  useEffect(() => {
     const session = activeSession();
-    if (!session) { setError("SESSION_EXPIRED"); setLoading(false); return; }
-    let cancelled = false;
-    setLoading(true); setError("");
+    if (!session) {
+      setError({
+        message: ar ? "انتهت الجلسة. سجّل الدخول مرة أخرى." : "Your session has ended. Sign in again.",
+        canRetry: false,
+      });
+      setLoading(false);
+      return;
+    }
+    const controller = new AbortController();
+    setLoading(true); setError(null);
     const query = new URLSearchParams({ year: String(year), primaryMonth, comparisonMonth });
-    void api<AnalyticsReceipt>(session, `/finance/daily-sales/analytics?${query.toString()}`)
-      .then((receipt) => !cancelled && setData(receipt))
-      .catch((reason) => !cancelled && setError(presentBaseerApiError(reason, language, ar ? "تعذر تحميل تحليلات المبيعات." : "Sales analytics could not be loaded.")))
-      .finally(() => !cancelled && setLoading(false));
-    return () => { cancelled = true; };
-  }, [ar, comparisonMonth, language, primaryMonth, year]);
+    void api<AnalyticsReceipt>(session, `/finance/daily-sales/analytics?${query.toString()}`, { signal: controller.signal })
+      .then((receipt) => !controller.signal.aborted && setData(receipt))
+      .catch((reason) => !controller.signal.aborted && setError({
+        message: presentBaseerApiError(reason, language, ar ? "تعذر تحميل تحليلات المبيعات." : "Sales analytics could not be loaded."),
+        canRetry: canRetryBaseerApiError(reason),
+      }))
+      .finally(() => !controller.signal.aborted && setLoading(false));
+    return () => controller.abort();
+  }, [ar, comparisonMonth, language, primaryMonth, retryRevision, sessionRevision, year]);
 
   const weeks = useMemo(() => data?.primary.weeks.map((primary, index) => ({ primary, comparison: data.comparison.weeks[index] ?? null })) ?? [], [data]);
   const monthly = data?.annualMonths ?? [];
@@ -74,7 +94,6 @@ export function SalesAnalyticsWorkspace({ language }: { language: Language }) {
   });
 
   return <section className="sales-analytics" dir={ar ? "rtl" : "ltr"}>
-    <p className="sales-analytics__intro">{ar ? "قراءة خادمية للمبيعات المثبتة الشاملة للضريبة. لا يظهر المتوسط أو التغير قبل اكتمال تغطية أيام التشغيل." : "Server-owned, VAT-inclusive sales analysis. Averages and changes appear only after operating-day coverage is complete."}</p>
     <div className="sales-analytics__grid">
       <article className="sales-analytics__card">
         <header><div><span className="sales-analytics__vat">{ar ? "شامل الضريبة" : "VAT inclusive"}</span><h2>{ar ? "متوسط المبيعات اليومية حسب أسبوع الشهر" : "Daily sales average by month week"}</h2></div></header>
@@ -87,10 +106,17 @@ export function SalesAnalyticsWorkspace({ language }: { language: Language }) {
       </article>
       <article className="sales-analytics__card">
         <header><div><span className="sales-analytics__vat">{ar ? "شامل الضريبة" : "VAT inclusive"}</span><h2>{ar ? `نسبة مبيعات التطبيقات من إجمالي المبيعات — ${year}` : `Application sales share of total sales — ${year}`}</h2></div></header>
-        <div className="sales-analytics__application-chart"><MonthlyApplicationSalesShareChart language={language} title={ar ? `نسبة مبيعات التطبيقات من إجمالي المبيعات خلال ${year}` : `Application sales share of total sales in ${year}`} points={applicationSales.map((item) => ({ label: labelForMonth(item.month, language), monthLabel: (language === "ar" ? monthNamesAr : monthNamesEn)[Number(item.month.slice(5, 7)) - 1]!, shortLabel: shortLabelForMonth(item.month, language), sharePlotValue: item.display.applicationSalesSharePlotValue, shareDisplay: item.display.applicationSalesSharePercent, totalSalesDisplay: item.display.salesGrossAmount, applicationSalesDisplay: item.display.applicationSalesGrossAmount }))} /><p>{ar ? "تظهر النسبة فقط للشهور مكتملة التغطية؛ مرّر المؤشر فوق أي شهر لقراءة تفاصيله." : "The share appears only for months with complete coverage; hover over a month for details."}</p></div>
+        <div className="sales-analytics__application-chart"><MonthlyApplicationSalesShareChart language={language} title={ar ? `نسبة مبيعات التطبيقات من إجمالي المبيعات خلال ${year}` : `Application sales share of total sales in ${year}`} points={applicationSales.map((item) => ({ label: labelForMonth(item.month, language), monthLabel: (language === "ar" ? monthNamesAr : monthNamesEn)[Number(item.month.slice(5, 7)) - 1]!, shortLabel: shortLabelForMonth(item.month, language), totalSalesPlotValue: item.display.salesGrossPlotValue, applicationSalesPlotValue: item.display.applicationSalesGrossPlotValue, sharePlotValue: item.display.applicationSalesSharePlotValue, shareDisplay: item.display.applicationSalesSharePercent, totalSalesDisplay: item.display.salesGrossAmount, applicationSalesDisplay: item.display.applicationSalesGrossAmount }))} /></div>
       </article>
     </div>
-    {loading ? <p className="sales-analytics__status">{ar ? "جارٍ تحميل البيانات…" : "Loading data…"}</p> : null}{error ? <p className="sales-analytics__status is-error">{error}</p> : null}
+    {loading ? <BaseerAsyncState status="loading" language={language} /> : null}
+    {error ? <BaseerAsyncState
+      status="error"
+      language={language}
+      title={error.message}
+      description={ar ? "لم تتغير أي بيانات محاسبية." : "No accounting data was changed."}
+      onRetry={error.canRetry ? () => setRetryRevision((current) => current + 1) : undefined}
+    /> : null}
   </section>;
 }
 
