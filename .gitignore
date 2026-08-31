@@ -20,3 +20,10 @@ backups/
 outputs/
 archify-trial/
 hr-chart-lab/
+
+# Local Codex tooling, generated visual evidence, and the standalone GPT reference.
+.agents/
+artifacts/
+apps/web/artifacts/
+apps/web/profile-route-results/
+gpt-modern-dashboard/
