@@ -5,7 +5,7 @@ import { BaseerApiError } from './baseer-api-error';
 import { BaseerButton } from './baseer-button';
 import { BaseerCard } from './baseer-card';
 import { BaseerStatusBadge } from './baseer-status-badge';
-import { BaseerEmptyState, BaseerNotice, BaseerSectionHeader, BaseerWorkspace } from './baseer-workspace';
+import { BaseerEmptyState, BaseerNotice, BaseerNoticeGroup, BaseerSectionHeader, BaseerWorkspace } from './baseer-workspace';
 import { activeSession, type ActiveSession } from './daily-sales-client';
 import { DailySalesSignIn } from './daily-sales-sign-in';
 import { formatCount, formatDateTime } from './number-format';
@@ -104,8 +104,7 @@ function NurixMigrationContent({ language, session }: { language: Language; sess
   return <BaseerWorkspace className="nurix-migration-workspace">
       <BaseerSectionHeader eyebrow={text.eyebrow} title={text.title} description={text.description} actions={<BaseerStatusBadge tone="warning">{text.stage}</BaseerStatusBadge>} />
       <NurixExcelImportPanel language={language} session={session} />
-    <BaseerNotice tone="warning" title={text.safeTitle}>{text.safe}</BaseerNotice>
-    {message ? <BaseerNotice tone="danger">{message}</BaseerNotice> : null}
+    <BaseerNoticeGroup ariaLabel={language === 'ar' ? 'تنبيهات بوابة الترحيل' : 'Migration gate notices'}><BaseerNotice tone="warning" title={text.safeTitle}>{text.safe}</BaseerNotice>{message ? <BaseerNotice tone="danger">{message}</BaseerNotice> : null}</BaseerNoticeGroup>
     {runs.length === 0 ? <BaseerEmptyState title={text.noRuns} /> : <>
       <BaseerCard className="nurix-migration-selector"><label>{text.select}<select value={selectedRunId} onChange={(event) => void chooseRun(event.target.value)} disabled={busy}>{runs.map((run) => <option value={run.id} key={run.id}>{run.sourceSystem} · {run.transformVersion} · {run.sourceFingerprintPrefix}</option>)}</select></label><BaseerButton type="button" onClick={() => void load(selectedRunId)} disabled={loading || busy}>{text.reload}</BaseerButton></BaseerCard>
       {review ? <>

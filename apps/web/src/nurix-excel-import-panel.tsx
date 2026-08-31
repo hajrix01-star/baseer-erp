@@ -7,7 +7,7 @@ import { BaseerButton } from './baseer-button';
 import { BaseerCard } from './baseer-card';
 import { BaseerFileInput } from './baseer-form-fields';
 import { BaseerStatusBadge } from './baseer-status-badge';
-import { BaseerNotice } from './baseer-workspace';
+import { BaseerNotice, BaseerNoticeGroup } from './baseer-workspace';
 import { listAvailableCompanies, type ActiveSession, type AvailableCompany } from './daily-sales-client';
 import { executeNurixExcelMasterData, loadNurixExcelImportTemplate, loadNurixHistoricalPayrollEvidence, startNurixExcelImportPreflight, type NurixExcelImportPreflight, type NurixExcelImportTemplate, type NurixExcelMasterDataExecution, type NurixHistoricalPayrollEvidence } from './nurix-migration-client';
 import { formatCount, formatDateTime } from './number-format';
@@ -132,8 +132,7 @@ export function NurixExcelImportPanel({ language, session }: { language: Languag
 
   return <section className="nurix-excel-import" aria-labelledby="nurix-excel-import-title">
     <header className="nurix-excel-import__header"><div><h3 id="nurix-excel-import-title">{text.title}</h3><p>{text.description}</p></div><BaseerButton type="button" variant="secondary" disabled={busy} onClick={() => void showTemplate()}>{text.template}</BaseerButton></header>
-    <BaseerNotice tone="warning" title={text.safetyTitle}>{text.safety}</BaseerNotice>
-    {!serviceReady ? <BaseerNotice tone="info">{text.unready}</BaseerNotice> : null}
+    <BaseerNoticeGroup ariaLabel={language === 'ar' ? 'تنبيهات الاستيراد' : 'Import notices'}><BaseerNotice tone="warning" title={text.safetyTitle}>{text.safety}</BaseerNotice>{!serviceReady ? <BaseerNotice tone="info">{text.unready}</BaseerNotice> : null}</BaseerNoticeGroup>
     <ol className="nurix-excel-import__stages" aria-label={text.stageTitle}>{text.stages.map((stage, index) => <li key={stage} className={index < activeStep ? 'is-complete' : index === activeStep ? 'is-current' : ''}><span>{index < activeStep ? '✓' : index + 1}</span><strong>{stage}</strong></li>)}</ol>
     <BaseerCard className="nurix-excel-import__form">
       <label><span>{text.company}</span><select value={targetCompanyId} disabled={busy || loading} onChange={(event) => { const next = event.target.value; setTargetCompanyId(next); setSelectedFile(null); setMessage(null); void load(next); }}><option value={session.companyId}>{companies.find((company) => company.id === session.companyId)?.nameAr ?? session.companyId}</option>{companies.filter((company) => company.id !== session.companyId).map((company) => <option key={company.id} value={company.id}>{company.nameAr}</option>)}</select></label>
