@@ -26,14 +26,14 @@
 .hr-attendance-team-report__card header small { color: var(--muted); font-size: .7rem; font-weight: 800; }
 .hr-attendance-team-report__card h4 { overflow: hidden; margin: 0; color: var(--ink); font-size: .95rem; line-height: 1.4; text-overflow: ellipsis; white-space: nowrap; }
 .hr-attendance-team-report__state { display: inline-flex; flex: 0 0 auto; align-items: center; min-block-size: 1.65rem; padding: .18rem .45rem; border-radius: 999px; background: var(--canvas); color: var(--muted); font-size: .68rem; font-weight: 850; white-space: nowrap; }
-.hr-attendance-team-report__state.is-on_time { color: var(--success, #16794d); background: color-mix(in srgb, var(--success, #16794d) 9%, var(--surface)); }
+.hr-attendance-team-report__state.is-on_time { color: var(--status-success); background: color-mix(in srgb, var(--status-success-surface) 62%, var(--surface)); }
 .hr-attendance-team-report__state.is-in_progress { color: var(--brand-deep); background: color-mix(in srgb, var(--brand) 10%, var(--surface)); }
 .hr-attendance-team-report__state.is-attention, .hr-attendance-team-report__state.is-missing_check_in { color: var(--status-danger); background: color-mix(in srgb, var(--status-danger-surface) 66%, var(--surface)); }
 .hr-attendance-team-report__card-main { display: grid; grid-template-columns: 6.75rem 1fr; gap: .75rem; align-items: stretch; }
 .hr-attendance-team-report__score, .hr-attendance-team-report__hours { display: grid; align-content: center; gap: .18rem; padding: .62rem; border-radius: .7rem; background: var(--canvas); }
 .hr-attendance-team-report__score { text-align: center; color: var(--brand-deep); }
-.hr-attendance-team-report__card.is-good .hr-attendance-team-report__score { color: var(--success, #16794d); }
-.hr-attendance-team-report__card.is-watch .hr-attendance-team-report__score { color: var(--status-warning, #9a641a); }
+.hr-attendance-team-report__card.is-good .hr-attendance-team-report__score { color: var(--status-success); }
+.hr-attendance-team-report__card.is-watch .hr-attendance-team-report__score { color: var(--status-warning); }
 .hr-attendance-team-report__card.is-attention .hr-attendance-team-report__score { color: var(--status-danger); }
 .hr-attendance-team-report__score small, .hr-attendance-team-report__hours small, .hr-attendance-team-report__hours span { color: var(--muted); font-size: .68rem; font-weight: 750; }
 .hr-attendance-team-report__score b { font-size: 1.35rem; font-variant-numeric: tabular-nums; }
@@ -52,7 +52,7 @@
 .hr-attendance-team-report__table strong { color: var(--ink); }
 .hr-attendance-team-report__table small { margin-top: .15rem; color: var(--muted); font-size: .7rem; }
 .hr-attendance-team-report__table-score { font-variant-numeric: tabular-nums; }
-.hr-attendance-team-report__table-score.is-good { color: var(--success, #16794d); }.hr-attendance-team-report__table-score.is-watch { color: var(--status-warning, #9a641a); }.hr-attendance-team-report__table-score.is-attention, .hr-attendance-team-report__table td.is-attention { color: var(--status-danger); }
+.hr-attendance-team-report__table-score.is-good { color: var(--status-success); }.hr-attendance-team-report__table-score.is-watch { color: var(--status-warning); }.hr-attendance-team-report__table-score.is-attention, .hr-attendance-team-report__table td.is-attention { color: var(--status-danger); }
 @media (max-width: 760px) { .hr-attendance-team-report__summary > header { flex-direction: column; }.hr-attendance-team-report__view-switch { align-self: stretch; }.hr-attendance-team-report__view-switch .baseer-button { flex: 1; }.hr-attendance-team-report__totals { grid-template-columns: repeat(2, minmax(0, 1fr)); }.hr-attendance-team-report__totals > div:nth-child(odd) { border-inline-start: 0; }.hr-attendance-team-report__totals > div:nth-child(n + 3) { border-top: 1px solid color-mix(in srgb, var(--brand) 14%, var(--line)); } }
 @media (max-width: 460px) { .hr-attendance-team-report__cards { grid-template-columns: 1fr; }.hr-attendance-team-report__card > footer { align-items: flex-start; flex-direction: column; }.hr-attendance-team-report__card-main { grid-template-columns: 6rem 1fr; } }
 

@@ -14,18 +14,19 @@ import { BaseerComboboxField as BaseerCombobox } from "./baseer-combobox-field";
 import { BaseerSummaryMetric, BaseerSummaryMetricGrid } from "./baseer-summary-metric";
 import { BaseerMoney } from "./baseer-money";
 import { BaseerStatusBadge } from "./baseer-status-badge";
+import { BaseerSectionIcon } from "./baseer-section-icon";
 import { BaseerEmptyState, BaseerNotice, BaseerSectionHeader, BaseerWorkspace } from "./baseer-workspace";
 import { sumMoneyDecimals } from "./decimal-string";
 import type { BaseerDataGridColumn } from "./baseer-data-grid";
 import { BaseerDataGridField as BaseerDataGrid } from "./baseer-data-grid-field";
 import { activeSession, api, requestId, type ActiveSession } from "./daily-sales-client";
-import { presentBaseerApiError, presentBaseerLoadError } from "./baseer-api-error";
+import { BaseerApiError, presentBaseerApiError, presentBaseerLoadError } from "./baseer-api-error";
 import { hrEnumLabel, hrText } from "./hr-copy";
 import { HrJobTitleSelect } from "./hr-job-titles";
 import { HrEmployeeDirectoryGrid } from "./hr-employee-directory-grid";
 import { reportTopmostDialogError } from "./use-dialog-focus-trap";
 import { hasActivePermission } from "./module-access";
-import { consumeHrRouteStage } from "./hr-route-stage";
+import { consumeHrRouteStage, recoverHrRouteStage } from "./hr-route-stage";
 import { pageRouteHash } from "./page-registry";
 import "./hr-employee-edit-dialog.css";
 import { cancelHrEmployeeAdministrativeDeduction, createHrEmployeeAdministrativeDeduction, deferHrEmployeeAdministrativeDeduction, deferHrEmployeeAdvance, getHrAdministrativeDeduction, getHrAdvance, getHrEmployee, issueHrEmployeeAdvance, listHrAdministrativeDeductions, listHrAdvances, listHrEmployees, reverseHrEmployeeAdvanceIssue, settleHrEmployeeAdvanceDirectly, updateHrEmployee, type HrAdministrativeDeduction, type HrAdministrativeDeductionDetail, type HrAdvance, type HrAdvanceDetail, type HrDetail, type HrEmployee, type HrEmployeeStatus } from "./hr-client";
@@ -233,9 +234,24 @@ export function HrWorkspaceCore({ language, section, stage }: { language: Langua
     setDetail(null);
     void getHrEmployee(current, employeeProfileId)
       .then((next) => { if (active) setDetail(next); })
-      .catch((error) => { if (active) showError(presentBaseerApiError(error, language, text.employeeFile)); });
+      .catch((error) => {
+        if (!active) return;
+        // An employee profile URL is company-scoped. After switching company
+        // or re-importing employees, a saved link can point at an old id while
+        // the current register is valid. Recover to that register instead of
+        // leaving an unrelated 404 banner over the employee cards.
+        if (error instanceof BaseerApiError && error.status === 404) {
+          setDetail(null);
+          recoverHrRouteStage(section);
+          showSuccess(language === "ar"
+            ? "تم تحديث بيانات الموظفين والعودة إلى القائمة. افتح بطاقة الموظف الحالية."
+            : "Employee data was refreshed and the employee list was restored. Open the current employee card.");
+          return;
+        }
+        showError(presentBaseerApiError(error, language, text.employeeFile));
+      });
     return () => { active = false; };
-  }, [employeeProfileId, language, showError, text.employeeFile]);
+  }, [employeeProfileId, language, section, showError, showSuccess, text.employeeFile]);
   const loadMoreMovements = async () => {
     const current = activeSession();
     if (!current || !detail?.nextMovementCursor) return;
@@ -331,7 +347,7 @@ export function HrWorkspaceCore({ language, section, stage }: { language: Langua
     {message ? <BaseerNotice tone={message.tone}>{message.text}</BaseerNotice> : null}
     {section === 0 ? (
       <>
-        <BaseerSummaryMetricGrid><BaseerSummaryMetric label={text.active} value={String(overview.activeEmployees)} /><BaseerSummaryMetric label={text.onLeave} value={String(overview.employeesOnLeave)} /><BaseerSummaryMetric label={text.advances} value={String(overview.openAdvances)} /><BaseerSummaryMetric label={text.administrativeDeductions} value={String(overview.openAdministrativeDeductions)} /></BaseerSummaryMetricGrid>
+        <BaseerSummaryMetricGrid><BaseerSummaryMetric label={text.active} value={String(overview.activeEmployees)} icon={<BaseerSectionIcon glyph="users" />} accent="brand" /><BaseerSummaryMetric label={text.onLeave} value={String(overview.employeesOnLeave)} icon={<BaseerSectionIcon glyph="calendar" />} accent="success" /><BaseerSummaryMetric label={text.advances} value={String(overview.openAdvances)} icon={<BaseerSectionIcon glyph="wallet" />} accent="warning" /><BaseerSummaryMetric label={text.administrativeDeductions} value={String(overview.openAdministrativeDeductions)} icon={<BaseerSectionIcon glyph="ledger" />} accent="danger" /></BaseerSummaryMetricGrid>
       </>
     ) : (
       <>

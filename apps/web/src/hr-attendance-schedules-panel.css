@@ -14,7 +14,7 @@
 .hr-schedules__summary b { color: var(--brand-deep); font-size: 1.35rem; font-variant-numeric: tabular-nums; }
 .hr-schedules__summary small { color: var(--muted); font-size: var(--font-caption); font-weight: 700; }
 .hr-schedules__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .85rem; }
-.hr-schedules__template { display: grid; align-content: start; gap: .7rem; min-inline-size: 0; border-color: color-mix(in srgb, var(--brand) 17%, var(--line)); box-shadow: 0 .65rem 1.5rem rgb(10 58 44 / 5%); }
+.hr-schedules__template { display: grid; align-content: start; gap: .7rem; min-inline-size: 0; border-color: color-mix(in srgb, var(--brand) 17%, var(--line)); box-shadow: 0 .65rem 1.5rem color-mix(in srgb, var(--ink) 5%, transparent); }
 .hr-schedules__template-head { display: flex; justify-content: space-between; gap: .75rem; }
 .hr-schedules__template h3 { margin: .18rem 0 0; color: var(--ink); font-size: var(--font-title-md); }
 .hr-schedules__status { flex: 0 0 auto; align-self: start; padding: .22rem .5rem; border: 1px solid color-mix(in srgb, var(--line) 90%, transparent); border-radius: 999px; color: var(--muted); background: var(--canvas); font-size: var(--font-caption); font-weight: 800; }

@@ -128,6 +128,7 @@ async function mockHr(page: Page, requested: string[], options: { language?: "ar
     }
     if (url.pathname === `/v1/hr/employees/${employee.id}/letters`) return fulfill(route, { companyId, letters: [letter], hasMore: false, nextCursor: null });
     if (url.pathname === `/v1/hr/employees/${employee.id}/payroll`) return fulfill(route, { companyId, lines: [], hasMore: false, nextCursor: null });
+    if (url.pathname === "/v1/hr/employees/stale-employee-id") return fulfill(route, { error: { code: "NOT_FOUND", message: { ar: "السجل المطلوب غير موجود.", en: "The requested record was not found." }, correlationId: "e2e-stale-employee", retry: { kind: "do-not-retry" } } }, 404);
     if (url.pathname === `/v1/hr/employees/${employee.id}`) return fulfill(route, {
       companyId, employee: profileEmployee, compensation, compensationHistory: [], compensationHistoryCount: 14, services: [], serviceCount: 52, servicesHasMore: true,
       movements: [{ id: "movement-1", journalEntryId: "journal-1", movementType: "PAYROLL_ACCRUAL", businessDate: "2026-08-20", amount: "3000.0000", sourceReference: payrollRun.runNumber, description: null }], movementCount: 81, hasMoreMovements: false, nextMovementCursor: null,
@@ -208,6 +209,25 @@ async function fillOnboarding(page: Page) {
     .click();
   await dialog.getByLabel("إجمالي الراتب الشهري*").fill("3000");
   return dialog;
+}
+
+for (const presentation of ["modern-1", "modern-2"] as const) {
+  test(`HR overview cards keep their semantic roles in ${presentation}`, async ({ page, isMobile }) => {
+    const requested: string[] = [];
+    await page.addInitScript((selectedPresentation) => {
+      localStorage.setItem("baseer-erp.shell.presentation.v1", selectedPresentation);
+    }, presentation);
+    await mockHr(page, requested);
+    await page.goto("/#module=hr&section=0");
+
+    await expect(page.locator("body")).toHaveAttribute("data-ui-theme", presentation);
+    await expect(page.locator(".hr-overview__activity-card.baseer-card--record")).toHaveCount(3);
+    await expect(page.locator(".hr-workforce-chart")).toBeVisible();
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    expect(overflow).toBeLessThanOrEqual(1);
+    expect(isMobile || (await page.locator(".module-sidebar").isVisible())).toBeTruthy();
+  });
+
 }
 
 test("HR quick actions are permission-gated and open the requested operation", async ({ page }) => {
@@ -353,6 +373,21 @@ test("employee profile shows exact counts, lazy compliance paging, and topmost m
   await expect(page.locator('[role="dialog"]')).toHaveCount(1);
   await expect(profile).toBeVisible();
   await expectViewportContained(page);
+});
+
+test("a stale employee profile link self-recovers to the current company register", async ({ page }) => {
+  const requested: string[] = [];
+  await mockHr(page, requested);
+  await page.goto("/#module=hr&page=hr-employees&stage=employee-stale-employee-id");
+
+  await expect(page.getByText("تم تحديث بيانات الموظفين والعودة إلى القائمة. افتح بطاقة الموظف الحالية.")).toBeVisible();
+  await expect(page.getByRole("listitem").filter({ hasText: "موظف الاختبار" })).toBeVisible();
+  await expect(page).toHaveURL(/#module=hr&page=hr-employees$/);
+  await page.waitForTimeout(300);
+  // React Strict Mode may mount a development read effect twice. The guard is
+  // that recovery clears the stage and never creates a retry loop.
+  expect(requested.filter((request) => request === "GET /v1/hr/employees/stale-employee-id").length).toBeLessThanOrEqual(2);
+  await expect(page.getByText("السجل المطلوب غير موجود.")).toHaveCount(0);
 });
 
 test("successful onboarding closes, refreshes, and never repeats the POST", async ({ page }) => {

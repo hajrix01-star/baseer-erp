@@ -7,8 +7,8 @@
   border-radius: 1.2rem;
   background:
     radial-gradient(circle at 12% 22%, color-mix(in srgb, var(--brand) 12%, transparent), transparent 31%),
-    linear-gradient(135deg, color-mix(in srgb, var(--surface) 92%, #e7f7ef), var(--surface));
-  box-shadow: 0 1rem 2.6rem rgb(10 54 41 / 8%);
+    linear-gradient(135deg, color-mix(in srgb, var(--surface) 92%, var(--brand-soft)), var(--surface));
+  box-shadow: 0 1rem 2.6rem color-mix(in srgb, var(--ink) 8%, transparent);
   animation: hr-workforce-chart-enter 680ms cubic-bezier(.22, 1, .36, 1) both;
 }
 
@@ -32,9 +32,9 @@
 .hr-workforce-chart__header > small { flex: 0 0 auto; padding: .35rem .6rem; border: 1px solid color-mix(in srgb, var(--brand) 16%, var(--line)); border-radius: 999px; color: var(--muted); background: color-mix(in srgb, var(--surface) 84%, var(--brand-soft)); font-size: var(--font-caption); font-weight: 700; }
 
 .hr-workforce-chart__body { display: grid; grid-template-columns: minmax(15rem, .88fr) minmax(19rem, 1.12fr); align-items: center; gap: clamp(1rem, 3vw, 2.5rem); }
-.hr-workforce-chart__visual { position: relative; display: grid; min-block-size: 15.5rem; place-items: center; isolation: isolate; }
-.hr-workforce-chart__visual::before { position: absolute; z-index: -1; inline-size: min(85%, 14rem); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgb(21 154 121 / 14%), transparent 68%); content: ""; animation: hr-workforce-chart-glow 2.9s ease-in-out infinite; }
-.hr-workforce-chart__plot { position: relative; inline-size: min(100%, 15.5rem); block-size: 15.5rem; border: 1px solid color-mix(in srgb, var(--brand) 18%, var(--line)); border-radius: 50%; box-shadow: 0 1rem 2.6rem rgb(10 58 44 / 12%); }
+.hr-workforce-chart__visual { position: relative; display: grid; min-block-size: var(--baseer-chart-height-radial, 15.5rem); place-items: center; isolation: isolate; }
+.hr-workforce-chart__visual::before { position: absolute; z-index: -1; inline-size: min(85%, 14rem); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--chart-primary) 14%, transparent), transparent 68%); content: ""; animation: hr-workforce-chart-glow 2.9s ease-in-out infinite; }
+.hr-workforce-chart__plot { position: relative; inline-size: min(100%, var(--baseer-chart-height-radial, 15.5rem)); block-size: var(--baseer-chart-height-radial, 15.5rem); border: 1px solid color-mix(in srgb, var(--brand) 18%, var(--line)); border-radius: 50%; box-shadow: 0 1rem 2.6rem color-mix(in srgb, var(--ink) 12%, transparent); }
 .hr-workforce-chart__plot::after { position: absolute; inset: 22%; border-radius: 50%; background: var(--surface); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--brand) 10%, var(--line)); content: ""; }
 .hr-workforce-chart__center { position: absolute; z-index: 1; display: grid; max-inline-size: 8.7rem; gap: .16rem; place-items: center; pointer-events: none; text-align: center; }
 .hr-workforce-chart__center strong { color: var(--ink); font-size: clamp(2rem, 4vw, 3rem); font-variant-numeric: tabular-nums; letter-spacing: -.06em; line-height: 1; }
@@ -43,7 +43,7 @@
 .hr-workforce-chart__insights { display: grid; gap: .55rem; }
 .hr-workforce-chart__insight { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: .72rem; min-block-size: 4.35rem; padding: .7rem .8rem; border: 1px solid color-mix(in srgb, var(--brand) 10%, var(--line)); border-radius: .9rem; color: var(--ink); background: color-mix(in srgb, var(--surface) 90%, transparent); font: inherit; text-align: start; cursor: pointer; transition: transform 200ms cubic-bezier(.22, 1, .36, 1), border-color 200ms ease, background-color 200ms ease, box-shadow 200ms ease; }
 .hr-workforce-chart__insight:hover,
-.hr-workforce-chart__insight[aria-pressed="true"] { border-color: color-mix(in srgb, var(--brand) 48%, var(--line)); background: var(--surface); box-shadow: 0 .7rem 1.3rem rgb(10 58 44 / 9%); transform: translateY(-2px); }
+.hr-workforce-chart__insight[aria-pressed="true"] { border-color: color-mix(in srgb, var(--brand) 48%, var(--line)); background: var(--surface); box-shadow: 0 .7rem 1.3rem color-mix(in srgb, var(--ink) 9%, transparent); transform: translateY(-2px); }
 .hr-workforce-chart__insight:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
 .hr-workforce-chart__insight > span:nth-child(2) { display: grid; min-inline-size: 0; gap: .16rem; }
 .hr-workforce-chart__insight strong { overflow: hidden; color: var(--ink); font-size: var(--font-label); text-overflow: ellipsis; white-space: nowrap; }
@@ -91,12 +91,12 @@
   .hr-workforce-chart__header,
   .hr-workforce-chart__footer { align-items: flex-start; flex-direction: column; }
   .hr-workforce-chart__body { grid-template-columns: 1fr; gap: .8rem; }
-  .hr-workforce-chart__visual { min-block-size: 14rem; }
-  .hr-workforce-chart__plot { inline-size: 14rem; block-size: 14rem; }
+  .hr-workforce-chart__visual { min-block-size: var(--baseer-chart-height-radial, 14rem); }
+  .hr-workforce-chart__plot { inline-size: var(--baseer-chart-height-radial, 14rem); block-size: var(--baseer-chart-height-radial, 14rem); }
   .hr-workforce-chart__footer span:last-child { text-align: start; }
   .hr-overview__operations .hr-workforce-chart__body { grid-template-columns: 1fr; }
-  .hr-overview__operations .hr-workforce-chart__visual { min-block-size: 14rem; }
-  .hr-overview__operations .hr-workforce-chart__plot { inline-size: 14rem; block-size: 14rem; }
+  .hr-overview__operations .hr-workforce-chart__visual { min-block-size: var(--baseer-chart-height-radial, 14rem); }
+  .hr-overview__operations .hr-workforce-chart__plot { inline-size: var(--baseer-chart-height-radial, 14rem); block-size: var(--baseer-chart-height-radial, 14rem); }
   .hr-overview__operations .hr-workforce-chart__insight small { display: block; }
 }
 
@@ -111,5 +111,5 @@
 
 /* This file is loaded after the shared shell. Keep the HR dashboard aligned
    with the chosen container surface instead of reintroducing local card tints. */
-.hr-overview :is(.hr-overview__metrics > button, .hr-overview__task-grid > button, .hr-overview__quick-actions, .hr-overview__activity-card, .hr-workforce-chart, .hr-workforce-chart__insight) { border-color: var(--border-subtle); background: var(--card-surface, var(--surface-raised)); }
+.hr-overview :is(.baseer-metric-action-card, .hr-overview__quick-actions, .hr-overview__activity-card, .hr-workforce-chart, .hr-workforce-chart__insight) { border-color: var(--border-subtle); background: var(--card-surface, var(--surface-raised)); }
 .hr-overview .hr-workforce-chart__plot::after { background: var(--card-surface, var(--surface-raised)); }

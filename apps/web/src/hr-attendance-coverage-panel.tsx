@@ -24,9 +24,9 @@ export function HrAttendanceCoveragePanel({ coverage, language }: { coverage: At
   const position = (minute: number) => Math.max(0, Math.min(100, ((minute - coverage.timelineStartMinute) / range) * 100));
   const width = (startMinute: number, endMinute: number) => Math.max(.75, position(endMinute) - position(startMinute));
 
-  return <BaseerCard className="hr-coverage" aria-label={ar ? "تغطية الدوام وأوقات الذروة" : "Work coverage and peak hours"}>
+  return <BaseerCard variant="chart" className="hr-coverage" aria-label={ar ? "تغطية الدوام وأوقات الذروة" : "Work coverage and peak hours"}>
     <header className="hr-coverage__header">
-      <div><span>{ar ? "تحليل تشغيلي" : "Operational analytics"}</span><h3>{ar ? "تغطية الدوام وأوقات الذروة" : "Work coverage & peak hours"}</h3><p>{ar ? "المخطط من الشفتات المعتمدة، والفعلي من الحضور والانصراف فقط؛ لا يوجد تتبع للموقع." : "Planned uses approved shifts; actual uses check-in/out only. No location tracking."}</p></div>
+      <div><span>{ar ? "تحليل تشغيلي" : "Operational analytics"}</span><h3>{ar ? "تغطية الدوام وأوقات الذروة" : "Work coverage & peak hours"}</h3></div>
       <div className="hr-coverage__mode" aria-label={ar ? "نمط عرض التغطية" : "Coverage display mode"}>
         <BaseerButton type="button" variant="quiet" aria-pressed={mode === "planned"} onClick={() => setMode("planned")}>{ar ? "المخطط" : "Planned"}</BaseerButton>
         <BaseerButton type="button" variant="quiet" aria-pressed={mode === "actual"} onClick={() => setMode("actual")}>{ar ? "الفعلي" : "Actual"}</BaseerButton>
@@ -45,7 +45,7 @@ export function HrAttendanceCoveragePanel({ coverage, language }: { coverage: At
       </div>
     </section>
     <section className="hr-coverage__timeline" aria-label={ar ? "الدوام الفعلي اليوم" : "Actual attendance today"}>
-      <header><div><h4>{ar ? "الدوام الفعلي اليوم" : "Actual attendance today"}</h4><p>{ar ? "الشريط الأخضر = الحضور الفعلي، والإطار الفاتح = الدوام المخطط." : "Green is actual attendance; the light outline is the planned shift."}</p></div><span>{coverage.date}</span></header>
+      <header><div><h4>{ar ? "الدوام الفعلي اليوم" : "Actual attendance today"}</h4></div><span>{coverage.date}</span></header>
       <div className="hr-coverage__timeline-scroll"><div className="hr-coverage__timeline-grid" style={{ "--timeline-range": range } as React.CSSProperties}>
         <div className="hr-coverage__timeline-axis"><span />{Array.from({ length: Math.floor(range / 120) + 1 }, (_, index) => <span key={index}>{formatAttendanceMinute(coverage.timelineStartMinute + index * 120)}</span>)}</div>
         {coverage.timeline.map((employee) => <div className="hr-coverage__timeline-row" key={employee.employeeId}><strong>{employee.employeeNumber} · {ar ? employee.employeeNameAr : employee.employeeNameEn ?? employee.employeeNameAr}</strong><div className="hr-coverage__track">{employee.plannedPeriods.map((period, index) => <i className="is-planned" key={`p-${index}`} style={{ insetInlineStart: `${position(period.startMinute)}%`, inlineSize: `${width(period.startMinute, period.endMinute)}%` }} />)}{employee.actualPeriods.map((period, index) => <i className="is-actual" key={`a-${index}`} style={{ insetInlineStart: `${position(period.startMinute)}%`, inlineSize: `${width(period.startMinute, period.endMinute)}%` }} />)}</div></div>)}

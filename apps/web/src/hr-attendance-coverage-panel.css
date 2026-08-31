@@ -12,7 +12,7 @@
 .hr-coverage p { color: var(--muted); font-size: var(--font-caption); line-height: 1.55; }
 .hr-coverage__mode { display: inline-flex; gap: .25rem; padding: .2rem; border: 1px solid var(--line); border-radius: .7rem; background: var(--canvas); }
 .hr-coverage__mode .baseer-button { min-block-size: 2.15rem; }
-.hr-coverage__mode .baseer-button[aria-pressed="true"] { color: var(--on-brand, #fff); background: var(--brand); }
+.hr-coverage__mode .baseer-button[aria-pressed="true"] { color: var(--on-brand); background: var(--brand); }
 .hr-coverage__summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: hidden; border: 1px solid color-mix(in srgb, var(--brand) 18%, var(--line)); border-radius: .85rem; background: color-mix(in srgb, var(--brand-soft) 25%, var(--surface)); }
 .hr-coverage__summary > div { display: grid; gap: .1rem; min-inline-size: 0; padding: .75rem .9rem; }
 .hr-coverage__summary > div + div { border-inline-start: 1px solid color-mix(in srgb, var(--brand) 15%, var(--line)); }

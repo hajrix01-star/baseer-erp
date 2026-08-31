@@ -55,7 +55,7 @@
 .hr-payroll-create__table-heading { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding-top: .25rem; border-top: 1px solid var(--line); }
 .hr-payroll-create__loading, .hr-payroll-create__notice { margin: 0; padding: .65rem .75rem; border-radius: .55rem; font-size: var(--font-caption); }
 .hr-payroll-create__loading { color: var(--muted); background: color-mix(in srgb, var(--surface) 94%, var(--brand) 6%); }
-.hr-payroll-create__notice { border: 1px solid #e5bd71; color: #754b13; background: #fff9ec; font-weight: 650; }
+.hr-payroll-create__notice { border: 1px solid color-mix(in srgb, var(--status-warning) 46%, var(--border-subtle)); color: var(--status-warning); background: color-mix(in srgb, var(--status-warning-surface) 72%, var(--surface)); font-weight: 650; }
 
 .hr-payroll-create__table-wrap { overflow: auto; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); background: var(--surface-raised); }
 .hr-payroll-create__table-wrap table { width: 100%; min-width: 58rem; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
@@ -70,8 +70,8 @@
 .hr-payroll-create__table-wrap th:nth-child(3), .hr-payroll-create__table-wrap td:nth-child(3), .hr-payroll-create__table-wrap th:nth-child(4), .hr-payroll-create__table-wrap td:nth-child(4) { width: 21%; }
 .hr-payroll-create__table-wrap th:nth-child(5), .hr-payroll-create__table-wrap td:nth-child(5) { width: 14%; }
 .hr-payroll-create__table-wrap th:nth-child(6), .hr-payroll-create__table-wrap td:nth-child(6) { width: 11%; }
-.hr-payroll-create__included { color: #247b4b; font-weight: 700; }
-.hr-payroll-create__excluded { color: #9a5d19; font-weight: 650; }
+.hr-payroll-create__included { color: var(--status-success); font-weight: 700; }
+.hr-payroll-create__excluded { color: var(--status-warning); font-weight: 650; }
 .hr-payroll-create__leave-toggle { display: inline-flex; align-items: center; gap: .35rem; color: var(--ink); font-size: var(--font-caption); font-weight: 700; white-space: nowrap; }
 
 .hr-payroll-create__application-list { display: grid; gap: .2rem; min-width: 0; text-align: start; white-space: normal; }

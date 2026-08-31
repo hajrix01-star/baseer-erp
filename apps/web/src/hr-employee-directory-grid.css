@@ -25,7 +25,7 @@
   border-color: transparent;
   background: transparent;
   box-shadow: none;
-  color: var(--muted, #66766e);
+  color: var(--muted);
 }
 
 .hr-employee-view-switch__button.baseer-button--primary,
@@ -36,7 +36,7 @@
 }
 
 .hr-employee-view-switch__button[aria-pressed="true"] {
-  color: var(--brand, #176b48);
+  color: var(--brand);
 }
 
 .hr-employee-view-switch__button[aria-pressed="true"]::after {
@@ -66,24 +66,24 @@
   min-inline-size: 0;
   margin-block-start: 2.35rem;
   padding: 2.65rem 1rem 1rem;
-  border: 1px solid var(--baseer-border, #d7e4dc);
+  border: 1px solid var(--border-subtle);
   border-radius: 1rem;
-  background: var(--baseer-surface, #fff);
+  background: var(--card-surface, var(--surface-raised));
   color: inherit;
   text-align: start;
-  box-shadow: 0 1px 2px rgb(18 51 40 / 3%);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--ink) 3%, transparent);
   cursor: pointer;
   transition: border-color .16s ease, box-shadow .16s ease, transform .16s ease;
 }
 
 .hr-employee-directory-card:hover {
-  border-color: color-mix(in srgb, var(--brand, #176b48) 45%, var(--baseer-border, #d7e4dc));
-  box-shadow: 0 .6rem 1.5rem rgb(18 51 40 / 9%);
+  border-color: color-mix(in srgb, var(--brand) 45%, var(--border-subtle));
+  box-shadow: 0 .6rem 1.5rem color-mix(in srgb, var(--ink) 9%, transparent);
   transform: translateY(-1px);
 }
 
 .hr-employee-directory-card:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--brand, #176b48) 35%, transparent);
+  outline: 3px solid color-mix(in srgb, var(--brand) 35%, transparent);
   outline-offset: 2px;
 }
 
@@ -105,11 +105,11 @@
   block-size: 4.7rem;
   place-items: center;
   overflow: hidden;
-  border: 3px solid var(--baseer-surface, #fff);
+  border: 3px solid var(--surface-raised);
   border-radius: 50%;
-  background: color-mix(in srgb, var(--brand, #176b48) 10%, #fff);
-  box-shadow: 0 .4rem 1rem rgb(18 51 40 / 16%);
-  color: var(--brand-deep, #123328);
+  background: color-mix(in srgb, var(--brand) 10%, var(--surface-raised));
+  box-shadow: 0 .4rem 1rem color-mix(in srgb, var(--ink) 16%, transparent);
+  color: var(--brand-deep);
   font-weight: 800;
 }
 
@@ -127,14 +127,14 @@
 
 .hr-employee-directory-card__identity strong {
   overflow: hidden;
-  color: var(--baseer-ink, #123328);
+  color: var(--ink);
   font-size: 1rem;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .hr-employee-directory-card__identity bdi {
-  color: var(--baseer-muted, #60756b);
+  color: var(--muted);
   font-size: .78rem;
   font-variant-numeric: tabular-nums;
 }
@@ -151,12 +151,12 @@
   justify-content: space-between;
   gap: .75rem;
   padding-bottom: .5rem;
-  border-bottom: 1px solid color-mix(in srgb, var(--baseer-border, #d7e4dc) 72%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--border-subtle) 72%, transparent);
 }
 
 .hr-employee-directory-card dt {
   flex: 0 0 auto;
-  color: var(--baseer-muted, #60756b);
+  color: var(--muted);
   font-size: .78rem;
 }
 
@@ -164,7 +164,7 @@
   min-inline-size: 0;
   margin: 0;
   overflow: hidden;
-  color: var(--baseer-ink, #123328);
+  color: var(--ink);
   font-size: .86rem;
   font-weight: 700;
   text-align: end;
@@ -176,13 +176,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: var(--brand-deep, #123328);
+  color: var(--brand-deep);
   font-size: .82rem;
   font-weight: 800;
 }
 
 .hr-employee-directory-card footer span {
-  color: var(--brand, #176b48);
+  color: var(--brand);
   font-size: 1rem;
 }
 
