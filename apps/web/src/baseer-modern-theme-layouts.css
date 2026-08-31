@@ -102,6 +102,7 @@ body[data-ui-theme="modern-1"] :is(.topbar, .launcher-topbar) {
 }
 body[data-ui-theme="modern-1"] :is(.baseer-card, .baseer-chart, .baseer-batch-panel, .baseer-stepper__panel) {
   border-color: color-mix(in srgb, var(--brand) 15%, var(--border-subtle));
+  border-radius: 1.125rem;
   box-shadow: var(--modern-card-shadow);
 }
 body[data-ui-theme="modern-1"] .baseer-card--default,
@@ -764,7 +765,14 @@ body[data-color-scheme="dark"][data-ui-theme="modern-2"] .baseer-data-table tbod
     inline-size: 100%;
     max-inline-size: none;
     margin-inline: 0;
-    padding-inline: clamp(.75rem, 1vw, 1rem);
+  }
+
+  body[data-ui-theme="modern-1"] .module-page {
+    padding-inline: clamp(1.25rem, 4vw, 3.5rem);
+  }
+
+  body[data-ui-theme="modern-2"] .module-page {
+    padding-inline: clamp(1.5rem, 2.34375vw, 2.875rem);
   }
 
   .module-page > :is(

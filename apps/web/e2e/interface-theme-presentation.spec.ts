@@ -50,6 +50,22 @@ async function openThemePreview(page: Page) {
   await expect(page.locator(".launcher-page")).toBeVisible();
 }
 
+function presentationPicker(page: Page, isMobile: boolean) {
+  return isMobile
+    ? page.locator(".header-profile-menu .header-profile-menu__interface select")
+    : page.locator(":is(.topbar, .launcher-topbar) > .interface-theme-control select").first();
+}
+
+async function selectPresentation(page: Page, isMobile: boolean, presentation: "modern-1" | "modern-2") {
+  const picker = presentationPicker(page, isMobile);
+  if (isMobile) {
+    const profileMenu = page.locator(".header-profile-menu");
+    if (await profileMenu.getAttribute("open") === null) await profileMenu.locator(":scope > summary").click();
+    await expect(picker).toBeVisible();
+  }
+  await picker.selectOption(presentation);
+}
+
 async function enableDarkMode(page: Page, isMobile: boolean) {
   const legacyThemeSummary = page.locator(".theme-button summary");
   const canUseLegacyPicker = !isMobile && await legacyThemeSummary.isVisible();
@@ -64,20 +80,21 @@ async function enableDarkMode(page: Page, isMobile: boolean) {
 
 test("Theme 1 and Theme 2 replace the complete shared presentation palette", async ({ page, isMobile }, testInfo) => {
   await openThemePreview(page);
-  const picker = page.locator(".interface-theme-control select");
-  await expect(picker).toBeVisible();
+  const picker = presentationPicker(page, isMobile);
+  if (isMobile) await expect(picker).not.toBeVisible();
+  else await expect(picker).toBeVisible();
 
-  await picker.selectOption("modern-1");
+  await selectPresentation(page, isMobile, "modern-1");
   await expect(page.locator("body")).toHaveAttribute("data-ui-theme", "modern-1");
-  await expect.poll(() => page.evaluate(() => getComputedStyle(document.body).getPropertyValue("--brand").trim())).toBe("#0b8060");
+  await expect.poll(() => page.evaluate(() => getComputedStyle(document.body).getPropertyValue("--brand").trim())).toBe("#16815f");
   await expect.poll(() => page.evaluate(() => getComputedStyle(document.body).fontFamily)).toBe("Tahoma, Arial, sans-serif");
   if (!isMobile) await expect.poll(() => page.locator(".launcher-topbar").evaluate((element) => Math.round(element.getBoundingClientRect().height))).toBe(70);
   else await expect.poll(() => page.locator(".launcher-topbar").evaluate((element) => Math.round(element.getBoundingClientRect().height))).toBe(62);
   await page.screenshot({ path: testInfo.outputPath(`theme-1-${isMobile ? "mobile" : "desktop"}.png`), fullPage: true });
 
-  await picker.selectOption("modern-2");
+  await selectPresentation(page, isMobile, "modern-2");
   await expect(page.locator("body")).toHaveAttribute("data-ui-theme", "modern-2");
-  await expect.poll(() => page.evaluate(() => getComputedStyle(document.body).getPropertyValue("--brand").trim())).toBe("#a74d2c");
+  await expect.poll(() => page.evaluate(() => getComputedStyle(document.body).getPropertyValue("--brand").trim())).toBe("#9c4f28");
   await expect.poll(() => page.evaluate(() => getComputedStyle(document.body).fontFamily)).toBe("Tahoma, Arial, sans-serif");
   if (!isMobile) await expect.poll(() => page.locator(".launcher-topbar").evaluate((element) => Math.round(element.getBoundingClientRect().height))).toBe(56);
   else await expect.poll(() => page.locator(".launcher-topbar").evaluate((element) => Math.round(element.getBoundingClientRect().height))).toBe(62);
@@ -86,30 +103,30 @@ test("Theme 1 and Theme 2 replace the complete shared presentation palette", asy
 
 test("modern presentations isolate their palette from stored Baseer legacy controls", async ({ page, isMobile }) => {
   await openThemePreview(page);
-  const picker = page.locator(".interface-theme-control select");
-  await picker.selectOption("modern-1");
+  const picker = presentationPicker(page, isMobile);
+  await selectPresentation(page, isMobile, "modern-1");
   await expect.poll(() => page.evaluate(() => ({
     brand: getComputedStyle(document.body).getPropertyValue("--brand").trim(),
     surface: getComputedStyle(document.body).getPropertyValue("--surface-raised").trim(),
     legacyClass: document.body.classList.contains("is-blue"),
     background: document.body.dataset.launcherBackground ?? null,
     container: document.body.dataset.containerSurface ?? null,
-  }))).toEqual({ brand: "#0b8060", surface: "#fff", legacyClass: false, background: null, container: null });
+  }))).toEqual({ brand: "#16815f", surface: "#fff", legacyClass: false, background: null, container: null });
 
   const legacyThemeSummary = page.locator(".theme-button summary");
   if (isMobile) await expect(legacyThemeSummary).not.toBeVisible();
   else await legacyThemeSummary.click();
   await expect(page.getByRole("button", { name: "blue", exact: true })).toHaveCount(0);
-  await expect(isMobile ? picker : page.getByText("المظهر", { exact: true })).toBeVisible();
+  await expect(picker).toBeVisible();
 
-  await picker.selectOption("modern-2");
+  await selectPresentation(page, isMobile, "modern-2");
   await expect.poll(() => page.evaluate(() => ({
     brand: getComputedStyle(document.body).getPropertyValue("--brand").trim(),
     surface: getComputedStyle(document.body).getPropertyValue("--surface-raised").trim(),
     legacyClass: document.body.classList.contains("is-blue"),
     background: document.body.dataset.launcherBackground ?? null,
     container: document.body.dataset.containerSurface ?? null,
-  }))).toEqual({ brand: "#a74d2c", surface: "#fffdf9", legacyClass: false, background: null, container: null });
+  }))).toEqual({ brand: "#9c4f28", surface: "#fffdfa", legacyClass: false, background: null, container: null });
 });
 
 test("chart palettes follow computed presentation tokens in RTL and dark mode", async ({ page, isMobile }) => {
@@ -117,8 +134,7 @@ test("chart palettes follow computed presentation tokens in RTL and dark mode", 
   await page.goto("/#module=reports&page=reports-financial");
   await expect(page.locator(".module-page")).toBeVisible();
 
-  const picker = page.locator(".interface-theme-control select");
-  await picker.selectOption("modern-1");
+  await selectPresentation(page, isMobile, "modern-1");
   await expect.poll(() => page.evaluate(() => {
     const table = document.createElement("table");
     table.className = "baseer-chart__inline-table";
@@ -135,13 +151,13 @@ test("chart palettes follow computed presentation tokens in RTL and dark mode", 
     table.remove();
     return result;
   })).toEqual({
-    primary: "#0b8060",
-    secondary: "#d29034",
-    grid: "rgb(16 94 73 / 13%)",
-    background: "linear-gradient(270deg, rgb(7, 87, 68), rgb(53, 173, 134))",
+    primary: "#16815f",
+    secondary: "#d6a15c",
+    grid: "rgb(220 229 223 / 70%)",
+    background: "linear-gradient(270deg, rgb(16, 44, 36), rgb(220, 246, 231))",
   });
 
-  await picker.selectOption("modern-2");
+  await selectPresentation(page, isMobile, "modern-2");
   await enableDarkMode(page, isMobile);
   await expect(page.locator("body")).toHaveAttribute("data-color-scheme", "dark");
   await expect.poll(() => page.evaluate(() => ({
@@ -153,7 +169,6 @@ test("chart palettes follow computed presentation tokens in RTL and dark mode", 
 
 test("modern presentations keep reference primitive geometry across RTL, mobile, and dark surfaces", async ({ page, isMobile }) => {
   await openThemePreview(page);
-  const picker = page.locator(".interface-theme-control select");
 
   const primitives = () => page.evaluate(() => {
     const fixture = document.createElement("section");
@@ -163,6 +178,11 @@ test("modern presentations keep reference primitive geometry across RTL, mobile,
       '<div class="baseer-data-table"><table><thead><tr><th>Header</th></tr></thead><tbody><tr><td>Cell</td></tr></tbody></table></div>',
       '<section class="baseer-filter-bar administration-companies-toolbar"><input class="baseer-filter-bar__select" /></section>',
       '<section class="baseer-dialog" role="dialog">Dialog</section>',
+      '<section class="baseer-batch-panel">Batch panel</section>',
+      '<section class="baseer-stepper__panel"><nav class="baseer-stepper__tabs"><button class="baseer-button">Step</button></nav></section>',
+      '<nav class="baseer-workspace-tabs"><button class="baseer-button">Workspace tab</button></nav>',
+      '<section class="baseer-period-filter"><button class="baseer-period-filter__trigger">Period</button><section class="baseer-period-filter__popover">Period popover</section></section>',
+      '<section class="baseer-aria-date-picker__popover">Date popover</section>',
     ].join("");
     document.body.append(fixture);
     const query = <T extends Element>(selector: string) => fixture.querySelector<T>(selector)!;
@@ -179,12 +199,18 @@ test("modern presentations keep reference primitive geometry across RTL, mobile,
       cellPadding: styles("td").padding,
       filterPadding: styles(".baseer-filter-bar").padding,
       dialogRadius: styles(".baseer-dialog").borderRadius,
+      batchPanelRadius: styles(".baseer-batch-panel").borderRadius,
+      stepperPanelRadius: styles(".baseer-stepper__panel").borderRadius,
+      stepperTabsRadius: styles(".baseer-stepper__tabs").borderRadius,
+      workspaceTabsRadius: styles(".baseer-workspace-tabs").borderRadius,
+      periodPopoverRadius: styles(".baseer-period-filter__popover").borderRadius,
+      datePopoverRadius: styles(".baseer-aria-date-picker__popover").borderRadius,
     };
     fixture.remove();
     return result;
   });
 
-  await picker.selectOption("modern-1");
+  await selectPresentation(page, isMobile, "modern-1");
   const themeOne = await primitives();
   expect(themeOne.cardRadius).toBe("18px");
   expect(themeOne.metricRadius).toBe("17px");
@@ -194,6 +220,12 @@ test("modern presentations keep reference primitive geometry across RTL, mobile,
   expect(themeOne.tableRadius).toBe("18px");
   expect(themeOne.headerPadding).toBe("11px 22px");
   expect(themeOne.cellPadding).toBe("12px 22px");
+  expect(themeOne.batchPanelRadius).toBe("18px");
+  expect(themeOne.stepperPanelRadius).toBe("18px");
+  expect(themeOne.stepperTabsRadius).toBe("14.4px");
+  expect(themeOne.workspaceTabsRadius).toBe("14.4px");
+  expect(themeOne.periodPopoverRadius).toBe("16px");
+  expect(themeOne.datePopoverRadius).toBe("16px");
 
   if (!isMobile) {
     const themeOnePagePadding = await page.evaluate(() => {
@@ -208,7 +240,7 @@ test("modern presentations keep reference primitive geometry across RTL, mobile,
     expect(themeOnePagePadding).toBeLessThanOrEqual(52);
   }
 
-  await picker.selectOption("modern-2");
+  await selectPresentation(page, isMobile, "modern-2");
   const themeTwo = await primitives();
   expect(themeTwo.cardRadius).toBe("5px");
   expect(themeTwo.metricRadius).toBe(isMobile ? "5px" : "0px");
@@ -219,6 +251,24 @@ test("modern presentations keep reference primitive geometry across RTL, mobile,
   expect(themeTwo.headerPadding).toBe("11px 22px");
   expect(themeTwo.cellPadding).toBe("12px 22px");
   expect(themeTwo.dialogRadius).toBe("5px");
+  expect(themeTwo.batchPanelRadius).toBe("5px");
+  expect(themeTwo.stepperPanelRadius).toBe("5px");
+  expect(themeTwo.stepperTabsRadius).toBe("5px 5px 0px 0px");
+  expect(themeTwo.workspaceTabsRadius).toBe("5px 5px 0px 0px");
+  expect(themeTwo.periodPopoverRadius).toBe("5px");
+  expect(themeTwo.datePopoverRadius).toBe("5px");
+
+  if (!isMobile) {
+    const themeTwoPagePadding = await page.evaluate(() => {
+      const modulePage = document.createElement("section");
+      modulePage.className = "module-page";
+      document.body.append(modulePage);
+      const padding = Number.parseFloat(getComputedStyle(modulePage).paddingInlineStart);
+      modulePage.remove();
+      return padding;
+    });
+    expect(themeTwoPagePadding).toBe(30);
+  }
 
   await page.evaluate(() => { document.body.dataset.colorScheme = "dark"; });
   const darkThemeTwo = await primitives();
