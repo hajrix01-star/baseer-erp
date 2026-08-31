@@ -27,7 +27,7 @@ export function MarketingReputationRoute({ language, permissionCodes }: { langua
   if (!canRead) return <section className="baseer-workspace"><BaseerEmptyState title={copy.noPermission} /></section>;
 
   return <BaseerCompanyReadQuery session={session} resource="marketing.reputation" scope={[language, [...(permissionCodes ?? [])].sort().join(",")]} load={(current, signal) => api<MarketingWorkspaceRead>(current, "/marketing", { signal })}>{({ data, loading, error, refetch }) => <section className="baseer-workspace marketing-workspace" dir={ar ? "rtl" : "ltr"}>
-    <header className="baseer-section-header"><div className="baseer-section-header__copy"><p className="baseer-section-header__eyebrow">{copy.eyebrow}</p><h2>{copy.title}</h2><p>{copy.overview}</p></div><div className="baseer-section-header__actions"><BaseerButton type="button" variant="secondary" disabled={loading} onClick={() => void refetch()}>{copy.refresh}</BaseerButton></div></header>
+    <header className="baseer-section-header"><div className="baseer-section-header__copy"><p className="baseer-section-header__eyebrow">{copy.eyebrow}</p><p>{copy.overview}</p></div><div className="baseer-section-header__actions"><BaseerButton type="button" variant="secondary" disabled={loading} onClick={() => void refetch()}>{copy.refresh}</BaseerButton></div></header>
     {error ? <BaseerCard className="marketing-workspace__message" padding="compact">{copy.fail}</BaseerCard> : <MarketingReputationWorkspace language={language} data={data} copy={copy} permissionCodes={permissionCodes} onSaved={refetch} />}
   </section>}</BaseerCompanyReadQuery>;
 }
@@ -53,7 +53,7 @@ export function MarketingReputationWorkspace({ language, data, copy, permissionC
   }
 
   return <section className="marketing-reputation">
-    <header><h3>{copy.reputation}</h3><p>{copy.notReady}</p></header>
+    <header><p>{copy.notReady}</p></header>
     <div className="baseer-card-grid">{(data?.readiness ?? []).map((item) => <BaseerCard key={item.provider}>
       <strong>{item.provider === "GOOGLE_ADS" ? "Google Ads" : "Google Business"}</strong>
       <span className="baseer-status-badge baseer-status-badge--warning"><i className="baseer-status-badge__dot" />{copy.notConnected}</span>

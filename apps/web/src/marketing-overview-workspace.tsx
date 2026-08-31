@@ -56,7 +56,7 @@ function MarketingOverviewWorkspace({ data, copy, language, session }: { data: M
 }
 
 function Metric({ label, value }: { label: string; value: number | string }) {
-  return <BaseerCard className="baseer-metric"><small>{label}</small><strong>{value}</strong></BaseerCard>;
+  return <BaseerCard variant="metric" className="baseer-metric"><small>{label}</small><strong>{value}</strong></BaseerCard>;
 }
 
 function MarketingReputationSummary({ data, copy, ar }: { data: MarketingWorkspaceRead | undefined; copy: MarketingCopy; ar: boolean }) {

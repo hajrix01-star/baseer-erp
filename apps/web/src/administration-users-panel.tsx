@@ -56,7 +56,7 @@ export function AdministrationUsersPanel({ language, session, overview, owner, o
 
   return <section className="administration-section administration-users-section">
     <header className="administration-section-heading">
-      <div><h3>{text.usersManagement}</h3><p>{text.usersDescription}</p></div>
+      <div><h3>{text.usersManagement}</h3></div>
       {owner && <BaseerButton type="button" onClick={() => setMode("create")}>+ {text.addEmployee}</BaseerButton>}
     </header>
     <div className="administration-users-summary" aria-label={text.users}>

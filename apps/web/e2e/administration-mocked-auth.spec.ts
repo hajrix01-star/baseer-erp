@@ -74,6 +74,25 @@ async function mockAdministration(page: Page, language: "ar" | "en", requests: s
   });
 }
 
+async function expectViewportBoundedDialog(page: Page, name: string) {
+  const dialog = page.getByRole("dialog", { name });
+  await expect(dialog).toBeVisible();
+  const geometry = await dialog.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    return {
+      documentOverflow: document.documentElement.scrollWidth - window.innerWidth,
+      dialogOverflow: element.scrollWidth - element.clientWidth,
+      top: rect.top,
+      bottom: rect.bottom,
+      viewportHeight: window.innerHeight,
+    };
+  });
+  expect(geometry.documentOverflow).toBeLessThanOrEqual(1);
+  expect(geometry.dialogOverflow).toBeLessThanOrEqual(1);
+  expect(geometry.top).toBeGreaterThanOrEqual(-1);
+  expect(geometry.bottom).toBeLessThanOrEqual(geometry.viewportHeight + 1);
+}
+
 test("company form uses the central validation adapter in Arabic RTL", async ({ page }) => {
   const requests: string[] = [];
   await mockAdministration(page, "ar", requests);
@@ -175,5 +194,16 @@ for (const language of ["ar", "en"] as const) {
     }
     await expect(page.locator(".administration-ai-settings")).toBeVisible();
     await expect(page).toHaveScreenshot(`basira-connection-${language}.png`, { animations: "disabled" });
+  });
+}
+
+for (const presentation of ["modern-1", "modern-2"] as const) {
+  test(`modern dialog shell bounds the company editor in ${presentation}`, async ({ page }) => {
+    await page.addInitScript((theme) => localStorage.setItem("baseer-erp.shell.presentation.v1", theme), presentation);
+    await mockAdministration(page, "ar");
+    await page.goto("/#module=administration&section=1");
+    await page.getByRole("button", { name: /إضافة شركة/ }).click();
+    await expectViewportBoundedDialog(page, "إضافة شركة");
+    await expect(page.locator("body")).toHaveAttribute("data-ui-theme", presentation);
   });
 }

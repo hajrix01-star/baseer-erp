@@ -38,6 +38,23 @@ function comparison(url: URL, matched = false) {
   };
 }
 
+function incompleteComparison(url: URL, matched = false) {
+  const result = comparison(url, matched);
+  return {
+    ...result,
+    dataQuality: "INCOMPLETE",
+    payload: {
+      currencyCode: "SAR",
+      currentNetAmount: null,
+      comparisonNetAmount: null,
+      differenceNetAmount: null,
+      percentDifference: null,
+      currentCustomerCount: null,
+      comparisonCustomerCount: null,
+    },
+  };
+}
+
 const event = { id: "55555555-5555-4555-8555-555555555555", scope: "COMPANY", eventKind: "OPERATIONAL_EVENT", titleAr: "إغلاق فرع الاختبار", startsOn: "2026-08-10", endsOn: "2026-08-10", verificationStatus: "SYSTEM_RECONCILED", sourceReference: "قرار داخلي", locationLabelAr: null, isManual: true };
 const alert = { id: alertId, ruleCode: "sales_change", ruleVersion: "sales_change.v1", status: "OPEN", titleAr: "تغير مبيعات قابل للمراجعة", createdAt: "2026-08-23T08:30:00.000Z", acknowledgedAt: null, closedAt: null, evidenceSnapshotId: "66666666-6666-4666-8666-666666666666" };
 
@@ -54,7 +71,7 @@ const candidate = { id: candidateId, eventKind: "PUBLIC_EVENT", titleAr: "عطل
 const review = { id: reviewId, eventKind: "PUBLIC_EVENT", scope: "TENANT_GLOBAL", locationLabelAr: null, currentRevision: 1, source: { sourceCode: "SA_SPL_FIXTURES", displayNameAr: "رابطة الدوري السعودي" }, revisions: [{ revision: 2, titleAr: "مباراة مراجعة", startsOn: "2026-08-24T00:00:00.000Z", endsOn: "2026-08-24T23:59:59.999Z", sourceUpdatedAt: "2026-08-22T12:00:00.000Z", sourceChecksum: checksum }] };
 const sourceHealth = [{ category: "RESEARCH", sourceCode: "SA_NCM_WEATHER_FORECAST", displayNameAr: "المركز الوطني للأرصاد", sourceUrl: "https://ncm.gov.sa/", scheduleCode: "daily", readiness: "READY_TO_SYNC", readinessReason: "موصل حكومي معتمد", lastRun: { status: "SUCCEEDED", startedAt: "2026-08-23T06:00:00.000Z", finishedAt: "2026-08-23T06:01:00.000Z" } }];
 
-async function mockDecision(page: Page, language: "ar" | "en", permissions: string[], requests: RequestLog[]) {
+async function mockDecision(page: Page, language: "ar" | "en", permissions: string[], requests: RequestLog[], options?: { incompleteComparisons?: boolean }) {
   await page.addInitScript(({ locale, company }) => {
     sessionStorage.setItem("baseer.erp.access-token", "mock-access-token");
     sessionStorage.setItem("baseer.erp.refresh-token", "mock-refresh-token");
@@ -74,8 +91,8 @@ async function mockDecision(page: Page, language: "ar" | "en", permissions: stri
       createdAt: "2026-08-23T10:00:00.000Z", replayed: false,
     });
     if (url.pathname === "/v1/decision-intelligence/metrics/sales-daily") return fulfill(route, metric(url));
-    if (url.pathname === "/v1/decision-intelligence/metrics/sales-comparison") return fulfill(route, comparison(url));
-    if (url.pathname === "/v1/decision-intelligence/metrics/sales-matched-weekday") return fulfill(route, comparison(url, true));
+    if (url.pathname === "/v1/decision-intelligence/metrics/sales-comparison") return fulfill(route, options?.incompleteComparisons ? incompleteComparison(url) : comparison(url));
+    if (url.pathname === "/v1/decision-intelligence/metrics/sales-matched-weekday") return fulfill(route, options?.incompleteComparisons ? incompleteComparison(url, true) : comparison(url, true));
     if (url.pathname === "/v1/decision-intelligence/context/timeline") return fulfill(route, [event]);
     if (url.pathname === "/v1/decision-intelligence/alerts") return fulfill(route, [alert]);
     if (url.pathname === `/v1/decision-intelligence/alerts/${alertId}/evidence`) return fulfill(route, evidence());
@@ -127,6 +144,16 @@ test("Decision overview is accessible in Arabic and English, refreshes by period
     "/v1/decision-intelligence/metrics/sales-daily",
   ]);
   await limited.close();
+});
+
+test("Decision overview keeps an incomplete comparison as a review state instead of a white page", async ({ page }) => {
+  const requests: RequestLog[] = [];
+  await mockDecision(page, "ar", allPermissions, requests, { incompleteComparisons: true });
+  await open(page, 0);
+  await expect(page.getByRole("heading", { name: "قراءات موثقة قبل أي تفسير" })).toBeVisible();
+  await expect(page.locator(".decision-sales-comparison")).toContainText("غير مكتملة");
+  await expect(page.getByText("لا يصدر المركز حكماً عن التغير لأن إحدى الفترتين ناقصة أو غير متاحة. راجع جودة البيانات أولاً.")).toBeVisible();
+  await expect(page.getByText("تنبيهات مفتوحة")).toBeVisible();
 });
 
 test("Timeline and alerts keep validation, evidence, status reason, Escape, and focus behavior", async ({ page }) => {
