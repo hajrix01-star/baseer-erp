@@ -86,6 +86,8 @@ export const operationsItemSchema = z.object({
 export const operationsCatalogQuerySchema = z.object({
   kind: operationsItemKindSchema.optional(),
   status: operationsItemStatusSchema.optional(),
+  orderReady: z.coerce.boolean().optional(),
+  missingPurchasePrice: z.coerce.boolean().optional(),
   search: z.string().trim().min(1).max(160).optional(),
   cursor: operationsIdSchema.optional(),
   pageSize: z.coerce.number().int().min(10).max(100).default(50),
@@ -446,6 +448,75 @@ export const operationsReportQuerySchema = z.object({
   pageSize: z.coerce.number().int().min(10).max(100).default(50),
 }).strict().refine((value) => !value.from || !value.to || value.from <= value.to, "Report start date must not be after end date.");
 
+/** Read-only inventory reporting queries. These endpoints expose posted
+ * operational facts; they never infer a stock movement from a purchase plan. */
+export const operationsInventoryBalanceQuerySchema = z.object({
+  search: z.string().trim().min(1).max(160).optional(),
+  cursor: operationsIdSchema.optional(),
+  pageSize: z.coerce.number().int().min(10).max(100).default(50),
+}).strict();
+
+export const operationsInventoryLedgerQuerySchema = z.object({
+  rawMaterialItemId: operationsIdSchema.optional(),
+  movementType: z.enum(["RECEIPT", "REVERSAL", "INTERNAL_CONSUMPTION"]).optional(),
+  from: z.string().date().optional(),
+  to: z.string().date().optional(),
+  search: z.string().trim().min(1).max(160).optional(),
+  cursor: operationsIdSchema.optional(),
+  pageSize: z.coerce.number().int().min(10).max(100).default(50),
+}).strict().refine((value) => !value.from || !value.to || value.from <= value.to, "Ledger start date must not be after end date.");
+
+const operationsInventoryDecimalSchema = z.string().regex(/^-?\d{1,24}(?:\.\d{1,12})?$/);
+
+export const operationsInventoryBalancesReceiptSchema = z.object({
+  balances: z.array(z.object({
+    id: operationsIdSchema,
+    rawMaterialItemId: operationsIdSchema,
+    materialCode: z.string().min(1).max(80),
+    materialNameAr: z.string().min(1).max(160),
+    materialNameEn: z.string().max(160).nullable(),
+    baseUnitId: operationsIdSchema,
+    baseUnitNameAr: z.string().min(1).max(80),
+    baseUnitNameEn: z.string().max(80).nullable(),
+    baseQuantity: operationsInventoryDecimalSchema,
+    totalValue: operationsInventoryDecimalSchema,
+    weightedUnitCost: operationsInventoryDecimalSchema,
+    updatedAt: z.string().datetime(),
+  }).strict()).max(100),
+  nextCursor: operationsIdSchema.nullable(),
+  asOf: z.string().datetime(),
+}).strict();
+
+export const operationsInventoryLedgerReceiptSchema = z.object({
+  movements: z.array(z.object({
+    id: operationsIdSchema,
+    movementNumber: z.string().min(1).max(80),
+    movementType: z.enum(["RECEIPT", "REVERSAL", "INTERNAL_CONSUMPTION"]),
+    businessDate: z.string().date(),
+    effectiveAt: z.string().datetime(),
+    rawMaterialItemId: operationsIdSchema,
+    materialCode: z.string().min(1).max(80),
+    materialNameAr: z.string().min(1).max(160),
+    materialNameEn: z.string().max(160).nullable(),
+    baseQuantityDelta: operationsInventoryDecimalSchema,
+    valueDelta: operationsInventoryDecimalSchema,
+    quantityAfter: operationsInventoryDecimalSchema,
+    valueAfter: operationsInventoryDecimalSchema,
+    weightedUnitCostAfter: operationsInventoryDecimalSchema,
+    source: z.object({
+      kind: z.enum(["PURCHASE_RECEIPT", "INTERNAL_REGISTRATION"]),
+      id: operationsIdSchema,
+      number: z.string().min(1).max(80),
+      sectionNameAr: z.string().max(160).nullable(),
+      sectionNameEn: z.string().max(160).nullable(),
+      menuProductNameAr: z.string().max(160).nullable(),
+      menuProductNameEn: z.string().max(160).nullable(),
+    }).nullable(),
+  }).strict()).max(100),
+  nextCursor: operationsIdSchema.nullable(),
+  asOf: z.string().datetime(),
+}).strict();
+
 /** These reports intentionally use posted purchases only; a purchase plan is not a financial fact. */
 export const operationsMaterialsReceivedReportReceiptSchema = z.object({
   totals: z.object({ materialCount: z.number().int().nonnegative(), quantity: z.string(), amount: z.string() }).strict(),
@@ -466,3 +537,5 @@ export type ReceiveOperationsPurchaseRequest = z.infer<typeof receiveOperationsP
 export type CancelOperationsPurchaseRequest = z.infer<typeof cancelOperationsPurchaseRequestSchema>;
 export type ReverseOperationsPurchaseReceipt = z.infer<typeof reverseOperationsPurchaseReceiptSchema>;
 export type OperationsReportQuery = z.infer<typeof operationsReportQuerySchema>;
+export type OperationsInventoryBalanceQuery = z.infer<typeof operationsInventoryBalanceQuerySchema>;
+export type OperationsInventoryLedgerQuery = z.infer<typeof operationsInventoryLedgerQuerySchema>;

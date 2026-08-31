@@ -14,6 +14,18 @@ type Language = "ar" | "en";
 type Section = { id: string; nameAr: string; nameEn: string | null };
 type Product = { id: string; sectionId: string | null; nameAr: string; nameEn: string | null; units: Array<{ unitId: string; nameAr: string; nameEn: string | null }> };
 type Workstation = { sections: Section[]; products: Product[] };
+type CatalogFallback = {
+  sections: Array<Section & { isActive: boolean }>;
+  units: Array<{ id: string; nameAr: string; nameEn: string | null }>;
+  items: Array<{
+    id: string;
+    sectionId: string | null;
+    nameAr: string;
+    nameEn: string | null;
+    itemUnits: Array<{ unitId: string; isActive: boolean }>;
+  }>;
+  nextCursor: string | null;
+};
 type Line = { menuProductItemId: string; unitId: string; quantity: string };
 const today = () => new Date().toISOString().slice(0, 10);
 const positiveDecimal = /^\d+(?:\.\d{1,4})?$/;
@@ -32,7 +44,45 @@ export function OperationsInternalRegistrationEntry({ language, onSaved }: { lan
   const form = useBaseerForm<FormValues>({ schema: schema(language), defaultValues: { businessDate: today(), sectionId: "" } });
   const sectionId = form.watch("sectionId");
   const businessDate = form.watch("businessDate");
-  const load = useCallback(async () => { const current = activeSession(); setSession(current); if (!current) return; try { const data = await api<Workstation>(current, "/operations/internal-registration/workstation"); setWorkstation(data); if (!form.getValues("sectionId")) form.setValue("sectionId", data.sections[0]?.id || "", { shouldValidate: true }); } catch (error) { setMessage(presentBaseerApiError(error, language, t.failed)); } }, [form, language, t.failed]);
+  const load = useCallback(async () => {
+    const current = activeSession();
+    setSession(current);
+    if (!current) return;
+    try {
+      // The catalog is the single company source for sections and menu
+      // products. Reading it directly keeps the registration screen aligned
+      // with product management and avoids a stale intermediate projection.
+      const catalog = await api<CatalogFallback>(current, "/operations/catalog?kind=MENU_PRODUCT&status=ACTIVE&pageSize=100");
+      const remaining = catalog.nextCursor
+        ? await api<CatalogFallback>(current, `/operations/catalog?kind=MENU_PRODUCT&status=ACTIVE&pageSize=100&cursor=${encodeURIComponent(catalog.nextCursor)}`)
+        : null;
+      const activeSections = catalog.sections.filter((section) => section.isActive);
+      const activeSectionIds = new Set(activeSections.map((section) => section.id));
+      const units = new Map(catalog.units.map((unit) => [unit.id, unit]));
+      const data: Workstation = {
+        sections: activeSections,
+        products: [...catalog.items, ...(remaining?.items ?? [])]
+          .filter((item) => item.sectionId !== null && activeSectionIds.has(item.sectionId))
+          .map((item) => ({
+            id: item.id,
+            sectionId: item.sectionId,
+            nameAr: item.nameAr,
+            nameEn: item.nameEn,
+            units: item.itemUnits
+              .filter((itemUnit) => itemUnit.isActive)
+              .flatMap((itemUnit) => {
+                const unit = units.get(itemUnit.unitId);
+                return unit ? [{ unitId: unit.id, nameAr: unit.nameAr, nameEn: unit.nameEn }] : [];
+              }),
+          }))
+          .filter((item) => item.units.length),
+      };
+      setWorkstation(data);
+      if (!form.getValues("sectionId")) form.setValue("sectionId", data.sections[0]?.id || "", { shouldValidate: true });
+    } catch (error) {
+      setMessage(presentBaseerApiError(error, language, t.failed));
+    }
+  }, [form, language, t.failed]);
   useEffect(() => { void load(); }, [load]);
   const productName = (product: Product) => ar ? product.nameAr : product.nameEn ?? product.nameAr;
   const products = useMemo(() => (workstation?.products ?? []).filter((product) => product.sectionId === sectionId && `${product.nameAr} ${product.nameEn ?? ""}`.toLocaleLowerCase().includes(search.toLocaleLowerCase())), [search, sectionId, workstation]);

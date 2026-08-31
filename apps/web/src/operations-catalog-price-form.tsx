@@ -23,7 +23,6 @@ export function OperationsCatalogPriceForm({ formId, language, value, onSubmit }
   const price = form.watch("price");
   useEffect(() => { form.reset({ price: value }); }, [form, value]);
   return <form id={formId} className="administration-form" data-baseer-rhf-form="true" noValidate onSubmit={form.handleSubmit((next) => void onSubmit(next))}>
-    <p>{ar ? "سعر البيع محفوظ داخل كرت صنف المنيو، ولا يظهر للموظف في شاشة التسجيل الداخلي." : "The sale price is stored on this menu-product card and is never shown to internal-registration staff."}</p>
     <label>{text.price}<input inputMode="decimal" dir="ltr" lang="en" value={price} aria-invalid={Boolean(form.formState.errors.price)} onChange={(event) => form.setValue("price", normalizeBaseerNumericInput(event.target.value), { shouldDirty: true, shouldValidate: true })} />{form.formState.errors.price ? <small role="alert">{form.formState.errors.price.message}</small> : null}</label>
   </form>;
 }

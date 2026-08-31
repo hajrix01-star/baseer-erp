@@ -4,6 +4,7 @@ import { presentBaseerLoadError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
 import { BaseerCompanyReadQuery } from "./baseer-company-read-query";
+import { BaseerMetricActionCard } from "./baseer-metric-action-card";
 import { BaseerPeriodFilter, baseerPeriodLabel, baseerPeriodQuery, defaultBaseerPeriodRange, type BaseerPeriodRange } from "./baseer-period-filter";
 import { BaseerEmptyState, BaseerNotice, BaseerSectionHeader, BaseerWorkspace } from "./baseer-workspace";
 import { formatDate } from "./number-format";
@@ -57,16 +58,16 @@ function OperationsOverviewContent({ language, period, onPeriodChange, data, loa
   const text = copy[language];
   const actions = <><BaseerPeriodFilter language={language} value={period} onChange={onPeriodChange} allowNonContiguousMonths={false} /><BaseerButton type="button" variant="secondary" onClick={onRefresh}>{text.refresh}</BaseerButton></>;
   if (error) return <BaseerWorkspace className="operations-overview"><BaseerSectionHeader eyebrow={text.eyebrow} title={text.title} actions={actions} /><BaseerEmptyState title={presentBaseerLoadError(error, language, { ar: "لوحة التشغيل", en: "the operations dashboard" })} action={<BaseerButton type="button" onClick={onRefresh}>{text.retry}</BaseerButton>} /></BaseerWorkspace>;
-  if (loading || !data) return <BaseerWorkspace className="operations-overview"><BaseerSectionHeader eyebrow={text.eyebrow} title={text.title} actions={actions} /><BaseerCard className="operations-overview__loading">{text.loading}</BaseerCard></BaseerWorkspace>;
+  if (loading || !data) return <BaseerWorkspace className="operations-overview"><BaseerSectionHeader eyebrow={text.eyebrow} title={text.title} actions={actions} /><BaseerCard variant="surface" className="operations-overview__loading">{text.loading}</BaseerCard></BaseerWorkspace>;
   const salesHint = data.sales.dataQuality === "NO_DATA" ? text.noSales : data.sales.dataQuality === "INCOMPLETE" ? `${data.sales.coverage.display} · ${text.incomplete}` : text.ready;
   return <BaseerWorkspace className="operations-overview">
     <BaseerSectionHeader eyebrow={text.eyebrow} title={text.title} description={`${baseerPeriodLabel(period, language)} · ${formatDate(data.period.fromBusinessDate, language)} — ${formatDate(data.period.toBusinessDate, language)}`} actions={actions} />
     <section className="operations-overview__hero" aria-label={text.title}>
-      <button type="button" className="operations-overview__metric operations-overview__metric--sales" onClick={() => routeTo(1)}><span>{text.sales} · {text.vatInclusive}</span><strong dir="ltr">{data.sales.display.grossAmount ?? "—"}</strong><small><bdi dir="ltr">{data.sales.display.closingCount ?? "—"}</bdi> {text.salesDetail} · {salesHint}</small><em>{text.openSales} ←</em></button>
-      <button type="button" className="operations-overview__metric operations-overview__metric--purchases" onClick={() => routeTo(2)}><span>{text.purchases} · {text.vatInclusive}</span><strong dir="ltr">{data.purchases.display.grossAmount}</strong><small><bdi dir="ltr">{data.purchases.display.documentCount}</bdi> {text.purchasesDetail}</small><em>{text.openPurchases} ←</em></button>
+      <BaseerMetricActionCard layout="hero" className="operations-overview__metric operations-overview__metric--sales" title={<>{text.sales} · {text.vatInclusive}</>} value={<bdi dir="ltr">{data.sales.display.grossAmount ?? "—"}</bdi>} detail={<><bdi dir="ltr">{data.sales.display.closingCount ?? "—"}</bdi> {text.salesDetail} · {salesHint}</>} actionLabel={`${text.openSales} ←`} icon="trend" tone="success" onClick={() => routeTo(1)} />
+      <BaseerMetricActionCard layout="hero" className="operations-overview__metric operations-overview__metric--purchases" title={<>{text.purchases} · {text.vatInclusive}</>} value={<bdi dir="ltr">{data.purchases.display.grossAmount}</bdi>} detail={<><bdi dir="ltr">{data.purchases.display.documentCount}</bdi> {text.purchasesDetail}</>} actionLabel={`${text.openPurchases} ←`} icon="receipt" tone="warning" onClick={() => routeTo(2)} />
     </section>
     {data.sales.dataQuality !== "READY" ? <BaseerNotice tone="warning" title={text.incomplete}>{data.sales.dataQuality === "NO_DATA" ? text.noSales : `${data.sales.coverage.display} · ${text.incomplete}`}</BaseerNotice> : null}
-    <Suspense fallback={<BaseerCard className="operations-overview__loading">{text.loading}</BaseerCard>}><LazyOperationsMonthChart language={language} title={text.chart} days={data.timeline} asOf={data.businessDate} /></Suspense>
+    <Suspense fallback={<BaseerCard variant="chart" className="operations-overview__loading">{text.loading}</BaseerCard>}><LazyOperationsMonthChart language={language} title={text.chart} days={data.timeline} asOf={data.businessDate} /></Suspense>
     <p className="operations-overview__source">{text.source}</p>
   </BaseerWorkspace>;
 }

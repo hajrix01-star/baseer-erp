@@ -61,6 +61,10 @@ export class OperationsCatalogService {
           { nameAr: { contains: query.search, mode: "insensitive" } },
           { nameEn: { contains: query.search, mode: "insensitive" } },
         ] } : {}),
+        ...(query.orderReady || query.missingPurchasePrice ? { AND: [
+          ...(query.orderReady ? [{ itemUnits: { some: { isActive: true, isOrderEnabled: true } } }] : []),
+          ...(query.missingPurchasePrice ? [{ itemUnits: { none: { isActive: true, isOrderEnabled: true, lastPurchaseUnitPrice: { not: null } } } }] : []),
+        ] } : {}),
       };
       if (query.cursor) {
         const cursor = await tx.operationsItem.findFirst({ where: { ...itemWhere, id: query.cursor }, select: { id: true } });

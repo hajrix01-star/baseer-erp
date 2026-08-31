@@ -1,22 +1,13 @@
 .operations-overview { display: grid; gap: 1rem; }
 .operations-overview__hero { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
-.operations-overview__metric { position: relative; display: grid; gap: .55rem; min-block-size: 13rem; padding: var(--space-panel-header); overflow: hidden; border: 1px solid var(--border-subtle); border-radius: calc(var(--card-radius) + .2rem); background: var(--card-surface); color: var(--ink); text-align: start; font: inherit; cursor: pointer; box-shadow: 0 .45rem 1.3rem rgba(17, 54, 44, .07); transition: transform 180ms ease, box-shadow 180ms ease; animation: operations-overview-rise 480ms cubic-bezier(.2, .8, .2, 1) both; }
-.operations-overview__metric::after { position: absolute; inset-block-end: -4.4rem; inset-inline-end: -2.6rem; inline-size: 10rem; block-size: 10rem; border-radius: 50%; background: var(--overview-accent-soft); content: ""; }
-.operations-overview__metric:hover { transform: translateY(-4px); box-shadow: 0 .9rem 2rem rgba(17, 54, 44, .14); }
-.operations-overview__metric:focus-visible { outline: 3px solid color-mix(in srgb, var(--overview-accent) 55%, transparent); outline-offset: 3px; }
-.operations-overview__metric > span, .operations-overview__metric > small, .operations-overview__metric > em, .operations-overview__metric > strong { position: relative; z-index: 1; }
-.operations-overview__metric > span { color: var(--muted); font-size: var(--font-caption); font-weight: 800; }
-.operations-overview__metric > strong { color: var(--overview-accent); font-size: clamp(1.9rem, 3.2vw, 2.7rem); font-weight: 900; letter-spacing: -.045em; font-variant-numeric: tabular-nums; line-height: 1; }
-.operations-overview__metric > small { color: var(--ink); font-size: var(--font-caption); font-weight: 700; }
-.operations-overview__metric > em { align-self: end; color: var(--overview-accent); font-size: var(--font-caption); font-style: normal; font-weight: 850; }
-.operations-overview__metric--sales { --overview-accent: #087d61; --overview-accent-soft: rgba(49, 178, 139, .18); }
-.operations-overview__metric--purchases { --overview-accent: #bc6b17; --overview-accent-soft: rgba(230, 159, 61, .19); animation-delay: 90ms; }
+.operations-overview__metric { animation: operations-overview-rise 480ms cubic-bezier(.2, .8, .2, 1) both; }
+.operations-overview__metric--purchases { animation-delay: 90ms; }
 .operations-overview__source { margin: 0; color: var(--muted); font-size: var(--font-caption); line-height: 1.65; }
 .operations-overview__loading { min-block-size: 11rem; display: grid; place-items: center; color: var(--muted); }
 .baseer-operations-month-chart { animation: operations-overview-rise 540ms 120ms cubic-bezier(.2, .8, .2, 1) both; }
-.baseer-operations-month-chart__plot { min-block-size: 21rem; }
+.baseer-operations-month-chart__plot { min-block-size: var(--baseer-chart-height-operational, 21rem); }
 @keyframes operations-overview-rise { from { opacity: .01; transform: translateY(.65rem) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
-@media (max-width: 720px) { .operations-overview__hero { grid-template-columns: 1fr; }.operations-overview__metric { min-block-size: 10rem; }.baseer-operations-month-chart__plot { min-block-size: 17rem; } }
+@media (max-width: 720px) { .operations-overview__hero { grid-template-columns: 1fr; }.baseer-metric-action-card--hero { min-block-size: 10rem; }.baseer-operations-month-chart__plot { min-block-size: var(--baseer-chart-height-operational, 15.5rem); } }
 @media (prefers-reduced-motion: reduce) { .operations-overview__metric, .baseer-operations-month-chart { animation: none; transition: none; } }
 
 /* Overview cards follow the common section and card spacing. */

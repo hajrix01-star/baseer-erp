@@ -1,16 +1,18 @@
 import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from "react";
 
 import { presentBaseerApiError } from "./baseer-api-error";
+import { BaseerBatchPanel, BaseerWorkspaceTabs } from "./baseer-batch-layout";
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
 import { BaseerCompanyReadQuery } from "./baseer-company-read-query";
-import type { BaseerDataGridColumn, BaseerServerDataGridProps } from "./baseer-data-grid";
+import { BaseerDataGrid, type BaseerDataGridColumn, type BaseerServerDataGridProps } from "./baseer-data-grid";
 import { BaseerFilterBar } from "./baseer-filter-bar";
 import { BaseerPeriodFilter, defaultBaseerPeriodRange, type BaseerPeriodRange } from "./baseer-period-filter";
-import { DataTable, type DataTableColumn } from "./data-table";
 import { DailySalesSignIn } from "./daily-sales-sign-in";
 import { activeSession, api, type ActiveSession } from "./daily-sales-client";
+import { hasActivePermission } from "./module-access";
 import { formatCount, formatMoney, formatQuantity } from "./number-format";
+import { OperationsInternalRegistrationReport } from "./operations-internal-registration-report";
 
 type Language = "ar" | "en";
 type MaterialRow = {
@@ -41,10 +43,10 @@ type CustodyMonth = {
 };
 type CustodyReport = { representativeName: string | null; months: CustodyMonth[] };
 type ReportsData = { materials: MaterialsReport; custody: CustodyReport };
+type ReportsTab = "inventory-materials" | "internal-registration";
 
 type Copy = {
   title: string;
-  description: string;
   refresh: string;
   materials: string;
   material: string;
@@ -69,12 +71,14 @@ type Copy = {
   loading: string;
   loadMore: string;
   loadingMore: string;
+  inventoryMaterials: string;
+  internalRegistration: string;
+  unavailable: string;
 };
 
 const copy: Record<Language, Copy> = {
   ar: {
     title: "تقارير المشتريات والعهدة",
-    description: "تعرض هذه التقارير الشراء الفعلي وحركات العهدة فقط؛ لا تدخل خطط الطلبات في الأرقام.",
     refresh: "تحديث",
     materials: "المواد المستلمة",
     material: "المادة",
@@ -99,10 +103,12 @@ const copy: Record<Language, Copy> = {
     loading: "جارٍ التحميل…",
     loadMore: "تحميل المزيد",
     loadingMore: "جارٍ تحميل المزيد…",
+    inventoryMaterials: "تقارير المخزون والمواد",
+    internalRegistration: "تقرير التسجيل الداخلي",
+    unavailable: "غير متاح ضمن صلاحياتك.",
   },
   en: {
     title: "Purchasing & custody reports",
-    description: "These reports use actual purchases and custody movements only; purchase plans are excluded.",
     refresh: "Refresh",
     materials: "Received materials",
     material: "Material",
@@ -127,6 +133,9 @@ const copy: Record<Language, Copy> = {
     loading: "Loading…",
     loadMore: "Load more",
     loadingMore: "Loading more…",
+    inventoryMaterials: "Inventory & materials reports",
+    internalRegistration: "Internal registration report",
+    unavailable: "Unavailable with your permissions.",
   },
 };
 
@@ -205,6 +214,8 @@ export function OperationsReportsWorkspaceRuntime({ language }: { language: Lang
   const t = copy[language];
   const [session] = useState<ActiveSession | null>(activeSession());
   const [period, setPeriod] = useState<BaseerPeriodRange>(defaultBaseerPeriodRange());
+  const canReadInternalRegistration = hasActivePermission("operations.internal_registration.read");
+  const [tab, setTab] = useState<ReportsTab>("inventory-materials");
   if (!session) return <DailySalesSignIn language={language} />;
 
   const materialColumns: readonly BaseerDataGridColumn<MaterialRow>[] = [
@@ -214,7 +225,7 @@ export function OperationsReportsWorkspaceRuntime({ language }: { language: Lang
     { id: "average", header: t.average, numeric: true, cell: (row) => <bdi dir="ltr">{formatMoney(row.weightedActualUnitPrice, "SAR", language, 4)}</bdi> },
     { id: "amount", header: t.amount, numeric: true, cell: (row) => <bdi dir="ltr">{formatMoney(row.amount, "SAR", language)}</bdi> },
   ];
-  const custodyColumns: readonly DataTableColumn<CustodyMonth>[] = [
+  const custodyColumns: readonly BaseerDataGridColumn<CustodyMonth>[] = [
     { id: "month", header: t.month, cell: (row) => row.month },
     { id: "opening", header: t.opening, numeric: true, cell: (row) => <bdi dir="ltr">{formatMoney(row.openingBalance, "SAR", language)}</bdi> },
     { id: "funding", header: t.funding, numeric: true, cell: (row) => <bdi dir="ltr">{formatMoney(row.funding, "SAR", language)}</bdi> },
@@ -235,10 +246,12 @@ export function OperationsReportsWorkspaceRuntime({ language }: { language: Lang
   return <BaseerCompanyReadQuery session={session} resource="operations.reports.purchase-custody" scope={[period.from, period.to]} load={load}>
     {({ data, loading, error, refetch }) => <section className="daily-sales-workspace" dir={ar ? "rtl" : "ltr"}>
       <header className="administration-section-heading">
-        <div><p className="eyebrow">Operations</p><h3>{t.title}</h3><p>{t.description}</p></div>
+        <div><p className="eyebrow">Operations</p><h3>{t.title}</h3></div>
         <BaseerButton type="button" variant="secondary" disabled={loading} onClick={refetch}>{t.refresh}</BaseerButton>
       </header>
-      <BaseerFilterBar language={language} controls={<BaseerPeriodFilter language={language} value={period} onChange={setPeriod} presets={["DAY", "MONTH", "QUARTER", "YEAR", "RANGE"]} allowNonContiguousMonths={false} />} />
+      <BaseerWorkspaceTabs ariaLabel={t.title} idPrefix="operations-reports" activeId={tab} onChange={(value) => setTab(value as ReportsTab)} tabs={[{ id: "inventory-materials", label: t.inventoryMaterials }, { id: "internal-registration", label: t.internalRegistration }]} />
+      <BaseerBatchPanel id={`operations-reports-panel-${tab}`} labelledBy={`operations-reports-${tab}`}>
+      {tab === "inventory-materials" ? <><BaseerFilterBar language={language} controls={<BaseerPeriodFilter language={language} value={period} onChange={setPeriod} presets={["DAY", "MONTH", "QUARTER", "YEAR", "RANGE"]} allowNonContiguousMonths={false} />} />
       {error ? <p className="daily-sales-message error">{presentBaseerApiError(error, language, t.failed)}</p> : null}
       <BaseerCard>
         <h3>{t.materials}</h3>
@@ -254,8 +267,10 @@ export function OperationsReportsWorkspaceRuntime({ language }: { language: Lang
       <BaseerCard>
         <h3>{t.custody}</h3>
         <p>{t.representative}: <strong>{data?.custody.representativeName ?? "—"}</strong></p>
-        {data?.custody.months.length ? <DataTable ariaLabel={t.custody} caption={t.custody} rows={data.custody.months} rowKey={(row) => row.month} columns={custodyColumns} /> : data ? <p>{t.noData}</p> : null}
+        {data?.custody.months.length ? <BaseerDataGrid ariaLabel={t.custody} caption={t.custody} rows={data.custody.months} rowKey={(row) => row.month} columns={custodyColumns} /> : data ? <p>{t.noData}</p> : null}
       </BaseerCard>
+      </> : canReadInternalRegistration ? <OperationsInternalRegistrationReport language={language} session={session} /> : <BaseerCard><p>{t.unavailable}</p></BaseerCard>}
+      </BaseerBatchPanel>
     </section>}
   </BaseerCompanyReadQuery>;
 }

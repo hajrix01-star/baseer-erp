@@ -143,6 +143,8 @@ import { OperationsExecutionController } from './operations/operations-execution
 import { OperationsExecutionService } from './operations/operations-execution.service.js';
 import { OperationsInternalRegistrationController } from './operations/operations-internal-registration.controller.js';
 import { OperationsInternalRegistrationService } from './operations/operations-internal-registration.service.js';
+import { OperationsInventoryReportingController } from './operations/operations-inventory-reporting.controller.js';
+import { OperationsInventoryReportingService } from './operations/operations-inventory-reporting.service.js';
 import { OperationsAssetsWarrantyController } from './operations/operations-assets-warranty.controller.js';
 import { OperationsAssetsWarrantyService } from './operations/operations-assets-warranty.service.js';
 import { OperationsOverviewController } from './operations/operations-overview.controller.js';
@@ -183,7 +185,7 @@ import { OfficialReportRunsController } from './reports/official-report-runs.con
       ],
     }),
   ],
-  controllers: [AdministrationController, BackupController, NurixMigrationReviewController, NurixExcelImportController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinanceAccountsController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController, HrOverviewController, AttendanceController, ReportCatalogController, ReportsController, LedgerTrialBalanceController, InternalVatReportController, VatSimulationController, ReportDocumentController, OfficialReportRunsController, OperationsCatalogController, OperationsExecutionController, OperationsInternalRegistrationController, OperationsAssetsWarrantyController, OperationsOverviewController, DecisionIntelligenceController, MarketingController, InboundEvidenceController, OwnerDailyBriefController, OwnerDashboardController],
+  controllers: [AdministrationController, BackupController, NurixMigrationReviewController, NurixExcelImportController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinanceAccountsController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController, HrOverviewController, AttendanceController, ReportCatalogController, ReportsController, LedgerTrialBalanceController, InternalVatReportController, VatSimulationController, ReportDocumentController, OfficialReportRunsController, OperationsCatalogController, OperationsExecutionController, OperationsInternalRegistrationController, OperationsInventoryReportingController, OperationsAssetsWarrantyController, OperationsOverviewController, DecisionIntelligenceController, MarketingController, InboundEvidenceController, OwnerDailyBriefController, OwnerDashboardController],
   providers: [
     DatabaseService,
     BackupService,
@@ -286,6 +288,7 @@ import { OfficialReportRunsController } from './reports/official-report-runs.con
     OperationsCatalogService,
     OperationsExecutionService,
     OperationsInternalRegistrationService,
+    OperationsInventoryReportingService,
     OperationsAssetsWarrantyService,
     OperationsOverviewService,
     DecisionIntelligenceService,

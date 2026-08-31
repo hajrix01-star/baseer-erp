@@ -32,7 +32,7 @@ async function fulfill(route: Route, json: unknown, status = 200) {
   await route.fulfill({ status, contentType: "application/json", body: JSON.stringify(json) });
 }
 
-async function mockInternalRegistration(page: Page, options: { isOwner?: boolean; includeOwnerFlag?: boolean; legacyOwnerFallback?: boolean } = {}) {
+async function mockInternalRegistration(page: Page, options: { isOwner?: boolean; includeOwnerFlag?: boolean; legacyOwnerFallback?: boolean; includeRecipe?: boolean } = {}) {
   const requested: Array<{ method: string; path: string; body?: unknown }> = [];
   await page.addInitScript((company) => {
     sessionStorage.setItem("baseer.erp.access-token", "operations-e2e-token");
@@ -47,7 +47,7 @@ async function mockInternalRegistration(page: Page, options: { isOwner?: boolean
     const body = method === "POST" ? route.request().postDataJSON() : undefined;
     requested.push({ method, path: `${url.pathname}${url.search}`, body });
     if (url.pathname === "/v1/companies/available") {
-      const company = { id: companyId, nameAr: "شركة الاختبار", nameEn: "Test Company", permissionCodes: ["operations.internal_registration.create", "operations.internal_registration.read", "operations.catalog.manage", ...(options.legacyOwnerFallback ? ["inbound_evidence.owner_access"] : [])] };
+      const company = { id: companyId, nameAr: "شركة الاختبار", nameEn: "Test Company", permissionCodes: ["operations.internal_registration.create", "operations.internal_registration.read", "operations.catalog.manage", ...(options.includeRecipe ? ["operations.recipe.read"] : []), ...(options.legacyOwnerFallback ? ["inbound_evidence.owner_access"] : [])] };
       return fulfill(route, { companies: [{ ...company, ...(options.includeOwnerFlag === false ? {} : { isOwner: options.isOwner ?? false }) }] });
     }
     if (url.pathname === "/v1/operations/internal-registration/workstation") {
@@ -77,6 +77,12 @@ async function mockInternalRegistration(page: Page, options: { isOwner?: boolean
     if (url.pathname === "/v1/operations/catalog/item-units/price" && method === "POST") return fulfill(route, { id: "menu-1", replayed: false });
     if (url.pathname === "/v1/operations/catalog/item-units/configure" && method === "POST") return fulfill(route, { id: "item-1", replayed: false });
     if (url.pathname === "/v1/operations/catalog/conversions/publish" && method === "POST") return fulfill(route, { id: "item-1", replayed: false });
+    if (url.pathname === "/v1/operations/recipe-workspace") return fulfill(route, {
+      units: catalog.units,
+      menuProducts: [{ id: "menu-1", nameAr: "منتج الاختبار", nameEn: "Test menu product", itemUnits: catalog.items[2]!.itemUnits }],
+      rawMaterials: [{ id: "item-1", nameAr: "مادة الاختبار", nameEn: "Test material", baseUnitId: "unit-1", itemUnits: catalog.items[0]!.itemUnits, conversionVersion: catalog.items[0]!.conversionVersion, weightedUnitCost: "8.0000" }],
+      recipes: [],
+    });
     if (url.pathname === "/v1/operations/reports/materials-received") {
       const firstPage = !url.searchParams.has("cursor");
       return fulfill(route, {
@@ -298,3 +304,36 @@ test("purchase request and completion expose the shared Gregorian date adapter",
   await page.keyboard.press("Escape");
   await expect(page.getByRole("grid")).toHaveCount(0);
 });
+
+for (const presentation of ["modern-1", "modern-2"] as const) {
+  test(`${presentation} keeps compound purchase and recipe surfaces inside their viewport`, async ({ page, isMobile }, testInfo) => {
+    await page.addInitScript((selectedPresentation) => {
+      localStorage.setItem("baseer-erp.shell.presentation.v1", selectedPresentation);
+      localStorage.setItem("baseer-erp.shell.appearance.v1", "light");
+    }, presentation);
+    await mockInternalRegistration(page, { includeRecipe: true });
+
+    await page.goto("/#module=operations&page=operations-execution");
+    await page.getByRole("button", { name: "فتح إدارة طلبات الشراء والعهدة" }).click();
+    await page.getByRole("button", { name: "اعتماد الشراء الفعلي" }).click();
+    const receipt = page.getByRole("dialog");
+    const pos = receipt.locator(".operations-purchase-pos");
+    await expect(receipt.locator('[data-baseer-card-variant="form-or-receipt"]')).toBeVisible();
+    await expect(pos).toBeVisible();
+    await expect(pos.locator('[data-baseer-card-variant="form-or-receipt"]')).toBeVisible();
+    await expect(pos.locator('[data-baseer-card-variant="joined-ledger"]')).toBeVisible();
+    await page.screenshot({ path: testInfo.outputPath(`operations-receipt-${presentation}-${isMobile ? "mobile" : "desktop"}.png`), fullPage: true });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+
+    await page.goto("/#module=operations&page=operations-catalog");
+    await page.getByRole("tab", { name: "منتجات المنيو" }).click();
+    await page.getByRole("button", { name: "منتج الاختبار" }).click();
+    const recipeDialog = page.getByRole("dialog");
+    await recipeDialog.getByRole("button", { name: "الرسبي والتكلفة" }).click();
+    const recipe = recipeDialog.locator(".operations-recipe-editor");
+    await expect(recipe).toBeVisible();
+    await expect(recipe.locator('[data-baseer-card-variant="form-or-receipt"]')).toHaveCount(2);
+    await page.screenshot({ path: testInfo.outputPath(`operations-recipe-${presentation}-${isMobile ? "mobile" : "desktop"}.png`), fullPage: true });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+  });
+}
