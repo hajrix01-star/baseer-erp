@@ -7,6 +7,7 @@ import type { TrustedCompanyActorContext } from '../core-controls/trusted-contex
 import { DatabaseService } from '../database/database.service.js';
 import { BusinessDateService } from '../business-date/business-date.service.js';
 import { FinanceJournalEntryStatus, Prisma } from '../generated/prisma/client.js';
+import { financeJournalPresentation } from '../finance/finance-journal-presentation.js';
 import { ReportRunService, SEALED_LEDGER_ENTRY_PREDICATE_VERSION } from './report-run.service.js';
 
 const REPORT_CODE = 'ledger_trial_balance';
@@ -14,6 +15,27 @@ const DEFINITION_VERSION = 'ledger_trial_balance_v1';
 const PAGE_SIZE = 100;
 const MAX_INTERACTIVE_DAYS = 366;
 const MAX_INTERACTIVE_ACCOUNTS = 1_000;
+const journalPresentationSelect = {
+  hrPayrollAccrual: { select: { runNumber: true } },
+  hrPayrollPayment: { select: { paymentNumber: true, payrollRun: { select: { runNumber: true } } } },
+  hrEmployeeAdvanceIssue: { select: { advanceNumber: true } },
+  hrEmployeeAdvanceSettlements: { take: 1, select: { source: true, advance: { select: { advanceNumber: true } } } },
+  hrFinalSettlementAccrual: { select: { settlementNumber: true } },
+  hrFinalSettlementPayment: { select: { paymentNumber: true, settlement: { select: { settlementNumber: true } } } },
+  dailySalesClosing: { select: { documentNumber: true } },
+  vatSettlement: { select: { referenceNumber: true } },
+  reversalOfEntry: { select: {
+    sourceType: true, sourceReference: true, description: true,
+    hrPayrollAccrual: { select: { runNumber: true } },
+    hrPayrollPayment: { select: { paymentNumber: true, payrollRun: { select: { runNumber: true } } } },
+    hrEmployeeAdvanceIssue: { select: { advanceNumber: true } },
+    hrEmployeeAdvanceSettlements: { take: 1, select: { source: true, advance: { select: { advanceNumber: true } } } },
+    hrFinalSettlementAccrual: { select: { settlementNumber: true } },
+    hrFinalSettlementPayment: { select: { paymentNumber: true, settlement: { select: { settlementNumber: true } } } },
+    dailySalesClosing: { select: { documentNumber: true } },
+    vatSettlement: { select: { referenceNumber: true } },
+  } },
+} satisfies Prisma.FinanceJournalEntrySelect;
 
 type TrialBalanceRequest = Readonly<{ from: Date; to: Date; includeZeroRows: boolean }>;
 type TrialAmounts = Readonly<{ openingDebit: Prisma.Decimal; openingCredit: Prisma.Decimal; periodDebit: Prisma.Decimal; periodCredit: Prisma.Decimal; closingDebit: Prisma.Decimal; closingCredit: Prisma.Decimal }>;
@@ -133,7 +155,7 @@ export class LedgerTrialBalanceReportService {
       take: PAGE_SIZE + 1,
       select: {
         id: true, businessDate: true, createdAt: true, lineNumber: true, debitAmount: true, creditAmount: true,
-        journalEntry: { select: { id: true, businessDate: true, sourceType: true, sourceReference: true, description: true, reversalEntry: { select: { ledgerRevision: true } } } },
+        journalEntry: { select: { id: true, businessDate: true, sourceType: true, sourceReference: true, description: true, reversalEntry: { select: { ledgerRevision: true } }, ...journalPresentationSelect } },
       },
       });
     });
@@ -144,7 +166,6 @@ export class LedgerTrialBalanceReportService {
       nextCursor: lines.length > page.length && last ? encodeCursor(last) : null,
       items: page.map((line) => ({
         lineId: line.id, journalEntryId: line.journalEntry.id, businessDate: dateText(line.journalEntry.businessDate),
-        reference: line.journalEntry.sourceReference,
         ...journalLabel(line.journalEntry),
         description: line.journalEntry.description,
         debit: money(line.debitAmount), credit: money(line.creditAmount),
@@ -207,7 +228,7 @@ export class LedgerTrialBalanceReportService {
       where: { id: lineId, tenantId: context.tenantId, companyId: context.companyId, accountId, journalEntry: { is: entryPredicate } },
       select: {
         journalEntry: { select: {
-          id: true, businessDate: true, sourceType: true, sourceReference: true, description: true, reversalEntry: { select: { ledgerRevision: true } },
+          id: true, businessDate: true, sourceType: true, sourceReference: true, description: true, reversalEntry: { select: { ledgerRevision: true } }, ...journalPresentationSelect,
           lines: { orderBy: { lineNumber: 'asc' }, select: { id: true, lineNumber: true, debitAmount: true, creditAmount: true, description: true, account: { select: { code: true, nameAr: true, nameEn: true } } } },
         } },
       },
@@ -216,7 +237,7 @@ export class LedgerTrialBalanceReportService {
     const entry = line.journalEntry;
     return {
       journalEntry: {
-        id: entry.id, businessDate: dateText(entry.businessDate), sourceReference: entry.sourceReference,
+        id: entry.id, businessDate: dateText(entry.businessDate),
         ...journalLabel(entry), description: entry.description, cancellationLabelAr: cancellationLabel(entry, run.ledgerRevision),
         lines: entry.lines.map((item) => ({ id: item.id, lineNumber: item.lineNumber, accountCode: item.account.code, accountNameAr: item.account.nameAr, accountNameEn: item.account.nameEn, debit: money(item.debitAmount), credit: money(item.creditAmount), description: item.description })),
       },
@@ -250,7 +271,7 @@ export function isEligibleTrialBalanceAccount(account: { status: string; isSyste
 function assertBalanced(value: TrialAmounts) { for (const [debit, credit] of [['openingDebit', 'openingCredit'], ['periodDebit', 'periodCredit'], ['closingDebit', 'closingCredit']] as const) if (!value[debit].equals(value[credit])) throw new BadRequestException('The Trial Balance is not balanced for the eligible ledger scope.'); }
 function metadataFor(source: { company: { nameAr: string; nameEn: string; businessTimezone: string }; profile: { functionalCurrencyCode: string } }, request: TrialBalanceRequest, ledgerRevision: bigint) { return { reportCode: REPORT_CODE, definitionVersion: DEFINITION_VERSION, dataMode: 'LIVE' as const, ledgerRevision: ledgerRevision.toString(), company: { displayName: source.company.nameAr || source.company.nameEn, functionalCurrency: source.profile.functionalCurrencyCode }, businessTimezone: source.company.businessTimezone, selectedPeriod: { from: dateText(request.from), to: dateText(request.to) }, economicAsOfDate: dateText(request.to), basisLabelAr: 'دفتر الأستاذ — القيود المختومة', sourceKindAr: 'قيود دفتر مختومة', cancellationTreatmentAr: 'يبقى أصل العملية في تاريخه الاقتصادي، ويبدأ أثر الإلغاء من تاريخ عمل قيد الإلغاء.', dataCoverage: { state: 'COMPLETE' as const }, reconciliation: { state: 'RECONCILED' as const, messageAr: 'تساوت إجماليات المدين والدائن للافتتاح والحركة والختام.' }, roundingRule: 'تُحسب المبالغ بأربع منازل عشرية وتُعرض بمنزلتين عشريتين.' }; }
 function scopeDateFilter(scope: 'OPENING' | 'PERIOD' | 'CLOSING', request: TrialBalanceRequest) { return scope === 'OPENING' ? { lt: request.from } : scope === 'PERIOD' ? { gte: request.from, lte: request.to } : { lte: request.to }; }
-function journalLabel(entry: { sourceType: string; sourceReference: string }) { return entry.sourceType === 'journal_reversal' ? { labelAr: `إلغاء ${entry.sourceReference}`, labelEn: `Cancellation ${entry.sourceReference}` } : { labelAr: 'قيد أو تسوية', labelEn: 'Journal or adjustment' }; }
+function journalLabel(entry: Parameters<typeof financeJournalPresentation>[0]) { return financeJournalPresentation(entry); }
 function cancellationLabel(entry: { sourceType: string; reversalEntry?: { ledgerRevision: bigint } | null }, reportRevision: bigint) { if (entry.sourceType === 'journal_reversal') return 'قيد إلغاء'; return entry.reversalEntry && entry.reversalEntry.ledgerRevision <= reportRevision ? 'ملغى' : null; }
 function money(value: Prisma.Decimal) { const sign = value.gt(0) ? 'positive' as const : value.lt(0) ? 'negative' as const : 'zero' as const; return { raw: value.toFixed(4), display: value.abs().toFixed(2), sign }; }
 function decimal(value: Prisma.Decimal | null | undefined) { return value ?? zero(); }

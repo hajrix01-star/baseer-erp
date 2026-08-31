@@ -10,5 +10,5 @@ const InvoiceRegisterWorkspaceRuntime = lazy(async () => ({ default: (await impo
 /** The unified register is opened directly; its runtime owns authentication and data loading. */
 export function InvoiceRegisterWorkspace({ language }: { language: Language }) {
   const text = financeText(language);
-  return <Suspense fallback={<BaseerCard aria-busy="true">{text.loading}</BaseerCard>}><InvoiceRegisterWorkspaceRuntime language={language} /></Suspense>;
+  return <Suspense fallback={<BaseerCard variant="record" aria-busy="true">{text.loading}</BaseerCard>}><InvoiceRegisterWorkspaceRuntime language={language} /></Suspense>;
 }

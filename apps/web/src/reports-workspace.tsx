@@ -9,5 +9,5 @@ const ReportsWorkspaceContent = lazy(async () => ({ default: (await import("./re
 /** Report navigation remains stable while its read, snapshot and export UI load on demand. */
 export function ReportsWorkspace({ language, initialReport }: { language: Language; initialReport?: "trial-balance" | "cash-performance" }) {
   const text = language === "ar" ? "جارٍ تحميل التقارير المالية…" : "Loading financial reports…";
-  return <Suspense fallback={<BaseerCard aria-busy="true">{text}</BaseerCard>}><ReportsWorkspaceContent language={language} initialReport={initialReport} /></Suspense>;
+  return <Suspense fallback={<BaseerCard variant="record" aria-busy="true">{text}</BaseerCard>}><ReportsWorkspaceContent language={language} initialReport={initialReport} /></Suspense>;
 }

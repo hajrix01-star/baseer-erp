@@ -7,6 +7,7 @@ import type { TrustedCompanyActorContext } from '../core-controls/trusted-contex
 import { BusinessDateService } from '../business-date/business-date.service.js';
 import { DatabaseService } from '../database/database.service.js';
 import { FinanceJournalEntryStatus, Prisma } from '../generated/prisma/client.js';
+import { financeJournalPresentation } from '../finance/finance-journal-presentation.js';
 import { ReportRunService, SEALED_LEDGER_ENTRY_PREDICATE_VERSION } from './report-run.service.js';
 import { interactiveReportPeriodMessage, interactiveReportSourceMessage } from './interactive-report-limits.js';
 
@@ -14,7 +15,28 @@ const REPORT_CODE = 'internal_vat_report';
 const DEFINITION_VERSION = 'internal_vat_report_v1';
 type RowCode = 'output_vat' | 'input_vat' | 'vat_paid' | 'vat_refunded';
 type Request = Readonly<{ from: Date; to: Date; months?: readonly string[] }>;
-type VatLine = Readonly<{ id: string; businessDate: Date; accountKey: 'VAT_OUTPUT' | 'VAT_INPUT'; debit: Prisma.Decimal; credit: Prisma.Decimal; reference: string; sourceType: string; originalSourceType: string | null }>;
+const journalPresentationSelect = {
+  hrPayrollAccrual: { select: { runNumber: true } },
+  hrPayrollPayment: { select: { paymentNumber: true, payrollRun: { select: { runNumber: true } } } },
+  hrEmployeeAdvanceIssue: { select: { advanceNumber: true } },
+  hrEmployeeAdvanceSettlements: { take: 1, select: { source: true, advance: { select: { advanceNumber: true } } } },
+  hrFinalSettlementAccrual: { select: { settlementNumber: true } },
+  hrFinalSettlementPayment: { select: { paymentNumber: true, settlement: { select: { settlementNumber: true } } } },
+  dailySalesClosing: { select: { documentNumber: true } },
+  vatSettlement: { select: { referenceNumber: true } },
+  reversalOfEntry: { select: {
+    sourceType: true, sourceReference: true, description: true,
+    hrPayrollAccrual: { select: { runNumber: true } },
+    hrPayrollPayment: { select: { paymentNumber: true, payrollRun: { select: { runNumber: true } } } },
+    hrEmployeeAdvanceIssue: { select: { advanceNumber: true } },
+    hrEmployeeAdvanceSettlements: { take: 1, select: { source: true, advance: { select: { advanceNumber: true } } } },
+    hrFinalSettlementAccrual: { select: { settlementNumber: true } },
+    hrFinalSettlementPayment: { select: { paymentNumber: true, settlement: { select: { settlementNumber: true } } } },
+    dailySalesClosing: { select: { documentNumber: true } },
+    vatSettlement: { select: { referenceNumber: true } },
+  } },
+} satisfies Prisma.FinanceJournalEntrySelect;
+type VatLine = Readonly<{ id: string; businessDate: Date; accountKey: 'VAT_OUTPUT' | 'VAT_INPUT'; debit: Prisma.Decimal; credit: Prisma.Decimal; reference: string; sourceType: string; originalSourceType: string | null; labelAr: string; labelEn: string }>;
 
 /**
  * Internal VAT analysis only. It isolates tax-control ledger lines from cash
@@ -60,7 +82,7 @@ export class InternalVatReportService {
     if (marker && !all.some((line) => line.id === marker.id && day(line.businessDate) === marker.businessDate)) throw new BadRequestException('The VAT evidence cursor is outside this report scope.');
     const eligible = marker ? all.filter((line) => day(line.businessDate) > marker.businessDate || (day(line.businessDate) === marker.businessDate && line.id > marker.id)) : all;
     const page = eligible.slice(0, 100); const last = page.at(-1);
-    return { reportRunId: run.id, rowCode, nextCursor: eligible.length > page.length && last ? `${day(last.businessDate)}:${last.id}` : null, items: page.map((line) => ({ lineId: line.id, businessDate: day(line.businessDate), amount: money(valueFor(line)), reference: line.reference, ...labelFor(line) })) };
+    return { reportRunId: run.id, rowCode, nextCursor: eligible.length > page.length && last ? `${day(last.businessDate)}:${last.id}` : null, items: page.map((line) => ({ lineId: line.id, businessDate: day(line.businessDate), amount: money(valueFor(line)), reference: line.reference, labelAr: line.labelAr, labelEn: line.labelEn })) };
   }
 
   async sourceJournal(context: TrustedCompanyActorContext, reportRunId: string, lineId: string) {
@@ -69,11 +91,12 @@ export class InternalVatReportService {
     if (!lines.some((line) => line.id === lineId)) throw new NotFoundException('The source line is not available in this VAT report run.');
     const journal = await this.database.inTenantTransaction(context.tenantId, (transaction) => transaction.financeJournalLine.findFirst({
       where: { id: lineId, tenantId: context.tenantId, companyId: context.companyId },
-      select: { journalEntry: { select: { id: true, businessDate: true, sourceType: true, sourceReference: true, description: true, postedAt: true, reversalEntry: { select: { ledgerRevision: true } }, lines: { orderBy: { lineNumber: 'asc' }, select: { id: true, lineNumber: true, debitAmount: true, creditAmount: true, description: true, account: { select: { code: true, nameAr: true, nameEn: true } } } } } } },
+      select: { journalEntry: { select: { id: true, businessDate: true, sourceType: true, sourceReference: true, description: true, postedAt: true, reversalEntry: { select: { ledgerRevision: true } }, ...journalPresentationSelect, lines: { orderBy: { lineNumber: 'asc' }, select: { id: true, lineNumber: true, debitAmount: true, creditAmount: true, description: true, account: { select: { code: true, nameAr: true, nameEn: true } } } } } } },
     }));
     if (!journal) throw new NotFoundException('The VAT source journal is not available.');
     const entry = journal.journalEntry;
-    return { journalEntry: { id: entry.id, businessDate: day(entry.businessDate), sourceType: entry.sourceType, sourceReference: entry.sourceReference, description: entry.description, status: entry.reversalEntry && entry.reversalEntry.ledgerRevision <= run.ledgerRevision ? 'REVERSED' as const : 'POSTED' as const, postedAt: entry.postedAt.toISOString(), lines: entry.lines.map((line) => ({ id: line.id, lineNumber: line.lineNumber, accountCode: line.account.code, accountNameAr: line.account.nameAr, accountNameEn: line.account.nameEn, debitAmount: line.debitAmount.toFixed(4), creditAmount: line.creditAmount.toFixed(4), description: line.description })) } };
+    const presentation = financeJournalPresentation(entry);
+    return { journalEntry: { id: entry.id, businessDate: day(entry.businessDate), sourceType: entry.sourceType, labelAr: presentation.labelAr, labelEn: presentation.labelEn, sourceReference: presentation.reference, description: entry.description, status: entry.reversalEntry && entry.reversalEntry.ledgerRevision <= run.ledgerRevision ? 'REVERSED' as const : 'POSTED' as const, postedAt: entry.postedAt.toISOString(), lines: entry.lines.map((line) => ({ id: line.id, lineNumber: line.lineNumber, accountCode: line.account.code, accountNameAr: line.account.nameAr, accountNameEn: line.account.nameEn, debitAmount: line.debitAmount.toFixed(4), creditAmount: line.creditAmount.toFixed(4), description: line.description })) } };
   }
 
   async snapshotForDocument(context: TrustedCompanyActorContext, reportRunId: string, locale: ReportLocale): Promise<ReportSnapshot> {
@@ -95,9 +118,13 @@ export class InternalVatReportService {
     const eligible = this.eligibleEntryWhere(context, revision, request);
     const records = await this.database.inTenantTransaction(context.tenantId, (transaction) => transaction.financeJournalLine.findMany({
       where: { tenantId: context.tenantId, companyId: context.companyId, account: { is: { systemKey: { in: ['VAT_OUTPUT', 'VAT_INPUT'] } } }, journalEntry: { is: eligible } },
-      select: { id: true, debitAmount: true, creditAmount: true, account: { select: { systemKey: true } }, journalEntry: { select: { businessDate: true, sourceReference: true, sourceType: true, reversalOfEntry: { select: { sourceType: true } } } } },
+      select: { id: true, debitAmount: true, creditAmount: true, account: { select: { systemKey: true } }, journalEntry: { select: { businessDate: true, sourceReference: true, sourceType: true, description: true, ...journalPresentationSelect } } },
     }));
-    return records.flatMap((line): VatLine[] => line.account.systemKey === 'VAT_OUTPUT' || line.account.systemKey === 'VAT_INPUT' ? [{ id: line.id, businessDate: line.journalEntry.businessDate, accountKey: line.account.systemKey, debit: line.debitAmount, credit: line.creditAmount, reference: line.journalEntry.sourceReference, sourceType: line.journalEntry.sourceType, originalSourceType: line.journalEntry.reversalOfEntry?.sourceType ?? null }] : []);
+    return records.flatMap((line): VatLine[] => {
+      if (line.account.systemKey !== 'VAT_OUTPUT' && line.account.systemKey !== 'VAT_INPUT') return [];
+      const presentation = financeJournalPresentation(line.journalEntry);
+      return [{ id: line.id, businessDate: line.journalEntry.businessDate, accountKey: line.account.systemKey, debit: line.debitAmount, credit: line.creditAmount, reference: presentation.reference, sourceType: line.journalEntry.sourceType, originalSourceType: line.journalEntry.reversalOfEntry?.sourceType ?? null, labelAr: presentation.labelAr, labelEn: presentation.labelEn }];
+    });
   }
 
   private sourceLineCount(context: TrustedCompanyActorContext, revision: bigint | string, request: Request) {
@@ -135,7 +162,6 @@ function valueFor(line: VatLine) { const row = classify(line); return row === 'o
 function aggregate(lines: readonly VatLine[]) { const definitions: ReadonlyArray<Readonly<{ code: RowCode; labelAr: string; labelEn: string }>> = [{ code: 'output_vat', labelAr: 'ضريبة المخرجات', labelEn: 'Output VAT' }, { code: 'input_vat', labelAr: 'ضريبة المدخلات', labelEn: 'Input VAT' }, { code: 'vat_paid', labelAr: 'ضريبة مسددة', labelEn: 'VAT paid' }, { code: 'vat_refunded', labelAr: 'ضريبة مستردة', labelEn: 'VAT refunded' }]; return definitions.map((definition) => { const selected = lines.filter((line) => classify(line) === definition.code); return { ...definition, amount: selected.reduce((sum, line) => sum.plus(valueFor(line)), zero()), eventCount: selected.length }; }); }
 function amountFor(rows: ReadonlyArray<{ code: RowCode; amount: Prisma.Decimal }>, code: RowCode) { return rows.find((row) => row.code === code)?.amount ?? zero(); }
 function displayRow(row: { code: RowCode; labelAr: string; labelEn: string; amount: Prisma.Decimal; eventCount: number }) { return { ...row, amount: money(row.amount) }; }
-function labelFor(line: VatLine) { return isSettlement(line) ? { labelAr: line.sourceType === 'journal_reversal' ? `إلغاء ${line.reference}` : 'تسوية ضريبة', labelEn: line.sourceType === 'journal_reversal' ? `Cancellation ${line.reference}` : 'VAT settlement' } : { labelAr: line.sourceType === 'journal_reversal' ? `إلغاء ${line.reference}` : 'قيد ضريبي', labelEn: line.sourceType === 'journal_reversal' ? `Cancellation ${line.reference}` : 'VAT journal entry' }; }
 function reportMetadata(source: { company: { nameAr: string; nameEn: string; businessTimezone: string }; profile: { functionalCurrencyCode: string } }, request: Request, ledgerRevision: bigint) { return { reportCode: REPORT_CODE, definitionVersion: DEFINITION_VERSION, dataMode: 'LIVE' as const, ledgerRevision: ledgerRevision.toString(), company: { displayName: source.company.nameAr || source.company.nameEn, functionalCurrency: source.profile.functionalCurrencyCode }, selectedPeriod: { from: day(request.from), to: day(request.to), ...(request.months?.length ? { months: request.months } : {}) }, basisLabelAr: 'دفتر الأستاذ — حسابات الضريبة' }; }
 function money(value: Prisma.Decimal) { const sign = value.gt(0) ? 'positive' as const : value.lt(0) ? 'negative' as const : 'zero' as const; return { raw: value.toFixed(4), display: value.abs().toFixed(2), sign }; }
 function zero() { return new Prisma.Decimal(0); }

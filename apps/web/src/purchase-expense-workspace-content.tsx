@@ -21,7 +21,6 @@ const copy = {
   ar: {
     eyebrow: "المالية ← المشتريات",
     title: "المشتريات والمصروفات",
-    description: "آخر المستندات المثبتة في الشركة الحالية. افتح الإدارة الكاملة للإدخال والائتمان والتعديل والعكس.",
     open: "إدارة المشتريات",
     preparing: "جارٍ تجهيز إدارة المشتريات…",
     loading: "جارٍ تحميل آخر المستندات…",
@@ -35,7 +34,6 @@ const copy = {
   en: {
     eyebrow: "Finance → Purchases",
     title: "Purchases and expenses",
-    description: "The latest posted documents in the current company. Open full management for entry, credit, amendment, and reversal.",
     open: "Manage purchases",
     preparing: "Preparing purchase management…",
     loading: "Loading recent documents…",
@@ -82,7 +80,7 @@ export function PurchaseExpenseWorkspaceContent({ language, activeTab = "entry",
   return <section className="purchase-expense-workspace">
     <BaseerCard>
       <div className="baseer-workspace__heading">
-        <div><p className="overline">{text.eyebrow}</p><h2>{text.title}</h2><p>{text.description}</p></div>
+        <div><p className="overline">{text.eyebrow}</p><h2>{text.title}</h2></div>
         <div className="baseer-workspace__actions"><BaseerButton type="button" onClick={() => setOpenRuntime(true)}>{text.open}</BaseerButton></div>
       </div>
       {!canRead ? <p>{text.unavailable}</p> : failed ? <p className="daily-sales-message error" role="alert">{text.failed}</p> : documents === null ? <p>{text.loading}</p> : documents.length ? <BaseerDataGrid ariaLabel={language === "ar" ? "آخر مستندات المشتريات والمصروفات" : "Recent purchase and expense documents"} caption={language === "ar" ? "آخر مستندات المشتريات والمصروفات" : "Recent purchase and expense documents"} columns={documentColumns} rows={documents} rowKey={(document) => document.id} /> : <p>{text.noDocuments}</p>}

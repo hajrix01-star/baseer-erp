@@ -983,7 +983,6 @@ function FinanceSettingsHub({
       icon: "⌁",
       title: text.suppliers,
       value: String(readiness.counts.activeSuppliers),
-      detail: text.standardSuppliersDescription,
       action: language === "ar" ? "إدارة الموردين" : "Manage suppliers",
       target: `#${pageRouteHash("operations-suppliers")}`,
     },
@@ -1084,7 +1083,6 @@ function FinanceSettingsHub({
         >
           <div>
             <h3>{text.seedUpdate}</h3>
-            <p>{text.seedUpdateDescription}</p>
           </div>
           <BaseerButton
             type="button"
@@ -1295,12 +1293,6 @@ function FinanceSetupReviewDialog({
             ? "تحديث البذرة المالية"
             : "Finance foundation update"}
         </h3>
-        <p>
-          {profile &&
-          profile.baseSeedVersion >= readiness.requiredBaseSeedVersion
-            ? text.seedReviewCurrentDescription
-            : text.seedReviewUpdateDescription}
-        </p>
         <BaseerButton
           type="button"
           variant="secondary"

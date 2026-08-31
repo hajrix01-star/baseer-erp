@@ -837,7 +837,6 @@ export function TreasuryWorkspaceRuntime({ language }: { language: Language }) {
       <header className="administration-section-heading">
         <div>
           <p className="eyebrow">{text.finance}</p>
-          <h3>{text.vaults}</h3>
         </div>
         <div className="page-actions">
           <BaseerButton type="button" variant="secondary" onClick={openOrder}>
@@ -883,7 +882,7 @@ export function TreasuryWorkspaceRuntime({ language }: { language: Language }) {
         <p className={`daily-sales-message ${message.kind}`}>{message.text}</p>
       ) : null}
       {!workspace ? (
-        <BaseerCard>
+        <BaseerCard variant="record">
           <p>
             {workspaceLoading
               ? text.loadingVaults
@@ -927,7 +926,7 @@ export function TreasuryWorkspaceRuntime({ language }: { language: Language }) {
               value={formatMoney(workspace.summary.outflow)}
             />
           </BaseerSummaryMetricGrid>
-          <BaseerCard>
+          <BaseerCard variant="joined-ledger">
             <header className="administration-section-heading">
               <div>
                 <h3>{text.reconciliationHistory}</h3>
@@ -1526,6 +1525,7 @@ function VaultCards({
       {vaults.map((vault) => (
         <BaseerCard
           key={vault.id}
+          variant="metric"
           padding="compact"
           className={`baseer-metric-card${vault.status === "ARCHIVED" ? " baseer-metric-card--archived" : ""}`}
         >

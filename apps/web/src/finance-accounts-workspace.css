@@ -1,6 +1,6 @@
 .finance-accounts-workspace {
-  --finance-debit: #17628d;
-  --finance-credit: #b42318;
+  --finance-debit: var(--status-info);
+  --finance-credit: var(--status-danger);
 }
 
 .finance-account-column-heading,
@@ -21,4 +21,12 @@
 .finance-account-amount--zero {
   color: var(--muted);
   font-weight: 700;
+}
+
+/* The accounting meaning stays the same; only its visual role follows the
+   active presentation instead of the former fixed blue/red pair. */
+body[data-ui-theme="modern-1"] .finance-accounts-workspace,
+body[data-ui-theme="modern-2"] .finance-accounts-workspace {
+  --finance-debit: var(--status-info);
+  --finance-credit: var(--status-danger);
 }

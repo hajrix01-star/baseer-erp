@@ -79,6 +79,20 @@ type Loan = {
   status: "ACTIVE" | "SETTLED";
   notes: string | null;
 };
+
+/**
+ * `sourceDocumentNumber` is an immutable audit key, not a user-facing title.
+ * Noorix historical loans retain that key for reconciliation, while the ERP
+ * should describe their business purpose in the interface.
+ */
+function loanDisplayName(loan: Loan, language: "ar" | "en") {
+  if (loan.sourceDocumentNumber.startsWith("NOORIX-LOAN-")) {
+    const isArzFinancing = /\bARZ\b/i.test(loan.notes ?? "");
+    if (isArzFinancing) return language === "ar" ? "تمويل تاريخي موحّد لصالح ARZ" : "Historical unified financing for ARZ";
+    return language === "ar" ? "قرض تاريخي مُرحّل من نوركس" : "Historical loan migrated from Noorix";
+  }
+  return loan.sourceDocumentNumber;
+}
 type Document = {
   id: string;
   documentNumber: string;
@@ -505,7 +519,7 @@ function ItemsAndObligations({
                   {text.financialObligation} ·{" "}
                   {loan.status === "SETTLED" ? text.settled : text.active}
                 </span>
-                <h4>{loan.sourceDocumentNumber}</h4>
+                <h4>{loanDisplayName(loan, language)}</h4>
                 <p>
                   {text.term}: {loan.termMonths} · {text.firstDue}:{" "}
                   <bdi dir="ltr">{formatDate(loan.firstInstallmentDueDate, language)}</bdi>
@@ -558,7 +572,7 @@ function ItemsAndObligations({
           >
             <header>
               <h4>
-                {text.loanPayment}: {paying.sourceDocumentNumber}
+                {text.loanPayment}: {loanDisplayName(paying, language)}
               </h4>
               <span>
                 {text.currentBalance}: SAR {money(paying.remainingAmount)}
@@ -695,7 +709,7 @@ function SettlementHistory({
         {loans.map((loan) => (
           <article key={`loan-${loan.id}`}>
             <strong>
-              {text.loan} · {loan.sourceDocumentNumber}
+              {text.loan} · {loanDisplayName(loan, language)}
             </strong>
             <span>{text.remainingLoan}</span>
             <span>

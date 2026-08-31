@@ -101,7 +101,7 @@ export function CategoriesWorkspace({ language }: { language: "ar" | "en" }) {
   };
   if (!session) return <DailySalesSignIn language={language} />;
   return <section className="daily-sales-workspace" aria-label={text.title}>
-    <header className="administration-section-heading"><h3>{text.title}</h3><span className="baseer-inline-actions"><BaseerButton type="button" variant="primary" onClick={() => openDialog()} disabled={saving}>{text.addCategory}</BaseerButton></span></header>
+    <header className="administration-section-heading"><span className="baseer-inline-actions"><BaseerButton type="button" variant="primary" onClick={() => openDialog()} disabled={saving}>{text.addCategory}</BaseerButton></span></header>
     {message.kind !== "idle" ? <p className={`daily-sales-message ${message.kind}`}>{message.text}</p> : null}
     {loadError ? <BaseerLoadFailure message={loadError} language={language} onRetry={() => void load()} /> : null}
     <BaseerWorkspaceTabs ariaLabel={text.kind} idPrefix="finance-category-kind" activeId={kind} onChange={(value) => setKind(value as CategoryKind)} tabs={[{ id: "PURCHASE", label: localizedEnum(language, "PURCHASE") }, { id: "EXPENSE", label: localizedEnum(language, "EXPENSE") }, { id: "SALE", label: localizedEnum(language, "SALE") }]} />

@@ -38,6 +38,8 @@ type SalesAnalyticsPeriod = Readonly<{
     dailyAverageCustomerCount: string | null;
     applicationSalesSharePercent: string | null;
     applicationSalesSharePlotValue: number | null;
+    salesGrossPlotValue: number | null;
+    applicationSalesGrossPlotValue: number | null;
   }>;
 }>;
 type ComputedSalesAnalyticsPeriod = Readonly<{
@@ -390,6 +392,10 @@ function analyticsPeriodReceipt(
       dailyAverageCustomerCount: ready && values.dailyAverageCustomerCount ? formatDecimal(values.dailyAverageCustomerCount, 2) : null,
       applicationSalesSharePercent: share ? `${formatDecimal(share, 2)}%` : null,
       applicationSalesSharePlotValue: share ? Number(share.toDecimalPlaces(4).toFixed(4)) : null,
+      // These values are only chart coordinates. Financial amounts remain the
+      // formatted decimal strings above; a chart must not derive them client-side.
+      salesGrossPlotValue: ready ? Number(values.gross.toDecimalPlaces(4).toFixed(4)) : null,
+      applicationSalesGrossPlotValue: ready ? Number(values.applicationGross.toDecimalPlaces(4).toFixed(4)) : null,
     },
   };
 }

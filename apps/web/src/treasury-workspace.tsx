@@ -12,5 +12,5 @@ const TreasuryWorkspaceRuntime = lazy(async () => ({ default: (await import("./t
 /** Treasury opens directly; its runtime owns authentication and data loading. */
 export function TreasuryWorkspace({ language }: { language: Language }) {
   const text = financeText(language);
-  return <Suspense fallback={<BaseerCard aria-busy="true">{text.loading}</BaseerCard>}><TreasuryWorkspaceRuntime language={language} /></Suspense>;
+  return <Suspense fallback={<BaseerCard variant="record" aria-busy="true">{text.loading}</BaseerCard>}><TreasuryWorkspaceRuntime language={language} /></Suspense>;
 }

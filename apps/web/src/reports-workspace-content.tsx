@@ -12,5 +12,5 @@ const ReportsWorkspaceRuntime = lazy(async () => ({
 /** Financial reports render directly; their runtime owns authentication and data loading. */
 export function ReportsWorkspaceContent({ language, initialReport }: { language: Language; initialReport?: ReportId }) {
   const loading = language === "ar" ? "جارٍ تجهيز التقرير…" : "Preparing report…";
-  return <Suspense fallback={<BaseerCard aria-busy="true">{loading}</BaseerCard>}><ReportsWorkspaceRuntime language={language} initialReport={initialReport} /></Suspense>;
+  return <Suspense fallback={<BaseerCard variant="record" aria-busy="true">{loading}</BaseerCard>}><ReportsWorkspaceRuntime language={language} initialReport={initialReport} /></Suspense>;
 }

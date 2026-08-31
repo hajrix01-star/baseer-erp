@@ -544,7 +544,6 @@ export function FinanceAccountsWorkspaceRuntime({ language }: { language: Langua
       <header className="administration-section-heading">
         <div>
           <p className="eyebrow">{text.finance}</p>
-          <h3>{labels.title}</h3>
           <p>{labels.description}</p>
         </div>
       </header>
@@ -586,7 +585,7 @@ export function FinanceAccountsWorkspaceRuntime({ language }: { language: Langua
       </Suspense>
       {message ? <p className="daily-sales-message error">{message}</p> : null}
       {!receipt ? (
-        <BaseerCard>
+        <BaseerCard variant="record">
           <p>{text.loading}</p>
         </BaseerCard>
       ) : (
@@ -618,7 +617,7 @@ export function FinanceAccountsWorkspaceRuntime({ language }: { language: Langua
               rowKey={(item) => item.id}
             />
           ) : (
-            <BaseerCard>
+            <BaseerCard variant="record">
               <p>{labels.noAccounts}</p>
             </BaseerCard>
           )}

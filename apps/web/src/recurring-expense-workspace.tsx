@@ -23,5 +23,5 @@ export function RecurringExpensePaymentBatch(props: WorkspaceProps) {
   const [open, setOpen] = useState(false);
   const text = financeText(props.language);
   if (open) return <Suspense fallback={<BaseerCard aria-busy="true">{text.loading}</BaseerCard>}><RecurringExpensePaymentBatchRuntime {...props} /></Suspense>;
-  return <BaseerCard><strong>{text.recurringBatchTitle}</strong><p>{props.language === "ar" ? "أدخل الدفعات الدورية المصرح بها بعد مراجعة الملفات المستحقة." : "Enter authorized recurring payments after reviewing the due profiles."}</p><BaseerButton type="button" onClick={() => setOpen(true)}>{props.language === "ar" ? "فتح دفعات المصروفات الدورية" : "Open recurring expense payments"}</BaseerButton></BaseerCard>;
+  return <BaseerCard><strong>{text.recurringBatchTitle}</strong><BaseerButton type="button" onClick={() => setOpen(true)}>{props.language === "ar" ? "فتح دفعات المصروفات الدورية" : "Open recurring expense payments"}</BaseerButton></BaseerCard>;
 }

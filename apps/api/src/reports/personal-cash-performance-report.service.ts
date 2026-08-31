@@ -346,9 +346,12 @@ export class PersonalCashPerformanceReportService {
       },
     }));
     if (!journal) throw new BadRequestException('The source journal is not available in this report run.');
+    const presentation = financeJournalPresentation(journal);
     return {
       journalEntry: {
-        id: journal.id, businessDate: dateText(journal.businessDate), sourceType: journal.sourceType, sourceReference: financeJournalPresentation(journal).reference, description: journal.description,
+        id: journal.id, businessDate: dateText(journal.businessDate), sourceType: journal.sourceType,
+        labelAr: presentation.labelAr, labelEn: presentation.labelEn,
+        sourceReference: presentation.reference, description: journal.description,
         status: journal.reversalEntry && journal.reversalEntry.ledgerRevision <= ledgerRevision ? 'REVERSED' as const : 'POSTED' as const, postedAt: journal.postedAt.toISOString(),
         lines: journal.lines.map((line) => ({ id: line.id, lineNumber: line.lineNumber, accountCode: line.account.code, accountNameAr: line.account.nameAr, accountNameEn: line.account.nameEn, debitAmount: line.debitAmount.toFixed(4), creditAmount: line.creditAmount.toFixed(4), description: line.description })),
       },
@@ -422,7 +425,10 @@ export class PersonalCashPerformanceReportService {
           ? rawAmount.mul(event.netAmount).div(event.grossAmount)
           : rawAmount;
         const vault = vaultByAccount.get(line.accountId)!;
-        const source = movementSourcePresentation(sourceType, financeJournalPresentation(entry).reference, original?.description ?? entry.description, rawAmount.gt(0));
+        // The journal adapter owns every human-facing type and reference.  In
+        // particular, imported Noorix journals must never fall back to the
+        // generic cash-movement label or expose their opaque source id here.
+        const source = financeJournalPresentation(entry);
         return [{
           id: line.id, journalEntryId: entry.id, businessDate: entry.businessDate, vaultId: vault.id, vaultNameAr: vault.nameAr, vaultNameEn: vault.nameEn,
           group, direction,
@@ -657,28 +663,24 @@ function financialMovementSortRank(code: string) {
   return (index < 0 ? 99 : index) * 10 + (code.includes(':') ? 1 : 0);
 }
 
-function movementSourcePresentation(sourceType: string, sourceReference: string, description: string | null, inflow: boolean) {
-  if (sourceType === 'daily_sales_closing') {
-    const document = description?.match(/Daily sales closing\s+([A-Z]+-\d{8}-\d{4})/i)?.[1] ?? sourceReference;
-    return { labelAr: inflow ? 'تحصيل مبيعات' : 'إلغاء تحصيل مبيعات', labelEn: inflow ? 'Sales collection' : 'Cancelled sales collection', reference: document };
-  }
-  const labels: Record<string, readonly [string, string]> = {
-    finance_outflow_document: ['فاتورة مشتريات أو مصروف', 'Purchase or expense invoice'],
-    supplier_due_payment: ['سداد التزام مورد', 'Supplier due payment'],
-    finance_vat_settlement: [inflow ? 'استرداد ضريبة' : 'سداد ضريبة', inflow ? 'VAT refund' : 'VAT payment'],
-    hr_payroll_payment: [inflow ? 'إلغاء دفع رواتب' : 'دفع رواتب', inflow ? 'Cancelled payroll payment' : 'Payroll payment'],
-    hr_employee_advance: [inflow ? 'إلغاء صرف سلفة موظف' : 'صرف سلفة موظف', inflow ? 'Cancelled employee advance issue' : 'Employee advance issue'],
-    hr_employee_advance_receipt: [inflow ? 'استرداد سلفة موظف' : 'إلغاء استرداد سلفة موظف', inflow ? 'Employee advance repayment' : 'Cancelled employee advance repayment'],
-    hr_final_settlement_payment: ['دفع نهاية خدمة', 'Final settlement payment'],
-    inclusive_loan_repayment: [inflow ? 'تحصيل سداد قرض' : 'سداد قرض', inflow ? 'Loan repayment collection' : 'Loan repayment'],
-  };
-  const [labelAr, labelEn] = labels[sourceType] ?? [inflow ? 'حركة مالية داخلة' : 'حركة مالية خارجة', inflow ? 'Financial inflow' : 'Financial outflow'];
-  return { labelAr, labelEn, reference: sourceReference };
-}
 
 /** The source journal is always available in the evidence dialog.  This route
  * additionally returns the operational screen that owns the transaction. */
 function sourceOrigin(sourceType: string) {
+  // Historical Noorix journals retain their source type for lineage, but their
+  // operational home is still the same one a user expects to open today.
+  if (sourceType === 'nurix_historical_employee_advance_issue' || sourceType === 'nurix_al_shami_historical_advance_issue' || sourceType === 'nurix_historical_employee_advance_settlement' || sourceType === 'nurix_al_shami_historical_advance_settlement') {
+    return { labelAr: 'الموارد البشرية ← السلف والخصومات', labelEn: 'Human resources → Advances & deductions', route: '#module=hr&page=hr-advances-deductions' };
+  }
+  if (sourceType === 'nurix_historical_paid_payroll_accrual' || sourceType === 'nurix_historical_paid_payroll_payment' || sourceType === 'nurix_al_shami_historical_paid_payroll') {
+    return { labelAr: 'الموارد البشرية ← الرواتب', labelEn: 'Human resources → Payroll', route: '#module=hr&page=hr-payroll' };
+  }
+  if (sourceType === 'nurix_excel_historical_recurring' || sourceType === 'nurix_excel_historical_recurring_evidence') {
+    return { labelAr: 'العمليات ← المصروفات والالتزامات', labelEn: 'Operations → Expenses & obligations', route: '#module=operations&page=operations-expenses-obligations&stage=history' };
+  }
+  if (sourceType === 'nurix_excel_historical_outflow' || sourceType === 'nurix_live_historical_outflow') {
+    return { labelAr: 'العمليات ← المشتريات', labelEn: 'Operations → Purchasing', route: '#module=operations&page=operations-purchases' };
+  }
   const origins: Record<string, { labelAr: string; labelEn: string; route: string }> = {
     daily_sales_closing: { labelAr: 'العمليات ← المبيعات', labelEn: 'Operations → Sales', route: '#module=operations&page=operations-sales' },
     finance_outflow_document: { labelAr: 'العمليات ← المشتريات', labelEn: 'Operations → Purchasing', route: '#module=operations&page=operations-purchases' },
@@ -897,16 +899,6 @@ function parseBusinessDate(value: string): Date {
   const date = new Date(`${value}T00:00:00.000Z`);
   if (!dateOnly(date) || dateText(date) !== value) throw new BadRequestException('A report run has an invalid business date.');
   return date;
-}
-function evidencePresentation(sourceType: string, sourceReference: string, description: string | null, direction: FinanceCashPerformanceDirection) {
-  if (sourceType === 'daily_sales_closing') {
-    const documentNumber = description?.match(/Daily sales closing\s+([A-Z]+-\d{8}-\d{4})/i)?.[1] ?? sourceReference;
-    return { labelAr: direction === FinanceCashPerformanceDirection.INFLOW ? 'تحصيل مبيعات' : 'إلغاء تحصيل مبيعات', labelEn: direction === FinanceCashPerformanceDirection.INFLOW ? 'Sales collection' : 'Cancelled sales collection', reference: documentNumber };
-  }
-  if (sourceType === 'finance_outflow_document') return { labelAr: 'فاتورة مشتريات أو مصروف', labelEn: 'Purchase or expense invoice', reference: sourceReference };
-  if (sourceType === 'supplier_due_payment') return { labelAr: 'سداد التزام مورد', labelEn: 'Supplier due payment', reference: sourceReference };
-  if (sourceType === 'finance_vat_settlement') return { labelAr: direction === FinanceCashPerformanceDirection.INFLOW ? 'استرداد ضريبة' : 'سداد ضريبة', labelEn: direction === FinanceCashPerformanceDirection.INFLOW ? 'VAT refund' : 'VAT payment', reference: sourceReference };
-  return { labelAr: direction === FinanceCashPerformanceDirection.INFLOW ? 'عملية محصّلة' : 'عملية مدفوعة', labelEn: direction === FinanceCashPerformanceDirection.INFLOW ? 'Collected operation' : 'Paid operation', reference: sourceReference };
 }
 function assertPeriod(request: PersonalCashPerformanceRequest): void {
   if (!dateOnly(request.from) || !dateOnly(request.to) || request.from > request.to) throw new BadRequestException('A valid inclusive business-date range is required.');

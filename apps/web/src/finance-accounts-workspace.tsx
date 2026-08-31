@@ -10,5 +10,5 @@ const FinanceAccountsWorkspaceRuntime = lazy(async () => ({ default: (await impo
 /** The accounts workspace is opened directly; its runtime owns authentication and data loading. */
 export function FinanceAccountsWorkspace({ language }: { language: Language }) {
   const text = financeText(language);
-  return <Suspense fallback={<BaseerCard aria-busy="true">{text.loading}</BaseerCard>}><FinanceAccountsWorkspaceRuntime language={language} /></Suspense>;
+  return <Suspense fallback={<BaseerCard variant="record" aria-busy="true">{text.loading}</BaseerCard>}><FinanceAccountsWorkspaceRuntime language={language} /></Suspense>;
 }
