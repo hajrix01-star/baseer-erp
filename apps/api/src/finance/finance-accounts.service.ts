@@ -61,7 +61,7 @@ export class FinanceAccountsService {
       const account = await tx.financeAccount.findFirst({ where: { id: accountId, tenantId: context.tenantId, companyId: context.companyId }, select: accountSelect });
       if (!account) throw new NotFoundException("The financial account was not found for this company.");
       const amount = (await this.amountsForAccounts(tx, context, [account.id], input.from, periodTo, asOf, input.businessMonths)).get(account.id) ?? zeroAmounts();
-      const period = journalPeriodWhere(input.from, periodTo, input.businessMonths);
+      const period = journalPeriodWhere(input.from, periodTo, asOf, input.businessMonths);
       const baseWhere: Prisma.FinanceJournalLineWhereInput = {
         tenantId: context.tenantId,
         companyId: context.companyId,
@@ -148,7 +148,7 @@ export class FinanceAccountsService {
     if (!accountIds.length) return amounts;
     const common = { tenantId: context.tenantId, companyId: context.companyId, accountId: { in: accountIds } };
     const currentMonth = monthStart(asOf);
-    const period = dailyPeriodWhere(from, to, businessMonths);
+    const period = dailyPeriodWhere(from, to, asOf, businessMonths);
     const [monthlyBalanceGroups, currentMonthBalanceGroups, periodGroups] = await Promise.all([
       tx.financeAccountMonthlyBalance.groupBy({ by: ["accountId"], where: { ...common, monthStart: { lt: currentMonth } }, _sum: { debitAmount: true, creditAmount: true } }),
       tx.financeAccountDailyBalance.groupBy({ by: ["accountId"], where: { ...common, businessDate: { gte: currentMonth, lte: asOf } }, _sum: { debitAmount: true, creditAmount: true } }),
@@ -196,8 +196,9 @@ function zeroAmounts(): Amounts { return { balanceDebit: new Prisma.Decimal(0), 
 function decimal(value: Prisma.Decimal | number | string | null | undefined) { return new Prisma.Decimal(value ?? 0); }
 function dateFilter(from?: Date, to?: Date) { return !from && !to ? undefined : { ...(from ? { gte: from } : {}), ...(to ? { lte: to } : {}) }; }
 function monthDateRanges(months: readonly string[] | undefined) { return (months ?? []).map((month) => { const [year, number] = month.split("-").map(Number); const start = new Date(Date.UTC(year!, number! - 1, 1)); return { gte: start, lte: new Date(Date.UTC(year!, number!, 0)) }; }); }
-function journalPeriodWhere(from: Date | undefined, to: Date | undefined, months: readonly string[] | undefined): Prisma.FinanceJournalLineWhereInput | undefined { const ranges = monthDateRanges(months); return ranges.length ? { OR: ranges.map((businessDate) => ({ businessDate })) } : dateFilter(from, to) ? { businessDate: dateFilter(from, to)! } : undefined; }
-function dailyPeriodWhere(from: Date | undefined, to: Date | undefined, months: readonly string[] | undefined): Prisma.FinanceAccountDailyBalanceWhereInput | undefined { const ranges = monthDateRanges(months); return ranges.length ? { OR: ranges.map((businessDate) => ({ businessDate })) } : dateFilter(from, to) ? { businessDate: dateFilter(from, to)! } : undefined; }
+function boundedBusinessDate(from: Date | undefined, to: Date | undefined, asOf: Date) { return dateFilter(from, to && to < asOf ? to : asOf)!; }
+function journalPeriodWhere(from: Date | undefined, to: Date | undefined, asOf: Date, months: readonly string[] | undefined): Prisma.FinanceJournalLineWhereInput { const ranges = monthDateRanges(months); const businessDate = boundedBusinessDate(from, to, asOf); return ranges.length ? { AND: [{ OR: ranges.map((range) => ({ businessDate: range })) }, { businessDate }] } : { businessDate }; }
+function dailyPeriodWhere(from: Date | undefined, to: Date | undefined, asOf: Date, months: readonly string[] | undefined): Prisma.FinanceAccountDailyBalanceWhereInput { const ranges = monthDateRanges(months); const businessDate = boundedBusinessDate(from, to, asOf); return ranges.length ? { AND: [{ OR: ranges.map((range) => ({ businessDate: range })) }, { businessDate }] } : { businessDate }; }
 function dateForBusinessDate(value: string) { return new Date(`${value}T00:00:00.000Z`); }
 function capAsOf(requested: Date | undefined, current: Date) { return requested && requested < current ? requested : current; }
 function dateValue(value: Date) { return value.toISOString().slice(0, 10); }

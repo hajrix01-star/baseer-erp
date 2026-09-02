@@ -21,6 +21,13 @@ const fixture = {
   cashAccountId: randomUUID(),
   expenseAccountId: randomUUID(),
   alternateAccountId: randomUUID(),
+  fiscalPeriodId: randomUUID(),
+  pastJournalEntryId: randomUUID(),
+  futureJournalEntryId: randomUUID(),
+  pastJournalLineId: randomUUID(),
+  pastOffsetJournalLineId: randomUUID(),
+  futureJournalLineId: randomUUID(),
+  futureOffsetJournalLineId: randomUUID(),
 };
 let app;
 
@@ -67,6 +74,27 @@ try {
     "The accounts workspace must return the database-backed, as-of and period totals for its selected company only.",
   );
 
+  const monthWorkspace = await server.inject({ method: "GET", url: "/v1/finance/accounts?businessMonths=2026-08", headers: readerHeaders });
+  assert.equal(monthWorkspace.statusCode, 200, monthWorkspace.body);
+  assert.equal(monthWorkspace.json().asOfBusinessDate, "2026-08-20");
+  assert.deepEqual(monthWorkspace.json().summary, { accountCount: 2, periodDebit: "25.0000", periodCredit: "4.0000" });
+  assert.deepEqual(
+    monthWorkspace.json().accounts.map((account) => [account.id, account.periodDebit, account.periodCredit]),
+    [[fixture.cashAccountId, "10.0000", "0.0000"], [fixture.expenseAccountId, "15.0000", "4.0000"]],
+    "A selected business month must still exclude daily balances after the current business date.",
+  );
+
+  const monthMovements = await server.inject({ method: "GET", url: `/v1/finance/accounts/${fixture.cashAccountId}/movements?businessMonths=2026-08&pageSize=10`, headers: readerHeaders });
+  assert.equal(monthMovements.statusCode, 200, monthMovements.body);
+  assert.equal(monthMovements.json().asOfBusinessDate, "2026-08-20");
+  assert.deepEqual(monthMovements.json().summary, { balanceDebit: "80.0000", balanceCredit: "0.0000", periodDebit: "10.0000", periodCredit: "0.0000" });
+  assert.deepEqual(
+    monthMovements.json().items.map((item) => [item.id, item.journalEntryId, item.businessDate, item.debitAmount, item.creditAmount]),
+    [[fixture.pastJournalLineId, fixture.pastJournalEntryId, "2026-08-10", "10.0000", "0.0000"]],
+    "A selected business month must exclude journal movements after the current business date without changing the account total receipt.",
+  );
+  assert.equal(monthMovements.json().nextCursor, null);
+
   const search = await server.inject({ method: "GET", url: `${url}&q=5000`, headers: readerHeaders });
   assert.equal(search.statusCode, 200, search.body);
   assert.deepEqual(search.json().accounts.map((account) => account.id), [fixture.expenseAccountId]);
@@ -105,8 +133,12 @@ async function seedFixture() {
     await client.query('INSERT INTO "Company" ("id", "tenantId", "nameAr", "nameEn") VALUES ($1::uuid, $2::uuid, $3, $4), ($5::uuid, $2::uuid, $6, $7)', [fixture.companyId, fixture.tenantId, "شركة الحسابات", "Accounts company", fixture.alternateCompanyId, "شركة بديلة", "Alternate accounts company"]);
     await seedUsers(client);
     await client.query('INSERT INTO "FinanceAccount" ("id", "tenantId", "companyId", "code", "nameAr", "nameEn", "type", "isSystem", "status") VALUES ($1::uuid, $2::uuid, $3::uuid, $4, $5, $6, $7::"FinanceAccountType", false, $8::"FinanceAccountStatus"), ($9::uuid, $2::uuid, $3::uuid, $10, $11, $12, $13::"FinanceAccountType", false, $8::"FinanceAccountStatus"), ($14::uuid, $2::uuid, $15::uuid, $16, $17, $18, $7::"FinanceAccountType", false, $8::"FinanceAccountStatus")', [fixture.cashAccountId, fixture.tenantId, fixture.companyId, "1000", "النقدية", "Cash", "ASSET", "ACTIVE", fixture.expenseAccountId, "5000", "مصروف التحقق", "Verification expense", "EXPENSE", fixture.alternateAccountId, fixture.alternateCompanyId, "1000", "نقدية بديلة", "Alternate cash"]);
+    await client.query('INSERT INTO "FinanceFiscalPeriod" ("id", "tenantId", "companyId", "nameAr", "nameEn", "startDate", "endDate", "status") VALUES ($1::uuid, $2::uuid, $3::uuid, $4, $5, DATE \'2026-01-01\', DATE \'2026-12-31\', $6::"FinanceFiscalPeriodStatus")', [fixture.fiscalPeriodId, fixture.tenantId, fixture.companyId, "السنة المالية 2026", "Fiscal year 2026", "OPEN"]);
     await client.query('INSERT INTO "FinanceAccountMonthlyBalance" ("tenantId", "companyId", "accountId", "monthStart", "debitAmount", "creditAmount") VALUES ($1::uuid, $2::uuid, $3::uuid, DATE \'2026-07-01\', 70.0000, 0.0000)', [fixture.tenantId, fixture.companyId, fixture.cashAccountId]);
     await client.query('INSERT INTO "FinanceAccountDailyBalance" ("tenantId", "companyId", "accountId", "businessDate", "debitAmount", "creditAmount") VALUES ($1::uuid, $2::uuid, $3::uuid, DATE \'2026-08-10\', 10.0000, 0.0000), ($1::uuid, $2::uuid, $3::uuid, DATE \'2026-08-21\', 999.0000, 0.0000), ($1::uuid, $2::uuid, $4::uuid, DATE \'2026-08-10\', 15.0000, 4.0000), ($1::uuid, $5::uuid, $6::uuid, DATE \'2026-08-10\', 77.0000, 0.0000)', [fixture.tenantId, fixture.companyId, fixture.cashAccountId, fixture.expenseAccountId, fixture.alternateCompanyId, fixture.alternateAccountId]);
+    await client.query('INSERT INTO "FinanceJournalEntry" ("id", "tenantId", "companyId", "fiscalPeriodId", "sourceType", "sourceReference", "businessDate", "description", "status", "isSealed", "ledgerRevision", "createdByUserId", "requestId") VALUES ($1::uuid, $2::uuid, $3::uuid, $4::uuid, $5, $6, DATE \'2026-08-10\', $7, $8::"FinanceJournalEntryStatus", false, 1, $9::uuid, $10), ($11::uuid, $2::uuid, $3::uuid, $4::uuid, $5, $12, DATE \'2026-08-21\', $13, $8::"FinanceJournalEntryStatus", false, 2, $9::uuid, $14)', [fixture.pastJournalEntryId, fixture.tenantId, fixture.companyId, fixture.fiscalPeriodId, "general_journal", "HTTP-ASOF-PAST", "Past as-of journal", "POSTED", fixture.readerUserId, `finance-accounts-past-${suffix}`, fixture.futureJournalEntryId, "HTTP-ASOF-FUTURE", "Future as-of journal", `finance-accounts-future-${suffix}`]);
+    await client.query('INSERT INTO "FinanceJournalLine" ("id", "tenantId", "companyId", "journalEntryId", "accountId", "businessDate", "lineNumber", "debitAmount", "creditAmount") VALUES ($1::uuid, $2::uuid, $3::uuid, $4::uuid, $5::uuid, DATE \'2026-08-10\', 1, 10.0000, 0.0000), ($6::uuid, $2::uuid, $3::uuid, $4::uuid, $7::uuid, DATE \'2026-08-10\', 2, 0.0000, 10.0000), ($8::uuid, $2::uuid, $3::uuid, $9::uuid, $5::uuid, DATE \'2026-08-21\', 1, 999.0000, 0.0000), ($10::uuid, $2::uuid, $3::uuid, $9::uuid, $7::uuid, DATE \'2026-08-21\', 2, 0.0000, 999.0000)', [fixture.pastJournalLineId, fixture.tenantId, fixture.companyId, fixture.pastJournalEntryId, fixture.cashAccountId, fixture.pastOffsetJournalLineId, fixture.expenseAccountId, fixture.futureJournalLineId, fixture.futureJournalEntryId, fixture.futureOffsetJournalLineId]);
+    await client.query('UPDATE "FinanceJournalEntry" SET "isSealed" = true, "sealedAt" = NOW() WHERE "id" IN ($1::uuid, $2::uuid)', [fixture.pastJournalEntryId, fixture.futureJournalEntryId]);
     await client.query("COMMIT");
   } catch (error) {
     await client.query("ROLLBACK");
