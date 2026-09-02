@@ -10,7 +10,11 @@ COPY packages/output-platform/package.json packages/output-platform/package.json
 RUN npm ci
 
 COPY . .
-RUN npm run build --workspace @baseer-erp/web
+# The web workspace imports the contracts package through its published
+# workspace exports, so its declaration and runtime files must exist before
+# TypeScript resolves the application build in a clean container.
+RUN npm run build --workspace @baseer-erp/contracts \
+  && npm run build --workspace @baseer-erp/web
 
 FROM nginx:1.27-alpine AS runtime
 
