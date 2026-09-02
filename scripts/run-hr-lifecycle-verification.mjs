@@ -468,7 +468,7 @@ try {
 
   for (const [key, deduction, expectedMessage] of [['late-final', lateFinalDeduction, /cannot predate its creation date/]]) {
     const employee = employees.get(key);
-    const request = { ...finalSettlementInput(employee.id, 'EMPLOYER_TERMINATION', [{ recoveryType: 'ADMINISTRATIVE_DEDUCTION', sourceId: deduction.id, amount: '10.0000' }]), terminationDate: yesterday };
+    const request = { ...finalSettlementInput(employee.id, 'EMPLOYER_TERMINATION', [{ recoveryType: 'ADMINISTRATIVE_DEDUCTION', sourceId: deduction.id, amount: '1.0000' }]), terminationDate: yesterday };
     const settlement = await settlements.create(creator, request);
     await settlements.verifyReason(approver, { settlementId: settlement.id, verificationNote: 'Verified chronology guard' }, randomUUID());
     await assert.rejects(
@@ -616,7 +616,7 @@ try {
     assert.equal(journal.isSealed, true, 'Every HR journal must remain sealed.');
     const debit = journal.lines.reduce((sum, line) => sum + Number(line.debitAmount), 0);
     const credit = journal.lines.reduce((sum, line) => sum + Number(line.creditAmount), 0);
-    assert.equal(debit, credit, `Journal ${journal.id} must balance.`);
+    assert.equal(debit.toFixed(4), credit.toFixed(4), `Journal ${journal.id} must balance.`);
   }
 
   console.log('HR lifecycle verification passed: onboarding/salary, advance and service-cost issue/reversal, deferred collection guards, payroll and final-settlement payment/accrual reversal, append-only employee-ledger movements, explicit replay, concurrency locks, and monotonic business dates.');

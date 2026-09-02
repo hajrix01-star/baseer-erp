@@ -392,6 +392,7 @@ async function seedFixture() {
       "hr.final_settlements.read",
       "hr.leaves.read",
       "hr.advances.read",
+      "hr.deductions.read",
       "hr.deductions.manage",
       "hr.advances.reverse",
       "hr.payroll.reverse",

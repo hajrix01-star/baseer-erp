@@ -15,10 +15,20 @@ const suffix = randomUUID().replaceAll('-', '').slice(0, 12);
 const now = new Date();
 const checkInAt = new Date(now.valueOf() - 2 * 60 * 60 * 1_000);
 const validCheckOutAt = new Date(now.valueOf() - 60 * 60 * 1_000);
+// Acceptance evidence is kept safely in the past. These UTC instants are
+// Riyadh 20:00 and 04:00, so the policy session crosses local midnight.
+const policyWeekStart = mondayAtOrBefore(new Date(now.valueOf() - 21 * 24 * 60 * 60 * 1_000));
+const policyEffectiveDate = ymd(policyWeekStart);
+const policyOvernightCheckoutDate = ymd(addDays(policyWeekStart, 1));
+const policyRestDate = ymd(addDays(policyWeekStart, 6));
+const policyOverrideDate = ymd(addDays(policyWeekStart, 7));
+const policyCheckInAt = new Date(`${policyEffectiveDate}T17:00:00.000Z`);
+const policyCheckOutAt = new Date(`${policyOvernightCheckoutDate}T01:00:00.000Z`);
 const fixture = {
   tenantId: randomUUID(), companyId: randomUUID(), ownerUserId: randomUUID(), managerUserId: randomUUID(),
   employeeId: randomUUID(), branchId: randomUUID(), sessionId: randomUUID(), tenantCode: `attendance-http-${suffix}`,
-  businessDate: now.toISOString().slice(0, 10), burstEmployees: Array.from({ length: 12 }, () => ({ id: randomUUID(), pin: String(Math.floor(1_000 + Math.random() * 9_000)) })),
+  policyEmployeeId: randomUUID(), policySessionId: randomUUID(),
+  businessDate: now.toISOString().slice(0, 10), burstEmployees: Array.from({ length: 12 }, (_, index) => ({ id: randomUUID(), pin: String(1_000 + index) })),
 };
 let app;
 
@@ -41,6 +51,37 @@ try {
   let server = app.getHttpAdapter().getInstance();
   const ownerHeaders = { authorization: `Bearer ${ownerSession.accessToken}`, 'x-baseer-company-id': fixture.companyId };
   const managerHeaders = { authorization: `Bearer ${managerSession.accessToken}`, 'x-baseer-company-id': fixture.companyId };
+
+  const twelveHourTemplate = await server.inject({ method: 'POST', url: '/v1/attendance/schedule-templates', headers: ownerHeaders, payload: {
+    nameAr: 'ورديات 12 ساعة لاختبار القبول', effectiveFrom: policyEffectiveDate,
+    periods: [1, 2, 3, 4, 5, 6].map((dayOfWeek) => ({ dayOfWeek, startTime: '20:00', endTime: '08:00' })), idempotencyKey: randomUUID(),
+  } });
+  assert.equal(twelveHourTemplate.statusCode, 201, twelveHourTemplate.body);
+  const scheduleSetup = await server.inject({ method: 'POST', url: '/v1/attendance/employees/schedule-setup', headers: ownerHeaders, payload: {
+    employeeId: fixture.policyEmployeeId, templateId: twelveHourTemplate.json().template.id, effectiveFrom: policyEffectiveDate,
+    weeklyAdjustment: { dayOfWeek: 7, kind: 'FULL_REST', periods: [] }, idempotencyKey: randomUUID(),
+  } });
+  assert.equal(scheduleSetup.statusCode, 201, scheduleSetup.body);
+  const initialEffectiveSchedule = await server.inject({ method: 'GET', url: `/v1/attendance/employees/${fixture.policyEmployeeId}/schedule/effective?date=${policyEffectiveDate}`, headers: ownerHeaders });
+  assert.equal(initialEffectiveSchedule.statusCode, 200, initialEffectiveSchedule.body);
+  assert.equal(initialEffectiveSchedule.json().source, 'TEMPLATE', 'The first attendance schedule must import the employee-file work-hours baseline.');
+  assert.deepEqual(initialEffectiveSchedule.json().periods.map((period) => period.minutes), [720], 'A 12-hour employee-file agreement must seed a 12-hour ordinary schedule.');
+
+  const requestedOverride = await server.inject({ method: 'POST', url: '/v1/attendance/schedule-exceptions', headers: ownerHeaders, payload: {
+    employeeId: fixture.policyEmployeeId, businessDate: policyOverrideDate, kind: 'CUSTOM_PERIODS', periods: [{ startTime: '08:00', endTime: '14:00' }], reason: 'اختبار تعديل تشغيلي مؤرخ', idempotencyKey: randomUUID(),
+  } });
+  assert.equal(requestedOverride.statusCode, 201, requestedOverride.body);
+  const approvedOverride = await server.inject({ method: 'POST', url: '/v1/attendance/schedule-exceptions/decide', headers: ownerHeaders, payload: {
+    exceptionId: requestedOverride.json().exception.id, decision: 'APPROVE', decisionNote: 'اعتماد اختبار القبول', idempotencyKey: randomUUID(),
+  } });
+  assert.equal(approvedOverride.statusCode, 201, approvedOverride.body);
+  const operationalEffectiveSchedule = await server.inject({ method: 'GET', url: `/v1/attendance/employees/${fixture.policyEmployeeId}/schedule/effective?date=${policyOverrideDate}`, headers: ownerHeaders });
+  assert.equal(operationalEffectiveSchedule.statusCode, 200, operationalEffectiveSchedule.body);
+  assert.equal(operationalEffectiveSchedule.json().source, 'EXCEPTION', 'A dated attendance adjustment must override the operational schedule.');
+  assert.deepEqual(operationalEffectiveSchedule.json().periods.map((period) => period.minutes), [360], 'The dated operational adjustment may shorten the scheduled day.');
+  const employeeSchedule = await server.inject({ method: 'GET', url: `/v1/attendance/employees/${fixture.policyEmployeeId}/schedule`, headers: ownerHeaders });
+  assert.equal(employeeSchedule.statusCode, 200, employeeSchedule.body);
+  assert.equal(employeeSchedule.json().workTermsReference?.workMinutesPerDay, 720, 'A dated attendance adjustment must not rewrite the employee-file 12-hour agreement.');
 
   const scheduleWorkspace = await server.inject({ method: 'GET', url: `/v1/attendance/schedule-workspace?date=${fixture.businessDate}`, headers: ownerHeaders });
   assert.equal(scheduleWorkspace.statusCode, 200, scheduleWorkspace.body);
@@ -73,6 +114,29 @@ try {
   const replayedClose = await server.inject({ method: 'POST', url: '/v1/attendance/sessions/close', headers: managerHeaders, payload: closePayload });
   assert.equal(replayedClose.statusCode, 201, replayedClose.body);
   assert.equal(replayedClose.json().replayed, true, 'Administrative close must replay idempotently.');
+
+  const overnightClose = await server.inject({ method: 'POST', url: '/v1/attendance/sessions/close', headers: managerHeaders, payload: {
+    employeeId: fixture.policyEmployeeId, businessDate: policyEffectiveDate, checkOutAt: policyCheckOutAt.toISOString(), reason: 'اختبار جلسة تتجاوز منتصف الليل', idempotencyKey: randomUUID(),
+  } });
+  assert.equal(overnightClose.statusCode, 201, overnightClose.body);
+  assert.equal(overnightClose.json().businessDate, policyEffectiveDate, 'A checkout after midnight must retain the check-in business date.');
+  const overnightReport = await server.inject({ method: 'GET', url: `/v1/attendance/report?from=${policyEffectiveDate}&to=${policyEffectiveDate}&employeeId=${fixture.policyEmployeeId}`, headers: ownerHeaders });
+  assert.equal(overnightReport.statusCode, 200, overnightReport.body);
+  assert.equal(overnightReport.json().summary.sessions, 1, 'The cross-midnight session must be reported once on its check-in date.');
+  assert.equal(overnightReport.json().summary.workedMinutes, 480, 'The cross-midnight session must retain all eight worked hours on its check-in date.');
+  const followingDateReport = await server.inject({ method: 'GET', url: `/v1/attendance/report?from=${policyOvernightCheckoutDate}&to=${policyOvernightCheckoutDate}&employeeId=${fixture.policyEmployeeId}`, headers: ownerHeaders });
+  assert.equal(followingDateReport.statusCode, 200, followingDateReport.body);
+  assert.equal(followingDateReport.json().summary.sessions, 0, 'The after-midnight checkout must not create a second-day attendance session.');
+
+  const restEffectiveSchedule = await server.inject({ method: 'GET', url: `/v1/attendance/employees/${fixture.policyEmployeeId}/schedule/effective?date=${policyRestDate}`, headers: ownerHeaders });
+  assert.equal(restEffectiveSchedule.statusCode, 200, restEffectiveSchedule.body);
+  assert.equal(restEffectiveSchedule.json().source, 'WEEKLY_ADJUSTMENT');
+  assert.equal(restEffectiveSchedule.json().kind, 'FULL_REST');
+  assert.deepEqual(restEffectiveSchedule.json().periods, [], 'The employee weekly full-rest rule must remove planned periods.');
+  const restReport = await server.inject({ method: 'GET', url: `/v1/attendance/report?from=${policyRestDate}&to=${policyRestDate}&employeeId=${fixture.policyEmployeeId}`, headers: ownerHeaders });
+  assert.equal(restReport.statusCode, 200, restReport.body);
+  assert.equal(restReport.json().summary.plannedMinutes, 0, 'A weekly full-rest day must not generate planned minutes.');
+  assert.equal(restReport.json().summary.shortageMinutes, 0, 'A weekly full-rest day must not generate a shortage.');
 
   const initialSettings = await server.inject({ method: 'GET', url: '/v1/attendance/company-settings', headers: ownerHeaders });
   assert.equal(initialSettings.statusCode, 200, initialSettings.body);
@@ -129,7 +193,7 @@ try {
   assert.equal(locationRedactedCount, 1, 'Coordinates older than 14 days must be redacted while preserving the event.');
   await expectDatabaseRejection(execute('UPDATE "AttendanceEvent" SET "requestKey" = $3 WHERE "tenantId" = $1::uuid AND "id" = $2::uuid', [fixture.tenantId, retentionEventId, randomUUID()]), 'AttendanceEvent rows are immutable');
 
-  console.log('Attendance HTTP verification passed: bounded schedule workspace receipt, owner/manager boundaries, open-session queue, chosen administrative checkout, location-off/on retention, settings idempotency, and a 12-record attendance burst.');
+  console.log('Attendance HTTP verification passed: employee-file schedule baseline and dated adjustment, cross-midnight business-date ownership, weekly full-rest evaluation, bounded schedule workspace receipt, owner/manager boundaries, open-session queue, chosen administrative checkout, location-off/on retention, settings idempotency, and a 12-record attendance burst.');
 } finally {
   if (app) await app.close();
   await pool.end();
@@ -151,6 +215,9 @@ async function seedFixture() {
     await client.query('INSERT INTO "AttendanceBranch" ("id", "tenantId", "companyId", "nameAr", "latitude", "longitude", "updatedAt") VALUES ($1::uuid, $2::uuid, $3::uuid, $4, 24.7136, 46.6753, CURRENT_TIMESTAMP)', [fixture.branchId, fixture.tenantId, fixture.companyId, 'فرع الفحص']);
     await client.query('INSERT INTO "HrEmployee" ("id", "tenantId", "companyId", "employeeNumber", "nameAr", "hireDate", "status", "updatedAt") VALUES ($1::uuid, $2::uuid, $3::uuid, $4, $5, $6::date, $7, CURRENT_TIMESTAMP)', [fixture.employeeId, fixture.tenantId, fixture.companyId, 'ATT-HTTP-001', 'موظف جلسة مفتوحة', fixture.businessDate, 'ACTIVE']);
     await client.query('INSERT INTO "AttendanceWorkSession" ("id", "tenantId", "companyId", "branchId", "employeeId", "businessDate", "checkInAt", "status", "updatedAt") VALUES ($1::uuid, $2::uuid, $3::uuid, $4::uuid, $5::uuid, $6::date, $7::timestamptz, $8, CURRENT_TIMESTAMP)', [fixture.sessionId, fixture.tenantId, fixture.companyId, fixture.branchId, fixture.employeeId, fixture.businessDate, checkInAt.toISOString(), 'OPEN']);
+    await client.query('INSERT INTO "HrEmployee" ("id", "tenantId", "companyId", "employeeNumber", "nameAr", "hireDate", "status", "updatedAt") VALUES ($1::uuid, $2::uuid, $3::uuid, $4, $5, $6::date, $7, CURRENT_TIMESTAMP)', [fixture.policyEmployeeId, fixture.tenantId, fixture.companyId, 'ATT-POL-001', 'موظف سياسة الحضور', policyEffectiveDate, 'ACTIVE']);
+    await client.query('INSERT INTO "HrEmployeeWorkTerms" ("id", "tenantId", "companyId", "employeeId", "effectiveFrom", "workMinutesPerDay", "createdByUserId", "updatedAt") VALUES ($1::uuid, $2::uuid, $3::uuid, $4::uuid, $5::date, 720, $6::uuid, CURRENT_TIMESTAMP)', [randomUUID(), fixture.tenantId, fixture.companyId, fixture.policyEmployeeId, policyEffectiveDate, fixture.ownerUserId]);
+    await client.query('INSERT INTO "AttendanceWorkSession" ("id", "tenantId", "companyId", "branchId", "employeeId", "businessDate", "checkInAt", "status", "updatedAt") VALUES ($1::uuid, $2::uuid, $3::uuid, $4::uuid, $5::uuid, $6::date, $7::timestamptz, $8, CURRENT_TIMESTAMP)', [fixture.policySessionId, fixture.tenantId, fixture.companyId, fixture.branchId, fixture.policyEmployeeId, policyEffectiveDate, policyCheckInAt.toISOString(), 'OPEN']);
     for (let index = 0; index < fixture.burstEmployees.length; index += 1) {
       const employee = fixture.burstEmployees[index];
       const pinHash = await bcrypt.hash(employee.pin, 12);
@@ -214,4 +281,7 @@ async function expectDatabaseRejection(promise, expectedMessage) {
     assert.match(error instanceof Error ? error.message : String(error), new RegExp(expectedMessage));
   }
 }
+function addDays(value, days) { const result = new Date(Date.UTC(value.getUTCFullYear(), value.getUTCMonth(), value.getUTCDate())); result.setUTCDate(result.getUTCDate() + days); return result; }
+function mondayAtOrBefore(value) { const result = new Date(Date.UTC(value.getUTCFullYear(), value.getUTCMonth(), value.getUTCDate())); result.setUTCDate(result.getUTCDate() - ((result.getUTCDay() + 6) % 7)); return result; }
+function ymd(value) { return value.toISOString().slice(0, 10); }
 function requiredEnvironment(name) { const value = process.env[name]; if (!value) throw new Error(`${name} is required.`); return value; }

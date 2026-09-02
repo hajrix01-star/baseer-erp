@@ -320,7 +320,7 @@ export class AttendanceService {
       const businessDate = businessDateValue(input.businessDate);
       const existing = await tx.attendanceScheduleException.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeId: input.employeeId, businessDate, status: { in: [AttendanceScheduleExceptionStatus.PENDING, AttendanceScheduleExceptionStatus.APPROVED] } }, select: { id: true } });
       if (existing) throw new ConflictException('A pending or approved schedule exception already exists for this employee and date.');
-      const exception = await tx.attendanceScheduleException.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, employeeId: input.employeeId, businessDate, kind: input.kind as AttendanceWeeklyAdjustmentKind, reason: input.reason, requestedByUserId: context.actorUserId, periods: { create: periods.map((period) => ({ id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, ...period })) } }, include: { periods: true } });
+      const exception = await tx.attendanceScheduleException.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, employeeId: input.employeeId, businessDate, kind: input.kind as AttendanceWeeklyAdjustmentKind, reason: input.reason, requestedByUserId: context.actorUserId, periods: { create: periods.map((period) => ({ id: randomUUID(), ...period })) } }, include: { periods: true } });
       await this.audit(tx, context, 'attendance.schedule_exception.requested', 'AttendanceScheduleException', exception.id, { employeeId: input.employeeId, businessDate: input.businessDate, kind: input.kind });
       return { exception: mapScheduleException(exception), replayed: false };
     });
