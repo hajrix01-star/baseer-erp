@@ -29,9 +29,14 @@ try {
     if (!pkg || !pkg.company.migrationReviewLocked || pkg.workbookSha256 !== workbookSha256) throw new Error('The locked company or verified workbook evidence does not match this approval run.');
     const staged = await tx.nurixExcelStagingRow.findMany({ where: { packageId, tenantId, sheet: 'CategoryAudit', status: 'ACCEPTED' }, select: { sourceId: true, sourceChecksum: true } });
     const stagedById = new Map(staged.map((row) => [row.sourceId, row.sourceChecksum]));
-    const categories = await tx.financeCategory.findMany({ where: { tenantId, companyId, code: { in: rows.map((row) => String(row.baseer_category_code)) }, status: 'ACTIVE' }, select: { id: true, code: true } });
+    const categories = await tx.financeCategory.findMany({ where: { tenantId, companyId, code: { in: rows.map((row) => String(row.baseer_category_code)) }, status: 'ACTIVE' }, select: { id: true, code: true, isPosting: true, accountId: true } });
     const categoryByCode = new Map(categories.map((row) => [row.code, row.id]));
-    if (staged.length !== rows.length || rows.some((row) => stagedById.get(String(row.source_category_id)) !== checksum(row) || !categoryByCode.get(String(row.baseer_category_code)))) throw new Error('A category decision is missing verified staging evidence or an active target category.');
+    if (staged.length !== rows.length || rows.some((row) => {
+      const category = categories.find((item) => item.code === String(row.baseer_category_code));
+      return stagedById.get(String(row.source_category_id)) !== checksum(row)
+        || !category?.isPosting
+        || !category.accountId;
+    })) throw new Error('A category decision is missing verified staging evidence or a financially ready posting target category.');
     const existingExecution = await tx.nurixExcelFinancialExecution.findUnique({ where: { packageId_tenantId_transformVersion: { packageId, tenantId, transformVersion: 'nurix-excel-category-audit-approval/v1' } }, select: { financialPlanSha256: true } });
     if (existingExecution && existingExecution.financialPlanSha256 !== planSha) throw new Error('Refusing to overwrite a completed category-approval audit with a different verified decision plan.');
     const execution = await tx.nurixExcelFinancialExecution.upsert({ where: { packageId_tenantId_transformVersion: { packageId, tenantId, transformVersion: 'nurix-excel-category-audit-approval/v1' } }, create: { id: randomUUID(), packageId, tenantId, targetCompanyId: companyId, transformVersion: 'nurix-excel-category-audit-approval/v1', financialPlanSha256: planSha, status: 'COMPLETED', reason: 'Owner-authorized explicit approval of verified Noorix category mappings.', requestedByUserId: actorUserId, approvedByUserId: actorUserId, approvedAt: new Date(), waveSequence: 1 }, update: { approvedByUserId: actorUserId, approvedAt: new Date(), status: 'COMPLETED', waveSequence: 1 }, select: { id: true } });

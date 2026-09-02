@@ -40,8 +40,8 @@ try {
       },
     },
   );
-  if (receipt.status !== 'PARSED_DRY_RUN' || !receipt.stagingPackageId) throw new Error(`Package staging failed: ${receipt.status}`);
   console.log(JSON.stringify(receipt));
+  if (receipt.status !== 'PARSED_DRY_RUN' || !receipt.stagingPackageId) throw new Error(`Package staging failed: ${receipt.status}`);
 } finally {
   await app.close();
 }

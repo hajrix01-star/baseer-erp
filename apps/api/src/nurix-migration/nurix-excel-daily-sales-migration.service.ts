@@ -99,7 +99,6 @@ export class NurixExcelDailySalesMigrationService {
       if (normalized === 'evening') return FinanceDailySalesClosingScope.EVENING;
       throw new BadRequestException(`Unsupported historical sales shift: ${value}.`);
     };
-    const usedScopes = new Set<string>();
     const sourceItems: SalesItem[] = table('DailySalesClosings').map((row): SalesItem => {
       const sourceId = text(row.source_id), sourceStatus = text(row.status).toLowerCase();
       if (!sourceId || !['active', 'cancelled'].includes(sourceStatus)) throw new BadRequestException('A sales closing has an unsupported source state.');
@@ -108,9 +107,6 @@ export class NurixExcelDailySalesMigrationService {
       const date = parsed ? `${parsed.y.toString().padStart(4, '0')}-${parsed.m.toString().padStart(2, '0')}-${parsed.d.toString().padStart(2, '0')}` : text(rawDate);
       if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new BadRequestException(`Invalid sales closing date for ${sourceId}.`);
       const itemScope = scope(text(row.shift));
-      const key = `${date}:${itemScope}`;
-      if (sourceStatus === 'active' && usedScopes.has(key)) throw new ConflictException(`More than one active Noorix sales close has the same date and scope (${key}).`);
-      if (sourceStatus === 'active') usedScopes.add(key);
       const allocations = allocationByClosing.get(sourceId) ?? [];
       const total = money(row.total_amount, 'sales closing amount');
       const sum = allocations.reduce((value, allocation) => value.plus(allocation.amount), new Prisma.Decimal(0)).toFixed(4);
@@ -120,6 +116,33 @@ export class NurixExcelDailySalesMigrationService {
       const cash = money(row.cash_on_hand || '0', 'cash-on-hand amount');
       return { sourceId, sourceChecksum: sha(row), status: sourceStatus as 'active' | 'cancelled', date, scope: itemScope, customerCount: customers, cashOnHand: cash === '0.0000' ? null : cash, total, notes: text(row.notes) || undefined, allocations };
     });
+    // Noorix occasionally exported multiple ALL closings for one business
+    // date.  They are separate source facts (often with different customer
+    // counts), not duplicates to discard.  Consolidate only same-date ALL
+    // records whose allocation distribution is identical; preserve every
+    // source row/allocation as lineage by attaching them all to one target.
+    const byDateAndScope = new Map<string, SalesItem[]>();
+    for (const item of sourceItems) if (item.status === 'active') (byDateAndScope.get(`${item.date}:${item.scope}`) ?? byDateAndScope.set(`${item.date}:${item.scope}`, []).get(`${item.date}:${item.scope}`)!).push(item);
+    for (const [key, entries] of byDateAndScope) {
+      if (entries.length < 2) continue;
+      if (entries[0]!.scope !== FinanceDailySalesClosingScope.ALL) throw new ConflictException(`More than one historical sales close has the same date and scope (${key}); owner review is required.`);
+      const signature = (item: SalesItem) => JSON.stringify(item.allocations
+        .map((allocation) => ({ vaultSourceId: allocation.vaultSourceId, amount: allocation.amount }))
+        .sort((left, right) => left.vaultSourceId.localeCompare(right.vaultSourceId)));
+      const expected = signature(entries[0]!);
+      if (entries.some((item) => signature(item) !== expected)) throw new ConflictException(`Same-date ALL sales closes have different allocation evidence (${key}); owner review is required.`);
+      const primary = entries[0]!;
+      const combined = entries.slice(1).reduce((value, item) => ({
+        ...value,
+        total: new Prisma.Decimal(value.total).plus(item.total).toFixed(4),
+        customerCount: value.customerCount + item.customerCount,
+        cashOnHand: (() => { const total = new Prisma.Decimal(value.cashOnHand ?? '0').plus(item.cashOnHand ?? '0').toFixed(4); return total === '0.0000' ? null : total; })(),
+        allocations: [...value.allocations, ...item.allocations],
+        notes: `${value.notes ?? ''}${value.notes ? ' — ' : ''}دمج تقفيلات ALL تاريخية متطابقة التوزيع: ${item.sourceId}`,
+      }), primary);
+      sourceItems[sourceItems.indexOf(primary)] = combined;
+      for (const secondary of entries.slice(1)) sourceItems[sourceItems.indexOf(secondary)] = { ...secondary, status: 'merged', notes: `${secondary.notes ?? ''}${secondary.notes ? ' — ' : ''}مُدمج في تقفيل ALL التاريخي ${primary.sourceId}; محفوظ في السلسلة ولا يُستبعد مالياً.` };
+    }
     // Explicit owner-approved reconciliation rule. Noorix marked a morning
     // close and an "all" (evening-labelled) close as active on this one day.
     // Baseer stores one daily close, so the ALL record carries their summed
@@ -235,17 +258,15 @@ export class NurixExcelDailySalesMigrationService {
 
   private async resolveVaults(context: TrustedTenantAdministratorContext, companyId: string, item: SalesItem) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const vaults = await tx.financeVault.findMany({ where: { tenantId: context.tenantId, companyId, status: 'ACTIVE' }, select: { id: true, account: { select: { code: true } } } });
-      const vaultByCode = new Map(vaults.map((vault) => [vault.account.code.replace(/^NURIX-/, ''), vault.id]));
+      const vaults = await tx.financeVault.findMany({ where: { tenantId: context.tenantId, companyId, status: 'ACTIVE', isSalesChannel: true, isPaymentDestination: true }, select: { id: true, nameAr: true, type: true, paymentMethods: true, account: { select: { code: true } } } });
       const vaultIdBySource = new Map<string, string>();
       for (const allocation of item.allocations) {
         const source = resolveNoorixVaultReference({ sourceId: allocation.vaultSourceId, nameAr: allocation.vaultNameAr });
         if (source.status !== 'MATCHED') throw new ConflictException('A daily-sales vault mapping is not approved.');
-        const vaultId = vaultByCode.get(source.mapping.targetVaultCode); if (!vaultId) throw new ConflictException(`Sales vault ${source.mapping.targetNameAr} is unavailable.`);
-        vaultIdBySource.set(allocation.vaultSourceId, vaultId);
+        const matches = vaults.filter((vault) => (vault.account.code === source.mapping.targetVaultCode || vault.account.code === `NURIX-${source.mapping.targetVaultCode}`) && vault.nameAr === source.mapping.targetNameAr && vault.type === source.mapping.vaultType && vault.paymentMethods.includes(source.mapping.paymentMethod as any));
+        if (matches.length !== 1) throw new ConflictException(`Sales vault ${source.mapping.targetNameAr} must be uniquely pre-provisioned as a sales channel.`);
+        vaultIdBySource.set(allocation.vaultSourceId, matches[0]!.id);
       }
-      // The source allocation itself is proof that these destinations are sales channels.
-      await tx.financeVault.updateMany({ where: { id: { in: [...new Set(vaultIdBySource.values())] }, tenantId: context.tenantId, companyId, isSalesChannel: false }, data: { isSalesChannel: true } });
       const grouped = new Map<string, Prisma.Decimal>();
       for (const allocation of item.allocations) {
         const vaultId = vaultIdBySource.get(allocation.vaultSourceId)!;

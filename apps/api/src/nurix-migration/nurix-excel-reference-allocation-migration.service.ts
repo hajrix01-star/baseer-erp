@@ -50,6 +50,9 @@ export type NurixExcelReferenceAllocationReceipt = Readonly<{
 }>;
 
 const VERSION = 'nurix-excel-reference-allocation/v1';
+/** A bounded prerequisite stage: it may create source-keyed suppliers and
+ * reuse reviewed vaults, but never writes a financial document or allocation. */
+export const REFERENCE_PROVISION_VERSION = 'nurix-excel-reference-provision/v1';
 const FINANCIAL_VERSION = 'nurix-excel-historical-finance/v1';
 const sha = (value: unknown) => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const text = (value: unknown) => typeof value === 'string' ? value.trim() : value === undefined || value === null ? '' : String(value).trim();
@@ -148,6 +151,33 @@ export class NurixExcelReferenceAllocationMigrationService {
     const plan = await this.withAcceptedStagingChecksums(context, packageRow.id, this.plan(bytes));
     await this.remediateAuthoritativeChecksums(context, packageRow, plan);
     const execution = await this.prepare(context, packageRow, plan, request.reason, waveSize);
+    if (execution.status === 'COMPLETED') return this.receipt(execution.id, plan, 0);
+    await this.database.inTenantTransaction(context.tenantId, (tx) => tx.nurixExcelFinancialWave.updateMany({ where: { executionId: execution.id, tenantId: context.tenantId, status: 'RUNNING', leaseExpiresAt: { lt: new Date() } }, data: { status: 'PENDING', leaseToken: null, leaseExpiresAt: null } }));
+    for (;;) {
+      const wave = await this.claim(context, execution.id);
+      if (!wave) break;
+      await this.commitWave(context, packageRow, execution.id, wave, plan);
+    }
+    return this.reconcile(context, packageRow.targetCompanyId, execution.id, plan);
+  }
+
+  /**
+   * Establishes immutable Supplier/Vault source maps before purchase and
+   * expense posting.  Allocation binding remains deliberately post-finance:
+   * it requires the imported outflow document to prove the target allocation.
+   */
+  async preprovision(context: TrustedTenantAdministratorContext, packageId: string, request: Readonly<{ reason?: string; waveSize?: number }> = {}): Promise<NurixExcelReferenceAllocationReceipt> {
+    const waveSize = request.waveSize ?? 50;
+    if (!Number.isInteger(waveSize) || waveSize < 10 || waveSize > 100) throw new BadRequestException('Reference-provision wave size must be between 10 and 100.');
+    const packageRow = await this.package(context, packageId);
+    const bytes = await this.storage.readVerified({ workbookSha256: packageRow.workbookSha256, artifact: packageRow });
+    const fullPlan = await this.withAcceptedStagingChecksums(context, packageRow.id, this.plan(bytes));
+    const plan: NurixExcelReferenceAllocationPlan = {
+      ...fullPlan,
+      items: fullPlan.items.filter((item) => item.sourceEntity === 'Supplier' || item.sourceEntity === 'Vault'),
+      checksum: sha({ version: REFERENCE_PROVISION_VERSION, items: fullPlan.items.filter((item) => item.sourceEntity === 'Supplier' || item.sourceEntity === 'Vault').map((item) => [item.sourceEntity, item.sourceId, item.sourceChecksum, item.status, item.reviewCode ?? null]) }),
+    };
+    const execution = await this.prepareProvision(context, packageRow, plan, request.reason, waveSize);
     if (execution.status === 'COMPLETED') return this.receipt(execution.id, plan, 0);
     await this.database.inTenantTransaction(context.tenantId, (tx) => tx.nurixExcelFinancialWave.updateMany({ where: { executionId: execution.id, tenantId: context.tenantId, status: 'RUNNING', leaseExpiresAt: { lt: new Date() } }, data: { status: 'PENDING', leaseToken: null, leaseExpiresAt: null } }));
     for (;;) {
@@ -295,6 +325,27 @@ export class NurixExcelReferenceAllocationMigrationService {
     });
   }
 
+  private async prepareProvision(context: TrustedTenantAdministratorContext, packageRow: Awaited<ReturnType<NurixExcelReferenceAllocationMigrationService['package']>>, plan: NurixExcelReferenceAllocationPlan, reason: string | undefined, waveSize: number) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const existing = await tx.nurixExcelFinancialExecution.findFirst({ where: { packageId: packageRow.id, tenantId: context.tenantId, targetCompanyId: packageRow.targetCompanyId, transformVersion: REFERENCE_PROVISION_VERSION }, select: { id: true, status: true, waveSequence: true, financialPlanSha256: true } });
+      if (existing) {
+        if (existing.financialPlanSha256 !== plan.checksum) throw new ConflictException('The verified reference-provision plan changed; create a new package revision instead of resuming it.');
+        if (existing.status === 'COMPLETED') return existing;
+        if (!['APPROVED', 'FAILED'].includes(existing.status)) throw new ConflictException('The reference-provision execution is not available to resume.');
+        if (existing.status === 'FAILED') await tx.nurixExcelFinancialWave.updateMany({ where: { executionId: existing.id, tenantId: context.tenantId, status: 'FAILED' }, data: { status: 'PENDING', leaseToken: null, leaseExpiresAt: null } });
+        return tx.nurixExcelFinancialExecution.update({ where: { id: existing.id }, data: { status: 'APPROVED', leaseToken: null, leaseExpiresAt: null }, select: { id: true, status: true, waveSequence: true, financialPlanSha256: true } });
+      }
+      const id = randomUUID();
+      await tx.nurixExcelFinancialExecution.create({ data: { id, packageId: packageRow.id, tenantId: context.tenantId, targetCompanyId: packageRow.targetCompanyId, transformVersion: REFERENCE_PROVISION_VERSION, financialPlanSha256: plan.checksum, status: 'APPROVED', reason: optionalText(reason) ?? 'Owner-authorized Noorix supplier and vault source-lineage provision.', requestedByUserId: context.actorUserId, approvedByUserId: context.actorUserId, approvedAt: new Date() } });
+      for (let offset = 0; offset < plan.items.length; offset += waveSize) {
+        const group = plan.items.slice(offset, offset + waveSize), waveId = randomUUID(), sequence = offset / waveSize + 1;
+        await tx.nurixExcelFinancialWave.create({ data: { id: waveId, executionId: id, tenantId: context.tenantId, targetCompanyId: packageRow.targetCompanyId, sequence, plannedItems: group.length, reviewItems: group.filter((item) => item.status === 'REVIEW_REQUIRED').length } });
+        await tx.nurixExcelFinancialItem.createMany({ data: group.map((item) => ({ id: randomUUID(), executionId: id, waveId, tenantId: context.tenantId, targetCompanyId: packageRow.targetCompanyId, sourceSheet: item.sourceSheet, sourceEntity: item.sourceEntity, sourceId: item.sourceId, sourceChecksum: item.sourceChecksum, operationKey: sha({ version: REFERENCE_PROVISION_VERSION, sourceEntity: item.sourceEntity, sourceId: item.sourceId }), status: item.status, ...(item.reviewCode ? { resultCode: item.reviewCode } : {}) })) });
+      }
+      return { id, status: 'APPROVED' as const, waveSequence: 0, financialPlanSha256: plan.checksum };
+    });
+  }
+
   private async claim(context: TrustedTenantAdministratorContext, executionId: string) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const wave = await tx.nurixExcelFinancialWave.findFirst({ where: { executionId, tenantId: context.tenantId, status: 'PENDING' }, orderBy: { sequence: 'asc' }, select: { id: true, sequence: true } });
@@ -362,6 +413,17 @@ export class NurixExcelReferenceAllocationMigrationService {
   private async writeSupplier(tx: any, context: TrustedTenantAdministratorContext, packageRow: Awaited<ReturnType<NurixExcelReferenceAllocationMigrationService['package']>>, executionId: string, source: SourceSupplier, invoices: readonly SourceInvoice[]): Promise<'POSTED' | 'REUSED'> {
     const existing = await tx.nurixExcelFinancialSourceMap.findFirst({ where: { executionId, tenantId: context.tenantId, sourceEntity: 'Supplier', sourceId: source.sourceId }, select: { targetId: true, sourceChecksum: true } });
     if (existing) { if (existing.sourceChecksum !== source.sourceChecksum) throw new ConflictException('A supplier source map differs from immutable source evidence.'); return 'REUSED'; }
+    // A package revision must not create a second supplier for the same Noorix
+    // identity.  The map is tenant+target-company scoped, so reusing it is
+    // safer than a display-name comparison and remains independent of the
+    // revised workbook/package id.
+    const prior = await tx.nurixExcelFinancialSourceMap.findFirst({ where: { tenantId: context.tenantId, targetCompanyId: packageRow.targetCompanyId, sourceEntity: 'Supplier', sourceId: source.sourceId, targetEntity: 'FinanceSupplier', state: { in: ['APPLIED', 'REUSED'] } }, select: { targetId: true } });
+    if (prior) {
+      const target = await tx.financeSupplier.findFirst({ where: { id: prior.targetId, tenantId: context.tenantId, companyId: packageRow.targetCompanyId, status: FinanceSupplierStatus.ACTIVE }, select: { id: true } });
+      if (!target) throw new ConflictException('A prior supplier source map points outside the active target company.');
+      await tx.nurixExcelFinancialSourceMap.create({ data: { id: randomUUID(), executionId, tenantId: context.tenantId, targetCompanyId: packageRow.targetCompanyId, sourceEntity: 'Supplier', sourceId: source.sourceId, sourceChecksum: source.sourceChecksum, targetEntity: 'FinanceSupplier', targetId: target.id, state: 'REUSED' } });
+      return 'REUSED';
+    }
     const legacyEntity = `SUPPLIER_${sha({ sourceCompanyId: packageRow.sourceCompanyId }).slice(0, 24)}`;
     const legacy = await tx.legacyMigrationRecordMap.findFirst({ where: { tenantId: context.tenantId, targetCompanyId: packageRow.targetCompanyId, sourceCompanyId: packageRow.sourceCompanyId, sourceEntity: legacyEntity, sourceId: source.sourceId, targetEntity: 'FINANCE_SUPPLIER' }, select: { targetId: true, sourceChecksum: true } });
     let legacyTargetId: string | null = null;

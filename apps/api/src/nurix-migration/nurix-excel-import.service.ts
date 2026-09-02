@@ -230,6 +230,17 @@ export class NurixExcelImportService {
     if (source.entity === 'ACCOUNT') {
       const type = (source.row.account_type ?? '').toUpperCase();
       const status = (source.row.status ?? '').toUpperCase();
+      // Historical Noorix vault accounts can retain a namespaced account code
+      // (NURIX-V-003) beside an older chart account (V-003).  A source vault
+      // must resolve to the account owned by its FinanceVault, not merely the
+      // first legacy chart account with the same short code.
+      const vaultAccount = /^V-\d{3}$/i.test(source.row.code ?? '')
+        ? await tx.financeVault.findFirst({
+          where: { tenantId, companyId, status: 'ACTIVE', account: { code: `NURIX-${source.row.code}` } },
+          select: { account: { select: { id: true, type: true } } },
+        })
+        : null;
+      if (vaultAccount?.account) return vaultAccount.account.type === type ? { status: 'REUSED', targetId: vaultAccount.account.id } : { status: 'REVIEW_REQUIRED' };
       const existing = await tx.financeAccount.findFirst({ where: { tenantId, companyId, code: source.row.code }, select: { id: true, type: true } });
       if (existing) return existing.type === type ? { status: 'REUSED', targetId: existing.id } : { status: 'REVIEW_REQUIRED' };
       const nameAr = source.row.name_ar ?? '';
@@ -238,13 +249,34 @@ export class NurixExcelImportService {
     }
     if (source.entity === 'CATEGORY') {
       const kind = (source.row.category_type ?? '').toUpperCase();
-      const existing = await tx.financeCategory.findFirst({ where: { tenantId, companyId, code: source.row.baseer_category_code }, select: { id: true, kind: true } });
-      if (existing) return existing.kind === kind ? { status: 'REUSED', targetId: existing.id } : { status: 'REVIEW_REQUIRED' };
       const parentCode = source.row.parent_baseer_category_code ?? '';
-      const parent = parentCode ? await tx.financeCategory.findFirst({ where: { tenantId, companyId, code: parentCode }, select: { id: true } }) : null;
-      if (parentCode && !parent) return { status: 'REVIEW_REQUIRED' };
+      const existing = await tx.financeCategory.findFirst({ where: { tenantId, companyId, code: source.row.baseer_category_code }, select: { id: true, code: true, kind: true, parentId: true, accountId: true } });
+      if (existing) {
+        if (existing.kind !== kind) return { status: 'REVIEW_REQUIRED' };
+        const [requestedParent, chartParent, sameCodeAccount] = await Promise.all([
+          parentCode ? tx.financeCategory.findFirst({ where: { tenantId, companyId, code: parentCode, status: 'ACTIVE' }, select: { id: true, kind: true, accountId: true } }) : Promise.resolve(null),
+          existing.parentId ? tx.financeCategory.findFirst({ where: { tenantId, companyId, id: existing.parentId, status: 'ACTIVE' }, select: { id: true, kind: true, accountId: true } }) : Promise.resolve(null),
+          tx.financeAccount.findFirst({ where: { tenantId, companyId, code: existing.code, status: 'ACTIVE', type: kind === 'SALE' ? 'REVENUE' : 'EXPENSE' }, select: { id: true } }),
+        ]);
+        if (requestedParent && (requestedParent.kind !== kind || existing.parentId !== requestedParent.id)) return { status: 'REVIEW_REQUIRED' };
+        // A pre-existing Baseer leaf may legitimately have a posting parent.
+        // Repair only a missing account from that exact chart parent (or from
+        // the same-code chart account for a root).  This closes incomplete
+        // legacy setup without changing a classified category's identity.
+        const repairAccountId = chartParent?.kind === kind && chartParent.accountId
+          ? chartParent.accountId
+          : sameCodeAccount?.id ?? null;
+        if (existing.accountId === null && repairAccountId) {
+          await tx.financeCategory.update({ where: { id: existing.id }, data: { accountId: repairAccountId } });
+        }
+        return { status: 'REUSED', targetId: existing.id };
+      }
+      const parent = parentCode
+        ? await tx.financeCategory.findFirst({ where: { tenantId, companyId, code: parentCode, status: 'ACTIVE' }, select: { id: true, kind: true, isPosting: true, accountId: true } })
+        : null;
+      if (parentCode && (!parent || parent.kind !== kind || parent.isPosting || !parent.accountId)) return { status: 'REVIEW_REQUIRED' };
       const nameAr = source.row.name_ar ?? '';
-      const created = await tx.financeCategory.create({ data: { id: randomUUID(), tenantId, companyId, parentId: parent?.id ?? null, accountId: null, suggestedSupplierId: null, code: source.row.baseer_category_code ?? '', nameAr, nameEn: source.row.name_en || nameAr, kind, status: source.row.status === 'active' ? 'ACTIVE' : 'ARCHIVED', isPosting: true } });
+      const created = await tx.financeCategory.create({ data: { id: randomUUID(), tenantId, companyId, parentId: parent?.id ?? null, accountId: parent?.accountId ?? null, suggestedSupplierId: null, code: source.row.baseer_category_code ?? '', nameAr, nameEn: source.row.name_en || nameAr, kind, status: source.row.status === 'active' ? 'ACTIVE' : 'ARCHIVED', isPosting: true } });
       return { status: 'CREATED', targetId: created.id };
     }
     const existing = await tx.hrEmployee.findFirst({ where: { tenantId, companyId, employeeNumber: source.row.employee_serial }, select: { id: true } });

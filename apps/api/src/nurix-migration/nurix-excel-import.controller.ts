@@ -159,6 +159,20 @@ export class NurixExcelImportController {
   }
 
   /** Supplier, vault, and allocation lineage only; it never creates financial documents. */
+  @Post('packages/:packageId/reference-provision')
+  @HttpCode(200)
+  async preprovisionReferences(@Param('packageId') packageId: string, @Body() body: unknown, @Headers('authorization') authorization?: string) {
+    const id = nurixMigrationRunIdSchema.safeParse(packageId);
+    const payload = this.payload(body);
+    if (!id.success || !payload || typeof payload !== 'object' || Array.isArray(payload)) throw new BadRequestException('Invalid reference-provision Excel execution request.');
+    const record = payload as Record<string, unknown>;
+    return this.referenceAllocationImports.preprovision(await this.context.authorizeOwner(this.accessToken(authorization)), id.data, {
+      ...(typeof record.reason === 'string' ? { reason: record.reason } : {}),
+      ...(typeof record.waveSize === 'number' ? { waveSize: record.waveSize } : {}),
+    });
+  }
+
+  /** Supplier, vault, and allocation lineage only; it never creates financial documents. */
   @Post('packages/:packageId/references-and-allocations')
   @HttpCode(200)
   async executeReferencesAndAllocations(@Param('packageId') packageId: string, @Body() body: unknown, @Headers('authorization') authorization?: string) {

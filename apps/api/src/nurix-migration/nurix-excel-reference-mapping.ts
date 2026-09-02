@@ -64,6 +64,11 @@ export const NOORIX_VAULT_REFERENCES: readonly ArzVaultReference[] = [
   { sourceId: 'cmngf3sp10020gwgiymgxlmdh', sourceNameAr: 'جاهز', targetVaultCode: 'V-004', targetNameAr: 'جاهز', vaultType: 'APP', paymentMethod: 'APP', evidence: 'ARZ_V5_EXPLICIT_VAULT_DECISION' },
   { sourceId: 'cmngf47fp0027gwgizvpdbssf', sourceNameAr: 'كيتا', targetVaultCode: 'V-005', targetNameAr: 'كيتا', vaultType: 'APP', paymentMethod: 'APP', evidence: 'ARZ_V5_EXPLICIT_VAULT_DECISION' },
   { sourceId: 'cmsje54c600ixp59837kw765d', sourceNameAr: 'عبدالجليل', targetVaultCode: 'V-006', targetNameAr: 'عبدالجليل', vaultType: 'CASH', paymentMethod: 'CASH', evidence: 'ARZ_V5_EXPLICIT_VAULT_DECISION' },
+  // Doha Al-Mustahlek — exact source IDs from the 2026-09-02 Noorix archive.
+  // They intentionally map only the two company foundation vaults; no
+  // display-name inference is permitted by the migration writer.
+  { sourceId: 'cmnf5xrdt002oy8lmpyszg9uy', sourceNameAr: 'نقد', targetVaultCode: 'V-001', targetNameAr: 'نقد', vaultType: 'CASH', paymentMethod: 'CASH', evidence: 'ARZ_V5_EXPLICIT_VAULT_DECISION' },
+  { sourceId: 'cmnf5xrdx002qy8lm9dgwq3ee', sourceNameAr: 'بنك', targetVaultCode: 'V-002', targetNameAr: 'بنك', vaultType: 'BANK', paymentMethod: 'BANK_TRANSFER', evidence: 'ARZ_V5_EXPLICIT_VAULT_DECISION' },
 ] as const;
 
 /** Rejects a hand-edited decision set before it can be passed to an importer. */

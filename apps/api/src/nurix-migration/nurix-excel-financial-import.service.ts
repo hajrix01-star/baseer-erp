@@ -132,8 +132,8 @@ export type NurixHistoricalFinanceIssue = Readonly<{
 export type NurixHistoricalFinancialPlanItem = Readonly<{
   sourceInvoiceId: string;
   sourceInvoiceChecksum: string;
-  sourceLedgerId: string;
-  sourceLedgerChecksum: string;
+  /** Every accepted source ledger row remains independently traceable. */
+  sourceLedgers: readonly Readonly<{ sourceId: string; sourceChecksum: string; notes?: string }> [];
   sourceReference: string;
   businessDate: string;
   supplierInvoiceDate: string;
@@ -146,8 +146,6 @@ export type NurixHistoricalFinancialPlanItem = Readonly<{
   grossAmount: string;
   /** Original Noorix text; it is payload, not a migration annotation. */
   sourceNotes?: string;
-  /** A ledger note has no dedicated target field, so it accompanies the document. */
-  sourceLedgerNotes?: string;
   journalLines: readonly Readonly<{ accountId: string; debitAmount: string; creditAmount: string }>[];
   allocations: readonly Readonly<{ sourceAllocationId: string; sourceChecksum: string; vaultId: string; grossAmount: string; paymentMethod: string }>[];
 }>;
@@ -244,19 +242,14 @@ export class NurixExcelFinancialImportService {
       const allocations = allocationsByInvoice.get(invoice.sourceId) ?? [];
       const allocationPlans = this.validateAllocations(allocations, invoice, input.mapping, issues);
       const ledgers = ledgersByInvoice.get(invoice.sourceId) ?? [];
-      if (ledgers.length !== 1) this.issue(issues, 'LEDGER_CARDINALITY_INVALID', 'Invoice', invoice.sourceId);
-      const ledger = ledgers[0];
-      if (ledger && gross !== null && category) this.validateLedger(ledger, invoice, gross, businessDate, category, input.mapping, issues);
+      this.validateLedgers(ledgers, invoice, gross, businessDate, input.mapping, issues);
 
-      if (issues.length !== before || net === null || tax === null || gross === null || !businessDate || !invoiceDate || !ledger || !category?.accountId || !supplier || !allocationPlans.length) continue;
-      const debitAccount = input.mapping.accountsBySourceId[ledger.debitAccountSourceId]!;
-      const creditAccount = input.mapping.accountsBySourceId[ledger.creditAccountSourceId]!;
+      if (issues.length !== before || net === null || tax === null || gross === null || !businessDate || !invoiceDate || !ledgers.length || !category?.accountId || !supplier || !allocationPlans.length) continue;
       const amount = formatMoney(gross);
       items.push(Object.freeze({
         sourceInvoiceId: invoice.sourceId,
         sourceInvoiceChecksum: invoice.sourceChecksum,
-        sourceLedgerId: ledger.sourceId,
-        sourceLedgerChecksum: ledger.sourceChecksum,
+        sourceLedgers: Object.freeze(ledgers.map((ledger) => Object.freeze({ sourceId: ledger.sourceId, sourceChecksum: ledger.sourceChecksum, ...(ledger.notes ? { notes: ledger.notes } : {}) }))),
         sourceReference: sourceReference(input.sourceCompanyId, invoice.sourceId),
         businessDate,
         supplierInvoiceDate: invoiceDate,
@@ -268,10 +261,15 @@ export class NurixExcelFinancialImportService {
         taxAmount: formatMoney(tax),
         grossAmount: amount,
         ...(invoice.notes ? { sourceNotes: invoice.notes } : {}),
-        ...(ledger.notes ? { sourceLedgerNotes: ledger.notes } : {}),
         journalLines: Object.freeze([
-          Object.freeze({ accountId: debitAccount.id, debitAmount: amount, creditAmount: '0.0000' }),
-          Object.freeze({ accountId: creditAccount.id, debitAmount: '0.0000', creditAmount: amount }),
+          // Category is the canonical reporting classification.  Noorix's
+          // original debit account remains source evidence in the journal
+          // annotation, but cannot make cash and P&L reports disagree.
+          Object.freeze({ accountId: category.accountId, debitAmount: amount, creditAmount: '0.0000' }),
+          // Allocations are the cash-settlement evidence.  Their aggregate
+          // must reconcile to gross, so each destination receives its own
+          // credit rather than collapsing a multi-vault source settlement.
+          ...allocationPlans.map((allocation) => Object.freeze({ accountId: this.vaultAccountId(input.mapping, allocation.vaultId), debitAmount: '0.0000', creditAmount: allocation.grossAmount })),
         ]),
         allocations: Object.freeze(allocationPlans),
       }));
@@ -281,7 +279,7 @@ export class NurixExcelFinancialImportService {
     }
     const planChecksum = sha({
       version: 'nurix-historical-finance-plan/v1', packageId: input.packageId, workbookSha256: input.workbookSha256,
-      mappingChecksum: input.mapping.checksum, itemReceipts: items.map((item) => ({ invoice: item.sourceInvoiceId, invoiceChecksum: item.sourceInvoiceChecksum, ledger: item.sourceLedgerId, ledgerChecksum: item.sourceLedgerChecksum, sourceReference: item.sourceReference, sourceNotes: item.sourceNotes ?? null, sourceLedgerNotes: item.sourceLedgerNotes ?? null })),
+      mappingChecksum: input.mapping.checksum, itemReceipts: items.map((item) => ({ invoice: item.sourceInvoiceId, invoiceChecksum: item.sourceInvoiceChecksum, ledgers: item.sourceLedgers, sourceReference: item.sourceReference, sourceNotes: item.sourceNotes ?? null })),
     });
     return Object.freeze({
       packageId: input.packageId, sourceCompanyId: input.sourceCompanyId, targetCompanyId: input.targetCompanyId,
@@ -384,22 +382,37 @@ export class NurixExcelFinancialImportService {
     return plans;
   }
 
-  private validateLedger(ledger: NurixHistoricalLedgerEntry, invoice: NurixHistoricalInvoice, gross: bigint, businessDate: string | null, category: NurixHistoricalTargetCategory, mapping: NurixHistoricalMappingSnapshot, issues: NurixHistoricalFinanceIssue[]) {
+  private validateLedgers(ledgers: readonly NurixHistoricalLedgerEntry[], invoice: NurixHistoricalInvoice, gross: bigint | null, businessDate: string | null, mapping: NurixHistoricalMappingSnapshot, issues: NurixHistoricalFinanceIssue[]) {
+    if (!ledgers.length) {
+      this.issue(issues, 'LEDGER_CARDINALITY_INVALID', 'Invoice', invoice.sourceId);
+      return;
+    }
+    let total = 0n;
+    for (const ledger of ledgers) this.validateLedgerRow(ledger, invoice, businessDate, mapping, issues, (amount) => { total += amount; });
+    if (gross === null || total !== gross) this.issue(issues, 'LEDGER_AMOUNT_MISMATCH', 'Invoice', invoice.sourceId);
+  }
+
+  private validateLedgerRow(ledger: NurixHistoricalLedgerEntry, invoice: NurixHistoricalInvoice, businessDate: string | null, mapping: NurixHistoricalMappingSnapshot, issues: NurixHistoricalFinanceIssue[], acceptAmount: (amount: bigint) => void) {
     if (ledger.status.trim().toLowerCase() !== 'active') this.issue(issues, 'LEDGER_STATUS_UNSUPPORTED', 'LedgerEntry', ledger.sourceId);
     if (ledger.referenceEntity.trim().toLowerCase() !== 'invoice' || ledger.referenceSourceId !== invoice.sourceId) this.issue(issues, 'LEDGER_REFERENCE_INVALID', 'LedgerEntry', ledger.sourceId);
     const amount = parseMoney(ledger.amount);
-    if (amount === null || amount !== gross) this.issue(issues, 'LEDGER_AMOUNT_MISMATCH', 'LedgerEntry', ledger.sourceId);
+    if (amount === null || amount <= 0n) this.issue(issues, 'LEDGER_AMOUNT_MISMATCH', 'LedgerEntry', ledger.sourceId);
+    else acceptAmount(amount);
     const ledgerDate = parseSourceDate(ledger.entryDate);
     if (!ledgerDate || ledgerDate !== businessDate) this.issue(issues, 'LEDGER_DATE_MISMATCH', 'LedgerEntry', ledger.sourceId);
-    if (ledger.vaultSourceId !== invoice.vaultSourceId) this.issue(issues, 'LEDGER_VAULT_MISMATCH', 'LedgerEntry', ledger.sourceId);
     const debit = mapping.accountsBySourceId[ledger.debitAccountSourceId];
     const credit = mapping.accountsBySourceId[ledger.creditAccountSourceId];
     const vault = mapping.vaultsBySourceId[ledger.vaultSourceId];
     this.validateMapped(debit, 'LedgerEntry', ledger.sourceId, issues);
     this.validateMapped(credit, 'LedgerEntry', ledger.sourceId, issues);
     this.validateMapped(vault, 'LedgerEntry', ledger.sourceId, issues);
-    if (debit && category.accountId !== debit.id) this.issue(issues, 'CATEGORY_POSTING_ACCOUNT_MISMATCH', 'Invoice', invoice.sourceId);
     if (credit && vault && credit.id !== vault.accountId) this.issue(issues, 'VAULT_ACCOUNT_MISMATCH', 'LedgerEntry', ledger.sourceId);
+  }
+
+  private vaultAccountId(mapping: NurixHistoricalMappingSnapshot, vaultId: string): string {
+    const vault = Object.values(mapping.vaultsBySourceId).find((candidate) => candidate.id === vaultId);
+    if (!vault) throw new ConflictException('A planned allocation vault lost its mapped account.');
+    return vault.accountId;
   }
 
   private issue(target: NurixHistoricalFinanceIssue[], code: NurixHistoricalFinanceIssueCode, sourceEntity: NurixHistoricalFinanceIssue['sourceEntity'], sourceId: string) {

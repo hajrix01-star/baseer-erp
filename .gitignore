@@ -15,6 +15,7 @@ test-results/
 .rehearsal/
 .codex-remote-attachments/
 apps/api/storage/
+storage/
 backups/
 .tmp-noorix-db-inspection/
 outputs/

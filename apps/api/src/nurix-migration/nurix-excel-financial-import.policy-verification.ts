@@ -27,9 +27,40 @@ assert.equal(plan.items[0]?.businessDate, '2026-03-04');
 assert.equal(plan.items[0]?.journalLines[0]?.debitAmount, '115.0000');
 assert.equal(plan.items[0]?.journalLines[1]?.creditAmount, '115.0000');
 
-const duplicateLedger = service.plan({ ...input, ledgerEntries: [...input.ledgerEntries, { ...input.ledgerEntries[0]!, sourceId: 'ledger-2', sourceChecksum: 'b'.repeat(64) }] });
-assert.equal(duplicateLedger.canExecute, false);
-assert.ok(duplicateLedger.issues.some((issue) => issue.code === 'LEDGER_CARDINALITY_INVALID'));
+const duplicatedGrossLedger = service.plan({ ...input, ledgerEntries: [...input.ledgerEntries, { ...input.ledgerEntries[0]!, sourceId: 'ledger-2', sourceChecksum: 'b'.repeat(64) }] });
+assert.equal(duplicatedGrossLedger.canExecute, false);
+assert.ok(duplicatedGrossLedger.issues.some((issue) => issue.code === 'LEDGER_AMOUNT_MISMATCH'));
+
+// Split historical settlements are valid when invoice, allocations, and all
+// source-ledger rows reconcile to the same gross total. The target journal is
+// one category debit plus allocation-vault credits, and both ledgers retain
+// their own immutable receipts.
+const split = service.plan({
+  ...input,
+  mapping: {
+    ...input.mapping,
+    accountsBySourceId: { ...input.mapping.accountsBySourceId, creditCard: { id: 'account-card', active: true, code: 'V-2' } },
+    vaultsBySourceId: {
+      ...input.mapping.vaultsBySourceId,
+      card: { id: 'vault-card', active: true, paymentDestination: true, accountId: 'account-card', defaultPaymentMethod: 'BANK_CARD', paymentMethods: ['BANK_CARD'] },
+    },
+  },
+  allocations: [
+    { ...input.allocations[0]!, sourceId: 'allocation-cash', amount: '60.0000' },
+    { ...input.allocations[0]!, sourceId: 'allocation-card', sourceChecksum: 'b'.repeat(64), vaultSourceId: 'card', paymentMethodSourceId: 'BANK_CARD', amount: '55.0000' },
+  ],
+  ledgerEntries: [
+    { ...input.ledgerEntries[0]!, sourceId: 'ledger-cash', amount: '60.0000' },
+    { ...input.ledgerEntries[0]!, sourceId: 'ledger-card', sourceChecksum: 'b'.repeat(64), creditAccountSourceId: 'creditCard', vaultSourceId: 'card', amount: '55.0000' },
+  ],
+});
+assert.equal(split.canExecute, true);
+assert.equal(split.items[0]?.sourceLedgers.length, 2);
+assert.deepEqual(split.items[0]?.journalLines.map((line) => [line.accountId, line.debitAmount, line.creditAmount]), [
+  ['account-expense', '115.0000', '0.0000'],
+  ['account-cash', '0.0000', '60.0000'],
+  ['account-card', '0.0000', '55.0000'],
+]);
 
 const mismatchedVault = service.plan({ ...input, mapping: { ...input.mapping, vaultsBySourceId: { vault: { ...input.mapping.vaultsBySourceId.vault!, accountId: 'other-cash' } } } });
 assert.equal(mismatchedVault.canExecute, false);
