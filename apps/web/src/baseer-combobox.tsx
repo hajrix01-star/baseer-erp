@@ -21,6 +21,8 @@ export type BaseerComboboxProps = {
   invalid?: boolean;
   className?: string;
   menuClassName?: string;
+  /** Lets an owning popover treat this portalled listbox as part of its interaction boundary. */
+  onMenuElementChange?: (element: HTMLDivElement | null) => void;
   onChange: (value: string) => void;
 };
 
@@ -29,7 +31,7 @@ export type BaseerComboboxProps = {
  * retains focus while arrow keys move its active descendant; both local and
  * remote choices use the same keyboard and assistive-technology behavior.
  */
-export function BaseerCombobox({ id, label, value, options, placeholder, disabled = false, required = false, scopeKey = "baseer-combobox", remoteSearch, loadingLabel, emptyLabel, errorLabel, searchable = true, invalid = false, className, menuClassName, onChange }: BaseerComboboxProps) {
+export function BaseerCombobox({ id, label, value, options, placeholder, disabled = false, required = false, scopeKey = "baseer-combobox", remoteSearch, loadingLabel, emptyLabel, errorLabel, searchable = true, invalid = false, className, menuClassName, onMenuElementChange, onChange }: BaseerComboboxProps) {
   const generatedId = useId();
   const inputId = id ?? `baseer-combobox-${generatedId}`;
   const listboxId = `${inputId}-options`;
@@ -54,6 +56,8 @@ export function BaseerCombobox({ id, label, value, options, placeholder, disable
   }, [options, query, remoteOptions, selected]);
   const copy = { loading: loadingLabel ?? "جارٍ التحميل…", empty: emptyLabel ?? "لا توجد نتائج مطابقة", error: errorLabel ?? "تعذر إتمام البحث" };
   const optionId = (option: BaseerSearchOption) => `${inputId}-option-${option.id}`;
+  const toggleLabel = /[\u0600-\u06FF]/.test(label) ? `فتح قائمة ${label}` : `Open ${label} options`;
+  const assignMenuElement = (element: HTMLDivElement | null) => { menuRef.current = element; onMenuElementChange?.(element); };
 
   const openMenu = () => {
     if (disabled) return;
@@ -67,7 +71,10 @@ export function BaseerCombobox({ id, label, value, options, placeholder, disable
   const choose = (option: BaseerSearchOption) => {
     onChange(option.id);
     closeMenu();
-    inputRef.current?.focus();
+    // Keeping focus in a text input reopens the soft keyboard after a mobile
+    // choice. Desktop keyboard users retain the conventional focus return.
+    if (window.matchMedia("(pointer: coarse)").matches) inputRef.current?.blur();
+    else inputRef.current?.focus();
   };
 
   useEffect(() => {
@@ -177,12 +184,30 @@ export function BaseerCombobox({ id, label, value, options, placeholder, disable
       value={searchable && open ? query : selected?.label ?? ""}
       placeholder={placeholder}
       onClick={openMenu}
-      onFocus={() => { setQuery(""); openMenu(); }}
+      // Dialog focus management may place focus here when a form opens. Focus
+      // alone must never expose a list; opening remains an explicit click,
+      // typed search, or keyboard-arrow action.
+      onFocus={() => setQuery("")}
       onChange={(event) => { if (searchable) { setQuery(event.target.value); openMenu(); } }}
       onKeyDown={onKeyDown}
     />
-    <span className="baseer-combobox__trigger" aria-hidden="true">▾</span>
-    {typeof document === "undefined" || !open ? null : createPortal(<div ref={menuRef} id={listboxId} style={menuStyle} className={["baseer-combobox__menu", "company-session-control__menu", menuClassName].filter(Boolean).join(" ")} role="listbox" aria-label={label} aria-busy={loading || undefined}>
+    <button
+      type="button"
+      className="baseer-combobox__trigger"
+      aria-label={toggleLabel}
+      aria-haspopup="listbox"
+      aria-expanded={open}
+      aria-controls={open ? listboxId : undefined}
+      disabled={disabled}
+      onPointerDown={(event) => {
+        // A deliberate arrow tap opens choices without moving focus into the
+        // editable field, so mobile browsers do not show the soft keyboard.
+        event.preventDefault();
+        inputRef.current?.blur();
+      }}
+      onClick={openMenu}
+    >▾</button>
+    {typeof document === "undefined" || !open ? null : createPortal(<div ref={assignMenuElement} id={listboxId} style={menuStyle} className={["baseer-combobox__menu", "company-session-control__menu", menuClassName].filter(Boolean).join(" ")} role="listbox" aria-label={label} aria-busy={loading || undefined}>
       {matches.length ? matches.map((option, index) => <button
         key={option.id}
         id={optionId(option)}

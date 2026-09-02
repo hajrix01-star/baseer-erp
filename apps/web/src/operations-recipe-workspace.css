@@ -47,28 +47,6 @@
 .operations-recipe-editor__metric span { color: var(--muted); font-size: .84rem; }
 .operations-recipe-editor__metric strong { color: var(--ink); font-size: 1rem; }
 
-body[data-ui-theme="modern-1"] .operations-recipe__warning,
-body[data-ui-theme="modern-2"] .operations-recipe__warning { border-color: color-mix(in srgb, var(--status-warning) 40%, var(--line)); color: var(--status-warning); background: var(--status-warning-surface); }
-body[data-ui-theme="modern-1"] .operations-recipe-editor__eyebrow,
-body[data-ui-theme="modern-2"] .operations-recipe-editor__eyebrow,
-body[data-ui-theme="modern-1"] .operations-recipe-editor__version,
-body[data-ui-theme="modern-2"] .operations-recipe-editor__version { color: var(--brand); }
-body[data-ui-theme="modern-1"] .operations-recipe-editor__version,
-body[data-ui-theme="modern-2"] .operations-recipe-editor__version { border-color: color-mix(in srgb, var(--brand) 28%, var(--line)); background: color-mix(in srgb, var(--brand) 10%, var(--surface-raised)); }
-body[data-ui-theme="modern-1"] .operations-recipe-editor__output-bar,
-body[data-ui-theme="modern-2"] .operations-recipe-editor__output-bar { border-color: var(--border-subtle); background: var(--surface-subtle); }
-body[data-ui-theme="modern-1"] .operations-recipe-editor__table-wrap,
-body[data-ui-theme="modern-2"] .operations-recipe-editor__table-wrap { border-color: var(--border-subtle); background: var(--surface-raised); }
-body[data-ui-theme="modern-1"] .operations-recipe-editor__table th,
-body[data-ui-theme="modern-2"] .operations-recipe-editor__table th { border-color: var(--border-subtle); color: var(--muted); background: var(--table-header); }
-body[data-ui-theme="modern-1"] .operations-recipe-editor__table :is(td, .operations-recipe-editor__material-stages td),
-body[data-ui-theme="modern-2"] .operations-recipe-editor__table :is(td, .operations-recipe-editor__material-stages td) { border-color: var(--border-subtle); background: var(--surface-raised); }
-body[data-ui-theme="modern-1"] .operations-recipe-editor__table-warning td,
-body[data-ui-theme="modern-2"] .operations-recipe-editor__table-warning td { color: var(--status-warning); background: var(--status-warning-surface); }
-body[data-ui-theme="modern-1"] .operations-recipe-editor__summary,
-body[data-ui-theme="modern-2"] .operations-recipe-editor__summary { border-color: color-mix(in srgb, var(--brand) 28%, var(--border-subtle)); background: linear-gradient(135deg, var(--surface-raised), color-mix(in srgb, var(--brand) 8%, var(--surface-raised))); box-shadow: 0 .35rem 1rem color-mix(in srgb, var(--ink) 7%, transparent); }
-body[data-ui-theme="modern-1"] .operations-recipe-editor__summary :is(.operations-recipe-editor__calculator-title, .operations-recipe-editor__metric strong),
-body[data-ui-theme="modern-2"] .operations-recipe-editor__summary :is(.operations-recipe-editor__calculator-title, .operations-recipe-editor__metric strong) { color: var(--brand-deep); }
 .daily-sales-dialog.operations-menu-product-card { width: min(72rem, calc(100vw - 2rem)); block-size: min(44rem, calc(100dvh - 2rem)); min-block-size: min(44rem, calc(100dvh - 2rem)); max-block-size: calc(100dvh - 2rem); display: flex; flex-direction: column; overflow: hidden; }
 .operations-menu-product-card .daily-sales-dialog__body { flex: 1 1 auto; min-block-size: 0; overflow: auto; overscroll-behavior: contain; }
 .operations-menu-product-card .daily-sales-dialog__actions { flex: 0 0 auto; }

@@ -9,13 +9,6 @@
 .operations-row-link:hover strong { color: var(--brand); text-decoration: underline; text-underline-offset: .18rem; }
 .operations-row-link:focus-visible { outline: 2px solid var(--brand); outline-offset: .25rem; border-radius: .25rem; }
 
-body[data-ui-theme="modern-1"] .operations-payment-channel legend,
-body[data-ui-theme="modern-2"] .operations-payment-channel legend { color: var(--muted); }
-body[data-ui-theme="modern-1"] .operations-row-link:hover strong,
-body[data-ui-theme="modern-2"] .operations-row-link:hover strong { color: var(--brand); }
-body[data-ui-theme="modern-1"] .operations-row-link:focus-visible,
-body[data-ui-theme="modern-2"] .operations-row-link:focus-visible { outline-color: var(--brand); }
-
 /* Execution forms share the standard compact control rhythm. */
 .operations-purchase-summary { gap: var(--space-4); }
 .operations-purchase-request-meta { gap: var(--space-3); }

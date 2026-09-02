@@ -1,6 +1,7 @@
 import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import "./baseer-calendar.css";
 import { BaseerCalendarIcon } from "./baseer-calendar-icon";
+import { BaseerCombobox } from "./baseer-combobox";
 import { baseerPeriodRange, defaultBaseerPeriodRange, iso, riyadhToday, type BaseerPeriodPreset, type BaseerPeriodRange } from "./baseer-period-values";
 import { formatCount, formatMonthYear, normalizeBaseerNumericInput } from "./number-format";
 
@@ -49,8 +50,8 @@ export function baseerPeriodQuery(range: BaseerPeriodRange) { const query = new 
 export function BaseerPeriodFilter({ language, value, onChange, presets = ["DAY", "MONTH", "QUARTER", "YEAR", "RANGE"], allowNonContiguousMonths = true, className }: Props) {
   const rootRef = useRef<HTMLElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const presetRef = useRef<HTMLSelectElement>(null);
   const popoverRef = useRef<HTMLElement>(null);
+  const presetMenuRef = useRef<HTMLDivElement | null>(null);
   const popoverId = useId();
   const [open, setOpen] = useState(false);
   const [popoverAlignment, setPopoverAlignment] = useState<"start" | "end">("start");
@@ -59,10 +60,10 @@ export function BaseerPeriodFilter({ language, value, onChange, presets = ["DAY"
   const [rangeStart, setRangeStart] = useState<string | null>(null);
   const years = useMemo(() => { const current = riyadhToday().year; return Array.from({ length: 9 }, (_, index) => current - 5 + index); }, []);
   const closePicker = (restoreFocus = false) => { setOpen(false); if (restoreFocus) requestAnimationFrame(() => triggerRef.current?.focus()); };
-  useEffect(() => { if (!open) return; const closeWhenOutside = (event: PointerEvent) => { if (!rootRef.current?.contains(event.target as Node)) closePicker(false); }; const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") { event.preventDefault(); closePicker(true); } }; document.addEventListener("pointerdown", closeWhenOutside); document.addEventListener("keydown", closeOnEscape); return () => { document.removeEventListener("pointerdown", closeWhenOutside); document.removeEventListener("keydown", closeOnEscape); }; }, [open]);
+  useEffect(() => { if (!open) return; const closeWhenOutside = (event: PointerEvent) => { const target = event.target as Node; if (!rootRef.current?.contains(target) && !presetMenuRef.current?.contains(target)) closePicker(false); }; const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") { event.preventDefault(); closePicker(true); } }; document.addEventListener("pointerdown", closeWhenOutside); document.addEventListener("keydown", closeOnEscape); return () => { document.removeEventListener("pointerdown", closeWhenOutside); document.removeEventListener("keydown", closeOnEscape); }; }, [open]);
   useLayoutEffect(() => {
     if (!open) return;
-    presetRef.current?.focus();
+    const focusPreset = requestAnimationFrame(() => document.getElementById(`${popoverId}-preset`)?.focus());
     const alignPopover = () => {
       const root = rootRef.current?.getBoundingClientRect();
       const popover = popoverRef.current?.getBoundingClientRect();
@@ -77,8 +78,8 @@ export function BaseerPeriodFilter({ language, value, onChange, presets = ["DAY"
     };
     alignPopover();
     window.addEventListener("resize", alignPopover);
-    return () => window.removeEventListener("resize", alignPopover);
-  }, [language, open]);
+    return () => { cancelAnimationFrame(focusPreset); window.removeEventListener("resize", alignPopover); };
+  }, [language, open, popoverId]);
   const openPicker = () => { setDraft(value); setCursor(cursorFor(value.from)); setRangeStart(null); setOpen(true); };
   const setPreset = (preset: BaseerPeriodPreset) => { const next = preset === "RANGE" ? { ...draft, preset, months: [] } : baseerPeriodRange(preset); setDraft(next); setCursor(cursorFor(next.from)); setRangeStart(null); };
   const selectMonth = (month: number) => { const token = `${cursor.slice(0, 4)}-${String(month).padStart(2, "0")}`; const today = riyadhToday(); const currentToken = `${today.year}-${String(today.month).padStart(2, "0")}`; if (token > currentToken) return; if (!allowNonContiguousMonths) { const range = rangeFromMonth(token); setDraft({ preset: "MONTH", from: range.from, to: notAfterToday(range.to), months: [token] }); return; } const months = draft.preset === "MONTH" ? draft.months : []; const next = envelope(months.includes(token) ? months.filter((item) => item !== token) : [...months, token]); if (next) setDraft({ preset: "MONTH", from: next.from, to: notAfterToday(next.to), months: next.months }); };
@@ -110,7 +111,7 @@ export function BaseerPeriodFilter({ language, value, onChange, presets = ["DAY"
       {hasCustomPeriod && <button className="baseer-period-filter__clear" type="button" onClick={clearPeriod} aria-label={language === "ar" ? "إلغاء الفلترة" : "Clear filter"} title={language === "ar" ? "إلغاء الفلترة" : "Clear filter"}>×</button>}
     </div>
     {open && <section ref={popoverRef} id={popoverId} className="baseer-period-filter__popover" role="dialog" aria-modal="false" aria-label={language === "ar" ? "اختيار الفترة" : "Choose period"}>
-      <header><select ref={presetRef} aria-label={language === "ar" ? "نوع الفترة" : "Period type"} value={draft.preset} onChange={(event) => setPreset(event.target.value as BaseerPeriodPreset)}>{presets.map((preset) => <option key={preset} value={preset}>{labels[language][preset]}</option>)}</select>{(draft.preset === "MONTH" || draft.preset === "QUARTER") && <input type="number" inputMode="numeric" dir="ltr" lang="en" min="1" max="9999" value={cursor.slice(0, 4)} aria-label={language === "ar" ? "السنة" : "Year"} onChange={(event) => { const year = Number(normalizeBaseerNumericInput(event.target.value)); if (Number.isInteger(year) && year >= 1 && year <= 9999) setCursor(`${String(year).padStart(4, "0")}-01`); }} />}<div className="baseer-period-filter__nav"><button type="button" onClick={() => setCursor(shiftCursor(cursor, -1))} aria-label={language === "ar" ? "السابق" : "Previous"}>‹</button><strong>{monthName(language, cursor, "short")}</strong><button type="button" onClick={() => setCursor(shiftCursor(cursor, 1))} aria-label={language === "ar" ? "التالي" : "Next"}>›</button></div></header>
+      <header><BaseerCombobox id={`${popoverId}-preset`} className="baseer-period-filter__preset" menuClassName="baseer-period-filter__preset-menu" label={language === "ar" ? "نوع الفترة" : "Period type"} value={draft.preset} options={presets.map((preset) => ({ id: preset, label: labels[language][preset] }))} placeholder="" searchable={false} onMenuElementChange={(element) => { presetMenuRef.current = element; }} onChange={(value) => setPreset(value as BaseerPeriodPreset)} />{(draft.preset === "MONTH" || draft.preset === "QUARTER") && <input type="number" inputMode="numeric" dir="ltr" lang="en" min="1" max="9999" value={cursor.slice(0, 4)} aria-label={language === "ar" ? "السنة" : "Year"} onChange={(event) => { const year = Number(normalizeBaseerNumericInput(event.target.value)); if (Number.isInteger(year) && year >= 1 && year <= 9999) setCursor(`${String(year).padStart(4, "0")}-01`); }} />}<div className="baseer-period-filter__nav"><button type="button" onClick={() => setCursor(shiftCursor(cursor, -1))} aria-label={language === "ar" ? "السابق" : "Previous"}>‹</button><strong>{monthName(language, cursor, "short")}</strong><button type="button" onClick={() => setCursor(shiftCursor(cursor, 1))} aria-label={language === "ar" ? "التالي" : "Next"}>›</button></div></header>
       {(draft.preset === "DAY" || draft.preset === "RANGE") && <><div className="baseer-period-filter__weekdays" aria-hidden="true">{weekdays[language].map((day) => <span key={day}>{day}</span>)}</div><div className="baseer-period-filter__days">{days.map((day) => <button id={`${popoverId}-day-${day.iso}`} key={day.iso} className={[!day.inMonth ? "is-outside" : "", day.iso === draft.from || day.iso === draft.to ? "is-selected" : "", day.iso > draft.from && day.iso < draft.to ? "is-between" : "", day.iso === today ? "is-today" : ""].filter(Boolean).join(" ")} type="button" disabled={day.iso > today} aria-label={day.iso} aria-pressed={day.iso === draft.from || day.iso === draft.to} onKeyDown={(event) => onDayKeyDown(event, day.iso)} onClick={() => selectDay(day.iso)}>{day.day}</button>)}</div></>}
       {draft.preset === "MONTH" && <div className="baseer-period-filter__months">{Array.from({ length: 12 }, (_, index) => { const token = `${cursor.slice(0, 4)}-${String(index + 1).padStart(2, "0")}`; const selected = draft.months.includes(token); return <button className={selected ? "is-selected" : ""} key={token} type="button" disabled={token > `${riyadhToday().year}-${String(riyadhToday().month).padStart(2, "0")}`} aria-pressed={selected} onClick={() => selectMonth(index + 1)}>{monthName(language, token, "short")}</button>; })}</div>}
       {draft.preset === "QUARTER" && <div className="baseer-period-filter__quarters">{[1, 2, 3, 4].map((quarter) => { const from = iso(Number(cursor.slice(0, 4)), (quarter - 1) * 3 + 1, 1); return <button key={quarter} type="button" disabled={from > today} aria-pressed={draft.preset === "QUARTER" && draft.from === from} onClick={() => selectQuarter(quarter)}>{language === "ar" ? `الربع ${quarter}` : `Q${quarter}`}</button>; })}</div>}

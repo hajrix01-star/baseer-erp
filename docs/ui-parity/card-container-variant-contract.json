@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "acceptanceMatrix": {
-    "presentations": ["modern-1", "modern-2"],
+    "presentations": ["modern-3"],
     "viewports": ["desktop-chromium", "mobile-chromium"],
     "directions": ["rtl"],
     "appearances": ["light", "dark"]
@@ -17,7 +17,7 @@
       "evidence": {
         "status": "measured",
         "test": "apps/web/e2e/interface-theme-presentation.spec.ts",
-        "asserts": ["radius", "dark surface", "presentation palette"]
+        "asserts": ["radius", "dark surface", "modern administrative palette"]
       }
     },
     {
@@ -110,7 +110,7 @@
       "evidenceStatus": "partial",
       "evidence": {
         "test": "apps/web/e2e/finance-reports-modern-data.spec.ts",
-        "asserts": ["read/detail receipts for ledger, treasury, P&L and VAT pass on modern-1/modern-2 in RTL desktop and mobile", "ledger record radius is 18px/5px and header/cell cadence is 11px/12px", "VAT header/cell cadence is 12px/12px", "treasury activity reaches its journal source and P&L/VAT dialogs mount"],
+        "asserts": ["read/detail receipts for ledger, treasury, P&L and VAT pass on the modern administrative interface in RTL desktop and mobile", "ledger and VAT header/cell cadence remains readable", "treasury activity reaches its journal source and P&L/VAT dialogs mount"],
         "remaining": "Read/detail fixture acceptance is complete for this finance/reports exception. Mutation workflows and unrelated report families remain outside this bounded contract."
       }
     },

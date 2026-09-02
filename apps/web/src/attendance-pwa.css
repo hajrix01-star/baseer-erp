@@ -67,13 +67,5 @@
 .attendance-pwa__pin-dialog .daily-sales-dialog__actions .baseer-button {
   color: var(--on-brand) !important;
 }
-body[data-ui-theme="modern-1"] .attendance-pwa__card { border-radius: 1.05rem; }
-body[data-ui-theme="modern-2"] .attendance-pwa__card,
-body[data-ui-theme="modern-2"] .attendance-pwa__pin-dialog,
-body[data-ui-theme="modern-2"] .attendance-pwa__schedule li,
-body[data-ui-theme="modern-2"] .attendance-pwa__language,
-body[data-ui-theme="modern-2"] .attendance-pwa__entry-actions .baseer-button,
-body[data-ui-theme="modern-2"] .attendance-pwa__commitment { border-radius: .3125rem; }
-body[data-ui-theme="modern-2"] .attendance-pwa__card { box-shadow: .35rem .5rem 0 color-mix(in srgb, var(--brand) 8%, transparent); }
 body[data-color-scheme="dark"][data-ui-theme] .attendance-pwa__card,
 body[data-color-scheme="dark"][data-ui-theme] .attendance-pwa__schedule li { background: var(--surface-raised); }

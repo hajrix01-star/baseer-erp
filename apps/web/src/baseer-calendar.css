@@ -11,7 +11,14 @@
 .baseer-period-filter__popover { position: absolute; z-index: 40; inset-block-start: calc(100% + 8px); inset-inline-start: 0; width: min(14.5rem, calc(100vw - 24px)); padding: 8px; border: 1px solid var(--line); border-radius: 2px; background: var(--surface); box-shadow: 0 4px 12px rgb(10 45 31 / 12%); }
 .baseer-period-filter.is-popover-end .baseer-period-filter__popover { inset-inline-start: auto; inset-inline-end: 0; }
 .baseer-period-filter__popover header { display: grid; gap: 6px; margin-block-end: 8px; }
-.baseer-period-filter__popover select { min-height: 34px; width: 100%; padding-inline: 8px; border: 1px solid var(--line); border-radius: 6px; color: var(--ink); background: var(--surface); font: inherit; font-size: var(--font-label); }
+.baseer-period-filter__popover header > input[type="number"], .baseer-period-filter__preset .baseer-combobox__input { box-sizing: border-box; inline-size: 100%; min-block-size: 2.4rem; padding-block: .42rem; padding-inline: .65rem 2.35rem; border: 1px solid var(--field-border); border-radius: var(--control-radius); color: var(--ink); background: var(--surface); font: inherit; font-size: var(--font-label); line-height: 1.4; outline: none; transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease; }
+.baseer-period-filter__preset { inline-size: 100%; }
+.baseer-period-filter__preset .baseer-combobox__trigger { color: var(--brand-deep); }
+.baseer-period-filter__popover header > input[type="number"]:hover, .baseer-period-filter__preset .baseer-combobox__input:hover { border-color: color-mix(in srgb, var(--brand) 48%, var(--field-border)); }
+/* The picker focuses its period selector when it opens. Give that useful
+   keyboard focus an intentional Baseer ring instead of the browser default. */
+.baseer-period-filter__popover header > input[type="number"]:focus, .baseer-period-filter__preset .baseer-combobox__input:focus { border-color: var(--brand); box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 20%, transparent); }
+.baseer-period-filter__popover header > input[type="number"]:focus-visible, .baseer-period-filter__preset .baseer-combobox__input:focus-visible { border-color: var(--brand); box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 20%, transparent); }
 .baseer-period-filter__nav { display: grid; grid-template-columns: 34px 1fr 34px; align-items: center; gap: 6px; min-height: 34px; text-align: center; }
 .baseer-period-filter__nav button { width: 34px; height: 34px; padding: 0; border: 1px solid var(--line); border-radius: 8px; color: var(--brand-deep); background: var(--surface); font-size: 1.5rem; line-height: 1; cursor: pointer; }
 .baseer-period-filter__nav strong { font-size: var(--font-body); }

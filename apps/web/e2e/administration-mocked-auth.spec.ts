@@ -197,13 +197,11 @@ for (const language of ["ar", "en"] as const) {
   });
 }
 
-for (const presentation of ["modern-1", "modern-2"] as const) {
-  test(`modern dialog shell bounds the company editor in ${presentation}`, async ({ page }) => {
-    await page.addInitScript((theme) => localStorage.setItem("baseer-erp.shell.presentation.v1", theme), presentation);
-    await mockAdministration(page, "ar");
-    await page.goto("/#module=administration&section=1");
-    await page.getByRole("button", { name: /إضافة شركة/ }).click();
-    await expectViewportBoundedDialog(page, "إضافة شركة");
-    await expect(page.locator("body")).toHaveAttribute("data-ui-theme", presentation);
-  });
-}
+test("modern administrative dialog shell bounds the company editor", async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem("baseer-erp.shell.presentation.v1", "modern-3"));
+  await mockAdministration(page, "ar");
+  await page.goto("/#module=administration&section=1");
+  await page.getByRole("button", { name: /إضافة شركة/ }).click();
+  await expectViewportBoundedDialog(page, "إضافة شركة");
+  await expect(page.locator("body")).toHaveAttribute("data-ui-theme", "modern-3");
+});

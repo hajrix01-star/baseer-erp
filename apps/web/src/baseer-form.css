@@ -26,6 +26,9 @@
 .baseer-form-grid .company-session-control { width: 100%; min-width: 0; }
 .baseer-field-control,
 .baseer-text-input,
+.baseer-money-input,
+.baseer-integer-input,
+.baseer-textarea,
 :where(.baseer-form-grid, .basira-interpretation-center__filter, .basira-interpretation-center__form) :is(input, select, textarea) { width: 100%; min-height: var(--control-height); min-inline-size: 0; box-sizing: border-box; padding: .45rem .65rem; border: 1px solid var(--field-border); border-radius: var(--control-radius); color: var(--ink); background: var(--surface); font: inherit; line-height: 1.4; }
 .baseer-static-select { position: relative; display: block; min-inline-size: 0; }
 .baseer-static-select > select { inline-size: 100%; min-block-size: var(--control-height); min-inline-size: 0; box-sizing: border-box; padding-block: .45rem; padding-inline: .65rem 2rem; border: 1px solid var(--field-border); border-radius: var(--control-radius); appearance: none; color: var(--ink); background: var(--surface); font: inherit; line-height: 1.4; }
@@ -34,10 +37,31 @@
 .baseer-static-select__chevron { pointer-events: none; position: absolute; inset-inline-end: .65rem; inset-block-start: 50%; transform: translateY(-50%); color: var(--brand-deep); font-size: .8rem; }
 .baseer-field-control:hover,
 .baseer-text-input:hover,
+.baseer-money-input:hover,
+.baseer-integer-input:hover,
+.baseer-textarea:hover,
 :where(.baseer-form-grid, .basira-interpretation-center__filter, .basira-interpretation-center__form) :is(input, select, textarea):hover { border-color: color-mix(in srgb, var(--brand) 48%, var(--field-border)); }
 .baseer-field-control:focus-visible,
 .baseer-text-input:focus-visible,
+.baseer-money-input:focus-visible,
+.baseer-integer-input:focus-visible,
+.baseer-textarea:focus-visible,
 :where(.baseer-form-grid, .basira-interpretation-center__filter, .basira-interpretation-center__form) :is(input, select, textarea):focus-visible { outline: 2px solid color-mix(in srgb, var(--brand) 34%, transparent); outline-offset: 1px; border-color: var(--brand); }
+.baseer-field-control:disabled,
+.baseer-text-input:disabled,
+.baseer-money-input:disabled,
+.baseer-integer-input:disabled,
+.baseer-textarea:disabled { cursor: not-allowed; opacity: .6; background: color-mix(in srgb, var(--surface) 72%, var(--canvas)); }
+.baseer-field-control[aria-invalid="true"],
+.baseer-text-input[aria-invalid="true"],
+.baseer-money-input[aria-invalid="true"],
+.baseer-integer-input[aria-invalid="true"],
+.baseer-textarea[aria-invalid="true"] { border-color: var(--status-danger); }
+.baseer-field-control[aria-invalid="true"]:focus-visible,
+.baseer-text-input[aria-invalid="true"]:focus-visible,
+.baseer-money-input[aria-invalid="true"]:focus-visible,
+.baseer-integer-input[aria-invalid="true"]:focus-visible,
+.baseer-textarea[aria-invalid="true"]:focus-visible { outline-color: color-mix(in srgb, var(--status-danger) 34%, transparent); border-color: var(--status-danger); }
 .baseer-form-grid input[type="date"] { direction: ltr; text-align: start; }
 .baseer-form-grid input[type="checkbox"] { inline-size: 1.1rem; block-size: 1.1rem; min-height: 0; padding: 0; accent-color: var(--brand); }
 .baseer-checkbox { inline-size: 1.1rem; block-size: 1.1rem; min-height: 0; min-inline-size: 0; padding: 0; accent-color: var(--brand); }
@@ -49,6 +73,12 @@
 .baseer-time-input { direction: ltr; text-align: start; font-variant-numeric: tabular-nums; }
 .baseer-textarea { min-block-size: 4.5rem; resize: vertical; }
 .baseer-textarea--compact { min-block-size: var(--control-height); }
+.baseer-numeric-suffix-input { position: relative; display: grid; inline-size: 100%; min-inline-size: 0; }
+.baseer-numeric-suffix-input__control { grid-area: 1 / 1; }
+.baseer-numeric-suffix-input--rtl .baseer-numeric-suffix-input__control { padding-inline-start: 3.25rem; }
+.baseer-numeric-suffix-input--ltr .baseer-numeric-suffix-input__control { padding-inline-end: 3.25rem; }
+.baseer-numeric-suffix-input__suffix { pointer-events: none; position: absolute; z-index: 1; inset-inline-end: .65rem; inset-block-start: 50%; max-inline-size: 2.7rem; overflow: hidden; color: var(--muted); font-size: var(--font-caption); font-weight: 700; line-height: 1; text-overflow: ellipsis; transform: translateY(-50%); white-space: nowrap; }
+.baseer-numeric-suffix-input:has(.baseer-numeric-suffix-input__control:disabled) .baseer-numeric-suffix-input__suffix { opacity: .6; }
 .baseer-file-input { position: relative; display: inline-flex; inline-size: fit-content; min-inline-size: 0; }
 .baseer-file-input__native { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .baseer-file-input__trigger { display: inline-flex; min-height: var(--control-height); align-items: center; justify-content: center; padding: .45rem .75rem; border: 1px solid var(--field-border); border-radius: var(--control-radius); color: var(--ink); background: var(--surface); font-size: var(--font-label); font-weight: 700; }

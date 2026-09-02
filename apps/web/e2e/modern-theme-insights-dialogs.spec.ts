@@ -7,15 +7,15 @@ async function fulfill(route: Route, json: unknown, status = 200) {
   await route.fulfill({ status, contentType: "application/json", body: JSON.stringify(json) });
 }
 
-async function prepareShell(page: Page, theme: "modern-1" | "modern-2", permissions: readonly string[]) {
-  await page.addInitScript(({ company, uiTheme }) => {
+async function prepareShell(page: Page, permissions: readonly string[]) {
+  await page.addInitScript(({ company }) => {
     sessionStorage.setItem("baseer.erp.access-token", "modern-insights-e2e-token");
     sessionStorage.setItem("baseer.erp.refresh-token", "modern-insights-e2e-refresh-token");
     sessionStorage.setItem("baseer.erp.session-expires-at", "2099-01-01T00:00:00.000Z");
     sessionStorage.setItem("baseer.erp.company-id", company);
     localStorage.setItem("baseer.ui.locale.v1", "ar");
-    localStorage.setItem("baseer-erp.shell.presentation.v1", uiTheme);
-  }, { company: companyId, uiTheme: theme });
+    localStorage.setItem("baseer-erp.shell.presentation.v1", "modern-3");
+  }, { company: companyId });
   await page.route("**/v1/**", async (route) => {
     const url = new URL(route.request().url());
     if (url.pathname === "/v1/companies/available") return fulfill(route, { companies: [{ id: companyId, nameAr: "شركة اختبار الواجهات", nameEn: "UI test company", functionalCurrency: "SAR", permissionCodes: permissions }] });
@@ -41,12 +41,12 @@ async function expectBounded(page: Page, locator: ReturnType<Page["getByRole"]>)
   expect(geometry.bottom).toBeLessThanOrEqual(geometry.viewportHeight + 1);
 }
 
-function expectModernShell(page: Page, theme: "modern-1" | "modern-2") {
-  return expect(page.locator("body")).toHaveAttribute("data-ui-theme", theme);
+function expectModernShell(page: Page) {
+  return expect(page.locator("body")).toHaveAttribute("data-ui-theme", "modern-3");
 }
 
-async function mockMarketing(page: Page, theme: "modern-1" | "modern-2") {
-  await prepareShell(page, theme, ["marketing.insights.read", "marketing.campaign.write"]);
+async function mockMarketing(page: Page) {
+  await prepareShell(page, ["marketing.insights.read", "marketing.campaign.write"]);
   await page.route("**/v1/marketing", async (route) => fulfill(route, {
     companyId,
     campaigns: [{
@@ -55,8 +55,8 @@ async function mockMarketing(page: Page, theme: "modern-1" | "modern-2") {
   }));
 }
 
-async function mockEvidence(page: Page, theme: "modern-1" | "modern-2") {
-  await prepareShell(page, theme, ["inbound_evidence.owner_access"]);
+async function mockEvidence(page: Page) {
+  await prepareShell(page, ["inbound_evidence.owner_access"]);
   await page.route("**/v1/inbound-evidence", async (route) => fulfill(route, {
     labels: [{ id: "44444444-4444-4444-8444-444444444444", nameAr: "فواتير ومصروفات", nameEn: "Invoices & expenses", colorHex: "#526D87", sortOrder: 100, systemKey: null, ruleCount: 1 }],
     rules: [{ id: "55555555-5555-4555-8555-555555555555", name: "موردو الاختبار", enabled: true, priority: 100, labelId: "44444444-4444-4444-8444-444444444444", senderContains: "supplier.example", subjectContains: null, attachmentCondition: "REQUIRED" }],
@@ -64,8 +64,8 @@ async function mockEvidence(page: Page, theme: "modern-1" | "modern-2") {
   }));
 }
 
-async function mockDecision(page: Page, theme: "modern-1" | "modern-2") {
-  await prepareShell(page, theme, ["decision.context.read", "decision.context.company.manage", "decision.alerts.read", "decision.alerts.manage"]);
+async function mockDecision(page: Page) {
+  await prepareShell(page, ["decision.context.read", "decision.context.company.manage", "decision.alerts.read", "decision.alerts.manage"]);
   const alert = { id: alertId, ruleCode: "sales_change", ruleVersion: "sales_change.v1", status: "OPEN", titleAr: "تغير مبيعات قابل للمراجعة", createdAt: "2026-08-23T08:30:00.000Z", acknowledgedAt: null, closedAt: null, evidenceSnapshotId: "77777777-7777-4777-8777-777777777777" };
   await page.route("**/v1/decision-intelligence/**", async (route) => {
     const pathname = new URL(route.request().url()).pathname;
@@ -82,27 +82,26 @@ async function mockDecision(page: Page, theme: "modern-1" | "modern-2") {
   });
 }
 
-for (const theme of ["modern-1", "modern-2"] as const) {
-  test(`Modern insights: marketing campaign form is bounded in ${theme}`, async ({ page }) => {
-    await mockMarketing(page, theme);
+test("Modern admin insights: marketing campaign form is bounded", async ({ page }) => {
+    await mockMarketing(page);
     await page.goto("/#module=marketing&page=marketing-campaigns");
     await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
     await page.getByRole("button", { name: "إضافة حملة" }).click();
     await expectBounded(page, page.getByRole("dialog", { name: "إضافة حملة" }));
-    await expectModernShell(page, theme);
-  });
+    await expectModernShell(page);
+});
 
-  test(`Modern insights: inbound label form is bounded in ${theme}`, async ({ page }) => {
-    await mockEvidence(page, theme);
+test("Modern admin insights: inbound label form is bounded", async ({ page }) => {
+    await mockEvidence(page);
     await page.goto("/#module=inbound-evidence&page=evidence-labels");
     await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
     await page.getByRole("button", { name: "إضافة Label" }).click();
     await expectBounded(page, page.getByRole("dialog", { name: "إضافة Label" }));
-    await expectModernShell(page, theme);
-  });
+    await expectModernShell(page);
+});
 
-  test(`Modern insights: decision evidence is bounded in ${theme}`, async ({ page }) => {
-    await mockDecision(page, theme);
+test("Modern admin insights: decision evidence is bounded", async ({ page }) => {
+    await mockDecision(page);
     await page.goto("/#module=decision&page=decision-alerts");
     // Decision is a deliberately nested lazy route. Waiting for its mounted
     // workspace (instead of assuming a short fixed delay) makes a direct link
@@ -110,6 +109,5 @@ for (const theme of ["modern-1", "modern-2"] as const) {
     await expect(page.locator(".decision-workspace")).toBeVisible({ timeout: 15_000 });
     await page.getByRole("button", { name: "عرض الأدلة" }).click();
     await expectBounded(page, page.getByRole("dialog", { name: "حزمة أدلة التنبيه" }));
-    await expectModernShell(page, theme);
-  });
-}
+    await expectModernShell(page);
+});

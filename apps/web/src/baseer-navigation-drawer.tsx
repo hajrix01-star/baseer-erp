@@ -24,9 +24,9 @@ const focusableSelector = [
 ].join(",");
 
 /**
- * The only mobile navigation overlay. It owns portal placement, focus, Escape,
- * backdrop dismissal and document scrolling so individual workspaces cannot
- * drift into incompatible drawer behaviour.
+ * Mobile-only navigation overlay. It owns portal placement, focus, Escape,
+ * backdrop dismissal and document scrolling so module workspaces keep one
+ * predictable navigation experience.
  */
 export function BaseerNavigationDrawer({ open, title, eyebrow, closeLabel, onClose, children }: Props) {
   const panelRef = useRef<HTMLElement>(null);

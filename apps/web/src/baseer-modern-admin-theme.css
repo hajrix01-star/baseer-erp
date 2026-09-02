@@ -6,7 +6,7 @@
  */
 body[data-ui-theme="modern-3"] {
   --ink: #182c4b;
-  --muted: #66758c;
+  --muted: #5e6f87;
   --line: #e1e7f0;
   --canvas: #f7f9fc;
   --app-canvas: #f7f9fc;
@@ -24,11 +24,15 @@ body[data-ui-theme="modern-3"] {
   --brand-deep: #172c4a;
   --brand-soft: #dff5ef;
   --on-brand: #ffffff;
-  --status-success: #068c6b;
+  --navigation-active: var(--brand);
+  --navigation-active-ink: var(--on-brand);
+  --navigation-active-surface: color-mix(in srgb, var(--navigation-active) 12%, var(--surface));
+  --navigation-active-border: color-mix(in srgb, var(--navigation-active) 38%, var(--border-subtle));
+  --status-success: #06745b;
   --status-success-surface: #e4f7f0;
   --status-danger: #c53838;
   --status-danger-surface: #fdecec;
-  --status-warning: #d77a10;
+  --status-warning: #9b5000;
   --status-warning-surface: #fff2df;
   --status-info: #3853b8;
   --status-info-surface: #e9edff;
@@ -85,7 +89,7 @@ body[data-ui-theme="modern-3"] .module-sidebar .sidebar-product,
 body[data-ui-theme="modern-3"] .module-sidebar .sidebar-head {
   border-bottom-color: var(--border-subtle);
 }
-body[data-ui-theme="modern-3"] .module-sidebar {
+body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) {
   overflow-x: clip;
   scrollbar-gutter: auto;
 }
@@ -104,17 +108,20 @@ body[data-ui-theme="modern-3"] .module-sidebar .sidebar-brand .baseer-brand__erp
 /* Dream-style navigation grammar: modules are compact hierarchy rows, not a
  * stack of cards. The active module owns the one solid selection surface. */
 body[data-ui-theme="modern-3"] .module-sidebar .sidebar-head { display: none; }
-body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree {
+/* The drawer is the mobile form of this same navigation.  Keep its tree
+ * grammar in lockstep with the desktop rail; never leave a desktop-only
+ * selector here without an intentional mobile alternative. */
+body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree {
   gap: .14rem;
   padding: .55rem .45rem .9rem;
   overflow-x: clip;
 }
-body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__tree-node {
+body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__tree-node {
   border: 0;
   border-radius: 0;
   background: transparent;
 }
-body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__tree-node > summary {
+body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__tree-node > summary {
   grid-template-columns: 1.15rem minmax(0, 1fr) 1rem;
   gap: .58rem;
   min-block-size: 2.45rem;
@@ -122,15 +129,15 @@ body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-na
   border-radius: .48rem;
   color: var(--nav-tree-ink);
 }
-body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__tree-node > summary:hover {
+body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__tree-node > summary:hover {
   color: var(--brand-deep);
   background: var(--nav-item-hover-surface);
 }
-body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__tree-node.is-current-module > summary {
-  color: var(--on-brand);
-  background: var(--brand-deep);
+body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__tree-node.is-current-module > summary {
+  color: var(--navigation-active-ink);
+  background: var(--navigation-active);
 }
-body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__module-symbol {
+body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__module-symbol {
   inline-size: 1.15rem;
   block-size: 1.15rem;
   border-radius: .25rem;
@@ -138,20 +145,20 @@ body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-na
   background: transparent;
   box-shadow: none;
 }
-body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__tree-node.is-current-module .theme-navigation__module-symbol { color: var(--on-brand); }
-body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__module-symbol svg { inline-size: 1rem; block-size: 1rem; }
-body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__module-title { font-size: .8rem; font-weight: 780; }
-body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__count { display: none; }
-body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__tree-node > summary::after { grid-column: 3; color: currentColor; font-size: .85rem; }
-body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__branches {
+body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__tree-node.is-current-module .theme-navigation__module-symbol { color: var(--navigation-active-ink); }
+body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__module-symbol svg { inline-size: 1rem; block-size: 1rem; }
+body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__module-title { font-size: .8rem; font-weight: 780; }
+body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__count { display: none; }
+body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__tree-node > summary::after { grid-column: 3; color: currentColor; font-size: .85rem; }
+body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__branches {
   gap: .04rem;
   margin: .08rem .25rem .32rem;
   padding-block: .1rem;
   padding-inline: 1.2rem .05rem;
   border-inline-start: 0;
 }
-body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__section-branch::before { display: none; }
-body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__section {
+body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__section-branch::before { display: none; }
+body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__section {
   min-block-size: 2.1rem;
   padding: .3rem .5rem;
   border: 0;
@@ -160,15 +167,15 @@ body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-na
   font-size: .76rem;
   font-weight: 680;
 }
-body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__section:hover { color: var(--brand-deep); background: var(--nav-tree-hover-surface); }
-body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__section.is-active {
+body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__section:hover { color: var(--brand-deep); background: var(--nav-tree-hover-surface); }
+body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__section.is-active {
   padding-inline-start: .34rem;
-  border-inline-start: .22rem solid var(--theme-navigation-module);
-  color: var(--theme-navigation-module);
-  background: color-mix(in srgb, var(--theme-navigation-module) 10%, var(--surface));
+  border-inline-start: .22rem solid var(--navigation-active);
+  color: var(--navigation-active);
+  background: var(--navigation-active-surface);
   font-weight: 820;
 }
-body[data-ui-theme="modern-3"] .module-sidebar .theme-navigation--tree .theme-navigation__section.is-active svg { color: var(--theme-navigation-module); }
+body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__section.is-active svg { color: var(--navigation-active); }
 body[data-ui-theme="modern-3"] .module-sidebar .overline,
 body[data-ui-theme="modern-3"] .mobile-drawer__panel .overline { color: var(--muted); }
 body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .nav-item {
@@ -181,8 +188,8 @@ body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .nav-
   background: var(--nav-tree-hover-surface);
 }
 body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .nav-item.active {
-  color: var(--on-brand);
-  background: var(--brand-deep);
+  color: var(--navigation-active-ink);
+  background: var(--navigation-active);
   box-shadow: none;
 }
 body[data-ui-theme="modern-3"] .mobile-drawer__panel .close-button {
@@ -411,6 +418,21 @@ body[data-ui-theme="modern-3"] .baseer-button--primary { background: var(--brand
 body[data-ui-theme="modern-3"] .baseer-button--secondary { border-color: var(--field-border); background: var(--surface); }
 body[data-ui-theme="modern-3"] .baseer-status-badge { border-radius: .35rem; }
 
+/* Button density follows the shared semantic contract. Financial commits stay
+   at the safe 40px tier until a workflow explicitly opts into another size. */
+@media (min-width: 801px) {
+  body[data-ui-theme="modern-3"] { --baseer-action-prominent: 2.25rem; }
+  body[data-ui-theme="modern-3"] .baseer-button { min-block-size: var(--baseer-action-standard); padding-block: .3rem; padding-inline: .65rem; font-size: .875rem; }
+  body[data-ui-theme="modern-3"] :is(.baseer-button--primary, .baseer-button--danger) { min-block-size: var(--baseer-action-commit); }
+  body[data-ui-theme="modern-3"] .baseer-button--quiet { min-block-size: var(--baseer-action-compact); padding-block: .2rem; padding-inline: .5rem; font-size: .8125rem; }
+  body[data-ui-theme="modern-3"] .baseer-button--icon { inline-size: var(--baseer-action-standard); min-inline-size: var(--baseer-action-standard); padding: 0; }
+  body[data-ui-theme="modern-3"] .baseer-data-table .baseer-button:not(.baseer-button--primary):not(.baseer-button--danger) { min-block-size: var(--baseer-action-compact); padding-inline: .5rem; font-size: .75rem; }
+  body[data-ui-theme="modern-3"] .baseer-button--size-compact { min-block-size: var(--baseer-action-compact); }
+  body[data-ui-theme="modern-3"] .baseer-button--size-standard { min-block-size: var(--baseer-action-standard); }
+  body[data-ui-theme="modern-3"] .baseer-button--size-prominent { min-block-size: var(--baseer-action-prominent); }
+  body[data-ui-theme="modern-3"] .baseer-button--size-commit { min-block-size: var(--baseer-action-commit); }
+}
+
 body[data-ui-theme="modern-3"] .baseer-chart,
 body[data-ui-theme="modern-3"] .baseer-marketing-timeline--command {
   border-radius: var(--card-radius);
@@ -441,6 +463,10 @@ body[data-color-scheme="dark"][data-ui-theme="modern-3"] {
   --brand-deep: #b5eee4;
   --brand-soft: #1a4e4a;
   --on-brand: #10201e;
+  --navigation-active: var(--brand);
+  --navigation-active-ink: var(--on-brand);
+  --navigation-active-surface: color-mix(in srgb, var(--navigation-active) 12%, var(--surface));
+  --navigation-active-border: color-mix(in srgb, var(--navigation-active) 38%, var(--border-subtle));
   --status-success: #74e0bd;
   --status-success-surface: #193f3b;
   --status-danger: #ffa7a7;
@@ -473,10 +499,12 @@ body[data-color-scheme="dark"][data-ui-theme="modern-3"] .module-sidebar,
 body[data-color-scheme="dark"][data-ui-theme="modern-3"] .mobile-drawer__panel { background: var(--surface); }
 body[data-color-scheme="dark"][data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .nav-item { color: var(--nav-item-ink); }
 body[data-color-scheme="dark"][data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .nav-item:hover { background: var(--nav-item-hover-surface); }
-body[data-color-scheme="dark"][data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .nav-item.active { color: var(--on-brand); background: var(--brand); }
+body[data-color-scheme="dark"][data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .nav-item.active { color: var(--navigation-active-ink); background: var(--navigation-active); }
 
 @media (max-width: 800px) {
   body[data-ui-theme="modern-3"] .module-page { padding: 1rem .7rem 2rem; }
   body[data-ui-theme="modern-3"] .baseer-metric { min-block-size: 6.15rem; }
   body[data-ui-theme="modern-3"] :is(.topbar, .launcher-topbar) { min-block-size: 3.5rem; }
+  body[data-ui-theme="modern-3"] .baseer-button { min-block-size: var(--baseer-touch-target); }
+  body[data-ui-theme="modern-3"] .baseer-button--icon { inline-size: var(--baseer-touch-target); min-inline-size: var(--baseer-touch-target); }
 }

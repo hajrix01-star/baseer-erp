@@ -5,7 +5,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { BaseerApiError } from './baseer-api-error';
 import { BaseerButton } from './baseer-button';
 import { BaseerCard } from './baseer-card';
-import { BaseerFileInput } from './baseer-form-fields';
+import { BaseerFileInput, BaseerTextInput } from './baseer-form-fields';
+import { BaseerStaticSelect } from './baseer-static-select';
 import { BaseerStatusBadge } from './baseer-status-badge';
 import { BaseerNotice, BaseerNoticeGroup } from './baseer-workspace';
 import { listAvailableCompanies, type ActiveSession, type AvailableCompany } from './daily-sales-client';
@@ -135,8 +136,8 @@ export function NurixExcelImportPanel({ language, session }: { language: Languag
     <BaseerNoticeGroup ariaLabel={language === 'ar' ? 'تنبيهات الاستيراد' : 'Import notices'}><BaseerNotice tone="warning" title={text.safetyTitle}>{text.safety}</BaseerNotice>{!serviceReady ? <BaseerNotice tone="info">{text.unready}</BaseerNotice> : null}</BaseerNoticeGroup>
     <ol className="nurix-excel-import__stages" aria-label={text.stageTitle}>{text.stages.map((stage, index) => <li key={stage} className={index < activeStep ? 'is-complete' : index === activeStep ? 'is-current' : ''}><span>{index < activeStep ? '✓' : index + 1}</span><strong>{stage}</strong></li>)}</ol>
     <BaseerCard className="nurix-excel-import__form">
-      <label><span>{text.company}</span><select value={targetCompanyId} disabled={busy || loading} onChange={(event) => { const next = event.target.value; setTargetCompanyId(next); setSelectedFile(null); setMessage(null); void load(next); }}><option value={session.companyId}>{companies.find((company) => company.id === session.companyId)?.nameAr ?? session.companyId}</option>{companies.filter((company) => company.id !== session.companyId).map((company) => <option key={company.id} value={company.id}>{company.nameAr}</option>)}</select></label>
-      <label><span>{text.sourceCompany}</span><input value={sourceCompanyId} disabled={busy} dir="ltr" onChange={(event) => { setSourceCompanyId(event.target.value); setPreflight(null); }} /><small>{text.sourceCompanyHelp}</small></label>
+      <label><span>{text.company}</span><BaseerStaticSelect label={text.company} value={targetCompanyId} disabled={busy || loading} onChange={(event) => { const next = event.target.value; setTargetCompanyId(next); setSelectedFile(null); setMessage(null); void load(next); }}><option value={session.companyId}>{companies.find((company) => company.id === session.companyId)?.nameAr ?? session.companyId}</option>{companies.filter((company) => company.id !== session.companyId).map((company) => <option key={company.id} value={company.id}>{company.nameAr}</option>)}</BaseerStaticSelect></label>
+      <label><span>{text.sourceCompany}</span><BaseerTextInput value={sourceCompanyId} disabled={busy} dir="ltr" onChange={(event) => { setSourceCompanyId(event.target.value); setPreflight(null); }} /><small>{text.sourceCompanyHelp}</small></label>
       <label><span>{text.file}</span><BaseerFileInput accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.xlsx" disabled={busy} triggerLabel={text.chooseFile} onChange={(event) => chooseFile(event.target.files?.[0] ?? null)} /><small>{text.fileHelp}</small></label>
       <div className="nurix-excel-import__selected-file">{selectedFile ? <><BaseerStatusBadge tone="success">{text.selected}</BaseerStatusBadge><span dir="ltr">{selectedFile.name}</span><small>{formatCount(selectedFile.size, language)} B{fileSha256 ? ` · SHA-256 ${fileSha256.slice(0, 12)}…` : ''}</small></> : <small>{text.templateHelp}</small>}</div>
       <div className="nurix-excel-import__actions"><div><strong>{text.preflight}</strong><small>{text.preflightHelp}</small></div><BaseerButton type="button" variant="primary" disabled={busy || !selectedFile || !sourceCompanyId.trim()} onClick={() => void runPreflight()}>{busy ? text.running : text.preflight}</BaseerButton></div>

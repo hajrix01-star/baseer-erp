@@ -9,7 +9,7 @@ const DecisionIntelligenceWorkspaceRuntime = lazy(async () => ({
 }));
 
 /** The decision workspace owns its own permission and loading states, so the route loads it directly. */
-export function DecisionIntelligenceWorkspaceContent({ language, section, permissionCodes }: { language: Language; section: number; permissionCodes: readonly string[] | null }) {
+export function DecisionIntelligenceWorkspaceContent({ language, section, permissionCodes, migrationReviewLocked = false }: { language: Language; section: number; permissionCodes: readonly string[] | null; migrationReviewLocked?: boolean }) {
   const loading = language === "ar" ? "جارٍ تحميل مركز القرار…" : "Loading decision center…";
-  return <Suspense fallback={<BaseerCard aria-busy="true">{loading}</BaseerCard>}><DecisionIntelligenceWorkspaceRuntime language={language} section={section} permissionCodes={permissionCodes} /></Suspense>;
+  return <Suspense fallback={<BaseerCard aria-busy="true">{loading}</BaseerCard>}><DecisionIntelligenceWorkspaceRuntime language={language} section={section} permissionCodes={permissionCodes} migrationReviewLocked={migrationReviewLocked} /></Suspense>;
 }

@@ -13,14 +13,13 @@ import { BaseerApiError, presentBaseerApiError, presentBaseerLoadError } from ".
 import { formatNumberFixed, formatTime, riyadhBusinessDate } from "./number-format";
 import type { AttendanceScheduleDraft, AttendanceScheduleTemplate } from "./hr-attendance-schedules-panel";
 import type { AttendanceTeamReportView } from "./hr-attendance-team-report";
-import "./hr-attendance-shell.css";
+import "./hr-attendance-workspace.css";
 
 const HrAttendanceSchedulesPanel = lazy(async () => ({ default: (await import("./hr-attendance-schedules-panel")).HrAttendanceSchedulesPanel }));
 const HrAttendanceCoveragePanel = lazy(async () => ({ default: (await import("./hr-attendance-coverage-panel")).HrAttendanceCoveragePanel }));
 const HrAttendanceRosterEditor = lazy(async () => ({ default: (await import("./hr-attendance-roster-editor")).HrAttendanceRosterEditor }));
 const HrAttendanceEmployeeReport = lazy(async () => ({ default: (await import("./hr-attendance-employee-report")).HrAttendanceEmployeeReport }));
 const HrAttendanceTeamReport = lazy(async () => ({ default: (await import("./hr-attendance-team-report")).HrAttendanceTeamReport }));
-const HrAttendanceDeferredStyles = lazy(async () => ({ default: (await import("./hr-attendance-deferred-styles")).HrAttendanceDeferredStyles }));
 
 type Language = "ar" | "en";
 type BranchForm = { nameAr: string; latitude: string; longitude: string; radiusMeters: string; maxAccuracyMeters: string; qrValiditySeconds: string };
@@ -352,7 +351,6 @@ export function HrAttendanceWorkspace({ language }: { language: Language }) {
         ["settings", ar ? "الإعدادات" : "Settings"],
       ] as const).map(([tab, label]) => <button key={tab} type="button" className={`hr-attendance__tab${activeTab === tab ? " hr-attendance__tab--active" : ""}`} aria-current={activeTab === tab ? "page" : undefined} onClick={() => setActiveTab(tab)}>{label}</button>)}
     </nav>
-    {activeTab !== "today" || branchOpen || deductionOpen || exceptionOpen || exceptionDecision ? <Suspense fallback={null}><HrAttendanceDeferredStyles /></Suspense> : null}
     {activeTab === "reports" ? <BaseerCard className={`hr-attendance__employee-report-picker${reportEmployeeId !== "ALL" ? " is-selected" : ""}`}>
       <div className="hr-attendance__card-header">
         <div>

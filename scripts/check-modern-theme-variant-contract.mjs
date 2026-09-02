@@ -3,7 +3,8 @@ import { resolve } from "node:path";
 
 const root = process.cwd();
 const contractPath = resolve(root, "docs/ui-parity/card-container-variant-contract.json");
-const layoutPath = resolve(root, "apps/web/src/baseer-modern-theme-layouts.css");
+const layoutPath = resolve(root, "apps/web/src/baseer-modern-admin-theme.css");
+const palettePath = resolve(root, "apps/web/src/baseer-modern-admin-palettes.css");
 const foundationPath = resolve(root, "apps/web/src/workspace-foundation.css");
 const stylesPath = resolve(root, "apps/web/src/styles.css");
 
@@ -26,7 +27,7 @@ try {
   for (const required of ["presentations", "viewports", "directions", "appearances"]) {
     if (!Array.isArray(matrix?.[required]) || matrix[required].length === 0) fail(`acceptanceMatrix.${required} must be a non-empty array`);
   }
-  for (const presentation of ["modern-1", "modern-2"]) {
+  for (const presentation of ["modern-3"]) {
     if (!matrix.presentations.includes(presentation)) fail(`acceptance matrix must include ${presentation}`);
   }
   for (const viewport of ["desktop-chromium", "mobile-chromium"]) {
@@ -61,8 +62,15 @@ try {
     }
   }
   const layout = text(layoutPath);
-  for (const presentation of ["modern-1", "modern-2"]) {
+  for (const presentation of ["modern-3"]) {
     if (!layout.includes(`body[data-ui-theme="${presentation}"]`)) fail(`presentation layout is missing ${presentation}`);
+  }
+  const palettes = text(palettePath);
+  for (const palette of ["calm-green", "editorial-copper"]) {
+    if (!palettes.includes(`data-color-palette="${palette}"`)) fail(`colour palette is missing ${palette}`);
+  }
+  if (/(?:\bpadding|\bmargin|\bradius|inline-size|grid-template-columns)\s*:/.test(palettes)) {
+    fail("colour palettes must not include layout or geometry declarations");
   }
   console.log(`Modern theme variant contract verified: ${contract.variants.length} central variants (${measured} measured, ${pending} partial/pending); ${contract.exceptions.length} explicit domain exceptions. This is a governance check, not full visual acceptance.`);
 } catch (error) {

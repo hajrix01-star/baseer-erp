@@ -21,7 +21,7 @@ export function BaseerDialog({ open, title, eyebrow, children, language, busy = 
   const visibleError = error ?? reportedError;
   // Dialog forms share a compact desktop rhythm. The controls keep their normal
   // touch size on small screens through the existing global media rule.
-  const dialog = <section ref={dialogRef} className={["daily-sales-dialog", "baseer-dialog", `baseer-dialog--${size}`, className].filter(Boolean).join(" ")} role={presentation === "modal" ? "dialog" : "region"} aria-modal={presentation === "modal" && isTopmost ? "true" : undefined} aria-hidden={presentation === "modal" && !isTopmost ? true : undefined} aria-label={title} onMouseDown={(event) => event.stopPropagation()}>
+  const dialog = <section ref={dialogRef} tabIndex={-1} className={["daily-sales-dialog", "baseer-dialog", `baseer-dialog--${size}`, className].filter(Boolean).join(" ")} role={presentation === "modal" ? "dialog" : "region"} aria-modal={presentation === "modal" && isTopmost ? "true" : undefined} aria-hidden={presentation === "modal" && !isTopmost ? true : undefined} aria-label={title} onMouseDown={(event) => event.stopPropagation()}>
       <div className="daily-sales-dialog__header">{eyebrow ? <div><p className="eyebrow">{eyebrow}</p><h3>{title}</h3></div> : <h3>{title}</h3>}<BaseerButton variant="icon" type="button" aria-label={copy.close} disabled={busy} onClick={onClose}>×</BaseerButton></div>
       <div className="daily-sales-dialog__body">
         {reserveErrorSpace || visibleError ? <div className={`baseer-dialog__error-slot${visibleError ? " is-visible" : ""}`} role={visibleError ? "alert" : undefined} aria-live="assertive" aria-atomic="true">{visibleError || "\u00a0"}</div> : null}

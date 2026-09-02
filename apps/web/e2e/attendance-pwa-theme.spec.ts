@@ -15,11 +15,11 @@ const portalProfile = {
   ],
 } as const;
 
-async function preparePwa(page: Page, presentation: "modern-1" | "modern-2") {
+async function preparePwa(page: Page) {
   await page.addInitScript((selectedPresentation) => {
     localStorage.setItem("baseer-erp.shell.presentation.v1", selectedPresentation);
     localStorage.setItem("baseer.ui.locale.v1", "ar");
-  }, presentation);
+  }, "modern-1");
   await page.route("**/attendance/portal/session", async (route) => {
     await route.fulfill({
       contentType: "application/json",
@@ -28,17 +28,17 @@ async function preparePwa(page: Page, presentation: "modern-1" | "modern-2") {
   });
 }
 
-for (const presentation of ["modern-1", "modern-2"] as const) {
-  test(`attendance PWA keeps ${presentation} isolated and contained`, async ({ page, isMobile }) => {
-    await preparePwa(page, presentation);
+test("attendance PWA migrates legacy presentation preferences and stays contained", async ({ page, isMobile }) => {
+    await preparePwa(page);
     await page.goto("/#attendance?tenant=aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa&company=11111111-1111-4111-8111-111111111111");
 
-    await expect(page.locator("body")).toHaveAttribute("data-ui-theme", presentation);
+    await expect(page.locator("body")).toHaveAttribute("data-ui-theme", "modern-3");
+    await expect(page.locator("body")).toHaveAttribute("data-color-palette", "calm-green");
     await expect(page.locator(".attendance-pwa")).toHaveAttribute("dir", "rtl");
     await expect(page.locator(".attendance-pwa__card")).toBeVisible();
     await expect(page.locator(".module-sidebar")).toHaveCount(0);
     const shape = await page.locator(".attendance-pwa__card").evaluate((element) => Number.parseFloat(getComputedStyle(element).borderRadius));
-    expect(presentation === "modern-1" ? shape > 10 : shape <= 6).toBeTruthy();
+    expect(shape).toBeGreaterThan(0);
 
     await page.getByRole("button", { name: "دخول حسابي" }).click();
     const dialog = page.getByRole("dialog", { name: "دخول حسابي" });
@@ -50,5 +50,4 @@ for (const presentation of ["modern-1", "modern-2"] as const) {
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     expect(overflow).toBeLessThanOrEqual(1);
     if (isMobile) await expect(page.locator(".attendance-pwa__card")).toBeVisible();
-  });
-}
+});

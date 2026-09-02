@@ -1,4 +1,4 @@
-import { forwardRef, useState, type ComponentProps } from "react";
+import { forwardRef, useState, type ComponentProps, type ReactNode } from "react";
 import { normalizeBaseerNumericInput } from "./number-format";
 import "./baseer-form.css";
 export { BaseerTextInput } from "./baseer-text-input";
@@ -30,11 +30,11 @@ export function trimEditableAmountZeros(value: string) {
 }
 
 /** Shared monetary input: accepts Arabic digits but emits ASCII/LTR text. */
-export function BaseerMoneyInput({ value, onValueChange, className, onFocus, onBlur, ...props }: MoneyInputProps) {
+export const BaseerMoneyInput = forwardRef<HTMLInputElement, MoneyInputProps>(function BaseerMoneyInput({ value, onValueChange, className, onFocus, onBlur, ...props }, ref) {
   const [draft, setDraft] = useState<string | null>(null);
   const normalizedValue = normalizeBaseerNumericInput(value);
-  return <input {...props} className={["baseer-money-input", className].filter(Boolean).join(" ")} value={draft ?? trimEditableAmountZeros(normalizedValue)} inputMode="decimal" dir="ltr" lang="en" onFocus={(event) => { setDraft(trimEditableAmountZeros(normalizedValue)); onFocus?.(event); }} onBlur={(event) => { const compact = trimEditableAmountZeros(normalizeBaseerNumericInput(event.target.value)); setDraft(null); if (compact !== normalizedValue) onValueChange(compact); onBlur?.(event); }} onChange={(event) => { const next = normalizeBaseerNumericInput(event.target.value); setDraft(next); onValueChange(next); }} />;
-}
+  return <input ref={ref} {...props} className={["baseer-money-input", className].filter(Boolean).join(" ")} value={draft ?? trimEditableAmountZeros(normalizedValue)} inputMode="decimal" dir="ltr" lang="en" onFocus={(event) => { setDraft(trimEditableAmountZeros(normalizedValue)); onFocus?.(event); }} onBlur={(event) => { const compact = trimEditableAmountZeros(normalizeBaseerNumericInput(event.target.value)); setDraft(null); if (compact !== normalizedValue) onValueChange(compact); onBlur?.(event); }} onChange={(event) => { const next = normalizeBaseerNumericInput(event.target.value); setDraft(next); onValueChange(next); }} />;
+});
 
 type IntegerInputProps = Omit<ComponentProps<"input">, "type" | "value" | "onChange"> & {
   value: string;
@@ -43,10 +43,35 @@ type IntegerInputProps = Omit<ComponentProps<"input">, "type" | "value" | "onCha
 };
 
 /** Shared integer input: normalizes Arabic digits and rejects decimal separators. */
-export function BaseerIntegerInput({ value, onValueChange, allowNegative = false, className, ...props }: IntegerInputProps) {
+export const BaseerIntegerInput = forwardRef<HTMLInputElement, IntegerInputProps>(function BaseerIntegerInput({ value, onValueChange, allowNegative = false, className, ...props }, ref) {
   const normalize = (next: string) => normalizeBaseerNumericInput(next, { allowNegative }).replaceAll(".", "");
-  return <input {...props} className={["baseer-integer-input", className].filter(Boolean).join(" ")} value={normalize(value)} inputMode="numeric" dir="ltr" lang="en" onChange={(event) => onValueChange(normalizeBaseerNumericInput(event.target.value, { allowNegative }).replaceAll(".", ""))} />;
-}
+  return <input ref={ref} {...props} className={["baseer-integer-input", className].filter(Boolean).join(" ")} value={normalize(value)} inputMode="numeric" dir="ltr" lang="en" onChange={(event) => onValueChange(normalizeBaseerNumericInput(event.target.value, { allowNegative }).replaceAll(".", ""))} />;
+});
+
+type NumericSuffixInputProps = Omit<MoneyInputProps, "className"> & {
+  /** Visible unit rendered inside the same field boundary, e.g. "%" or "ساعة". */
+  suffix: ReactNode;
+  /** Use "integer" when decimal separators must be rejected. Defaults to money/decimal behavior. */
+  kind?: "money" | "integer";
+  /** Enables a leading minus sign when `kind="integer"`. */
+  allowNegative?: boolean;
+  /** Places the unit correctly for the surrounding reading direction. Defaults to RTL. */
+  suffixDirection?: "rtl" | "ltr";
+  className?: string;
+  inputClassName?: string;
+};
+
+/**
+ * A numeric input with a non-interactive unit inside its boundary.
+ * The control remains LTR/tabular while the wrapper retains the surrounding RTL layout.
+ */
+export const BaseerNumericSuffixInput = forwardRef<HTMLInputElement, NumericSuffixInputProps>(function BaseerNumericSuffixInput({ suffix, kind = "money", allowNegative, suffixDirection = "rtl", className, inputClassName, ...props }, ref) {
+  const Control = kind === "integer" ? BaseerIntegerInput : BaseerMoneyInput;
+  return <span dir={suffixDirection} className={["baseer-numeric-suffix-input", `baseer-numeric-suffix-input--${suffixDirection}`, className].filter(Boolean).join(" ")}>
+    <Control ref={ref} {...props} allowNegative={kind === "integer" ? allowNegative : undefined} className={["baseer-numeric-suffix-input__control", inputClassName].filter(Boolean).join(" ")} />
+    <span className="baseer-numeric-suffix-input__suffix" aria-hidden="true">{suffix}</span>
+  </span>;
+});
 
 type MonthPickerProps = Omit<ComponentProps<"input">, "type">;
 

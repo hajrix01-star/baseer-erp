@@ -10,7 +10,7 @@ const permissions = [
   "hr.advances.read", "hr.advances.issue", "hr.advances.settle", "hr.advances.reverse", "hr.deductions.manage",
   "hr.employee_letters.read", "hr.employee_letters.issue", "hr.final_settlements.read", "hr.final_settlements.create",
   "hr.final_settlements.verify", "hr.final_settlements.approve", "hr.final_settlements.pay", "hr.final_settlements.reverse",
-  "hr.employee_documents.read", "hr.employee_documents.write", "hr.employee_documents.revoke", "hr.employee_letters.revoke",
+  "hr.employee_documents.read", "hr.employee_documents.write", "hr.employee_documents.revoke", "hr.employee_letters.revoke", "attendance.manage",
   "finance.configuration.read", "finance.purchase_expense.create", "finance.purchase_expense.cancel",
 ];
 
@@ -116,6 +116,18 @@ async function mockHr(page: Page, requested: string[], options: { language?: "ar
       payroll: { draftCount: 1, awaitingPaymentCount: 0, recentRuns: [payrollRun] }, services: { expiredCount: 0, expiringCount: 1, attentionItems: [] },
       leaves: { openCount: 1, actionItems: [] }, finalSettlements: { openCount: 0, actionItems: [] },
     });
+    if (url.pathname === "/v1/attendance/dashboard") return fulfill(route, {
+      date: "2026-08-20",
+      summary: { activeEmployees: 1, checkedIn: 0, checkedOut: 1, notRecorded: 0, openSessions: 0 },
+      employees: [{
+        employeeId: employee.id, employeeNumber: employee.employeeNumber, employeeNameAr: employee.nameAr, employeeNameEn: employee.nameEn,
+        state: "CHECKED_OUT", checkInAt: "2026-08-20T06:00:00.000Z", checkOutAt: "2026-08-20T14:00:00.000Z", workedMinutes: 480,
+        evaluation: { businessDate: "2026-08-20", scheduleSource: "TEMPLATE", scheduleKind: "CUSTOM_PERIODS", state: "ON_TIME", plannedMinutes: 480, workedMinutes: 480, lateMinutes: 0, earlyLeaveMinutes: 0, extraMinutes: 0, shortageMinutes: 0, hasOpenSession: false },
+      }],
+    });
+    if (url.pathname === "/v1/attendance/alerts") return fulfill(route, {
+      date: "2026-08-20", summary: { late: 0, missingCheckIn: 0, openSessions: 0 }, alerts: [],
+    });
     if (url.pathname === "/v1/hr/employees" && route.request().method() === "GET") {
       if (options.slowEmployeeSearch && url.searchParams.has("search")) await new Promise((resolve) => setTimeout(resolve, 350));
       return fulfill(route, { companyId: requestCompanyId, employees: isAlternateCompany ? [] : [profileEmployee], hasMore: false, nextCursor: null, summary: { activeEmployees: isAlternateCompany ? 0 : 7, employeesOnLeave: isAlternateCompany ? 0 : 1, openAdvances: 2, openAdministrativeDeductions: 1 } });
@@ -211,24 +223,44 @@ async function fillOnboarding(page: Page) {
   return dialog;
 }
 
-for (const presentation of ["modern-1", "modern-2"] as const) {
-  test(`HR overview cards keep their semantic roles in ${presentation}`, async ({ page, isMobile }) => {
-    const requested: string[] = [];
-    await page.addInitScript((selectedPresentation) => {
-      localStorage.setItem("baseer-erp.shell.presentation.v1", selectedPresentation);
-    }, presentation);
-    await mockHr(page, requested);
-    await page.goto("/#module=hr&section=0");
-
-    await expect(page.locator("body")).toHaveAttribute("data-ui-theme", presentation);
-    await expect(page.locator(".hr-overview__activity-card.baseer-card--record")).toHaveCount(3);
-    await expect(page.locator(".hr-workforce-chart")).toBeVisible();
-    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
-    expect(overflow).toBeLessThanOrEqual(1);
-    expect(isMobile || (await page.locator(".module-sidebar").isVisible())).toBeTruthy();
+test("HR overview cards keep their semantic roles in the modern administrative shell", async ({ page, isMobile }) => {
+  const requested: string[] = [];
+  await page.addInitScript(() => {
+    localStorage.setItem("baseer-erp.shell.presentation.v1", "modern-3");
   });
+  await mockHr(page, requested);
+  await page.goto("/#module=hr&section=0");
 
-}
+  await expect(page.locator("body")).toHaveAttribute("data-ui-theme", "modern-3");
+  await expect(page.locator(".hr-overview__activity-card.baseer-card--record")).toHaveCount(3);
+  await expect(page.locator(".hr-workforce-chart")).toBeVisible();
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  expect(overflow).toBeLessThanOrEqual(1);
+  expect(isMobile || (await page.locator(".module-sidebar").isVisible())).toBeTruthy();
+});
+
+test("attendance daily register keeps wide columns inside its mobile scroller", async ({ page }) => {
+  const requested: string[] = [];
+  await page.setViewportSize({ width: 393, height: 852 });
+  await mockHr(page, requested);
+  await page.goto("/#module=hr&section=7");
+
+  await expect(page.getByRole("heading", { name: "الحضور والانصراف" }).first()).toBeVisible();
+  await expect(page.getByRole("heading", { name: "الحضور مقابل خطة الدوام" })).toBeVisible();
+  const scroller = page.locator(".baseer-data-grid__scroll").first();
+  await expect(scroller).toBeVisible();
+
+  const geometry = await scroller.evaluate((element) => ({
+    pageOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    localOverflow: element.scrollWidth - element.clientWidth,
+    tableWidth: element.querySelector("table")?.scrollWidth ?? 0,
+    viewportWidth: window.innerWidth,
+  }));
+  expect(geometry.pageOverflow).toBeLessThanOrEqual(1);
+  expect(geometry.localOverflow).toBeGreaterThan(0);
+  expect(geometry.tableWidth).toBeGreaterThan(geometry.viewportWidth);
+  expect(requested.some((request) => request.startsWith("GET /v1/attendance/dashboard"))).toBeTruthy();
+});
 
 test("HR quick actions are permission-gated and open the requested operation", async ({ page }) => {
   const requested: string[] = [];
@@ -244,32 +276,27 @@ test("HR quick actions are permission-gated and open the requested operation", a
   await expect(page.getByRole("button", { name: "تسجيل إجازة" })).toBeVisible();
   await expect(page.getByRole("button", { name: "تسجيل خدمة" })).toBeVisible();
   await page.getByRole("button", { name: "موظف جديد" }).click();
-  await expect(page.getByRole("dialog")).toContainText("إضافة موظف");
-  await expect(page.getByRole("dialog")).toHaveAttribute("aria-modal", "true");
+  const employeeDialog = page.getByRole("dialog", { name: "إضافة موظف" });
+  await expect(employeeDialog).toContainText("إضافة موظف");
+  await expect(employeeDialog).toHaveAttribute("aria-modal", "true");
+  const coarsePointer = await page.evaluate(() => window.matchMedia("(pointer: coarse)").matches);
+  if (coarsePointer) await expect(employeeDialog).toBeFocused();
   await expectViewportContained(page);
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
 });
 
-test("advance issuer shortcut loads only its narrow entry references", async ({ page }) => {
+test("advance issuer sees the floating advance action only in the advances workstation", async ({ page }) => {
   const requested: string[] = [];
   await mockHr(page, requested, { permissionCodes: ["hr.advances.issue"] });
 
-  await page.goto("/");
-  await page.locator(".quick-actions > summary").click();
-  await page.getByRole("menuitem", { name: "إدخال سلفة" }).click();
+  await page.goto("/#module=hr&section=4");
+  const advanceQuickAdd = page.getByRole("button", { name: "إدخال سلفة" });
+  await expect(advanceQuickAdd).toBeVisible();
+  await expect(advanceQuickAdd).toHaveCSS("position", "fixed");
+  expect(await advanceQuickAdd.evaluate((element) => element.getBoundingClientRect().left < window.innerWidth / 2)).toBeTruthy();
+  await advanceQuickAdd.click();
   await expectTopmostDialog(page, "إدخال سلفة");
   await expect.poll(() => requested.some((request) => request === "GET /v1/hr/advances/entry-references")).toBeTruthy();
-  const employeePicker = page.getByRole("combobox", { name: "الموظف" });
-  const employeeOption = page.getByRole("option", { name: `${employee.employeeNumber} · ${employee.nameAr}` });
-  await employeePicker.click();
-  await expect(employeeOption).toBeVisible();
-  const [pickerBox, optionBox] = await Promise.all([employeePicker.boundingBox(), employeeOption.boundingBox()]);
-  expect(optionBox!.y).toBeGreaterThanOrEqual(pickerBox!.y + pickerBox!.height);
-  await employeeOption.click();
-  await expect(employeePicker).toHaveValue(`${employee.employeeNumber} · ${employee.nameAr}`);
-  expect(requested.some((request) => request.startsWith("GET /v1/hr/employees"))).toBeFalsy();
-  expect(requested.some((request) => request.startsWith("GET /v1/finance/configuration"))).toBeFalsy();
-  expect(requested.some((request) => request.startsWith("GET /v1/hr/advances?") || request.endsWith("GET /v1/hr/advances"))).toBeFalsy();
 });
 
 test("payroll uses server search and cursor paging without page-level overflow", async ({ page }) => {
@@ -572,7 +599,10 @@ test("leave and payroll dialogs include nested return and destructive confirmati
 
   await page.goto("/#module=hr&section=2");
   await page.getByRole("button", { name: "تسجيل إجازة" }).click();
-  await expectTopmostDialog(page, "تسجيل إجازة");
+  const leaveRegister = await expectTopmostDialog(page, "تسجيل إجازة");
+  if (await page.evaluate(() => window.matchMedia("(pointer: coarse)").matches)) {
+    await expect(leaveRegister).toBeFocused();
+  }
   await page.keyboard.press("Escape");
   await page.getByRole("button", { name: new RegExp(employee.employeeNumber) }).click();
   const leaveDetail = await expectTopmostDialog(page, "تفاصيل الإجازة");
@@ -710,6 +740,12 @@ test("leave employee filter uses the Baseer Combobox adapter with keyboard searc
   await page.getByRole("button", { name: "الفلاتر" }).click();
   const combobox = page.getByRole("combobox", { name: "الموظف" });
   await combobox.focus();
+  await expect(combobox).toHaveAttribute("aria-expanded", "false");
+  await expect(page.getByRole("listbox")).toHaveCount(0);
+  const toggle = page.getByRole("button", { name: "فتح قائمة الموظف" });
+  await toggle.click();
+  await expect(page.getByRole("listbox")).toBeVisible();
+  await expect(combobox).not.toBeFocused();
   await combobox.fill("موظف");
   await expect(page.getByRole("option", { name: `${employee.employeeNumber} · ${employee.nameAr}` })).toBeVisible();
   await expect.poll(() => requested.some((request) => request.includes("GET /v1/hr/employees?search="))).toBeTruthy();

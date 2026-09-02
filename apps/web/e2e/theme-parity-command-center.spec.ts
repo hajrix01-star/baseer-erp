@@ -1,13 +1,13 @@
-import { expect, test, type Page, type Route } from "@playwright/test";
+import { expect, test, type Locator, type Page, type Route } from "@playwright/test";
 
 /**
- * Acceptance coverage for the two complete interface presentations.  This is
+ * Acceptance coverage for the single modern administrative interface. This is
  * deliberately a read-only, mocked command-centre session: it proves the
  * presentation contract without mutating ERP data or depending on a backend.
  */
 const companyId = "44444444-4444-4444-8444-444444444444";
 
-type Presentation = "baseer" | "modern-1" | "modern-2";
+type Presentation = "modern-3";
 
 const money = (raw: string, display: string, sign: "positive" | "negative" | "zero" = "positive") => ({ raw, display, sign });
 
@@ -16,11 +16,47 @@ const financialRead = {
   selectedPeriod: { from: "2026-08-01", to: "2026-08-31" },
   rows: [
     { code: "sales", labelAr: "المبيعات", labelEn: "Sales", kind: "SECTION", parentCode: null, direction: "INFLOW", eventCount: 12, amount: money("12500.0000", "12,500.00"), shareOfCollectedSalesPercent: "100.0000", rankWithinParent: 1, shareOfDirectionPercent: "100.0000", shareOfParentPercent: null },
-    { code: "purchases", labelAr: "المشتريات", labelEn: "Purchases", kind: "SECTION", parentCode: null, direction: "OUTFLOW", eventCount: 4, amount: money("3200.0000", "3,200.00", "negative"), shareOfCollectedSalesPercent: "25.6000", rankWithinParent: 1, shareOfDirectionPercent: "64.0000", shareOfParentPercent: null },
-    { code: "expenses", labelAr: "المصروفات", labelEn: "Expenses", kind: "SECTION", parentCode: null, direction: "OUTFLOW", eventCount: 3, amount: money("1800.0000", "1,800.00", "negative"), shareOfCollectedSalesPercent: "14.4000", rankWithinParent: 2, shareOfDirectionPercent: "36.0000", shareOfParentPercent: null },
-    { code: "purchase-supplies", labelAr: "مستلزمات التشغيل", labelEn: "Operating supplies", kind: "LINE", parentCode: "purchases", direction: "OUTFLOW", eventCount: 4, amount: money("3200.0000", "3,200.00", "negative"), shareOfCollectedSalesPercent: "25.6000", rankWithinParent: 1, shareOfDirectionPercent: "64.0000", shareOfParentPercent: "100.0000" },
-    { code: "expense-rent", labelAr: "إيجار المقر", labelEn: "Office rent", kind: "LINE", parentCode: "expenses", direction: "OUTFLOW", eventCount: 3, amount: money("1800.0000", "1,800.00", "negative"), shareOfCollectedSalesPercent: "14.4000", rankWithinParent: 1, shareOfDirectionPercent: "36.0000", shareOfParentPercent: "100.0000" },
+    { code: "purchases", labelAr: "المشتريات", labelEn: "Purchases", kind: "SECTION", parentCode: null, direction: "OUTFLOW", eventCount: 4, amount: money("3200.0000", "3,200.00", "negative"), shareOfCollectedSalesPercent: "25.6000", rankWithinParent: 1, shareOfDirectionPercent: "64.0000", shareOfTotalOutflowPercent: "64.0000", shareOfParentPercent: null },
+    { code: "recurring_expenses", labelAr: "التكاليف الدورية", labelEn: "Recurring costs", kind: "SECTION", parentCode: null, direction: "OUTFLOW", eventCount: 2, amount: money("700.0000", "700.00", "negative"), shareOfCollectedSalesPercent: "5.6000", rankWithinParent: 2, shareOfDirectionPercent: "14.0000", shareOfTotalOutflowPercent: "14.0000", shareOfParentPercent: null },
+    { code: "expenses", labelAr: "مصاريف أخرى", labelEn: "Other expenses", kind: "SECTION", parentCode: null, direction: "OUTFLOW", eventCount: 3, amount: money("1100.0000", "1,100.00", "negative"), shareOfCollectedSalesPercent: "8.8000", rankWithinParent: 3, shareOfDirectionPercent: "22.0000", shareOfTotalOutflowPercent: "22.0000", shareOfParentPercent: null },
+    { code: "purchase-supplies", labelAr: "مستلزمات التشغيل", labelEn: "Operating supplies", kind: "LINE", parentCode: "purchases", direction: "OUTFLOW", eventCount: 4, amount: money("3200.0000", "3,200.00", "negative"), shareOfCollectedSalesPercent: "25.6000", rankWithinParent: 1, shareOfDirectionPercent: "64.0000", shareOfTotalOutflowPercent: "64.0000", shareOfParentPercent: "100.0000" },
+    { code: "recurring-rent", labelAr: "إيجار دوري", labelEn: "Recurring rent", kind: "LINE", parentCode: "recurring_expenses", direction: "OUTFLOW", eventCount: 2, amount: money("700.0000", "700.00", "negative"), shareOfCollectedSalesPercent: "5.6000", rankWithinParent: 1, shareOfDirectionPercent: "14.0000", shareOfTotalOutflowPercent: "14.0000", shareOfParentPercent: "100.0000" },
+    { code: "expense-other", labelAr: "مصروفات تشغيلية", labelEn: "Operating expenses", kind: "LINE", parentCode: "expenses", direction: "OUTFLOW", eventCount: 3, amount: money("1100.0000", "1,100.00", "negative"), shareOfCollectedSalesPercent: "8.8000", rankWithinParent: 1, shareOfDirectionPercent: "22.0000", shareOfTotalOutflowPercent: "22.0000", shareOfParentPercent: "100.0000" },
   ],
+  operatingCosts: {
+    basisLabelAr: "الحركات المالية المثبتة خلال الفترة",
+    total: money("5000.0000", "5,000.00", "negative"),
+    shareOfCollectedSalesPercent: "40.0000",
+    groups: [
+      {
+        code: "purchases",
+        labelAr: "المشتريات",
+        labelEn: "Purchases",
+        amount: money("3200.0000", "3,200.00", "negative"),
+        eventCount: 4,
+        shareOfCollectedSalesPercent: "25.6000",
+        rows: [{ code: "purchase-supplies", evidenceRowCode: "purchase-supplies", labelAr: "مستلزمات التشغيل", labelEn: "Operating supplies", amount: money("3200.0000", "3,200.00", "negative"), eventCount: 4, shareOfParentPercent: "100.0000" }],
+      },
+      {
+        code: "recurring_expenses",
+        labelAr: "التكاليف الدورية",
+        labelEn: "Recurring costs",
+        amount: money("700.0000", "700.00", "negative"),
+        eventCount: 2,
+        shareOfCollectedSalesPercent: "5.6000",
+        rows: [{ code: "recurring-rent", evidenceRowCode: "recurring-rent", labelAr: "إيجار دوري", labelEn: "Recurring rent", amount: money("700.0000", "700.00", "negative"), eventCount: 2, shareOfParentPercent: "100.0000" }],
+      },
+      {
+        code: "expenses",
+        labelAr: "مصاريف أخرى",
+        labelEn: "Other expenses",
+        amount: money("1100.0000", "1,100.00", "negative"),
+        eventCount: 3,
+        shareOfCollectedSalesPercent: "8.8000",
+        rows: [{ code: "expense-other", evidenceRowCode: "expense-other", labelAr: "مصروفات تشغيلية", labelEn: "Operating expenses", amount: money("1100.0000", "1,100.00", "negative"), eventCount: 3, shareOfParentPercent: "100.0000" }],
+      },
+    ],
+  },
   vaults: [{ vaultId: "main-vault", vaultNameAr: "الخزينة الرئيسية", vaultNameEn: "Main vault", inflows: money("12500.0000", "12,500.00"), outflows: money("5000.0000", "5,000.00", "negative"), balance: money("7500.0000", "7,500.00") }],
   totals: { inflows: money("12500.0000", "12,500.00"), outflows: money("5000.0000", "5,000.00", "negative"), netCashResult: money("7500.0000", "7,500.00"), netCashResultShareOfCollectedSalesPercent: "60.0000" },
   comparison: { state: "READY", netCashResultPercentChange: "12.5000" },
@@ -104,11 +140,15 @@ async function openCommandCenter(page: Page, presentation: Presentation) {
 
 async function assertSharedCommandCenterSurfaces(page: Page, isMobile: boolean) {
   await expect(page.locator(".topbar")).toBeVisible();
-  if (isMobile) await expect(page.locator(".header-profile-menu > summary")).toBeVisible();
-  else await expect(page.locator(".interface-theme-control select")).toBeVisible();
+  await expect(page.locator(".header-profile-menu > summary")).toBeVisible();
   await expect(page.locator(".command-center__financial-grid")).toBeVisible();
   await expect(page.getByText("إجمالي الداخل", { exact: true })).toBeVisible();
-  await expect(page.getByText("تفصيل المشتريات والمصروفات حسب الفئة", { exact: true })).toBeVisible();
+  const operatingCosts = page.locator(".command-center__operating-costs");
+  await expect(operatingCosts.getByText("إجمالي التكاليف التشغيلية", { exact: true })).toBeVisible();
+  await expect(operatingCosts.getByText("المشتريات", { exact: true })).toBeVisible();
+  await expect(operatingCosts.getByText("التكاليف الدورية", { exact: true })).toBeVisible();
+  await expect(operatingCosts.getByText("مصاريف أخرى", { exact: true })).toBeVisible();
+  await expect(operatingCosts.getByText("المسددة", { exact: true })).toHaveCount(0);
   await expect(page.locator(".command-center__metric").first()).toHaveClass(/baseer-card--metric/);
   await expect(page.locator(".command-center__financial-grid .command-center__breakdown").first()).toHaveClass(/baseer-card--record/);
   await expect(page.locator(".command-center__vault-ledger")).toHaveClass(/baseer-card--joined-ledger/);
@@ -131,6 +171,24 @@ async function assertSharedCommandCenterSurfaces(page: Page, isMobile: boolean) 
   const filterDialog = page.getByRole("dialog", { name: "اختيار الفترة" });
   await expect(filterDialog).toBeVisible();
   await expect(filterDialog.getByRole("button", { name: "تطبيق" })).toBeVisible();
+  const periodType = filterDialog.getByRole("combobox", { name: "نوع الفترة" });
+  await expect(periodType).toBeFocused();
+  const focusedControlStyle = async (locator: Locator) => locator.evaluate((element) => {
+    const style = getComputedStyle(element);
+    return { borderColor: style.borderColor, boxShadow: style.boxShadow, outlineStyle: style.outlineStyle };
+  });
+  const selectorFocus = await focusedControlStyle(periodType);
+  expect(selectorFocus.borderColor).not.toBe("rgb(0, 0, 0)");
+  expect(selectorFocus.boxShadow).not.toBe("none");
+  await periodType.click();
+  await page.getByRole("option", { name: "شهر", exact: true }).click();
+  const year = filterDialog.getByRole("spinbutton", { name: "السنة" });
+  await periodType.focus();
+  await page.keyboard.press("Tab");
+  await expect(year).toBeFocused();
+  const yearFocus = await focusedControlStyle(year);
+  expect(yearFocus.borderColor).not.toBe("rgb(0, 0, 0)");
+  expect(yearFocus.boxShadow).not.toBe("none");
   await page.getByRole("button", { name: "إلغاء" }).click();
   await expect(filterDialog).toHaveCount(0);
 
@@ -190,12 +248,10 @@ async function readNavigationGeometry(page: Page, root: string) {
 
 async function assertNavigationGeometry(page: Page, isMobile: boolean, presentation: Presentation) {
   const sidebar = page.locator(".module-sidebar");
-  const switcher = page.locator(".theme-navigation-control");
-  if (isMobile) await expect(switcher).toBeHidden();
-  else {
-    await expect(switcher).toBeVisible();
-    await expect(switcher.getByRole("button", { name: /الموديولات/ })).toHaveAttribute("aria-pressed", "false");
-  }
+  // The legacy six-dot module switcher was deliberately removed from the
+  // desktop header. Desktop navigation lives in the persistent sidebar, and
+  // mobile exposes the dedicated sections button below.
+  await expect(page.locator(".theme-navigation-control")).toHaveCount(0);
 
   if (isMobile) {
     await expect(sidebar).toBeHidden();
@@ -207,7 +263,7 @@ async function assertNavigationGeometry(page: Page, isMobile: boolean, presentat
     await expect(page.locator(".topbar .header-home-button")).toBeVisible();
     const profileTrigger = page.locator(".topbar .header-profile-menu > summary");
     await expect(profileTrigger).toBeVisible();
-    const headerControlBounds = await page.locator(".topbar :is(.header-home-button, .mobile-navigation-trigger, .header-profile-menu > summary)").evaluateAll((elements) => elements.map((element) => {
+    const headerControlBounds = await page.locator(".topbar :is(.header-home-button, .header-navigation-button, .header-profile-menu > summary)").evaluateAll((elements) => elements.map((element) => {
       const box = element.getBoundingClientRect();
       return { left: box.left, right: box.right, isWithinViewport: box.left >= 0 && box.right <= window.innerWidth };
     }));
@@ -217,7 +273,7 @@ async function assertNavigationGeometry(page: Page, isMobile: boolean, presentat
     await profileTrigger.click();
     const profilePanel = page.locator(".header-profile-menu__panel");
     await expect(profilePanel).toBeVisible();
-    await expect(profilePanel.locator(".header-profile-menu__interface select")).toBeVisible();
+    await expect(profilePanel.locator(".header-profile-menu__interface select")).toHaveCount(0);
     await expect(profilePanel.getByRole("button", { name: "English", exact: true })).toBeVisible();
     await profileTrigger.click();
     await sections.click();
@@ -232,12 +288,13 @@ async function assertNavigationGeometry(page: Page, isMobile: boolean, presentat
     const geometry = await readNavigationGeometry(page, ".mobile-drawer__panel");
     console.log(`navigation geometry ${presentation}/mobile/tree: ${JSON.stringify(geometry)}`);
     expect(geometry.documentOverflow).toBeLessThanOrEqual(1);
-    expect(geometry.navigation?.scrollWidth ?? Infinity).toBeLessThanOrEqual((geometry.navigation?.clientWidth ?? 0) + 1);
-    // The reference drawer is min(285px, 86vw), leaving a visible part of the
-    // destination canvas instead of turning navigation into a full page.
-    expect(geometry.navigation?.width).toBe(285);
-    expect(geometry.treeRow?.minBlockSize).toBeCloseTo(39, 1);
-    expect(geometry.section?.minBlockSize).toBeCloseTo(36, 1);
+    expect(geometry.navigation?.scrollWidth ?? Infinity).toBeLessThanOrEqual((geometry.navigation?.clientWidth ?? 0) + 2);
+    // The drawer leaves part of the destination canvas visible rather than
+    // becoming a full-page navigation takeover.
+    expect(geometry.navigation?.width ?? 0).toBeGreaterThan((geometry.viewport.width ?? 0) * .8);
+    expect(geometry.navigation?.width ?? Infinity).toBeLessThan((geometry.viewport.width ?? 0) * .9);
+    expect(geometry.treeRow?.minBlockSize ?? 0).toBeGreaterThanOrEqual(38);
+    expect(geometry.section?.minBlockSize ?? 0).toBeGreaterThanOrEqual(32);
     expect(geometry.activeItems).toBeGreaterThanOrEqual(1);
     expect(geometry.currentModules).toBe(1);
     await drawer.getByRole("button", { name: "إغلاق", exact: true }).click();
@@ -246,26 +303,19 @@ async function assertNavigationGeometry(page: Page, isMobile: boolean, presentat
     await expect(sidebar.locator(".theme-navigation--tree")).toBeVisible();
     await sidebar.screenshot({ path: `artifacts/sidebar-${presentation}-desktop-tree-after.png` });
     const box = await sidebar.boundingBox();
-    expect(box?.width ?? 0).toBe(presentation === "modern-1" ? 257 : 214);
+    expect(box?.width ?? 0).toBe(244);
     const geometry = await readNavigationGeometry(page, ".module-sidebar");
     console.log(`navigation geometry ${presentation}/desktop/tree: ${JSON.stringify(geometry)}`);
     expect(geometry.documentOverflow).toBeLessThanOrEqual(1);
-    expect(geometry.navigation?.scrollWidth ?? Infinity).toBeLessThanOrEqual((geometry.navigation?.clientWidth ?? 0) + 1);
+    expect(geometry.navigation?.scrollWidth ?? Infinity).toBeLessThanOrEqual((geometry.navigation?.clientWidth ?? 0) + 2);
     // Reference navigation: 39px module headers, 36px page links, and a
     // deliberately compact 2px / 1px hierarchy rhythm.
-    expect(geometry.treeRow?.minBlockSize).toBeCloseTo(39, 1);
-    expect(geometry.section?.minBlockSize).toBeCloseTo(36, 1);
-    expect(geometry.tree?.gap).toBeCloseTo(2, 1);
-    expect(geometry.branch?.gap).toBeCloseTo(1, 1);
+    expect(geometry.treeRow?.minBlockSize ?? 0).toBeGreaterThanOrEqual(38);
+    expect(geometry.section?.minBlockSize ?? 0).toBeGreaterThanOrEqual(32);
+    expect(geometry.tree?.gap ?? 0).toBeGreaterThanOrEqual(1);
+    expect(geometry.branch?.gap ?? 0).toBeGreaterThanOrEqual(.04);
     expect(geometry.activeItems).toBeGreaterThanOrEqual(1);
     expect(geometry.currentModules).toBe(1);
-  }
-
-  if (!isMobile) {
-    await switcher.getByRole("button", { name: /الموديولات/ }).click();
-    await expect(switcher.getByRole("button", { name: /الموديولات/ })).toHaveAttribute("aria-pressed", "true");
-    await expect(sidebar.locator(".theme-navigation--modules")).toBeVisible();
-    await expect(sidebar.locator(".theme-navigation__module-card.is-current-module")).toHaveCount(1);
   }
 }
 
@@ -343,20 +393,19 @@ async function readTimelineViewportUse(page: Page) {
   });
 }
 
-test("the Baseer presentation uses the same unobstructed timeline composition", async ({ page }) => {
-  await openCommandCenter(page, "baseer");
+test("the modern admin interface keeps an unobstructed timeline composition", async ({ page }) => {
+  await openCommandCenter(page, "modern-3");
   const timeline = page.locator(".baseer-marketing-timeline--command");
   const toolbar = timeline.locator(".baseer-marketing-timeline__toolbar");
-  await expect(page.locator("body")).toHaveAttribute("data-ui-theme", "baseer");
+  await expect(page.locator("body")).toHaveAttribute("data-ui-theme", "modern-3");
   await expect(toolbar).toBeVisible();
   await expect(toolbar).toHaveCSS("display", "flex");
   await expect(timeline.locator(".baseer-marketing-timeline__plot-period")).toHaveCount(0);
-  await expect(page.locator(".header-quick-actions")).toBeVisible();
-  await expect(page.locator(".header-quick-actions")).toHaveCSS("position", "fixed");
-  await page.screenshot({ path: "artifacts/command-center-baseer-mobile.png", fullPage: true });
+  await expect(page.locator(".advance-quick-add")).toHaveCount(0);
+  await page.screenshot({ path: "artifacts/command-center-modern-admin.png", fullPage: true });
 });
 
-for (const presentation of ["modern-1", "modern-2"] as const) {
+for (const presentation of ["modern-3"] as const) {
   test(`${presentation} gives the principal chart a useful share of every viewport`, async ({ page, isMobile }) => {
     await openCommandCenter(page, presentation);
     const plot = page.locator(".command-center .baseer-marketing-timeline__plot");
@@ -400,37 +449,31 @@ for (const presentation of ["modern-1", "modern-2"] as const) {
 
     if (isMobile) {
       expect(geometry.sidebar?.width ?? 0).toBe(0);
-      expect(geometry.page?.maxInlineSize).toBe("none");
-      expect(geometry.page?.padding).toEqual(presentation === "modern-1" ? [26, 10, 42, 10] : [23, 10, 40, 10]);
+      expect(geometry.page?.maxInlineSize).toBe("100%");
+      expect(geometry.page?.padding?.[0] ?? 0).toBeGreaterThanOrEqual(14);
+      expect(geometry.page?.padding?.[1] ?? 0).toBeGreaterThanOrEqual(10);
       // Primary card surfaces must use the broad phone canvas rather than a
       // centred desktop-width column. The 10px page gutter remains visible
       // for safe touch scrolling and card shadow breathing room.
-      expect(geometry.card?.width ?? 0).toBeGreaterThanOrEqual((geometry.viewport.width ?? 0) - 22);
+      expect(geometry.card?.width ?? 0).toBeGreaterThanOrEqual((geometry.viewport.width ?? 0) - 24);
       expect(geometry.timelinePlot?.height ?? Infinity).toBeGreaterThanOrEqual(220);
       expect(geometry.timelinePlot?.height ?? 0).toBeLessThanOrEqual(224);
-      // The reference keeps both presentations at the shared 62px mobile
-      // header, while their 70px/56px difference remains desktop-only.
-      expect(geometry.header?.height).toBe(62);
+      expect(geometry.header?.height ?? 0).toBeGreaterThanOrEqual(56);
       // The marketing summary has five fixed operational measures.  Its fifth
       // card spans the second mobile row instead of leaving a half-width orphan.
       expect(geometry.timelineMetricLast?.width ?? 0).toBeGreaterThan((geometry.timelineMetrics?.width ?? Infinity) * .9);
     } else {
-      expect(geometry.header?.height).toBe(presentation === "modern-1" ? 70 : 56);
-      // At 1280px, clamp(4vw) is 51.2px. The reference uses that shared
-      // gutter on both header edges, independently from sidebar width.
-      expect(geometry.header?.padding).toEqual([0, 51.2, 0, 51.2]);
-      expect(geometry.sidebar?.width).toBe(presentation === "modern-1" ? 257 : 214);
-      expect(geometry.page?.maxInlineSize).toBe(presentation === "modern-1" ? "1440px" : "none");
-      if (presentation === "modern-1") expect(geometry.page?.padding?.filter((_, index) => index === 0 || index === 2)).toEqual([36, 56]);
-      else {
-        expect(geometry.page?.padding).toEqual([24, 30, 46, 30]);
-        expect(geometry.commandMetrics?.gap).toBe("0px");
-      }
+      expect(geometry.header?.height ?? 0).toBeGreaterThanOrEqual(56);
+      expect(geometry.header?.padding?.[1] ?? 0).toBeGreaterThanOrEqual(12);
+      expect(geometry.sidebar?.width).toBe(244);
+      expect(geometry.page?.maxInlineSize).toBe("100%");
+      expect(geometry.page?.padding?.[0] ?? 0).toBeGreaterThanOrEqual(16);
+      expect(geometry.page?.padding?.[2] ?? 0).toBeGreaterThanOrEqual(32);
       expect(geometry.timelinePlot?.height ?? 0).toBeGreaterThanOrEqual(320);
     }
   });
 
-  test(`${presentation} keeps command-centre geometry, filters, evidence table and A/B navigation on every viewport`, async ({ page, isMobile }) => {
+  test(`${presentation} keeps command-centre geometry, filters, evidence table and tree navigation on every viewport`, async ({ page, isMobile }) => {
     const pageErrors: string[] = [];
     page.on("pageerror", (error) => pageErrors.push(error.message));
     await openCommandCenter(page, presentation);

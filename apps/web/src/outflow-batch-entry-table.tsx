@@ -8,7 +8,7 @@ import { BaseerMoneyInput } from "./baseer-form-fields";
 import { activeSession } from "./daily-sales-client";
 import { displayName } from "./baseer-localization";
 import { financeText, outflowBatchEntryText } from "./finance-copy";
-import { formatNumber } from "./number-format";
+import { formatNumber, formatPercent } from "./number-format";
 
 export type OutflowBatchEntryRow = {
   id: string;
@@ -89,7 +89,7 @@ export function OutflowBatchEntryTable<Row extends OutflowBatchEntryRow>({
   renderSupplierAction?: (supplier: Supplier) => ReactNode;
   onRemove: (id: string) => void;
 }) {
-  const taxRate = `${vatRateBasisPoints / 100}%`;
+  const taxRate = formatPercent(vatRateBasisPoints / 100, language);
   const typeLabel = (kind: Row["kind"]) =>
     kind === "PURCHASE"
       ? text.purchaseInvoice

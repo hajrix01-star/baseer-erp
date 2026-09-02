@@ -1,48 +1,37 @@
 import { expect, test, type Page, type Route } from "@playwright/test";
 
 const companyId = "11111111-1111-4111-8111-111111111111";
+const presentationStorageKey = "baseer-erp.shell.presentation.v1";
+const paletteStorageKey = "baseer-erp.shell.color-palette.v1";
 
 async function fulfill(route: Route, json: unknown) {
   await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(json) });
 }
 
-async function openThemePreview(page: Page) {
-  await page.addInitScript((company) => {
+async function openThemePreview(page: Page, storedPresentation: string | null, storedPalette: string | null = null) {
+  await page.addInitScript(({ company, presentation, palette, presentationKey, paletteKey }) => {
     sessionStorage.setItem("baseer.erp.access-token", "theme-preview-access-token");
     sessionStorage.setItem("baseer.erp.refresh-token", "theme-preview-refresh-token");
     sessionStorage.setItem("baseer.erp.session-expires-at", "2099-01-01T00:00:00.000Z");
     sessionStorage.setItem("baseer.erp.company-id", company);
     localStorage.setItem("baseer.ui.locale.v1", "ar");
-    localStorage.setItem("baseer-erp.shell.theme.v1", "blue");
-    localStorage.setItem("baseer-erp.shell.app-background.v2", "product-gray");
-    localStorage.setItem("baseer-erp.shell.container-surface.v1", "beige");
-  }, companyId);
+    localStorage.setItem("baseer-erp.shell.appearance.v1", "light");
+    if (presentation === null) localStorage.removeItem(presentationKey);
+    else localStorage.setItem(presentationKey, presentation);
+    if (palette === null) localStorage.removeItem(paletteKey);
+    else localStorage.setItem(paletteKey, palette);
+  }, { company: companyId, presentation: storedPresentation, palette: storedPalette, presentationKey: presentationStorageKey, paletteKey: paletteStorageKey });
   await page.route("**/v1/**", async (route) => {
     const path = new URL(route.request().url()).pathname;
     if (path === "/v1/companies/available") return fulfill(route, {
-      companies: [{
-        id: companyId,
-        nameAr: "شركة اختبار الثيم",
-        nameEn: "Theme preview company",
-        permissionCodes: ["reports.read", "marketing.insights.read"],
-      }],
+      companies: [{ id: companyId, nameAr: "شركة اختبار الثيم", nameEn: "Theme preview company", permissionCodes: ["reports.read"] }],
     });
     if (path === "/v1/reports/personal-cash-performance") return fulfill(route, {
-      state: "READY",
-      selectedPeriod: { from: "2026-08-01", to: "2026-08-31" },
-      rows: [], vaults: [],
+      state: "READY", selectedPeriod: { from: "2026-08-01", to: "2026-08-31" }, rows: [], vaults: [],
       totals: {
-        inflows: { raw: "0.0000", display: "0.00", sign: "zero" },
-        outflows: { raw: "0.0000", display: "0.00", sign: "zero" },
-        netCashResult: { raw: "0.0000", display: "0.00", sign: "zero" },
-        netCashResultShareOfCollectedSalesPercent: "0.0000",
+        inflows: { raw: "0.0000", display: "0.00", sign: "zero" }, outflows: { raw: "0.0000", display: "0.00", sign: "zero" },
+        netCashResult: { raw: "0.0000", display: "0.00", sign: "zero" }, netCashResultShareOfCollectedSalesPercent: "0.0000",
       },
-    });
-    if (path === "/v1/marketing/calendar") return fulfill(route, {
-      period: { fromBusinessDate: "2026-08-01", toBusinessDate: "2026-08-31", timezone: "Asia/Riyadh" },
-      sales: { dataQuality: "READY", payload: { netAmount: "0.0000" } },
-      campaigns: [], days: [], weekdayAverages: [], salesTargets: [], context: [], linkedActualGrossAmount: "0.0000",
-      spendResult: { plannedCampaignCost: "0.0000", linkedActualSpend: "0.0000", officialNetSales: "0.0000", spendToSalesPercent: "0.0000", campaignCount: 0, salesDataQuality: "READY", conclusionAr: "", conclusionEn: "" },
     });
     return fulfill(route, {});
   });
@@ -50,228 +39,54 @@ async function openThemePreview(page: Page) {
   await expect(page.locator(".launcher-page")).toBeVisible();
 }
 
-function presentationPicker(page: Page, isMobile: boolean) {
-  return isMobile
-    ? page.locator(".header-profile-menu .header-profile-menu__interface select")
-    : page.locator(":is(.topbar, .launcher-topbar) > .interface-theme-control select").first();
-}
-
-async function selectPresentation(page: Page, isMobile: boolean, presentation: "modern-1" | "modern-2") {
-  const picker = presentationPicker(page, isMobile);
-  if (isMobile) {
-    const profileMenu = page.locator(".header-profile-menu");
-    if (await profileMenu.getAttribute("open") === null) await profileMenu.locator(":scope > summary").click();
-    await expect(picker).toBeVisible();
+test("legacy presentations migrate into their matching modern administrative colour palette", async ({ page }) => {
+  for (const [storedPresentation, expectedPalette] of [[null, "modern-admin"], ["baseer", "modern-admin"], ["modern-1", "calm-green"], ["modern-2", "editorial-copper"], ["modern-3", "modern-admin"], ["unexpected-value", "modern-admin"]] as const) {
+    await openThemePreview(page, storedPresentation);
+    await expect(page.locator("body")).toHaveAttribute("data-ui-theme", "modern-3");
+    await expect(page.locator("body")).toHaveAttribute("data-color-palette", expectedPalette);
+    await expect.poll(() => page.evaluate((storageKey) => localStorage.getItem(storageKey), presentationStorageKey)).toBe("modern-3");
+    await expect.poll(() => page.evaluate((storageKey) => localStorage.getItem(storageKey), paletteStorageKey)).toBe(expectedPalette);
   }
-  await picker.selectOption(presentation);
-}
+});
 
-async function enableDarkMode(page: Page, isMobile: boolean) {
-  const legacyThemeSummary = page.locator(".theme-button summary");
-  const canUseLegacyPicker = !isMobile && await legacyThemeSummary.isVisible();
-  if (canUseLegacyPicker) {
-    await legacyThemeSummary.click();
-    await page.getByRole("button", { name: "ليلي", exact: true }).click();
-    return;
-  }
-  if (isMobile) await expect(legacyThemeSummary).not.toBeVisible();
-  await page.evaluate(() => { document.body.dataset.colorScheme = "dark"; });
-}
+test("the profile menu exposes three colour palettes without a competing interface layout", async ({ page }) => {
+  await openThemePreview(page, "modern-1");
+  const profileMenu = page.locator(".header-profile-menu");
+  await profileMenu.locator(":scope > summary").click();
 
-test("Theme 1 and Theme 2 replace the complete shared presentation palette", async ({ page, isMobile }, testInfo) => {
-  await openThemePreview(page);
-  const picker = presentationPicker(page, isMobile);
-  if (isMobile) await expect(picker).not.toBeVisible();
-  else await expect(picker).toBeVisible();
+  await expect(profileMenu.locator(".header-profile-menu__interface")).toHaveCount(0);
+  await expect(profileMenu.locator("select")).toHaveCount(0);
+  await expect(profileMenu.locator(".palette-picker button")).toHaveCount(3);
+  await expect(profileMenu.locator(".header-profile-menu__appearance summary")).toHaveAttribute("aria-label", "المظهر");
+});
 
-  await selectPresentation(page, isMobile, "modern-1");
-  await expect(page.locator("body")).toHaveAttribute("data-ui-theme", "modern-1");
+test("palette and appearance remain switchable without changing the modern administrative interface", async ({ page }) => {
+  await openThemePreview(page, "modern-2");
+  const profileMenu = page.locator(".header-profile-menu");
+  await profileMenu.locator(":scope > summary").click();
+  await page.getByRole("button", { name: "أخضر هادئ", exact: true }).click();
+  await expect(page.locator("body")).toHaveAttribute("data-ui-theme", "modern-3");
+  await expect(page.locator("body")).toHaveAttribute("data-color-palette", "calm-green");
   await expect.poll(() => page.evaluate(() => getComputedStyle(document.body).getPropertyValue("--brand").trim())).toBe("#16815f");
-  await expect.poll(() => page.evaluate(() => getComputedStyle(document.body).fontFamily)).toBe("Tahoma, Arial, sans-serif");
-  if (!isMobile) await expect.poll(() => page.locator(".launcher-topbar").evaluate((element) => Math.round(element.getBoundingClientRect().height))).toBe(70);
-  else await expect.poll(() => page.locator(".launcher-topbar").evaluate((element) => Math.round(element.getBoundingClientRect().height))).toBe(62);
-  await page.screenshot({ path: testInfo.outputPath(`theme-1-${isMobile ? "mobile" : "desktop"}.png`), fullPage: true });
+  await expect.poll(() => page.evaluate((storageKey) => localStorage.getItem(storageKey), paletteStorageKey)).toBe("calm-green");
+  await profileMenu.locator(".header-profile-menu__appearance summary").click();
+  await page.getByRole("button", { name: "ليلي", exact: true }).click();
 
-  await selectPresentation(page, isMobile, "modern-2");
-  await expect(page.locator("body")).toHaveAttribute("data-ui-theme", "modern-2");
-  await expect.poll(() => page.evaluate(() => getComputedStyle(document.body).getPropertyValue("--brand").trim())).toBe("#9c4f28");
-  await expect.poll(() => page.evaluate(() => getComputedStyle(document.body).fontFamily)).toBe("Tahoma, Arial, sans-serif");
-  if (!isMobile) await expect.poll(() => page.locator(".launcher-topbar").evaluate((element) => Math.round(element.getBoundingClientRect().height))).toBe(56);
-  else await expect.poll(() => page.locator(".launcher-topbar").evaluate((element) => Math.round(element.getBoundingClientRect().height))).toBe(62);
-  await page.screenshot({ path: testInfo.outputPath(`theme-2-${isMobile ? "mobile" : "desktop"}.png`), fullPage: true });
-});
-
-test("modern presentations isolate their palette from stored Baseer legacy controls", async ({ page, isMobile }) => {
-  await openThemePreview(page);
-  const picker = presentationPicker(page, isMobile);
-  await selectPresentation(page, isMobile, "modern-1");
-  await expect.poll(() => page.evaluate(() => ({
-    brand: getComputedStyle(document.body).getPropertyValue("--brand").trim(),
-    surface: getComputedStyle(document.body).getPropertyValue("--surface-raised").trim(),
-    legacyClass: document.body.classList.contains("is-blue"),
-    background: document.body.dataset.launcherBackground ?? null,
-    container: document.body.dataset.containerSurface ?? null,
-  }))).toEqual({ brand: "#16815f", surface: "#fff", legacyClass: false, background: null, container: null });
-
-  const legacyThemeSummary = page.locator(".theme-button summary");
-  if (isMobile) await expect(legacyThemeSummary).not.toBeVisible();
-  else await legacyThemeSummary.click();
-  await expect(page.getByRole("button", { name: "blue", exact: true })).toHaveCount(0);
-  await expect(picker).toBeVisible();
-
-  await selectPresentation(page, isMobile, "modern-2");
-  await expect.poll(() => page.evaluate(() => ({
-    brand: getComputedStyle(document.body).getPropertyValue("--brand").trim(),
-    surface: getComputedStyle(document.body).getPropertyValue("--surface-raised").trim(),
-    legacyClass: document.body.classList.contains("is-blue"),
-    background: document.body.dataset.launcherBackground ?? null,
-    container: document.body.dataset.containerSurface ?? null,
-  }))).toEqual({ brand: "#9c4f28", surface: "#fffdfa", legacyClass: false, background: null, container: null });
-});
-
-test("chart palettes follow computed presentation tokens in RTL and dark mode", async ({ page, isMobile }) => {
-  await openThemePreview(page);
-  await page.goto("/#module=reports&page=reports-financial");
-  await expect(page.locator(".module-page")).toBeVisible();
-
-  await selectPresentation(page, isMobile, "modern-1");
-  await expect.poll(() => page.evaluate(() => {
-    const table = document.createElement("table");
-    table.className = "baseer-chart__inline-table";
-    table.dir = "rtl";
-    table.innerHTML = '<tbody><tr><td><span class="baseer-chart__inline-bar"><span class="baseer-chart__inline-bar-fill" style="--baseer-bar-scale:.5;--baseer-bar-delay:0ms"></span></span></td></tr></tbody>';
-    document.body.append(table);
-    const fill = table.querySelector<HTMLElement>(".baseer-chart__inline-bar-fill")!;
-    const result = {
-      primary: getComputedStyle(document.body).getPropertyValue("--chart-primary").trim(),
-      secondary: getComputedStyle(document.body).getPropertyValue("--chart-secondary").trim(),
-      grid: getComputedStyle(document.body).getPropertyValue("--chart-grid").trim(),
-      background: getComputedStyle(fill).backgroundImage,
-    };
-    table.remove();
-    return result;
-  })).toEqual({
-    primary: "#16815f",
-    secondary: "#d6a15c",
-    grid: "rgb(220 229 223 / 70%)",
-    background: "linear-gradient(270deg, rgb(16, 44, 36), rgb(220, 246, 231))",
-  });
-
-  await selectPresentation(page, isMobile, "modern-2");
-  await enableDarkMode(page, isMobile);
+  await expect(page.locator("body")).toHaveAttribute("data-ui-theme", "modern-3");
   await expect(page.locator("body")).toHaveAttribute("data-color-scheme", "dark");
-  await expect.poll(() => page.evaluate(() => ({
-    primary: getComputedStyle(document.body).getPropertyValue("--chart-primary").trim(),
-    axis: getComputedStyle(document.body).getPropertyValue("--chart-axis").trim(),
-    tooltipSurface: getComputedStyle(document.body).getPropertyValue("--chart-tooltip-surface").trim(),
-  }))).toEqual({ primary: "#ef9b70", axis: "#ddc3b1", tooltipSurface: "#37241b" });
+  await expect.poll(() => page.evaluate(() => getComputedStyle(document.body).getPropertyValue("--brand").trim())).toBe("#52c69a");
 });
 
-test("modern presentations keep reference primitive geometry across RTL, mobile, and dark surfaces", async ({ page, isMobile }) => {
-  await openThemePreview(page);
-
-  const primitives = () => page.evaluate(() => {
-    const fixture = document.createElement("section");
-    fixture.innerHTML = [
-      '<article class="baseer-card baseer-card--default">Card</article>',
-      '<div class="baseer-metric-grid"><article class="baseer-card baseer-card--compact baseer-metric"><small>Metric</small><strong>100</strong></article><article class="baseer-card baseer-card--compact baseer-metric"><small>Metric</small><strong>200</strong></article></div>',
-      '<div class="baseer-data-table"><table><thead><tr><th>Header</th></tr></thead><tbody><tr><td>Cell</td></tr></tbody></table></div>',
-      '<section class="baseer-filter-bar administration-companies-toolbar"><input class="baseer-filter-bar__select" /></section>',
-      '<section class="baseer-dialog" role="dialog">Dialog</section>',
-      '<section class="baseer-batch-panel">Batch panel</section>',
-      '<section class="baseer-stepper__panel"><nav class="baseer-stepper__tabs"><button class="baseer-button">Step</button></nav></section>',
-      '<nav class="baseer-workspace-tabs"><button class="baseer-button">Workspace tab</button></nav>',
-      '<section class="baseer-period-filter"><button class="baseer-period-filter__trigger">Period</button><section class="baseer-period-filter__popover">Period popover</section></section>',
-      '<section class="baseer-aria-date-picker__popover">Date popover</section>',
-    ].join("");
-    document.body.append(fixture);
-    const query = <T extends Element>(selector: string) => fixture.querySelector<T>(selector)!;
-    const styles = (selector: string) => getComputedStyle(query(selector));
-    const result = {
-      cardRadius: styles(".baseer-card").borderRadius,
-      metricRadius: styles(".baseer-metric").borderRadius,
-      metricMinHeight: styles(".baseer-metric").minHeight,
-      metricPadding: styles(".baseer-metric").padding,
-      metricGap: styles(".baseer-metric-grid").gap,
-      metricGridRadius: styles(".baseer-metric-grid").borderRadius,
-      tableRadius: styles(".baseer-data-table").borderRadius,
-      headerPadding: styles("th").padding,
-      cellPadding: styles("td").padding,
-      filterPadding: styles(".baseer-filter-bar").padding,
-      dialogRadius: styles(".baseer-dialog").borderRadius,
-      batchPanelRadius: styles(".baseer-batch-panel").borderRadius,
-      stepperPanelRadius: styles(".baseer-stepper__panel").borderRadius,
-      stepperTabsRadius: styles(".baseer-stepper__tabs").borderRadius,
-      workspaceTabsRadius: styles(".baseer-workspace-tabs").borderRadius,
-      periodPopoverRadius: styles(".baseer-period-filter__popover").borderRadius,
-      datePopoverRadius: styles(".baseer-aria-date-picker__popover").borderRadius,
-    };
-    fixture.remove();
-    return result;
-  });
-
-  await selectPresentation(page, isMobile, "modern-1");
-  const themeOne = await primitives();
-  expect(themeOne.cardRadius).toBe("18px");
-  expect(themeOne.metricRadius).toBe("17px");
-  expect(themeOne.metricPadding).toBe("16px");
-  expect(themeOne.metricGap).toBe(isMobile ? "9px" : "13px");
-  expect(themeOne.metricMinHeight).toBe(isMobile ? "128px" : "144px");
-  expect(themeOne.tableRadius).toBe("18px");
-  expect(themeOne.headerPadding).toBe("11px 22px");
-  expect(themeOne.cellPadding).toBe("12px 22px");
-  expect(themeOne.batchPanelRadius).toBe("18px");
-  expect(themeOne.stepperPanelRadius).toBe("18px");
-  expect(themeOne.stepperTabsRadius).toBe("14.4px");
-  expect(themeOne.workspaceTabsRadius).toBe("14.4px");
-  expect(themeOne.periodPopoverRadius).toBe("16px");
-  expect(themeOne.datePopoverRadius).toBe("16px");
-
-  if (!isMobile) {
-    const themeOnePagePadding = await page.evaluate(() => {
-      const modulePage = document.createElement("section");
-      modulePage.className = "module-page";
-      document.body.append(modulePage);
-      const padding = Number.parseFloat(getComputedStyle(modulePage).paddingInlineStart);
-      modulePage.remove();
-      return padding;
-    });
-    expect(themeOnePagePadding).toBeGreaterThanOrEqual(50);
-    expect(themeOnePagePadding).toBeLessThanOrEqual(52);
+test("every saved palette supplies its own light and dark semantic brand token", async ({ page }) => {
+  for (const [palette, lightBrand, darkBrand] of [["calm-green", "#16815f", "#52c69a"], ["editorial-copper", "#9c4f28", "#ef9b70"], ["modern-admin", "#127f73", "#55c7b7"]] as const) {
+    await openThemePreview(page, "modern-3", palette);
+    await expect(page.locator("body")).toHaveAttribute("data-ui-theme", "modern-3");
+    await expect(page.locator("body")).toHaveAttribute("data-color-palette", palette);
+    await expect.poll(() => page.evaluate(() => getComputedStyle(document.body).getPropertyValue("--brand").trim())).toBe(lightBrand);
+    const profileMenu = page.locator(".header-profile-menu");
+    await profileMenu.locator(":scope > summary").click();
+    await profileMenu.locator(".header-profile-menu__appearance summary").click();
+    await page.getByRole("button", { name: "ليلي", exact: true }).click();
+    await expect.poll(() => page.evaluate(() => getComputedStyle(document.body).getPropertyValue("--brand").trim())).toBe(darkBrand);
   }
-
-  await selectPresentation(page, isMobile, "modern-2");
-  const themeTwo = await primitives();
-  expect(themeTwo.cardRadius).toBe("5px");
-  expect(themeTwo.metricRadius).toBe(isMobile ? "5px" : "0px");
-  expect(themeTwo.metricMinHeight).toBe(isMobile ? "128px" : "118px");
-  expect(themeTwo.metricGap).toBe(isMobile ? "9px" : "0px");
-  expect(themeTwo.metricGridRadius).toBe(isMobile ? "0px" : "5px");
-  expect(themeTwo.tableRadius).toBe("5px");
-  expect(themeTwo.headerPadding).toBe("11px 22px");
-  expect(themeTwo.cellPadding).toBe("12px 22px");
-  expect(themeTwo.dialogRadius).toBe("5px");
-  expect(themeTwo.batchPanelRadius).toBe("5px");
-  expect(themeTwo.stepperPanelRadius).toBe("5px");
-  expect(themeTwo.stepperTabsRadius).toBe("5px 5px 0px 0px");
-  expect(themeTwo.workspaceTabsRadius).toBe("5px 5px 0px 0px");
-  expect(themeTwo.periodPopoverRadius).toBe("5px");
-  expect(themeTwo.datePopoverRadius).toBe("5px");
-
-  if (!isMobile) {
-    const themeTwoPagePadding = await page.evaluate(() => {
-      const modulePage = document.createElement("section");
-      modulePage.className = "module-page";
-      document.body.append(modulePage);
-      const padding = Number.parseFloat(getComputedStyle(modulePage).paddingInlineStart);
-      modulePage.remove();
-      return padding;
-    });
-    expect(themeTwoPagePadding).toBe(30);
-  }
-
-  await page.evaluate(() => { document.body.dataset.colorScheme = "dark"; });
-  const darkThemeTwo = await primitives();
-  expect(darkThemeTwo.cardRadius).toBe("5px");
-  expect(darkThemeTwo.metricMinHeight).toBe(isMobile ? "128px" : "118px");
 });

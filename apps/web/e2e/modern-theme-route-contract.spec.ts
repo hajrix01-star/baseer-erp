@@ -10,7 +10,8 @@ import { pageRegistry } from "../src/page-registry";
 const testDirectory = fileURLToPath(new URL(".", import.meta.url));
 const appSource = readFileSync(resolve(testDirectory, "../src/App.tsx"), "utf8");
 const shellSource = readFileSync(resolve(testDirectory, "../src/baseer-app-shell.tsx"), "utf8");
-const themeLayoutSource = readFileSync(resolve(testDirectory, "../src/baseer-modern-theme-layouts.css"), "utf8");
+const modernAdminThemeSource = readFileSync(resolve(testDirectory, "../src/baseer-modern-admin-theme.css"), "utf8");
+const paletteSource = readFileSync(resolve(testDirectory, "../src/baseer-modern-admin-palettes.css"), "utf8");
 
 /**
  * This is a route-contract test, not a visual approval test.  It deliberately
@@ -35,13 +36,13 @@ test("every visible registry page is inside the modern shell presentation contra
   expect(appSource).toContain("<BaseerAppShell header={header}");
   expect(shellSource).toContain('<main className="workspace">');
 
-  // Both modern presentations carry the reference shell dimensions.  Keeping
-  // this in the contract prevents a later token-only change from silently
-  // collapsing Theme 1/2 back into a color-only presentation.
-  expect(themeLayoutSource).toContain("--shell-header-height: 4.375rem");
-  expect(themeLayoutSource).toContain("--shell-header-height: 3.5rem");
-  expect(themeLayoutSource).toContain("inline-size: 16.0625rem");
-  expect(themeLayoutSource).toContain("inline-size: 13.375rem");
+  // The modern administrative layout is fixed. Colour palettes must be a
+  // separate, semantic-token layer and must never revive a legacy layout.
+  expect(appSource).toContain("document.body.dataset.colorPalette = palette");
+  expect(modernAdminThemeSource).toContain('body[data-ui-theme="modern-3"]');
+  expect(paletteSource).toContain('data-color-palette="calm-green"');
+  expect(paletteSource).toContain('data-color-palette="editorial-copper"');
+  expect(paletteSource).not.toMatch(/(?:padding|margin|radius|inline-size|grid-template-columns)\s*:/);
 });
 
 test("the only registry-page navigation exception is explicit and security scoped", () => {

@@ -12,7 +12,7 @@ const permissionCodes = [
 const uncoveredRoutes = [
   { module: "command", page: "command-calendar", title: "التقويم" },
   { module: "command", page: "command-analytics", title: "التحليلات" },
-  { module: "command", page: "command-owner-notebook", title: "دفتر المالك اليومي" },
+  { module: "command", page: "command-owner-notebook", title: "لوحة المالك" },
   { module: "decision", page: "decision-interpretations", title: "التفسيرات والقرارات البشرية" },
   { module: "marketing", page: "marketing-overview", title: "النظرة" },
   { module: "marketing", page: "marketing-calendar", title: "التقويم التسويقي" },

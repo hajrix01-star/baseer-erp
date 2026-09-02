@@ -12,7 +12,7 @@ import { pageRegistry } from "../src/page-registry";
  * unprepared API surface has real data coverage.
  */
 const companyId = "77777777-7777-4777-8777-777777777777";
-const presentations = ["modern-1", "modern-2"] as const;
+const palettes = ["calm-green", "editorial-copper", "modern-admin"] as const;
 const representativePageIds = new Set([
   "command-money-marketing",
   "decision-overview",
@@ -25,7 +25,7 @@ const representativePageIds = new Set([
   "administration-overview",
 ]);
 
-type Presentation = (typeof presentations)[number];
+type Palette = (typeof palettes)[number];
 
 function broadPermissionCodes() {
   return [...new Set(pageRegistry.flatMap((entry) => {
@@ -38,18 +38,18 @@ async function fulfill(route: Route, json: unknown, status = 200) {
   await route.fulfill({ status, contentType: "application/json", body: JSON.stringify(json) });
 }
 
-async function prepareVisualMatrix(page: Page, presentation: Presentation) {
+async function prepareVisualMatrix(page: Page, palette: Palette) {
   const unpreparedReads = new Set<string>();
-  await page.addInitScript(({ company, selectedPresentation }) => {
+  await page.addInitScript(({ company, selectedPalette }) => {
     sessionStorage.setItem("baseer.erp.access-token", "visual-matrix-access-token");
     sessionStorage.setItem("baseer.erp.refresh-token", "visual-matrix-refresh-token");
     sessionStorage.setItem("baseer.erp.session-expires-at", "2099-01-01T00:00:00.000Z");
     sessionStorage.setItem("baseer.erp.company-id", company);
     localStorage.setItem("baseer.ui.locale.v1", "ar");
-    localStorage.setItem("baseer-erp.shell.presentation.v1", selectedPresentation);
-    localStorage.setItem("baseer-erp.shell.theme-navigation-mode.v1", "tree");
+    localStorage.setItem("baseer-erp.shell.presentation.v1", "modern-3");
+    localStorage.setItem("baseer-erp.shell.color-palette.v1", selectedPalette);
     localStorage.setItem("baseer-erp.shell.appearance.v1", "light");
-  }, { company: companyId, selectedPresentation: presentation });
+  }, { company: companyId, selectedPalette: palette });
 
   await page.route("**/v1/**", async (route) => {
     const request = route.request();
@@ -83,22 +83,17 @@ async function prepareVisualMatrix(page: Page, presentation: Presentation) {
   return unpreparedReads;
 }
 
-async function assertCommonVisualContract(page: Page, presentation: Presentation, isMobile: boolean) {
-  await expect(page.locator("body")).toHaveAttribute("data-ui-theme", presentation);
+async function assertCommonVisualContract(page: Page, palette: Palette, isMobile: boolean) {
+  await expect(page.locator("body")).toHaveAttribute("data-ui-theme", "modern-3");
+  await expect(page.locator("body")).toHaveAttribute("data-color-palette", palette);
   await expect(page.locator("main.workspace")).toBeVisible();
   await expect(page.locator(".module-page")).toBeVisible();
   await expect(page.locator(".topbar")).toBeVisible();
-  await expect(page.locator(".interface-theme-control select")).toHaveValue(presentation);
   if (isMobile) {
     await expect(page.getByRole("button", { name: /الأقسام/ })).toBeVisible();
-    // The phone header deliberately keeps A/B inside the profile menu so it
-    // does not compete with navigation and the company context. It must still
-    // be reachable and visible after the real menu interaction.
-    await page.locator(".header-profile-menu > summary").click();
-    await expect(page.locator(".header-profile-menu__navigation")).toBeVisible();
   } else {
-    await expect(page.locator(".theme-navigation-control")).toBeVisible();
     await expect(page.locator(".module-sidebar")).toBeVisible();
+    await expect(page.locator(".theme-navigation--tree")).toBeVisible();
   }
 
   return page.evaluate(() => {
@@ -123,15 +118,15 @@ async function assertCommonVisualContract(page: Page, presentation: Presentation
   });
 }
 
-for (const presentation of presentations) {
+for (const palette of palettes) {
   for (const entry of pageRegistry) {
-    test(`${presentation} visual matrix: ${entry.id}`, async ({ page, isMobile }, testInfo) => {
+    test(`${palette} visual matrix: ${entry.id}`, async ({ page, isMobile }, testInfo) => {
       const pageErrors: string[] = [];
       page.on("pageerror", (error) => pageErrors.push(error.message));
-      const unpreparedReads = await prepareVisualMatrix(page, presentation);
+      const unpreparedReads = await prepareVisualMatrix(page, palette);
 
       await page.goto(`/#module=${entry.moduleId}&page=${entry.id}`);
-      const overflow = await assertCommonVisualContract(page, presentation, isMobile);
+      const overflow = await assertCommonVisualContract(page, palette, isMobile);
       await expect(page.locator(".page-heading h1")).toHaveText(entry.title.ar);
       // Give lazy workspace reads a chance to settle so a rejected read cannot
       // leave an unobserved runtime exception after the shell assertion.
@@ -139,7 +134,7 @@ for (const presentation of presentations) {
 
       await testInfo.attach("unprepared-api-reads.json", {
         contentType: "application/json",
-        body: JSON.stringify({ pageId: entry.id, presentation, reads: [...unpreparedReads].sort() }, null, 2),
+        body: JSON.stringify({ pageId: entry.id, palette, reads: [...unpreparedReads].sort() }, null, 2),
       });
       if (overflow.overflow > 1) {
         await testInfo.attach("horizontal-overflow.json", {
@@ -148,7 +143,7 @@ for (const presentation of presentations) {
         });
       }
       if (representativePageIds.has(entry.id)) {
-        await page.screenshot({ path: testInfo.outputPath(`${entry.id}-${presentation}-${isMobile ? "mobile" : "desktop"}.png`), fullPage: true });
+        await page.screenshot({ path: testInfo.outputPath(`${entry.id}-${palette}-${isMobile ? "mobile" : "desktop"}.png`), fullPage: true });
       }
       expect(overflow.overflow, `horizontal overflow diagnostics: ${JSON.stringify(overflow)}`).toBeLessThanOrEqual(1);
       expect(pageErrors).toEqual([]);

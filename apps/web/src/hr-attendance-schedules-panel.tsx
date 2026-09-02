@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
+import { BaseerConfirmDialog } from "./baseer-confirm-dialog";
 import { BaseerDatePicker } from "./baseer-date-picker";
 import { BaseerCheckbox, BaseerTextInput, BaseerTimeInput } from "./baseer-form-fields";
 import { BaseerFormDialog } from "./baseer-form-dialog";
@@ -130,6 +131,8 @@ export function HrAttendanceSchedulesPanel({ language, schedules, busy = false, 
   const [assignmentEffectiveFrom, setAssignmentEffectiveFrom] = useState(riyadhBusinessDate);
   const [previewDay, setPreviewDay] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [simplifyConfirmationOpen, setSimplifyConfirmationOpen] = useState(false);
+  const [archiveTarget, setArchiveTarget] = useState<AttendanceScheduleTemplate | null>(null);
   const activeSchedules = useMemo(() => schedules.filter((schedule) => schedule.status === "ACTIVE"), [schedules]);
   const archiveSchedules = useMemo(() => schedules.filter((schedule) => schedule.status === "ARCHIVED"), [schedules]);
   const totalAssigned = useMemo(
@@ -197,14 +200,19 @@ export function HrAttendanceSchedulesPanel({ language, schedules, busy = false, 
 
     const workDays = draft.days.filter((day) => day.intervals.length > 0).map((day) => day.day);
     const source = draft.days.find((day) => day.intervals.length > 0)?.intervals ?? [];
-    const confirmation = ar
-      ? "ستصبح فترات كل أيام العمل متطابقة مع أول يوم عمل، وستُزال التخصيصات المختلفة. هل تريد المتابعة؟"
-      : "Every work day will use the first work day's periods and its distinct customizations will be removed. Continue?";
-    if (!window.confirm(confirmation)) return;
+    // The actual change is confirmed in the shared accessible dialog below.
+    // Do not rely on window.confirm: it is unreliable in installed/mobile PWA
+    // contexts and bypasses the application's focus handling.
+    if (workDays.length && source.length) setSimplifyConfirmationOpen(true);
+  };
 
+  const confirmReturnToSimpleEditor = () => {
+    const workDays = draft.days.filter((day) => day.intervals.length > 0).map((day) => day.day);
+    const source = draft.days.find((day) => day.intervals.length > 0)?.intervals ?? [];
     setDraft((current) => ({ ...current, days: withSharedIntervals(current.days, workDays, source) }));
     setPreviewDay(workDays[0] ?? 0);
     setAdvancedEditor(false);
+    setSimplifyConfirmationOpen(false);
   };
 
   const save = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -223,11 +231,16 @@ export function HrAttendanceSchedulesPanel({ language, schedules, busy = false, 
     }
   };
 
-  const archive = async (schedule: AttendanceScheduleTemplate) => {
+  const archive = async () => {
+    const schedule = archiveTarget;
     if (!onArchive || busy) return;
-    const message = ar ? `أرشفة «${schedule.nameAr}»؟ لن يتغير تاريخ الحضور السابق.` : `Archive “${schedule.nameAr}”? Historic attendance will not change.`;
-    if (!window.confirm(message)) return;
-    await onArchive(schedule);
+    if (!schedule) return;
+    try {
+      await onArchive(schedule);
+      setArchiveTarget(null);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : (ar ? "تعذرت أرشفة قالب الدوام." : "The work template could not be archived."));
+    }
   };
 
   const openAssignment = (schedule: AttendanceScheduleTemplate) => {
@@ -272,7 +285,7 @@ export function HrAttendanceSchedulesPanel({ language, schedules, busy = false, 
       <div className="hr-schedules__template-actions">
         {onAssignEmployees ? <BaseerButton type="button" variant="secondary" onClick={() => openAssignment(schedule)} disabled={busy}>{ar ? "ربط موظفين" : "Assign employees"}</BaseerButton> : null}
         <BaseerButton type="button" variant="quiet" onClick={() => openEdit(schedule)} disabled={busy}>{ar ? "تعديل" : "Edit"}</BaseerButton>
-        {schedule.status === "ACTIVE" ? <BaseerButton type="button" variant="quiet" onClick={() => void archive(schedule)} disabled={busy}>{ar ? "أرشفة" : "Archive"}</BaseerButton> : null}
+        {schedule.status === "ACTIVE" ? <BaseerButton type="button" variant="quiet" onClick={() => { setError(null); setArchiveTarget(schedule); }} disabled={busy}>{ar ? "أرشفة" : "Archive"}</BaseerButton> : null}
       </div>
     </BaseerCard>;
   };
@@ -381,5 +394,7 @@ export function HrAttendanceSchedulesPanel({ language, schedules, busy = false, 
         </div></fieldset>
       </form>
     </BaseerFormDialog>
+    <BaseerConfirmDialog open={simplifyConfirmationOpen} language={language} title={ar ? "توحيد فترات الدوام" : "Unify work periods"} message={ar ? "ستصبح فترات كل أيام العمل متطابقة مع أول يوم عمل، وستُزال التخصيصات المختلفة." : "Every work day will use the first work day's periods and its distinct customizations will be removed."} confirmLabel={ar ? "توحيد الفترات" : "Unify periods"} destructive onCancel={() => setSimplifyConfirmationOpen(false)} onConfirm={confirmReturnToSimpleEditor} />
+    <BaseerConfirmDialog open={Boolean(archiveTarget)} language={language} title={ar ? "أرشفة قالب الدوام" : "Archive work template"} message={archiveTarget ? (ar ? `لن يتغير تاريخ الحضور السابق للقالب «${archiveTarget.nameAr}».` : `Historic attendance for “${archiveTarget.nameAr}” will not change.`) : ""} confirmLabel={ar ? "أرشفة القالب" : "Archive template"} destructive busy={busy} onCancel={() => !busy && setArchiveTarget(null)} onConfirm={() => void archive()} />
   </section>;
 }

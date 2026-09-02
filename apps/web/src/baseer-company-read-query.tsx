@@ -15,6 +15,8 @@ type BaseerCompanyReadQueryProps<T> = {
    * never be repeated merely because the browser regained focus or network.
    */
   mode?: "live" | "snapshot";
+  /** Optional near-real-time refresh for live financial reads. */
+  refreshIntervalMs?: number;
   load: (session: ActiveSession, signal: AbortSignal) => Promise<T>;
   children: (state: QueryState<T>) => ReactNode;
 };
@@ -35,11 +37,12 @@ export function baseerReadQueryKey(session: ActiveSession, resource: string, sco
   return ["baseer", "read", session.companyId, session.sessionExpiresAt, resource, ...scope] as const;
 }
 
-function CompanyQuery<T>({ session, resource, scope, mode, load, children }: BaseerCompanyReadQueryProps<T>) {
+function CompanyQuery<T>({ session, resource, scope, mode, refreshIntervalMs, load, children }: BaseerCompanyReadQueryProps<T>) {
   const snapshot = mode === "snapshot";
   const query = useQuery({
     queryKey: baseerReadQueryKey(session, resource, scope),
     queryFn: ({ signal }) => load(session, signal),
+    refetchInterval: snapshot ? false : refreshIntervalMs,
     ...(snapshot ? { staleTime: Infinity, retry: false, retryOnMount: false, refetchOnWindowFocus: false, refetchOnReconnect: false } : {}),
   });
   const reload = async () => (await query.refetch({ throwOnError: true })).data;

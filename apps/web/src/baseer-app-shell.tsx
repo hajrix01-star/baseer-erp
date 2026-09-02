@@ -26,8 +26,8 @@ type Props = {
 
 /**
  * Authenticated module frame. The frame makes every full workspace share one
- * heading, sidebar and mobile drawer contract while allowing focused flows to
- * omit navigation deliberately.
+ * heading, desktop sidebar and mobile drawer contract while allowing focused
+ * flows to omit navigation deliberately.
  */
 export function BaseerAppShell({ header, moduleTitle, currentModuleLabel, sectionTitle, sectionsLabel, closeLabel, breadcrumbPrefix = "Baseer ERP", pageClassName, onModules, navigation, navigationKey, children }: Props) {
   const [drawerOpen, setDrawerOpen] = useState(false);

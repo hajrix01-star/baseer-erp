@@ -22,15 +22,15 @@ async function fulfill(route: Route, body: unknown) {
   await route.fulfill({ contentType: "application/json", body: JSON.stringify(body) });
 }
 
-async function prepareEmployeeProfile(page: Page, presentation: "modern-1" | "modern-2") {
-  await page.addInitScript(({ company, selectedPresentation }) => {
+async function prepareEmployeeProfile(page: Page) {
+  await page.addInitScript(({ company }) => {
     sessionStorage.setItem("baseer.erp.access-token", "hr-profile-e2e-token");
     sessionStorage.setItem("baseer.erp.refresh-token", "hr-profile-e2e-refresh-token");
     sessionStorage.setItem("baseer.erp.session-expires-at", "2099-01-01T00:00:00.000Z");
     sessionStorage.setItem("baseer.erp.company-id", company);
     localStorage.setItem("baseer.ui.locale.v1", "ar");
-    localStorage.setItem("baseer-erp.shell.presentation.v1", selectedPresentation);
-  }, { company: companyId, selectedPresentation: presentation });
+    localStorage.setItem("baseer-erp.shell.presentation.v1", "modern-3");
+  }, { company: companyId });
   await page.route("**/v1/**", async (route) => {
     const path = new URL(route.request().url()).pathname;
     if (path === "/v1/companies/available") return fulfill(route, { companies: [{ id: companyId, nameAr: "شركة الاختبار", nameEn: "Test Company", permissionCodes: ["hr.employees.read", "hr.employees.write"] }] });
@@ -43,15 +43,14 @@ async function prepareEmployeeProfile(page: Page, presentation: "modern-1" | "mo
   });
 }
 
-for (const presentation of ["modern-1", "modern-2"] as const) {
-  test(`employee file route stays semantic and contained in ${presentation}`, async ({ page, isMobile }) => {
+test("employee file route stays semantic and contained in the modern admin interface", async ({ page, isMobile }) => {
     const pageErrors: string[] = [];
     page.on("pageerror", (error) => pageErrors.push(error.message));
-    await prepareEmployeeProfile(page, presentation);
+    await prepareEmployeeProfile(page);
     await page.goto(`/#module=hr&page=hr-employees&stage=employee-${employeeId}`);
 
     const profile = page.getByRole("region", { name: "موظف الاختبار" });
-    await expect(page.locator("body")).toHaveAttribute("data-ui-theme", presentation);
+    await expect(page.locator("body")).toHaveAttribute("data-ui-theme", "modern-3");
     await expect(page).toHaveURL(new RegExp(`stage=employee-${employeeId}`));
     await expect(page.locator("#root")).not.toHaveText("جارٍ التحميل…", { timeout: 15_000 });
     await expect(profile).toBeVisible({ timeout: 15_000 }).catch(async (error) => {
@@ -71,5 +70,4 @@ for (const presentation of ["modern-1", "modern-2"] as const) {
     expect(measurement.localOverflow).toBeLessThanOrEqual(1);
     expect(measurement.pageOverflow).toBeLessThanOrEqual(1);
     if (isMobile) await expect(profile.getByRole("tablist", { name: "أقسام ملف الموظف" })).toBeVisible();
-  });
-}
+});

@@ -1,6 +1,6 @@
 import { BarChart, LineChart } from "echarts/charts";
 import { GridComponent, TooltipComponent } from "echarts/components";
-import { graphic, init, use } from "echarts/core";
+import { init, use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { BaseerButton } from "./baseer-button";
@@ -84,10 +84,7 @@ export function BaseerChart({ language, title, points, asOf, showSummary = true,
         barMaxWidth: 18,
         animationDelay: (index: number) => index * 85,
         animationDelayUpdate: (index: number) => index * 36,
-        itemStyle: {
-          borderRadius: language === "ar" ? [8, 0, 0, 8] : [0, 8, 8, 0],
-          color: { type: "linear", x: 0, y: 0, x2: 1, y2: 0, colorStops: language === "ar" ? [{ offset: 0, color: chartPalette.primarySoft }, { offset: 1, color: chartPalette.primary }] : [{ offset: 0, color: chartPalette.primary }, { offset: 1, color: chartPalette.primarySoft }] },
-        },
+        itemStyle: { borderRadius: language === "ar" ? [8, 0, 0, 8] : [0, 8, 8, 0], color: chartPalette.primary },
         label: {
           show: true,
           position: language === "ar" ? "left" : "right",
@@ -112,7 +109,7 @@ export function BaseerChart({ language, title, points, asOf, showSummary = true,
       // selected denominator instead of merely ranking rows against the largest row.
       const scale = Number.isFinite(declaredShare) ? Math.max(0, Math.min(1, declaredShare / 100)) : maximum > 0 ? Math.max(0, Math.min(1, point.value / maximum)) : 0;
       const barStyle = { "--baseer-bar-scale": String(scale), "--baseer-bar-delay": `${index * 70}ms` } as CSSProperties;
-      return <tr key={point.id ?? point.label}><td className="baseer-chart__rank" dir="ltr">{formatCount(point.rank ?? index + 1, language)}</td><th scope="row">{onPointClick ? <button type="button" className="baseer-chart__point-link" onClick={() => onPointClick(point)}>{point.label}</button> : point.label}</th><td><span className="baseer-chart__inline-bar" aria-hidden="true"><span className="baseer-chart__inline-bar-fill" style={barStyle} /></span></td><td className="baseer-chart__share" dir="ltr">{point.shareOfTotalPercent === undefined ? "—" : formatPercent(point.shareOfTotalPercent, 2, language)}</td><td dir="ltr">{pointDisplay(point)}</td></tr>;
+      return <tr key={point.id ?? point.label}><td className="baseer-chart__rank" dir="ltr">{formatCount(point.rank ?? index + 1, language)}</td><th scope="row">{onPointClick ? <button type="button" className="baseer-chart__point-link" onClick={() => onPointClick(point)}>{point.label}</button> : point.label}</th><td><span className="baseer-chart__inline-bar" aria-hidden="true"><span className="baseer-chart__inline-bar-fill" style={barStyle} /></span></td><td className="baseer-chart__share" dir="ltr">{point.shareOfTotalPercent === undefined ? "—" : formatPercent(point.shareOfTotalPercent, language)}</td><td dir="ltr">{pointDisplay(point)}</td></tr>;
     })}</tbody></table> : <><div ref={element} className="baseer-chart__plot" style={{ minBlockSize: `max(var(--baseer-chart-height-standard, 15rem), ${Math.max(10, points.length * 1.85)}rem)` }} role="img" aria-label={title} /><table><caption className="visually-hidden">{title}</caption><thead><tr><th>{language === "ar" ? "المؤشر" : "Metric"}</th><th>{language === "ar" ? "القيمة" : "Value"}</th></tr></thead><tbody>{points.map((point) => <tr key={point.label}><th scope="row">{point.label}</th><td dir="ltr">{pointDisplay(point)}</td></tr>)}</tbody></table></>}
   </section>;
 }
@@ -131,25 +128,14 @@ export function HrWorkforceStatusChart({ language, title, points, asOf }: {
 }) {
   const ar = language === "ar";
   const chartPalette = useBaseerChartPalette();
-  const [selectedPointIndex, setSelectedPointIndex] = useState(0);
-  const total = points.reduce((sum, point) => sum + Math.max(0, point.value), 0);
+  const maximum = Math.max(1, ...points.map((point) => Math.max(0, point.value)));
   const palette = [chartPalette.primary, chartPalette.info, chartPalette.secondary];
-  const activePoints = points.filter((point) => point.value > 0);
-  const singleActivePoint = activePoints.length === 1 ? activePoints[0] : null;
-  let cursor = 0;
-  const stops = points.map((point, index) => {
-    const start = total ? cursor / total * 100 : 0;
-    cursor += Math.max(0, point.value);
-    const end = total ? cursor / total * 100 : 0;
-    return `${palette[index % palette.length]} ${start}% ${end}%`;
-  }).join(", ") || `${chartPalette.grid} 0 100%`;
   return <section className="hr-workforce-chart" aria-label={title} dir={ar ? "rtl" : "ltr"}>
     <header className="hr-workforce-chart__header"><div><p>{ar ? "لقطة تشغيلية" : "Operational snapshot"}</p><h3>{title}</h3></div><small>{ar ? `محدّث في ${formatDate(asOf, language)}` : `Updated ${formatDate(asOf, language)}`}</small></header>
     <div className="hr-workforce-chart__body">
-      <div className="hr-workforce-chart__visual"><div className="hr-workforce-chart__plot" role="img" aria-label={title} style={{ background: `conic-gradient(${stops})` }} /><div className="hr-workforce-chart__center" aria-hidden="true"><strong dir="ltr">{formatCount(total, language)}</strong><span>{singleActivePoint?.label ?? (ar ? "إجمالي الإشارات" : "Total signals")}</span></div></div>
-      <div className="hr-workforce-chart__insights" aria-label={ar ? "تفاصيل الحالة" : "Status details"}>{points.map((point, index) => <button key={point.id ?? point.label} type="button" className="hr-workforce-chart__insight" aria-pressed={selectedPointIndex === index} onClick={() => setSelectedPointIndex(index)}><span className="hr-workforce-chart__dot" style={{ backgroundColor: palette[index % palette.length] }} aria-hidden="true" /><span><strong>{point.label}</strong><small>{ar ? "إشارة تشغيلية" : "Operational signal"}</small></span><b dir="ltr">{point.displayValue ?? formatCount(point.value, language)}</b></button>)}</div>
+      <div className="hr-workforce-chart__insights" aria-label={ar ? "تفاصيل الحالة" : "Status details"}>{points.map((point, index) => <div key={point.id ?? point.label} className="hr-workforce-chart__insight"><span className="hr-workforce-chart__dot" style={{ backgroundColor: palette[index % palette.length] }} aria-hidden="true" /><span><strong>{point.label}</strong><small>{ar ? "إشارة مستقلة" : "Independent signal"}</small></span><b dir="ltr">{point.displayValue ?? formatCount(point.value, language)}</b><span className="hr-workforce-chart__bar" aria-hidden="true"><span style={{ inlineSize: `${Math.max(0, point.value) / maximum * 100}%`, backgroundColor: palette[index % palette.length] }} /></span></div>)}</div>
     </div>
-    <footer className="hr-workforce-chart__footer"><span>{ar ? "المؤشرات قد تتداخل بين الموظفين" : "Signals may overlap across employees"}</span></footer>
+    <footer className="hr-workforce-chart__footer"><span>{ar ? "المؤشرات قد تتداخل بين الموظفين، لذا تُقرأ منفصلة ولا تُجمع كإجمالي." : "Signals may overlap across employees, so they are read independently rather than summed."}</span></footer>
   </section>;
 }
 
@@ -181,7 +167,13 @@ export function BaseerMarketingTimelineChart({ language, title, timeline, campai
   // disproportionate share of a phone canvas.  On narrow screens the tooltip
   // remains the exact-reading surface and the plot gets that width back.
   const [isCompactTimeline, setIsCompactTimeline] = useState(() => typeof window !== "undefined" && window.matchMedia("(max-width: 720px)").matches);
-  const [visibleSeries, setVisibleSeries] = useState({ sales: true, campaignSpend: true, purchases: true, customers: true });
+  // A phone starts with the three monetary readings. Customer count remains
+  // one tap away because it has a separate unit/axis and would otherwise make
+  // a four-series mobile plot harder to read.
+  const [visibleSeries, setVisibleSeries] = useState(() => {
+    const compact = typeof window !== "undefined" && window.matchMedia("(max-width: 720px)").matches;
+    return { sales: true, campaignSpend: true, purchases: true, customers: !compact };
+  });
   const [showPointLabels, setShowPointLabels] = useState(false);
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
   const [outputError, setOutputError] = useState<string | null>(null);
@@ -237,20 +229,28 @@ export function BaseerMarketingTimelineChart({ language, title, timeline, campai
       ]);
     };
     const contextAreas = mode === "daily" ? context.slice(0, 40).map((item) => [{ name: item.titleAr, xAxis: item.startsOn }, { xAxis: item.endsOn }]) : [];
-    const pointLabel = (params: { value?: unknown }) => {
-      const value = typeof params.value === "number" ? params.value : Number(params.value);
-      return Number.isFinite(value) ? compactNumber(value, language) : "";
+    // Plot coordinates necessarily remain numeric for ECharts, but every
+    // visible monetary label comes back from the Marketing read model.  The
+    // browser must never apply a second rounding, compacting, or currency rule.
+    const pointLabel = (params: { dataIndex?: number; seriesId?: string }) => {
+      const row = timelineRows[params.dataIndex ?? -1];
+      if (!row) return "";
+      if (params.seriesId === "sales") return row.sales.display ?? "";
+      if (params.seriesId === "purchases") return row.purchases.display ?? "";
+      return params.seriesId === "customers" ? customerLabel(row.customerCount) : "";
     };
     const series = [
       // A null is an unverified or unavailable accounting reading, never a
       // zero and never a value we may interpolate across.  Keeping the gap is
       // more honest than a visually continuous trend.
-      visibleSeries.sales ? { id: "sales", name: ar ? "المبيعات الرسمية الشاملة للضريبة" : "VAT-inclusive official sales", type: "line" as const, smooth: isCompactTimeline ? .18 : .32, connectNulls: false, showSymbol: true, symbol: "circle", symbolSize: isCompactTimeline ? 5 : 7, z: 4, data: timelineRows.map((row) => row.sales.chartValue), label: { show: showPointLabels, position: "top", distance: 5, color: chartPalette.primary, fontSize: 9, fontWeight: 800, formatter: pointLabel }, labelLayout: { hideOverlap: true }, itemStyle: { color: chartPalette.primary, borderWidth: 0 }, lineStyle: { width: isCompactTimeline ? 2.6 : 3, type: "solid", cap: "round" }, areaStyle: { color: new graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: chartAlpha(chartPalette.primary, .28) }, { offset: .52, color: chartAlpha(chartPalette.primary, .11) }, { offset: 1, color: chartAlpha(chartPalette.primary, 0) }]) }, emphasis: { focus: "series" as const, symbolSize: isCompactTimeline ? 7 : 9, lineStyle: { width: 4, type: "solid" } }, markArea: contextAreas.length ? { silent: true, itemStyle: { color: chartAlpha(chartPalette.secondary, .08) }, data: contextAreas } : undefined } : null,
-      visibleSeries.campaignSpend ? { id: "campaignSpend", name: ar ? "الصرف على الحملات" : "Campaign spend", type: "bar" as const, yAxisIndex: 0, barMaxWidth: isCompactTimeline ? 12 : 16, data: timelineRows.map((row) => row.campaignSpend.chartValue), itemStyle: { color: new graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: chartPalette.secondary }, { offset: 1, color: chartAlpha(chartPalette.secondary, .56) }]), borderRadius: [6, 6, 1, 1] }, emphasis: { focus: "series" as const, itemStyle: { color: chartPalette.secondary } } } : null,
+      // The primary accounting amount is a column: it makes daily sales volume
+      // and its zero baseline immediately legible. Supporting flows are lines.
+      visibleSeries.sales ? { id: "sales", name: ar ? "المبيعات الرسمية الشاملة للضريبة" : "VAT-inclusive official sales", type: "bar" as const, yAxisIndex: 0, barMaxWidth: isCompactTimeline ? 14 : 20, z: 2, data: timelineRows.map((row) => row.sales.chartValue), label: { show: showPointLabels, position: "top", distance: 5, color: chartPalette.primaryDeep, fontSize: 9, fontWeight: 800, formatter: pointLabel }, labelLayout: { hideOverlap: true }, itemStyle: { color: chartPalette.primary, borderRadius: [5, 5, 0, 0] }, emphasis: { focus: "series" as const, itemStyle: { color: chartPalette.primaryDeep } }, markArea: contextAreas.length ? { silent: true, itemStyle: { color: chartAlpha(chartPalette.secondary, .08) }, data: contextAreas } : undefined } : null,
+      visibleSeries.campaignSpend ? { id: "campaignSpend", name: ar ? "الصرف على الحملات" : "Campaign spend", type: "line" as const, yAxisIndex: 0, smooth: false, connectNulls: false, showSymbol: true, symbol: "circle", symbolSize: isCompactTimeline ? 4.5 : 6, z: 5, data: timelineRows.map((row) => row.campaignSpend.chartValue), label: { show: showPointLabels, position: "top", distance: 4, color: chartPalette.secondary, fontSize: 8, fontWeight: 800, formatter: pointLabel }, labelLayout: { hideOverlap: true }, itemStyle: { color: chartPalette.secondary, borderColor: chartPalette.tooltipSurface, borderWidth: 1.5 }, lineStyle: { width: isCompactTimeline ? 2.1 : 2.4, type: "solid", cap: "round" }, emphasis: { focus: "series" as const, symbolSize: isCompactTimeline ? 6.5 : 8, lineStyle: { width: 3.4, type: "solid" } } } : null,
       // A completed no-purchase day is a valid zero; an unread day is null
       // and must remain a gap instead of inventing a purchase result.
-      visibleSeries.purchases ? { id: "purchases", name: ar ? "المشتريات" : "Purchases", type: "line" as const, yAxisIndex: 0, smooth: isCompactTimeline ? .1 : .18, connectNulls: false, showSymbol: true, symbol: "circle", symbolSize: isCompactTimeline ? 4.5 : 6, z: 4, data: timelineRows.map((row) => row.purchases.chartValue), label: { show: showPointLabels, position: "top", distance: 4, color: chartPalette.danger, fontSize: 8, fontWeight: 800, formatter: pointLabel }, labelLayout: { hideOverlap: true }, itemStyle: { color: chartPalette.danger, borderWidth: 0 }, lineStyle: { width: isCompactTimeline ? 2.1 : 2.4, type: "solid", cap: "round" }, areaStyle: { color: new graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: chartAlpha(chartPalette.danger, .18) }, { offset: .55, color: chartAlpha(chartPalette.danger, .06) }, { offset: 1, color: chartAlpha(chartPalette.danger, 0) }]) }, emphasis: { focus: "series" as const, symbolSize: isCompactTimeline ? 6.5 : 8, lineStyle: { width: 3.4, type: "solid" } } } : null,
-      visibleSeries.customers ? { id: "customers", name: ar ? "العملاء" : "Customers", type: "line" as const, yAxisIndex: 1, smooth: isCompactTimeline ? .16 : .28, connectNulls: false, showSymbol: true, symbol: "circle", symbolSize: isCompactTimeline ? 4.25 : 5.5, z: 4, data: timelineRows.map((row) => row.customerCount), label: { show: showPointLabels, position: "top", distance: 5, color: chartPalette.info, fontSize: 8.5, fontWeight: 800, formatter: pointLabel }, labelLayout: { hideOverlap: true }, itemStyle: { color: chartPalette.info, borderWidth: 0 }, lineStyle: { width: isCompactTimeline ? 2 : 2.35, type: "dashed", cap: "round" }, areaStyle: { color: new graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: chartAlpha(chartPalette.info, .12) }, { offset: .55, color: chartAlpha(chartPalette.info, .04) }, { offset: 1, color: chartAlpha(chartPalette.info, 0) }]) }, emphasis: { focus: "series" as const, symbolSize: isCompactTimeline ? 6 : 8, lineStyle: { width: 3.25, type: "dashed" } } } : null,
+      visibleSeries.purchases ? { id: "purchases", name: ar ? "المشتريات" : "Purchases", type: "line" as const, yAxisIndex: 0, smooth: false, connectNulls: false, showSymbol: true, symbol: "circle", symbolSize: isCompactTimeline ? 4.5 : 6, z: 5, data: timelineRows.map((row) => row.purchases.chartValue), label: { show: showPointLabels, position: "top", distance: 4, color: chartPalette.danger, fontSize: 8, fontWeight: 800, formatter: pointLabel }, labelLayout: { hideOverlap: true }, itemStyle: { color: chartPalette.danger, borderColor: chartPalette.tooltipSurface, borderWidth: 1.5 }, lineStyle: { width: isCompactTimeline ? 2.1 : 2.4, type: "solid", cap: "round" }, emphasis: { focus: "series" as const, symbolSize: isCompactTimeline ? 6.5 : 8, lineStyle: { width: 3.4, type: "solid" } } } : null,
+      visibleSeries.customers ? { id: "customers", name: ar ? "العملاء" : "Customers", type: "line" as const, yAxisIndex: 1, smooth: false, connectNulls: false, showSymbol: true, symbol: "circle", symbolSize: isCompactTimeline ? 4.25 : 5.5, z: 5, data: timelineRows.map((row) => row.customerCount), label: { show: showPointLabels, position: "top", distance: 5, color: chartPalette.info, fontSize: 8.5, fontWeight: 800, formatter: pointLabel }, labelLayout: { hideOverlap: true }, itemStyle: { color: chartPalette.info, borderColor: chartPalette.tooltipSurface, borderWidth: 1.5 }, lineStyle: { width: isCompactTimeline ? 2 : 2.35, type: "dashed", cap: "round" }, emphasis: { focus: "series" as const, symbolSize: isCompactTimeline ? 6 : 8, lineStyle: { width: 3.25, type: "dashed" } } } : null,
     ].filter((series): series is NonNullable<typeof series> => series !== null);
     const description = ar ? `${title}. مخطط زمني موحّد يقارن المبيعات والصرف المثبت والعملاء والحملات النشطة على المحور نفسه.` : `${title}. A joined timeline comparing sales, posted campaign spend, customers and active campaigns on one axis.`;
     timeline.setOption({
@@ -327,13 +327,12 @@ export function BaseerOperationsMonthChart({ language, title, days, asOf }: { la
       yAxis: { type: "value", min: 0, axisLabel: { color: chartPalette.axis, fontSize: 10, formatter: (value: number) => compactNumber(value, language) }, splitLine: { lineStyle: { color: chartPalette.grid, width: 1 } } },
       series: [
         {
-          name: ar ? "المبيعات" : "Sales", type: "line", smooth: true, connectNulls: false,
-          data: days.map((day) => day.sales.plotValue), symbolSize: 5,
-          itemStyle: { color: chartPalette.primary, borderColor: chartPalette.tooltipSurface, borderWidth: 2 }, lineStyle: { width: 3.2, cap: "round" }, areaStyle: { color: new graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: chartAlpha(chartPalette.primary, .24) }, { offset: 1, color: chartAlpha(chartPalette.primary, 0) }]) },
+          name: ar ? "المبيعات" : "Sales", type: "bar", barMaxWidth: 18,
+          data: days.map((day) => day.sales.plotValue), itemStyle: { color: chartPalette.primary, borderRadius: [5, 5, 0, 0] },
         },
         {
-          name: ar ? "المشتريات" : "Purchases", type: "bar", barMaxWidth: 16,
-          data: days.map((day) => day.purchases.plotValue), itemStyle: { color: new graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: chartPalette.secondary }, { offset: 1, color: chartAlpha(chartPalette.secondary, .56) }]), borderRadius: [6, 6, 1, 1] },
+          name: ar ? "المشتريات" : "Purchases", type: "line", smooth: false, connectNulls: false, showSymbol: true, symbol: "circle", symbolSize: 5,
+          data: days.map((day) => day.purchases.plotValue), itemStyle: { color: chartPalette.secondary, borderColor: chartPalette.tooltipSurface, borderWidth: 1.5 }, lineStyle: { width: 2.6, cap: "round" },
         },
       ].filter((series) => series.name === (ar ? "المبيعات" : "Sales") ? visibleSeries.sales : visibleSeries.purchases),
     });

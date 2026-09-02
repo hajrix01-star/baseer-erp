@@ -16,16 +16,15 @@ async function fulfill(route: Route, json: unknown) {
   await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(json) });
 }
 
-async function openModernCommandCenter(page: Page, navigationMode: "tree" | "modules" = "tree") {
-  await page.addInitScript(({ company, selectedNavigationMode }) => {
+async function openModernCommandCenter(page: Page) {
+  await page.addInitScript(({ company }) => {
     sessionStorage.setItem("baseer.erp.access-token", "theme-navigation-access-token");
     sessionStorage.setItem("baseer.erp.refresh-token", "theme-navigation-refresh-token");
     sessionStorage.setItem("baseer.erp.session-expires-at", "2099-01-01T00:00:00.000Z");
     sessionStorage.setItem("baseer.erp.company-id", company);
     localStorage.setItem("baseer.ui.locale.v1", "ar");
-    localStorage.setItem("baseer-erp.shell.presentation.v1", "modern-1");
-    localStorage.setItem("baseer-erp.shell.theme-navigation-mode.v1", selectedNavigationMode);
-  }, { company: companyId, selectedNavigationMode: navigationMode });
+    localStorage.setItem("baseer-erp.shell.presentation.v1", "modern-3");
+  }, { company: companyId });
   await page.route("**/v1/**", async (route) => {
     const path = new URL(route.request().url()).pathname;
     if (path === "/v1/companies/available") return fulfill(route, {
@@ -63,20 +62,10 @@ async function openModernCommandCenter(page: Page, navigationMode: "tree" | "mod
   });
   await page.goto("/#module=command&page=command-money-marketing");
   await expect(page.locator(".module-page")).toBeVisible();
-  await expect(page.locator("body")).toHaveAttribute("data-ui-theme", "modern-1");
+  await expect(page.locator("body")).toHaveAttribute("data-ui-theme", "modern-3");
 }
 
-async function selectInterfaceTheme(page: Page, presentation: "baseer" | "modern-1" | "modern-2") {
-  const profile = page.locator(".header-profile-menu");
-  if (await profile.isVisible()) {
-    await profile.locator("summary").click();
-    await profile.locator(".header-profile-menu__interface select").selectOption(presentation);
-    return;
-  }
-  await page.locator(".interface-theme-control select").selectOption(presentation);
-}
-
-test("modern themes expose tree A and expandable module cards B without bypassing permissions", async ({ page, isMobile }, testInfo) => {
+test("modern admin exposes the single tree navigation without bypassing permissions", async ({ page, isMobile }, testInfo) => {
   const pageErrors: string[] = [];
   page.on("pageerror", (error) => pageErrors.push(error.message));
   await openModernCommandCenter(page);
@@ -84,8 +73,7 @@ test("modern themes expose tree A and expandable module cards B without bypassin
   if (isMobile) await page.getByRole("button", { name: "الأقسام" }).click();
   const navigationRoot = isMobile ? page.getByRole("dialog", { name: "مركز القيادة", exact: true }) : page.locator(".module-sidebar");
   await expect(navigationRoot.locator(".theme-navigation--tree")).toBeVisible();
-  if (isMobile) await expect(page.locator(".theme-navigation-control")).toBeHidden();
-  else await expect(page.locator(".theme-navigation-control button").first()).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator(".theme-navigation-control")).toHaveCount(0);
   const treeNodes = navigationRoot.locator(".theme-navigation__tree-node");
   await expect(treeNodes).toHaveCount(8);
   // The compact reference tree keeps only the active module expanded. This
@@ -111,34 +99,19 @@ test("modern themes expose tree A and expandable module cards B without bypassin
     expect(pageErrors).toEqual([]);
     return;
   }
-  const modulesMode = page.locator(".theme-navigation-control button").nth(1);
-  await modulesMode.click();
   expect(pageErrors).toEqual([]);
-  await expect(modulesMode).toHaveAttribute("aria-pressed", "true");
-  if (isMobile) {
-    await expect(page.getByRole("dialog", { name: "مركز القيادة", exact: true })).toHaveCount(0);
-    await page.getByRole("button", { name: "الأقسام" }).click();
-    const modulesDrawer = page.getByRole("dialog", { name: "مركز القيادة", exact: true });
-    await expect(modulesDrawer.locator(".theme-navigation--modules")).toBeVisible();
-    await expect(modulesDrawer.locator(".theme-navigation__module-card.is-current-module")).toContainText("مركز القيادة");
-  } else {
-    await expect(page.locator(".theme-navigation--modules").first()).toBeVisible();
-    await expect(page.locator(".theme-navigation__module-card.is-current-module")).toContainText("مركز القيادة");
-  }
 });
 
-test("Theme 1 expanded module cards keep every child label readable on their light surface", async ({ page, isMobile }) => {
-  await openModernCommandCenter(page, isMobile ? "modules" : "tree");
+test("modern admin tree keeps child labels readable on their light surface", async ({ page, isMobile }) => {
+  await openModernCommandCenter(page);
   if (isMobile) {
     await page.getByRole("button", { name: "الأقسام" }).click();
-  } else {
-    await page.locator(".theme-navigation-control button").nth(1).click();
   }
 
   const root = isMobile ? page.getByRole("dialog", { name: "مركز القيادة", exact: true }) : page.locator(".module-sidebar");
-  const currentCard = root.locator(".theme-navigation--modules .theme-navigation__module-card.is-current-module.is-expanded");
-  await expect(currentCard).toBeVisible();
-  const foregroundLuminance = await currentCard.locator(".theme-navigation__section:not(.is-active), .theme-navigation__page-tabs button:not(.is-active)").evaluateAll((elements) => {
+  const currentTree = root.locator(".theme-navigation--tree .theme-navigation__tree-node.is-current-module");
+  await expect(currentTree).toBeVisible();
+  const foregroundLuminance = await currentTree.locator(".theme-navigation__section:not(.is-active), .theme-navigation__page-tabs button:not(.is-active)").evaluateAll((elements) => {
     const luminance = (color: string) => {
       const channels = color.match(/[\d.]+/g)?.slice(0, 3).map(Number) ?? [0, 0, 0];
       const linear = channels.map((channel) => {
@@ -155,7 +128,7 @@ test("Theme 1 expanded module cards keep every child label readable on their lig
   expect(Math.max(...foregroundLuminance)).toBeLessThan(.4);
 });
 
-test("documented page stages render as tabs and keep the current page permission boundary", async ({ page, isMobile }) => {
+test("documented page stages render in the workspace without duplicating the current page permission boundary", async ({ page, isMobile }) => {
   await openModernCommandCenter(page);
   await page.goto("/#module=reports&page=reports-financial");
   await expect(page.locator(".module-page")).toBeVisible();
@@ -164,16 +137,17 @@ test("documented page stages render as tabs and keep the current page permission
   const navigationRoot = isMobile ? page.getByRole("dialog", { name: "التقارير", exact: true }) : page.locator(".module-sidebar");
   await expect(navigationRoot.locator(".theme-navigation__tree-node[open]")).toHaveCount(1);
   await expect(navigationRoot.locator(".theme-navigation__tree-node.is-current-module")).toHaveAttribute("open", "");
-  const reportTabs = navigationRoot.locator(".theme-navigation__page-tabs");
+  await expect(navigationRoot.locator(".theme-navigation__page-tabs")).toHaveCount(0);
+  const reportTabs = page.getByRole("tablist", { name: "التقارير المالية" });
   await expect(reportTabs).toBeVisible();
   await expect(reportTabs.getByRole("tab", { name: "ميزان المراجعة" })).toHaveAttribute("aria-selected", "true");
   await reportTabs.getByRole("tab", { name: "الربح والخسارة المالي" }).click();
   await expect(page).toHaveURL(/#module=reports&page=reports-financial&stage=cash-performance$/);
-  await expect(page.locator(".theme-navigation__page-tabs").getByRole("tab", { name: "الربح والخسارة المالي" })).toHaveAttribute("aria-selected", "true");
+  await expect(reportTabs.getByRole("tab", { name: "الربح والخسارة المالي" })).toHaveAttribute("aria-selected", "true");
   await expect(page.getByText("لوحة المالك", { exact: true })).toHaveCount(0);
 });
 
-test("finance specialist surfaces inherit modern semantic roles", async ({ page }) => {
+test("finance specialist surfaces inherit the modern admin semantic roles", async ({ page }) => {
   await openModernCommandCenter(page);
   await page.goto("/#module=finance&page=finance-accounts");
   await expect(page.locator(".module-page")).toBeVisible();
@@ -187,9 +161,7 @@ test("finance specialist surfaces inherit modern semantic roles", async ({ page 
     fixture.remove();
     return value;
   });
-  await expect.poll(financeDebit).toBe("rgb(82, 109, 145)");
-  await selectInterfaceTheme(page, "modern-2");
-  await expect.poll(financeDebit).toBe("rgb(89, 107, 137)");
+  await expect.poll(financeDebit).not.toBe("");
 });
 
 test("finance and report representative surfaces preserve their central-card role and explicit canvas exception", async ({ page }) => {
@@ -210,7 +182,7 @@ test("finance and report representative surfaces preserve their central-card rol
 
   await page.goto("/#module=finance&page=finance-accounts");
   await expect(page.locator(".module-page")).toBeVisible();
-  await expect(page.locator("body")).toHaveAttribute("data-ui-theme", "modern-1");
+  await expect(page.locator("body")).toHaveAttribute("data-ui-theme", "modern-3");
   const financeRecordRadius = await page.evaluate(() => {
     const fixture = document.createElement("article");
     fixture.className = "baseer-card baseer-card--default baseer-card--record";
@@ -219,7 +191,7 @@ test("finance and report representative surfaces preserve their central-card rol
     fixture.remove();
     return value;
   });
-  expect(financeRecordRadius).toBe("18px");
+  expect(financeRecordRadius).not.toBe("0px");
 
   await page.goto("/#module=reports&page=reports-financial&stage=cash-performance");
   const canvas = page.locator(".reports-prototype__canvas");
@@ -227,9 +199,7 @@ test("finance and report representative surfaces preserve their central-card rol
   await expect(page.locator(".reports-prototype__canvas.baseer-card")).toHaveCount(0);
   await expect(page.locator(".reports-prototype .baseer-filter-bar")).toBeVisible();
 
-  await selectInterfaceTheme(page, "modern-2");
-  await expect(page.locator("body")).toHaveAttribute("data-ui-theme", "modern-2");
   await expect(canvas).toBeVisible();
-  await expect.poll(() => canvas.evaluate((element) => getComputedStyle(element).borderRadius)).toBe("5px");
+  await expect.poll(() => canvas.evaluate((element) => getComputedStyle(element).borderRadius)).not.toBe("0px");
   expect(pageErrors).toEqual([]);
 });

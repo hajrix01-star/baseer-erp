@@ -305,35 +305,33 @@ test("purchase request and completion expose the shared Gregorian date adapter",
   await expect(page.getByRole("grid")).toHaveCount(0);
 });
 
-for (const presentation of ["modern-1", "modern-2"] as const) {
-  test(`${presentation} keeps compound purchase and recipe surfaces inside their viewport`, async ({ page, isMobile }, testInfo) => {
-    await page.addInitScript((selectedPresentation) => {
-      localStorage.setItem("baseer-erp.shell.presentation.v1", selectedPresentation);
-      localStorage.setItem("baseer-erp.shell.appearance.v1", "light");
-    }, presentation);
-    await mockInternalRegistration(page, { includeRecipe: true });
-
-    await page.goto("/#module=operations&page=operations-execution");
-    await page.getByRole("button", { name: "فتح إدارة طلبات الشراء والعهدة" }).click();
-    await page.getByRole("button", { name: "اعتماد الشراء الفعلي" }).click();
-    const receipt = page.getByRole("dialog");
-    const pos = receipt.locator(".operations-purchase-pos");
-    await expect(receipt.locator('[data-baseer-card-variant="form-or-receipt"]')).toBeVisible();
-    await expect(pos).toBeVisible();
-    await expect(pos.locator('[data-baseer-card-variant="form-or-receipt"]')).toBeVisible();
-    await expect(pos.locator('[data-baseer-card-variant="joined-ledger"]')).toBeVisible();
-    await page.screenshot({ path: testInfo.outputPath(`operations-receipt-${presentation}-${isMobile ? "mobile" : "desktop"}.png`), fullPage: true });
-    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
-
-    await page.goto("/#module=operations&page=operations-catalog");
-    await page.getByRole("tab", { name: "منتجات المنيو" }).click();
-    await page.getByRole("button", { name: "منتج الاختبار" }).click();
-    const recipeDialog = page.getByRole("dialog");
-    await recipeDialog.getByRole("button", { name: "الرسبي والتكلفة" }).click();
-    const recipe = recipeDialog.locator(".operations-recipe-editor");
-    await expect(recipe).toBeVisible();
-    await expect(recipe.locator('[data-baseer-card-variant="form-or-receipt"]')).toHaveCount(2);
-    await page.screenshot({ path: testInfo.outputPath(`operations-recipe-${presentation}-${isMobile ? "mobile" : "desktop"}.png`), fullPage: true });
-    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+test("modern administrative shell keeps compound purchase and recipe surfaces inside their viewport", async ({ page, isMobile }, testInfo) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("baseer-erp.shell.presentation.v1", "modern-3");
+    localStorage.setItem("baseer-erp.shell.appearance.v1", "light");
   });
-}
+  await mockInternalRegistration(page, { includeRecipe: true });
+
+  await page.goto("/#module=operations&page=operations-execution");
+  await page.getByRole("button", { name: "فتح إدارة طلبات الشراء والعهدة" }).click();
+  await page.getByRole("button", { name: "اعتماد الشراء الفعلي" }).click();
+  const receipt = page.getByRole("dialog");
+  const pos = receipt.locator(".operations-purchase-pos");
+  await expect(receipt.locator('[data-baseer-card-variant="form-or-receipt"]')).toBeVisible();
+  await expect(pos).toBeVisible();
+  await expect(pos.locator('[data-baseer-card-variant="form-or-receipt"]')).toBeVisible();
+  await expect(pos.locator('[data-baseer-card-variant="joined-ledger"]')).toBeVisible();
+  await page.screenshot({ path: testInfo.outputPath(`operations-receipt-modern-3-${isMobile ? "mobile" : "desktop"}.png`), fullPage: true });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+
+  await page.goto("/#module=operations&page=operations-catalog");
+  await page.getByRole("tab", { name: "منتجات المنيو" }).click();
+  await page.getByRole("button", { name: "منتج الاختبار" }).click();
+  const recipeDialog = page.getByRole("dialog");
+  await recipeDialog.getByRole("button", { name: "الرسبي والتكلفة" }).click();
+  const recipe = recipeDialog.locator(".operations-recipe-editor");
+  await expect(recipe).toBeVisible();
+  await expect(recipe.locator('[data-baseer-card-variant="form-or-receipt"]')).toHaveCount(2);
+  await page.screenshot({ path: testInfo.outputPath(`operations-recipe-modern-3-${isMobile ? "mobile" : "desktop"}.png`), fullPage: true });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
+});

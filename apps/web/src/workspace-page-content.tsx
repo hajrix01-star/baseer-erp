@@ -33,6 +33,7 @@ type Props = {
   route: { moduleId: ModuleId; section: number; pageId: PageId; stage?: string };
   language: "ar" | "en";
   permissionCodes: readonly string[] | null;
+  migrationReviewLocked: boolean;
   onStage: (stage: string) => void;
   loading: string;
   loadingPurchases: string;
@@ -45,24 +46,24 @@ function Fallback({ children }: { children: string }) {
   return <section className="module-page__placeholder">{children}</section>;
 }
 
-export function WorkspacePageContent({ route, language, permissionCodes, onStage, loading, loadingPurchases, loadingFinanceSetup, loadingVaults, loadingAdministration }: Props) {
+export function WorkspacePageContent({ route, language, permissionCodes, migrationReviewLocked, onStage, loading, loadingPurchases, loadingFinanceSetup, loadingVaults, loadingAdministration }: Props) {
   const content = route.moduleId === "reports" && route.pageId === "reports-hajri-tax" ? <VatSimulationWorkspace language={language} />
     : route.moduleId === "administration" && route.pageId === "administration-backup" ? <BackupRecoveryWorkspace language={language} />
     : route.moduleId === "administration" && route.pageId === "administration-nurix-migration" ? <NurixMigrationWorkspace language={language} />
     : route.moduleId === "operations" && route.section === 0 ? <OperationsOverviewWorkspace language={language} />
     : route.moduleId === "command" && route.section === 2 ? <SalesAnalyticsWorkspace language={language} />
     : route.moduleId === "command" && route.section === 3 ? <OwnerDashboardWorkspace language={language} />
-    : route.moduleId === "decision" ? <DecisionIntelligenceWorkspace language={language} section={route.section} permissionCodes={permissionCodes} />
+    : route.moduleId === "decision" ? <DecisionIntelligenceWorkspace language={language} section={route.section} permissionCodes={permissionCodes} migrationReviewLocked={migrationReviewLocked} />
     : route.moduleId === "marketing" ? <MarketingWorkspace language={language} section={route.section} permissionCodes={permissionCodes} />
     : route.moduleId === "operations" && route.section === 9 ? <OperationsAssetsWarrantyWorkspace language={language} />
     : route.moduleId === "reports" && route.section === 0 ? <ReportsOverviewWorkspace language={language} />
-    : route.moduleId === "reports" && route.section === 1 ? <ReportsWorkspace language={language} initialReport={route.stage === "cash-performance" ? "cash-performance" : "trial-balance"} />
+    : route.moduleId === "reports" && route.section === 1 ? <ReportsWorkspace language={language} initialReport={route.stage === "cash-performance" ? "cash-performance" : route.stage === "accrual-profit-loss" ? "accrual-profit-loss" : "trial-balance"} onReportChange={onStage} />
     : route.moduleId === "reports" && route.section === 2 ? <InternalVatReportWorkspace language={language} />
     : route.moduleId === "reports" && route.section === 4 ? <ReportDocumentsWorkspace language={language} />
     : route.moduleId === "hr" && route.section === 0 ? <HrOverviewWorkspace language={language} />
     : route.moduleId === "hr" ? <HrWorkspace language={language} section={route.section} />
     : route.moduleId === "operations" && route.section === 1 ? <DailySalesWorkspace language={language} />
-    : route.moduleId === "operations" && route.section === 2 ? <PurchaseExpenseWorkspace language={language} activeTab={route.stage === "credit" ? "credit" : "entry"} onTabChange={onStage} />
+    : route.moduleId === "operations" && route.section === 2 ? <PurchaseExpenseWorkspace language={language} migrationReviewLocked={migrationReviewLocked} activeTab={route.stage === "credit" ? "credit" : "entry"} onTabChange={onStage} />
     : route.moduleId === "operations" && route.section === 3 ? <ExpensesObligationsWorkspace language={language} activeTab={route.stage === "batch" || route.stage === "history" ? route.stage : "items"} onTabChange={onStage} />
     : route.moduleId === "operations" && route.section === 4 ? <FinanceSetupWorkspace language={language} view="suppliers" />
     : route.moduleId === "operations" && (route.section === 5 || route.section === 6 || route.section === 7 || route.section === 8) ? <OperationsRequestsWorkspace language={language} initialTab={route.section === 5 ? "catalog" : route.section === 6 ? "requests" : route.section === 7 ? "registration" : "reports"} />

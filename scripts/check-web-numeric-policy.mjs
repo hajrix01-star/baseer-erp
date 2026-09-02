@@ -29,8 +29,6 @@ const CALCULATION_ONLY_TO_FIXED = new Map([
 // normalised centrally by their enclosing form logic; the exact indexes make
 // this a reviewable, non-expandable exception rather than a file-wide bypass.
 const CENTRALLY_MANAGED_NUMERIC_INPUTS = new Map([
-  [join(sourceRoot, "decision-intelligence-workspace-runtime.tsx"), new Set([0, 1, 2, 3, 4])],
-  [join(sourceRoot, "hr-employee-onboarding-dialog.tsx"), new Set([0])],
   [join(sourceRoot, "hr-workspace-content.tsx"), new Set([0])],
 ]);
 
@@ -91,6 +89,9 @@ for (const file of listFiles(sourceRoot).filter((candidate) => [".ts", ".tsx"].i
   if (!isFormatter && !isDateCalculationUtility) {
     for (const match of source.matchAll(visibleFormatter)) {
       failures.push(`${relative(file)}:${lineNumber(source, match.index)} must use the central number/date formatter, not ${match[0]}.`);
+    }
+    for (const match of source.matchAll(/\bformatPercent\s*\([^)]*,\s*\d/gu)) {
+      failures.push(`${relative(file)}:${lineNumber(source, match.index)} must not select percentage precision locally; formatPercent() owns the single shared presentation policy.`);
     }
   }
   for (const match of source.matchAll(/\.toFixed\s*\(/gu)) {

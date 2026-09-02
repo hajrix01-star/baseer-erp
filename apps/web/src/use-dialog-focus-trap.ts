@@ -45,6 +45,26 @@ function focusableElements(root: HTMLElement | null) {
   )).filter((element) => !element.hasAttribute("disabled") && element.tabIndex >= 0 && element.getClientRects().length > 0);
 }
 
+/**
+ * A focused editable control summons the virtual keyboard on phones. A modal
+ * should announce itself first; the user can then choose the field to edit.
+ */
+function usesCoarsePointer() {
+  return typeof window !== "undefined" && window.matchMedia?.("(pointer: coarse)").matches;
+}
+
+function focusDialogContainer(dialog: HTMLElement | null) {
+  if (!dialog) return;
+  // Some standalone dialogs use the hook directly instead of BaseerDialog.
+  // Keep the shared contract valid for those dialogs as well.
+  dialog.tabIndex = -1;
+  const activeElement = document.activeElement;
+  if (activeElement instanceof HTMLInputElement || activeElement instanceof HTMLTextAreaElement || activeElement instanceof HTMLSelectElement) {
+    activeElement.blur();
+  }
+  dialog.focus({ preventScroll: true });
+}
+
 /** Routes an operation error to the active modal instead of a notice hidden behind its backdrop. */
 export function reportTopmostDialogError(message: string) {
   const dialogId = dialogStack.at(-1);
@@ -101,7 +121,13 @@ export function useDialogFocusTrap({
       document.activeElement instanceof HTMLElement
         ? document.activeElement
         : null;
-    const timer = window.setTimeout(() => focusableElements(dialogRef.current)[0]?.focus(), 0);
+    const timer = window.setTimeout(() => {
+      if (usesCoarsePointer()) {
+        focusDialogContainer(dialogRef.current);
+        return;
+      }
+      focusableElements(dialogRef.current)[0]?.focus();
+    }, 0);
     return () => {
       window.clearTimeout(timer);
       previousFocus?.focus();

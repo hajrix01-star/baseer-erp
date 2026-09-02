@@ -51,7 +51,7 @@
       "lifecycle": "active",
       "owner": "UI Platform",
       "source": "apps/web/src/baseer-button.tsx",
-      "publicApi": "BaseerButton with semantic variants, busy and disabled state",
+      "publicApi": "BaseerButton with semantic variants (primary, secondary, danger, icon, quiet), semantic sizes (compact, standard, prominent, commit), and disabled state",
       "states": [
         "default",
         "focus",
@@ -147,7 +147,7 @@
       "lifecycle": "active",
       "owner": "UI Platform",
       "source": "apps/web/src/baseer-form-fields.tsx",
-      "publicApi": "BaseerMoneyInput, BaseerIntegerInput, BaseerMonthPicker, BaseerCheckbox, BaseerTextArea and BaseerFileInput",
+      "publicApi": "BaseerMoneyInput, BaseerIntegerInput, BaseerNumericSuffixInput, BaseerMonthPicker, BaseerCheckbox, BaseerTextArea and BaseerFileInput",
       "states": [
         "default",
         "focus",
@@ -163,7 +163,7 @@
       "consumers": [
         "apps/web/src"
       ],
-      "notes": "Money and integer values remain string-safe at the UI boundary."
+      "notes": "Money and integer values remain string-safe at the UI boundary; BaseerNumericSuffixInput keeps a visible unit inside the same field boundary."
     },
     {
       "id": "baseer-static-select",
