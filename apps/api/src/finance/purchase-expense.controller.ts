@@ -99,7 +99,17 @@ export class PurchaseExpenseController {
     const parsedQuery = financeOutflowDocumentsQuerySchema.safeParse(query);
     if (!parsedQuery.success) throw new BadRequestException('Invalid document history query.');
     const context = await this.authorize(authorization, companyId, READ_CAPABILITY);
-    const page = await this.documents.list(context, { pageSize: parsedQuery.data.pageSize, ...(parsedQuery.data.cursor ? { cursor: parsedQuery.data.cursor } : {}) });
+    const page = await this.documents.list(context, {
+      pageSize: parsedQuery.data.pageSize,
+      ...(parsedQuery.data.cursor ? { cursor: parsedQuery.data.cursor } : {}),
+      ...(parsedQuery.data.fromBusinessDate ? { fromBusinessDate: new Date(`${parsedQuery.data.fromBusinessDate}T00:00:00.000Z`) } : {}),
+      ...(parsedQuery.data.toBusinessDate ? { toBusinessDate: new Date(`${parsedQuery.data.toBusinessDate}T00:00:00.000Z`) } : {}),
+      businessMonths: parsedQuery.data.businessMonths,
+      ...(parsedQuery.data.q ? { q: parsedQuery.data.q } : {}),
+      ...(parsedQuery.data.kind ? { kind: parsedQuery.data.kind } : {}),
+      ...(parsedQuery.data.settlementKind ? { settlementKind: parsedQuery.data.settlementKind } : {}),
+      ...(parsedQuery.data.status ? { status: parsedQuery.data.status } : {}),
+    });
     return financeOutflowDocumentsReceiptSchema.parse({
       companyId: context.companyId,
       ownerCanAmend: await this.isOwner(authorization, context),

@@ -34,8 +34,19 @@ export type RecordEmployeeServiceAndIssueCostRequest = Readonly<Omit<RecordHrEmp
 export type RecordEmployeeServiceAndIssueCostReceipt = Readonly<{ serviceId: string; documentId: string; documentNumber: string; journalEntryId: string; replayed: boolean }>;
 export type ReverseEmployeeServiceCostRequest = Readonly<{ serviceId: string; businessDate: Date; reason: string }>;
 export type ReverseEmployeeServiceCostReceipt = Readonly<{ serviceId: string; documentId: string; documentNumber: string; reversalJournalEntryId: string; replayed: boolean }>;
- type StoredRecurringExpensePaymentBatchReceipt = Omit<RecurringExpensePaymentBatchReceipt, 'businessDate'> & { businessDate: string };
- type StoredPurchaseExpenseBatchReceipt = Omit<PurchaseExpenseBatchReceipt, 'businessDate'> & { businessDate: string };
+type StoredRecurringExpensePaymentBatchReceipt = Omit<RecurringExpensePaymentBatchReceipt, 'businessDate'> & { businessDate: string };
+type StoredPurchaseExpenseBatchReceipt = Omit<PurchaseExpenseBatchReceipt, 'businessDate'> & { businessDate: string };
+
+/** The purchase register accepts a discrete set of months, not the envelope
+ * between them. This keeps a non-contiguous period filter server-correct. */
+const monthRange = (value: string) => {
+  const year = Number(value.slice(0, 4));
+  const month = Number(value.slice(5, 7));
+  return {
+    from: new Date(Date.UTC(year, month - 1, 1)),
+    to: new Date(Date.UTC(year, month, 0)),
+  };
+};
 
 @Injectable()
 export class PurchaseExpenseService {
@@ -519,17 +530,46 @@ export class PurchaseExpenseService {
     const suppliers = [...groups.values()].map((group) => ({ supplierId: group.supplierId, supplierNameAr: group.supplierNameAr, supplierNameEn: group.supplierNameEn, invoiceCount: group.dues.length, originalAmount: group.original.toFixed(4), paidAmount: group.paid.toFixed(4), remainingAmount: group.remaining.toFixed(4), dues: group.dues }));
     return { companyId: context.companyId, asOfBusinessDate: date.businessDate, openSupplierCount: result.openSupplierCount, openInvoiceCount: result.summary._count._all, originalAmount: (result.summary._sum.originalAmount ?? new Prisma.Decimal(0)).toFixed(4), paidAmount: (result.summary._sum.paidAmount ?? new Prisma.Decimal(0)).toFixed(4), remainingAmount: (result.summary._sum.remainingAmount ?? new Prisma.Decimal(0)).toFixed(4), suppliers, hasMore: result.hasMore, nextCursor: result.nextCursor };
   }
-  async list(context: TrustedCompanyActorContext, input: { cursor?: string; pageSize: number }) {
+  async list(context: TrustedCompanyActorContext, input: {
+    cursor?: string;
+    pageSize: number;
+    fromBusinessDate?: Date;
+    toBusinessDate?: Date;
+    businessMonths?: readonly string[];
+    q?: string;
+    kind?: FinanceOutflowDocumentKind;
+    settlementKind?: FinanceOutflowSettlementKind;
+    status?: FinanceOutflowDocumentStatus;
+  }) {
     return this.db.inTenantTransaction(context.tenantId, async (tx) => {
       const baseWhere: Prisma.FinanceOutflowDocumentWhereInput = { tenantId: context.tenantId, companyId: context.companyId };
       const cursor = input.cursor ? await tx.financeOutflowDocument.findFirst({ where: { ...baseWhere, id: input.cursor }, select: { id: true, businessDate: true, createdAt: true } }) : null;
       if (input.cursor && !cursor) throw new BadRequestException('The document history cursor is no longer valid.');
+      const filters: Prisma.FinanceOutflowDocumentWhereInput[] = [baseWhere];
+      const monthlyPeriods = (input.businessMonths ?? []).map((month) => monthRange(month));
+      if (monthlyPeriods.length) filters.push({ OR: monthlyPeriods.map((period) => ({ businessDate: { gte: period.from, lte: period.to } })) });
+      else if (input.fromBusinessDate || input.toBusinessDate) filters.push({ businessDate: { ...(input.fromBusinessDate ? { gte: input.fromBusinessDate } : {}), ...(input.toBusinessDate ? { lte: input.toBusinessDate } : {}) } });
+      if (input.kind) filters.push({ kind: input.kind });
+      if (input.settlementKind) filters.push({ settlementKind: input.settlementKind });
+      if (input.status) filters.push({ status: input.status });
+      if (input.q) {
+        const text = input.q.trim();
+        filters.push({ OR: [
+          { documentNumber: { contains: text, mode: 'insensitive' } },
+          { supplierInvoiceNumber: { contains: text, mode: 'insensitive' } },
+          { supplierNameSnapshotAr: { contains: text, mode: 'insensitive' } },
+          { supplierNameSnapshotEn: { contains: text, mode: 'insensitive' } },
+          { supplier: { is: { OR: [{ nameAr: { contains: text, mode: 'insensitive' } }, { nameEn: { contains: text, mode: 'insensitive' } }] } } },
+          { category: { is: { OR: [{ nameAr: { contains: text, mode: 'insensitive' } }, { nameEn: { contains: text, mode: 'insensitive' } }] } } },
+        ] });
+      }
+      if (cursor) filters.push({ OR: [
+        { businessDate: { lt: cursor.businessDate } },
+        { businessDate: cursor.businessDate, createdAt: { lt: cursor.createdAt } },
+        { businessDate: cursor.businessDate, createdAt: cursor.createdAt, id: { lt: cursor.id } },
+      ] });
       const rows = await tx.financeOutflowDocument.findMany({
-        where: cursor ? { ...baseWhere, OR: [
-          { businessDate: { lt: cursor.businessDate } },
-          { businessDate: cursor.businessDate, createdAt: { lt: cursor.createdAt } },
-          { businessDate: cursor.businessDate, createdAt: cursor.createdAt, id: { lt: cursor.id } },
-        ] } : baseWhere,
+        where: { AND: filters },
         orderBy: [{ businessDate: 'desc' }, { createdAt: 'desc' }, { id: 'desc' }], take: input.pageSize + 1,
         select: { id: true, documentNumber: true, kind: true, settlementKind: true, status: true, businessDate: true, grossAmount: true, supplierId: true, supplierNameSnapshotAr: true, supplierNameSnapshotEn: true, categoryId: true, supplierInvoiceNumber: true, supplierInvoiceMissingReason: true, supplierInvoiceDate: true, vatRateBasisPoints: true, assetWarrantyFollowUp: true, notes: true, postingVersion: true, allocations: { select: { vaultId: true, grossAmount: true, paymentMethod: true }, orderBy: [{ vaultId: 'asc' }, { paymentMethod: 'asc' }] }, batch: { select: { batchNumber: true } }, supplier: { select: { nameAr: true, nameEn: true } }, category: { select: { nameAr: true, nameEn: true } } },
       });

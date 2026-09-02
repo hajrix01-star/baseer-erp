@@ -22,7 +22,7 @@ import { BaseerFilterBar } from "./baseer-filter-bar";
 import { BaseerFilterSelect } from "./baseer-filter-controls";
 import { BaseerStaticSelect } from "./baseer-static-select";
 import { BaseerMoneyInput, BaseerTextArea, BaseerTextInput } from "./baseer-form-fields";
-import { BaseerPeriodFilter, baseerPeriodLabel, defaultBaseerPeriodRange, iso, riyadhToday, type BaseerPeriodRange } from "./baseer-period-filter";
+import { BaseerPeriodFilter, baseerPeriodLabel, baseerPeriodQuery, defaultBaseerPeriodRange, iso, riyadhToday, type BaseerPeriodRange } from "./baseer-period-filter";
 import { BaseerLoadFailure } from "./baseer-load-failure";
 import { BaseerNotice } from "./baseer-workspace";
 import { formatMoney } from "./number-format";
@@ -203,6 +203,9 @@ export function PurchaseExpenseWorkspaceRuntime({
     Configuration["categories"]
   >([]);
   const [documents, setDocuments] = useState<Document[]>([]);
+  const [historyHasMore, setHistoryHasMore] = useState(false);
+  const [historyNextCursor, setHistoryNextCursor] = useState<string | null>(null);
+  const [historyLoading, setHistoryLoading] = useState(false);
   const [ownerCanAmend, setOwnerCanAmend] = useState(false);
   const [historySearch, setHistorySearch] = useState("");
   const [historyPeriod, setHistoryPeriod] = useState<BaseerPeriodRange>(() => defaultBaseerPeriodRange());
@@ -258,21 +261,38 @@ export function PurchaseExpenseWorkspaceRuntime({
   const batchSchemaFactory = ({ z }: Parameters<NonNullable<React.ComponentProps<typeof BaseerValidatedForm>["schemaFactory"]>>[0]) => z.object({ businessDate: z.string().date(validationMessage), batchNotes: z.string().max(1000), rows: z.array(z.custom<BatchRow>()).max(100) }).strict().superRefine((value, context) => { const entered = value.rows.filter(rowHasValue); if (!entered.length || entered.some((row) => !validRow(row))) context.addIssue({ code: "custom", path: ["rows"], message: validationMessage }); });
   const reversalSchemaFactory = ({ z }: Parameters<NonNullable<React.ComponentProps<typeof BaseerValidatedForm>["schemaFactory"]>>[0]) => z.object({ businessDate: z.string().date(validationMessage), reason: z.string().trim().min(1, validationMessage).max(1000) }).strict();
   const amendmentSchemaFactory = ({ z }: Parameters<NonNullable<React.ComponentProps<typeof BaseerValidatedForm>["schemaFactory"]>>[0]) => z.object({ businessDate: z.string().date(validationMessage), row: z.custom<BatchRow>() }).strict().superRefine((value, context) => { if (!validRow(value.row)) context.addIssue({ code: "custom", path: ["row"], message: validationMessage }); });
-  const load = useCallback(async () => {
+  const historyRequest = useCallback((cursor?: string) => {
+    const query = new URLSearchParams(baseerPeriodQuery(historyPeriod));
+    query.set("pageSize", "50");
+    if (historySearch.trim()) query.set("q", historySearch.trim());
+    if (historyKind !== "ALL") query.set("kind", historyKind);
+    if (historySettlement !== "ALL") query.set("settlementKind", historySettlement);
+    if (historyStatus !== "ALL") query.set("status", historyStatus);
+    if (cursor) query.set("cursor", cursor);
+    return query.toString();
+  }, [historyKind, historyPeriod, historySearch, historySettlement, historyStatus]);
+  const load = useCallback(async (cursor?: string) => {
     const current = activeSession();
     setSession(current);
     if (!current) return;
+    if (canReadHistory) setHistoryLoading(true);
     const [nextConfiguration, nextDocuments] = await Promise.all([
       canCreate ? api<Configuration>(current, "/finance/purchase-expense-documents/entry-references") : Promise.resolve<Configuration>({ profile: null, vaults: [], categories: [], suppliers: [] }),
-      canReadHistory ? api<{ documents: Document[]; ownerCanAmend: boolean }>(
+      canReadHistory ? api<{ documents: Document[]; ownerCanAmend: boolean; hasMore: boolean; nextCursor: string | null }>(
         current,
-        "/finance/purchase-expense-documents",
-      ) : Promise.resolve({ documents: [], ownerCanAmend: false }),
+        `/finance/purchase-expense-documents?${historyRequest(cursor)}`,
+      ) : Promise.resolve({ documents: [], ownerCanAmend: false, hasMore: false, nextCursor: null }),
     ]);
     setConfiguration(nextConfiguration);
-    setDocuments(nextDocuments.documents);
+    setDocuments((previous) => cursor ? [
+      ...previous,
+      ...nextDocuments.documents.filter((document) => !previous.some((existing) => existing.id === document.id)),
+    ] : nextDocuments.documents);
     setOwnerCanAmend(nextDocuments.ownerCanAmend);
-  }, [canCreate, canReadHistory]);
+    setHistoryHasMore(nextDocuments.hasMore);
+    setHistoryNextCursor(nextDocuments.nextCursor);
+    if (canReadHistory) setHistoryLoading(false);
+  }, [canCreate, canReadHistory, historyRequest]);
   const loadCredit = useCallback(async (cursor?: string) => {
     const current = activeSession();
     if (!current) return;
@@ -296,6 +316,7 @@ export function PurchaseExpenseWorkspaceRuntime({
     );
   }, []);
   const reportLoadFailure = useCallback((error: unknown) => {
+    setHistoryLoading(false);
     setMessage({
       kind: "error",
       text: presentBaseerLoadError(error, language, { ar: "بيانات المشتريات", en: "purchase data" }),
@@ -377,34 +398,9 @@ export function PurchaseExpenseWorkspaceRuntime({
       ) ?? [],
     [configuration],
   );
-  const visibleHistory = useMemo(() => {
-    const query = historySearch.trim().toLocaleLowerCase();
-    return documents.filter((document) => {
-      const searchable = [
-        document.documentNumber,
-        document.businessDate,
-        document.supplierNameAr,
-        document.supplierNameEn,
-        document.categoryNameAr,
-        document.categoryNameEn,
-        document.supplierInvoiceNumber,
-      ]
-        .filter(Boolean)
-        .join(" ")
-        .toLocaleLowerCase();
-      return (
-        (!query || searchable.includes(query)) &&
-        document.businessDate >= historyPeriod.from &&
-        document.businessDate <= historyPeriod.to &&
-        (historyPeriod.preset !== "MONTH" ||
-          historyPeriod.months.includes(document.businessDate.slice(0, 7))) &&
-        (historyKind === "ALL" || document.kind === historyKind) &&
-        (historySettlement === "ALL" ||
-          document.settlementKind === historySettlement) &&
-        (historyStatus === "ALL" || document.status === historyStatus)
-      );
-    });
-  }, [documents, historyKind, historyPeriod, historySearch, historySettlement, historyStatus]);
+  // The API owns filtering and cursor paging. Rendering a local subset as a
+  // complete register was the cause of historical invoices appearing absent.
+  const visibleHistory = documents;
   const historyByDay = useMemo(() => {
     const days = new Map<string, Document[]>();
     for (const document of visibleHistory) {
@@ -1028,7 +1024,7 @@ export function PurchaseExpenseWorkspaceRuntime({
                       <h3>{text.invoiceHistory}</h3>
                     </div>
                     <span>
-                      {visibleHistory.length} {text.invoiceCount}
+                      {visibleHistory.length}{historyHasMore ? "+" : ""} {text.invoiceCount}
                     </span>
                   </div>
                   <BaseerFilterBar
@@ -1102,25 +1098,26 @@ export function PurchaseExpenseWorkspaceRuntime({
                     }
                   />
                   {historyByDay.length ? (
-                    <div className="purchase-history-by-day">
-                      {historyByDay.map(([day, dayDocuments]) => (
-                        <section key={day} className="purchase-history-day">
-                          <header>
-                            <time dateTime={day} dir="ltr">
-                              {day}
-                            </time>
-                            <span>
-                              {dayDocuments.length}{" "}
-                              {language === "ar"
-                                ? "فاتورة"
-                                : dayDocuments.length === 1
-                                  ? "invoice"
-                                  : "invoices"}
-                            </span>
-                          </header>
-                          <div className="purchase-history-day__documents">
-                            {dayDocuments.map((document) => (
-                              <article key={document.id}>
+                    <>
+                      <div className="purchase-history-by-day">
+                        {historyByDay.map(([day, dayDocuments]) => (
+                          <section key={day} className="purchase-history-day">
+                            <header>
+                              <time dateTime={day} dir="ltr">
+                                {day}
+                              </time>
+                              <span>
+                                {dayDocuments.length}{" "}
+                                {language === "ar"
+                                  ? "فاتورة"
+                                  : dayDocuments.length === 1
+                                    ? "invoice"
+                                    : "invoices"}
+                              </span>
+                            </header>
+                            <div className="purchase-history-day__documents">
+                              {dayDocuments.map((document) => (
+                                <article key={document.id}>
                                 <div className="purchase-history-document__number">
                                   <strong dir="ltr">
                                     {document.documentNumber}
@@ -1157,12 +1154,23 @@ export function PurchaseExpenseWorkspaceRuntime({
                                 >
                                   {language === "ar" ? "عرض" : "View"}
                                 </BaseerButton>
-                              </article>
-                            ))}
-                          </div>
-                        </section>
-                      ))}
-                    </div>
+                                </article>
+                              ))}
+                            </div>
+                          </section>
+                        ))}
+                      </div>
+                      {historyHasMore ? (
+                        <BaseerButton
+                          type="button"
+                          variant="secondary"
+                          disabled={historyLoading || !historyNextCursor}
+                          onClick={() => void load(historyNextCursor ?? undefined).catch(reportLoadFailure)}
+                        >
+                          {historyLoading ? text.loading : text.loadMore}
+                        </BaseerButton>
+                      ) : null}
+                    </>
                   ) : (
                     <p className="empty-results">{text.noInvoices}</p>
                   )}

@@ -1206,6 +1206,13 @@ export const financeOutflowDocumentsReceiptSchema = z.object({
   nextCursor: z.string().uuid().nullable(),
 }).strict();
 export const financeOutflowDocumentsQuerySchema = z.object({
+  fromBusinessDate: businessDateSchema.optional(),
+  toBusinessDate: businessDateSchema.optional(),
+  businessMonths: businessMonthsQuerySchema,
+  q: z.string().trim().min(1).max(160).optional(),
+  kind: z.enum(["PURCHASE", "EXPENSE"]).optional(),
+  settlementKind: z.enum(["PAID", "PAYABLE"]).optional(),
+  status: z.enum(["POSTED", "CANCELLED"]).optional(),
   cursor: z.string().uuid().optional(),
   pageSize: z.coerce.number().int().min(1).max(100).optional().default(50),
 }).strict();
