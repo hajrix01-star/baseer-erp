@@ -70,6 +70,12 @@ services:
       BASEER_SYSTEM_TENANT_CODE: ${BASEER_SYSTEM_TENANT_CODE:?BASEER_SYSTEM_TENANT_CODE is required}
       DATABASE_URL: postgresql://${BASEER_DB_APP_USER}:${BASEER_DB_APP_PASSWORD}@postgres:5432/${BASEER_DB_NAME}
       IDENTITY_JWT_SECRET: ${IDENTITY_JWT_SECRET:?IDENTITY_JWT_SECRET is required}
+      ATTENDANCE_PIN_PEPPER: ${ATTENDANCE_PIN_PEPPER:?ATTENDANCE_PIN_PEPPER is required}
+      ATTENDANCE_QR_SECRET: ${ATTENDANCE_QR_SECRET:?ATTENDANCE_QR_SECRET is required}
+      # Required for the two-week location-evidence privacy retention policy.
+      # Run this on exactly one API instance; the database lease handles an
+      # accidental replica overlap safely.
+      BASEER_ATTENDANCE_LOCATION_RETENTION_SCHEDULER_ENABLED: ${BASEER_ATTENDANCE_LOCATION_RETENTION_SCHEDULER_ENABLED:?BASEER_ATTENDANCE_LOCATION_RETENTION_SCHEDULER_ENABLED must be true}
       BASEER_PUBLIC_DOMAIN: ${BASEER_PUBLIC_DOMAIN:?BASEER_PUBLIC_DOMAIN is required}
       BASEER_BACKUP_TARGET_LABEL: ${BASEER_BACKUP_TARGET_LABEL:?BASEER_BACKUP_TARGET_LABEL is required}
       # Company-archive jobs stay opt-in. Their encrypted artifacts live under

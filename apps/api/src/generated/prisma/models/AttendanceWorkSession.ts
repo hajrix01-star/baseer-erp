@@ -34,6 +34,9 @@ export type AttendanceWorkSessionMinAggregateOutputType = {
   businessDate: Date | null
   checkInAt: Date | null
   checkOutAt: Date | null
+  adminClosedByUserId: string | null
+  adminCloseReason: string | null
+  adminClosedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -48,6 +51,9 @@ export type AttendanceWorkSessionMaxAggregateOutputType = {
   businessDate: Date | null
   checkInAt: Date | null
   checkOutAt: Date | null
+  adminClosedByUserId: string | null
+  adminCloseReason: string | null
+  adminClosedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -62,6 +68,9 @@ export type AttendanceWorkSessionCountAggregateOutputType = {
   businessDate: number
   checkInAt: number
   checkOutAt: number
+  adminClosedByUserId: number
+  adminCloseReason: number
+  adminClosedAt: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -78,6 +87,9 @@ export type AttendanceWorkSessionMinAggregateInputType = {
   businessDate?: true
   checkInAt?: true
   checkOutAt?: true
+  adminClosedByUserId?: true
+  adminCloseReason?: true
+  adminClosedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -92,6 +104,9 @@ export type AttendanceWorkSessionMaxAggregateInputType = {
   businessDate?: true
   checkInAt?: true
   checkOutAt?: true
+  adminClosedByUserId?: true
+  adminCloseReason?: true
+  adminClosedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -106,6 +121,9 @@ export type AttendanceWorkSessionCountAggregateInputType = {
   businessDate?: true
   checkInAt?: true
   checkOutAt?: true
+  adminClosedByUserId?: true
+  adminCloseReason?: true
+  adminClosedAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -193,6 +211,9 @@ export type AttendanceWorkSessionGroupByOutputType = {
   businessDate: Date
   checkInAt: Date
   checkOutAt: Date | null
+  adminClosedByUserId: string | null
+  adminCloseReason: string | null
+  adminClosedAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: AttendanceWorkSessionCountAggregateOutputType | null
@@ -228,6 +249,9 @@ export type AttendanceWorkSessionWhereInput = {
   businessDate?: Prisma.DateTimeFilter<"AttendanceWorkSession"> | Date | string
   checkInAt?: Prisma.DateTimeFilter<"AttendanceWorkSession"> | Date | string
   checkOutAt?: Prisma.DateTimeNullableFilter<"AttendanceWorkSession"> | Date | string | null
+  adminClosedByUserId?: Prisma.UuidNullableFilter<"AttendanceWorkSession"> | string | null
+  adminCloseReason?: Prisma.StringNullableFilter<"AttendanceWorkSession"> | string | null
+  adminClosedAt?: Prisma.DateTimeNullableFilter<"AttendanceWorkSession"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"AttendanceWorkSession"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AttendanceWorkSession"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
@@ -246,6 +270,9 @@ export type AttendanceWorkSessionOrderByWithRelationInput = {
   businessDate?: Prisma.SortOrder
   checkInAt?: Prisma.SortOrder
   checkOutAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  adminClosedByUserId?: Prisma.SortOrderInput | Prisma.SortOrder
+  adminCloseReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  adminClosedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   company?: Prisma.CompanyOrderByWithRelationInput
@@ -268,6 +295,9 @@ export type AttendanceWorkSessionWhereUniqueInput = Prisma.AtLeast<{
   businessDate?: Prisma.DateTimeFilter<"AttendanceWorkSession"> | Date | string
   checkInAt?: Prisma.DateTimeFilter<"AttendanceWorkSession"> | Date | string
   checkOutAt?: Prisma.DateTimeNullableFilter<"AttendanceWorkSession"> | Date | string | null
+  adminClosedByUserId?: Prisma.UuidNullableFilter<"AttendanceWorkSession"> | string | null
+  adminCloseReason?: Prisma.StringNullableFilter<"AttendanceWorkSession"> | string | null
+  adminClosedAt?: Prisma.DateTimeNullableFilter<"AttendanceWorkSession"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"AttendanceWorkSession"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AttendanceWorkSession"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
@@ -286,6 +316,9 @@ export type AttendanceWorkSessionOrderByWithAggregationInput = {
   businessDate?: Prisma.SortOrder
   checkInAt?: Prisma.SortOrder
   checkOutAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  adminClosedByUserId?: Prisma.SortOrderInput | Prisma.SortOrder
+  adminCloseReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  adminClosedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.AttendanceWorkSessionCountOrderByAggregateInput
@@ -306,6 +339,9 @@ export type AttendanceWorkSessionScalarWhereWithAggregatesInput = {
   businessDate?: Prisma.DateTimeWithAggregatesFilter<"AttendanceWorkSession"> | Date | string
   checkInAt?: Prisma.DateTimeWithAggregatesFilter<"AttendanceWorkSession"> | Date | string
   checkOutAt?: Prisma.DateTimeNullableWithAggregatesFilter<"AttendanceWorkSession"> | Date | string | null
+  adminClosedByUserId?: Prisma.UuidNullableWithAggregatesFilter<"AttendanceWorkSession"> | string | null
+  adminCloseReason?: Prisma.StringNullableWithAggregatesFilter<"AttendanceWorkSession"> | string | null
+  adminClosedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"AttendanceWorkSession"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"AttendanceWorkSession"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"AttendanceWorkSession"> | Date | string
 }
@@ -316,6 +352,9 @@ export type AttendanceWorkSessionCreateInput = {
   businessDate: Date | string
   checkInAt: Date | string
   checkOutAt?: Date | string | null
+  adminClosedByUserId?: string | null
+  adminCloseReason?: string | null
+  adminClosedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutAttendanceWorkSessionsInput
@@ -334,6 +373,9 @@ export type AttendanceWorkSessionUncheckedCreateInput = {
   businessDate: Date | string
   checkInAt: Date | string
   checkOutAt?: Date | string | null
+  adminClosedByUserId?: string | null
+  adminCloseReason?: string | null
+  adminClosedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   events?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutSessionInput
@@ -345,6 +387,9 @@ export type AttendanceWorkSessionUpdateInput = {
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  adminClosedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminCloseReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminClosedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutAttendanceWorkSessionsNestedInput
@@ -363,6 +408,9 @@ export type AttendanceWorkSessionUncheckedUpdateInput = {
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  adminClosedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminCloseReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminClosedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.AttendanceEventUncheckedUpdateManyWithoutSessionNestedInput
@@ -378,6 +426,9 @@ export type AttendanceWorkSessionCreateManyInput = {
   businessDate: Date | string
   checkInAt: Date | string
   checkOutAt?: Date | string | null
+  adminClosedByUserId?: string | null
+  adminCloseReason?: string | null
+  adminClosedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -388,6 +439,9 @@ export type AttendanceWorkSessionUpdateManyMutationInput = {
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  adminClosedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminCloseReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminClosedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -402,6 +456,9 @@ export type AttendanceWorkSessionUncheckedUpdateManyInput = {
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  adminClosedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminCloseReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminClosedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -437,6 +494,9 @@ export type AttendanceWorkSessionCountOrderByAggregateInput = {
   businessDate?: Prisma.SortOrder
   checkInAt?: Prisma.SortOrder
   checkOutAt?: Prisma.SortOrder
+  adminClosedByUserId?: Prisma.SortOrder
+  adminCloseReason?: Prisma.SortOrder
+  adminClosedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -451,6 +511,9 @@ export type AttendanceWorkSessionMaxOrderByAggregateInput = {
   businessDate?: Prisma.SortOrder
   checkInAt?: Prisma.SortOrder
   checkOutAt?: Prisma.SortOrder
+  adminClosedByUserId?: Prisma.SortOrder
+  adminCloseReason?: Prisma.SortOrder
+  adminClosedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -465,6 +528,9 @@ export type AttendanceWorkSessionMinOrderByAggregateInput = {
   businessDate?: Prisma.SortOrder
   checkInAt?: Prisma.SortOrder
   checkOutAt?: Prisma.SortOrder
+  adminClosedByUserId?: Prisma.SortOrder
+  adminCloseReason?: Prisma.SortOrder
+  adminClosedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -619,6 +685,9 @@ export type AttendanceWorkSessionCreateWithoutCompanyInput = {
   businessDate: Date | string
   checkInAt: Date | string
   checkOutAt?: Date | string | null
+  adminClosedByUserId?: string | null
+  adminCloseReason?: string | null
+  adminClosedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   branch: Prisma.AttendanceBranchCreateNestedOneWithoutWorkSessionsInput
@@ -634,6 +703,9 @@ export type AttendanceWorkSessionUncheckedCreateWithoutCompanyInput = {
   businessDate: Date | string
   checkInAt: Date | string
   checkOutAt?: Date | string | null
+  adminClosedByUserId?: string | null
+  adminCloseReason?: string | null
+  adminClosedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   events?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutSessionInput
@@ -678,6 +750,9 @@ export type AttendanceWorkSessionScalarWhereInput = {
   businessDate?: Prisma.DateTimeFilter<"AttendanceWorkSession"> | Date | string
   checkInAt?: Prisma.DateTimeFilter<"AttendanceWorkSession"> | Date | string
   checkOutAt?: Prisma.DateTimeNullableFilter<"AttendanceWorkSession"> | Date | string | null
+  adminClosedByUserId?: Prisma.UuidNullableFilter<"AttendanceWorkSession"> | string | null
+  adminCloseReason?: Prisma.StringNullableFilter<"AttendanceWorkSession"> | string | null
+  adminClosedAt?: Prisma.DateTimeNullableFilter<"AttendanceWorkSession"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"AttendanceWorkSession"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AttendanceWorkSession"> | Date | string
 }
@@ -688,6 +763,9 @@ export type AttendanceWorkSessionCreateWithoutEmployeeInput = {
   businessDate: Date | string
   checkInAt: Date | string
   checkOutAt?: Date | string | null
+  adminClosedByUserId?: string | null
+  adminCloseReason?: string | null
+  adminClosedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutAttendanceWorkSessionsInput
@@ -702,6 +780,9 @@ export type AttendanceWorkSessionUncheckedCreateWithoutEmployeeInput = {
   businessDate: Date | string
   checkInAt: Date | string
   checkOutAt?: Date | string | null
+  adminClosedByUserId?: string | null
+  adminCloseReason?: string | null
+  adminClosedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   events?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutSessionInput
@@ -739,6 +820,9 @@ export type AttendanceWorkSessionCreateWithoutBranchInput = {
   businessDate: Date | string
   checkInAt: Date | string
   checkOutAt?: Date | string | null
+  adminClosedByUserId?: string | null
+  adminCloseReason?: string | null
+  adminClosedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutAttendanceWorkSessionsInput
@@ -753,6 +837,9 @@ export type AttendanceWorkSessionUncheckedCreateWithoutBranchInput = {
   businessDate: Date | string
   checkInAt: Date | string
   checkOutAt?: Date | string | null
+  adminClosedByUserId?: string | null
+  adminCloseReason?: string | null
+  adminClosedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   events?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutSessionInput
@@ -790,6 +877,9 @@ export type AttendanceWorkSessionCreateWithoutEventsInput = {
   businessDate: Date | string
   checkInAt: Date | string
   checkOutAt?: Date | string | null
+  adminClosedByUserId?: string | null
+  adminCloseReason?: string | null
+  adminClosedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutAttendanceWorkSessionsInput
@@ -807,6 +897,9 @@ export type AttendanceWorkSessionUncheckedCreateWithoutEventsInput = {
   businessDate: Date | string
   checkInAt: Date | string
   checkOutAt?: Date | string | null
+  adminClosedByUserId?: string | null
+  adminCloseReason?: string | null
+  adminClosedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -833,6 +926,9 @@ export type AttendanceWorkSessionUpdateWithoutEventsInput = {
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  adminClosedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminCloseReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminClosedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutAttendanceWorkSessionsNestedInput
@@ -850,6 +946,9 @@ export type AttendanceWorkSessionUncheckedUpdateWithoutEventsInput = {
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  adminClosedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminCloseReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminClosedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -862,6 +961,9 @@ export type AttendanceWorkSessionCreateManyCompanyInput = {
   businessDate: Date | string
   checkInAt: Date | string
   checkOutAt?: Date | string | null
+  adminClosedByUserId?: string | null
+  adminCloseReason?: string | null
+  adminClosedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -872,6 +974,9 @@ export type AttendanceWorkSessionUpdateWithoutCompanyInput = {
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  adminClosedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminCloseReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminClosedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   branch?: Prisma.AttendanceBranchUpdateOneRequiredWithoutWorkSessionsNestedInput
@@ -887,6 +992,9 @@ export type AttendanceWorkSessionUncheckedUpdateWithoutCompanyInput = {
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  adminClosedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminCloseReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminClosedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.AttendanceEventUncheckedUpdateManyWithoutSessionNestedInput
@@ -900,6 +1008,9 @@ export type AttendanceWorkSessionUncheckedUpdateManyWithoutCompanyInput = {
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  adminClosedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminCloseReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminClosedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -911,6 +1022,9 @@ export type AttendanceWorkSessionCreateManyEmployeeInput = {
   businessDate: Date | string
   checkInAt: Date | string
   checkOutAt?: Date | string | null
+  adminClosedByUserId?: string | null
+  adminCloseReason?: string | null
+  adminClosedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -921,6 +1035,9 @@ export type AttendanceWorkSessionUpdateWithoutEmployeeInput = {
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  adminClosedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminCloseReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminClosedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutAttendanceWorkSessionsNestedInput
@@ -935,6 +1052,9 @@ export type AttendanceWorkSessionUncheckedUpdateWithoutEmployeeInput = {
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  adminClosedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminCloseReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminClosedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.AttendanceEventUncheckedUpdateManyWithoutSessionNestedInput
@@ -947,6 +1067,9 @@ export type AttendanceWorkSessionUncheckedUpdateManyWithoutEmployeeInput = {
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  adminClosedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminCloseReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminClosedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -958,6 +1081,9 @@ export type AttendanceWorkSessionCreateManyBranchInput = {
   businessDate: Date | string
   checkInAt: Date | string
   checkOutAt?: Date | string | null
+  adminClosedByUserId?: string | null
+  adminCloseReason?: string | null
+  adminClosedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -968,6 +1094,9 @@ export type AttendanceWorkSessionUpdateWithoutBranchInput = {
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  adminClosedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminCloseReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminClosedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutAttendanceWorkSessionsNestedInput
@@ -982,6 +1111,9 @@ export type AttendanceWorkSessionUncheckedUpdateWithoutBranchInput = {
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  adminClosedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminCloseReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminClosedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   events?: Prisma.AttendanceEventUncheckedUpdateManyWithoutSessionNestedInput
@@ -994,6 +1126,9 @@ export type AttendanceWorkSessionUncheckedUpdateManyWithoutBranchInput = {
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkInAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   checkOutAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  adminClosedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminCloseReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adminClosedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1039,6 +1174,9 @@ export type AttendanceWorkSessionSelect<ExtArgs extends runtime.Types.Extensions
   businessDate?: boolean
   checkInAt?: boolean
   checkOutAt?: boolean
+  adminClosedByUserId?: boolean
+  adminCloseReason?: boolean
+  adminClosedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
@@ -1058,6 +1196,9 @@ export type AttendanceWorkSessionSelectCreateManyAndReturn<ExtArgs extends runti
   businessDate?: boolean
   checkInAt?: boolean
   checkOutAt?: boolean
+  adminClosedByUserId?: boolean
+  adminCloseReason?: boolean
+  adminClosedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
@@ -1075,6 +1216,9 @@ export type AttendanceWorkSessionSelectUpdateManyAndReturn<ExtArgs extends runti
   businessDate?: boolean
   checkInAt?: boolean
   checkOutAt?: boolean
+  adminClosedByUserId?: boolean
+  adminCloseReason?: boolean
+  adminClosedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
@@ -1092,11 +1236,14 @@ export type AttendanceWorkSessionSelectScalar = {
   businessDate?: boolean
   checkInAt?: boolean
   checkOutAt?: boolean
+  adminClosedByUserId?: boolean
+  adminCloseReason?: boolean
+  adminClosedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type AttendanceWorkSessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "branchId" | "employeeId" | "status" | "businessDate" | "checkInAt" | "checkOutAt" | "createdAt" | "updatedAt", ExtArgs["result"]["attendanceWorkSession"]>
+export type AttendanceWorkSessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "branchId" | "employeeId" | "status" | "businessDate" | "checkInAt" | "checkOutAt" | "adminClosedByUserId" | "adminCloseReason" | "adminClosedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["attendanceWorkSession"]>
 export type AttendanceWorkSessionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   branch?: boolean | Prisma.AttendanceBranchDefaultArgs<ExtArgs>
@@ -1133,6 +1280,13 @@ export type $AttendanceWorkSessionPayload<ExtArgs extends runtime.Types.Extensio
     businessDate: Date
     checkInAt: Date
     checkOutAt: Date | null
+    /**
+     * Administrative checkout preserves the employee's original check-in and
+     * records the responsible actor, reason, and server-recorded action time.
+     */
+    adminClosedByUserId: string | null
+    adminCloseReason: string | null
+    adminClosedAt: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["attendanceWorkSession"]>
@@ -1571,6 +1725,9 @@ export interface AttendanceWorkSessionFieldRefs {
   readonly businessDate: Prisma.FieldRef<"AttendanceWorkSession", 'DateTime'>
   readonly checkInAt: Prisma.FieldRef<"AttendanceWorkSession", 'DateTime'>
   readonly checkOutAt: Prisma.FieldRef<"AttendanceWorkSession", 'DateTime'>
+  readonly adminClosedByUserId: Prisma.FieldRef<"AttendanceWorkSession", 'String'>
+  readonly adminCloseReason: Prisma.FieldRef<"AttendanceWorkSession", 'String'>
+  readonly adminClosedAt: Prisma.FieldRef<"AttendanceWorkSession", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"AttendanceWorkSession", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"AttendanceWorkSession", 'DateTime'>
 }

@@ -23,13 +23,14 @@ export class DatabaseService implements OnModuleDestroy {
   async inTenantTransaction<T>(
     tenantId: string,
     operation: (transaction: Prisma.TransactionClient) => Promise<T>,
+    options?: { maxWait?: number; timeout?: number },
   ): Promise<T> {
     return this.client.$transaction(async (transaction) => {
       await transaction.$executeRaw`
         SELECT set_config('app.tenant_id', ${tenantId}, true)
       `;
       return operation(transaction);
-    });
+    }, options);
   }
 
   /**

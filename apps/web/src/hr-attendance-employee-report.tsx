@@ -29,9 +29,9 @@ function stateLabel(state: AttendanceReportRow["days"][number]["state"], languag
   return state === "ON_TIME" ? (ar ? "ملتزم" : "On time") : state === "REST_DAY" ? (ar ? "راحة" : "Rest") : state === "MISSING_CHECK_IN" ? (ar ? "لم يسجل حضور" : "Missing") : state === "IN_PROGRESS" ? (ar ? "جلسة مفتوحة" : "Open") : state === "ATTENTION" ? (ar ? "يحتاج متابعة" : "Review") : (ar ? "لا يوجد دوام" : "No schedule");
 }
 
-function varianceLabel(day: AttendanceReportRow["days"][number], language: Language) {
+function referenceTimeLabel(day: AttendanceReportRow["days"][number], language: Language) {
   const ar = language === "ar";
-  if (day.extraMinutes) return { value: `+${formatAttendanceDuration(day.extraMinutes, language)}`, tone: "good" };
+  if (day.extraMinutes) return { value: `+${formatAttendanceDuration(day.extraMinutes, language)}`, tone: "good", label: ar ? "وقت مسجل بعد نهاية الجدول للمرجع فقط" : "Time recorded after the schedule; reference only" };
   if (day.shortageMinutes) return { value: `−${formatAttendanceDuration(day.shortageMinutes, language)}`, tone: "attention" };
   return { value: "—", tone: "neutral", label: ar ? "مطابق للمخطط" : "Matches plan" };
 }
@@ -47,7 +47,7 @@ function DailyAttendanceTable({ days, language }: { days: DailyAttendanceRow[]; 
     { id: "actual", header: ar ? "فعلي" : "Actual", width: "6.5rem", align: "center", numeric: true, cell: (day) => <strong>{formatAttendanceDuration(day.workedMinutes, language)}</strong> },
     { id: "late", header: ar ? "تأخر" : "Late", width: "5.5rem", align: "center", numeric: true, cell: (day) => day.lateMinutes ? <span className="hr-employee-attendance-report__attention-value">{formatAttendanceDuration(day.lateMinutes, language)}</span> : "—" },
     { id: "early", header: ar ? "مبكر" : "Early", width: "6rem", align: "center", numeric: true, cell: (day) => day.earlyLeaveMinutes ? <span className="hr-employee-attendance-report__attention-value">{formatAttendanceDuration(day.earlyLeaveMinutes, language)}</span> : "—" },
-    { id: "variance", header: ar ? "الفارق" : "Variance", width: "6.5rem", align: "center", numeric: true, cell: (day) => { const variance = varianceLabel(day, language); return <span className={`hr-employee-attendance-report__variance is-${variance.tone}`} title={variance.label}>{variance.value}</span>; } },
+    { id: "reference", header: ar ? "وقت بعد الجدول" : "Post-schedule time", width: "8.5rem", align: "center", numeric: true, cell: (day) => { const reference = referenceTimeLabel(day, language); return <span className={`hr-employee-attendance-report__variance is-${reference.tone}`} title={reference.label}>{reference.value}</span>; } },
     { id: "state", header: ar ? "الحالة" : "Status", width: "8rem", align: "center", cell: (day) => <span className={`hr-employee-attendance-report__state is-${day.state.toLowerCase()}`}>{stateLabel(day.state, language)}</span> },
   ];
   return <BaseerDataGridField ariaLabel={ar ? "سجل الدوام اليومي" : "Daily attendance register"} caption={ar ? "تفصيل الحضور للفترة المحددة" : "Attendance detail for selected period"} className="hr-employee-attendance-report__daily-table" columns={columns} rows={days} rowKey={(day) => day.businessDate} />;
@@ -65,7 +65,6 @@ export function HrAttendanceEmployeeReport({ row, schedule, from, to, language, 
   const ar = language === "ar";
   const periodCommitment = commitment(row);
   const assignment = schedule?.assignments.filter((item) => item.effectiveFrom <= to).sort((left, right) => right.effectiveFrom.localeCompare(left.effectiveFrom))[0];
-  const weeklyAdjustment = schedule?.weeklyAdjustments.filter((item) => item.effectiveFrom <= to).sort((left, right) => right.effectiveFrom.localeCompare(left.effectiveFrom))[0];
   const exceptions = schedule?.exceptions.filter((item) => item.businessDate >= from && item.businessDate <= to) ?? [];
 
   return <section className="hr-employee-attendance-report" aria-label={ar ? "تحليل حضور الموظف" : "Employee attendance analysis"}>
@@ -73,7 +72,7 @@ export function HrAttendanceEmployeeReport({ row, schedule, from, to, language, 
       <div>
         <span>{ar ? "تحليل الموظف" : "Employee analysis"}</span>
         <h3>{row.employeeNumber} · {ar ? row.employeeNameAr : row.employeeNameEn ?? row.employeeNameAr}</h3>
-        <p>{ar ? `الفترة ${from} إلى ${to}. المؤشر تشغيلي للمتابعة فقط ولا ينشئ خصماً أو أوفر تايم.` : `Period ${from} to ${to}. This is an operational measure only; it never creates payroll actions.`}</p>
+        <p>{ar ? `الفترة ${from} إلى ${to}. المؤشر تشغيلي للمتابعة فقط؛ ولا ينشئ خصماً أو أثراً مالياً تلقائياً.` : `Period ${from} to ${to}. This is an operational measure only; it never creates payroll actions.`}</p>
       </div>
       <div className={`hr-employee-attendance-report__commitment is-${commitmentTone(periodCommitment)}`}>
         <small>{ar ? "التزام الفترة" : "Period commitment"}</small>
@@ -87,7 +86,7 @@ export function HrAttendanceEmployeeReport({ row, schedule, from, to, language, 
       <Metric label={ar ? "فعلي" : "Actual"} value={formatAttendanceDuration(row.workedMinutes, language)} />
       <Metric label={ar ? "تأخر + مبكر" : "Late + early"} value={formatAttendanceDuration(row.lateMinutes + row.earlyLeaveMinutes, language)} tone={row.lateMinutes + row.earlyLeaveMinutes ? "attention" : undefined} />
       <Metric label={ar ? "ناقص" : "Shortage"} value={formatAttendanceDuration(row.shortageMinutes, language)} tone={row.shortageMinutes ? "attention" : undefined} />
-      <Metric label={ar ? "زائد" : "Extra"} value={formatAttendanceDuration(row.extraMinutes, language)} tone={row.extraMinutes ? "good" : undefined} />
+      <Metric label={ar ? "وقت بعد الجدول (مرجعي)" : "Post-schedule time (reference)"} value={formatAttendanceDuration(row.extraMinutes, language)} tone={row.extraMinutes ? "good" : undefined} />
       <Metric label={ar ? "بلا حضور" : "Missing"} value={String(row.missingCheckInDays)} tone={row.missingCheckInDays ? "attention" : undefined} />
     </div>
 
@@ -104,7 +103,7 @@ export function HrAttendanceEmployeeReport({ row, schedule, from, to, language, 
       <div><span>{ar ? "خطة الدوام" : "Work plan"}</span><h4>{ar ? "القالب والتخصيصات المؤثرة" : "Template and active adjustments"}</h4></div>
       <dl>
         <div><dt>{ar ? "قالب الدوام" : "Work template"}</dt><dd>{assignment ? `${ar ? assignment.templateNameAr : assignment.templateNameEn ?? assignment.templateNameAr} · ${assignment.effectiveFrom}` : "—"}</dd></div>
-        <div><dt>{ar ? "راحة/نصف دوام" : "Rest / half day"}</dt><dd>{weeklyAdjustment ? `${weeklyAdjustment.kind === "FULL_REST" ? (ar ? "راحة كاملة" : "Full rest") : weeklyAdjustment.periods.map((period) => `${period.startTime}–${period.endTime}`).join(" · ")} · ${weeklyAdjustment.effectiveFrom}` : "—"}</dd></div>
+        <div><dt>{ar ? "الراحة/نصف الدوام" : "Rest / half day"}</dt><dd>{schedule?.weeklyAdjustments.filter((item) => item.effectiveFrom <= to).sort((left, right) => right.effectiveFrom.localeCompare(left.effectiveFrom)).map((item) => `${item.kind === "FULL_REST" ? (ar ? "راحة كاملة" : "Full rest") : item.periods.map((period) => `${period.startTime}–${period.endTime}`).join(" · ")} · ${item.effectiveFrom}`).join("\n") || "—"}</dd></div>
         <div><dt>{ar ? "جلسات مكتملة" : "Completed sessions"}</dt><dd>{row.completedSessions} / {row.sessions}</dd></div>
       </dl>
     </BaseerCard>

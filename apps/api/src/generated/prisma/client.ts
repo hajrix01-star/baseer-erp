@@ -744,6 +744,13 @@ export type AttendanceQrScanUse = Prisma.AttendanceQrScanUseModel
  */
 export type AttendanceWorkSession = Prisma.AttendanceWorkSessionModel
 /**
+ * Model HrEmployeeWorkTerms
+ * Effective-dated contractual work hours. Attendance schedules decide when
+ * work occurs; this agreement remains the employee-file source of the daily
+ * contracted minutes and is never silently changed by attendance planning.
+ */
+export type HrEmployeeWorkTerms = Prisma.HrEmployeeWorkTermsModel
+/**
  * Model HrEmployeePromotion
  * An immutable, operational career-history event. Compensation remains in
  * HrEmployeeCompensationProfile so a promotion can never rewrite payroll

@@ -1,8 +1,9 @@
 import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { createCipheriv, createDecipheriv, createHash, createHmac, randomBytes, randomUUID } from 'node:crypto';
-import type { ApproveAttendanceRosterRequest, ArchiveAttendanceScheduleTemplateRequest, AssignAttendanceEmployeeScheduleRequest, AssignAttendanceEmployeesScheduleRequest, AttendanceEmployeePortalSessionRequest, AttendanceEmployeeRecordRequest, AttendanceEmployeeScheduleListQuery, ConfigureAttendanceEmployeeScheduleRequest, CreateAttendanceBranchRequest, CreateAttendanceScheduleExceptionRequest, CreateAttendanceScheduleTemplateRequest, CreateAttendanceScheduleVersionRequest, DecideAttendanceScheduleExceptionRequest, SaveAttendanceRosterDraftRequest, SetAttendanceEmployeePinRequest, SetAttendanceEmployeeWeeklyAdjustmentRequest, UpdateAttendanceBranchRequest, UpdateAttendanceScheduleTemplateRequest } from '@baseer-erp/contracts';
+import type { ApproveAttendanceRosterRequest, ArchiveAttendanceScheduleTemplateRequest, AssignAttendanceEmployeeScheduleRequest, AssignAttendanceEmployeesScheduleRequest, AttendanceEmployeePortalSessionRequest, AttendanceEmployeeRecordRequest, AttendanceEmployeeScheduleListQuery, AttendanceOpenSessionsQuery, CloseAttendanceSessionRequest, ConfigureAttendanceEmployeeScheduleRequest, CreateAttendanceBranchRequest, CreateAttendanceScheduleExceptionRequest, CreateAttendanceScheduleTemplateRequest, CreateAttendanceScheduleVersionRequest, DecideAttendanceScheduleExceptionRequest, SaveAttendanceRosterDraftRequest, SetAttendanceEmployeePinRequest, SetAttendanceEmployeeWeeklyAdjustmentRequest, UpdateAttendanceBranchRequest, UpdateAttendanceCompanySettingsRequest, UpdateAttendanceScheduleTemplateRequest } from '@baseer-erp/contracts';
 import { AttendanceEventType, AttendanceRosterApprovalMode, AttendanceRosterPlanStatus, AttendanceScheduleExceptionStatus, AttendanceScheduleTemplateStatus, AttendanceWeeklyAdjustmentKind, AttendanceWorkSessionStatus, HrEmployeeStatus, Prisma } from '../generated/prisma/client.js';
 import type { TrustedCompanyActorContext } from '../core-controls/trusted-context.js';
+import { IdempotencyService } from '../core-controls/idempotency.service.js';
 import { DatabaseService } from '../database/database.service.js';
 import { hashPassword, verifyPassword } from '../identity/password.util.js';
 
@@ -10,12 +11,15 @@ const ATTENDANCE_WORKSPACE_EMPLOYEE_LIMIT = 500;
 
 @Injectable()
 export class AttendanceService {
-  constructor(private readonly database: DatabaseService) {}
+  constructor(private readonly database: DatabaseService, private readonly idempotency: IdempotencyService) {}
 
-  /** All manager-facing attendance operations are deliberately restricted to
-   * the tenant owner or the designated company manager, even where a broader
-   * capability could otherwise be granted to another role. */
+  /** Attendance administration belongs to the tenant owner. The one narrow
+   * exception is an accountable manager closing an employee's open session. */
   async assertManagementAuthority(context: TrustedCompanyActorContext) {
+    await this.database.inTenantTransaction(context.tenantId, (tx) => this.assertOwnerAuthority(tx, context));
+  }
+
+  async assertManagerCloseAuthority(context: TrustedCompanyActorContext) {
     await this.database.inTenantTransaction(context.tenantId, (tx) => this.assertPinDisplayAuthority(tx, context));
   }
 
@@ -65,6 +69,105 @@ export class AttendanceService {
 
   async listBranches(context: TrustedCompanyActorContext) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => (await tx.attendanceBranch.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId }, orderBy: { nameAr: 'asc' } })).map(mapBranch));
+  }
+
+  async companySettings(context: TrustedCompanyActorContext) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      await this.assertOwnerAuthority(tx, context);
+      const company = await tx.company.findFirst({ where: { id: context.companyId, tenantId: context.tenantId }, select: { attendanceLocationEnabled: true } });
+      if (!company) throw new NotFoundException('Attendance company was not found.');
+      return { locationEnabled: company.attendanceLocationEnabled, locationRetentionDays: 14 as const };
+    });
+  }
+
+  async updateCompanySettings(context: TrustedCompanyActorContext, input: UpdateAttendanceCompanySettingsRequest) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      await this.assertOwnerAuthority(tx, context);
+      const begun = await this.idempotency.beginInTransaction(tx, context, {
+        operation: 'attendance.company_settings.update', key: input.idempotencyKey, request: { locationEnabled: input.locationEnabled }, expiresAt: new Date(Date.now() + 86_400_000),
+      });
+      if (begun.kind === 'replay') return begun.response.body as { locationEnabled: boolean; locationRetentionDays: 14 };
+      if (begun.kind === 'in-progress') throw new ConflictException('The attendance company-settings request is already being processed.');
+      const previous = await tx.company.findFirst({ where: { id: context.companyId, tenantId: context.tenantId }, select: { id: true, attendanceLocationEnabled: true } });
+      if (!previous) throw new NotFoundException('Attendance company was not found.');
+      const company = await tx.company.update({ where: { id: previous.id }, data: { attendanceLocationEnabled: input.locationEnabled }, select: { attendanceLocationEnabled: true } });
+      await this.audit(tx, context, 'attendance.company_settings.location_updated', 'Company', previous.id, { before: { locationEnabled: previous.attendanceLocationEnabled }, after: { locationEnabled: company.attendanceLocationEnabled }, locationRetentionDays: 14, requestKey: input.idempotencyKey });
+      const receipt = { locationEnabled: company.attendanceLocationEnabled, locationRetentionDays: 14 as const };
+      await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 200, headers: null, body: receipt } });
+      return receipt;
+    });
+  }
+
+  /** This intentionally has no scheduler dependency: a privileged runner can
+   * invoke it safely and its bounded, non-financial action is audited. */
+  async purgeExpiredLocationEvidence(context: TrustedCompanyActorContext, now = new Date()) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      await this.assertOwnerAuthority(tx, context);
+      const cutoff = new Date(now.valueOf() - 14 * 24 * 60 * 60 * 1_000);
+      const result = await tx.attendanceEvent.updateMany({
+        where: { tenantId: context.tenantId, companyId: context.companyId, occurredAt: { lt: cutoff }, OR: [{ latitude: { not: null } }, { longitude: { not: null } }, { accuracyMeters: { not: null } }] },
+        data: { latitude: null, longitude: null, accuracyMeters: null },
+      });
+      await this.audit(tx, context, 'attendance.location_evidence.purged', 'AttendanceEvent', context.companyId, { cutoff: cutoff.toISOString(), retentionDays: 14, purgedEvents: result.count });
+      return { cutoff: cutoff.toISOString(), retentionDays: 14 as const, purgedEvents: result.count };
+    });
+  }
+
+  /** Code-owned daily retention path. It is intentionally tenant-scoped and
+   * writes only redacted aggregate audit facts, never a coordinate payload. */
+  async purgeExpiredLocationEvidenceForTenant(tenantId: string, now = new Date()) {
+    return this.database.inTenantTransaction(tenantId, async (tx) => {
+      const cutoff = new Date(now.valueOf() - 14 * 24 * 60 * 60 * 1_000);
+      const companies = await tx.company.findMany({ where: { tenantId }, select: { id: true } });
+      let purgedEvents = 0;
+      for (const company of companies) {
+        const result = await tx.attendanceEvent.updateMany({
+          where: { tenantId, companyId: company.id, occurredAt: { lt: cutoff }, OR: [{ latitude: { not: null } }, { longitude: { not: null } }, { accuracyMeters: { not: null } }] },
+          data: { latitude: null, longitude: null, accuracyMeters: null },
+        });
+        purgedEvents += result.count;
+        if (result.count) await tx.auditEvent.create({ data: { id: randomUUID(), tenantId, companyId: company.id, actorUserId: null, action: 'attendance.location_evidence.purged_by_scheduler', entityType: 'AttendanceEvent', entityId: company.id, requestId: randomUUID(), afterJson: { cutoff: cutoff.toISOString(), retentionDays: 14, purgedEvents: result.count } } });
+      }
+      return { tenantId, companyCount: companies.length, purgedEvents, cutoff: cutoff.toISOString() };
+    });
+  }
+
+  async closeOpenSession(context: TrustedCompanyActorContext, input: CloseAttendanceSessionRequest) {
+    const checkOutAt = new Date(input.checkOutAt);
+    const serverNow = new Date();
+    if (Number.isNaN(checkOutAt.valueOf()) || checkOutAt > serverNow) throw new BadRequestException('Administrative checkout must not be in the future.');
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      await this.assertPinDisplayAuthority(tx, context);
+      const replay = await tx.attendanceEvent.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, requestKey: input.idempotencyKey }, include: { session: true } });
+      if (replay) {
+        if (replay.eventType !== AttendanceEventType.ADMIN_CHECK_OUT) throw new ConflictException('This idempotency key belongs to a different attendance operation.');
+        return { sessionId: replay.sessionId, employeeId: replay.employeeId, businessDate: dateOnly(replay.businessDate), checkOutAt: replay.occurredAt.toISOString(), reason: replay.session.adminCloseReason ?? input.reason, closedByUserId: replay.session.adminClosedByUserId ?? context.actorUserId, replayed: true };
+      }
+      const session = await tx.attendanceWorkSession.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeId: input.employeeId, businessDate: businessDateValue(input.businessDate), status: AttendanceWorkSessionStatus.OPEN } });
+      if (!session) throw new NotFoundException('No open attendance session was found for this employee and business date.');
+      if (checkOutAt <= session.checkInAt) throw new BadRequestException('Administrative checkout must be after the recorded check-in.');
+      const closed = await tx.attendanceWorkSession.updateMany({ where: { id: session.id, status: AttendanceWorkSessionStatus.OPEN }, data: { status: AttendanceWorkSessionStatus.CLOSED, checkOutAt, adminClosedByUserId: context.actorUserId, adminCloseReason: input.reason, adminClosedAt: serverNow } });
+      if (closed.count !== 1) throw new ConflictException('Attendance state changed; please retry.');
+      const eventId = randomUUID();
+      await tx.attendanceEvent.create({ data: { id: eventId, tenantId: context.tenantId, companyId: context.companyId, branchId: session.branchId, employeeId: session.employeeId, sessionId: session.id, eventType: AttendanceEventType.ADMIN_CHECK_OUT, businessDate: session.businessDate, occurredAt: checkOutAt, latitude: null, longitude: null, accuracyMeters: null, qrTokenHash: createHash('sha256').update(`admin-check-out:${session.id}:${input.idempotencyKey}`).digest('hex'), requestKey: input.idempotencyKey } });
+      await this.audit(tx, context, 'attendance.session.administratively_closed', 'AttendanceWorkSession', session.id, { employeeId: session.employeeId, businessDate: dateOnly(session.businessDate), checkInAt: session.checkInAt.toISOString(), chosenCheckOutAt: checkOutAt.toISOString(), reason: input.reason, administrativeEventId: eventId, requestKey: input.idempotencyKey });
+      return { sessionId: session.id, employeeId: session.employeeId, businessDate: dateOnly(session.businessDate), checkOutAt: checkOutAt.toISOString(), reason: input.reason, closedByUserId: context.actorUserId, replayed: false };
+    });
+  }
+
+  async openSessionsForManager(context: TrustedCompanyActorContext, query: AttendanceOpenSessionsQuery) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      await this.assertPinDisplayAuthority(tx, context);
+      const cursor = query.cursor ? await tx.attendanceWorkSession.findFirst({ where: { id: query.cursor, tenantId: context.tenantId, companyId: context.companyId, status: AttendanceWorkSessionStatus.OPEN }, select: { id: true, checkInAt: true } }) : null;
+      if (query.cursor && !cursor) throw new BadRequestException('The open-session cursor is invalid.');
+      const rows = await tx.attendanceWorkSession.findMany({
+        where: { tenantId: context.tenantId, companyId: context.companyId, status: AttendanceWorkSessionStatus.OPEN, ...(cursor ? { OR: [{ checkInAt: { lt: cursor.checkInAt } }, { checkInAt: cursor.checkInAt, id: { lt: cursor.id } }] } : {}) },
+        include: { employee: { select: { nameAr: true } } }, orderBy: [{ checkInAt: 'desc' }, { id: 'desc' }], take: query.pageSize + 1,
+      });
+      const hasMore = rows.length > query.pageSize;
+      const sessions = hasMore ? rows.slice(0, query.pageSize) : rows;
+      return { sessions: sessions.map((session) => ({ sessionId: session.id, employeeId: session.employeeId, employeeNameAr: session.employee.nameAr, businessDate: dateOnly(session.businessDate), checkInAt: session.checkInAt.toISOString() })), hasMore, nextCursor: hasMore ? sessions.at(-1)?.id ?? null : null };
+    });
   }
 
   async listScheduleTemplates(context: TrustedCompanyActorContext) {
@@ -168,13 +271,24 @@ export class AttendanceService {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const effectiveFrom = businessDateValue(input.effectiveFrom);
       await this.assertActiveEmployee(tx, context, input.employeeId);
-      const [template, assignmentClash, adjustmentClash] = await Promise.all([
-        tx.attendanceScheduleTemplate.findFirst({ where: { id: input.templateId, tenantId: context.tenantId, companyId: context.companyId, status: AttendanceScheduleTemplateStatus.ACTIVE }, select: { id: true } }),
+      const [template, assignmentClash, adjustmentClash, existingAssignment, workTerms] = await Promise.all([
+        tx.attendanceScheduleTemplate.findFirst({ where: { id: input.templateId, tenantId: context.tenantId, companyId: context.companyId, status: AttendanceScheduleTemplateStatus.ACTIVE }, select: { id: true, versions: { where: { effectiveFrom: { lte: effectiveFrom } }, orderBy: { effectiveFrom: 'desc' }, take: 1, include: { periods: true } } } }),
         tx.attendanceEmployeeScheduleAssignment.findFirst({ where: { employeeId: input.employeeId, effectiveFrom }, select: { id: true } }),
         tx.attendanceEmployeeWeeklyAdjustment.findFirst({ where: { employeeId: input.employeeId, dayOfWeek: input.weeklyAdjustment.dayOfWeek, effectiveFrom }, select: { id: true } }),
+        tx.attendanceEmployeeScheduleAssignment.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeId: input.employeeId }, select: { id: true } }),
+        tx.hrEmployeeWorkTerms.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeId: input.employeeId, effectiveFrom: { lte: effectiveFrom }, OR: [{ effectiveTo: null }, { effectiveTo: { gte: effectiveFrom } }] }, orderBy: { effectiveFrom: 'desc' } }),
       ]);
       if (!template) throw new BadRequestException('Choose an active schedule template from this company.');
       if (assignmentClash || adjustmentClash) throw new ConflictException('A work schedule or weekly adjustment already starts on this date.');
+      // Only first-time employee-file configuration imports the contractual
+      // hours as a guardrail. Later attendance planning remains independent,
+      // effective-dated operational history and never edits this agreement.
+      if (!existingAssignment) {
+        if (!workTerms) throw new BadRequestException('Set effective employee work terms before the first attendance schedule setup.');
+        const version = template.versions[0];
+        if (!version) throw new BadRequestException('The selected schedule template has no version effective on the setup date.');
+        assertInitialScheduleMatchesWorkTerms(version.periods, input.weeklyAdjustment.dayOfWeek, workTerms.workMinutesPerDay);
+      }
       const assignmentId = randomUUID(); const adjustmentId = randomUUID();
       await tx.attendanceEmployeeScheduleAssignment.create({ data: { id: assignmentId, tenantId: context.tenantId, companyId: context.companyId, employeeId: input.employeeId, templateId: template.id, effectiveFrom, createdByUserId: context.actorUserId } });
       await tx.attendanceEmployeeWeeklyAdjustment.create({ data: { id: adjustmentId, tenantId: context.tenantId, companyId: context.companyId, employeeId: input.employeeId, dayOfWeek: input.weeklyAdjustment.dayOfWeek, effectiveFrom, kind: input.weeklyAdjustment.kind as AttendanceWeeklyAdjustmentKind, createdByUserId: context.actorUserId, periods: { create: periods.map((period) => ({ id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, ...period })) } } });
@@ -366,16 +480,21 @@ export class AttendanceService {
 
   private async readEmployeeSchedules(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, employeeIds: string[]) {
     if (!employeeIds.length) return [];
-    const [assignments, weeklyAdjustments, exceptions] = await Promise.all([
+    const asOf = businessDateValue(riyadhDate(new Date()));
+    const [assignments, weeklyAdjustments, exceptions, workTerms] = await Promise.all([
       tx.attendanceEmployeeScheduleAssignment.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeId: { in: employeeIds } }, include: { template: { select: { nameAr: true, nameEn: true } } }, orderBy: [{ employeeId: 'asc' }, { effectiveFrom: 'desc' }] }),
       tx.attendanceEmployeeWeeklyAdjustment.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeId: { in: employeeIds } }, include: { periods: { orderBy: { startMinute: 'asc' } } }, orderBy: [{ employeeId: 'asc' }, { dayOfWeek: 'asc' }, { effectiveFrom: 'desc' }] }),
       tx.attendanceScheduleException.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeId: { in: employeeIds } }, include: { periods: { orderBy: { startMinute: 'asc' } } }, orderBy: [{ employeeId: 'asc' }, { businessDate: 'desc' }, { createdAt: 'desc' }] }),
+      tx.hrEmployeeWorkTerms.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeId: { in: employeeIds }, effectiveFrom: { lte: asOf }, OR: [{ effectiveTo: null }, { effectiveTo: { gte: asOf } }] }, orderBy: { effectiveFrom: 'desc' } }),
     ]);
     const assignmentsByEmployee = groupBy(assignments, (item) => item.employeeId);
     const adjustmentsByEmployee = groupBy(weeklyAdjustments, (item) => item.employeeId);
     const exceptionsByEmployee = groupBy(exceptions, (item) => item.employeeId);
+    const workTermsByEmployee = new Map<string, typeof workTerms[number]>();
+    for (const workTermsRow of workTerms) if (!workTermsByEmployee.has(workTermsRow.employeeId)) workTermsByEmployee.set(workTermsRow.employeeId, workTermsRow);
     return employeeIds.map((employeeId) => ({
       employeeId,
+      workTermsReference: mapWorkTermsReference(workTermsByEmployee.get(employeeId) ?? null),
       assignments: (assignmentsByEmployee.get(employeeId) ?? []).map(mapAssignment),
       weeklyAdjustments: (adjustmentsByEmployee.get(employeeId) ?? []).map(mapWeeklyAdjustment),
       exceptions: (exceptionsByEmployee.get(employeeId) ?? []).slice(0, 200).map(mapScheduleException),
@@ -701,10 +820,10 @@ export class AttendanceService {
   async createEmployeePortalSession(input: AttendanceEmployeePortalSessionRequest) {
     const company = { id: input.companyId, tenantId: input.tenantId };
     return this.database.inTenantTransaction(input.tenantId, async (tx) => {
-      const exists = await tx.company.findFirst({ where: { id: company.id, tenantId: company.tenantId }, select: { id: true } });
-      if (!exists) throw new ForbiddenException('Attendance company is unavailable.');
+      const companySettings = await tx.company.findFirst({ where: { id: company.id, tenantId: company.tenantId }, select: { id: true, attendanceLocationEnabled: true } });
+      if (!companySettings) throw new ForbiddenException('Attendance company is unavailable.');
       const credential = await this.authenticateEmployeePin(tx, company, input.pin);
-      const profile = await this.employeePortalProfileForEmployee(tx, company, credential.employee.id);
+      const profile = await this.employeePortalProfileForEmployee(tx, company, credential.employee.id, companySettings.attendanceLocationEnabled);
       const expiresAt = Math.floor(Date.now() / 1_000) + 10 * 60;
       const accessToken = this.createEmployeePortalToken(company.id, company.tenantId, credential.employee.id, expiresAt);
       await tx.auditEvent.create({ data: { id: randomUUID(), tenantId: company.tenantId, companyId: company.id, action: 'attendance.employee_portal.opened', entityType: 'HrEmployee', entityId: credential.employee.id, requestId: randomUUID(), afterJson: { employeeId: credential.employee.id, expiresAt } } });
@@ -716,21 +835,24 @@ export class AttendanceService {
     const access = this.verifyEmployeePortalToken(accessToken);
     const company = { id: access.companyId, tenantId: access.tenantId };
     return this.database.inTenantTransaction(access.tenantId, async (tx) => {
-      const exists = await tx.company.findFirst({ where: { id: company.id, tenantId: company.tenantId }, select: { id: true } });
-      if (!exists) throw new ForbiddenException('Attendance company is unavailable.');
+      const companySettings = await tx.company.findFirst({ where: { id: company.id, tenantId: company.tenantId }, select: { id: true, attendanceLocationEnabled: true } });
+      if (!companySettings) throw new ForbiddenException('Attendance company is unavailable.');
       const credential = await tx.attendanceEmployeeCredential.findFirst({ where: { tenantId: company.tenantId, companyId: company.id, employeeId: access.employeeId }, select: { id: true } });
       if (!credential) throw new ForbiddenException('Employee portal access is no longer available.');
-      return this.employeePortalProfileForEmployee(tx, company, access.employeeId);
+      return this.employeePortalProfileForEmployee(tx, company, access.employeeId, companySettings.attendanceLocationEnabled);
     });
   }
 
   async recordFromEmployee(input: AttendanceEmployeeRecordRequest) {
     const company = { id: input.companyId, tenantId: input.tenantId };
     return this.database.inTenantTransaction(input.tenantId, async (tx) => {
-      const exists = await tx.company.findFirst({ where: { id: company.id, tenantId: company.tenantId }, select: { id: true } });
-      if (!exists) throw new ForbiddenException('Attendance company is unavailable.');
+      const companySettings = await tx.company.findFirst({ where: { id: company.id, tenantId: company.tenantId }, select: { id: true, attendanceLocationEnabled: true } });
+      if (!companySettings) throw new ForbiddenException('Attendance company is unavailable.');
       const replay = await tx.attendanceEvent.findFirst({ where: { tenantId: company.tenantId, companyId: company.id, requestKey: input.idempotencyKey }, include: { employee: { select: { nameAr: true } }, session: true } });
-      if (replay) return { employeeId: replay.employeeId, employeeNameAr: replay.employee.nameAr, operation: replay.eventType, occurredAt: replay.occurredAt.toISOString(), sessionId: replay.sessionId, replayed: true };
+      if (replay) {
+        if (replay.eventType !== AttendanceEventType.CHECK_IN && replay.eventType !== AttendanceEventType.CHECK_OUT) throw new ConflictException('This idempotency key belongs to a different attendance operation.');
+        return { employeeId: replay.employeeId, employeeNameAr: replay.employee.nameAr, operation: replay.eventType, occurredAt: replay.occurredAt.toISOString(), sessionId: replay.sessionId, replayed: true };
+      }
       const credential = input.portalToken
         ? await this.authenticateEmployeePortalToken(tx, company, input.portalToken)
         : await this.authenticateEmployeePin(tx, company, input.pin!);
@@ -738,8 +860,12 @@ export class AttendanceService {
       if (!branch) throw new BadRequestException('Attendance branch is unavailable.');
       const qr = this.verifyQr(input.qrToken, branch.id, company.id);
       const qrTokenHash = createHash('sha256').update(input.qrToken).digest('hex');
-      if (input.accuracyMeters > branch.maxAccuracyMeters) throw new BadRequestException('Location accuracy is not sufficient. Please try again near a clearer signal.');
-      if (distanceMeters(input.latitude, input.longitude, Number(branch.latitude), Number(branch.longitude)) > branch.radiusMeters) throw new ForbiddenException('You are outside the permitted attendance radius.');
+      const location = input.latitude === undefined || input.longitude === undefined || input.accuracyMeters === undefined ? null : { latitude: input.latitude, longitude: input.longitude, accuracyMeters: input.accuracyMeters };
+      if (companySettings.attendanceLocationEnabled) {
+        if (!location) throw new BadRequestException('This company requires location evidence for attendance.');
+        if (location.accuracyMeters > branch.maxAccuracyMeters) throw new BadRequestException('Location accuracy is not sufficient. Please try again near a clearer signal.');
+        if (distanceMeters(location.latitude, location.longitude, Number(branch.latitude), Number(branch.longitude)) > branch.radiusMeters) throw new ForbiddenException('You are outside the permitted attendance radius.');
+      }
       try {
         await tx.attendanceQrScanUse.create({ data: { id: randomUUID(), tenantId: company.tenantId, companyId: company.id, employeeId: credential.employee.id, qrTokenHash, expiresAt: qr.expiresAt } });
       } catch (error) {
@@ -763,9 +889,15 @@ export class AttendanceService {
       } else {
         await tx.attendanceWorkSession.create({ data: { id: sessionId, tenantId: company.tenantId, companyId: company.id, branchId: branch.id, employeeId: credential.employee.id, status: AttendanceWorkSessionStatus.OPEN, businessDate, checkInAt: occurredAt } });
       }
-      await tx.attendanceEvent.create({ data: { id: randomUUID(), tenantId: company.tenantId, companyId: company.id, branchId: branch.id, employeeId: credential.employee.id, sessionId, eventType, businessDate, occurredAt, latitude: new Prisma.Decimal(input.latitude), longitude: new Prisma.Decimal(input.longitude), accuracyMeters: new Prisma.Decimal(input.accuracyMeters), qrTokenHash, requestKey: input.idempotencyKey } });
-      await tx.auditEvent.create({ data: { id: randomUUID(), tenantId: company.tenantId, companyId: company.id, action: `attendance.${eventType.toLowerCase()}`, entityType: 'AttendanceEvent', entityId: sessionId, requestId: input.idempotencyKey, afterJson: { employeeId: credential.employee.id, branchId: branch.id, eventType, accuracyAccepted: true, qrConsumedForEmployee: true } } });
+      await tx.attendanceEvent.create({ data: { id: randomUUID(), tenantId: company.tenantId, companyId: company.id, branchId: branch.id, employeeId: credential.employee.id, sessionId, eventType, businessDate, occurredAt, latitude: companySettings.attendanceLocationEnabled ? new Prisma.Decimal(location!.latitude) : null, longitude: companySettings.attendanceLocationEnabled ? new Prisma.Decimal(location!.longitude) : null, accuracyMeters: companySettings.attendanceLocationEnabled ? new Prisma.Decimal(location!.accuracyMeters) : null, qrTokenHash, requestKey: input.idempotencyKey } });
+      await tx.auditEvent.create({ data: { id: randomUUID(), tenantId: company.tenantId, companyId: company.id, action: `attendance.${eventType.toLowerCase()}`, entityType: 'AttendanceEvent', entityId: sessionId, requestId: input.idempotencyKey, afterJson: { employeeId: credential.employee.id, branchId: branch.id, eventType, locationEvidenceRequired: companySettings.attendanceLocationEnabled, qrConsumedForEmployee: true } } });
       return { employeeId: credential.employee.id, employeeNameAr: credential.employee.nameAr, operation: eventType, occurredAt: occurredAt.toISOString(), sessionId, replayed: false };
+    }, {
+      // PIN verification is intentionally slow and occurs in the tenant
+      // transaction. Permit the approved 12-person kiosk burst to queue, but
+      // keep both the queue and transaction duration explicitly bounded.
+      maxWait: 15_000,
+      timeout: 30_000,
     });
   }
 
@@ -803,7 +935,7 @@ export class AttendanceService {
     return credential;
   }
 
-  private async employeePortalProfileForEmployee(tx: Prisma.TransactionClient, company: { id: string; tenantId: string }, employeeId: string) {
+  private async employeePortalProfileForEmployee(tx: Prisma.TransactionClient, company: { id: string; tenantId: string }, employeeId: string, locationEnabled: boolean) {
     const employee = await tx.hrEmployee.findFirst({ where: { id: employeeId, tenantId: company.tenantId, companyId: company.id, status: HrEmployeeStatus.ACTIVE }, select: { id: true, employeeNumber: true, nameAr: true, nameEn: true } });
     if (!employee) throw new ForbiddenException('Employee portal access is no longer available.');
     const startText = riyadhDate(new Date()); const start = businessDateValue(startText);
@@ -834,7 +966,7 @@ export class AttendanceService {
     const shortageMinutes = evaluations.reduce((total, day) => total + day.shortageMinutes, 0);
     const evaluatedDays = evaluations.filter((day) => day.plannedMinutes > 0).length;
     const commitment = { score: plannedMinutes ? Math.max(0, Math.min(100, Math.round(((plannedMinutes - shortageMinutes) / plannedMinutes) * 100))) : null, plannedMinutes, shortageMinutes, evaluatedDays };
-    return { companyId: company.id, employeeId: employee.id, employeeNumber: employee.employeeNumber, employeeNameAr: employee.nameAr, employeeNameEn: employee.nameEn, businessDate: startText, state: open ? 'IN_PROGRESS' as const : 'READY' as const, commitment, schedule };
+    return { companyId: company.id, employeeId: employee.id, employeeNumber: employee.employeeNumber, employeeNameAr: employee.nameAr, employeeNameEn: employee.nameEn, businessDate: startText, state: open ? 'IN_PROGRESS' as const : 'READY' as const, locationEnabled, commitment, schedule };
   }
 
   private createEmployeePortalToken(companyId: string, tenantId: string, employeeId: string, expiresAt: number) {
@@ -858,7 +990,8 @@ export class AttendanceService {
   private pinEncryptionKey() { return createHash('sha256').update(`${this.secret('ATTENDANCE_PIN_PEPPER')}:attendance-pin-display:v1`).digest(); }
   private sign(value: string) { return createHmac('sha256', this.secret('ATTENDANCE_QR_SECRET')).update(value).digest('base64url'); }
   private signEmployeePortal(value: string) { return createHmac('sha256', this.secret('ATTENDANCE_QR_SECRET')).update(`employee-portal:v1:${value}`).digest('base64url'); }
-  private async assertPinDisplayAuthority(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext) { const [owner, membership] = await Promise.all([tx.tenantAdministrationAssignment.findFirst({ where: { tenantId: context.tenantId, userId: context.actorUserId, isOwner: true }, select: { userId: true } }), tx.companyMembership.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, userId: context.actorUserId }, include: { role: { select: { code: true, isSystem: true } } } })]); if (owner || (membership?.role.isSystem && membership.role.code === 'BASEER_COMPANY_MANAGER')) return; throw new ForbiddenException('Only the tenant owner or company manager can view attendance PINs.'); }
+  private async assertOwnerAuthority(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext) { const owner = await tx.tenantAdministrationAssignment.findFirst({ where: { tenantId: context.tenantId, userId: context.actorUserId, isOwner: true }, select: { userId: true } }); if (!owner) throw new ForbiddenException('Only the tenant owner can administer attendance.'); }
+  private async assertPinDisplayAuthority(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext) { const [owner, membership] = await Promise.all([tx.tenantAdministrationAssignment.findFirst({ where: { tenantId: context.tenantId, userId: context.actorUserId, isOwner: true }, select: { userId: true } }), tx.companyMembership.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, userId: context.actorUserId }, include: { role: { select: { code: true, isSystem: true } } } })]); if (owner || (membership?.role.isSystem && membership.role.code === 'BASEER_COMPANY_MANAGER')) return; throw new ForbiddenException('Only the tenant owner or company manager can close an open attendance session.'); }
   private secret(name: string) { const value = process.env[name]; if (!value || value.length < 32) throw new Error(`${name} must be configured with at least 32 characters.`); return value; }
   private verifyQr(token: string, branchId: string, companyId: string) { const [body, signature, extra] = token.split('.'); if (!body || !signature || extra || this.sign(body) !== signature) throw new ForbiddenException('Attendance QR is invalid.'); try { const payload = JSON.parse(Buffer.from(body, 'base64url').toString('utf8')) as { companyId?: string; branchId?: string; expiresAt?: number; nonce?: string }; const expiresAt = payload.expiresAt; if (payload.companyId !== companyId || payload.branchId !== branchId || !Number.isInteger(expiresAt) || typeof payload.nonce !== 'string' || !payload.nonce || (expiresAt as number) * 1_000 < Date.now()) throw new Error('expired'); return { expiresAt: new Date((expiresAt as number) * 1_000) }; } catch { throw new ForbiddenException('Attendance QR has expired. Scan the current code.'); } }
   private async audit(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, action: string, entityType: string, entityId: string, afterJson: Prisma.InputJsonValue) { await tx.auditEvent.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId, action, entityType, entityId, requestId: randomUUID(), afterJson } }); }
@@ -874,6 +1007,19 @@ function normalizeDailyPeriods(periods: InputPeriod[]) {
   const normalized = periods.map((period) => { const startMinute = toMinute(period.startTime); const endMinute = toMinute(period.endTime); return { startMinute, endMinute, endsNextDay: endMinute < startMinute }; });
   assertPeriodsDoNotOverlap(normalized);
   return normalized;
+}
+/** A weekly rest/partial-day rule is intentionally excluded: it is an
+ * employee-specific exception. First setup validates all ordinary template
+ * workdays against the employee-file agreement. */
+function assertInitialScheduleMatchesWorkTerms(periods: Array<{ dayOfWeek: number; startMinute: number; endMinute: number; endsNextDay: boolean }>, weeklyAdjustmentDay: number, workMinutesPerDay: number) {
+  const minutesByDay = new Map<number, number>();
+  for (const period of periods) {
+    const minutes = period.endsNextDay ? 1_440 - period.startMinute + period.endMinute : period.endMinute - period.startMinute;
+    minutesByDay.set(period.dayOfWeek, (minutesByDay.get(period.dayOfWeek) ?? 0) + minutes);
+  }
+  const regularDays = [...minutesByDay.entries()].filter(([dayOfWeek, minutes]) => dayOfWeek !== weeklyAdjustmentDay && minutes > 0);
+  if (!regularDays.length) throw new BadRequestException('The selected template has no ordinary workday to validate against employee work terms.');
+  if (regularDays.some(([, minutes]) => minutes !== workMinutesPerDay)) throw new BadRequestException('The selected template does not match the employee contractual work minutes on ordinary workdays.');
 }
 function normalizeWeeklyPeriods(periods: InputWeeklyPeriod[]) {
   const normalized = periods.map((period) => ({ dayOfWeek: period.dayOfWeek, ...normalizeDailyPeriods([period])[0]! }));
@@ -900,6 +1046,7 @@ function assertPeriodsDoNotOverlap(periods: Array<{ startMinute: number; endMinu
 }
 function mapTimePeriod(value: { startMinute: number; endMinute: number; endsNextDay: boolean }) { const minutes = value.endsNextDay ? 1_440 - value.startMinute + value.endMinute : value.endMinute - value.startMinute; return { startTime: formatMinute(value.startMinute), endTime: formatMinute(value.endMinute), endsNextDay: value.endsNextDay, minutes }; }
 function mapScheduleVersion(value: { id: string; versionNumber: number; effectiveFrom: Date; periods: Array<{ startMinute: number; endMinute: number; endsNextDay: boolean; dayOfWeek: number }> }) { return { id: value.id, versionNumber: value.versionNumber, effectiveFrom: dateOnly(value.effectiveFrom), periods: value.periods.slice().sort((a, b) => a.dayOfWeek - b.dayOfWeek || a.startMinute - b.startMinute).map((period) => ({ dayOfWeek: period.dayOfWeek, ...mapTimePeriod(period) })) }; }
+function mapWorkTermsReference(value: { id: string; effectiveFrom: Date; effectiveTo: Date | null; workMinutesPerDay: number } | null) { return value ? { id: value.id, effectiveFrom: dateOnly(value.effectiveFrom), effectiveTo: value.effectiveTo ? dateOnly(value.effectiveTo) : null, workMinutesPerDay: value.workMinutesPerDay } : null; }
 function mapScheduleTemplate(value: { id: string; nameAr: string; nameEn: string | null; status: AttendanceScheduleTemplateStatus; archivedAt: Date | null; versions: Array<{ id: string; versionNumber: number; effectiveFrom: Date; periods: Array<{ startMinute: number; endMinute: number; endsNextDay: boolean; dayOfWeek: number }> }> }) { return { id: value.id, nameAr: value.nameAr, nameEn: value.nameEn, status: value.status, archivedAt: value.archivedAt?.toISOString() ?? null, versions: value.versions.map(mapScheduleVersion) }; }
 function mapAssignment(value: { id: string; templateId: string; effectiveFrom: Date; createdAt: Date; template: { nameAr: string; nameEn: string | null } }) { return { id: value.id, templateId: value.templateId, templateNameAr: value.template.nameAr, templateNameEn: value.template.nameEn, effectiveFrom: dateOnly(value.effectiveFrom), createdAt: value.createdAt.toISOString() }; }
 function mapWeeklyAdjustment(value: { id: string; dayOfWeek: number; effectiveFrom: Date; kind: AttendanceWeeklyAdjustmentKind; createdAt: Date; periods: Array<{ startMinute: number; endMinute: number; endsNextDay: boolean }> }) { return { id: value.id, dayOfWeek: value.dayOfWeek, effectiveFrom: dateOnly(value.effectiveFrom), kind: value.kind, periods: value.periods.slice().sort((a, b) => a.startMinute - b.startMinute).map(mapTimePeriod), createdAt: value.createdAt.toISOString() }; }

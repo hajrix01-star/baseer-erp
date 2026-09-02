@@ -85,6 +85,7 @@
         "verify:hr-financial-integrity": "npm run build --workspace @baseer-erp/api && node apps/api/dist/hr/hr-financial-concurrency.verification.js",
         "verify:hr-lifecycle": "npm run build --workspace @baseer-erp/contracts && npm run build --workspace @baseer-erp/api && node scripts/run-hr-lifecycle-verification.mjs",
         "verify:hr-http": "npm run build --workspace @baseer-erp/contracts && npm run build --workspace @baseer-erp/api && node scripts/run-hr-http-verification.mjs",
+        "verify:attendance-http": "npm run build --workspace @baseer-erp/contracts && npm run build --workspace @baseer-erp/api && node scripts/run-attendance-http-verification.mjs",
         "verify:reports-http": "npm run build --workspace @baseer-erp/api && node scripts/run-reports-http-verification.mjs",
         "verify:decision-intelligence-http": "npm run build --workspace @baseer-erp/contracts && npm run build --workspace @baseer-erp/api && node scripts/run-decision-intelligence-http-verification.mjs",
         "verify:command-center-http": "npm run build --workspace @baseer-erp/contracts && npm run build --workspace @baseer-erp/api && node scripts/run-command-center-http-verification.mjs",

@@ -517,6 +517,7 @@ export const ModelName = {
   AttendanceEvent: 'AttendanceEvent',
   AttendanceQrScanUse: 'AttendanceQrScanUse',
   AttendanceWorkSession: 'AttendanceWorkSession',
+  HrEmployeeWorkTerms: 'HrEmployeeWorkTerms',
   HrEmployeePromotion: 'HrEmployeePromotion',
   HrEmployeeLeave: 'HrEmployeeLeave',
   HrEmployeeDocumentBlob: 'HrEmployeeDocumentBlob',
@@ -607,7 +608,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "backupPolicy" | "backupJob" | "backupArtifact" | "backupAuditEvent" | "legacyMigrationRun" | "legacyMigrationCompanyMap" | "legacyMigrationRecordMap" | "noorixSourceAnnotation" | "nurixExcelStagingPackage" | "nurixExcelStagingBatch" | "nurixExcelStagingRow" | "nurixExcelMasterDataExecution" | "nurixExcelMasterDataItem" | "nurixExcelFinancialExecution" | "nurixExcelFinancialWave" | "nurixExcelFinancialItem" | "nurixExcelFinancialSourceMap" | "nurixExcelFinancialReceipt" | "nurixHistoricalPayrollEvidence" | "nurixHistoricalPayrollLineEvidence" | "nurixHistoricalPayrollAccountingEvidence" | "legacyMigrationException" | "legacyMigrationReviewAction" | "ownerDailyBriefSnapshot" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financePnlMappingVersion" | "financePnlStatementLine" | "financePnlAccountMapping" | "financeLedgerRevision" | "reportRun" | "decisionMetricDefinition" | "decisionSalesChangePolicy" | "decisionRuleDefinition" | "decisionContextSource" | "decisionContextImportRun" | "decisionContextResearchRun" | "decisionContextCandidate" | "decisionGlobalContextEvent" | "decisionGlobalContextEventRevision" | "decisionGlobalContextReviewAction" | "decisionCompanyContextEvent" | "decisionEvaluationRun" | "decisionEvidenceSnapshot" | "decisionAlert" | "decisionAlertAction" | "decisionFeedback" | "inboundEvidenceLabel" | "inboundEvidenceRule" | "inboundEvidenceCommandReceipt" | "inboundEvidenceGmailConnection" | "inboundEvidenceGmailOAuthState" | "inboundEvidenceMessage" | "inboundEvidenceAttachment" | "inboundEvidenceDocumentAnalysis" | "inboundEvidenceMessageLabel" | "marketingCampaign" | "marketingCampaignAnalysisFeedback" | "marketingCampaignFinancialLink" | "marketingCampaignContextLink" | "marketingSalesTarget" | "marketingProviderConnection" | "marketingProviderOAuthState" | "marketingReputationReplyPolicy" | "reportDocument" | "vatSimulation" | "financeCashPerformanceEvent" | "financeCashPerformanceCoverage" | "financeCashPerformanceHistoricalImport" | "financeVatSettlement" | "financeCategory" | "financeSupplier" | "financeCounterpartyIdentity" | "financeCounterpartyAlias" | "legacyMigrationCounterpartyResolution" | "legacyMigrationCounterpartyCandidate" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowDocumentRevision" | "operationsAssetWarrantyAsset" | "operationsAssetWarrantyLine" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "attendanceEmployeeCredential" | "attendanceBranch" | "attendanceRosterPlan" | "attendanceRosterPeakPeriod" | "attendanceRosterEntry" | "attendanceRosterEntryPeriod" | "attendanceScheduleTemplate" | "attendanceScheduleTemplateVersion" | "attendanceSchedulePeriod" | "attendanceEmployeeScheduleAssignment" | "attendanceEmployeeWeeklyAdjustment" | "attendanceEmployeeWeeklyAdjustmentPeriod" | "attendanceScheduleException" | "attendanceScheduleExceptionPeriod" | "attendanceEvent" | "attendanceQrScanUse" | "attendanceWorkSession" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiCompanyContext" | "aiSkillActivation" | "aiExecutionReceipt" | "aiInterpretation" | "aiInterpretationRun" | "aiModelPriceRevision" | "aiBudgetReservation" | "aiUsageLedger" | "aiInterpretationPlacement" | "aiHumanInsight" | "aiEvaluationFeedback" | "aiSkillEvaluationRun" | "aiSystemIdentity" | "operationsSection" | "operationsUnit" | "operationsCatalogCategory" | "operationsItem" | "operationsItemUnit" | "operationsItemConversionVersion" | "operationsItemConversionEdge" | "operationsInternalRegistration" | "operationsInternalRegistrationLine" | "operationsInternalRegistrationConsumption" | "operationsRecipeVersion" | "operationsRecipeLine" | "operationsPurchaseRequest" | "operationsPurchaseRequestLine" | "operationsPurchaseReceipt" | "operationsPurchaseReceiptLine" | "operationsCustodyProfile" | "operationsCustodyEvent" | "operationsInventoryBalance" | "operationsInventoryMovement"
+    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "backupPolicy" | "backupJob" | "backupArtifact" | "backupAuditEvent" | "legacyMigrationRun" | "legacyMigrationCompanyMap" | "legacyMigrationRecordMap" | "noorixSourceAnnotation" | "nurixExcelStagingPackage" | "nurixExcelStagingBatch" | "nurixExcelStagingRow" | "nurixExcelMasterDataExecution" | "nurixExcelMasterDataItem" | "nurixExcelFinancialExecution" | "nurixExcelFinancialWave" | "nurixExcelFinancialItem" | "nurixExcelFinancialSourceMap" | "nurixExcelFinancialReceipt" | "nurixHistoricalPayrollEvidence" | "nurixHistoricalPayrollLineEvidence" | "nurixHistoricalPayrollAccountingEvidence" | "legacyMigrationException" | "legacyMigrationReviewAction" | "ownerDailyBriefSnapshot" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "financeAccount" | "financePnlMappingVersion" | "financePnlStatementLine" | "financePnlAccountMapping" | "financeLedgerRevision" | "reportRun" | "decisionMetricDefinition" | "decisionSalesChangePolicy" | "decisionRuleDefinition" | "decisionContextSource" | "decisionContextImportRun" | "decisionContextResearchRun" | "decisionContextCandidate" | "decisionGlobalContextEvent" | "decisionGlobalContextEventRevision" | "decisionGlobalContextReviewAction" | "decisionCompanyContextEvent" | "decisionEvaluationRun" | "decisionEvidenceSnapshot" | "decisionAlert" | "decisionAlertAction" | "decisionFeedback" | "inboundEvidenceLabel" | "inboundEvidenceRule" | "inboundEvidenceCommandReceipt" | "inboundEvidenceGmailConnection" | "inboundEvidenceGmailOAuthState" | "inboundEvidenceMessage" | "inboundEvidenceAttachment" | "inboundEvidenceDocumentAnalysis" | "inboundEvidenceMessageLabel" | "marketingCampaign" | "marketingCampaignAnalysisFeedback" | "marketingCampaignFinancialLink" | "marketingCampaignContextLink" | "marketingSalesTarget" | "marketingProviderConnection" | "marketingProviderOAuthState" | "marketingReputationReplyPolicy" | "reportDocument" | "vatSimulation" | "financeCashPerformanceEvent" | "financeCashPerformanceCoverage" | "financeCashPerformanceHistoricalImport" | "financeVatSettlement" | "financeCategory" | "financeSupplier" | "financeCounterpartyIdentity" | "financeCounterpartyAlias" | "legacyMigrationCounterpartyResolution" | "legacyMigrationCounterpartyCandidate" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowDocumentRevision" | "operationsAssetWarrantyAsset" | "operationsAssetWarrantyLine" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "attendanceEmployeeCredential" | "attendanceBranch" | "attendanceRosterPlan" | "attendanceRosterPeakPeriod" | "attendanceRosterEntry" | "attendanceRosterEntryPeriod" | "attendanceScheduleTemplate" | "attendanceScheduleTemplateVersion" | "attendanceSchedulePeriod" | "attendanceEmployeeScheduleAssignment" | "attendanceEmployeeWeeklyAdjustment" | "attendanceEmployeeWeeklyAdjustmentPeriod" | "attendanceScheduleException" | "attendanceScheduleExceptionPeriod" | "attendanceEvent" | "attendanceQrScanUse" | "attendanceWorkSession" | "hrEmployeeWorkTerms" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiCompanyContext" | "aiSkillActivation" | "aiExecutionReceipt" | "aiInterpretation" | "aiInterpretationRun" | "aiModelPriceRevision" | "aiBudgetReservation" | "aiUsageLedger" | "aiInterpretationPlacement" | "aiHumanInsight" | "aiEvaluationFeedback" | "aiSkillEvaluationRun" | "aiSystemIdentity" | "operationsSection" | "operationsUnit" | "operationsCatalogCategory" | "operationsItem" | "operationsItemUnit" | "operationsItemConversionVersion" | "operationsItemConversionEdge" | "operationsInternalRegistration" | "operationsInternalRegistrationLine" | "operationsInternalRegistrationConsumption" | "operationsRecipeVersion" | "operationsRecipeLine" | "operationsPurchaseRequest" | "operationsPurchaseRequestLine" | "operationsPurchaseReceipt" | "operationsPurchaseReceiptLine" | "operationsCustodyProfile" | "operationsCustodyEvent" | "operationsInventoryBalance" | "operationsInventoryMovement"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -9491,6 +9492,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    HrEmployeeWorkTerms: {
+      payload: Prisma.$HrEmployeeWorkTermsPayload<ExtArgs>
+      fields: Prisma.HrEmployeeWorkTermsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HrEmployeeWorkTermsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeWorkTermsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HrEmployeeWorkTermsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeWorkTermsPayload>
+        }
+        findFirst: {
+          args: Prisma.HrEmployeeWorkTermsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeWorkTermsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HrEmployeeWorkTermsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeWorkTermsPayload>
+        }
+        findMany: {
+          args: Prisma.HrEmployeeWorkTermsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeWorkTermsPayload>[]
+        }
+        create: {
+          args: Prisma.HrEmployeeWorkTermsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeWorkTermsPayload>
+        }
+        createMany: {
+          args: Prisma.HrEmployeeWorkTermsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HrEmployeeWorkTermsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeWorkTermsPayload>[]
+        }
+        delete: {
+          args: Prisma.HrEmployeeWorkTermsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeWorkTermsPayload>
+        }
+        update: {
+          args: Prisma.HrEmployeeWorkTermsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeWorkTermsPayload>
+        }
+        deleteMany: {
+          args: Prisma.HrEmployeeWorkTermsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HrEmployeeWorkTermsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HrEmployeeWorkTermsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeWorkTermsPayload>[]
+        }
+        upsert: {
+          args: Prisma.HrEmployeeWorkTermsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HrEmployeeWorkTermsPayload>
+        }
+        aggregate: {
+          args: Prisma.HrEmployeeWorkTermsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHrEmployeeWorkTerms>
+        }
+        groupBy: {
+          args: Prisma.HrEmployeeWorkTermsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HrEmployeeWorkTermsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HrEmployeeWorkTermsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HrEmployeeWorkTermsCountAggregateOutputType> | number
+        }
+      }
+    }
     HrEmployeePromotion: {
       payload: Prisma.$HrEmployeePromotionPayload<ExtArgs>
       fields: Prisma.HrEmployeePromotionFieldRefs
@@ -15121,6 +15196,7 @@ export const CompanyScalarFieldEnum = {
   contextLongitude: 'contextLongitude',
   status: 'status',
   migrationReviewLocked: 'migrationReviewLocked',
+  attendanceLocationEnabled: 'attendanceLocationEnabled',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -17225,11 +17301,31 @@ export const AttendanceWorkSessionScalarFieldEnum = {
   businessDate: 'businessDate',
   checkInAt: 'checkInAt',
   checkOutAt: 'checkOutAt',
+  adminClosedByUserId: 'adminClosedByUserId',
+  adminCloseReason: 'adminCloseReason',
+  adminClosedAt: 'adminClosedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type AttendanceWorkSessionScalarFieldEnum = (typeof AttendanceWorkSessionScalarFieldEnum)[keyof typeof AttendanceWorkSessionScalarFieldEnum]
+
+
+export const HrEmployeeWorkTermsScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  employeeId: 'employeeId',
+  effectiveFrom: 'effectiveFrom',
+  effectiveTo: 'effectiveTo',
+  workMinutesPerDay: 'workMinutesPerDay',
+  notes: 'notes',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrEmployeeWorkTermsScalarFieldEnum = (typeof HrEmployeeWorkTermsScalarFieldEnum)[keyof typeof HrEmployeeWorkTermsScalarFieldEnum]
 
 
 export const HrEmployeePromotionScalarFieldEnum = {
@@ -17697,6 +17793,8 @@ export const HrPayrollLineScalarFieldEnum = {
   overtimeHours: 'overtimeHours',
   scheduledHoursPerDay: 'scheduledHoursPerDay',
   scheduledWorkDays: 'scheduledWorkDays',
+  contractWorkTermsId: 'contractWorkTermsId',
+  contractMinutesPerDay: 'contractMinutesPerDay',
   advanceSettlementAmount: 'advanceSettlementAmount',
   administrativeDeductionAmount: 'administrativeDeductionAmount',
   netPayableAmount: 'netPayableAmount',
@@ -21183,6 +21281,7 @@ export type GlobalOmitConfig = {
   attendanceEvent?: Prisma.AttendanceEventOmit
   attendanceQrScanUse?: Prisma.AttendanceQrScanUseOmit
   attendanceWorkSession?: Prisma.AttendanceWorkSessionOmit
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsOmit
   hrEmployeePromotion?: Prisma.HrEmployeePromotionOmit
   hrEmployeeLeave?: Prisma.HrEmployeeLeaveOmit
   hrEmployeeDocumentBlob?: Prisma.HrEmployeeDocumentBlobOmit

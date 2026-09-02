@@ -25,10 +25,26 @@ export const createAttendanceBranchRequestSchema = z.object({
   qrValiditySeconds: z.number().int().min(30).max(60).default(45), idempotencyKey,
 }).strict();
 export const updateAttendanceBranchRequestSchema = createAttendanceBranchRequestSchema.omit({ idempotencyKey: true }).extend({ branchId: uuid, isActive: z.boolean().optional(), idempotencyKey }).strict();
-export const attendanceEmployeeRecordRequestSchema = z.object({ tenantId: uuid, companyId: companyIdSchema, branchId: uuid, qrToken: z.string().trim().min(32).max(2_000), pin: pin.optional(), portalToken: employeePortalToken.optional(), latitude, longitude, accuracyMeters: z.number().finite().positive().max(10_000), idempotencyKey }).strict().superRefine((value, context) => {
+const attendanceLocationEvidenceSchema = z.object({ latitude, longitude, accuracyMeters: z.number().finite().positive().max(10_000) }).strict();
+export const attendanceEmployeeRecordRequestSchema = z.object({ tenantId: uuid, companyId: companyIdSchema, branchId: uuid, qrToken: z.string().trim().min(32).max(2_000), pin: pin.optional(), portalToken: employeePortalToken.optional(), latitude: latitude.optional(), longitude: longitude.optional(), accuracyMeters: z.number().finite().positive().max(10_000).optional(), idempotencyKey }).strict().superRefine((value, context) => {
   if (Boolean(value.pin) === Boolean(value.portalToken)) context.addIssue({ code: z.ZodIssueCode.custom, message: "Use either a PIN or an employee portal session.", path: ["portalToken"] });
+  const hasAnyLocation = value.latitude !== undefined || value.longitude !== undefined || value.accuracyMeters !== undefined;
+  if (hasAnyLocation && !attendanceLocationEvidenceSchema.safeParse({ latitude: value.latitude, longitude: value.longitude, accuracyMeters: value.accuracyMeters }).success) context.addIssue({ code: z.ZodIssueCode.custom, message: "Location evidence must include latitude, longitude, and accuracy together.", path: ["latitude"] });
 });
 export const attendanceBranchSchema = z.object({ id: uuid, nameAr: z.string(), nameEn: z.string().nullable(), latitude: z.number(), longitude: z.number(), radiusMeters: z.number().int(), maxAccuracyMeters: z.number().int(), qrValiditySeconds: z.number().int(), isActive: z.boolean() }).strict();
+export const attendanceCompanySettingsSchema = z.object({ locationEnabled: z.boolean(), locationRetentionDays: z.literal(14) }).strict();
+export const updateAttendanceCompanySettingsRequestSchema = z.object({ locationEnabled: z.boolean(), idempotencyKey }).strict();
+export const closeAttendanceSessionRequestSchema = z.object({ employeeId: uuid, businessDate, checkOutAt: dateTime, reason: z.string().trim().min(1).max(2_000), idempotencyKey }).strict();
+export const closeAttendanceSessionReceiptSchema = z.object({ sessionId: uuid, employeeId: uuid, businessDate, checkOutAt: dateTime, reason: z.string(), closedByUserId: uuid, replayed: z.boolean() }).strict();
+/** Deliberately narrow manager view: only sessions eligible for the one
+ * manager action (a documented administrative checkout). */
+export const attendanceOpenSessionsQuerySchema = z.object({ cursor: uuid.optional(), pageSize: z.coerce.number().int().min(1).max(30).optional().default(30) }).strict();
+export const attendanceOpenSessionsReceiptSchema = z.object({
+  sessions: z.array(z.object({ sessionId: uuid, employeeId: uuid, employeeNameAr: z.string(), businessDate, checkInAt: dateTime }).strict()).max(30),
+  hasMore: z.boolean(), nextCursor: uuid.nullable(),
+}).strict().superRefine((value, context) => {
+  if (value.hasMore !== Boolean(value.nextCursor)) context.addIssue({ code: z.ZodIssueCode.custom, message: 'A continuation cursor is required exactly when another open session exists.', path: ['nextCursor'] });
+});
 export const attendanceEmployeePinDisplayReceiptSchema = z.object({ employeeId: uuid, state: z.enum(["SET", "NOT_SET", "RESET_REQUIRED"]), pin: pin.nullable() }).strict();
 export const attendanceEmployeeRecordReceiptSchema = z.object({ employeeId: uuid, employeeNameAr: z.string(), operation: z.enum(["CHECK_IN", "CHECK_OUT"]), occurredAt: dateTime, sessionId: uuid, replayed: z.boolean() }).strict();
 export const attendanceEmployeePortalScopeReceiptSchema = z.object({ tenantId: uuid, companyId: companyIdSchema }).strict();
@@ -42,7 +58,7 @@ const attendanceEmployeePortalCommitmentSchema = z.object({
   shortageMinutes: z.number().int().nonnegative(),
   evaluatedDays: z.number().int().nonnegative(),
 }).strict();
-export const attendanceEmployeePortalProfileSchema = z.object({ companyId: companyIdSchema, employeeId: uuid, employeeNumber: z.string(), employeeNameAr: z.string(), employeeNameEn: z.string().nullable(), businessDate, state: z.enum(["READY", "IN_PROGRESS"]), commitment: attendanceEmployeePortalCommitmentSchema, schedule: z.array(attendanceEmployeePortalScheduleSchema).length(7) }).strict();
+export const attendanceEmployeePortalProfileSchema = z.object({ companyId: companyIdSchema, employeeId: uuid, employeeNumber: z.string(), employeeNameAr: z.string(), employeeNameEn: z.string().nullable(), businessDate, state: z.enum(["READY", "IN_PROGRESS"]), locationEnabled: z.boolean(), commitment: attendanceEmployeePortalCommitmentSchema, schedule: z.array(attendanceEmployeePortalScheduleSchema).length(7) }).strict();
 export const attendanceEmployeePortalSessionReceiptSchema = z.object({ accessToken: employeePortalToken, expiresAt: dateTime, profile: attendanceEmployeePortalProfileSchema }).strict();
 export const attendanceDailyEvaluationSchema = z.object({
   businessDate,
@@ -151,6 +167,9 @@ export const attendanceScheduleTemplateSchema = z.object({
 }).strict();
 export const attendanceEmployeeScheduleSchema = z.object({
   employeeId: uuid,
+  /** Employee-file agreement currently in force. Attendance adjustments never
+   * update this reference or any payroll snapshot. */
+  workTermsReference: z.object({ id: uuid, effectiveFrom: businessDate, effectiveTo: businessDate.nullable(), workMinutesPerDay: z.number().int().min(30).max(1_440) }).strict().nullable(),
   assignments: z.array(z.object({ id: uuid, templateId: uuid, templateNameAr: z.string(), templateNameEn: z.string().nullable(), effectiveFrom: businessDate, createdAt: dateTime }).strict()),
   weeklyAdjustments: z.array(z.object({ id: uuid, dayOfWeek: isoWeekday, effectiveFrom: businessDate, kind: z.enum(["FULL_REST", "CUSTOM_PERIODS"]), periods: z.array(z.object({ startTime: scheduleTime, endTime: scheduleTime, endsNextDay: z.boolean(), minutes: z.number().int().positive() }).strict()), createdAt: dateTime }).strict()),
   exceptions: z.array(z.object({ id: uuid, businessDate, kind: z.enum(["FULL_REST", "CUSTOM_PERIODS"]), status: z.enum(["PENDING", "APPROVED", "REJECTED", "CANCELLED"]), reason: z.string(), decisionNote: z.string().nullable(), decidedAt: dateTime.nullable(), periods: z.array(z.object({ startTime: scheduleTime, endTime: scheduleTime, endsNextDay: z.boolean(), minutes: z.number().int().positive() }).strict()), createdAt: dateTime }).strict()),
@@ -179,6 +198,11 @@ export type SetAttendanceEmployeePinRequest = z.infer<typeof setAttendanceEmploy
 export type CreateAttendanceBranchRequest = z.infer<typeof createAttendanceBranchRequestSchema>;
 export type UpdateAttendanceBranchRequest = z.infer<typeof updateAttendanceBranchRequestSchema>;
 export type AttendanceEmployeeRecordRequest = z.infer<typeof attendanceEmployeeRecordRequestSchema>;
+export type AttendanceCompanySettings = z.infer<typeof attendanceCompanySettingsSchema>;
+export type UpdateAttendanceCompanySettingsRequest = z.infer<typeof updateAttendanceCompanySettingsRequestSchema>;
+export type CloseAttendanceSessionRequest = z.infer<typeof closeAttendanceSessionRequestSchema>;
+export type CloseAttendanceSessionReceipt = z.infer<typeof closeAttendanceSessionReceiptSchema>;
+export type AttendanceOpenSessionsQuery = z.infer<typeof attendanceOpenSessionsQuerySchema>;
 export type AttendanceEmployeePortalSessionRequest = z.infer<typeof attendanceEmployeePortalSessionRequestSchema>;
 export type AttendanceEmployeePinDisplayReceipt = z.infer<typeof attendanceEmployeePinDisplayReceiptSchema>;
 export type AttendanceDashboardReceipt = z.infer<typeof attendanceDashboardReceiptSchema>;

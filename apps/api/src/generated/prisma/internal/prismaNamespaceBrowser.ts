@@ -171,6 +171,7 @@ export const ModelName = {
   AttendanceEvent: 'AttendanceEvent',
   AttendanceQrScanUse: 'AttendanceQrScanUse',
   AttendanceWorkSession: 'AttendanceWorkSession',
+  HrEmployeeWorkTerms: 'HrEmployeeWorkTerms',
   HrEmployeePromotion: 'HrEmployeePromotion',
   HrEmployeeLeave: 'HrEmployeeLeave',
   HrEmployeeDocumentBlob: 'HrEmployeeDocumentBlob',
@@ -305,6 +306,7 @@ export const CompanyScalarFieldEnum = {
   contextLongitude: 'contextLongitude',
   status: 'status',
   migrationReviewLocked: 'migrationReviewLocked',
+  attendanceLocationEnabled: 'attendanceLocationEnabled',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2409,11 +2411,31 @@ export const AttendanceWorkSessionScalarFieldEnum = {
   businessDate: 'businessDate',
   checkInAt: 'checkInAt',
   checkOutAt: 'checkOutAt',
+  adminClosedByUserId: 'adminClosedByUserId',
+  adminCloseReason: 'adminCloseReason',
+  adminClosedAt: 'adminClosedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type AttendanceWorkSessionScalarFieldEnum = (typeof AttendanceWorkSessionScalarFieldEnum)[keyof typeof AttendanceWorkSessionScalarFieldEnum]
+
+
+export const HrEmployeeWorkTermsScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  employeeId: 'employeeId',
+  effectiveFrom: 'effectiveFrom',
+  effectiveTo: 'effectiveTo',
+  workMinutesPerDay: 'workMinutesPerDay',
+  notes: 'notes',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HrEmployeeWorkTermsScalarFieldEnum = (typeof HrEmployeeWorkTermsScalarFieldEnum)[keyof typeof HrEmployeeWorkTermsScalarFieldEnum]
 
 
 export const HrEmployeePromotionScalarFieldEnum = {
@@ -2881,6 +2903,8 @@ export const HrPayrollLineScalarFieldEnum = {
   overtimeHours: 'overtimeHours',
   scheduledHoursPerDay: 'scheduledHoursPerDay',
   scheduledWorkDays: 'scheduledWorkDays',
+  contractWorkTermsId: 'contractWorkTermsId',
+  contractMinutesPerDay: 'contractMinutesPerDay',
   advanceSettlementAmount: 'advanceSettlementAmount',
   administrativeDeductionAmount: 'administrativeDeductionAmount',
   netPayableAmount: 'netPayableAmount',

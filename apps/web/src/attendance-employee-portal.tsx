@@ -37,12 +37,14 @@ function currentLocation(): Promise<GeolocationPosition> {
   return new Promise((resolve, reject) => navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, timeout: 15_000, maximumAge: 0 }));
 }
 
-function secureAttendanceMessage(ar: boolean) {
-  return ar ? "يتطلب تسجيل الحضور اتصالاً آمناً عبر HTTPS حتى تعمل الكاميرا والموقع الدقيق. افتح رابط الموظف المنشور عبر HTTPS." : "Attendance recording needs a secure HTTPS connection for camera and precise location access.";
+function secureAttendanceMessage(ar: boolean, locationEnabled: boolean) {
+  return locationEnabled
+    ? (ar ? "يتطلب تسجيل الحضور اتصالاً آمناً عبر HTTPS حتى تعمل الكاميرا والموقع عند تفعيله. افتح رابط الموظف المنشور عبر HTTPS." : "Attendance recording needs a secure HTTPS connection for camera and, when enabled, location access.")
+    : (ar ? "يتطلب تسجيل الحضور اتصالاً آمناً عبر HTTPS حتى تعمل الكاميرا. افتح رابط الموظف المنشور عبر HTTPS." : "Attendance recording needs a secure HTTPS connection for camera access.");
 }
 
-function messageFor(error: unknown, ar: boolean) {
-  if (window.location.protocol !== "https:") return secureAttendanceMessage(ar);
+function messageFor(error: unknown, ar: boolean, locationEnabled = true) {
+  if (window.location.protocol !== "https:") return secureAttendanceMessage(ar, locationEnabled);
   if (error instanceof BaseerApiError) {
     if (error.status === 0) return ar ? "تعذر التحقق بسبب انقطاع الإنترنت. أعد المحاولة." : "Verification needs an internet connection. Try again.";
     if (error.status === 403) return ar ? "تعذر التحقق من الكود أو انتهت الجلسة. أعد إدخال الكود." : "The code could not be verified or the session expired. Enter the code again.";
@@ -52,7 +54,7 @@ function messageFor(error: unknown, ar: boolean) {
   }
   if (error instanceof GeolocationPositionError) return error.code === error.PERMISSION_DENIED ? (ar ? "يجب السماح بالموقع الدقيق لتسجيل الحضور." : "Allow precise location to record attendance.") : (ar ? "تعذر تحديد الموقع بدقة. انتقل قرب المدخل وأعد المحاولة." : "Location is unavailable. Move near the entrance and try again.");
   const errorName = error && typeof error === "object" && "name" in error ? String(error.name) : "";
-  if (errorName === "NotAllowedError") return ar ? "لم تسمح للمتصفح باستخدام الكاميرا أو الموقع. فعّل الصلاحية ثم أعد المحاولة." : "Camera or location permission was not granted. Allow it and try again.";
+  if (errorName === "NotAllowedError") return locationEnabled ? (ar ? "لم تسمح للمتصفح باستخدام الكاميرا أو الموقع. فعّل الصلاحية ثم أعد المحاولة." : "Camera or location permission was not granted. Allow it and try again.") : (ar ? "لم تسمح للمتصفح باستخدام الكاميرا. فعّل الصلاحية ثم أعد المحاولة." : "Camera permission was not granted. Allow it and try again.");
   return ar ? "تعذر إتمام العملية. أعد المحاولة." : "The operation could not be completed. Try again.";
 }
 
@@ -97,7 +99,7 @@ export function AttendanceEmployeePortal({ language: initialLanguage }: { langua
   const startIntent = (next: Exclude<PortalIntent, null>) => {
     setNotice(null); setReceipt(null);
     if (!scope) { setNotice(ar ? "رابط صفحة الموظف غير مكتمل. استخدم الرابط الصادر من إعدادات الحضور." : "The employee portal link is incomplete. Use the link issued from Attendance settings."); return; }
-    if (next === "RECORD" && window.location.protocol !== "https:") { setNotice(secureAttendanceMessage(ar)); return; }
+    if (next === "RECORD" && window.location.protocol !== "https:") { setNotice(secureAttendanceMessage(ar, portal?.profile.locationEnabled ?? true)); return; }
     if (next === "RECORD" && portal) { setScannerOpen(true); return; }
     setIntent(next);
   };
@@ -121,15 +123,16 @@ export function AttendanceEmployeePortal({ language: initialLanguage }: { langua
     const payload = readQrPayload(qrToken);
     const resolvedCompanyId = portal?.profile.companyId ?? companyId;
     if (!payload || !portal || !tenantId || !resolvedCompanyId || payload.companyId !== resolvedCompanyId) { setNotice(ar ? "رمز QR لا يخص منشأتك." : "This QR does not belong to your company."); setScannerOpen(false); return; }
-    if (!navigator.geolocation) { setNotice(ar ? "الموقع غير مدعوم في هذا الجهاز." : "Location is not supported on this device."); setScannerOpen(false); return; }
+    const locationEnabled = portal.profile.locationEnabled;
+    if (locationEnabled && !navigator.geolocation) { setNotice(ar ? "الموقع غير مدعوم في هذا الجهاز." : "Location is not supported on this device."); setScannerOpen(false); return; }
     setScannerOpen(false); setBusy(true); setNotice(null);
     try {
-      const position = await currentLocation();
-      const next = await recordAttendance({ tenantId, companyId: resolvedCompanyId, branchId: payload.branchId, qrToken, portalToken: portal.accessToken, latitude: position.coords.latitude, longitude: position.coords.longitude, accuracyMeters: position.coords.accuracy, idempotencyKey: requestId() });
+      const position = locationEnabled ? await currentLocation() : null;
+      const next = await recordAttendance({ tenantId, companyId: resolvedCompanyId, branchId: payload.branchId, qrToken, portalToken: portal.accessToken, ...(position ? { latitude: position.coords.latitude, longitude: position.coords.longitude, accuracyMeters: position.coords.accuracy } : {}), idempotencyKey: requestId() });
       setReceipt(next);
       const profile = await getAttendanceEmployeePortalProfile(portal.accessToken);
       setPortal((current) => current ? { ...current, profile } : current);
-    } catch (error) { setNotice(messageFor(error, ar)); }
+    } catch (error) { setNotice(messageFor(error, ar, locationEnabled)); }
     finally { setBusy(false); }
   };
 
@@ -138,7 +141,7 @@ export function AttendanceEmployeePortal({ language: initialLanguage }: { langua
     const element = video.current;
     if (!element || !navigator.mediaDevices?.getUserMedia) { setNotice(ar ? "يتطلب مسح QR صلاحية الكاميرا في المتصفح." : "QR scanning requires browser camera permission."); setScannerOpen(false); return; }
     const scanner = new QrScanner(element, (result) => { const token = result.data.trim(); if (token && readQrPayload(token)) void recordScannedQr(token); }, { preferredCamera: "environment", maxScansPerSecond: 4, returnDetailedScanResult: true });
-    void scanner.start().catch((error: unknown) => { setNotice(messageFor(error, ar)); setScannerOpen(false); });
+    void scanner.start().catch((error: unknown) => { setNotice(messageFor(error, ar, portal.profile.locationEnabled)); setScannerOpen(false); });
     return () => scanner.destroy();
   }, [ar, portal, scannerOpen]);
 

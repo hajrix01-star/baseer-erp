@@ -48,6 +48,7 @@ export type CompanyMinAggregateOutputType = {
   contextLongitude: runtime.Decimal | null
   status: $Enums.CompanyStatus | null
   migrationReviewLocked: boolean | null
+  attendanceLocationEnabled: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -64,6 +65,7 @@ export type CompanyMaxAggregateOutputType = {
   contextLongitude: runtime.Decimal | null
   status: $Enums.CompanyStatus | null
   migrationReviewLocked: boolean | null
+  attendanceLocationEnabled: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -80,6 +82,7 @@ export type CompanyCountAggregateOutputType = {
   contextLongitude: number
   status: number
   migrationReviewLocked: number
+  attendanceLocationEnabled: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -108,6 +111,7 @@ export type CompanyMinAggregateInputType = {
   contextLongitude?: true
   status?: true
   migrationReviewLocked?: true
+  attendanceLocationEnabled?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -124,6 +128,7 @@ export type CompanyMaxAggregateInputType = {
   contextLongitude?: true
   status?: true
   migrationReviewLocked?: true
+  attendanceLocationEnabled?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -140,6 +145,7 @@ export type CompanyCountAggregateInputType = {
   contextLongitude?: true
   status?: true
   migrationReviewLocked?: true
+  attendanceLocationEnabled?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -243,6 +249,7 @@ export type CompanyGroupByOutputType = {
   contextLongitude: runtime.Decimal | null
   status: $Enums.CompanyStatus
   migrationReviewLocked: boolean
+  attendanceLocationEnabled: boolean
   createdAt: Date
   updatedAt: Date
   _count: CompanyCountAggregateOutputType | null
@@ -282,6 +289,7 @@ export type CompanyWhereInput = {
   contextLongitude?: Prisma.DecimalNullableFilter<"Company"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFilter<"Company"> | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFilter<"Company"> | boolean
+  attendanceLocationEnabled?: Prisma.BoolFilter<"Company"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Company"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Company"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -350,6 +358,7 @@ export type CompanyWhereInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobListRelationFilter
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentListRelationFilter
   hrEmployeeLetters?: Prisma.HrEmployeeLetterListRelationFilter
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsListRelationFilter
   attendanceBranches?: Prisma.AttendanceBranchListRelationFilter
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialListRelationFilter
   attendanceEvents?: Prisma.AttendanceEventListRelationFilter
@@ -444,6 +453,7 @@ export type CompanyOrderByWithRelationInput = {
   contextLongitude?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   migrationReviewLocked?: Prisma.SortOrder
+  attendanceLocationEnabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
@@ -512,6 +522,7 @@ export type CompanyOrderByWithRelationInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobOrderByRelationAggregateInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentOrderByRelationAggregateInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterOrderByRelationAggregateInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsOrderByRelationAggregateInput
   attendanceBranches?: Prisma.AttendanceBranchOrderByRelationAggregateInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialOrderByRelationAggregateInput
   attendanceEvents?: Prisma.AttendanceEventOrderByRelationAggregateInput
@@ -610,6 +621,7 @@ export type CompanyWhereUniqueInput = Prisma.AtLeast<{
   contextLongitude?: Prisma.DecimalNullableFilter<"Company"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFilter<"Company"> | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFilter<"Company"> | boolean
+  attendanceLocationEnabled?: Prisma.BoolFilter<"Company"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Company"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Company"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -678,6 +690,7 @@ export type CompanyWhereUniqueInput = Prisma.AtLeast<{
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobListRelationFilter
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentListRelationFilter
   hrEmployeeLetters?: Prisma.HrEmployeeLetterListRelationFilter
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsListRelationFilter
   attendanceBranches?: Prisma.AttendanceBranchListRelationFilter
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialListRelationFilter
   attendanceEvents?: Prisma.AttendanceEventListRelationFilter
@@ -772,6 +785,7 @@ export type CompanyOrderByWithAggregationInput = {
   contextLongitude?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   migrationReviewLocked?: Prisma.SortOrder
+  attendanceLocationEnabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.CompanyCountOrderByAggregateInput
@@ -796,6 +810,7 @@ export type CompanyScalarWhereWithAggregatesInput = {
   contextLongitude?: Prisma.DecimalNullableWithAggregatesFilter<"Company"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusWithAggregatesFilter<"Company"> | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolWithAggregatesFilter<"Company"> | boolean
+  attendanceLocationEnabled?: Prisma.BoolWithAggregatesFilter<"Company"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Company"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Company"> | Date | string
 }
@@ -811,6 +826,7 @@ export type CompanyCreateInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -879,6 +895,7 @@ export type CompanyCreateInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -973,6 +990,7 @@ export type CompanyUncheckedCreateInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -1040,6 +1058,7 @@ export type CompanyUncheckedCreateInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -1133,6 +1152,7 @@ export type CompanyUpdateInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -1201,6 +1221,7 @@ export type CompanyUpdateInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -1295,6 +1316,7 @@ export type CompanyUncheckedUpdateInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -1362,6 +1384,7 @@ export type CompanyUncheckedUpdateInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -1456,6 +1479,7 @@ export type CompanyCreateManyInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1471,6 +1495,7 @@ export type CompanyUpdateManyMutationInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1487,6 +1512,7 @@ export type CompanyUncheckedUpdateManyInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1518,6 +1544,7 @@ export type CompanyCountOrderByAggregateInput = {
   contextLongitude?: Prisma.SortOrder
   status?: Prisma.SortOrder
   migrationReviewLocked?: Prisma.SortOrder
+  attendanceLocationEnabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -1539,6 +1566,7 @@ export type CompanyMaxOrderByAggregateInput = {
   contextLongitude?: Prisma.SortOrder
   status?: Prisma.SortOrder
   migrationReviewLocked?: Prisma.SortOrder
+  attendanceLocationEnabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -1555,6 +1583,7 @@ export type CompanyMinOrderByAggregateInput = {
   contextLongitude?: Prisma.SortOrder
   status?: Prisma.SortOrder
   migrationReviewLocked?: Prisma.SortOrder
+  attendanceLocationEnabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -2744,6 +2773,20 @@ export type CompanyUpdateOneRequiredWithoutAttendanceWorkSessionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutAttendanceWorkSessionsInput, Prisma.CompanyUpdateWithoutAttendanceWorkSessionsInput>, Prisma.CompanyUncheckedUpdateWithoutAttendanceWorkSessionsInput>
 }
 
+export type CompanyCreateNestedOneWithoutHrEmployeeWorkTermsInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeeWorkTermsInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeeWorkTermsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutHrEmployeeWorkTermsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneRequiredWithoutHrEmployeeWorkTermsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeeWorkTermsInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeeWorkTermsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutHrEmployeeWorkTermsInput
+  upsert?: Prisma.CompanyUpsertWithoutHrEmployeeWorkTermsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutHrEmployeeWorkTermsInput, Prisma.CompanyUpdateWithoutHrEmployeeWorkTermsInput>, Prisma.CompanyUncheckedUpdateWithoutHrEmployeeWorkTermsInput>
+}
+
 export type CompanyCreateNestedOneWithoutHrEmployeePromotionsInput = {
   create?: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeePromotionsInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeePromotionsInput>
   connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutHrEmployeePromotionsInput
@@ -3679,6 +3722,7 @@ export type CompanyCreateWithoutTenantInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
@@ -3746,6 +3790,7 @@ export type CompanyCreateWithoutTenantInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -3839,6 +3884,7 @@ export type CompanyUncheckedCreateWithoutTenantInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -3906,6 +3952,7 @@ export type CompanyUncheckedCreateWithoutTenantInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -4029,6 +4076,7 @@ export type CompanyScalarWhereInput = {
   contextLongitude?: Prisma.DecimalNullableFilter<"Company"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFilter<"Company"> | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFilter<"Company"> | boolean
+  attendanceLocationEnabled?: Prisma.BoolFilter<"Company"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Company"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Company"> | Date | string
 }
@@ -4044,6 +4092,7 @@ export type CompanyCreateWithoutBrandingInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -4112,6 +4161,7 @@ export type CompanyCreateWithoutBrandingInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -4205,6 +4255,7 @@ export type CompanyUncheckedCreateWithoutBrandingInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -4272,6 +4323,7 @@ export type CompanyUncheckedCreateWithoutBrandingInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -4380,6 +4432,7 @@ export type CompanyUpdateWithoutBrandingInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -4448,6 +4501,7 @@ export type CompanyUpdateWithoutBrandingInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -4541,6 +4595,7 @@ export type CompanyUncheckedUpdateWithoutBrandingInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -4608,6 +4663,7 @@ export type CompanyUncheckedUpdateWithoutBrandingInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -4700,6 +4756,7 @@ export type CompanyCreateWithoutMembershipsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -4767,6 +4824,7 @@ export type CompanyCreateWithoutMembershipsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -4861,6 +4919,7 @@ export type CompanyUncheckedCreateWithoutMembershipsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -4927,6 +4986,7 @@ export type CompanyUncheckedCreateWithoutMembershipsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -5036,6 +5096,7 @@ export type CompanyUpdateWithoutMembershipsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -5103,6 +5164,7 @@ export type CompanyUpdateWithoutMembershipsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -5197,6 +5259,7 @@ export type CompanyUncheckedUpdateWithoutMembershipsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -5263,6 +5326,7 @@ export type CompanyUncheckedUpdateWithoutMembershipsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -5356,6 +5420,7 @@ export type CompanyCreateWithoutAuditsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -5423,6 +5488,7 @@ export type CompanyCreateWithoutAuditsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -5517,6 +5583,7 @@ export type CompanyUncheckedCreateWithoutAuditsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -5583,6 +5650,7 @@ export type CompanyUncheckedCreateWithoutAuditsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -5692,6 +5760,7 @@ export type CompanyUpdateWithoutAuditsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -5759,6 +5828,7 @@ export type CompanyUpdateWithoutAuditsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -5853,6 +5923,7 @@ export type CompanyUncheckedUpdateWithoutAuditsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -5919,6 +5990,7 @@ export type CompanyUncheckedUpdateWithoutAuditsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -6012,6 +6084,7 @@ export type CompanyCreateWithoutIdempotencyReceiptsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -6079,6 +6152,7 @@ export type CompanyCreateWithoutIdempotencyReceiptsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -6173,6 +6247,7 @@ export type CompanyUncheckedCreateWithoutIdempotencyReceiptsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -6239,6 +6314,7 @@ export type CompanyUncheckedCreateWithoutIdempotencyReceiptsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -6348,6 +6424,7 @@ export type CompanyUpdateWithoutIdempotencyReceiptsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -6415,6 +6492,7 @@ export type CompanyUpdateWithoutIdempotencyReceiptsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -6509,6 +6587,7 @@ export type CompanyUncheckedUpdateWithoutIdempotencyReceiptsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -6575,6 +6654,7 @@ export type CompanyUncheckedUpdateWithoutIdempotencyReceiptsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -6668,6 +6748,7 @@ export type CompanyCreateWithoutBackupPoliciesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -6736,6 +6817,7 @@ export type CompanyCreateWithoutBackupPoliciesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -6829,6 +6911,7 @@ export type CompanyUncheckedCreateWithoutBackupPoliciesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -6896,6 +6979,7 @@ export type CompanyUncheckedCreateWithoutBackupPoliciesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -7004,6 +7088,7 @@ export type CompanyUpdateWithoutBackupPoliciesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -7072,6 +7157,7 @@ export type CompanyUpdateWithoutBackupPoliciesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -7165,6 +7251,7 @@ export type CompanyUncheckedUpdateWithoutBackupPoliciesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -7232,6 +7319,7 @@ export type CompanyUncheckedUpdateWithoutBackupPoliciesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -7324,6 +7412,7 @@ export type CompanyCreateWithoutBackupJobsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -7392,6 +7481,7 @@ export type CompanyCreateWithoutBackupJobsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -7485,6 +7575,7 @@ export type CompanyUncheckedCreateWithoutBackupJobsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -7552,6 +7643,7 @@ export type CompanyUncheckedCreateWithoutBackupJobsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -7660,6 +7752,7 @@ export type CompanyUpdateWithoutBackupJobsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -7728,6 +7821,7 @@ export type CompanyUpdateWithoutBackupJobsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -7821,6 +7915,7 @@ export type CompanyUncheckedUpdateWithoutBackupJobsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -7888,6 +7983,7 @@ export type CompanyUncheckedUpdateWithoutBackupJobsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -7980,6 +8076,7 @@ export type CompanyCreateWithoutBackupArtifactsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -8048,6 +8145,7 @@ export type CompanyCreateWithoutBackupArtifactsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -8141,6 +8239,7 @@ export type CompanyUncheckedCreateWithoutBackupArtifactsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -8208,6 +8307,7 @@ export type CompanyUncheckedCreateWithoutBackupArtifactsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -8316,6 +8416,7 @@ export type CompanyUpdateWithoutBackupArtifactsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -8384,6 +8485,7 @@ export type CompanyUpdateWithoutBackupArtifactsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -8477,6 +8579,7 @@ export type CompanyUncheckedUpdateWithoutBackupArtifactsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -8544,6 +8647,7 @@ export type CompanyUncheckedUpdateWithoutBackupArtifactsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -8636,6 +8740,7 @@ export type CompanyCreateWithoutBackupAuditEventsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -8704,6 +8809,7 @@ export type CompanyCreateWithoutBackupAuditEventsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -8797,6 +8903,7 @@ export type CompanyUncheckedCreateWithoutBackupAuditEventsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -8864,6 +8971,7 @@ export type CompanyUncheckedCreateWithoutBackupAuditEventsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -8972,6 +9080,7 @@ export type CompanyUpdateWithoutBackupAuditEventsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -9040,6 +9149,7 @@ export type CompanyUpdateWithoutBackupAuditEventsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -9133,6 +9243,7 @@ export type CompanyUncheckedUpdateWithoutBackupAuditEventsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -9200,6 +9311,7 @@ export type CompanyUncheckedUpdateWithoutBackupAuditEventsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -9292,6 +9404,7 @@ export type CompanyCreateWithoutLegacyMigrationCompanyMapsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -9360,6 +9473,7 @@ export type CompanyCreateWithoutLegacyMigrationCompanyMapsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -9453,6 +9567,7 @@ export type CompanyUncheckedCreateWithoutLegacyMigrationCompanyMapsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -9520,6 +9635,7 @@ export type CompanyUncheckedCreateWithoutLegacyMigrationCompanyMapsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -9628,6 +9744,7 @@ export type CompanyUpdateWithoutLegacyMigrationCompanyMapsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -9696,6 +9813,7 @@ export type CompanyUpdateWithoutLegacyMigrationCompanyMapsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -9789,6 +9907,7 @@ export type CompanyUncheckedUpdateWithoutLegacyMigrationCompanyMapsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -9856,6 +9975,7 @@ export type CompanyUncheckedUpdateWithoutLegacyMigrationCompanyMapsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -9948,6 +10068,7 @@ export type CompanyCreateWithoutLegacyMigrationRecordMapsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -10016,6 +10137,7 @@ export type CompanyCreateWithoutLegacyMigrationRecordMapsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -10109,6 +10231,7 @@ export type CompanyUncheckedCreateWithoutLegacyMigrationRecordMapsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -10176,6 +10299,7 @@ export type CompanyUncheckedCreateWithoutLegacyMigrationRecordMapsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -10284,6 +10408,7 @@ export type CompanyUpdateWithoutLegacyMigrationRecordMapsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -10352,6 +10477,7 @@ export type CompanyUpdateWithoutLegacyMigrationRecordMapsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -10445,6 +10571,7 @@ export type CompanyUncheckedUpdateWithoutLegacyMigrationRecordMapsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -10512,6 +10639,7 @@ export type CompanyUncheckedUpdateWithoutLegacyMigrationRecordMapsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -10604,6 +10732,7 @@ export type CompanyCreateWithoutNoorixSourceAnnotationsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -10671,6 +10800,7 @@ export type CompanyCreateWithoutNoorixSourceAnnotationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -10765,6 +10895,7 @@ export type CompanyUncheckedCreateWithoutNoorixSourceAnnotationsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -10831,6 +10962,7 @@ export type CompanyUncheckedCreateWithoutNoorixSourceAnnotationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -10940,6 +11072,7 @@ export type CompanyUpdateWithoutNoorixSourceAnnotationsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -11007,6 +11140,7 @@ export type CompanyUpdateWithoutNoorixSourceAnnotationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -11101,6 +11235,7 @@ export type CompanyUncheckedUpdateWithoutNoorixSourceAnnotationsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -11167,6 +11302,7 @@ export type CompanyUncheckedUpdateWithoutNoorixSourceAnnotationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -11260,6 +11396,7 @@ export type CompanyCreateWithoutNurixExcelStagingPackagesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -11328,6 +11465,7 @@ export type CompanyCreateWithoutNurixExcelStagingPackagesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -11421,6 +11559,7 @@ export type CompanyUncheckedCreateWithoutNurixExcelStagingPackagesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -11488,6 +11627,7 @@ export type CompanyUncheckedCreateWithoutNurixExcelStagingPackagesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -11596,6 +11736,7 @@ export type CompanyUpdateWithoutNurixExcelStagingPackagesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -11664,6 +11805,7 @@ export type CompanyUpdateWithoutNurixExcelStagingPackagesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -11757,6 +11899,7 @@ export type CompanyUncheckedUpdateWithoutNurixExcelStagingPackagesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -11824,6 +11967,7 @@ export type CompanyUncheckedUpdateWithoutNurixExcelStagingPackagesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -11916,6 +12060,7 @@ export type CompanyCreateWithoutNurixExcelMasterDataExecutionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -11984,6 +12129,7 @@ export type CompanyCreateWithoutNurixExcelMasterDataExecutionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -12077,6 +12223,7 @@ export type CompanyUncheckedCreateWithoutNurixExcelMasterDataExecutionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -12144,6 +12291,7 @@ export type CompanyUncheckedCreateWithoutNurixExcelMasterDataExecutionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -12252,6 +12400,7 @@ export type CompanyUpdateWithoutNurixExcelMasterDataExecutionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -12320,6 +12469,7 @@ export type CompanyUpdateWithoutNurixExcelMasterDataExecutionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -12413,6 +12563,7 @@ export type CompanyUncheckedUpdateWithoutNurixExcelMasterDataExecutionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -12480,6 +12631,7 @@ export type CompanyUncheckedUpdateWithoutNurixExcelMasterDataExecutionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -12572,6 +12724,7 @@ export type CompanyCreateWithoutNurixExcelFinancialExecutionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -12640,6 +12793,7 @@ export type CompanyCreateWithoutNurixExcelFinancialExecutionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -12733,6 +12887,7 @@ export type CompanyUncheckedCreateWithoutNurixExcelFinancialExecutionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -12800,6 +12955,7 @@ export type CompanyUncheckedCreateWithoutNurixExcelFinancialExecutionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -12908,6 +13064,7 @@ export type CompanyUpdateWithoutNurixExcelFinancialExecutionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -12976,6 +13133,7 @@ export type CompanyUpdateWithoutNurixExcelFinancialExecutionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -13069,6 +13227,7 @@ export type CompanyUncheckedUpdateWithoutNurixExcelFinancialExecutionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -13136,6 +13295,7 @@ export type CompanyUncheckedUpdateWithoutNurixExcelFinancialExecutionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -13228,6 +13388,7 @@ export type CompanyCreateWithoutNurixExcelFinancialWavesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -13296,6 +13457,7 @@ export type CompanyCreateWithoutNurixExcelFinancialWavesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -13389,6 +13551,7 @@ export type CompanyUncheckedCreateWithoutNurixExcelFinancialWavesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -13456,6 +13619,7 @@ export type CompanyUncheckedCreateWithoutNurixExcelFinancialWavesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -13564,6 +13728,7 @@ export type CompanyUpdateWithoutNurixExcelFinancialWavesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -13632,6 +13797,7 @@ export type CompanyUpdateWithoutNurixExcelFinancialWavesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -13725,6 +13891,7 @@ export type CompanyUncheckedUpdateWithoutNurixExcelFinancialWavesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -13792,6 +13959,7 @@ export type CompanyUncheckedUpdateWithoutNurixExcelFinancialWavesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -13884,6 +14052,7 @@ export type CompanyCreateWithoutNurixExcelFinancialItemsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -13952,6 +14121,7 @@ export type CompanyCreateWithoutNurixExcelFinancialItemsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -14045,6 +14215,7 @@ export type CompanyUncheckedCreateWithoutNurixExcelFinancialItemsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -14112,6 +14283,7 @@ export type CompanyUncheckedCreateWithoutNurixExcelFinancialItemsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -14220,6 +14392,7 @@ export type CompanyUpdateWithoutNurixExcelFinancialItemsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -14288,6 +14461,7 @@ export type CompanyUpdateWithoutNurixExcelFinancialItemsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -14381,6 +14555,7 @@ export type CompanyUncheckedUpdateWithoutNurixExcelFinancialItemsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -14448,6 +14623,7 @@ export type CompanyUncheckedUpdateWithoutNurixExcelFinancialItemsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -14540,6 +14716,7 @@ export type CompanyCreateWithoutNurixExcelFinancialSourceMapsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -14608,6 +14785,7 @@ export type CompanyCreateWithoutNurixExcelFinancialSourceMapsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -14701,6 +14879,7 @@ export type CompanyUncheckedCreateWithoutNurixExcelFinancialSourceMapsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -14768,6 +14947,7 @@ export type CompanyUncheckedCreateWithoutNurixExcelFinancialSourceMapsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -14876,6 +15056,7 @@ export type CompanyUpdateWithoutNurixExcelFinancialSourceMapsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -14944,6 +15125,7 @@ export type CompanyUpdateWithoutNurixExcelFinancialSourceMapsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -15037,6 +15219,7 @@ export type CompanyUncheckedUpdateWithoutNurixExcelFinancialSourceMapsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -15104,6 +15287,7 @@ export type CompanyUncheckedUpdateWithoutNurixExcelFinancialSourceMapsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -15196,6 +15380,7 @@ export type CompanyCreateWithoutNurixExcelFinancialReceiptsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -15264,6 +15449,7 @@ export type CompanyCreateWithoutNurixExcelFinancialReceiptsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -15357,6 +15543,7 @@ export type CompanyUncheckedCreateWithoutNurixExcelFinancialReceiptsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -15424,6 +15611,7 @@ export type CompanyUncheckedCreateWithoutNurixExcelFinancialReceiptsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -15532,6 +15720,7 @@ export type CompanyUpdateWithoutNurixExcelFinancialReceiptsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -15600,6 +15789,7 @@ export type CompanyUpdateWithoutNurixExcelFinancialReceiptsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -15693,6 +15883,7 @@ export type CompanyUncheckedUpdateWithoutNurixExcelFinancialReceiptsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -15760,6 +15951,7 @@ export type CompanyUncheckedUpdateWithoutNurixExcelFinancialReceiptsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -15852,6 +16044,7 @@ export type CompanyCreateWithoutDocumentSerialCountersInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -15919,6 +16112,7 @@ export type CompanyCreateWithoutDocumentSerialCountersInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -16013,6 +16207,7 @@ export type CompanyUncheckedCreateWithoutDocumentSerialCountersInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -16079,6 +16274,7 @@ export type CompanyUncheckedCreateWithoutDocumentSerialCountersInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -16188,6 +16384,7 @@ export type CompanyUpdateWithoutDocumentSerialCountersInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -16255,6 +16452,7 @@ export type CompanyUpdateWithoutDocumentSerialCountersInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -16349,6 +16547,7 @@ export type CompanyUncheckedUpdateWithoutDocumentSerialCountersInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -16415,6 +16614,7 @@ export type CompanyUncheckedUpdateWithoutDocumentSerialCountersInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -16508,6 +16708,7 @@ export type CompanyCreateWithoutFileMetadataInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -16575,6 +16776,7 @@ export type CompanyCreateWithoutFileMetadataInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -16669,6 +16871,7 @@ export type CompanyUncheckedCreateWithoutFileMetadataInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -16735,6 +16938,7 @@ export type CompanyUncheckedCreateWithoutFileMetadataInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -16844,6 +17048,7 @@ export type CompanyUpdateWithoutFileMetadataInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -16911,6 +17116,7 @@ export type CompanyUpdateWithoutFileMetadataInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -17005,6 +17211,7 @@ export type CompanyUncheckedUpdateWithoutFileMetadataInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -17071,6 +17278,7 @@ export type CompanyUncheckedUpdateWithoutFileMetadataInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -17164,6 +17372,7 @@ export type CompanyCreateWithoutFinanceProfileInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -17231,6 +17440,7 @@ export type CompanyCreateWithoutFinanceProfileInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -17325,6 +17535,7 @@ export type CompanyUncheckedCreateWithoutFinanceProfileInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -17391,6 +17602,7 @@ export type CompanyUncheckedCreateWithoutFinanceProfileInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -17500,6 +17712,7 @@ export type CompanyUpdateWithoutFinanceProfileInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -17567,6 +17780,7 @@ export type CompanyUpdateWithoutFinanceProfileInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -17661,6 +17875,7 @@ export type CompanyUncheckedUpdateWithoutFinanceProfileInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -17727,6 +17942,7 @@ export type CompanyUncheckedUpdateWithoutFinanceProfileInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -17820,6 +18036,7 @@ export type CompanyCreateWithoutFinanceAccountsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -17887,6 +18104,7 @@ export type CompanyCreateWithoutFinanceAccountsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -17981,6 +18199,7 @@ export type CompanyUncheckedCreateWithoutFinanceAccountsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -18047,6 +18266,7 @@ export type CompanyUncheckedCreateWithoutFinanceAccountsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -18156,6 +18376,7 @@ export type CompanyUpdateWithoutFinanceAccountsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -18223,6 +18444,7 @@ export type CompanyUpdateWithoutFinanceAccountsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -18317,6 +18539,7 @@ export type CompanyUncheckedUpdateWithoutFinanceAccountsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -18383,6 +18606,7 @@ export type CompanyUncheckedUpdateWithoutFinanceAccountsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -18476,6 +18700,7 @@ export type CompanyCreateWithoutPnlMappingVersionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -18543,6 +18768,7 @@ export type CompanyCreateWithoutPnlMappingVersionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -18637,6 +18863,7 @@ export type CompanyUncheckedCreateWithoutPnlMappingVersionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -18703,6 +18930,7 @@ export type CompanyUncheckedCreateWithoutPnlMappingVersionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -18812,6 +19040,7 @@ export type CompanyUpdateWithoutPnlMappingVersionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -18879,6 +19108,7 @@ export type CompanyUpdateWithoutPnlMappingVersionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -18973,6 +19203,7 @@ export type CompanyUncheckedUpdateWithoutPnlMappingVersionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -19039,6 +19270,7 @@ export type CompanyUncheckedUpdateWithoutPnlMappingVersionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -19132,6 +19364,7 @@ export type CompanyCreateWithoutPnlStatementLinesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -19199,6 +19432,7 @@ export type CompanyCreateWithoutPnlStatementLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -19293,6 +19527,7 @@ export type CompanyUncheckedCreateWithoutPnlStatementLinesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -19359,6 +19594,7 @@ export type CompanyUncheckedCreateWithoutPnlStatementLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -19468,6 +19704,7 @@ export type CompanyUpdateWithoutPnlStatementLinesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -19535,6 +19772,7 @@ export type CompanyUpdateWithoutPnlStatementLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -19629,6 +19867,7 @@ export type CompanyUncheckedUpdateWithoutPnlStatementLinesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -19695,6 +19934,7 @@ export type CompanyUncheckedUpdateWithoutPnlStatementLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -19788,6 +20028,7 @@ export type CompanyCreateWithoutPnlAccountMappingsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -19855,6 +20096,7 @@ export type CompanyCreateWithoutPnlAccountMappingsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -19949,6 +20191,7 @@ export type CompanyUncheckedCreateWithoutPnlAccountMappingsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -20015,6 +20258,7 @@ export type CompanyUncheckedCreateWithoutPnlAccountMappingsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -20124,6 +20368,7 @@ export type CompanyUpdateWithoutPnlAccountMappingsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -20191,6 +20436,7 @@ export type CompanyUpdateWithoutPnlAccountMappingsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -20285,6 +20531,7 @@ export type CompanyUncheckedUpdateWithoutPnlAccountMappingsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -20351,6 +20598,7 @@ export type CompanyUncheckedUpdateWithoutPnlAccountMappingsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -20444,6 +20692,7 @@ export type CompanyCreateWithoutLedgerRevisionInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -20511,6 +20760,7 @@ export type CompanyCreateWithoutLedgerRevisionInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -20605,6 +20855,7 @@ export type CompanyUncheckedCreateWithoutLedgerRevisionInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -20671,6 +20922,7 @@ export type CompanyUncheckedCreateWithoutLedgerRevisionInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -20780,6 +21032,7 @@ export type CompanyUpdateWithoutLedgerRevisionInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -20847,6 +21100,7 @@ export type CompanyUpdateWithoutLedgerRevisionInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -20941,6 +21195,7 @@ export type CompanyUncheckedUpdateWithoutLedgerRevisionInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -21007,6 +21262,7 @@ export type CompanyUncheckedUpdateWithoutLedgerRevisionInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -21100,6 +21356,7 @@ export type CompanyCreateWithoutReportRunsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -21167,6 +21424,7 @@ export type CompanyCreateWithoutReportRunsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -21261,6 +21519,7 @@ export type CompanyUncheckedCreateWithoutReportRunsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -21327,6 +21586,7 @@ export type CompanyUncheckedCreateWithoutReportRunsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -21436,6 +21696,7 @@ export type CompanyUpdateWithoutReportRunsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -21503,6 +21764,7 @@ export type CompanyUpdateWithoutReportRunsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -21597,6 +21859,7 @@ export type CompanyUncheckedUpdateWithoutReportRunsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -21663,6 +21926,7 @@ export type CompanyUncheckedUpdateWithoutReportRunsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -21756,6 +22020,7 @@ export type CompanyCreateWithoutDecisionMetricDefinitionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -21824,6 +22089,7 @@ export type CompanyCreateWithoutDecisionMetricDefinitionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -21917,6 +22183,7 @@ export type CompanyUncheckedCreateWithoutDecisionMetricDefinitionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -21984,6 +22251,7 @@ export type CompanyUncheckedCreateWithoutDecisionMetricDefinitionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -22092,6 +22360,7 @@ export type CompanyUpdateWithoutDecisionMetricDefinitionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -22160,6 +22429,7 @@ export type CompanyUpdateWithoutDecisionMetricDefinitionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -22253,6 +22523,7 @@ export type CompanyUncheckedUpdateWithoutDecisionMetricDefinitionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -22320,6 +22591,7 @@ export type CompanyUncheckedUpdateWithoutDecisionMetricDefinitionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -22412,6 +22684,7 @@ export type CompanyCreateWithoutDecisionSalesChangePolicyInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -22480,6 +22753,7 @@ export type CompanyCreateWithoutDecisionSalesChangePolicyInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -22573,6 +22847,7 @@ export type CompanyUncheckedCreateWithoutDecisionSalesChangePolicyInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -22640,6 +22915,7 @@ export type CompanyUncheckedCreateWithoutDecisionSalesChangePolicyInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -22748,6 +23024,7 @@ export type CompanyUpdateWithoutDecisionSalesChangePolicyInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -22816,6 +23093,7 @@ export type CompanyUpdateWithoutDecisionSalesChangePolicyInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -22909,6 +23187,7 @@ export type CompanyUncheckedUpdateWithoutDecisionSalesChangePolicyInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -22976,6 +23255,7 @@ export type CompanyUncheckedUpdateWithoutDecisionSalesChangePolicyInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -23068,6 +23348,7 @@ export type CompanyCreateWithoutDecisionRuleDefinitionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -23136,6 +23417,7 @@ export type CompanyCreateWithoutDecisionRuleDefinitionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -23229,6 +23511,7 @@ export type CompanyUncheckedCreateWithoutDecisionRuleDefinitionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -23296,6 +23579,7 @@ export type CompanyUncheckedCreateWithoutDecisionRuleDefinitionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -23404,6 +23688,7 @@ export type CompanyUpdateWithoutDecisionRuleDefinitionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -23472,6 +23757,7 @@ export type CompanyUpdateWithoutDecisionRuleDefinitionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -23565,6 +23851,7 @@ export type CompanyUncheckedUpdateWithoutDecisionRuleDefinitionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -23632,6 +23919,7 @@ export type CompanyUncheckedUpdateWithoutDecisionRuleDefinitionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -23724,6 +24012,7 @@ export type CompanyCreateWithoutDecisionCompanyContextEventsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -23792,6 +24081,7 @@ export type CompanyCreateWithoutDecisionCompanyContextEventsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -23885,6 +24175,7 @@ export type CompanyUncheckedCreateWithoutDecisionCompanyContextEventsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -23952,6 +24243,7 @@ export type CompanyUncheckedCreateWithoutDecisionCompanyContextEventsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -24060,6 +24352,7 @@ export type CompanyUpdateWithoutDecisionCompanyContextEventsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -24128,6 +24421,7 @@ export type CompanyUpdateWithoutDecisionCompanyContextEventsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -24221,6 +24515,7 @@ export type CompanyUncheckedUpdateWithoutDecisionCompanyContextEventsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -24288,6 +24583,7 @@ export type CompanyUncheckedUpdateWithoutDecisionCompanyContextEventsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -24380,6 +24676,7 @@ export type CompanyCreateWithoutDecisionEvaluationRunsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -24448,6 +24745,7 @@ export type CompanyCreateWithoutDecisionEvaluationRunsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -24541,6 +24839,7 @@ export type CompanyUncheckedCreateWithoutDecisionEvaluationRunsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -24608,6 +24907,7 @@ export type CompanyUncheckedCreateWithoutDecisionEvaluationRunsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -24716,6 +25016,7 @@ export type CompanyUpdateWithoutDecisionEvaluationRunsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -24784,6 +25085,7 @@ export type CompanyUpdateWithoutDecisionEvaluationRunsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -24877,6 +25179,7 @@ export type CompanyUncheckedUpdateWithoutDecisionEvaluationRunsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -24944,6 +25247,7 @@ export type CompanyUncheckedUpdateWithoutDecisionEvaluationRunsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -25036,6 +25340,7 @@ export type CompanyCreateWithoutDecisionEvidenceSnapshotsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -25104,6 +25409,7 @@ export type CompanyCreateWithoutDecisionEvidenceSnapshotsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -25197,6 +25503,7 @@ export type CompanyUncheckedCreateWithoutDecisionEvidenceSnapshotsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -25264,6 +25571,7 @@ export type CompanyUncheckedCreateWithoutDecisionEvidenceSnapshotsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -25372,6 +25680,7 @@ export type CompanyUpdateWithoutDecisionEvidenceSnapshotsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -25440,6 +25749,7 @@ export type CompanyUpdateWithoutDecisionEvidenceSnapshotsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -25533,6 +25843,7 @@ export type CompanyUncheckedUpdateWithoutDecisionEvidenceSnapshotsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -25600,6 +25911,7 @@ export type CompanyUncheckedUpdateWithoutDecisionEvidenceSnapshotsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -25692,6 +26004,7 @@ export type CompanyCreateWithoutDecisionAlertsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -25760,6 +26073,7 @@ export type CompanyCreateWithoutDecisionAlertsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -25853,6 +26167,7 @@ export type CompanyUncheckedCreateWithoutDecisionAlertsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -25920,6 +26235,7 @@ export type CompanyUncheckedCreateWithoutDecisionAlertsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -26028,6 +26344,7 @@ export type CompanyUpdateWithoutDecisionAlertsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -26096,6 +26413,7 @@ export type CompanyUpdateWithoutDecisionAlertsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -26189,6 +26507,7 @@ export type CompanyUncheckedUpdateWithoutDecisionAlertsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -26256,6 +26575,7 @@ export type CompanyUncheckedUpdateWithoutDecisionAlertsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -26348,6 +26668,7 @@ export type CompanyCreateWithoutDecisionAlertActionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -26416,6 +26737,7 @@ export type CompanyCreateWithoutDecisionAlertActionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -26509,6 +26831,7 @@ export type CompanyUncheckedCreateWithoutDecisionAlertActionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -26576,6 +26899,7 @@ export type CompanyUncheckedCreateWithoutDecisionAlertActionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -26684,6 +27008,7 @@ export type CompanyUpdateWithoutDecisionAlertActionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -26752,6 +27077,7 @@ export type CompanyUpdateWithoutDecisionAlertActionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -26845,6 +27171,7 @@ export type CompanyUncheckedUpdateWithoutDecisionAlertActionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -26912,6 +27239,7 @@ export type CompanyUncheckedUpdateWithoutDecisionAlertActionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -27004,6 +27332,7 @@ export type CompanyCreateWithoutDecisionFeedbackInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -27072,6 +27401,7 @@ export type CompanyCreateWithoutDecisionFeedbackInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -27165,6 +27495,7 @@ export type CompanyUncheckedCreateWithoutDecisionFeedbackInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -27232,6 +27563,7 @@ export type CompanyUncheckedCreateWithoutDecisionFeedbackInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -27340,6 +27672,7 @@ export type CompanyUpdateWithoutDecisionFeedbackInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -27408,6 +27741,7 @@ export type CompanyUpdateWithoutDecisionFeedbackInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -27501,6 +27835,7 @@ export type CompanyUncheckedUpdateWithoutDecisionFeedbackInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -27568,6 +27903,7 @@ export type CompanyUncheckedUpdateWithoutDecisionFeedbackInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -27660,6 +27996,7 @@ export type CompanyCreateWithoutMarketingCampaignsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -27728,6 +28065,7 @@ export type CompanyCreateWithoutMarketingCampaignsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -27821,6 +28159,7 @@ export type CompanyUncheckedCreateWithoutMarketingCampaignsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -27888,6 +28227,7 @@ export type CompanyUncheckedCreateWithoutMarketingCampaignsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -27996,6 +28336,7 @@ export type CompanyUpdateWithoutMarketingCampaignsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -28064,6 +28405,7 @@ export type CompanyUpdateWithoutMarketingCampaignsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -28157,6 +28499,7 @@ export type CompanyUncheckedUpdateWithoutMarketingCampaignsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -28224,6 +28567,7 @@ export type CompanyUncheckedUpdateWithoutMarketingCampaignsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -28316,6 +28660,7 @@ export type CompanyCreateWithoutMarketingCampaignAnalysisFeedbackInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -28384,6 +28729,7 @@ export type CompanyCreateWithoutMarketingCampaignAnalysisFeedbackInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -28477,6 +28823,7 @@ export type CompanyUncheckedCreateWithoutMarketingCampaignAnalysisFeedbackInput 
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -28544,6 +28891,7 @@ export type CompanyUncheckedCreateWithoutMarketingCampaignAnalysisFeedbackInput 
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -28652,6 +29000,7 @@ export type CompanyUpdateWithoutMarketingCampaignAnalysisFeedbackInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -28720,6 +29069,7 @@ export type CompanyUpdateWithoutMarketingCampaignAnalysisFeedbackInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -28813,6 +29163,7 @@ export type CompanyUncheckedUpdateWithoutMarketingCampaignAnalysisFeedbackInput 
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -28880,6 +29231,7 @@ export type CompanyUncheckedUpdateWithoutMarketingCampaignAnalysisFeedbackInput 
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -28972,6 +29324,7 @@ export type CompanyCreateWithoutMarketingCampaignFinancialLinksInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -29040,6 +29393,7 @@ export type CompanyCreateWithoutMarketingCampaignFinancialLinksInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -29133,6 +29487,7 @@ export type CompanyUncheckedCreateWithoutMarketingCampaignFinancialLinksInput = 
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -29200,6 +29555,7 @@ export type CompanyUncheckedCreateWithoutMarketingCampaignFinancialLinksInput = 
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -29308,6 +29664,7 @@ export type CompanyUpdateWithoutMarketingCampaignFinancialLinksInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -29376,6 +29733,7 @@ export type CompanyUpdateWithoutMarketingCampaignFinancialLinksInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -29469,6 +29827,7 @@ export type CompanyUncheckedUpdateWithoutMarketingCampaignFinancialLinksInput = 
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -29536,6 +29895,7 @@ export type CompanyUncheckedUpdateWithoutMarketingCampaignFinancialLinksInput = 
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -29628,6 +29988,7 @@ export type CompanyCreateWithoutMarketingCampaignContextLinksInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -29696,6 +30057,7 @@ export type CompanyCreateWithoutMarketingCampaignContextLinksInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -29789,6 +30151,7 @@ export type CompanyUncheckedCreateWithoutMarketingCampaignContextLinksInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -29856,6 +30219,7 @@ export type CompanyUncheckedCreateWithoutMarketingCampaignContextLinksInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -29964,6 +30328,7 @@ export type CompanyUpdateWithoutMarketingCampaignContextLinksInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -30032,6 +30397,7 @@ export type CompanyUpdateWithoutMarketingCampaignContextLinksInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -30125,6 +30491,7 @@ export type CompanyUncheckedUpdateWithoutMarketingCampaignContextLinksInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -30192,6 +30559,7 @@ export type CompanyUncheckedUpdateWithoutMarketingCampaignContextLinksInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -30284,6 +30652,7 @@ export type CompanyCreateWithoutMarketingSalesTargetsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -30351,6 +30720,7 @@ export type CompanyCreateWithoutMarketingSalesTargetsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -30445,6 +30815,7 @@ export type CompanyUncheckedCreateWithoutMarketingSalesTargetsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -30511,6 +30882,7 @@ export type CompanyUncheckedCreateWithoutMarketingSalesTargetsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -30620,6 +30992,7 @@ export type CompanyUpdateWithoutMarketingSalesTargetsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -30687,6 +31060,7 @@ export type CompanyUpdateWithoutMarketingSalesTargetsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -30781,6 +31155,7 @@ export type CompanyUncheckedUpdateWithoutMarketingSalesTargetsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -30847,6 +31222,7 @@ export type CompanyUncheckedUpdateWithoutMarketingSalesTargetsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -30940,6 +31316,7 @@ export type CompanyCreateWithoutMarketingProviderConnectionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -31008,6 +31385,7 @@ export type CompanyCreateWithoutMarketingProviderConnectionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -31101,6 +31479,7 @@ export type CompanyUncheckedCreateWithoutMarketingProviderConnectionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -31168,6 +31547,7 @@ export type CompanyUncheckedCreateWithoutMarketingProviderConnectionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -31276,6 +31656,7 @@ export type CompanyUpdateWithoutMarketingProviderConnectionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -31344,6 +31725,7 @@ export type CompanyUpdateWithoutMarketingProviderConnectionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -31437,6 +31819,7 @@ export type CompanyUncheckedUpdateWithoutMarketingProviderConnectionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -31504,6 +31887,7 @@ export type CompanyUncheckedUpdateWithoutMarketingProviderConnectionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -31596,6 +31980,7 @@ export type CompanyCreateWithoutMarketingReputationReplyPolicyInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -31664,6 +32049,7 @@ export type CompanyCreateWithoutMarketingReputationReplyPolicyInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -31757,6 +32143,7 @@ export type CompanyUncheckedCreateWithoutMarketingReputationReplyPolicyInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -31824,6 +32211,7 @@ export type CompanyUncheckedCreateWithoutMarketingReputationReplyPolicyInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -31932,6 +32320,7 @@ export type CompanyUpdateWithoutMarketingReputationReplyPolicyInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -32000,6 +32389,7 @@ export type CompanyUpdateWithoutMarketingReputationReplyPolicyInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -32093,6 +32483,7 @@ export type CompanyUncheckedUpdateWithoutMarketingReputationReplyPolicyInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -32160,6 +32551,7 @@ export type CompanyUncheckedUpdateWithoutMarketingReputationReplyPolicyInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -32252,6 +32644,7 @@ export type CompanyCreateWithoutReportDocumentsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -32319,6 +32712,7 @@ export type CompanyCreateWithoutReportDocumentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -32413,6 +32807,7 @@ export type CompanyUncheckedCreateWithoutReportDocumentsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -32479,6 +32874,7 @@ export type CompanyUncheckedCreateWithoutReportDocumentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -32588,6 +32984,7 @@ export type CompanyUpdateWithoutReportDocumentsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -32655,6 +33052,7 @@ export type CompanyUpdateWithoutReportDocumentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -32749,6 +33147,7 @@ export type CompanyUncheckedUpdateWithoutReportDocumentsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -32815,6 +33214,7 @@ export type CompanyUncheckedUpdateWithoutReportDocumentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -32908,6 +33308,7 @@ export type CompanyCreateWithoutVatSimulationsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -32975,6 +33376,7 @@ export type CompanyCreateWithoutVatSimulationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -33069,6 +33471,7 @@ export type CompanyUncheckedCreateWithoutVatSimulationsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -33135,6 +33538,7 @@ export type CompanyUncheckedCreateWithoutVatSimulationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -33244,6 +33648,7 @@ export type CompanyUpdateWithoutVatSimulationsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -33311,6 +33716,7 @@ export type CompanyUpdateWithoutVatSimulationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -33405,6 +33811,7 @@ export type CompanyUncheckedUpdateWithoutVatSimulationsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -33471,6 +33878,7 @@ export type CompanyUncheckedUpdateWithoutVatSimulationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -33564,6 +33972,7 @@ export type CompanyCreateWithoutCashPerformanceEventsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -33631,6 +34040,7 @@ export type CompanyCreateWithoutCashPerformanceEventsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -33725,6 +34135,7 @@ export type CompanyUncheckedCreateWithoutCashPerformanceEventsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -33791,6 +34202,7 @@ export type CompanyUncheckedCreateWithoutCashPerformanceEventsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -33900,6 +34312,7 @@ export type CompanyUpdateWithoutCashPerformanceEventsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -33967,6 +34380,7 @@ export type CompanyUpdateWithoutCashPerformanceEventsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -34061,6 +34475,7 @@ export type CompanyUncheckedUpdateWithoutCashPerformanceEventsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -34127,6 +34542,7 @@ export type CompanyUncheckedUpdateWithoutCashPerformanceEventsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -34220,6 +34636,7 @@ export type CompanyCreateWithoutCashPerformanceCoverageInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -34287,6 +34704,7 @@ export type CompanyCreateWithoutCashPerformanceCoverageInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -34381,6 +34799,7 @@ export type CompanyUncheckedCreateWithoutCashPerformanceCoverageInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -34447,6 +34866,7 @@ export type CompanyUncheckedCreateWithoutCashPerformanceCoverageInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -34556,6 +34976,7 @@ export type CompanyUpdateWithoutCashPerformanceCoverageInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -34623,6 +35044,7 @@ export type CompanyUpdateWithoutCashPerformanceCoverageInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -34717,6 +35139,7 @@ export type CompanyUncheckedUpdateWithoutCashPerformanceCoverageInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -34783,6 +35206,7 @@ export type CompanyUncheckedUpdateWithoutCashPerformanceCoverageInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -34876,6 +35300,7 @@ export type CompanyCreateWithoutCashPerformanceHistoricalImportsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -34943,6 +35368,7 @@ export type CompanyCreateWithoutCashPerformanceHistoricalImportsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -35037,6 +35463,7 @@ export type CompanyUncheckedCreateWithoutCashPerformanceHistoricalImportsInput =
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -35103,6 +35530,7 @@ export type CompanyUncheckedCreateWithoutCashPerformanceHistoricalImportsInput =
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -35212,6 +35640,7 @@ export type CompanyUpdateWithoutCashPerformanceHistoricalImportsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -35279,6 +35708,7 @@ export type CompanyUpdateWithoutCashPerformanceHistoricalImportsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -35373,6 +35803,7 @@ export type CompanyUncheckedUpdateWithoutCashPerformanceHistoricalImportsInput =
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -35439,6 +35870,7 @@ export type CompanyUncheckedUpdateWithoutCashPerformanceHistoricalImportsInput =
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -35532,6 +35964,7 @@ export type CompanyCreateWithoutVatSettlementsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -35599,6 +36032,7 @@ export type CompanyCreateWithoutVatSettlementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -35693,6 +36127,7 @@ export type CompanyUncheckedCreateWithoutVatSettlementsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -35759,6 +36194,7 @@ export type CompanyUncheckedCreateWithoutVatSettlementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -35868,6 +36304,7 @@ export type CompanyUpdateWithoutVatSettlementsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -35935,6 +36372,7 @@ export type CompanyUpdateWithoutVatSettlementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -36029,6 +36467,7 @@ export type CompanyUncheckedUpdateWithoutVatSettlementsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -36095,6 +36534,7 @@ export type CompanyUncheckedUpdateWithoutVatSettlementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -36188,6 +36628,7 @@ export type CompanyCreateWithoutFinanceCategoriesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -36255,6 +36696,7 @@ export type CompanyCreateWithoutFinanceCategoriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -36349,6 +36791,7 @@ export type CompanyUncheckedCreateWithoutFinanceCategoriesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -36415,6 +36858,7 @@ export type CompanyUncheckedCreateWithoutFinanceCategoriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -36524,6 +36968,7 @@ export type CompanyUpdateWithoutFinanceCategoriesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -36591,6 +37036,7 @@ export type CompanyUpdateWithoutFinanceCategoriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -36685,6 +37131,7 @@ export type CompanyUncheckedUpdateWithoutFinanceCategoriesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -36751,6 +37198,7 @@ export type CompanyUncheckedUpdateWithoutFinanceCategoriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -36844,6 +37292,7 @@ export type CompanyCreateWithoutFinanceSuppliersInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -36911,6 +37360,7 @@ export type CompanyCreateWithoutFinanceSuppliersInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -37005,6 +37455,7 @@ export type CompanyUncheckedCreateWithoutFinanceSuppliersInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -37071,6 +37522,7 @@ export type CompanyUncheckedCreateWithoutFinanceSuppliersInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -37180,6 +37632,7 @@ export type CompanyUpdateWithoutFinanceSuppliersInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -37247,6 +37700,7 @@ export type CompanyUpdateWithoutFinanceSuppliersInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -37341,6 +37795,7 @@ export type CompanyUncheckedUpdateWithoutFinanceSuppliersInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -37407,6 +37862,7 @@ export type CompanyUncheckedUpdateWithoutFinanceSuppliersInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -37500,6 +37956,7 @@ export type CompanyCreateWithoutFinanceFiscalPeriodsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -37567,6 +38024,7 @@ export type CompanyCreateWithoutFinanceFiscalPeriodsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -37661,6 +38119,7 @@ export type CompanyUncheckedCreateWithoutFinanceFiscalPeriodsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -37727,6 +38186,7 @@ export type CompanyUncheckedCreateWithoutFinanceFiscalPeriodsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -37836,6 +38296,7 @@ export type CompanyUpdateWithoutFinanceFiscalPeriodsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -37903,6 +38364,7 @@ export type CompanyUpdateWithoutFinanceFiscalPeriodsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -37997,6 +38459,7 @@ export type CompanyUncheckedUpdateWithoutFinanceFiscalPeriodsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -38063,6 +38526,7 @@ export type CompanyUncheckedUpdateWithoutFinanceFiscalPeriodsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -38156,6 +38620,7 @@ export type CompanyCreateWithoutFinanceVaultsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -38223,6 +38688,7 @@ export type CompanyCreateWithoutFinanceVaultsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -38317,6 +38783,7 @@ export type CompanyUncheckedCreateWithoutFinanceVaultsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -38383,6 +38850,7 @@ export type CompanyUncheckedCreateWithoutFinanceVaultsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -38492,6 +38960,7 @@ export type CompanyUpdateWithoutFinanceVaultsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -38559,6 +39028,7 @@ export type CompanyUpdateWithoutFinanceVaultsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -38653,6 +39123,7 @@ export type CompanyUncheckedUpdateWithoutFinanceVaultsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -38719,6 +39190,7 @@ export type CompanyUncheckedUpdateWithoutFinanceVaultsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -38812,6 +39284,7 @@ export type CompanyCreateWithoutFinanceVaultReconciliationsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -38879,6 +39352,7 @@ export type CompanyCreateWithoutFinanceVaultReconciliationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -38973,6 +39447,7 @@ export type CompanyUncheckedCreateWithoutFinanceVaultReconciliationsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -39039,6 +39514,7 @@ export type CompanyUncheckedCreateWithoutFinanceVaultReconciliationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -39148,6 +39624,7 @@ export type CompanyUpdateWithoutFinanceVaultReconciliationsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -39215,6 +39692,7 @@ export type CompanyUpdateWithoutFinanceVaultReconciliationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -39309,6 +39787,7 @@ export type CompanyUncheckedUpdateWithoutFinanceVaultReconciliationsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -39375,6 +39854,7 @@ export type CompanyUncheckedUpdateWithoutFinanceVaultReconciliationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -39468,6 +39948,7 @@ export type CompanyCreateWithoutFinanceSupplierDuesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -39535,6 +40016,7 @@ export type CompanyCreateWithoutFinanceSupplierDuesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -39629,6 +40111,7 @@ export type CompanyUncheckedCreateWithoutFinanceSupplierDuesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -39695,6 +40178,7 @@ export type CompanyUncheckedCreateWithoutFinanceSupplierDuesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -39804,6 +40288,7 @@ export type CompanyUpdateWithoutFinanceSupplierDuesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -39871,6 +40356,7 @@ export type CompanyUpdateWithoutFinanceSupplierDuesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -39965,6 +40451,7 @@ export type CompanyUncheckedUpdateWithoutFinanceSupplierDuesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -40031,6 +40518,7 @@ export type CompanyUncheckedUpdateWithoutFinanceSupplierDuesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -40124,6 +40612,7 @@ export type CompanyCreateWithoutFinanceSupplierDuePaymentsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -40191,6 +40680,7 @@ export type CompanyCreateWithoutFinanceSupplierDuePaymentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -40285,6 +40775,7 @@ export type CompanyUncheckedCreateWithoutFinanceSupplierDuePaymentsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -40351,6 +40842,7 @@ export type CompanyUncheckedCreateWithoutFinanceSupplierDuePaymentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -40460,6 +40952,7 @@ export type CompanyUpdateWithoutFinanceSupplierDuePaymentsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -40527,6 +41020,7 @@ export type CompanyUpdateWithoutFinanceSupplierDuePaymentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -40621,6 +41115,7 @@ export type CompanyUncheckedUpdateWithoutFinanceSupplierDuePaymentsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -40687,6 +41182,7 @@ export type CompanyUncheckedUpdateWithoutFinanceSupplierDuePaymentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -40780,6 +41276,7 @@ export type CompanyCreateWithoutFinanceJournalEntriesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -40847,6 +41344,7 @@ export type CompanyCreateWithoutFinanceJournalEntriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -40941,6 +41439,7 @@ export type CompanyUncheckedCreateWithoutFinanceJournalEntriesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -41007,6 +41506,7 @@ export type CompanyUncheckedCreateWithoutFinanceJournalEntriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -41116,6 +41616,7 @@ export type CompanyUpdateWithoutFinanceJournalEntriesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -41183,6 +41684,7 @@ export type CompanyUpdateWithoutFinanceJournalEntriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -41277,6 +41779,7 @@ export type CompanyUncheckedUpdateWithoutFinanceJournalEntriesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -41343,6 +41846,7 @@ export type CompanyUncheckedUpdateWithoutFinanceJournalEntriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -41436,6 +41940,7 @@ export type CompanyCreateWithoutOutflowDocumentsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -41503,6 +42008,7 @@ export type CompanyCreateWithoutOutflowDocumentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -41597,6 +42103,7 @@ export type CompanyUncheckedCreateWithoutOutflowDocumentsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -41663,6 +42170,7 @@ export type CompanyUncheckedCreateWithoutOutflowDocumentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -41772,6 +42280,7 @@ export type CompanyUpdateWithoutOutflowDocumentsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -41839,6 +42348,7 @@ export type CompanyUpdateWithoutOutflowDocumentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -41933,6 +42443,7 @@ export type CompanyUncheckedUpdateWithoutOutflowDocumentsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -41999,6 +42510,7 @@ export type CompanyUncheckedUpdateWithoutOutflowDocumentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -42092,6 +42604,7 @@ export type CompanyCreateWithoutOutflowDocumentRevisionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -42159,6 +42672,7 @@ export type CompanyCreateWithoutOutflowDocumentRevisionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -42253,6 +42767,7 @@ export type CompanyUncheckedCreateWithoutOutflowDocumentRevisionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -42319,6 +42834,7 @@ export type CompanyUncheckedCreateWithoutOutflowDocumentRevisionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -42428,6 +42944,7 @@ export type CompanyUpdateWithoutOutflowDocumentRevisionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -42495,6 +43012,7 @@ export type CompanyUpdateWithoutOutflowDocumentRevisionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -42589,6 +43107,7 @@ export type CompanyUncheckedUpdateWithoutOutflowDocumentRevisionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -42655,6 +43174,7 @@ export type CompanyUncheckedUpdateWithoutOutflowDocumentRevisionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -42748,6 +43268,7 @@ export type CompanyCreateWithoutOperationsAssetWarrantyAssetsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -42816,6 +43337,7 @@ export type CompanyCreateWithoutOperationsAssetWarrantyAssetsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -42909,6 +43431,7 @@ export type CompanyUncheckedCreateWithoutOperationsAssetWarrantyAssetsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -42976,6 +43499,7 @@ export type CompanyUncheckedCreateWithoutOperationsAssetWarrantyAssetsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -43084,6 +43608,7 @@ export type CompanyUpdateWithoutOperationsAssetWarrantyAssetsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -43152,6 +43677,7 @@ export type CompanyUpdateWithoutOperationsAssetWarrantyAssetsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -43245,6 +43771,7 @@ export type CompanyUncheckedUpdateWithoutOperationsAssetWarrantyAssetsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -43312,6 +43839,7 @@ export type CompanyUncheckedUpdateWithoutOperationsAssetWarrantyAssetsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -43404,6 +43932,7 @@ export type CompanyCreateWithoutOperationsAssetWarrantyLinesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -43472,6 +44001,7 @@ export type CompanyCreateWithoutOperationsAssetWarrantyLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -43565,6 +44095,7 @@ export type CompanyUncheckedCreateWithoutOperationsAssetWarrantyLinesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -43632,6 +44163,7 @@ export type CompanyUncheckedCreateWithoutOperationsAssetWarrantyLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -43740,6 +44272,7 @@ export type CompanyUpdateWithoutOperationsAssetWarrantyLinesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -43808,6 +44341,7 @@ export type CompanyUpdateWithoutOperationsAssetWarrantyLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -43901,6 +44435,7 @@ export type CompanyUncheckedUpdateWithoutOperationsAssetWarrantyLinesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -43968,6 +44503,7 @@ export type CompanyUncheckedUpdateWithoutOperationsAssetWarrantyLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -44060,6 +44596,7 @@ export type CompanyCreateWithoutOutflowBatchesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -44127,6 +44664,7 @@ export type CompanyCreateWithoutOutflowBatchesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -44221,6 +44759,7 @@ export type CompanyUncheckedCreateWithoutOutflowBatchesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -44287,6 +44826,7 @@ export type CompanyUncheckedCreateWithoutOutflowBatchesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -44396,6 +44936,7 @@ export type CompanyUpdateWithoutOutflowBatchesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -44463,6 +45004,7 @@ export type CompanyUpdateWithoutOutflowBatchesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -44557,6 +45099,7 @@ export type CompanyUncheckedUpdateWithoutOutflowBatchesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -44623,6 +45166,7 @@ export type CompanyUncheckedUpdateWithoutOutflowBatchesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -44716,6 +45260,7 @@ export type CompanyCreateWithoutHrEmployeesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -44783,6 +45328,7 @@ export type CompanyCreateWithoutHrEmployeesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -44877,6 +45423,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -44943,6 +45490,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -45052,6 +45600,7 @@ export type CompanyUpdateWithoutHrEmployeesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -45119,6 +45668,7 @@ export type CompanyUpdateWithoutHrEmployeesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -45213,6 +45763,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -45279,6 +45830,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -45372,6 +45924,7 @@ export type CompanyCreateWithoutAttendanceCredentialsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -45440,6 +45993,7 @@ export type CompanyCreateWithoutAttendanceCredentialsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
   attendanceWorkSessions?: Prisma.AttendanceWorkSessionCreateNestedManyWithoutCompanyInput
@@ -45533,6 +46087,7 @@ export type CompanyUncheckedCreateWithoutAttendanceCredentialsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -45600,6 +46155,7 @@ export type CompanyUncheckedCreateWithoutAttendanceCredentialsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
   attendanceWorkSessions?: Prisma.AttendanceWorkSessionUncheckedCreateNestedManyWithoutCompanyInput
@@ -45708,6 +46264,7 @@ export type CompanyUpdateWithoutAttendanceCredentialsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -45776,6 +46333,7 @@ export type CompanyUpdateWithoutAttendanceCredentialsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
   attendanceWorkSessions?: Prisma.AttendanceWorkSessionUpdateManyWithoutCompanyNestedInput
@@ -45869,6 +46427,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceCredentialsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -45936,6 +46495,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceCredentialsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceWorkSessions?: Prisma.AttendanceWorkSessionUncheckedUpdateManyWithoutCompanyNestedInput
@@ -46028,6 +46588,7 @@ export type CompanyCreateWithoutAttendanceBranchesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -46096,6 +46657,7 @@ export type CompanyCreateWithoutAttendanceBranchesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
   attendanceWorkSessions?: Prisma.AttendanceWorkSessionCreateNestedManyWithoutCompanyInput
@@ -46189,6 +46751,7 @@ export type CompanyUncheckedCreateWithoutAttendanceBranchesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -46256,6 +46819,7 @@ export type CompanyUncheckedCreateWithoutAttendanceBranchesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
   attendanceWorkSessions?: Prisma.AttendanceWorkSessionUncheckedCreateNestedManyWithoutCompanyInput
@@ -46364,6 +46928,7 @@ export type CompanyUpdateWithoutAttendanceBranchesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -46432,6 +46997,7 @@ export type CompanyUpdateWithoutAttendanceBranchesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
   attendanceWorkSessions?: Prisma.AttendanceWorkSessionUpdateManyWithoutCompanyNestedInput
@@ -46525,6 +47091,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceBranchesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -46592,6 +47159,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceBranchesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceWorkSessions?: Prisma.AttendanceWorkSessionUncheckedUpdateManyWithoutCompanyNestedInput
@@ -46684,6 +47252,7 @@ export type CompanyCreateWithoutAttendanceRosterPlansInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -46752,6 +47321,7 @@ export type CompanyCreateWithoutAttendanceRosterPlansInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -46845,6 +47415,7 @@ export type CompanyUncheckedCreateWithoutAttendanceRosterPlansInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -46912,6 +47483,7 @@ export type CompanyUncheckedCreateWithoutAttendanceRosterPlansInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -47020,6 +47592,7 @@ export type CompanyUpdateWithoutAttendanceRosterPlansInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -47088,6 +47661,7 @@ export type CompanyUpdateWithoutAttendanceRosterPlansInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -47181,6 +47755,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceRosterPlansInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -47248,6 +47823,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceRosterPlansInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -47340,6 +47916,7 @@ export type CompanyCreateWithoutAttendanceRosterPeakPeriodsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -47408,6 +47985,7 @@ export type CompanyCreateWithoutAttendanceRosterPeakPeriodsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -47501,6 +48079,7 @@ export type CompanyUncheckedCreateWithoutAttendanceRosterPeakPeriodsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -47568,6 +48147,7 @@ export type CompanyUncheckedCreateWithoutAttendanceRosterPeakPeriodsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -47676,6 +48256,7 @@ export type CompanyUpdateWithoutAttendanceRosterPeakPeriodsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -47744,6 +48325,7 @@ export type CompanyUpdateWithoutAttendanceRosterPeakPeriodsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -47837,6 +48419,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceRosterPeakPeriodsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -47904,6 +48487,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceRosterPeakPeriodsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -47996,6 +48580,7 @@ export type CompanyCreateWithoutAttendanceRosterEntriesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -48064,6 +48649,7 @@ export type CompanyCreateWithoutAttendanceRosterEntriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -48157,6 +48743,7 @@ export type CompanyUncheckedCreateWithoutAttendanceRosterEntriesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -48224,6 +48811,7 @@ export type CompanyUncheckedCreateWithoutAttendanceRosterEntriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -48332,6 +48920,7 @@ export type CompanyUpdateWithoutAttendanceRosterEntriesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -48400,6 +48989,7 @@ export type CompanyUpdateWithoutAttendanceRosterEntriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -48493,6 +49083,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceRosterEntriesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -48560,6 +49151,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceRosterEntriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -48652,6 +49244,7 @@ export type CompanyCreateWithoutAttendanceRosterEntryPeriodsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -48720,6 +49313,7 @@ export type CompanyCreateWithoutAttendanceRosterEntryPeriodsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -48813,6 +49407,7 @@ export type CompanyUncheckedCreateWithoutAttendanceRosterEntryPeriodsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -48880,6 +49475,7 @@ export type CompanyUncheckedCreateWithoutAttendanceRosterEntryPeriodsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -48988,6 +49584,7 @@ export type CompanyUpdateWithoutAttendanceRosterEntryPeriodsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -49056,6 +49653,7 @@ export type CompanyUpdateWithoutAttendanceRosterEntryPeriodsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -49149,6 +49747,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceRosterEntryPeriodsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -49216,6 +49815,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceRosterEntryPeriodsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -49308,6 +49908,7 @@ export type CompanyCreateWithoutAttendanceScheduleTemplatesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -49376,6 +49977,7 @@ export type CompanyCreateWithoutAttendanceScheduleTemplatesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -49469,6 +50071,7 @@ export type CompanyUncheckedCreateWithoutAttendanceScheduleTemplatesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -49536,6 +50139,7 @@ export type CompanyUncheckedCreateWithoutAttendanceScheduleTemplatesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -49644,6 +50248,7 @@ export type CompanyUpdateWithoutAttendanceScheduleTemplatesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -49712,6 +50317,7 @@ export type CompanyUpdateWithoutAttendanceScheduleTemplatesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -49805,6 +50411,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceScheduleTemplatesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -49872,6 +50479,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceScheduleTemplatesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -49964,6 +50572,7 @@ export type CompanyCreateWithoutAttendanceScheduleTemplateVersionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -50032,6 +50641,7 @@ export type CompanyCreateWithoutAttendanceScheduleTemplateVersionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -50125,6 +50735,7 @@ export type CompanyUncheckedCreateWithoutAttendanceScheduleTemplateVersionsInput
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -50192,6 +50803,7 @@ export type CompanyUncheckedCreateWithoutAttendanceScheduleTemplateVersionsInput
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -50300,6 +50912,7 @@ export type CompanyUpdateWithoutAttendanceScheduleTemplateVersionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -50368,6 +50981,7 @@ export type CompanyUpdateWithoutAttendanceScheduleTemplateVersionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -50461,6 +51075,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceScheduleTemplateVersionsInput
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -50528,6 +51143,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceScheduleTemplateVersionsInput
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -50620,6 +51236,7 @@ export type CompanyCreateWithoutAttendanceSchedulePeriodsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -50688,6 +51305,7 @@ export type CompanyCreateWithoutAttendanceSchedulePeriodsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -50781,6 +51399,7 @@ export type CompanyUncheckedCreateWithoutAttendanceSchedulePeriodsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -50848,6 +51467,7 @@ export type CompanyUncheckedCreateWithoutAttendanceSchedulePeriodsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -50956,6 +51576,7 @@ export type CompanyUpdateWithoutAttendanceSchedulePeriodsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -51024,6 +51645,7 @@ export type CompanyUpdateWithoutAttendanceSchedulePeriodsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -51117,6 +51739,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceSchedulePeriodsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -51184,6 +51807,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceSchedulePeriodsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -51276,6 +51900,7 @@ export type CompanyCreateWithoutAttendanceEmployeeScheduleAssignmentsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -51344,6 +51969,7 @@ export type CompanyCreateWithoutAttendanceEmployeeScheduleAssignmentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -51437,6 +52063,7 @@ export type CompanyUncheckedCreateWithoutAttendanceEmployeeScheduleAssignmentsIn
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -51504,6 +52131,7 @@ export type CompanyUncheckedCreateWithoutAttendanceEmployeeScheduleAssignmentsIn
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -51612,6 +52240,7 @@ export type CompanyUpdateWithoutAttendanceEmployeeScheduleAssignmentsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -51680,6 +52309,7 @@ export type CompanyUpdateWithoutAttendanceEmployeeScheduleAssignmentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -51773,6 +52403,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceEmployeeScheduleAssignmentsIn
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -51840,6 +52471,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceEmployeeScheduleAssignmentsIn
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -51932,6 +52564,7 @@ export type CompanyCreateWithoutAttendanceEmployeeWeeklyAdjustmentsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -52000,6 +52633,7 @@ export type CompanyCreateWithoutAttendanceEmployeeWeeklyAdjustmentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -52093,6 +52727,7 @@ export type CompanyUncheckedCreateWithoutAttendanceEmployeeWeeklyAdjustmentsInpu
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -52160,6 +52795,7 @@ export type CompanyUncheckedCreateWithoutAttendanceEmployeeWeeklyAdjustmentsInpu
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -52268,6 +52904,7 @@ export type CompanyUpdateWithoutAttendanceEmployeeWeeklyAdjustmentsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -52336,6 +52973,7 @@ export type CompanyUpdateWithoutAttendanceEmployeeWeeklyAdjustmentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -52429,6 +53067,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceEmployeeWeeklyAdjustmentsInpu
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -52496,6 +53135,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceEmployeeWeeklyAdjustmentsInpu
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -52588,6 +53228,7 @@ export type CompanyCreateWithoutAttendanceEmployeeWeeklyAdjustmentPeriodsInput =
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -52656,6 +53297,7 @@ export type CompanyCreateWithoutAttendanceEmployeeWeeklyAdjustmentPeriodsInput =
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -52749,6 +53391,7 @@ export type CompanyUncheckedCreateWithoutAttendanceEmployeeWeeklyAdjustmentPerio
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -52816,6 +53459,7 @@ export type CompanyUncheckedCreateWithoutAttendanceEmployeeWeeklyAdjustmentPerio
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -52924,6 +53568,7 @@ export type CompanyUpdateWithoutAttendanceEmployeeWeeklyAdjustmentPeriodsInput =
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -52992,6 +53637,7 @@ export type CompanyUpdateWithoutAttendanceEmployeeWeeklyAdjustmentPeriodsInput =
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -53085,6 +53731,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceEmployeeWeeklyAdjustmentPerio
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -53152,6 +53799,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceEmployeeWeeklyAdjustmentPerio
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -53244,6 +53892,7 @@ export type CompanyCreateWithoutAttendanceScheduleExceptionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -53312,6 +53961,7 @@ export type CompanyCreateWithoutAttendanceScheduleExceptionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -53405,6 +54055,7 @@ export type CompanyUncheckedCreateWithoutAttendanceScheduleExceptionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -53472,6 +54123,7 @@ export type CompanyUncheckedCreateWithoutAttendanceScheduleExceptionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -53580,6 +54232,7 @@ export type CompanyUpdateWithoutAttendanceScheduleExceptionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -53648,6 +54301,7 @@ export type CompanyUpdateWithoutAttendanceScheduleExceptionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -53741,6 +54395,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceScheduleExceptionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -53808,6 +54463,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceScheduleExceptionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -53900,6 +54556,7 @@ export type CompanyCreateWithoutAttendanceScheduleExceptionPeriodsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -53968,6 +54625,7 @@ export type CompanyCreateWithoutAttendanceScheduleExceptionPeriodsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -54061,6 +54719,7 @@ export type CompanyUncheckedCreateWithoutAttendanceScheduleExceptionPeriodsInput
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -54128,6 +54787,7 @@ export type CompanyUncheckedCreateWithoutAttendanceScheduleExceptionPeriodsInput
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -54236,6 +54896,7 @@ export type CompanyUpdateWithoutAttendanceScheduleExceptionPeriodsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -54304,6 +54965,7 @@ export type CompanyUpdateWithoutAttendanceScheduleExceptionPeriodsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -54397,6 +55059,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceScheduleExceptionPeriodsInput
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -54464,6 +55127,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceScheduleExceptionPeriodsInput
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -54556,6 +55220,7 @@ export type CompanyCreateWithoutAttendanceEventsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -54624,6 +55289,7 @@ export type CompanyCreateWithoutAttendanceEventsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceWorkSessions?: Prisma.AttendanceWorkSessionCreateNestedManyWithoutCompanyInput
@@ -54717,6 +55383,7 @@ export type CompanyUncheckedCreateWithoutAttendanceEventsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -54784,6 +55451,7 @@ export type CompanyUncheckedCreateWithoutAttendanceEventsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceWorkSessions?: Prisma.AttendanceWorkSessionUncheckedCreateNestedManyWithoutCompanyInput
@@ -54892,6 +55560,7 @@ export type CompanyUpdateWithoutAttendanceEventsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -54960,6 +55629,7 @@ export type CompanyUpdateWithoutAttendanceEventsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceWorkSessions?: Prisma.AttendanceWorkSessionUpdateManyWithoutCompanyNestedInput
@@ -55053,6 +55723,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceEventsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -55120,6 +55791,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceEventsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceWorkSessions?: Prisma.AttendanceWorkSessionUncheckedUpdateManyWithoutCompanyNestedInput
@@ -55212,6 +55884,7 @@ export type CompanyCreateWithoutAttendanceWorkSessionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -55280,6 +55953,7 @@ export type CompanyCreateWithoutAttendanceWorkSessionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -55373,6 +56047,7 @@ export type CompanyUncheckedCreateWithoutAttendanceWorkSessionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -55440,6 +56115,7 @@ export type CompanyUncheckedCreateWithoutAttendanceWorkSessionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -55548,6 +56224,7 @@ export type CompanyUpdateWithoutAttendanceWorkSessionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -55616,6 +56293,7 @@ export type CompanyUpdateWithoutAttendanceWorkSessionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -55709,6 +56387,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceWorkSessionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -55776,6 +56455,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceWorkSessionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -55857,7 +56537,7 @@ export type CompanyUncheckedUpdateWithoutAttendanceWorkSessionsInput = {
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCompanyNestedInput
 }
 
-export type CompanyCreateWithoutHrEmployeePromotionsInput = {
+export type CompanyCreateWithoutHrEmployeeWorkTermsInput = {
   id?: string
   nameAr: string
   nameEn: string
@@ -55868,6 +56548,7 @@ export type CompanyCreateWithoutHrEmployeePromotionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -55923,6 +56604,7 @@ export type CompanyCreateWithoutHrEmployeePromotionsInput = {
   hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionCreateNestedManyWithoutCompanyInput
   hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileCreateNestedManyWithoutCompanyInput
   marketingSalesTargets?: Prisma.MarketingSalesTargetCreateNestedManyWithoutCompanyInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionCreateNestedManyWithoutCompanyInput
   hrCompensationPolicies?: Prisma.HrCompensationPolicyCreateNestedManyWithoutCompanyInput
   hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionCreateNestedManyWithoutCompanyInput
   hrEmployeeLeaves?: Prisma.HrEmployeeLeaveCreateNestedManyWithoutCompanyInput
@@ -56017,6 +56699,670 @@ export type CompanyCreateWithoutHrEmployeePromotionsInput = {
   nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCompanyInput
 }
 
+export type CompanyUncheckedCreateWithoutHrEmployeeWorkTermsInput = {
+  id?: string
+  tenantId: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: $Enums.CompanyStatus
+  migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUncheckedCreateNestedManyWithoutCompanyInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUncheckedCreateNestedManyWithoutCompanyInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedCreateNestedManyWithoutCompanyInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
+  reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedCreateNestedManyWithoutCompanyInput
+  marketingSalesTargets?: Prisma.MarketingSalesTargetUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUncheckedCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUncheckedCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollLines?: Prisma.HrPayrollLineUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceWorkSessions?: Prisma.AttendanceWorkSessionUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceScheduleTemplates?: Prisma.AttendanceScheduleTemplateUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceScheduleTemplateVersions?: Prisma.AttendanceScheduleTemplateVersionUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceSchedulePeriods?: Prisma.AttendanceSchedulePeriodUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeScheduleAssignments?: Prisma.AttendanceEmployeeScheduleAssignmentUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeWeeklyAdjustments?: Prisma.AttendanceEmployeeWeeklyAdjustmentUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeWeeklyAdjustmentPeriods?: Prisma.AttendanceEmployeeWeeklyAdjustmentPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceScheduleExceptions?: Prisma.AttendanceScheduleExceptionUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceScheduleExceptionPeriods?: Prisma.AttendanceScheduleExceptionPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceRosterPlans?: Prisma.AttendanceRosterPlanUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceRosterEntries?: Prisma.AttendanceRosterEntryUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceRosterEntryPeriods?: Prisma.AttendanceRosterEntryPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
+  aiInterpretations?: Prisma.AiInterpretationUncheckedCreateNestedManyWithoutCompanyInput
+  aiInterpretationRuns?: Prisma.AiInterpretationRunUncheckedCreateNestedManyWithoutCompanyInput
+  aiInterpretationPlacements?: Prisma.AiInterpretationPlacementUncheckedCreateNestedManyWithoutCompanyInput
+  aiHumanInsights?: Prisma.AiHumanInsightUncheckedCreateNestedManyWithoutCompanyInput
+  aiBudgetReservations?: Prisma.AiBudgetReservationUncheckedCreateNestedManyWithoutCompanyInput
+  aiUsageLedgerEntries?: Prisma.AiUsageLedgerUncheckedCreateNestedManyWithoutCompanyInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaignAnalysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUncheckedCreateNestedManyWithoutCompanyInput
+  marketingProviderConnections?: Prisma.MarketingProviderConnectionUncheckedCreateNestedManyWithoutCompanyInput
+  marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsCatalogCategories?: Prisma.OperationsCatalogCategoryUncheckedCreateNestedManyWithoutCompanyInput
+  operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
+  operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUncheckedCreateNestedManyWithoutCompanyInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUncheckedCreateNestedManyWithoutCompanyInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUncheckedCreateNestedOneWithoutCompanyInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUncheckedCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutCompanyInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutCompanyInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutCompanyInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutCompanyInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTargetCompanyInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTargetCompanyInput
+  nurixExcelStagingPackages?: Prisma.NurixExcelStagingPackageUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelMasterDataExecutions?: Prisma.NurixExcelMasterDataExecutionUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutHrEmployeeWorkTermsInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeeWorkTermsInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeeWorkTermsInput>
+}
+
+export type CompanyUpsertWithoutHrEmployeeWorkTermsInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutHrEmployeeWorkTermsInput, Prisma.CompanyUncheckedUpdateWithoutHrEmployeeWorkTermsInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutHrEmployeeWorkTermsInput, Prisma.CompanyUncheckedCreateWithoutHrEmployeeWorkTermsInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutHrEmployeeWorkTermsInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutHrEmployeeWorkTermsInput, Prisma.CompanyUncheckedUpdateWithoutHrEmployeeWorkTermsInput>
+}
+
+export type CompanyUpdateWithoutHrEmployeeWorkTermsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
+  memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUpdateManyWithoutCompanyNestedInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUpdateManyWithoutCompanyNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUpdateManyWithoutCompanyNestedInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
+  reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUpdateManyWithoutCompanyNestedInput
+  marketingSalesTargets?: Prisma.MarketingSalesTargetUpdateManyWithoutCompanyNestedInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUpdateManyWithoutCompanyNestedInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUpdateManyWithoutCompanyNestedInput
+  hrPayrollLines?: Prisma.HrPayrollLineUpdateManyWithoutCompanyNestedInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUpdateManyWithoutCompanyNestedInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUpdateManyWithoutCompanyNestedInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUpdateManyWithoutCompanyNestedInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
+  attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
+  attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
+  attendanceWorkSessions?: Prisma.AttendanceWorkSessionUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleTemplates?: Prisma.AttendanceScheduleTemplateUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleTemplateVersions?: Prisma.AttendanceScheduleTemplateVersionUpdateManyWithoutCompanyNestedInput
+  attendanceSchedulePeriods?: Prisma.AttendanceSchedulePeriodUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeScheduleAssignments?: Prisma.AttendanceEmployeeScheduleAssignmentUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeWeeklyAdjustments?: Prisma.AttendanceEmployeeWeeklyAdjustmentUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeWeeklyAdjustmentPeriods?: Prisma.AttendanceEmployeeWeeklyAdjustmentPeriodUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleExceptions?: Prisma.AttendanceScheduleExceptionUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleExceptionPeriods?: Prisma.AttendanceScheduleExceptionPeriodUpdateManyWithoutCompanyNestedInput
+  attendanceRosterPlans?: Prisma.AttendanceRosterPlanUpdateManyWithoutCompanyNestedInput
+  attendanceRosterEntries?: Prisma.AttendanceRosterEntryUpdateManyWithoutCompanyNestedInput
+  attendanceRosterEntryPeriods?: Prisma.AttendanceRosterEntryPeriodUpdateManyWithoutCompanyNestedInput
+  attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
+  aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCompanyNestedInput
+  aiInterpretations?: Prisma.AiInterpretationUpdateManyWithoutCompanyNestedInput
+  aiInterpretationRuns?: Prisma.AiInterpretationRunUpdateManyWithoutCompanyNestedInput
+  aiInterpretationPlacements?: Prisma.AiInterpretationPlacementUpdateManyWithoutCompanyNestedInput
+  aiHumanInsights?: Prisma.AiHumanInsightUpdateManyWithoutCompanyNestedInput
+  aiBudgetReservations?: Prisma.AiBudgetReservationUpdateManyWithoutCompanyNestedInput
+  aiUsageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutCompanyNestedInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
+  decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
+  decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
+  marketingCampaignAnalysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUpdateManyWithoutCompanyNestedInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUpdateManyWithoutCompanyNestedInput
+  marketingProviderConnections?: Prisma.MarketingProviderConnectionUpdateManyWithoutCompanyNestedInput
+  marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyUpdateOneWithoutCompanyNestedInput
+  operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
+  operationsCatalogCategories?: Prisma.OperationsCatalogCategoryUpdateManyWithoutCompanyNestedInput
+  operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
+  operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutCompanyNestedInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUpdateManyWithoutCompanyNestedInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUpdateManyWithoutCompanyNestedInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUpdateManyWithoutCompanyNestedInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutCompanyNestedInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUpdateOneWithoutCompanyNestedInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUpdateManyWithoutCompanyNestedInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUpdateManyWithoutCompanyNestedInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutCompanyNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutCompanyNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutCompanyNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutCompanyNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTargetCompanyNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTargetCompanyNestedInput
+  nurixExcelStagingPackages?: Prisma.NurixExcelStagingPackageUpdateManyWithoutCompanyNestedInput
+  nurixExcelMasterDataExecutions?: Prisma.NurixExcelMasterDataExecutionUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutHrEmployeeWorkTermsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedUpdateManyWithoutCompanyNestedInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
+  reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingSalesTargets?: Prisma.MarketingSalesTargetUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUncheckedUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollLines?: Prisma.HrPayrollLineUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceWorkSessions?: Prisma.AttendanceWorkSessionUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleTemplates?: Prisma.AttendanceScheduleTemplateUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleTemplateVersions?: Prisma.AttendanceScheduleTemplateVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceSchedulePeriods?: Prisma.AttendanceSchedulePeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeScheduleAssignments?: Prisma.AttendanceEmployeeScheduleAssignmentUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeWeeklyAdjustments?: Prisma.AttendanceEmployeeWeeklyAdjustmentUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeWeeklyAdjustmentPeriods?: Prisma.AttendanceEmployeeWeeklyAdjustmentPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleExceptions?: Prisma.AttendanceScheduleExceptionUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleExceptionPeriods?: Prisma.AttendanceScheduleExceptionPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceRosterPlans?: Prisma.AttendanceRosterPlanUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceRosterEntries?: Prisma.AttendanceRosterEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceRosterEntryPeriods?: Prisma.AttendanceRosterEntryPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
+  aiInterpretations?: Prisma.AiInterpretationUncheckedUpdateManyWithoutCompanyNestedInput
+  aiInterpretationRuns?: Prisma.AiInterpretationRunUncheckedUpdateManyWithoutCompanyNestedInput
+  aiInterpretationPlacements?: Prisma.AiInterpretationPlacementUncheckedUpdateManyWithoutCompanyNestedInput
+  aiHumanInsights?: Prisma.AiHumanInsightUncheckedUpdateManyWithoutCompanyNestedInput
+  aiBudgetReservations?: Prisma.AiBudgetReservationUncheckedUpdateManyWithoutCompanyNestedInput
+  aiUsageLedgerEntries?: Prisma.AiUsageLedgerUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaignAnalysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingProviderConnections?: Prisma.MarketingProviderConnectionUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsCatalogCategories?: Prisma.OperationsCatalogCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUncheckedUpdateOneWithoutCompanyNestedInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUncheckedUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutCompanyNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutCompanyNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutCompanyNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutCompanyNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTargetCompanyNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTargetCompanyNestedInput
+  nurixExcelStagingPackages?: Prisma.NurixExcelStagingPackageUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelMasterDataExecutions?: Prisma.NurixExcelMasterDataExecutionUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutHrEmployeePromotionsInput = {
+  id?: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: $Enums.CompanyStatus
+  migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
+  memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionCreateNestedManyWithoutCompanyInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineCreateNestedManyWithoutCompanyInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingCreateNestedManyWithoutCompanyInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
+  reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
+  vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionCreateNestedManyWithoutCompanyInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileCreateNestedManyWithoutCompanyInput
+  marketingSalesTargets?: Prisma.MarketingSalesTargetCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionCreateNestedManyWithoutCompanyInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveCreateNestedManyWithoutCompanyInput
+  hrPayrollRuns?: Prisma.HrPayrollRunCreateNestedManyWithoutCompanyInput
+  hrPayrollLines?: Prisma.HrPayrollLineCreateNestedManyWithoutCompanyInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationCreateNestedManyWithoutCompanyInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationCreateNestedManyWithoutCompanyInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentCreateNestedManyWithoutCompanyInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
+  attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
+  attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
+  attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
+  attendanceWorkSessions?: Prisma.AttendanceWorkSessionCreateNestedManyWithoutCompanyInput
+  attendanceScheduleTemplates?: Prisma.AttendanceScheduleTemplateCreateNestedManyWithoutCompanyInput
+  attendanceScheduleTemplateVersions?: Prisma.AttendanceScheduleTemplateVersionCreateNestedManyWithoutCompanyInput
+  attendanceSchedulePeriods?: Prisma.AttendanceSchedulePeriodCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeScheduleAssignments?: Prisma.AttendanceEmployeeScheduleAssignmentCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeWeeklyAdjustments?: Prisma.AttendanceEmployeeWeeklyAdjustmentCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeWeeklyAdjustmentPeriods?: Prisma.AttendanceEmployeeWeeklyAdjustmentPeriodCreateNestedManyWithoutCompanyInput
+  attendanceScheduleExceptions?: Prisma.AttendanceScheduleExceptionCreateNestedManyWithoutCompanyInput
+  attendanceScheduleExceptionPeriods?: Prisma.AttendanceScheduleExceptionPeriodCreateNestedManyWithoutCompanyInput
+  attendanceRosterPlans?: Prisma.AttendanceRosterPlanCreateNestedManyWithoutCompanyInput
+  attendanceRosterEntries?: Prisma.AttendanceRosterEntryCreateNestedManyWithoutCompanyInput
+  attendanceRosterEntryPeriods?: Prisma.AttendanceRosterEntryPeriodCreateNestedManyWithoutCompanyInput
+  attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
+  aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCompanyInput
+  aiInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutCompanyInput
+  aiInterpretationRuns?: Prisma.AiInterpretationRunCreateNestedManyWithoutCompanyInput
+  aiInterpretationPlacements?: Prisma.AiInterpretationPlacementCreateNestedManyWithoutCompanyInput
+  aiHumanInsights?: Prisma.AiHumanInsightCreateNestedManyWithoutCompanyInput
+  aiBudgetReservations?: Prisma.AiBudgetReservationCreateNestedManyWithoutCompanyInput
+  aiUsageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutCompanyInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
+  decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
+  decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
+  marketingCampaignAnalysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkCreateNestedManyWithoutCompanyInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkCreateNestedManyWithoutCompanyInput
+  marketingProviderConnections?: Prisma.MarketingProviderConnectionCreateNestedManyWithoutCompanyInput
+  marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyCreateNestedOneWithoutCompanyInput
+  operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
+  operationsCatalogCategories?: Prisma.OperationsCatalogCategoryCreateNestedManyWithoutCompanyInput
+  operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
+  operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
+  operationsItemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutCompanyInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionCreateNestedManyWithoutCompanyInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeCreateNestedManyWithoutCompanyInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionCreateNestedManyWithoutCompanyInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutCompanyInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileCreateNestedOneWithoutCompanyInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventCreateNestedManyWithoutCompanyInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceCreateNestedManyWithoutCompanyInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutCompanyInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutCompanyInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutCompanyInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutCompanyInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTargetCompanyInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTargetCompanyInput
+  nurixExcelStagingPackages?: Prisma.NurixExcelStagingPackageCreateNestedManyWithoutCompanyInput
+  nurixExcelMasterDataExecutions?: Prisma.NurixExcelMasterDataExecutionCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCompanyInput
+}
+
 export type CompanyUncheckedCreateWithoutHrEmployeePromotionsInput = {
   id?: string
   tenantId: string
@@ -56029,6 +57375,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeePromotionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -56095,6 +57442,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeePromotionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -56204,6 +57552,7 @@ export type CompanyUpdateWithoutHrEmployeePromotionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -56271,6 +57620,7 @@ export type CompanyUpdateWithoutHrEmployeePromotionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -56365,6 +57715,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeePromotionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -56431,6 +57782,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeePromotionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -56524,6 +57876,7 @@ export type CompanyCreateWithoutHrEmployeeLeavesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -56591,6 +57944,7 @@ export type CompanyCreateWithoutHrEmployeeLeavesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -56685,6 +58039,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeLeavesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -56751,6 +58106,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeLeavesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -56860,6 +58216,7 @@ export type CompanyUpdateWithoutHrEmployeeLeavesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -56927,6 +58284,7 @@ export type CompanyUpdateWithoutHrEmployeeLeavesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -57021,6 +58379,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeLeavesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -57087,6 +58446,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeLeavesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -57180,6 +58540,7 @@ export type CompanyCreateWithoutHrEmployeeDocumentBlobsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -57247,6 +58608,7 @@ export type CompanyCreateWithoutHrEmployeeDocumentBlobsInput = {
   hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -57341,6 +58703,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeDocumentBlobsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -57407,6 +58770,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeDocumentBlobsInput = {
   hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -57516,6 +58880,7 @@ export type CompanyUpdateWithoutHrEmployeeDocumentBlobsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -57583,6 +58948,7 @@ export type CompanyUpdateWithoutHrEmployeeDocumentBlobsInput = {
   hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -57677,6 +59043,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeDocumentBlobsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -57743,6 +59110,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeDocumentBlobsInput = {
   hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -57836,6 +59204,7 @@ export type CompanyCreateWithoutHrEmployeeDocumentsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -57903,6 +59272,7 @@ export type CompanyCreateWithoutHrEmployeeDocumentsInput = {
   hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutCompanyInput
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -57997,6 +59367,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeDocumentsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -58063,6 +59434,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeDocumentsInput = {
   hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -58172,6 +59544,7 @@ export type CompanyUpdateWithoutHrEmployeeDocumentsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -58239,6 +59612,7 @@ export type CompanyUpdateWithoutHrEmployeeDocumentsInput = {
   hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -58333,6 +59707,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeDocumentsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -58399,6 +59774,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeDocumentsInput = {
   hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -58492,6 +59868,7 @@ export type CompanyCreateWithoutHrEmployeeLettersInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -58559,6 +59936,7 @@ export type CompanyCreateWithoutHrEmployeeLettersInput = {
   hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutCompanyInput
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -58653,6 +60031,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeLettersInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -58719,6 +60098,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeLettersInput = {
   hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -58828,6 +60208,7 @@ export type CompanyUpdateWithoutHrEmployeeLettersInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -58895,6 +60276,7 @@ export type CompanyUpdateWithoutHrEmployeeLettersInput = {
   hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -58989,6 +60371,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeLettersInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -59055,6 +60438,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeLettersInput = {
   hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -59148,6 +60532,7 @@ export type CompanyCreateWithoutHrEmployeeServicesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -59215,6 +60600,7 @@ export type CompanyCreateWithoutHrEmployeeServicesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -59309,6 +60695,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeServicesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -59375,6 +60762,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeServicesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -59484,6 +60872,7 @@ export type CompanyUpdateWithoutHrEmployeeServicesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -59551,6 +60940,7 @@ export type CompanyUpdateWithoutHrEmployeeServicesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -59645,6 +61035,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeServicesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -59711,6 +61102,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeServicesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -59804,6 +61196,7 @@ export type CompanyCreateWithoutHrEmployeeFinancialMovementsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -59871,6 +61264,7 @@ export type CompanyCreateWithoutHrEmployeeFinancialMovementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -59965,6 +61359,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeFinancialMovementsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -60031,6 +61426,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeFinancialMovementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -60140,6 +61536,7 @@ export type CompanyUpdateWithoutHrEmployeeFinancialMovementsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -60207,6 +61604,7 @@ export type CompanyUpdateWithoutHrEmployeeFinancialMovementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -60301,6 +61699,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeFinancialMovementsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -60367,6 +61766,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeFinancialMovementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -60460,6 +61860,7 @@ export type CompanyCreateWithoutHrFinalSettlementsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -60528,6 +61929,7 @@ export type CompanyCreateWithoutHrFinalSettlementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -60621,6 +62023,7 @@ export type CompanyUncheckedCreateWithoutHrFinalSettlementsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -60688,6 +62091,7 @@ export type CompanyUncheckedCreateWithoutHrFinalSettlementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -60796,6 +62200,7 @@ export type CompanyUpdateWithoutHrFinalSettlementsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -60864,6 +62269,7 @@ export type CompanyUpdateWithoutHrFinalSettlementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -60957,6 +62363,7 @@ export type CompanyUncheckedUpdateWithoutHrFinalSettlementsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -61024,6 +62431,7 @@ export type CompanyUncheckedUpdateWithoutHrFinalSettlementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -61116,6 +62524,7 @@ export type CompanyCreateWithoutHrEmployeeAdvancesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -61183,6 +62592,7 @@ export type CompanyCreateWithoutHrEmployeeAdvancesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -61277,6 +62687,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvancesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -61343,6 +62754,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvancesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -61452,6 +62864,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvancesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -61519,6 +62932,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvancesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -61613,6 +63027,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvancesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -61679,6 +63094,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvancesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -61772,6 +63188,7 @@ export type CompanyCreateWithoutHrEmployeeAdvanceAllocationsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -61839,6 +63256,7 @@ export type CompanyCreateWithoutHrEmployeeAdvanceAllocationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -61933,6 +63351,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceAllocationsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -61999,6 +63418,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceAllocationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -62108,6 +63528,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceAllocationsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -62175,6 +63596,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceAllocationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -62269,6 +63691,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceAllocationsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -62335,6 +63758,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceAllocationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -62428,6 +63852,7 @@ export type CompanyCreateWithoutHrEmployeeAdvanceSettlementsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -62495,6 +63920,7 @@ export type CompanyCreateWithoutHrEmployeeAdvanceSettlementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -62589,6 +64015,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceSettlementsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -62655,6 +64082,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceSettlementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -62764,6 +64192,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceSettlementsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -62831,6 +64260,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceSettlementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -62925,6 +64355,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceSettlementsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -62991,6 +64422,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceSettlementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -63084,6 +64516,7 @@ export type CompanyCreateWithoutHrEmployeeAdvanceDeferralsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -63151,6 +64584,7 @@ export type CompanyCreateWithoutHrEmployeeAdvanceDeferralsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -63245,6 +64679,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceDeferralsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -63311,6 +64746,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceDeferralsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -63420,6 +64856,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceDeferralsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -63487,6 +64924,7 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceDeferralsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -63581,6 +65019,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceDeferralsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -63647,6 +65086,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceDeferralsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -63740,6 +65180,7 @@ export type CompanyCreateWithoutHrEmployeeAdministrativeDeductionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -63807,6 +65248,7 @@ export type CompanyCreateWithoutHrEmployeeAdministrativeDeductionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -63901,6 +65343,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdministrativeDeductionsInput
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -63967,6 +65410,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdministrativeDeductionsInput
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -64076,6 +65520,7 @@ export type CompanyUpdateWithoutHrEmployeeAdministrativeDeductionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -64143,6 +65588,7 @@ export type CompanyUpdateWithoutHrEmployeeAdministrativeDeductionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -64237,6 +65683,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdministrativeDeductionsInput
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -64303,6 +65750,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdministrativeDeductionsInput
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -64396,6 +65844,7 @@ export type CompanyCreateWithoutHrEmployeeAdministrativeDeductionActionsInput = 
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -64463,6 +65912,7 @@ export type CompanyCreateWithoutHrEmployeeAdministrativeDeductionActionsInput = 
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -64557,6 +66007,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdministrativeDeductionAction
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -64623,6 +66074,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdministrativeDeductionAction
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -64732,6 +66184,7 @@ export type CompanyUpdateWithoutHrEmployeeAdministrativeDeductionActionsInput = 
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -64799,6 +66252,7 @@ export type CompanyUpdateWithoutHrEmployeeAdministrativeDeductionActionsInput = 
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -64893,6 +66347,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdministrativeDeductionAction
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -64959,6 +66414,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdministrativeDeductionAction
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -65052,6 +66508,7 @@ export type CompanyCreateWithoutHrEmployeeCompensationProfilesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -65119,6 +66576,7 @@ export type CompanyCreateWithoutHrEmployeeCompensationProfilesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -65213,6 +66671,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeCompensationProfilesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -65279,6 +66738,7 @@ export type CompanyUncheckedCreateWithoutHrEmployeeCompensationProfilesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -65388,6 +66848,7 @@ export type CompanyUpdateWithoutHrEmployeeCompensationProfilesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -65455,6 +66916,7 @@ export type CompanyUpdateWithoutHrEmployeeCompensationProfilesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -65549,6 +67011,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeCompensationProfilesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -65615,6 +67078,7 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeCompensationProfilesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -65708,6 +67172,7 @@ export type CompanyCreateWithoutHrCompensationPoliciesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -65775,6 +67240,7 @@ export type CompanyCreateWithoutHrCompensationPoliciesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -65869,6 +67335,7 @@ export type CompanyUncheckedCreateWithoutHrCompensationPoliciesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -65935,6 +67402,7 @@ export type CompanyUncheckedCreateWithoutHrCompensationPoliciesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -66044,6 +67512,7 @@ export type CompanyUpdateWithoutHrCompensationPoliciesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -66111,6 +67580,7 @@ export type CompanyUpdateWithoutHrCompensationPoliciesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -66205,6 +67675,7 @@ export type CompanyUncheckedUpdateWithoutHrCompensationPoliciesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -66271,6 +67742,7 @@ export type CompanyUncheckedUpdateWithoutHrCompensationPoliciesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -66364,6 +67836,7 @@ export type CompanyCreateWithoutHrCompensationPolicyVersionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -66431,6 +67904,7 @@ export type CompanyCreateWithoutHrCompensationPolicyVersionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -66525,6 +67999,7 @@ export type CompanyUncheckedCreateWithoutHrCompensationPolicyVersionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -66591,6 +68066,7 @@ export type CompanyUncheckedCreateWithoutHrCompensationPolicyVersionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -66700,6 +68176,7 @@ export type CompanyUpdateWithoutHrCompensationPolicyVersionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -66767,6 +68244,7 @@ export type CompanyUpdateWithoutHrCompensationPolicyVersionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -66861,6 +68339,7 @@ export type CompanyUncheckedUpdateWithoutHrCompensationPolicyVersionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -66927,6 +68406,7 @@ export type CompanyUncheckedUpdateWithoutHrCompensationPolicyVersionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -67020,6 +68500,7 @@ export type CompanyCreateWithoutHrPayrollRunsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -67087,6 +68568,7 @@ export type CompanyCreateWithoutHrPayrollRunsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -67181,6 +68663,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollRunsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -67247,6 +68730,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollRunsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -67356,6 +68840,7 @@ export type CompanyUpdateWithoutHrPayrollRunsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -67423,6 +68908,7 @@ export type CompanyUpdateWithoutHrPayrollRunsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -67517,6 +69003,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollRunsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -67583,6 +69070,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollRunsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -67676,6 +69164,7 @@ export type CompanyCreateWithoutHrPayrollLinesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -67743,6 +69232,7 @@ export type CompanyCreateWithoutHrPayrollLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -67837,6 +69327,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollLinesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -67903,6 +69394,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -68012,6 +69504,7 @@ export type CompanyUpdateWithoutHrPayrollLinesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -68079,6 +69572,7 @@ export type CompanyUpdateWithoutHrPayrollLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -68173,6 +69667,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollLinesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -68239,6 +69734,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -68332,6 +69828,7 @@ export type CompanyCreateWithoutHrPayrollAdvanceApplicationsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -68399,6 +69896,7 @@ export type CompanyCreateWithoutHrPayrollAdvanceApplicationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -68493,6 +69991,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollAdvanceApplicationsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -68559,6 +70058,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollAdvanceApplicationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -68668,6 +70168,7 @@ export type CompanyUpdateWithoutHrPayrollAdvanceApplicationsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -68735,6 +70236,7 @@ export type CompanyUpdateWithoutHrPayrollAdvanceApplicationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -68829,6 +70331,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollAdvanceApplicationsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -68895,6 +70398,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollAdvanceApplicationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -68988,6 +70492,7 @@ export type CompanyCreateWithoutHrPayrollDeductionApplicationsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -69055,6 +70560,7 @@ export type CompanyCreateWithoutHrPayrollDeductionApplicationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -69149,6 +70655,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollDeductionApplicationsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -69215,6 +70722,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollDeductionApplicationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -69324,6 +70832,7 @@ export type CompanyUpdateWithoutHrPayrollDeductionApplicationsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -69391,6 +70900,7 @@ export type CompanyUpdateWithoutHrPayrollDeductionApplicationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -69485,6 +70995,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollDeductionApplicationsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -69551,6 +71062,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollDeductionApplicationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -69644,6 +71156,7 @@ export type CompanyCreateWithoutHrPayrollPaymentsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -69711,6 +71224,7 @@ export type CompanyCreateWithoutHrPayrollPaymentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -69805,6 +71319,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollPaymentsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -69871,6 +71386,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollPaymentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -69980,6 +71496,7 @@ export type CompanyUpdateWithoutHrPayrollPaymentsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -70047,6 +71564,7 @@ export type CompanyUpdateWithoutHrPayrollPaymentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -70141,6 +71659,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollPaymentsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -70207,6 +71726,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollPaymentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -70300,6 +71820,7 @@ export type CompanyCreateWithoutHrPayrollPaymentAllocationsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -70367,6 +71888,7 @@ export type CompanyCreateWithoutHrPayrollPaymentAllocationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -70461,6 +71983,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollPaymentAllocationsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -70527,6 +72050,7 @@ export type CompanyUncheckedCreateWithoutHrPayrollPaymentAllocationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -70636,6 +72160,7 @@ export type CompanyUpdateWithoutHrPayrollPaymentAllocationsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -70703,6 +72228,7 @@ export type CompanyUpdateWithoutHrPayrollPaymentAllocationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -70797,6 +72323,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollPaymentAllocationsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -70863,6 +72390,7 @@ export type CompanyUncheckedUpdateWithoutHrPayrollPaymentAllocationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -70956,6 +72484,7 @@ export type CompanyCreateWithoutFinanceJournalLinesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -71023,6 +72552,7 @@ export type CompanyCreateWithoutFinanceJournalLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -71117,6 +72647,7 @@ export type CompanyUncheckedCreateWithoutFinanceJournalLinesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -71183,6 +72714,7 @@ export type CompanyUncheckedCreateWithoutFinanceJournalLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -71292,6 +72824,7 @@ export type CompanyUpdateWithoutFinanceJournalLinesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -71359,6 +72892,7 @@ export type CompanyUpdateWithoutFinanceJournalLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -71453,6 +72987,7 @@ export type CompanyUncheckedUpdateWithoutFinanceJournalLinesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -71519,6 +73054,7 @@ export type CompanyUncheckedUpdateWithoutFinanceJournalLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -71612,6 +73148,7 @@ export type CompanyCreateWithoutOperationalDaysInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -71679,6 +73216,7 @@ export type CompanyCreateWithoutOperationalDaysInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -71773,6 +73311,7 @@ export type CompanyUncheckedCreateWithoutOperationalDaysInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -71839,6 +73378,7 @@ export type CompanyUncheckedCreateWithoutOperationalDaysInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -71948,6 +73488,7 @@ export type CompanyUpdateWithoutOperationalDaysInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -72015,6 +73556,7 @@ export type CompanyUpdateWithoutOperationalDaysInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -72109,6 +73651,7 @@ export type CompanyUncheckedUpdateWithoutOperationalDaysInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -72175,6 +73718,7 @@ export type CompanyUncheckedUpdateWithoutOperationalDaysInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -72268,6 +73812,7 @@ export type CompanyCreateWithoutDailySalesClosingsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -72335,6 +73880,7 @@ export type CompanyCreateWithoutDailySalesClosingsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -72429,6 +73975,7 @@ export type CompanyUncheckedCreateWithoutDailySalesClosingsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -72495,6 +74042,7 @@ export type CompanyUncheckedCreateWithoutDailySalesClosingsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -72604,6 +74152,7 @@ export type CompanyUpdateWithoutDailySalesClosingsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -72671,6 +74220,7 @@ export type CompanyUpdateWithoutDailySalesClosingsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -72765,6 +74315,7 @@ export type CompanyUncheckedUpdateWithoutDailySalesClosingsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -72831,6 +74382,7 @@ export type CompanyUncheckedUpdateWithoutDailySalesClosingsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -72924,6 +74476,7 @@ export type CompanyCreateWithoutDailySalesAllocationsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -72991,6 +74544,7 @@ export type CompanyCreateWithoutDailySalesAllocationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -73085,6 +74639,7 @@ export type CompanyUncheckedCreateWithoutDailySalesAllocationsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -73151,6 +74706,7 @@ export type CompanyUncheckedCreateWithoutDailySalesAllocationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -73260,6 +74816,7 @@ export type CompanyUpdateWithoutDailySalesAllocationsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -73327,6 +74884,7 @@ export type CompanyUpdateWithoutDailySalesAllocationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -73421,6 +74979,7 @@ export type CompanyUncheckedUpdateWithoutDailySalesAllocationsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -73487,6 +75046,7 @@ export type CompanyUncheckedUpdateWithoutDailySalesAllocationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -73580,6 +75140,7 @@ export type CompanyCreateWithoutDailyFinancialSummariesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -73647,6 +75208,7 @@ export type CompanyCreateWithoutDailyFinancialSummariesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -73741,6 +75303,7 @@ export type CompanyUncheckedCreateWithoutDailyFinancialSummariesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -73807,6 +75370,7 @@ export type CompanyUncheckedCreateWithoutDailyFinancialSummariesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -73916,6 +75480,7 @@ export type CompanyUpdateWithoutDailyFinancialSummariesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -73983,6 +75548,7 @@ export type CompanyUpdateWithoutDailyFinancialSummariesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -74077,6 +75643,7 @@ export type CompanyUncheckedUpdateWithoutDailyFinancialSummariesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -74143,6 +75710,7 @@ export type CompanyUncheckedUpdateWithoutDailyFinancialSummariesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -74236,6 +75804,7 @@ export type CompanyCreateWithoutDailySalesChannelSummariesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -74303,6 +75872,7 @@ export type CompanyCreateWithoutDailySalesChannelSummariesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -74397,6 +75967,7 @@ export type CompanyUncheckedCreateWithoutDailySalesChannelSummariesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -74463,6 +76034,7 @@ export type CompanyUncheckedCreateWithoutDailySalesChannelSummariesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -74572,6 +76144,7 @@ export type CompanyUpdateWithoutDailySalesChannelSummariesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -74639,6 +76212,7 @@ export type CompanyUpdateWithoutDailySalesChannelSummariesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -74733,6 +76307,7 @@ export type CompanyUncheckedUpdateWithoutDailySalesChannelSummariesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -74799,6 +76374,7 @@ export type CompanyUncheckedUpdateWithoutDailySalesChannelSummariesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -74892,6 +76468,7 @@ export type CompanyCreateWithoutRecurringExpenseProfilesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -74959,6 +76536,7 @@ export type CompanyCreateWithoutRecurringExpenseProfilesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -75053,6 +76631,7 @@ export type CompanyUncheckedCreateWithoutRecurringExpenseProfilesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -75119,6 +76698,7 @@ export type CompanyUncheckedCreateWithoutRecurringExpenseProfilesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -75228,6 +76808,7 @@ export type CompanyUpdateWithoutRecurringExpenseProfilesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -75295,6 +76876,7 @@ export type CompanyUpdateWithoutRecurringExpenseProfilesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -75389,6 +76971,7 @@ export type CompanyUncheckedUpdateWithoutRecurringExpenseProfilesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -75455,6 +77038,7 @@ export type CompanyUncheckedUpdateWithoutRecurringExpenseProfilesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -75548,6 +77132,7 @@ export type CompanyCreateWithoutRecurringExpenseCoveragesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -75615,6 +77200,7 @@ export type CompanyCreateWithoutRecurringExpenseCoveragesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -75709,6 +77295,7 @@ export type CompanyUncheckedCreateWithoutRecurringExpenseCoveragesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -75775,6 +77362,7 @@ export type CompanyUncheckedCreateWithoutRecurringExpenseCoveragesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -75884,6 +77472,7 @@ export type CompanyUpdateWithoutRecurringExpenseCoveragesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -75951,6 +77540,7 @@ export type CompanyUpdateWithoutRecurringExpenseCoveragesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -76045,6 +77635,7 @@ export type CompanyUncheckedUpdateWithoutRecurringExpenseCoveragesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -76111,6 +77702,7 @@ export type CompanyUncheckedUpdateWithoutRecurringExpenseCoveragesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -76204,6 +77796,7 @@ export type CompanyCreateWithoutInclusiveLoansInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -76271,6 +77864,7 @@ export type CompanyCreateWithoutInclusiveLoansInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -76365,6 +77959,7 @@ export type CompanyUncheckedCreateWithoutInclusiveLoansInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -76431,6 +78026,7 @@ export type CompanyUncheckedCreateWithoutInclusiveLoansInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -76540,6 +78136,7 @@ export type CompanyUpdateWithoutInclusiveLoansInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -76607,6 +78204,7 @@ export type CompanyUpdateWithoutInclusiveLoansInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -76701,6 +78299,7 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoansInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -76767,6 +78366,7 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoansInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -76860,6 +78460,7 @@ export type CompanyCreateWithoutInclusiveLoanPaymentsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -76927,6 +78528,7 @@ export type CompanyCreateWithoutInclusiveLoanPaymentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -77021,6 +78623,7 @@ export type CompanyUncheckedCreateWithoutInclusiveLoanPaymentsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -77087,6 +78690,7 @@ export type CompanyUncheckedCreateWithoutInclusiveLoanPaymentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -77196,6 +78800,7 @@ export type CompanyUpdateWithoutInclusiveLoanPaymentsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -77263,6 +78868,7 @@ export type CompanyUpdateWithoutInclusiveLoanPaymentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -77357,6 +78963,7 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoanPaymentsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -77423,6 +79030,7 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoanPaymentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -77516,6 +79124,7 @@ export type CompanyCreateWithoutInclusiveLoanInstallmentsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -77583,6 +79192,7 @@ export type CompanyCreateWithoutInclusiveLoanInstallmentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -77677,6 +79287,7 @@ export type CompanyUncheckedCreateWithoutInclusiveLoanInstallmentsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -77743,6 +79354,7 @@ export type CompanyUncheckedCreateWithoutInclusiveLoanInstallmentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -77852,6 +79464,7 @@ export type CompanyUpdateWithoutInclusiveLoanInstallmentsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -77919,6 +79532,7 @@ export type CompanyUpdateWithoutInclusiveLoanInstallmentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -78013,6 +79627,7 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoanInstallmentsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -78079,6 +79694,7 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoanInstallmentsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -78172,6 +79788,7 @@ export type CompanyCreateWithoutAiCompanyIdentitiesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -78240,6 +79857,7 @@ export type CompanyCreateWithoutAiCompanyIdentitiesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -78333,6 +79951,7 @@ export type CompanyUncheckedCreateWithoutAiCompanyIdentitiesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -78400,6 +80019,7 @@ export type CompanyUncheckedCreateWithoutAiCompanyIdentitiesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -78508,6 +80128,7 @@ export type CompanyUpdateWithoutAiCompanyIdentitiesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -78576,6 +80197,7 @@ export type CompanyUpdateWithoutAiCompanyIdentitiesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -78669,6 +80291,7 @@ export type CompanyUncheckedUpdateWithoutAiCompanyIdentitiesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -78736,6 +80359,7 @@ export type CompanyUncheckedUpdateWithoutAiCompanyIdentitiesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -78828,6 +80452,7 @@ export type CompanyCreateWithoutAiCompanyContextsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -78896,6 +80521,7 @@ export type CompanyCreateWithoutAiCompanyContextsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -78989,6 +80615,7 @@ export type CompanyUncheckedCreateWithoutAiCompanyContextsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -79056,6 +80683,7 @@ export type CompanyUncheckedCreateWithoutAiCompanyContextsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -79164,6 +80792,7 @@ export type CompanyUpdateWithoutAiCompanyContextsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -79232,6 +80861,7 @@ export type CompanyUpdateWithoutAiCompanyContextsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -79325,6 +80955,7 @@ export type CompanyUncheckedUpdateWithoutAiCompanyContextsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -79392,6 +81023,7 @@ export type CompanyUncheckedUpdateWithoutAiCompanyContextsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -79484,6 +81116,7 @@ export type CompanyCreateWithoutAiSkillActivationsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -79552,6 +81185,7 @@ export type CompanyCreateWithoutAiSkillActivationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -79645,6 +81279,7 @@ export type CompanyUncheckedCreateWithoutAiSkillActivationsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -79712,6 +81347,7 @@ export type CompanyUncheckedCreateWithoutAiSkillActivationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -79820,6 +81456,7 @@ export type CompanyUpdateWithoutAiSkillActivationsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -79888,6 +81525,7 @@ export type CompanyUpdateWithoutAiSkillActivationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -79981,6 +81619,7 @@ export type CompanyUncheckedUpdateWithoutAiSkillActivationsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -80048,6 +81687,7 @@ export type CompanyUncheckedUpdateWithoutAiSkillActivationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -80140,6 +81780,7 @@ export type CompanyCreateWithoutAiExecutionReceiptsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -80208,6 +81849,7 @@ export type CompanyCreateWithoutAiExecutionReceiptsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -80301,6 +81943,7 @@ export type CompanyUncheckedCreateWithoutAiExecutionReceiptsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -80368,6 +82011,7 @@ export type CompanyUncheckedCreateWithoutAiExecutionReceiptsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -80476,6 +82120,7 @@ export type CompanyUpdateWithoutAiExecutionReceiptsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -80544,6 +82189,7 @@ export type CompanyUpdateWithoutAiExecutionReceiptsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -80637,6 +82283,7 @@ export type CompanyUncheckedUpdateWithoutAiExecutionReceiptsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -80704,6 +82351,7 @@ export type CompanyUncheckedUpdateWithoutAiExecutionReceiptsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -80796,6 +82444,7 @@ export type CompanyCreateWithoutAiInterpretationsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -80864,6 +82513,7 @@ export type CompanyCreateWithoutAiInterpretationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -80957,6 +82607,7 @@ export type CompanyUncheckedCreateWithoutAiInterpretationsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -81024,6 +82675,7 @@ export type CompanyUncheckedCreateWithoutAiInterpretationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -81132,6 +82784,7 @@ export type CompanyUpdateWithoutAiInterpretationsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -81200,6 +82853,7 @@ export type CompanyUpdateWithoutAiInterpretationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -81293,6 +82947,7 @@ export type CompanyUncheckedUpdateWithoutAiInterpretationsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -81360,6 +83015,7 @@ export type CompanyUncheckedUpdateWithoutAiInterpretationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -81452,6 +83108,7 @@ export type CompanyCreateWithoutAiInterpretationRunsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -81520,6 +83177,7 @@ export type CompanyCreateWithoutAiInterpretationRunsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -81613,6 +83271,7 @@ export type CompanyUncheckedCreateWithoutAiInterpretationRunsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -81680,6 +83339,7 @@ export type CompanyUncheckedCreateWithoutAiInterpretationRunsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -81788,6 +83448,7 @@ export type CompanyUpdateWithoutAiInterpretationRunsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -81856,6 +83517,7 @@ export type CompanyUpdateWithoutAiInterpretationRunsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -81949,6 +83611,7 @@ export type CompanyUncheckedUpdateWithoutAiInterpretationRunsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -82016,6 +83679,7 @@ export type CompanyUncheckedUpdateWithoutAiInterpretationRunsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -82108,6 +83772,7 @@ export type CompanyCreateWithoutAiBudgetReservationsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -82176,6 +83841,7 @@ export type CompanyCreateWithoutAiBudgetReservationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -82269,6 +83935,7 @@ export type CompanyUncheckedCreateWithoutAiBudgetReservationsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -82336,6 +84003,7 @@ export type CompanyUncheckedCreateWithoutAiBudgetReservationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -82444,6 +84112,7 @@ export type CompanyUpdateWithoutAiBudgetReservationsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -82512,6 +84181,7 @@ export type CompanyUpdateWithoutAiBudgetReservationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -82605,6 +84275,7 @@ export type CompanyUncheckedUpdateWithoutAiBudgetReservationsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -82672,6 +84343,7 @@ export type CompanyUncheckedUpdateWithoutAiBudgetReservationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -82764,6 +84436,7 @@ export type CompanyCreateWithoutAiUsageLedgerEntriesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -82832,6 +84505,7 @@ export type CompanyCreateWithoutAiUsageLedgerEntriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -82925,6 +84599,7 @@ export type CompanyUncheckedCreateWithoutAiUsageLedgerEntriesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -82992,6 +84667,7 @@ export type CompanyUncheckedCreateWithoutAiUsageLedgerEntriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -83100,6 +84776,7 @@ export type CompanyUpdateWithoutAiUsageLedgerEntriesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -83168,6 +84845,7 @@ export type CompanyUpdateWithoutAiUsageLedgerEntriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -83261,6 +84939,7 @@ export type CompanyUncheckedUpdateWithoutAiUsageLedgerEntriesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -83328,6 +85007,7 @@ export type CompanyUncheckedUpdateWithoutAiUsageLedgerEntriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -83420,6 +85100,7 @@ export type CompanyCreateWithoutAiInterpretationPlacementsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -83488,6 +85169,7 @@ export type CompanyCreateWithoutAiInterpretationPlacementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -83581,6 +85263,7 @@ export type CompanyUncheckedCreateWithoutAiInterpretationPlacementsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -83648,6 +85331,7 @@ export type CompanyUncheckedCreateWithoutAiInterpretationPlacementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -83756,6 +85440,7 @@ export type CompanyUpdateWithoutAiInterpretationPlacementsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -83824,6 +85509,7 @@ export type CompanyUpdateWithoutAiInterpretationPlacementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -83917,6 +85603,7 @@ export type CompanyUncheckedUpdateWithoutAiInterpretationPlacementsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -83984,6 +85671,7 @@ export type CompanyUncheckedUpdateWithoutAiInterpretationPlacementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -84076,6 +85764,7 @@ export type CompanyCreateWithoutAiHumanInsightsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -84144,6 +85833,7 @@ export type CompanyCreateWithoutAiHumanInsightsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -84237,6 +85927,7 @@ export type CompanyUncheckedCreateWithoutAiHumanInsightsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -84304,6 +85995,7 @@ export type CompanyUncheckedCreateWithoutAiHumanInsightsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -84412,6 +86104,7 @@ export type CompanyUpdateWithoutAiHumanInsightsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -84480,6 +86173,7 @@ export type CompanyUpdateWithoutAiHumanInsightsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -84573,6 +86267,7 @@ export type CompanyUncheckedUpdateWithoutAiHumanInsightsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -84640,6 +86335,7 @@ export type CompanyUncheckedUpdateWithoutAiHumanInsightsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -84732,6 +86428,7 @@ export type CompanyCreateWithoutAiEvaluationFeedbackInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -84800,6 +86497,7 @@ export type CompanyCreateWithoutAiEvaluationFeedbackInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -84893,6 +86591,7 @@ export type CompanyUncheckedCreateWithoutAiEvaluationFeedbackInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -84960,6 +86659,7 @@ export type CompanyUncheckedCreateWithoutAiEvaluationFeedbackInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -85068,6 +86768,7 @@ export type CompanyUpdateWithoutAiEvaluationFeedbackInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -85136,6 +86837,7 @@ export type CompanyUpdateWithoutAiEvaluationFeedbackInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -85229,6 +86931,7 @@ export type CompanyUncheckedUpdateWithoutAiEvaluationFeedbackInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -85296,6 +86999,7 @@ export type CompanyUncheckedUpdateWithoutAiEvaluationFeedbackInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -85388,6 +87092,7 @@ export type CompanyCreateWithoutAiSkillEvaluationRunsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -85456,6 +87161,7 @@ export type CompanyCreateWithoutAiSkillEvaluationRunsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -85549,6 +87255,7 @@ export type CompanyUncheckedCreateWithoutAiSkillEvaluationRunsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -85616,6 +87323,7 @@ export type CompanyUncheckedCreateWithoutAiSkillEvaluationRunsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -85724,6 +87432,7 @@ export type CompanyUpdateWithoutAiSkillEvaluationRunsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -85792,6 +87501,7 @@ export type CompanyUpdateWithoutAiSkillEvaluationRunsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -85885,6 +87595,7 @@ export type CompanyUncheckedUpdateWithoutAiSkillEvaluationRunsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -85952,6 +87663,7 @@ export type CompanyUncheckedUpdateWithoutAiSkillEvaluationRunsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -86044,6 +87756,7 @@ export type CompanyCreateWithoutOperationsSectionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -86112,6 +87825,7 @@ export type CompanyCreateWithoutOperationsSectionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -86205,6 +87919,7 @@ export type CompanyUncheckedCreateWithoutOperationsSectionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -86272,6 +87987,7 @@ export type CompanyUncheckedCreateWithoutOperationsSectionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -86380,6 +88096,7 @@ export type CompanyUpdateWithoutOperationsSectionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -86448,6 +88165,7 @@ export type CompanyUpdateWithoutOperationsSectionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -86541,6 +88259,7 @@ export type CompanyUncheckedUpdateWithoutOperationsSectionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -86608,6 +88327,7 @@ export type CompanyUncheckedUpdateWithoutOperationsSectionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -86700,6 +88420,7 @@ export type CompanyCreateWithoutOperationsUnitsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -86768,6 +88489,7 @@ export type CompanyCreateWithoutOperationsUnitsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -86861,6 +88583,7 @@ export type CompanyUncheckedCreateWithoutOperationsUnitsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -86928,6 +88651,7 @@ export type CompanyUncheckedCreateWithoutOperationsUnitsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -87036,6 +88760,7 @@ export type CompanyUpdateWithoutOperationsUnitsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -87104,6 +88829,7 @@ export type CompanyUpdateWithoutOperationsUnitsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -87197,6 +88923,7 @@ export type CompanyUncheckedUpdateWithoutOperationsUnitsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -87264,6 +88991,7 @@ export type CompanyUncheckedUpdateWithoutOperationsUnitsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -87356,6 +89084,7 @@ export type CompanyCreateWithoutOperationsCatalogCategoriesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -87424,6 +89153,7 @@ export type CompanyCreateWithoutOperationsCatalogCategoriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -87517,6 +89247,7 @@ export type CompanyUncheckedCreateWithoutOperationsCatalogCategoriesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -87584,6 +89315,7 @@ export type CompanyUncheckedCreateWithoutOperationsCatalogCategoriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -87692,6 +89424,7 @@ export type CompanyUpdateWithoutOperationsCatalogCategoriesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -87760,6 +89493,7 @@ export type CompanyUpdateWithoutOperationsCatalogCategoriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -87853,6 +89587,7 @@ export type CompanyUncheckedUpdateWithoutOperationsCatalogCategoriesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -87920,6 +89655,7 @@ export type CompanyUncheckedUpdateWithoutOperationsCatalogCategoriesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -88012,6 +89748,7 @@ export type CompanyCreateWithoutOperationsItemsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -88080,6 +89817,7 @@ export type CompanyCreateWithoutOperationsItemsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -88173,6 +89911,7 @@ export type CompanyUncheckedCreateWithoutOperationsItemsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -88240,6 +89979,7 @@ export type CompanyUncheckedCreateWithoutOperationsItemsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -88348,6 +90088,7 @@ export type CompanyUpdateWithoutOperationsItemsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -88416,6 +90157,7 @@ export type CompanyUpdateWithoutOperationsItemsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -88509,6 +90251,7 @@ export type CompanyUncheckedUpdateWithoutOperationsItemsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -88576,6 +90319,7 @@ export type CompanyUncheckedUpdateWithoutOperationsItemsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -88668,6 +90412,7 @@ export type CompanyCreateWithoutOperationsItemUnitsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -88736,6 +90481,7 @@ export type CompanyCreateWithoutOperationsItemUnitsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -88829,6 +90575,7 @@ export type CompanyUncheckedCreateWithoutOperationsItemUnitsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -88896,6 +90643,7 @@ export type CompanyUncheckedCreateWithoutOperationsItemUnitsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -89004,6 +90752,7 @@ export type CompanyUpdateWithoutOperationsItemUnitsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -89072,6 +90821,7 @@ export type CompanyUpdateWithoutOperationsItemUnitsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -89165,6 +90915,7 @@ export type CompanyUncheckedUpdateWithoutOperationsItemUnitsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -89232,6 +90983,7 @@ export type CompanyUncheckedUpdateWithoutOperationsItemUnitsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -89324,6 +91076,7 @@ export type CompanyCreateWithoutOperationsConversionVersionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -89392,6 +91145,7 @@ export type CompanyCreateWithoutOperationsConversionVersionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -89485,6 +91239,7 @@ export type CompanyUncheckedCreateWithoutOperationsConversionVersionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -89552,6 +91307,7 @@ export type CompanyUncheckedCreateWithoutOperationsConversionVersionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -89660,6 +91416,7 @@ export type CompanyUpdateWithoutOperationsConversionVersionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -89728,6 +91485,7 @@ export type CompanyUpdateWithoutOperationsConversionVersionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -89821,6 +91579,7 @@ export type CompanyUncheckedUpdateWithoutOperationsConversionVersionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -89888,6 +91647,7 @@ export type CompanyUncheckedUpdateWithoutOperationsConversionVersionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -89980,6 +91740,7 @@ export type CompanyCreateWithoutOperationsConversionEdgesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -90048,6 +91809,7 @@ export type CompanyCreateWithoutOperationsConversionEdgesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -90141,6 +91903,7 @@ export type CompanyUncheckedCreateWithoutOperationsConversionEdgesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -90208,6 +91971,7 @@ export type CompanyUncheckedCreateWithoutOperationsConversionEdgesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -90316,6 +92080,7 @@ export type CompanyUpdateWithoutOperationsConversionEdgesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -90384,6 +92149,7 @@ export type CompanyUpdateWithoutOperationsConversionEdgesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -90477,6 +92243,7 @@ export type CompanyUncheckedUpdateWithoutOperationsConversionEdgesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -90544,6 +92311,7 @@ export type CompanyUncheckedUpdateWithoutOperationsConversionEdgesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -90636,6 +92404,7 @@ export type CompanyCreateWithoutOperationsInternalRegistrationsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -90704,6 +92473,7 @@ export type CompanyCreateWithoutOperationsInternalRegistrationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -90797,6 +92567,7 @@ export type CompanyUncheckedCreateWithoutOperationsInternalRegistrationsInput = 
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -90864,6 +92635,7 @@ export type CompanyUncheckedCreateWithoutOperationsInternalRegistrationsInput = 
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -90972,6 +92744,7 @@ export type CompanyUpdateWithoutOperationsInternalRegistrationsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -91040,6 +92813,7 @@ export type CompanyUpdateWithoutOperationsInternalRegistrationsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -91133,6 +92907,7 @@ export type CompanyUncheckedUpdateWithoutOperationsInternalRegistrationsInput = 
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -91200,6 +92975,7 @@ export type CompanyUncheckedUpdateWithoutOperationsInternalRegistrationsInput = 
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -91292,6 +93068,7 @@ export type CompanyCreateWithoutOperationsInternalRegistrationLinesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -91360,6 +93137,7 @@ export type CompanyCreateWithoutOperationsInternalRegistrationLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -91453,6 +93231,7 @@ export type CompanyUncheckedCreateWithoutOperationsInternalRegistrationLinesInpu
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -91520,6 +93299,7 @@ export type CompanyUncheckedCreateWithoutOperationsInternalRegistrationLinesInpu
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -91628,6 +93408,7 @@ export type CompanyUpdateWithoutOperationsInternalRegistrationLinesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -91696,6 +93477,7 @@ export type CompanyUpdateWithoutOperationsInternalRegistrationLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -91789,6 +93571,7 @@ export type CompanyUncheckedUpdateWithoutOperationsInternalRegistrationLinesInpu
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -91856,6 +93639,7 @@ export type CompanyUncheckedUpdateWithoutOperationsInternalRegistrationLinesInpu
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -91948,6 +93732,7 @@ export type CompanyCreateWithoutOperationsInternalRegistrationConsumptionsInput 
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -92016,6 +93801,7 @@ export type CompanyCreateWithoutOperationsInternalRegistrationConsumptionsInput 
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -92109,6 +93895,7 @@ export type CompanyUncheckedCreateWithoutOperationsInternalRegistrationConsumpti
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -92176,6 +93963,7 @@ export type CompanyUncheckedCreateWithoutOperationsInternalRegistrationConsumpti
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -92284,6 +94072,7 @@ export type CompanyUpdateWithoutOperationsInternalRegistrationConsumptionsInput 
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -92352,6 +94141,7 @@ export type CompanyUpdateWithoutOperationsInternalRegistrationConsumptionsInput 
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -92445,6 +94235,7 @@ export type CompanyUncheckedUpdateWithoutOperationsInternalRegistrationConsumpti
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -92512,6 +94303,7 @@ export type CompanyUncheckedUpdateWithoutOperationsInternalRegistrationConsumpti
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -92604,6 +94396,7 @@ export type CompanyCreateWithoutOperationsRecipeVersionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -92672,6 +94465,7 @@ export type CompanyCreateWithoutOperationsRecipeVersionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -92765,6 +94559,7 @@ export type CompanyUncheckedCreateWithoutOperationsRecipeVersionsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -92832,6 +94627,7 @@ export type CompanyUncheckedCreateWithoutOperationsRecipeVersionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -92940,6 +94736,7 @@ export type CompanyUpdateWithoutOperationsRecipeVersionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -93008,6 +94805,7 @@ export type CompanyUpdateWithoutOperationsRecipeVersionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -93101,6 +94899,7 @@ export type CompanyUncheckedUpdateWithoutOperationsRecipeVersionsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -93168,6 +94967,7 @@ export type CompanyUncheckedUpdateWithoutOperationsRecipeVersionsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -93260,6 +95060,7 @@ export type CompanyCreateWithoutOperationsRecipeLinesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -93328,6 +95129,7 @@ export type CompanyCreateWithoutOperationsRecipeLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -93421,6 +95223,7 @@ export type CompanyUncheckedCreateWithoutOperationsRecipeLinesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -93488,6 +95291,7 @@ export type CompanyUncheckedCreateWithoutOperationsRecipeLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -93596,6 +95400,7 @@ export type CompanyUpdateWithoutOperationsRecipeLinesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -93664,6 +95469,7 @@ export type CompanyUpdateWithoutOperationsRecipeLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -93757,6 +95563,7 @@ export type CompanyUncheckedUpdateWithoutOperationsRecipeLinesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -93824,6 +95631,7 @@ export type CompanyUncheckedUpdateWithoutOperationsRecipeLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -93916,6 +95724,7 @@ export type CompanyCreateWithoutOperationsPurchaseRequestsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -93984,6 +95793,7 @@ export type CompanyCreateWithoutOperationsPurchaseRequestsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -94077,6 +95887,7 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseRequestsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -94144,6 +95955,7 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseRequestsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -94252,6 +96064,7 @@ export type CompanyUpdateWithoutOperationsPurchaseRequestsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -94320,6 +96133,7 @@ export type CompanyUpdateWithoutOperationsPurchaseRequestsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -94413,6 +96227,7 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseRequestsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -94480,6 +96295,7 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseRequestsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -94572,6 +96388,7 @@ export type CompanyCreateWithoutOperationsPurchaseRequestLinesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -94640,6 +96457,7 @@ export type CompanyCreateWithoutOperationsPurchaseRequestLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -94733,6 +96551,7 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseRequestLinesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -94800,6 +96619,7 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseRequestLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -94908,6 +96728,7 @@ export type CompanyUpdateWithoutOperationsPurchaseRequestLinesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -94976,6 +96797,7 @@ export type CompanyUpdateWithoutOperationsPurchaseRequestLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -95069,6 +96891,7 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseRequestLinesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -95136,6 +96959,7 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseRequestLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -95228,6 +97052,7 @@ export type CompanyCreateWithoutOperationsPurchaseReceiptsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -95296,6 +97121,7 @@ export type CompanyCreateWithoutOperationsPurchaseReceiptsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -95389,6 +97215,7 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseReceiptsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -95456,6 +97283,7 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseReceiptsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -95564,6 +97392,7 @@ export type CompanyUpdateWithoutOperationsPurchaseReceiptsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -95632,6 +97461,7 @@ export type CompanyUpdateWithoutOperationsPurchaseReceiptsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -95725,6 +97555,7 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseReceiptsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -95792,6 +97623,7 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseReceiptsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -95884,6 +97716,7 @@ export type CompanyCreateWithoutOperationsPurchaseReceiptLinesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -95952,6 +97785,7 @@ export type CompanyCreateWithoutOperationsPurchaseReceiptLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -96045,6 +97879,7 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseReceiptLinesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -96112,6 +97947,7 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseReceiptLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -96220,6 +98056,7 @@ export type CompanyUpdateWithoutOperationsPurchaseReceiptLinesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -96288,6 +98125,7 @@ export type CompanyUpdateWithoutOperationsPurchaseReceiptLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -96381,6 +98219,7 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseReceiptLinesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -96448,6 +98287,7 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseReceiptLinesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -96540,6 +98380,7 @@ export type CompanyCreateWithoutOperationsCustodyProfileInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -96608,6 +98449,7 @@ export type CompanyCreateWithoutOperationsCustodyProfileInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -96701,6 +98543,7 @@ export type CompanyUncheckedCreateWithoutOperationsCustodyProfileInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -96768,6 +98611,7 @@ export type CompanyUncheckedCreateWithoutOperationsCustodyProfileInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -96876,6 +98720,7 @@ export type CompanyUpdateWithoutOperationsCustodyProfileInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -96944,6 +98789,7 @@ export type CompanyUpdateWithoutOperationsCustodyProfileInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -97037,6 +98883,7 @@ export type CompanyUncheckedUpdateWithoutOperationsCustodyProfileInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -97104,6 +98951,7 @@ export type CompanyUncheckedUpdateWithoutOperationsCustodyProfileInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -97196,6 +99044,7 @@ export type CompanyCreateWithoutOperationsCustodyEventsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -97264,6 +99113,7 @@ export type CompanyCreateWithoutOperationsCustodyEventsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -97357,6 +99207,7 @@ export type CompanyUncheckedCreateWithoutOperationsCustodyEventsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -97424,6 +99275,7 @@ export type CompanyUncheckedCreateWithoutOperationsCustodyEventsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -97532,6 +99384,7 @@ export type CompanyUpdateWithoutOperationsCustodyEventsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -97600,6 +99453,7 @@ export type CompanyUpdateWithoutOperationsCustodyEventsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -97693,6 +99547,7 @@ export type CompanyUncheckedUpdateWithoutOperationsCustodyEventsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -97760,6 +99615,7 @@ export type CompanyUncheckedUpdateWithoutOperationsCustodyEventsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -97852,6 +99708,7 @@ export type CompanyCreateWithoutOperationsInventoryBalancesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -97920,6 +99777,7 @@ export type CompanyCreateWithoutOperationsInventoryBalancesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -98013,6 +99871,7 @@ export type CompanyUncheckedCreateWithoutOperationsInventoryBalancesInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -98080,6 +99939,7 @@ export type CompanyUncheckedCreateWithoutOperationsInventoryBalancesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -98188,6 +100048,7 @@ export type CompanyUpdateWithoutOperationsInventoryBalancesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -98256,6 +100117,7 @@ export type CompanyUpdateWithoutOperationsInventoryBalancesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -98349,6 +100211,7 @@ export type CompanyUncheckedUpdateWithoutOperationsInventoryBalancesInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -98416,6 +100279,7 @@ export type CompanyUncheckedUpdateWithoutOperationsInventoryBalancesInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -98508,6 +100372,7 @@ export type CompanyCreateWithoutOperationsInventoryMovementsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
@@ -98576,6 +100441,7 @@ export type CompanyCreateWithoutOperationsInventoryMovementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
@@ -98669,6 +100535,7 @@ export type CompanyUncheckedCreateWithoutOperationsInventoryMovementsInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
@@ -98736,6 +100603,7 @@ export type CompanyUncheckedCreateWithoutOperationsInventoryMovementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
@@ -98844,6 +100712,7 @@ export type CompanyUpdateWithoutOperationsInventoryMovementsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
@@ -98912,6 +100781,7 @@ export type CompanyUpdateWithoutOperationsInventoryMovementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -99005,6 +100875,7 @@ export type CompanyUncheckedUpdateWithoutOperationsInventoryMovementsInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -99072,6 +100943,7 @@ export type CompanyUncheckedUpdateWithoutOperationsInventoryMovementsInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -99164,6 +101036,7 @@ export type CompanyCreateManyTenantInput = {
   contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: $Enums.CompanyStatus
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -99179,6 +101052,7 @@ export type CompanyUpdateWithoutTenantInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
@@ -99246,6 +101120,7 @@ export type CompanyUpdateWithoutTenantInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
@@ -99339,6 +101214,7 @@ export type CompanyUncheckedUpdateWithoutTenantInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
@@ -99406,6 +101282,7 @@ export type CompanyUncheckedUpdateWithoutTenantInput = {
   hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
   hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
   attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
@@ -99499,6 +101376,7 @@ export type CompanyUncheckedUpdateManyWithoutTenantInput = {
   contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
   migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -99571,6 +101449,7 @@ export type CompanyCountOutputType = {
   hrEmployeeDocumentBlobs: number
   hrEmployeeDocuments: number
   hrEmployeeLetters: number
+  hrEmployeeWorkTerms: number
   attendanceBranches: number
   attendanceCredentials: number
   attendanceEvents: number
@@ -99712,6 +101591,7 @@ export type CompanyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   hrEmployeeDocumentBlobs?: boolean | CompanyCountOutputTypeCountHrEmployeeDocumentBlobsArgs
   hrEmployeeDocuments?: boolean | CompanyCountOutputTypeCountHrEmployeeDocumentsArgs
   hrEmployeeLetters?: boolean | CompanyCountOutputTypeCountHrEmployeeLettersArgs
+  hrEmployeeWorkTerms?: boolean | CompanyCountOutputTypeCountHrEmployeeWorkTermsArgs
   attendanceBranches?: boolean | CompanyCountOutputTypeCountAttendanceBranchesArgs
   attendanceCredentials?: boolean | CompanyCountOutputTypeCountAttendanceCredentialsArgs
   attendanceEvents?: boolean | CompanyCountOutputTypeCountAttendanceEventsArgs
@@ -100232,6 +102112,13 @@ export type CompanyCountOutputTypeCountHrEmployeeDocumentsArgs<ExtArgs extends r
  */
 export type CompanyCountOutputTypeCountHrEmployeeLettersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.HrEmployeeLetterWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountHrEmployeeWorkTermsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrEmployeeWorkTermsWhereInput
 }
 
 /**
@@ -100779,6 +102666,7 @@ export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   contextLongitude?: boolean
   status?: boolean
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -100847,6 +102735,7 @@ export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   hrEmployeeDocumentBlobs?: boolean | Prisma.Company$hrEmployeeDocumentBlobsArgs<ExtArgs>
   hrEmployeeDocuments?: boolean | Prisma.Company$hrEmployeeDocumentsArgs<ExtArgs>
   hrEmployeeLetters?: boolean | Prisma.Company$hrEmployeeLettersArgs<ExtArgs>
+  hrEmployeeWorkTerms?: boolean | Prisma.Company$hrEmployeeWorkTermsArgs<ExtArgs>
   attendanceBranches?: boolean | Prisma.Company$attendanceBranchesArgs<ExtArgs>
   attendanceCredentials?: boolean | Prisma.Company$attendanceCredentialsArgs<ExtArgs>
   attendanceEvents?: boolean | Prisma.Company$attendanceEventsArgs<ExtArgs>
@@ -100942,6 +102831,7 @@ export type CompanySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   contextLongitude?: boolean
   status?: boolean
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -100959,6 +102849,7 @@ export type CompanySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   contextLongitude?: boolean
   status?: boolean
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -100976,11 +102867,12 @@ export type CompanySelectScalar = {
   contextLongitude?: boolean
   status?: boolean
   migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CompanyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "nameAr" | "nameEn" | "businessTimezone" | "contextLocationCode" | "contextLocationLabelAr" | "contextLatitude" | "contextLongitude" | "status" | "migrationReviewLocked" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
+export type CompanyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "nameAr" | "nameEn" | "businessTimezone" | "contextLocationCode" | "contextLocationLabelAr" | "contextLatitude" | "contextLongitude" | "status" | "migrationReviewLocked" | "attendanceLocationEnabled" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
 export type CompanyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   memberships?: boolean | Prisma.Company$membershipsArgs<ExtArgs>
@@ -101048,6 +102940,7 @@ export type CompanyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   hrEmployeeDocumentBlobs?: boolean | Prisma.Company$hrEmployeeDocumentBlobsArgs<ExtArgs>
   hrEmployeeDocuments?: boolean | Prisma.Company$hrEmployeeDocumentsArgs<ExtArgs>
   hrEmployeeLetters?: boolean | Prisma.Company$hrEmployeeLettersArgs<ExtArgs>
+  hrEmployeeWorkTerms?: boolean | Prisma.Company$hrEmployeeWorkTermsArgs<ExtArgs>
   attendanceBranches?: boolean | Prisma.Company$attendanceBranchesArgs<ExtArgs>
   attendanceCredentials?: boolean | Prisma.Company$attendanceCredentialsArgs<ExtArgs>
   attendanceEvents?: boolean | Prisma.Company$attendanceEventsArgs<ExtArgs>
@@ -101206,6 +103099,7 @@ export type $CompanyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     hrEmployeeDocumentBlobs: Prisma.$HrEmployeeDocumentBlobPayload<ExtArgs>[]
     hrEmployeeDocuments: Prisma.$HrEmployeeDocumentPayload<ExtArgs>[]
     hrEmployeeLetters: Prisma.$HrEmployeeLetterPayload<ExtArgs>[]
+    hrEmployeeWorkTerms: Prisma.$HrEmployeeWorkTermsPayload<ExtArgs>[]
     attendanceBranches: Prisma.$AttendanceBranchPayload<ExtArgs>[]
     attendanceCredentials: Prisma.$AttendanceEmployeeCredentialPayload<ExtArgs>[]
     attendanceEvents: Prisma.$AttendanceEventPayload<ExtArgs>[]
@@ -101303,6 +103197,11 @@ export type $CompanyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
      * readable, but CompanyContext rejects every non-read capability.
      */
     migrationReviewLocked: boolean
+    /**
+     * Location evidence is opt-in per company. When disabled, employee
+     * attendance records neither require nor retain device coordinates.
+     */
+    attendanceLocationEnabled: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["company"]>
@@ -101765,6 +103664,7 @@ export interface Prisma__CompanyClient<T, Null = never, ExtArgs extends runtime.
   hrEmployeeDocumentBlobs<T extends Prisma.Company$hrEmployeeDocumentBlobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$hrEmployeeDocumentBlobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeDocumentBlobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   hrEmployeeDocuments<T extends Prisma.Company$hrEmployeeDocumentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$hrEmployeeDocumentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   hrEmployeeLetters<T extends Prisma.Company$hrEmployeeLettersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$hrEmployeeLettersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeLetterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrEmployeeWorkTerms<T extends Prisma.Company$hrEmployeeWorkTermsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$hrEmployeeWorkTermsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeWorkTermsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   attendanceBranches<T extends Prisma.Company$attendanceBranchesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$attendanceBranchesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttendanceBranchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   attendanceCredentials<T extends Prisma.Company$attendanceCredentialsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$attendanceCredentialsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttendanceEmployeeCredentialPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   attendanceEvents<T extends Prisma.Company$attendanceEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$attendanceEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttendanceEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -101885,6 +103785,7 @@ export interface CompanyFieldRefs {
   readonly contextLongitude: Prisma.FieldRef<"Company", 'Decimal'>
   readonly status: Prisma.FieldRef<"Company", 'CompanyStatus'>
   readonly migrationReviewLocked: Prisma.FieldRef<"Company", 'Boolean'>
+  readonly attendanceLocationEnabled: Prisma.FieldRef<"Company", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Company", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Company", 'DateTime'>
 }
@@ -103830,6 +105731,30 @@ export type Company$hrEmployeeLettersArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.HrEmployeeLetterScalarFieldEnum | Prisma.HrEmployeeLetterScalarFieldEnum[]
+}
+
+/**
+ * Company.hrEmployeeWorkTerms
+ */
+export type Company$hrEmployeeWorkTermsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrEmployeeWorkTerms
+   */
+  select?: Prisma.HrEmployeeWorkTermsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrEmployeeWorkTerms
+   */
+  omit?: Prisma.HrEmployeeWorkTermsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrEmployeeWorkTermsInclude<ExtArgs> | null
+  where?: Prisma.HrEmployeeWorkTermsWhereInput
+  orderBy?: Prisma.HrEmployeeWorkTermsOrderByWithRelationInput | Prisma.HrEmployeeWorkTermsOrderByWithRelationInput[]
+  cursor?: Prisma.HrEmployeeWorkTermsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrEmployeeWorkTermsScalarFieldEnum | Prisma.HrEmployeeWorkTermsScalarFieldEnum[]
 }
 
 /**

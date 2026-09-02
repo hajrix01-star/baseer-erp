@@ -7,7 +7,11 @@
     X-Content-Type-Options "nosniff"
     X-Frame-Options "DENY"
     Referrer-Policy "no-referrer"
-    Permissions-Policy "camera=(), geolocation=(), microphone=()"
+    # The employee PWA asks for camera only to scan an attendance QR and asks
+    # for location only when its company owner enables that setting. The SPA is
+    # served from one origin, so the browser permission is scoped to this
+    # origin while the API remains the policy-enforcing source of truth.
+    Permissions-Policy "camera=(self), geolocation=(self), microphone=()"
     Cross-Origin-Opener-Policy "same-origin"
     Content-Security-Policy "default-src 'self'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'"
   }

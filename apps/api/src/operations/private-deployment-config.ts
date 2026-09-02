@@ -170,5 +170,14 @@ export function validatePrivateDeploymentConfiguration(
     throw new Error("IDENTITY_JWT_SECRET must be at least 32 characters long.");
   }
 
+  for (const name of ["ATTENDANCE_PIN_PEPPER", "ATTENDANCE_QR_SECRET"]) {
+    if (requireValue(name, environment[name]).length < 32) {
+      throw new Error(`${name} must be at least 32 characters long.`);
+    }
+  }
+  if (environment.BASEER_ATTENDANCE_LOCATION_RETENTION_SCHEDULER_ENABLED !== "true") {
+    throw new Error("BASEER_ATTENDANCE_LOCATION_RETENTION_SCHEDULER_ENABLED must be true for private-online deployment.");
+  }
+
   validatePersistentFileStorage(environment, domain);
 }

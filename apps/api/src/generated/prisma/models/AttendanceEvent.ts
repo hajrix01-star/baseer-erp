@@ -258,9 +258,9 @@ export type AttendanceEventGroupByOutputType = {
   eventType: $Enums.AttendanceEventType
   businessDate: Date
   occurredAt: Date
-  latitude: runtime.Decimal
-  longitude: runtime.Decimal
-  accuracyMeters: runtime.Decimal
+  latitude: runtime.Decimal | null
+  longitude: runtime.Decimal | null
+  accuracyMeters: runtime.Decimal | null
   qrTokenHash: string
   requestKey: string
   createdAt: Date
@@ -299,9 +299,9 @@ export type AttendanceEventWhereInput = {
   eventType?: Prisma.EnumAttendanceEventTypeFilter<"AttendanceEvent"> | $Enums.AttendanceEventType
   businessDate?: Prisma.DateTimeFilter<"AttendanceEvent"> | Date | string
   occurredAt?: Prisma.DateTimeFilter<"AttendanceEvent"> | Date | string
-  latitude?: Prisma.DecimalFilter<"AttendanceEvent"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFilter<"AttendanceEvent"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters?: Prisma.DecimalFilter<"AttendanceEvent"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: Prisma.DecimalNullableFilter<"AttendanceEvent"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.DecimalNullableFilter<"AttendanceEvent"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: Prisma.DecimalNullableFilter<"AttendanceEvent"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash?: Prisma.StringFilter<"AttendanceEvent"> | string
   requestKey?: Prisma.StringFilter<"AttendanceEvent"> | string
   createdAt?: Prisma.DateTimeFilter<"AttendanceEvent"> | Date | string
@@ -321,9 +321,9 @@ export type AttendanceEventOrderByWithRelationInput = {
   eventType?: Prisma.SortOrder
   businessDate?: Prisma.SortOrder
   occurredAt?: Prisma.SortOrder
-  latitude?: Prisma.SortOrder
-  longitude?: Prisma.SortOrder
-  accuracyMeters?: Prisma.SortOrder
+  latitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  longitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  accuracyMeters?: Prisma.SortOrderInput | Prisma.SortOrder
   qrTokenHash?: Prisma.SortOrder
   requestKey?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -348,9 +348,9 @@ export type AttendanceEventWhereUniqueInput = Prisma.AtLeast<{
   eventType?: Prisma.EnumAttendanceEventTypeFilter<"AttendanceEvent"> | $Enums.AttendanceEventType
   businessDate?: Prisma.DateTimeFilter<"AttendanceEvent"> | Date | string
   occurredAt?: Prisma.DateTimeFilter<"AttendanceEvent"> | Date | string
-  latitude?: Prisma.DecimalFilter<"AttendanceEvent"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFilter<"AttendanceEvent"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters?: Prisma.DecimalFilter<"AttendanceEvent"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: Prisma.DecimalNullableFilter<"AttendanceEvent"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.DecimalNullableFilter<"AttendanceEvent"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: Prisma.DecimalNullableFilter<"AttendanceEvent"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash?: Prisma.StringFilter<"AttendanceEvent"> | string
   requestKey?: Prisma.StringFilter<"AttendanceEvent"> | string
   createdAt?: Prisma.DateTimeFilter<"AttendanceEvent"> | Date | string
@@ -370,9 +370,9 @@ export type AttendanceEventOrderByWithAggregationInput = {
   eventType?: Prisma.SortOrder
   businessDate?: Prisma.SortOrder
   occurredAt?: Prisma.SortOrder
-  latitude?: Prisma.SortOrder
-  longitude?: Prisma.SortOrder
-  accuracyMeters?: Prisma.SortOrder
+  latitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  longitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  accuracyMeters?: Prisma.SortOrderInput | Prisma.SortOrder
   qrTokenHash?: Prisma.SortOrder
   requestKey?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -396,9 +396,9 @@ export type AttendanceEventScalarWhereWithAggregatesInput = {
   eventType?: Prisma.EnumAttendanceEventTypeWithAggregatesFilter<"AttendanceEvent"> | $Enums.AttendanceEventType
   businessDate?: Prisma.DateTimeWithAggregatesFilter<"AttendanceEvent"> | Date | string
   occurredAt?: Prisma.DateTimeWithAggregatesFilter<"AttendanceEvent"> | Date | string
-  latitude?: Prisma.DecimalWithAggregatesFilter<"AttendanceEvent"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalWithAggregatesFilter<"AttendanceEvent"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters?: Prisma.DecimalWithAggregatesFilter<"AttendanceEvent"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: Prisma.DecimalNullableWithAggregatesFilter<"AttendanceEvent"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.DecimalNullableWithAggregatesFilter<"AttendanceEvent"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: Prisma.DecimalNullableWithAggregatesFilter<"AttendanceEvent"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash?: Prisma.StringWithAggregatesFilter<"AttendanceEvent"> | string
   requestKey?: Prisma.StringWithAggregatesFilter<"AttendanceEvent"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"AttendanceEvent"> | Date | string
@@ -409,9 +409,9 @@ export type AttendanceEventCreateInput = {
   eventType: $Enums.AttendanceEventType
   businessDate: Date | string
   occurredAt?: Date | string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash: string
   requestKey: string
   createdAt?: Date | string
@@ -431,9 +431,9 @@ export type AttendanceEventUncheckedCreateInput = {
   eventType: $Enums.AttendanceEventType
   businessDate: Date | string
   occurredAt?: Date | string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash: string
   requestKey: string
   createdAt?: Date | string
@@ -444,9 +444,9 @@ export type AttendanceEventUpdateInput = {
   eventType?: Prisma.EnumAttendanceEventTypeFieldUpdateOperationsInput | $Enums.AttendanceEventType
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   requestKey?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -466,9 +466,9 @@ export type AttendanceEventUncheckedUpdateInput = {
   eventType?: Prisma.EnumAttendanceEventTypeFieldUpdateOperationsInput | $Enums.AttendanceEventType
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   requestKey?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -484,9 +484,9 @@ export type AttendanceEventCreateManyInput = {
   eventType: $Enums.AttendanceEventType
   businessDate: Date | string
   occurredAt?: Date | string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash: string
   requestKey: string
   createdAt?: Date | string
@@ -497,9 +497,9 @@ export type AttendanceEventUpdateManyMutationInput = {
   eventType?: Prisma.EnumAttendanceEventTypeFieldUpdateOperationsInput | $Enums.AttendanceEventType
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   requestKey?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -515,9 +515,9 @@ export type AttendanceEventUncheckedUpdateManyInput = {
   eventType?: Prisma.EnumAttendanceEventTypeFieldUpdateOperationsInput | $Enums.AttendanceEventType
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   requestKey?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -787,9 +787,9 @@ export type AttendanceEventCreateWithoutCompanyInput = {
   eventType: $Enums.AttendanceEventType
   businessDate: Date | string
   occurredAt?: Date | string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash: string
   requestKey: string
   createdAt?: Date | string
@@ -806,9 +806,9 @@ export type AttendanceEventUncheckedCreateWithoutCompanyInput = {
   eventType: $Enums.AttendanceEventType
   businessDate: Date | string
   occurredAt?: Date | string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash: string
   requestKey: string
   createdAt?: Date | string
@@ -853,9 +853,9 @@ export type AttendanceEventScalarWhereInput = {
   eventType?: Prisma.EnumAttendanceEventTypeFilter<"AttendanceEvent"> | $Enums.AttendanceEventType
   businessDate?: Prisma.DateTimeFilter<"AttendanceEvent"> | Date | string
   occurredAt?: Prisma.DateTimeFilter<"AttendanceEvent"> | Date | string
-  latitude?: Prisma.DecimalFilter<"AttendanceEvent"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFilter<"AttendanceEvent"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters?: Prisma.DecimalFilter<"AttendanceEvent"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: Prisma.DecimalNullableFilter<"AttendanceEvent"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.DecimalNullableFilter<"AttendanceEvent"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: Prisma.DecimalNullableFilter<"AttendanceEvent"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash?: Prisma.StringFilter<"AttendanceEvent"> | string
   requestKey?: Prisma.StringFilter<"AttendanceEvent"> | string
   createdAt?: Prisma.DateTimeFilter<"AttendanceEvent"> | Date | string
@@ -866,9 +866,9 @@ export type AttendanceEventCreateWithoutEmployeeInput = {
   eventType: $Enums.AttendanceEventType
   businessDate: Date | string
   occurredAt?: Date | string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash: string
   requestKey: string
   createdAt?: Date | string
@@ -884,9 +884,9 @@ export type AttendanceEventUncheckedCreateWithoutEmployeeInput = {
   eventType: $Enums.AttendanceEventType
   businessDate: Date | string
   occurredAt?: Date | string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash: string
   requestKey: string
   createdAt?: Date | string
@@ -923,9 +923,9 @@ export type AttendanceEventCreateWithoutBranchInput = {
   eventType: $Enums.AttendanceEventType
   businessDate: Date | string
   occurredAt?: Date | string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash: string
   requestKey: string
   createdAt?: Date | string
@@ -941,9 +941,9 @@ export type AttendanceEventUncheckedCreateWithoutBranchInput = {
   eventType: $Enums.AttendanceEventType
   businessDate: Date | string
   occurredAt?: Date | string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash: string
   requestKey: string
   createdAt?: Date | string
@@ -980,9 +980,9 @@ export type AttendanceEventCreateWithoutSessionInput = {
   eventType: $Enums.AttendanceEventType
   businessDate: Date | string
   occurredAt?: Date | string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash: string
   requestKey: string
   createdAt?: Date | string
@@ -998,9 +998,9 @@ export type AttendanceEventUncheckedCreateWithoutSessionInput = {
   eventType: $Enums.AttendanceEventType
   businessDate: Date | string
   occurredAt?: Date | string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash: string
   requestKey: string
   createdAt?: Date | string
@@ -1040,9 +1040,9 @@ export type AttendanceEventCreateManyCompanyInput = {
   eventType: $Enums.AttendanceEventType
   businessDate: Date | string
   occurredAt?: Date | string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash: string
   requestKey: string
   createdAt?: Date | string
@@ -1053,9 +1053,9 @@ export type AttendanceEventUpdateWithoutCompanyInput = {
   eventType?: Prisma.EnumAttendanceEventTypeFieldUpdateOperationsInput | $Enums.AttendanceEventType
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   requestKey?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1072,9 +1072,9 @@ export type AttendanceEventUncheckedUpdateWithoutCompanyInput = {
   eventType?: Prisma.EnumAttendanceEventTypeFieldUpdateOperationsInput | $Enums.AttendanceEventType
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   requestKey?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1088,9 +1088,9 @@ export type AttendanceEventUncheckedUpdateManyWithoutCompanyInput = {
   eventType?: Prisma.EnumAttendanceEventTypeFieldUpdateOperationsInput | $Enums.AttendanceEventType
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   requestKey?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1103,9 +1103,9 @@ export type AttendanceEventCreateManyEmployeeInput = {
   eventType: $Enums.AttendanceEventType
   businessDate: Date | string
   occurredAt?: Date | string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash: string
   requestKey: string
   createdAt?: Date | string
@@ -1116,9 +1116,9 @@ export type AttendanceEventUpdateWithoutEmployeeInput = {
   eventType?: Prisma.EnumAttendanceEventTypeFieldUpdateOperationsInput | $Enums.AttendanceEventType
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   requestKey?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1134,9 +1134,9 @@ export type AttendanceEventUncheckedUpdateWithoutEmployeeInput = {
   eventType?: Prisma.EnumAttendanceEventTypeFieldUpdateOperationsInput | $Enums.AttendanceEventType
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   requestKey?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1149,9 +1149,9 @@ export type AttendanceEventUncheckedUpdateManyWithoutEmployeeInput = {
   eventType?: Prisma.EnumAttendanceEventTypeFieldUpdateOperationsInput | $Enums.AttendanceEventType
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   requestKey?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1164,9 +1164,9 @@ export type AttendanceEventCreateManyBranchInput = {
   eventType: $Enums.AttendanceEventType
   businessDate: Date | string
   occurredAt?: Date | string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash: string
   requestKey: string
   createdAt?: Date | string
@@ -1177,9 +1177,9 @@ export type AttendanceEventUpdateWithoutBranchInput = {
   eventType?: Prisma.EnumAttendanceEventTypeFieldUpdateOperationsInput | $Enums.AttendanceEventType
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   requestKey?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1195,9 +1195,9 @@ export type AttendanceEventUncheckedUpdateWithoutBranchInput = {
   eventType?: Prisma.EnumAttendanceEventTypeFieldUpdateOperationsInput | $Enums.AttendanceEventType
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   requestKey?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1210,9 +1210,9 @@ export type AttendanceEventUncheckedUpdateManyWithoutBranchInput = {
   eventType?: Prisma.EnumAttendanceEventTypeFieldUpdateOperationsInput | $Enums.AttendanceEventType
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   requestKey?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1225,9 +1225,9 @@ export type AttendanceEventCreateManySessionInput = {
   eventType: $Enums.AttendanceEventType
   businessDate: Date | string
   occurredAt?: Date | string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters: runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash: string
   requestKey: string
   createdAt?: Date | string
@@ -1238,9 +1238,9 @@ export type AttendanceEventUpdateWithoutSessionInput = {
   eventType?: Prisma.EnumAttendanceEventTypeFieldUpdateOperationsInput | $Enums.AttendanceEventType
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   requestKey?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1256,9 +1256,9 @@ export type AttendanceEventUncheckedUpdateWithoutSessionInput = {
   eventType?: Prisma.EnumAttendanceEventTypeFieldUpdateOperationsInput | $Enums.AttendanceEventType
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   requestKey?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1271,9 +1271,9 @@ export type AttendanceEventUncheckedUpdateManyWithoutSessionInput = {
   eventType?: Prisma.EnumAttendanceEventTypeFieldUpdateOperationsInput | $Enums.AttendanceEventType
   businessDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   occurredAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  accuracyMeters?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  accuracyMeters?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   qrTokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   requestKey?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1407,9 +1407,9 @@ export type $AttendanceEventPayload<ExtArgs extends runtime.Types.Extensions.Int
      */
     businessDate: Date
     occurredAt: Date
-    latitude: runtime.Decimal
-    longitude: runtime.Decimal
-    accuracyMeters: runtime.Decimal
+    latitude: runtime.Decimal | null
+    longitude: runtime.Decimal | null
+    accuracyMeters: runtime.Decimal | null
     qrTokenHash: string
     requestKey: string
     createdAt: Date

@@ -1108,6 +1108,9 @@ model Company {
   /// An owner-controlled staging safeguard. Active review companies remain
   /// readable, but CompanyContext rejects every non-read capability.
   migrationReviewLocked  Boolean       @default(false)
+  /// Location evidence is opt-in per company. When disabled, employee
+  /// attendance records neither require nor retain device coordinates.
+  attendanceLocationEnabled Boolean    @default(false)
   createdAt              DateTime      @default(now()) @db.Timestamptz(6)
   updatedAt              DateTime      @updatedAt @db.Timestamptz(6)
 
@@ -1177,6 +1180,7 @@ model Company {
   hrEmployeeDocumentBlobs                    HrEmployeeDocumentBlob[]
   hrEmployeeDocuments                        HrEmployeeDocument[]
   hrEmployeeLetters                          HrEmployeeLetter[]
+  hrEmployeeWorkTerms                        HrEmployeeWorkTerms[]
   attendanceBranches                         AttendanceBranch[]
   attendanceCredentials                      AttendanceEmployeeCredential[]
   attendanceEvents                           AttendanceEvent[]
@@ -3841,6 +3845,7 @@ model HrEmployee {
   attendanceWeeklyAdjustments   AttendanceEmployeeWeeklyAdjustment[]
   attendanceScheduleExceptions  AttendanceScheduleException[]
   attendanceRosterEntries       AttendanceRosterEntry[]
+  workTerms                     HrEmployeeWorkTerms[]
 
   @@unique([id, tenantId, companyId])
   @@unique([companyId, employeeNumber])
@@ -3901,6 +3906,7 @@ model AttendanceBranch {
 enum AttendanceEventType {
   CHECK_IN
   CHECK_OUT
+  ADMIN_CHECK_OUT
 }
 
 enum AttendanceWorkSessionStatus {
@@ -4205,9 +4211,9 @@ model AttendanceEvent {
   /// checkout attached to the business date on which the work session started.
   businessDate   DateTime            @db.Date
   occurredAt     DateTime            @default(now()) @db.Timestamptz(6)
-  latitude       Decimal             @db.Decimal(10, 7)
-  longitude      Decimal             @db.Decimal(10, 7)
-  accuracyMeters Decimal             @db.Decimal(10, 2)
+  latitude       Decimal?            @db.Decimal(10, 7)
+  longitude      Decimal?            @db.Decimal(10, 7)
+  accuracyMeters Decimal?            @db.Decimal(10, 2)
   qrTokenHash    String              @db.Char(64)
   requestKey     String              @db.VarChar(255)
   createdAt      DateTime            @default(now()) @db.Timestamptz(6)
@@ -4249,6 +4255,11 @@ model AttendanceWorkSession {
   businessDate DateTime                    @db.Date
   checkInAt    DateTime                    @db.Timestamptz(6)
   checkOutAt   DateTime?                   @db.Timestamptz(6)
+  /// Administrative checkout preserves the employee's original check-in and
+  /// records the responsible actor, reason, and server-recorded action time.
+  adminClosedByUserId String?              @db.Uuid
+  adminCloseReason   String?               @db.VarChar(2000)
+  adminClosedAt      DateTime?             @db.Timestamptz(6)
   createdAt    DateTime                    @default(now()) @db.Timestamptz(6)
   updatedAt    DateTime                    @updatedAt @db.Timestamptz(6)
 
@@ -4261,6 +4272,32 @@ model AttendanceWorkSession {
   @@index([tenantId, companyId, employeeId, status])
   @@index([tenantId, companyId, businessDate, employeeId])
   @@index([tenantId, companyId, employeeId, businessDate])
+}
+
+/// Effective-dated contractual work hours. Attendance schedules decide when
+/// work occurs; this agreement remains the employee-file source of the daily
+/// contracted minutes and is never silently changed by attendance planning.
+model HrEmployeeWorkTerms {
+  id                String    @id @default(uuid()) @db.Uuid
+  tenantId          String    @db.Uuid
+  companyId         String    @db.Uuid
+  employeeId        String    @db.Uuid
+  effectiveFrom     DateTime  @db.Date
+  effectiveTo       DateTime? @db.Date
+  workMinutesPerDay Int
+  notes             String?   @db.VarChar(1000)
+  createdByUserId   String    @db.Uuid
+  createdAt         DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime  @updatedAt @db.Timestamptz(6)
+
+  company      Company         @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  employee     HrEmployee      @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  payrollLines HrPayrollLine[]
+
+  @@unique([id, tenantId, companyId])
+  @@unique([id, tenantId, companyId, employeeId])
+  @@unique([companyId, employeeId, effectiveFrom])
+  @@index([tenantId, companyId, employeeId, effectiveFrom])
 }
 
 /// An immutable, operational career-history event. Compensation remains in
@@ -4891,6 +4928,8 @@ model HrPayrollLine {
   overtimeHours                  Decimal                      @default(0) @db.Decimal(18, 4)
   scheduledHoursPerDay           Int?
   scheduledWorkDays              Int?
+  contractWorkTermsId            String?                      @db.Uuid
+  contractMinutesPerDay          Int?
   advanceSettlementAmount        Decimal                      @default(0) @db.Decimal(18, 4)
   administrativeDeductionAmount  Decimal                      @default(0) @db.Decimal(18, 4)
   netPayableAmount               Decimal                      @db.Decimal(18, 4)
@@ -4902,6 +4941,7 @@ model HrPayrollLine {
   payrollRun                HrPayrollRun                                  @relation(fields: [payrollRunId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   employee                  HrEmployee                                    @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   compensationPolicyVersion HrCompensationPolicyVersion?                  @relation("HrPayrollLinePolicyVersion", fields: [compensationPolicyVersionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  contractWorkTerms         HrEmployeeWorkTerms?                           @relation(fields: [contractWorkTermsId, tenantId, companyId, employeeId], references: [id, tenantId, companyId, employeeId], onDelete: Restrict)
   advanceApplications       HrPayrollAdvanceApplication[]
   deductionApplications     HrPayrollAdministrativeDeductionApplication[]
 

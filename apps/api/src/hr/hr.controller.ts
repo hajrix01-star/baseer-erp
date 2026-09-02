@@ -2,6 +2,7 @@ import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers
 import {
   companyIdSchema,
   createHrEmployeeRequestSchema,
+  createHrEmployeeWorkTermsRequestSchema,
   onboardHrEmployeeRequestSchema,
   createHrEmployeePromotionRequestSchema,
   createHrEmployeeServiceRequestSchema,
@@ -16,6 +17,7 @@ import {
   financeOutflowDocumentReceiptSchema,
   hrEmployeeDetailQuerySchema,
   hrEmployeeDetailReceiptSchema,
+  hrEmployeeWorkTermsReceiptSchema,
   hrEmployeePromotionsQuerySchema,
   hrEmployeePromotionsReceiptSchema,
   hrEmployeePromotionReceiptSchema,
@@ -153,6 +155,12 @@ export class HrController {
     return hrEmployeeCompensationHistoryReceiptSchema.parse({ companyId: context.companyId, ...(await this.hr.compensationHistory(context, employeeId, { pageSize: parsed.data.pageSize, ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) })) });
   }
 
+  @Get('employees/:employeeId/work-terms')
+  async employeeWorkTerms(@Param('employeeId', ParseUUIDPipe) employeeId: string, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const context = await this.authorize(authorization, companyId, READ_CAPABILITY);
+    return hrEmployeeWorkTermsReceiptSchema.parse({ companyId: context.companyId, workTerms: await this.hr.employeeWorkTerms(context, employeeId) });
+  }
+
   @Get('employees/:employeeId/promotions')
   async employeePromotions(@Param('employeeId', ParseUUIDPipe) employeeId: string, @Query() query: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = hrEmployeePromotionsQuerySchema.safeParse(query);
@@ -169,6 +177,16 @@ export class HrController {
     const context = await this.authorize(authorization, companyId, WRITE_CAPABILITY);
     const { idempotencyKey, ...input } = parsed.data;
     return hrEmployeeEntityReceiptSchema.parse(await this.hr.createEmployee(context, input, idempotencyKey));
+  }
+
+  @Post('employees/work-terms')
+  @HttpCode(201)
+  async createEmployeeWorkTerms(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const parsed = createHrEmployeeWorkTermsRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException('Invalid employee work-terms request.');
+    const context = await this.authorize(authorization, companyId, WRITE_CAPABILITY);
+    const { idempotencyKey, ...input } = parsed.data;
+    return hrEmployeeEntityReceiptSchema.parse(await this.hr.createEmployeeWorkTerms(context, input, idempotencyKey));
   }
 
   @Post('employees/onboard')

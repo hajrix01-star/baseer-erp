@@ -1331,7 +1331,8 @@ export type OperationsInventoryMovementType = (typeof OperationsInventoryMovemen
 
 export const AttendanceEventType = {
   CHECK_IN: 'CHECK_IN',
-  CHECK_OUT: 'CHECK_OUT'
+  CHECK_OUT: 'CHECK_OUT',
+  ADMIN_CHECK_OUT: 'ADMIN_CHECK_OUT'
 } as const
 
 export type AttendanceEventType = (typeof AttendanceEventType)[keyof typeof AttendanceEventType]

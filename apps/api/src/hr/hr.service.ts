@@ -1,7 +1,7 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 
-import type { CancelHrEmployeeServiceRequest, CreateHrEmployeePromotionRequest, CreateHrEmployeeRequest, CreateHrEmployeeServiceRequest, RenewHrEmployeeServiceRequest, UpdateHrEmployeeRequest, UpdateHrEmployeeServiceRequest } from '@baseer-erp/contracts';
+import type { CancelHrEmployeeServiceRequest, CreateHrEmployeePromotionRequest, CreateHrEmployeeRequest, CreateHrEmployeeServiceRequest, CreateHrEmployeeWorkTermsRequest, RenewHrEmployeeServiceRequest, UpdateHrEmployeeRequest, UpdateHrEmployeeServiceRequest } from '@baseer-erp/contracts';
 import { BusinessDateService } from '../business-date/business-date.service.js';
 import type { TrustedCompanyActorContext } from '../core-controls/trusted-context.js';
 import { IdempotencyPayloadMismatchError, IdempotencyService } from '../core-controls/idempotency.service.js';
@@ -22,6 +22,7 @@ type EmployeeReadProjection = Readonly<{
 type EmployeeCreateInput = Omit<CreateHrEmployeeRequest, 'idempotencyKey'>;
 type EmployeeUpdateInput = Omit<UpdateHrEmployeeRequest, 'idempotencyKey'>;
 type EmployeePromotionCreateInput = Omit<CreateHrEmployeePromotionRequest, 'idempotencyKey'>;
+type EmployeeWorkTermsCreateInput = Omit<CreateHrEmployeeWorkTermsRequest, 'idempotencyKey'>;
 type EmployeePromotionListQuery = Readonly<{ cursor?: string; pageSize: number }>;
 export type EmployeeServiceCreateInput = Omit<CreateHrEmployeeServiceRequest, 'idempotencyKey'>;
 type EmployeeServiceUpdateInput = Omit<UpdateHrEmployeeServiceRequest, 'idempotencyKey'>;
@@ -234,6 +235,46 @@ export class HrService {
       const receipt = { id: updated.id, replayed: false };
       await this.audit(tx, context, 'hr.employee.updated', 'HrEmployee', updated.id, mapEmployee(prior), mapEmployee(updated));
       await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 200, headers: null, body: receipt } });
+      return receipt;
+    }).catch(rethrowIdempotency);
+  }
+
+  async employeeWorkTerms(context: TrustedCompanyActorContext, employeeId: string) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const employee = await tx.hrEmployee.findFirst({ where: { id: employeeId, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true } });
+      if (!employee) throw new NotFoundException('The employee is not available for this company.');
+      const terms = await tx.hrEmployeeWorkTerms.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeId }, orderBy: [{ effectiveFrom: 'desc' }, { createdAt: 'desc' }], take: 100 });
+      return terms.map(mapWorkTerms);
+    });
+  }
+
+  /** A new agreement is append-only. The preceding agreement is closed in the
+   * same transaction, so attendance keeps historical contractual hours and no
+   * schedule or payroll row is silently rewritten. */
+  async createEmployeeWorkTerms(context: TrustedCompanyActorContext, input: EmployeeWorkTermsCreateInput, idempotencyKey: string) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      await this.assertOwner(tx, context);
+      const begun = await this.idempotency.beginInTransaction(tx, context, {
+        operation: 'hr.employee.work_terms.create', key: idempotencyKey, request: jsonPayload(input), expiresAt: tomorrow(),
+      });
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; replayed: boolean }>(begun.response.body);
+      if (begun.kind === 'in-progress') throw new ConflictException('The employee work-terms request is already being processed.');
+      const employee = await tx.hrEmployee.findFirst({ where: { id: input.employeeId, tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrEmployeeStatus.ACTIVE, HrEmployeeStatus.ON_LEAVE] } }, select: { id: true, hireDate: true } });
+      if (!employee) throw new BadRequestException('Choose an active employee from this company.');
+      if (input.effectiveFrom < employee.hireDate) throw new BadRequestException('Work terms cannot start before the employee hire date.');
+      const previous = await tx.hrEmployeeWorkTerms.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeId: input.employeeId }, orderBy: [{ effectiveFrom: 'desc' }, { createdAt: 'desc' }] });
+      if (previous && input.effectiveFrom <= previous.effectiveFrom) throw new ConflictException('A work-terms agreement must start after the latest agreement.');
+      if (previous && previous.effectiveTo && input.effectiveFrom <= previous.effectiveTo) throw new ConflictException('The work-terms agreement overlaps existing employee terms.');
+      if (previous && !previous.effectiveTo) {
+        const effectiveTo = new Date(input.effectiveFrom);
+        effectiveTo.setUTCDate(effectiveTo.getUTCDate() - 1);
+        await tx.hrEmployeeWorkTerms.update({ where: { id: previous.id }, data: { effectiveTo } });
+      }
+      const id = randomUUID();
+      const term = await tx.hrEmployeeWorkTerms.create({ data: { id, tenantId: context.tenantId, companyId: context.companyId, employeeId: input.employeeId, effectiveFrom: input.effectiveFrom, effectiveTo: null, workMinutesPerDay: input.workMinutesPerDay, notes: input.notes ?? null, createdByUserId: context.actorUserId } });
+      const receipt = { id, replayed: false };
+      await this.audit(tx, context, 'hr.employee.work_terms.created', 'HrEmployeeWorkTerms', id, previous ? mapWorkTerms(previous) : null, mapWorkTerms(term));
+      await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 201, headers: null, body: receipt } });
       return receipt;
     }).catch(rethrowIdempotency);
   }
@@ -565,6 +606,11 @@ export class HrService {
   private async audit(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, action: string, entityType: string, entityId: string, before: unknown, after: unknown) {
     await tx.auditEvent.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId, action, entityType, entityId, requestId: `${action}:${entityId}`, beforeJson: before === null ? Prisma.JsonNull : before as Prisma.InputJsonValue, afterJson: after as Prisma.InputJsonValue } });
   }
+
+  private async assertOwner(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext) {
+    const owner = await tx.tenantAdministrationAssignment.findFirst({ where: { tenantId: context.tenantId, userId: context.actorUserId, isOwner: true }, select: { userId: true } });
+    if (!owner) throw new ForbiddenException('Only the tenant owner can change employee work terms.');
+  }
 }
 
 function employeeCreateInput(value: EmployeeCreateInput) {
@@ -620,6 +666,7 @@ function defaultCategoryCodeForService(serviceType: string) {
 }
 function day(value: Date | null) { return value ? value.toISOString().slice(0, 10) : null; }
 function mapEmployee(value: { id: string; employeeNumber: string; nameAr: string; nameEn: string | null; jobTitle: string | null; phone: string | null; email: string | null; iqamaNumber: string | null; workSchedule: string | null; hireDate: Date; status: HrEmployeeStatus; terminatedAt: Date | null; statusEffectiveAt: Date | null; statusReason: string | null; notes: string | null }, currentMonthlyGross: Prisma.Decimal | null = null, profilePhotoVersionId: string | null = null) { return { id: value.id, employeeNumber: value.employeeNumber, nameAr: value.nameAr, nameEn: value.nameEn, jobTitle: value.jobTitle, phone: value.phone, email: value.email, iqamaNumber: value.iqamaNumber, workSchedule: value.workSchedule, hireDate: day(value.hireDate)!, currentMonthlyGross: currentMonthlyGross?.toFixed(4) ?? null, profilePhotoVersionId, status: value.status, terminatedAt: day(value.terminatedAt), statusEffectiveAt: day(value.statusEffectiveAt), statusReason: value.statusReason, notes: value.notes }; }
+function mapWorkTerms(value: { id: string; employeeId: string; effectiveFrom: Date; effectiveTo: Date | null; workMinutesPerDay: number; notes: string | null; createdAt: Date; updatedAt: Date }) { return { id: value.id, employeeId: value.employeeId, effectiveFrom: day(value.effectiveFrom)!, effectiveTo: day(value.effectiveTo), workMinutesPerDay: value.workMinutesPerDay, notes: value.notes, createdAt: value.createdAt.toISOString(), updatedAt: value.updatedAt.toISOString() }; }
 function mapPromotion(value: { id: string; employeeId: string; effectiveDate: Date; previousJobTitle: string | null; newJobTitle: string; decisionReference: string; reason: string | null; createdAt: Date }) { return { id: value.id, employeeId: value.employeeId, effectiveDate: day(value.effectiveDate)!, previousJobTitle: value.previousJobTitle, newJobTitle: value.newJobTitle, decisionReference: value.decisionReference, reason: value.reason, createdAt: value.createdAt.toISOString() }; }
 function mapCompensation(value: { id: string; employeeId: string; policyVersionId: string | null; effectiveFrom: Date; effectiveTo: Date | null; monthlyGross: Prisma.Decimal; compensationMethod: string; foodAllowance: Prisma.Decimal; housingAllowance: Prisma.Decimal; transportAllowance: Prisma.Decimal; otherAllowance: Prisma.Decimal; scheduledHoursPerDay: number | null; scheduledWorkDays: number | null; notes: string | null }) { return { id: value.id, employeeId: value.employeeId, policyVersionId: value.policyVersionId, effectiveFrom: day(value.effectiveFrom)!, effectiveTo: day(value.effectiveTo), monthlyGross: value.monthlyGross.toFixed(4), compensationMethod: value.compensationMethod as 'FIXED_MONTHLY' | 'INCLUSIVE_OVERTIME', foodAllowance: value.foodAllowance.toFixed(4), housingAllowance: value.housingAllowance.toFixed(4), transportAllowance: value.transportAllowance.toFixed(4), otherAllowance: value.otherAllowance.toFixed(4), scheduledHoursPerDay: value.scheduledHoursPerDay, scheduledWorkDays: value.scheduledWorkDays, notes: value.notes }; }
 function mapService(value: { id: string; employeeId: string; serviceType: string; referenceNumber: string | null; issueDate: Date | null; expiryDate: Date | null; visaDurationMonths: number | null; renewalOfServiceId: string | null; supplier: { id: string; nameAr: string; nameEn: string | null } | null; category: { id: string; nameAr: string; nameEn: string } | null; outflowDocumentId: string | null; outflowDocument?: { status: FinanceOutflowDocumentStatus } | null; status: HrEmployeeServiceStatus; complianceStatus: HrEmployeeServiceComplianceStatus; notes: string | null; employee?: { id: string; employeeNumber: string; nameAr: string; nameEn: string | null } }) {

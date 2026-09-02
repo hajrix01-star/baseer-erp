@@ -167,6 +167,7 @@ import { InboundEvidenceDocumentIntelligenceService } from './inbound-evidence/i
 import { OwnerDailyBriefController } from './owner-daily-brief/owner-daily-brief.controller.js';
 import { OwnerDailyBriefService } from './owner-daily-brief/owner-daily-brief.service.js';
 import { OwnerDailyBriefSchedulerService } from './owner-daily-brief/owner-daily-brief-scheduler.service.js';
+import { AttendanceLocationRetentionSchedulerService } from './attendance/attendance-location-retention-scheduler.service.js';
 import { OwnerDashboardController } from './owner-dashboard/owner-dashboard.controller.js';
 import { OwnerDashboardService } from './owner-dashboard/owner-dashboard.service.js';
 import { OfficialReportRunsController } from './reports/official-report-runs.controller.js';
@@ -290,6 +291,7 @@ import { OfficialReportRunsController } from './reports/official-report-runs.con
     HrFinalSettlementService,
     HrOverviewService,
     AttendanceService,
+    AttendanceLocationRetentionSchedulerService,
     OperationsCatalogService,
     OperationsExecutionService,
     OperationsInternalRegistrationService,

@@ -107,6 +107,16 @@ export const updateHrEmployeeRequestSchema = z.object({
   idempotencyKey: idempotencyKeySchema,
 }).strict();
 
+/** Contractual daily hours belong to the employee agreement, not payroll or
+ * the attendance roster. Later terms are effective-dated history. */
+export const createHrEmployeeWorkTermsRequestSchema = z.object({
+  employeeId: hrEmployeeIdSchema,
+  effectiveFrom: hrDateSchema,
+  workMinutesPerDay: z.number().int().min(30).max(1_440),
+  notes: z.string().trim().max(1_000).optional(),
+  idempotencyKey: idempotencyKeySchema,
+}).strict();
+
 /** A promotion is an immutable career-history event. It never changes a payroll snapshot. */
 export const createHrEmployeePromotionRequestSchema = z.object({
   employeeId: hrEmployeeIdSchema,
@@ -827,6 +837,12 @@ export const hrEmployeeDetailReceiptSchema = z.object({
   hasMoreMovements: z.boolean(),
   nextMovementCursor: z.string().uuid().nullable(),
 }).strict();
+export const hrEmployeeWorkTermsSchema = z.object({
+  id: z.string().uuid(), employeeId: hrEmployeeIdSchema, effectiveFrom: businessDateSchema,
+  effectiveTo: businessDateSchema.nullable(), workMinutesPerDay: z.number().int().min(30).max(1_440),
+  notes: z.string().max(1_000).nullable(), createdAt: z.string().datetime(), updatedAt: z.string().datetime(),
+}).strict();
+export const hrEmployeeWorkTermsReceiptSchema = z.object({ companyId: companyIdSchema, workTerms: z.array(hrEmployeeWorkTermsSchema).max(100) }).strict();
 export const hrEmployeeEntityReceiptSchema = z.object({ id: z.string().uuid(), replayed: z.boolean() }).strict();
 export const hrEmployeeAdvanceIssueReceiptSchema = z.object({ id: z.string().uuid(), advanceNumber: z.string().min(1).max(80), journalEntryId: z.string().uuid(), replayed: z.boolean() }).strict();
 export const hrEmployeeAdvanceReversalReceiptSchema = z.object({ id: z.string().uuid(), advanceNumber: z.string().min(1).max(80), reversalJournalEntryId: z.string().uuid(), replayed: z.boolean() }).strict();
@@ -905,6 +921,7 @@ export const hrOverviewReceiptSchema = z.object({
 export type CreateHrEmployeeRequest = z.infer<typeof createHrEmployeeRequestSchema>;
 export type OnboardHrEmployeeRequest = z.infer<typeof onboardHrEmployeeRequestSchema>;
 export type UpdateHrEmployeeRequest = z.infer<typeof updateHrEmployeeRequestSchema>;
+export type CreateHrEmployeeWorkTermsRequest = z.infer<typeof createHrEmployeeWorkTermsRequestSchema>;
 export type CreateHrEmployeePromotionRequest = z.infer<typeof createHrEmployeePromotionRequestSchema>;
 export type CreateHrEmployeeServiceRequest = z.infer<typeof createHrEmployeeServiceRequestSchema>;
 export type UpdateHrEmployeeServiceRequest = z.infer<typeof updateHrEmployeeServiceRequestSchema>;

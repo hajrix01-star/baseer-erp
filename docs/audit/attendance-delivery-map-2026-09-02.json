@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "بصير ERP — مسار الحضور والانصراف",
+    "quality_profile": "showcase",
+    "views": [
+      { "id": "attendance", "label": "رحلة تسجيل الحضور", "focus": ["employee", "web", "edge", "api", "database"], "note": "QR وPIN/رمز البوابة يعبران الحدود إلى سجل الحضور الدائم." },
+      { "id": "admin-close", "label": "إغلاق إداري", "focus": ["manager", "web", "api", "database"], "note": "المالك يدير، ومدير الشركة يغلق جلسة مفتوحة فقط بوقت وسبب." },
+      { "id": "retention", "label": "خصوصية الموقع", "focus": ["api", "retention", "database"], "note": "الموقع اختياري؛ المجدول يمحو الإحداثيات بعد 14 يوماً." }
+    ]
+  },
+  "components": [
+    { "id": "employee", "type": "external", "label": "الموظف", "sublabel": "بوابة الحضور", "pos": [30, 300], "size": [130, 62] },
+    { "id": "manager", "type": "external", "label": "المالك / مدير الشركة", "sublabel": "واجهة ERP", "pos": [30, 120], "size": [150, 62] },
+    { "id": "web", "type": "frontend", "label": "React web", "sublabel": "Arabic-first UI", "pos": [250, 240], "size": [145, 72] },
+    { "id": "edge", "type": "security", "label": "Caddy edge", "sublabel": "HTTPS + permissions", "pos": [470, 240], "size": [150, 72] },
+    { "id": "api", "type": "backend", "label": "Nest Attendance + HR", "sublabel": "authZ · validation · audit", "pos": [700, 240], "size": [180, 72] },
+    { "id": "retention", "type": "backend", "label": "Retention scheduler", "sublabel": "daily DB lease", "pos": [700, 440], "size": [180, 62] },
+    { "id": "database", "type": "database", "label": "PostgreSQL", "sublabel": "RLS · events · sessions · work terms", "pos": [970, 240], "size": [190, 72] }
+  ],
+  "boundaries": [
+    { "kind": "security-group", "label": "حد الثقة العام: المتصفح إلى HTTPS", "wraps": ["web", "edge", "api"] },
+    { "kind": "region", "label": "بيئة Baseer الخاصة", "wraps": ["edge", "api", "retention", "database"] }
+  ],
+  "connections": [
+    { "id": "employee-web", "from": "employee", "to": "web", "label": "PIN + QR + موقع اختياري", "variant": "emphasis", "labelAt": [205, 376] },
+    { "id": "manager-web", "from": "manager", "to": "web", "label": "جلسة ERP", "variant": "security" },
+    { "id": "web-edge", "from": "web", "to": "edge", "label": "HTTPS" },
+    { "id": "edge-api", "from": "edge", "to": "api", "label": "API" },
+    { "id": "api-database", "from": "api", "to": "database", "label": "RLS transaction + audit", "variant": "security", "labelAt": [925, 205] },
+    { "id": "retention-database", "from": "retention", "to": "database", "label": "redact coordinates >14d", "variant": "dashed" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "مثبت بالدليل", "items": ["الموقع معطّل افتراضياً لكل شركة", "الإغلاق الإداري يحفظ الوقت والسبب والمنفذ", "اتفاق الساعات منفصل عن التعويض والرواتب"] },
+    { "dot": "amber", "title": "حدود التسليم", "items": ["لم تُطبّق migration أو اختبار حمل على قاعدة معزولة", "قرار الإنتاج يحتاج artifact نظيفاً وقياس ذروة 12/دقيقة"] }
+  ]
+}
