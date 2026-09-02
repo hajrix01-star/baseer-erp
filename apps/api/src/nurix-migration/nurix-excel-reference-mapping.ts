@@ -69,6 +69,10 @@ export const NOORIX_VAULT_REFERENCES: readonly ArzVaultReference[] = [
   // display-name inference is permitted by the migration writer.
   { sourceId: 'cmnf5xrdt002oy8lmpyszg9uy', sourceNameAr: 'نقد', targetVaultCode: 'V-001', targetNameAr: 'نقد', vaultType: 'CASH', paymentMethod: 'CASH', evidence: 'ARZ_V5_EXPLICIT_VAULT_DECISION' },
   { sourceId: 'cmnf5xrdx002qy8lm9dgwq3ee', sourceNameAr: 'بنك', targetVaultCode: 'V-002', targetNameAr: 'بنك', vaultType: 'BANK', paymentMethod: 'BANK_TRANSFER', evidence: 'ARZ_V5_EXPLICIT_VAULT_DECISION' },
+  // SHAMI TAX — exact bank-vault identity from the 2026-09-02 Noorix
+  // snapshot.  The source UUID and normalized name are both required by the
+  // resolver; this is deliberately not a display-name fallback.
+  { sourceId: 'cmr3fd0z9001lycziqkw21grp', sourceNameAr: 'بنك', targetVaultCode: 'V-002', targetNameAr: 'بنك', vaultType: 'BANK', paymentMethod: 'BANK_TRANSFER', evidence: 'ARZ_V5_EXPLICIT_VAULT_DECISION' },
 ] as const;
 
 /** Rejects a hand-edited decision set before it can be passed to an importer. */
