@@ -1,5 +1,5 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
-import { createHash } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 
 import type { TrustedTenantAdministratorContext } from '../administration/tenant-administration-context.service.js';
 import { DatabaseService } from '../database/database.service.js';
@@ -100,6 +100,7 @@ type HrRecordMap = Readonly<{ sourceId: string; sourceChecksum: string; targetId
 type HrException = Readonly<{ sourceEntity: string | null; sourceId: string | null; code: string; severity: string }>;
 type FinancialClosureItem = Readonly<{ sourceEntity: string; sourceId: string; sourceChecksum: string; status: string; resultCode: string | null }>;
 type FinancialClosureSourceMap = Readonly<{ sourceEntity: string; sourceId: string; sourceChecksum: string }>;
+type SpecializedExceptionSourceMap = Readonly<{ sourceEntity: string; sourceId: string; targetEntity: string; state: string }>;
 type RecurringProfileEvidenceItem = FinancialClosureItem & Readonly<{ targetEntity: string | null; transformVersion: string }>;
 export type HrHistoryClosureCoverage = Readonly<Record<'EmployeeServices' | 'EmployeeDeductions' | 'EmployeeMovements', Readonly<{
   settledRows: number;
@@ -130,7 +131,7 @@ export class NurixExcelPackageClosureAuditService {
       if (!packageRow) throw new NotFoundException('The verified Noorix package was not found.');
 
       const hrFingerprint = hrHistoryFingerprint(packageRow.workbookSha256, packageRow.sourceCompanyId, packageRow.id);
-      const [sourceRows, masterItems, financialItems, sourceMaps, deletedSupplierEvents, executions, hrRun, rawSalesClosings, postedClosings, reversedClosings, postedAllocations] = await Promise.all([
+      const [sourceRows, masterItems, financialItems, sourceMaps, specializedExceptionMaps, deletedSupplierEvents, executions, hrRun, rawSalesClosings, postedClosings, reversedClosings, postedAllocations] = await Promise.all([
         tx.nurixExcelStagingRow.findMany({ where: { packageId, tenantId: context.tenantId, status: 'ACCEPTED' }, select: { sheet: true, sourceId: true, sourceChecksum: true } }),
         tx.nurixExcelMasterDataItem.findMany({
           where: { tenantId: context.tenantId, execution: { packageId, status: 'COMPLETED' }, status: { in: ['CREATED', 'REUSED'] } },
@@ -148,6 +149,19 @@ export class NurixExcelPackageClosureAuditService {
           // target already existed and was safely retained.
           where: { tenantId: context.tenantId, execution: { packageId, status: 'COMPLETED' }, state: { in: ['APPLIED', 'REVERSED', 'REUSED'] } },
           select: { sourceEntity: true, sourceId: true, sourceChecksum: true },
+        }),
+        // A historical specialist can be completed before this core package
+        // is re-exported.  It is usable here only for the exact exception ID
+        // in this company and only through the fixed lifecycle contracts
+        // below; generic Invoice maps never settle an exception.
+        tx.nurixExcelFinancialSourceMap.findMany({
+          where: {
+            tenantId: context.tenantId,
+            targetCompanyId: packageRow.targetCompanyId,
+            state: { in: ['APPLIED', 'REUSED', 'REVERSED'] },
+            execution: { status: 'COMPLETED' },
+          },
+          select: { sourceEntity: true, sourceId: true, targetEntity: true, state: true },
         }),
         tx.auditEvent.findMany({
           where: {
@@ -244,10 +258,11 @@ export class NurixExcelPackageClosureAuditService {
           ? { serviceMaps: hrRun.recordMaps, exceptions: hrRun.exceptions, activeServiceIds: activeHistoricalServices.map((item) => item.id) }
           : null,
       );
-      const hrExceptionEvidenceRows = resolveHrExceptionSheetEvidence(
-        sourceRows,
-        hrRun && isCompletedHrHistoryRun(hrRun.status, hrRun.completedAt) ? hrRun.exceptions : null,
-      );
+      const exceptionEvidenceSourceIds = new Set([
+        ...resolveHrExceptionSourceIds(hrRun && isCompletedHrHistoryRun(hrRun.status, hrRun.completedAt) ? hrRun.exceptions : null),
+        ...resolveSpecializedExceptionSourceIds(specializedExceptionMaps),
+      ]);
+      const exceptionEvidenceRows = sourceRows.filter((row) => row.sheet === 'Exceptions' && exceptionEvidenceSourceIds.has(row.sourceId)).length;
       const packageVerified = packageRow.status === 'READY_FOR_RECONCILIATION'
         && Boolean(packageRow.storageReference && packageRow.encryptionIv && packageRow.storedByteSize !== null && packageRow.workbookSha256);
       const dailySalesReconciliation = sources.get('DailySalesClosings')
@@ -265,7 +280,7 @@ export class NurixExcelPackageClosureAuditService {
         const sourceEntity = sourceEntityBySheet[sheet];
         const hrSection = hrCoverage[sheet as keyof HrHistoryClosureCoverage];
         if (hrSection) return this.hrHistorySection(sheet, sourceRowsCount, hrSection, packageVerified);
-        if (sheet === 'Exceptions') return this.hrExceptionSection(sourceRowsCount, hrExceptionEvidenceRows, packageVerified);
+        if (sheet === 'Exceptions') return this.hrExceptionSection(sourceRowsCount, exceptionEvidenceRows, packageVerified);
         if (sheet === 'CategoryAudit') {
           const approvedReviews = maps.get('CategoryAudit') ?? 0;
           return approvedReviews === sourceRowsCount
@@ -321,6 +336,31 @@ export class NurixExcelPackageClosureAuditService {
     if (audit.readyToUnlock) return;
     const blockers = audit.blockingSheets.length ? audit.blockingSheets.join(', ') : 'execution-health-or-package-verification';
     throw new ConflictException(`The Noorix package closure is incomplete: ${blockers}. Keep the target company migration-locked.`);
+  }
+
+  /**
+   * This is the only write path for lifting a Noorix review lock from a
+   * package. It deliberately reuses the fail-closed audit rather than
+   * allowing a caller to toggle the ordinary administration switch first.
+   */
+  async unlockCompanyAfterVerifiedClosure(context: TrustedTenantAdministratorContext, packageId: string): Promise<Readonly<{ unlocked: boolean; audit: NurixExcelPackageClosureAudit }>> {
+    if (!context.isOwner) throw new ConflictException('Only the tenant owner may lift a completed Noorix migration review lock.');
+    const audit = await this.audit(context, packageId);
+    this.assertCompanyMayUnlock(audit);
+    await this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const company = await tx.company.findFirst({ where: { id: audit.targetCompanyId, tenantId: context.tenantId }, select: { id: true, migrationReviewLocked: true } });
+      if (!company) throw new NotFoundException('The target company was not found while lifting its migration review lock.');
+      if (!company.migrationReviewLocked) return;
+      await tx.company.update({ where: { id: company.id }, data: { migrationReviewLocked: false } });
+      await tx.auditEvent.create({ data: {
+        id: randomUUID(), tenantId: context.tenantId, companyId: company.id, actorUserId: context.actorUserId,
+        action: 'nurix_excel.package_closure_unlock_completed', entityType: 'NurixExcelStagingPackage', entityId: packageId,
+        requestId: `nurix-closure-unlock:${packageId}`,
+        beforeJson: { migrationReviewLocked: true, blockingSheets: audit.blockingSheets },
+        afterJson: { migrationReviewLocked: false, packageVerified: audit.packageVerified, executionHealth: audit.executionHealth, dailySalesReconciliation: audit.dailySalesReconciliation },
+      } });
+    });
+    return { unlocked: true, audit };
   }
 
   /**
@@ -429,8 +469,8 @@ export class NurixExcelPackageClosureAuditService {
     const base = { sheet: 'Exceptions', nameAr: namesAr.Exceptions ?? 'استثناءات المصدر', sourceRows, settledRows, sourceMaps: 0 };
     if (sourceRows === 0) return { ...base, state: 'NOT_APPLICABLE', treatmentAr: 'لا توجد صفوف مصدر.', nextActionAr: 'لا يلزم إجراء.' };
     if (!packageVerified) return { ...base, state: 'BLOCKER', treatmentAr: 'دليل الحزمة غير موثق.', nextActionAr: 'أعد التحقق من الحزمة المشفرة وبصمتها.' };
-    if (settledRows !== sourceRows) return { ...base, state: 'REMAINING', treatmentAr: 'توجد استثناءات مصدر لا ترتبط بدليل خدمة موظف تاريخي مقبول من الحزمة نفسها.', nextActionAr: 'وثق كل استثناء بمسار مستقل؛ لا تعتمد الاستثناءات العامة.' };
-    return { ...base, state: 'HISTORICAL_EVIDENCE_RETAINED', treatmentAr: 'كل استثناء مصدر مرتبط بدليل خدمة موظف تاريخي مقبول من الحزمة نفسها؛ لا ينشئ قيداً أو مطالبة.', nextActionAr: 'لا يلزم إجراء.' };
+    if (settledRows !== sourceRows) return { ...base, state: 'REMAINING', treatmentAr: 'توجد استثناءات مصدر لا ترتبط بعد بمسار متخصص نهائي ومثبت لهوية المصدر نفسها.', nextActionAr: 'وثق كل استثناء بمسار رواتب أو سلف أو خدمة أو دليل إلغاء محدد؛ لا تعتمد الاستثناءات العامة.' };
+    return { ...base, state: 'HISTORICAL_EVIDENCE_RETAINED', treatmentAr: 'كل استثناء مصدر مرتبط بمسار متخصص نهائي أو دليل إلغاء ثابت لهوية المصدر نفسها؛ لا ينشئ دليل الإلغاء قيداً أو مطالبة.', nextActionAr: 'لا يلزم إجراء.' };
   }
 }
 
@@ -491,11 +531,56 @@ export function resolveHrExceptionSheetEvidence(
   sourceRows: readonly HrStagingRow[],
   exceptions: readonly HrException[] | null,
 ): number {
-  if (!exceptions) return 0;
-  const acceptedServiceEvidenceIds = new Set(exceptions
+  const acceptedServiceEvidenceIds = resolveHrExceptionSourceIds(exceptions);
+  return sourceRows.filter((row) => row.sheet === 'Exceptions' && acceptedServiceEvidenceIds.has(row.sourceId)).length;
+}
+
+function resolveHrExceptionSourceIds(exceptions: readonly HrException[] | null): ReadonlySet<string> {
+  if (!exceptions) return new Set<string>();
+  return new Set(exceptions
     .filter((item) => item.severity === 'REVIEW' && item.sourceEntity === HR_SERVICE_EVIDENCE_ENTITY && item.sourceId && [HR_EVIDENCE_CODE, 'NURIX_HR_SERVICE_COST_EVIDENCE'].includes(item.code))
     .map((item) => item.sourceId!));
-  return sourceRows.filter((row) => row.sheet === 'Exceptions' && acceptedServiceEvidenceIds.has(row.sourceId)).length;
+}
+
+/**
+ * Exceptions exported from Noorix are deliberately not financial documents.
+ * They may close only when the exact source invoice has a final receipt from
+ * one of the explicitly supported lifecycle writers.  This permits a later
+ * core-package export to recognize an earlier specialist migration while
+ * preventing ordinary Invoice maps, notes, or review acknowledgements from
+ * becoming a blanket exception bypass.
+ */
+export function resolveSpecializedExceptionSheetEvidence(
+  sourceRows: readonly HrStagingRow[],
+  sourceMaps: readonly SpecializedExceptionSourceMap[],
+): number {
+  const accepted = resolveSpecializedExceptionSourceIds(sourceMaps);
+  return sourceRows.filter((row) => row.sheet === 'Exceptions' && accepted.has(row.sourceId)).length;
+}
+
+function resolveSpecializedExceptionSourceIds(sourceMaps: readonly SpecializedExceptionSourceMap[]): ReadonlySet<string> {
+  return new Set(sourceMaps.filter((map) => isAcceptedSpecializedExceptionMap(map)).map((map) => map.sourceId));
+}
+
+function isAcceptedSpecializedExceptionMap(map: SpecializedExceptionSourceMap): boolean {
+  const contract = `${map.sourceEntity}:${map.targetEntity}`;
+  return new Set([
+    // ARZ's accrual/payroll writer.
+    'PayrollFinancialRun:HrPayrollRun',
+    'PayrollInvoiceFinancial:HrPayrollPayment',
+    'PayrollInvoiceEvidence:NurixHistoricalPayrollAccountingEvidence',
+    // The paid-payroll writer used by Al-Shami and Doha.
+    'NoorixPaidPayrollRun:HrPayrollRun',
+    'NoorixPayrollInvoice:HrPayrollRun',
+    // A cash advance is an employee asset, never a generic expense invoice.
+    'NoorixAdvanceInvoice:HrEmployeeAdvance',
+    'NoorixAdvanceInvoice:NoorixCancelledAdvanceEvidence',
+    // Historical residency/insurance services use a posted outflow document.
+    'NoorixEmployeeServiceInvoice:FinanceOutflowDocument',
+    // A cancelled source remains visible as immutable evidence only; the
+    // dedicated writer creates no financial target or journal.
+    'NoorixCancelledInvoiceEvidence:NoorixCancelledSourceEvidence',
+  ]).has(contract);
 }
 
 function hrHistoryFingerprint(workbookSha256: string, sourceCompanyId: string, packageId: string): string {

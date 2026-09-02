@@ -22,6 +22,8 @@ import dotenv from 'dotenv';
 import { NestFactory } from '@nestjs/core';
 
 const SOURCE_COMPANY_ID = 'cmnaivif80001wavxxfgriptm';
+const SNAPSHOT_CONTAINER = 'baseer-noorix-snapshot-20260902';
+const SNAPSHOT_DATABASE = 'nurix_snapshot';
 const APPLY_TOKEN = 'APPLY_APPROVED_NOORIX_AL_SHAMI_PAID_PAYROLL_V1';
 const TRANSFORM_VERSION = 'nurix-al-shami-paid-payroll/v1';
 const [packageId, tenantId, companyId, actorUserId, mode] = process.argv.slice(2);
@@ -107,9 +109,30 @@ FROM (
    AND i.status='active'
   WHERE r.company_id='${SOURCE_COMPANY_ID}' AND r.status='completed'
 ) source;`;
-const raw = execFileSync('docker', ['exec', 'nurix-rehearsal-20260827', 'psql', '-U', 'nurix_restore', '-d', 'nurix_rehearsal', '-t', '-A', '-c', sourceSql], { encoding: 'utf8' }).trim();
+const raw = execFileSync('docker', ['exec', SNAPSHOT_CONTAINER, 'psql', '-U', 'nurix_restore', '-d', SNAPSHOT_DATABASE, '-t', '-A', '-c', sourceSql], { encoding: 'utf8' }).trim();
 if (!raw) throw new Error('No Noorix salary source was returned.');
 const sourceRuns = JSON.parse(raw);
+
+// A cancelled salary source is retained as immutable evidence only. It never
+// becomes a payroll run, payment, expense, accrual, or advance settlement.
+const cancelledSalarySql = `
+SELECT COALESCE(json_agg(json_build_object(
+  'sourceId', i.id,
+  'number', i.invoice_number,
+  'amount', i.total_amount::text,
+  'businessDate', to_char(i.transaction_date::date, 'YYYY-MM-DD'),
+  'status', i.status,
+  'notes', COALESCE(i.notes, '')
+) ORDER BY i.id), '[]'::json)::text
+FROM invoices i
+WHERE i.company_id='${SOURCE_COMPANY_ID}' AND i.kind='salary' AND i.status='cancelled';`;
+const cancelledRaw = execFileSync('docker', ['exec', SNAPSHOT_CONTAINER, 'psql', '-U', 'nurix_restore', '-d', SNAPSHOT_DATABASE, '-t', '-A', '-c', cancelledSalarySql], { encoding: 'utf8' }).trim();
+if (!cancelledRaw) throw new Error('No Noorix cancelled-salary evidence was returned.');
+const cancelledSalaryInvoices = JSON.parse(cancelledRaw).map((item) => {
+  if (!item?.sourceId || !item?.number || item.status !== 'cancelled' || !/^\d{4}-\d{2}-\d{2}$/.test(item.businessDate ?? '')) throw new Error('Noorix cancelled salary evidence is incomplete.');
+  return { sourceId: item.sourceId, number: item.number, amount: money(item.amount, `cancelled salary ${item.sourceId}`), businessDate: item.businessDate, notes: sourceNote(item.notes), checksum: sha(item) };
+});
+if (cancelledSalaryInvoices.length !== 1 || cancelledSalaryInvoices[0].amount !== '900.0000') throw new Error('The reviewed Al-Shami cancelled-salary evidence changed.');
 
 function normaliseRun(source) {
   if (!source?.sourceId || !source?.runNumber || !source?.invoice?.sourceId || !Array.isArray(source?.items) || !Array.isArray(source?.ledgers)) {
@@ -225,7 +248,7 @@ const targetRuns = [...runs.reduce((groups, component) => {
 if (targetRuns.length !== 5 || targetRuns.reduce((sum, run) => sum + run.items.length, 0) !== 67 || targetRuns.reduce((sum, run) => sum + run.ledgers.length, 0) !== 8) {
   throw new Error('Noorix monthly normalization does not produce the reviewed 5 target runs / 67 lines / 8 payments contract.');
 }
-const planChecksum = sha({ transformVersion: TRANSFORM_VERSION, sourceCompanyId: SOURCE_COMPANY_ID, sourceComponents: runs.map((run) => ({ sourceId: run.sourceId, checksum: run.checksum })), targetRuns: targetRuns.map((run) => ({ payrollMonth: run.payrollMonth, runNumber: run.runNumber, checksum: run.checksum })) });
+const planChecksum = sha({ transformVersion: TRANSFORM_VERSION, sourceCompanyId: SOURCE_COMPANY_ID, sourceComponents: runs.map((run) => ({ sourceId: run.sourceId, checksum: run.checksum })), targetRuns: targetRuns.map((run) => ({ payrollMonth: run.payrollMonth, runNumber: run.runNumber, checksum: run.checksum })), cancelledSalaryInvoices: cancelledSalaryInvoices.map((invoice) => ({ sourceId: invoice.sourceId, checksum: invoice.checksum })) });
 
 process.chdir(resolve('apps/api'));
 const { AppModule } = await import('../apps/api/dist/app.module.js');
@@ -263,9 +286,14 @@ try {
     const employeeById = new Map(employees.map((employee) => [employee.id, employee]));
     const employeeBySource = new Map();
     for (const map of employeeMaps) {
-      if (!map.targetId || employeeBySource.has(map.sourceId)) throw new Error(`Noorix employee ${map.sourceId} has ambiguous Baseer lineage.`);
+      if (!map.targetId) throw new Error(`Noorix employee ${map.sourceId} has ambiguous Baseer lineage.`);
       const employee = employeeById.get(map.targetId);
       if (!employee) throw new Error(`Noorix employee ${map.sourceId} maps outside this company.`);
+      const prior = employeeBySource.get(map.sourceId);
+      // Reused master-data receipts from later package revisions are valid
+      // only when they retain this exact employee target; a different target
+      // remains a hard stop.
+      if (prior && prior.id !== employee.id) throw new Error(`Noorix employee ${map.sourceId} has ambiguous Baseer lineage.`);
       employeeBySource.set(map.sourceId, employee);
     }
     if (employeeBySource.size !== sourceEmployeeIds.length) throw new Error('One or more Noorix payroll employees have no Baseer lineage.');
@@ -307,6 +335,7 @@ try {
     payrollLines: targetRuns.reduce((sum, run) => sum + run.items.length, 0),
     payments: paymentCount,
     paidTotal,
+    cancelledSalaryEvidenceOnly: cancelledSalaryInvoices.length,
     sourceLineArithmeticExceptions: runs.flatMap((run) => run.items.filter((item) => fixed(Number(item.grossSalary) + Number(item.allowances) - Number(item.deductions) - Number(item.advanceDeduction) - Number(item.netAmount)) !== '0.0000').map((item) => ({ runNumber: run.runNumber, sourceItemId: item.sourceId }))),
     noAccrualJournalCreated: true,
     noAdvanceSettlementJournalCreated: true,
@@ -320,7 +349,7 @@ try {
       const existingExecution = await tx.nurixExcelFinancialExecution.findUnique({ where: { packageId_tenantId_transformVersion: { packageId, tenantId, transformVersion: TRANSFORM_VERSION } }, select: { id: true, status: true, financialPlanSha256: true } });
       if (existingExecution?.financialPlanSha256 && existingExecution.financialPlanSha256 !== planChecksum) throw new Error('The payroll plan changed after preflight.');
       const execution = existingExecution ?? await tx.nurixExcelFinancialExecution.create({ data: { id: randomUUID(), packageId, tenantId, targetCompanyId: companyId, transformVersion: TRANSFORM_VERSION, financialPlanSha256: planChecksum, status: 'APPROVED', reason: 'Owner-approved Al Shami historical paid payroll. Mirrors verified Noorix cash-basis salary journals only; no accrual or source-error correction.', requestedByUserId: actorUserId, approvedByUserId: actorUserId, approvedAt: new Date() }, select: { id: true, status: true } });
-      const wave = await tx.nurixExcelFinancialWave.upsert({ where: { executionId_sequence: { executionId: execution.id, sequence: 1 } }, create: { id: randomUUID(), executionId: execution.id, tenantId, targetCompanyId: companyId, sequence: 1, status: 'RUNNING', plannedItems: targetRuns.length }, update: { status: 'RUNNING', plannedItems: targetRuns.length, failedItems: 0 }, select: { id: true } });
+      const wave = await tx.nurixExcelFinancialWave.upsert({ where: { executionId_sequence: { executionId: execution.id, sequence: 1 } }, create: { id: randomUUID(), executionId: execution.id, tenantId, targetCompanyId: companyId, sequence: 1, status: 'RUNNING', plannedItems: runs.length + cancelledSalaryInvoices.length }, update: { status: 'RUNNING', plannedItems: runs.length + cancelledSalaryInvoices.length, failedItems: 0 }, select: { id: true } });
       const accounts = await tx.financeAccount.findMany({ where: { tenantId, companyId, status: 'ACTIVE', systemKey: 'PAYROLL_EXPENSE' }, select: { id: true, code: true } });
       if (accounts.length !== 1 || accounts[0].code !== 'EXP-004') throw new Error('PAYROLL_EXPENSE account changed after preflight.');
       const employeeSourceIds = [...new Set(runs.flatMap((run) => run.items.map((item) => item.employeeSourceId)))];
@@ -377,9 +406,27 @@ try {
         await tx.auditEvent.create({ data: { id: randomUUID(), tenantId, companyId, actorUserId, action: 'nurix.al_shami.historical_paid_payroll.posted', entityType: 'HrPayrollRun', entityId: payrollRunId, requestId: `nurix-al-shami-payroll:${run.payrollMonth}`, afterJson: { sourceComponentIds: run.components.map((component) => component.sourceId), sourceComponentRunNumbers: run.components.map((component) => component.runNumber), sourceChecksum: run.checksum, sourcePaymentLedgerIds: payments.map((payment) => payment.ledger.sourceId), paidAmount: run.totalAmount, sourceLineArithmeticExceptionCount: run.items.filter(({ component, ...item }) => fixed(Number(item.grossSalary) + Number(item.allowances) - Number(item.deductions) - Number(item.advanceDeduction) - Number(item.netAmount)) !== '0.0000').length, noAccrualJournalCreated: true } } });
         receipts.push({ run, payrollRunId, replayed: false });
       }
-      await tx.nurixExcelFinancialItem.createMany({ skipDuplicates: true, data: receipts.flatMap(({ run, payrollRunId, replayed }) => run.components.map((component) => ({ id: randomUUID(), executionId: execution.id, waveId: wave.id, tenantId, targetCompanyId: companyId, sourceSheet: 'NoorixPaidPayroll', sourceEntity: 'NoorixPaidPayrollRun', sourceId: component.sourceId, sourceChecksum: component.checksum, operationKey: sha({ transformVersion: TRANSFORM_VERSION, sourceId: component.sourceId, checksum: component.checksum }), status: replayed ? 'REUSED' : 'POSTED', targetEntity: 'HrPayrollRun', targetId: payrollRunId, resultCode: replayed ? 'REPLAYED_VERIFIED' : 'POSTED_MONTH_NORMALIZED_CASH_BASIS_SOURCE_JOURNALS_ONLY' }))) });
-      const totals = { targetRuns: receipts.length, sourceComponents: runs.length, reusedTargetRuns: receipts.filter((receipt) => receipt.replayed).length, payrollLines: targetRuns.reduce((sum, run) => sum + run.items.length, 0), payments: paymentCount, paid: paidTotal, accrualJournalsCreated: 0, advanceSettlementJournalsCreated: 0, sourceLineArithmeticExceptions: drySummary.sourceLineArithmeticExceptions.length };
-      await tx.nurixExcelFinancialWave.update({ where: { id: wave.id }, data: { status: 'COMMITTED', postedItems: receipts.filter((receipt) => !receipt.replayed).length, reusedItems: receipts.filter((receipt) => receipt.replayed).length, failedItems: 0, committedAt: new Date(), reconciliationHash: sha(totals) } });
+      // Every active SAL invoice gets an invoice-level receipt on this package.
+      // This is essential when a prior writer already created the normalized
+      // monthly payroll run: replaying it must restore package-bound invoice
+      // lineage without posting a second journal or payment.
+      for (const { run, payrollRunId } of receipts) for (const component of run.components) {
+        const invoiceChecksum = sha({ sourceId: component.invoice.sourceId, invoice: component.invoice });
+        await tx.nurixExcelFinancialSourceMap.upsert({ where: { executionId_sourceEntity_sourceId: { executionId: execution.id, sourceEntity: 'NoorixPayrollInvoice', sourceId: component.invoice.sourceId } }, create: { id: randomUUID(), executionId: execution.id, tenantId, targetCompanyId: companyId, sourceEntity: 'NoorixPayrollInvoice', sourceId: component.invoice.sourceId, sourceChecksum: invoiceChecksum, targetEntity: 'HrPayrollRun', targetId: payrollRunId, state: 'APPLIED' }, update: { sourceChecksum: invoiceChecksum, targetEntity: 'HrPayrollRun', targetId: payrollRunId, state: 'APPLIED' } });
+      }
+      for (const invoice of cancelledSalaryInvoices) {
+        await tx.nurixExcelFinancialSourceMap.upsert({ where: { executionId_sourceEntity_sourceId: { executionId: execution.id, sourceEntity: 'NoorixCancelledPayrollInvoice', sourceId: invoice.sourceId } }, create: { id: randomUUID(), executionId: execution.id, tenantId, targetCompanyId: companyId, sourceEntity: 'NoorixCancelledPayrollInvoice', sourceId: invoice.sourceId, sourceChecksum: invoice.checksum, targetEntity: 'NoorixCancelledPayrollEvidence', targetId: invoice.sourceId, state: 'APPLIED' }, update: { sourceChecksum: invoice.checksum, targetEntity: 'NoorixCancelledPayrollEvidence', targetId: invoice.sourceId, state: 'APPLIED' } });
+        await tx.noorixSourceAnnotation.upsert({ where: { tenantId_targetCompanyId_sourceEntity_sourceId_field: { tenantId, targetCompanyId: companyId, sourceEntity: 'Invoice', sourceId: invoice.sourceId, field: 'notes' } }, create: { id: randomUUID(), tenantId, targetCompanyId: companyId, sourceCompanyId: SOURCE_COMPANY_ID, sourceEntity: 'Invoice', sourceId: invoice.sourceId, sourceChecksum: invoice.checksum, targetEntity: null, targetId: null, field: 'notes', exactText: invoice.notes }, update: { sourceChecksum: invoice.checksum, targetEntity: null, targetId: null, exactText: invoice.notes } });
+      }
+      await tx.nurixExcelFinancialItem.createMany({ skipDuplicates: true, data: [
+        ...receipts.flatMap(({ run, payrollRunId, replayed }) => run.components.map((component) => ({ id: randomUUID(), executionId: execution.id, waveId: wave.id, tenantId, targetCompanyId: companyId, sourceSheet: 'NoorixPaidPayroll', sourceEntity: 'NoorixPaidPayrollRun', sourceId: component.sourceId, sourceChecksum: component.checksum, operationKey: sha({ transformVersion: TRANSFORM_VERSION, sourceId: component.sourceId, checksum: component.checksum }), status: replayed ? 'REUSED' : 'POSTED', targetEntity: 'HrPayrollRun', targetId: payrollRunId, resultCode: replayed ? 'REPLAYED_VERIFIED' : 'POSTED_MONTH_NORMALIZED_CASH_BASIS_SOURCE_JOURNALS_ONLY' }))),
+        ...receipts.flatMap(({ run, payrollRunId, replayed }) => run.components.map((component) => ({ id: randomUUID(), executionId: execution.id, waveId: wave.id, tenantId, targetCompanyId: companyId, sourceSheet: 'Exceptions', sourceEntity: 'NoorixPayrollInvoice', sourceId: component.invoice.sourceId, sourceChecksum: sha({ sourceId: component.invoice.sourceId, invoice: component.invoice }), operationKey: sha({ transformVersion: TRANSFORM_VERSION, sourceId: component.invoice.sourceId, kind: 'salary-invoice' }), status: replayed ? 'REUSED' : 'POSTED', targetEntity: 'HrPayrollRun', targetId: payrollRunId, resultCode: replayed ? 'REPLAYED_VERIFIED_INVOICE_LINEAGE' : 'POSTED_CASH_BASIS_SOURCE_JOURNALS_ONLY' }))),
+        ...cancelledSalaryInvoices.map((invoice) => ({ id: randomUUID(), executionId: execution.id, waveId: wave.id, tenantId, targetCompanyId: companyId, sourceSheet: 'Exceptions', sourceEntity: 'NoorixCancelledPayrollInvoice', sourceId: invoice.sourceId, sourceChecksum: invoice.checksum, operationKey: sha({ transformVersion: TRANSFORM_VERSION, sourceId: invoice.sourceId, kind: 'cancelled-salary' }), status: 'EXCLUDED', targetEntity: 'NoorixCancelledPayrollEvidence', targetId: invoice.sourceId, resultCode: 'SOURCE_CANCELLED_EVIDENCE_ONLY' })),
+      ] });
+      const postedSourceComponents = receipts.filter((receipt) => !receipt.replayed).reduce((sum, receipt) => sum + receipt.run.components.length, 0);
+      const reusedSourceComponents = receipts.filter((receipt) => receipt.replayed).reduce((sum, receipt) => sum + receipt.run.components.length, 0);
+      const totals = { targetRuns: receipts.length, sourceComponents: runs.length, reusedTargetRuns: receipts.filter((receipt) => receipt.replayed).length, payrollLines: targetRuns.reduce((sum, run) => sum + run.items.length, 0), payments: paymentCount, paid: paidTotal, cancelledSalaryEvidenceOnly: cancelledSalaryInvoices.length, accrualJournalsCreated: 0, advanceSettlementJournalsCreated: 0, sourceLineArithmeticExceptions: drySummary.sourceLineArithmeticExceptions.length };
+      await tx.nurixExcelFinancialWave.update({ where: { id: wave.id }, data: { status: 'COMMITTED', postedItems: postedSourceComponents, reusedItems: reusedSourceComponents, reviewItems: cancelledSalaryInvoices.length, failedItems: 0, committedAt: new Date(), reconciliationHash: sha(totals) } });
       await tx.nurixExcelFinancialReceipt.upsert({ where: { executionId_sequence: { executionId: execution.id, sequence: 1 } }, create: { id: randomUUID(), executionId: execution.id, waveId: wave.id, tenantId, targetCompanyId: companyId, sequence: 1, kind: 'RECONCILIATION', receiptSha256: sha(totals), summaryJson: totals, createdByUserId: actorUserId }, update: { waveId: wave.id, receiptSha256: sha(totals), summaryJson: totals } });
       await tx.nurixExcelFinancialExecution.update({ where: { id: execution.id }, data: { status: 'COMPLETED', waveSequence: 1, leaseToken: null, leaseExpiresAt: null, reason: null } });
       return totals;

@@ -1,7 +1,7 @@
 /** Run after API build: `node apps/api/dist/nurix-migration/nurix-excel-package-closure-audit.policy-verification.js`. */
 import assert from 'node:assert/strict';
 
-import { countDistinctSourceMaps, countDistinctSourceMapsWithSupplierDeletions, filterPackageBoundFinancialEvidence, resolveHrExceptionSheetEvidence, resolveHrHistoryClosureCoverage } from './nurix-excel-package-closure-audit.service.js';
+import { countDistinctSourceMaps, countDistinctSourceMapsWithSupplierDeletions, filterPackageBoundFinancialEvidence, resolveHrExceptionSheetEvidence, resolveHrHistoryClosureCoverage, resolveSpecializedExceptionSheetEvidence } from './nurix-excel-package-closure-audit.service.js';
 
 // Retried/reused maps are final coverage, but retries must not inflate the
 // number of settled source rows. Five immutable vault identities therefore
@@ -91,5 +91,24 @@ assert.equal(resolveHrExceptionSheetEvidence(exceptionRows, [
 assert.equal(resolveHrExceptionSheetEvidence(exceptionRows, [
   { sourceEntity: 'NOORIX_EXCEL_EMPLOYEE_DEDUCTION', sourceId: 'service-2', code: 'NURIX_HR_EVIDENCE_ONLY', severity: 'REVIEW' },
 ]), 0);
+
+// A re-exported package may recognize only exact, completed specialist
+// lifecycle receipts. A generic financial map or an unsupported target must
+// remain a blocker even when it shares the same company and source ID.
+assert.equal(resolveSpecializedExceptionSheetEvidence([
+  { sheet: 'Exceptions', sourceId: 'payroll-invoice', sourceChecksum: 'a'.repeat(64) },
+  { sheet: 'Exceptions', sourceId: 'advance-invoice', sourceChecksum: 'b'.repeat(64) },
+  { sheet: 'Exceptions', sourceId: 'service-invoice', sourceChecksum: 'c'.repeat(64) },
+  { sheet: 'Exceptions', sourceId: 'generic-invoice', sourceChecksum: 'd'.repeat(64) },
+  { sheet: 'Exceptions', sourceId: 'wrong-payroll-target', sourceChecksum: 'e'.repeat(64) },
+  { sheet: 'Exceptions', sourceId: 'cancelled-invoice', sourceChecksum: 'f'.repeat(64) },
+], [
+  { sourceEntity: 'PayrollInvoiceFinancial', sourceId: 'payroll-invoice', targetEntity: 'HrPayrollPayment', state: 'APPLIED' },
+  { sourceEntity: 'NoorixAdvanceInvoice', sourceId: 'advance-invoice', targetEntity: 'HrEmployeeAdvance', state: 'APPLIED' },
+  { sourceEntity: 'NoorixEmployeeServiceInvoice', sourceId: 'service-invoice', targetEntity: 'FinanceOutflowDocument', state: 'APPLIED' },
+  { sourceEntity: 'Invoice', sourceId: 'generic-invoice', targetEntity: 'FinanceOutflowDocument', state: 'APPLIED' },
+  { sourceEntity: 'NoorixPayrollInvoice', sourceId: 'wrong-payroll-target', targetEntity: 'FinanceOutflowDocument', state: 'APPLIED' },
+  { sourceEntity: 'NoorixCancelledInvoiceEvidence', sourceId: 'cancelled-invoice', targetEntity: 'NoorixCancelledSourceEvidence', state: 'APPLIED' },
+]), 4);
 
 console.log('nurix package closure audit policy verification passed');
