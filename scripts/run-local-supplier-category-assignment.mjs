@@ -2,8 +2,8 @@
  * Safe, resumable category assignment for existing imported suppliers.
  *
  * Usage:
- *   node scripts/run-local-supplier-category-assignment.mjs DRY_RUN
- *   node scripts/run-local-supplier-category-assignment.mjs APPLY_APPROVED_SUPPLIER_CATEGORY_ASSIGNMENT_V1 [actor-user-id]
+ *   node scripts/run-local-supplier-category-assignment.mjs DRY_RUN [actor-user-id] [company-key]
+ *   node scripts/run-local-supplier-category-assignment.mjs APPLY_APPROVED_SUPPLIER_CATEGORY_ASSIGNMENT_V1 [actor-user-id] [company-key]
  *
  * The only evidence accepted is a Noorix-mapped financial document. A supplier
  * receives a default category only when every mapped document points to one
@@ -26,12 +26,17 @@ const DEFAULT_ACTOR_ID = 'c89fb913-2f7c-404e-84d7-161146766f77';
 const TARGETS = Object.freeze([
   Object.freeze({ key: 'ARZ', companyId: '7e64301f-c87e-4d98-9881-35328ace117b' }),
   Object.freeze({ key: 'AL_SHAMI', companyId: '4af6969a-161f-4e13-8acc-103d8aa26a70' }),
+  Object.freeze({ key: 'DOHA', companyId: '3c032ff1-c00d-4784-99ae-a9bf53e09e0d' }),
 ]);
 
-const [mode, actorUserId = DEFAULT_ACTOR_ID] = process.argv.slice(2);
+const [mode, actorUserId = DEFAULT_ACTOR_ID, requestedCompanyKey] = process.argv.slice(2);
 if (!mode || ![MODE_DRY_RUN, MODE_APPLY].includes(mode)) {
-  throw new Error(`Usage: node scripts/run-local-supplier-category-assignment.mjs ${MODE_DRY_RUN}|${MODE_APPLY} [actor-user-id]`);
+  throw new Error(`Usage: node scripts/run-local-supplier-category-assignment.mjs ${MODE_DRY_RUN}|${MODE_APPLY} [actor-user-id] [ARZ|AL_SHAMI|DOHA]`);
 }
+const selectedTargets = requestedCompanyKey
+  ? TARGETS.filter((target) => target.key === requestedCompanyKey.trim().toUpperCase())
+  : TARGETS;
+if (!selectedTargets.length) throw new Error(`Unknown company key: ${requestedCompanyKey}`);
 
 const loaded = dotenv.config({ path: resolve('apps/api/.env.baseer-test'), override: true, quiet: true });
 if (loaded.error) throw loaded.error;
@@ -190,7 +195,7 @@ try {
   const actor = await client.query(`SELECT id FROM "User" WHERE id = $1 AND "tenantId" = $2`, [actorUserId, TENANT_ID]);
   if (!actor.rowCount) throw new Error('Actor is unavailable for the approved tenant.');
   const plans = [];
-  for (const target of TARGETS) {
+  for (const target of selectedTargets) {
     const company = await client.query(`SELECT id, "nameAr", "migrationReviewLocked" FROM "Company" WHERE id = $1 AND "tenantId" = $2`, [target.companyId, TENANT_ID]);
     if (!company.rows[0]) throw new Error(`Target company is unavailable: ${target.key}`);
     plans.push({ ...companyPlan(target, await supplierEvidence(client, target)), company: company.rows[0] });
