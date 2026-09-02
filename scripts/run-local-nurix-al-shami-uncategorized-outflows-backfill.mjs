@@ -116,7 +116,7 @@ try {
     });
     const documentIds = [...new Set(invoiceMaps.map((row) => row.targetId).filter((value) => UUID.test(value)))];
     const [documents, categories, supplierMaps, vaultMaps, profile] = await Promise.all([
-      tx.financeOutflowDocument.findMany({ where: { tenantId, companyId, id: { in: documentIds }, status: 'POSTED' }, select: { id: true, categoryId: true, kind: true } }),
+      tx.financeOutflowDocument.findMany({ where: { tenantId, companyId, id: { in: documentIds }, status: 'POSTED' }, select: { id: true, categoryId: true, kind: true, grossAmount: true } }),
       // Historical documents may point to a parent category, but a new
       // financial write must only reuse a posting leaf.  A parent precedent
       // is evidence for review, never permission to invent one of its leaves.
@@ -149,11 +149,45 @@ try {
     };
   });
 
-  const candidates = sourceIndex.filter((row) => !row.categorySourceId && !target.mappedDocumentBySource.has(row.sourceId));
-  if (candidates.length !== CONTROL.candidates || sum(candidates) !== CONTROL.candidatesGross) {
-    throw new Error(`The Noorix uncategorized candidate control set changed: ${candidates.length}/${sum(candidates)}.`);
+  const uncategorizedSource = sourceIndex.filter((row) => !row.categorySourceId);
+  if (uncategorizedSource.length !== CONTROL.candidates || sum(uncategorizedSource) !== CONTROL.candidatesGross) {
+    throw new Error(`The Noorix uncategorized source control set changed: ${uncategorizedSource.length}/${sum(uncategorizedSource)}.`);
   }
-
+  const alreadyMapped = uncategorizedSource.filter((row) => target.mappedDocumentBySource.has(row.sourceId));
+  const candidates = uncategorizedSource.filter((row) => !target.mappedDocumentBySource.has(row.sourceId));
+  for (const source of alreadyMapped) {
+    const mapped = target.mappedDocumentBySource.get(source.sourceId);
+    const category = mapped ? target.categoryById.get(mapped.categoryId) : null;
+    // A source `purchase` may have been explicitly reclassified as an
+    // operating expense during the prior approved review.  The target
+    // document kind must agree with its posting category; it need not copy
+    // the category-less Noorix kind verbatim.
+    if (!mapped || !moneyEquals(mapped.grossAmount, source.gross)
+      || !category || category.kind !== mapped.kind || !category.accountId) {
+      throw new Error(`The existing mapped category evidence is invalid for ${source.sourceId}.`);
+    }
+  }
+  if (!candidates.length) {
+    const categoryCounts = new Map();
+    for (const source of alreadyMapped) {
+      const mapped = target.mappedDocumentBySource.get(source.sourceId);
+      const category = target.categoryById.get(mapped.categoryId);
+      const key = `${category.code}:${category.nameAr}`;
+      const current = categoryCounts.get(key) ?? { categoryCode: category.code, categoryNameAr: category.nameAr, invoiceCount: 0, grossAmount: 0 };
+      current.invoiceCount += 1;
+      current.grossAmount += Number(source.gross);
+      categoryCounts.set(key, current);
+    }
+    console.log(JSON.stringify({
+      status: 'ALREADY_RECONCILED', version: VERSION,
+      sourceRows: uncategorizedSource.length, sourceGross: sum(uncategorizedSource),
+      mappedRows: alreadyMapped.length, mappedGross: sum(alreadyMapped), outstandingRows: 0, outstandingGross: '0.0000',
+      categories: [...categoryCounts.values()].map((item) => ({ ...item, grossAmount: fixed(item.grossAmount) })),
+      sourceKindReclassifications: alreadyMapped.filter((source) => target.mappedDocumentBySource.get(source.sourceId).kind !== source.kind.toUpperCase()).length,
+      financialWrites: 0,
+    }, null, 2));
+    process.exitCode = 0;
+  } else {
   const eligible = [];
   const review = [];
   for (const candidate of candidates) {
@@ -315,6 +349,7 @@ WHERE i.company_id = '${SOURCE_COMPANY_ID}' AND i.id IN (${sourceIdList});`;
       await tx.auditEvent.create({ data: { id: randomUUID(), tenantId, companyId, actorUserId, action: 'nurix.al_shami.uncategorized_outflows.completed', entityType: 'NurixExcelFinancialExecution', entityId: execution.id, requestId: `nurix-al-shami-uncategorized:${planChecksum}`, afterJson: summary } });
     });
     console.log(JSON.stringify({ status: 'COMPLETED', ...dryRun, posted, reused, financialWrites: posted }, null, 2));
+  }
   }
 } finally {
   await app.close();
