@@ -12,7 +12,7 @@ dotenv.config({ path: "apps/api/.env.baseer-test" });
 const { Pool } = pg;
 const pool = new Pool({ connectionString: requiredEnvironment("DATABASE_URL") });
 const suffix = randomUUID().replaceAll("-", "").slice(0, 12);
-const fixture = { tenantId: randomUUID(), ownerId: randomUUID(), userId: randomUUID(), companyId: randomUUID(), foreignTenantId: randomUUID(), foreignUserId: randomUUID() };
+const fixture = { tenantId: randomUUID(), ownerId: randomUUID(), userId: randomUUID(), companyId: randomUUID(), systemRoleId: randomUUID(), foreignTenantId: randomUUID(), foreignUserId: randomUUID() };
 let app;
 
 try {
@@ -43,6 +43,16 @@ try {
 
   const overview = await server.inject({ method: "GET", url: "/v1/administration/overview", headers });
   assert.equal(overview.statusCode, 200, overview.body);
+
+  const updateSystemRole = await server.inject({ method: "PUT", url: `/v1/administration/roles/${fixture.systemRoleId}`, headers, payload: { nameAr: "تعديل محظور", nameEn: "Blocked update", permissionCodes: ["administration.roles.read"] } });
+  assert.equal(updateSystemRole.statusCode, 403, updateSystemRole.body);
+  const deleteSystemRole = await server.inject({ method: "DELETE", url: `/v1/administration/roles/${fixture.systemRoleId}`, headers, payload: {} });
+  assert.equal(deleteSystemRole.statusCode, 403, deleteSystemRole.body);
+  const immutableSystemRole = await database.inTenantTransaction(fixture.tenantId, (tx) => tx.role.findFirstOrThrow({ where: { id: fixture.systemRoleId }, include: { grants: true } }));
+  assert.equal(immutableSystemRole.nameAr, "دور نظام الاختبار");
+  assert.equal(immutableSystemRole.nameEn, "Test system role");
+  assert.equal(immutableSystemRole.isSystem, true);
+  assert.equal(immutableSystemRole.grants.length, 0);
 
   const foreignTarget = await server.inject({ method: "PUT", url: `/v1/administration/users/${fixture.foreignUserId}/status`, headers, payload: { status: "DISABLED", reason: "اختبار عزل شركة أخرى" } });
   assert.equal(foreignTarget.statusCode, 404, foreignTarget.body);
@@ -81,7 +91,7 @@ try {
   const passwordAudit = await database.inTenantTransaction(fixture.tenantId, (tx) => tx.auditEvent.findFirstOrThrow({ where: { tenantId: fixture.tenantId, action: "administration.user.password_reset" }, select: { afterJson: true } }));
   assert.ok(!JSON.stringify(passwordAudit.afterJson).includes(`New-${suffix}-password`), "Password reset audit must never store the password.");
   assert.ok(target.accessToken, "Fixture target sign-in establishes a session before lifecycle changes.");
-  console.log("Administration lifecycle verification passed: authentication/authority denial, cross-tenant RLS, disable/activate, password reset, membership withdrawal, session revocation, audit redaction, and last-owner protection.");
+  console.log("Administration lifecycle verification passed: authentication/authority denial, system-role immutability, cross-tenant RLS, disable/activate, password reset, membership withdrawal, session revocation, audit redaction, and last-owner protection.");
 } finally {
   if (app) await app.close();
   await pool.end();
@@ -101,7 +111,8 @@ async function seedFixture() {
     await client.query('INSERT INTO "User" ("id", "tenantId", "loginNormalized", "nameAr", "nameEn", "passwordHash") VALUES ($1::uuid, $2::uuid, $3, $4, $5, $6)', [fixture.foreignUserId, fixture.foreignTenantId, `foreign-${suffix}@admin-foreign-${suffix}.baseer.local`, "مستخدم أجنبي", "Foreign user", await bcrypt.hash(`Foreign-${suffix}`, 12)]);
     await client.query("SELECT set_config('app.tenant_id', $1, true)", [fixture.tenantId]);
     await client.query('INSERT INTO "Company" ("id", "tenantId", "nameAr", "nameEn") VALUES ($1::uuid, $2::uuid, $3, $4)', [fixture.companyId, fixture.tenantId, "شركة اختبار", "Test company"]);
-    await client.query('INSERT INTO "Role" ("id", "tenantId", "code", "nameAr", "nameEn") VALUES ($1::uuid, $2::uuid, $3, $4, $5)', [roleId, fixture.tenantId, "ADMIN_HTTP_TEST", "دور اختبار", "Test role"]);
+    await client.query('INSERT INTO "Role" ("id", "tenantId", "code", "nameAr", "nameEn") VALUES ($1::uuid, $2::uuid, $3, $4, $5), ($6::uuid, $2::uuid, $7, $8, $9)', [roleId, fixture.tenantId, "ADMIN_HTTP_TEST", "دور اختبار", "Test role", fixture.systemRoleId, "ADMIN_HTTP_SYSTEM", "دور نظام الاختبار", "Test system role"]);
+    await client.query('UPDATE "Role" SET "isSystem" = true WHERE "id" = $1::uuid', [fixture.systemRoleId]);
     await client.query('INSERT INTO "CompanyMembership" ("tenantId", "userId", "companyId", "roleId") VALUES ($1::uuid, $2::uuid, $3::uuid, $4::uuid)', [fixture.tenantId, fixture.userId, fixture.companyId, roleId]);
     await client.query('INSERT INTO "TenantAdministrationAssignment" ("tenantId", "userId", "isOwner") VALUES ($1::uuid, $2::uuid, true)', [fixture.tenantId, fixture.ownerId]);
     await client.query("COMMIT");

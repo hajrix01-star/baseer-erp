@@ -68,6 +68,7 @@ export class AdministrationService {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const role = await tx.role.findFirst({ where: { id: roleId, tenantId: context.tenantId }, include: { grants: true } });
       if (!role) throw new NotFoundException("Role was not found.");
+      if (role.isSystem) throw new ForbiddenException("System roles are immutable.");
       const permissionCodes: string[] = [...new Set(request.permissionCodes)];
       await tx.role.update({ where: { id: role.id }, data: { nameAr: request.nameAr, nameEn: request.nameEn } });
       await tx.rolePermission.deleteMany({ where: { roleId: role.id } });
@@ -80,8 +81,9 @@ export class AdministrationService {
   async deleteRole(context: TrustedTenantAdministratorContext, roleId: string) {
     this.ownerOnly(context);
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const role = await tx.role.findFirst({ where: { id: roleId, tenantId: context.tenantId }, select: { id: true, code: true, nameAr: true } });
+      const role = await tx.role.findFirst({ where: { id: roleId, tenantId: context.tenantId }, select: { id: true, code: true, nameAr: true, isSystem: true } });
       if (!role) throw new NotFoundException("Role was not found.");
+      if (role.isSystem) throw new ForbiddenException("System roles are immutable.");
       if (await tx.companyMembership.count({ where: { tenantId: context.tenantId, roleId: role.id } })) throw new ConflictException("Reassign members before deleting this role.");
       await tx.role.delete({ where: { id: role.id } });
       await this.audit(tx, context, "administration.role.deleted", "Role", role.id, { code: role.code, nameAr: role.nameAr }, { deleted: true });

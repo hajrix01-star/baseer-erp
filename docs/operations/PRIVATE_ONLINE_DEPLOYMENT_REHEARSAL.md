@@ -9,7 +9,7 @@ Only the reverse proxy exposes HTTPS. PostgreSQL has no host port and remains on
 ## Files supplied
 
 - `Dockerfile`: separate `runtime` API image and short-lived `migrate` image.
-- `docker-compose.private-online.yml`: private API, internal PostgreSQL, and HTTPS reverse proxy.
+- `docker-compose.private-online.yml`: private API, internal PostgreSQL, and HTTPS reverse proxy. It consumes immutable OCI digests only; it never builds the repository checkout.
 - `docker/Caddyfile.private-online`: HTTPS reverse proxy configuration; certificates are handled by Caddy after DNS points to the selected domain.
 - `ops/private-online/.env.private-online.example`: non-secret configuration template.
 - `docs/operations/PRIVATE_ONLINE_FILE_STORAGE_AND_RECOVERY.md`: same-server
@@ -21,13 +21,32 @@ Only the reverse proxy exposes HTTPS. PostgreSQL has no host port and remains on
 1. Choose the owner-controlled Hostinger server and subscribe to Hostinger daily server backups. Do not treat the live database volume itself as a backup. The adopted policy is recorded in `HOSTINGER_PRIVATE_HOSTING_AND_BACKUP_DECISION_2026-08-16.md`.
 2. Choose any available domain and point its DNS records to the private server. The domain may change later; **BASEER ERP** remains the product name.
 3. Copy `ops/private-online/.env.private-online.example` to `ops/private-online/.env.private-online`; replace every placeholder with unique secrets stored outside the repository. Prepare the permanent same-server file-storage bind mount before startup as described in `PRIVATE_ONLINE_FILE_STORAGE_AND_RECOVERY.md`. Create `backup-archives/` beneath it with write access for uid 1000; it is private encrypted archive storage and must never be reverse-proxy served. Keep archive worker and scheduler switches `false` until their isolated recovery rehearsal is accepted.
-4. Build the API runtime and migration images locally; this does not start the services:
+4. From the successful `main` CI run for the approved commit, download the
+   `baseer-release-manifest-<commit>` artifact. Copy its exact API, migrate,
+   and web `image@sha256:...` values into `ops/private-online/.env.private-online`.
+   Pin the approved PostgreSQL and Caddy vendor digests in that file too. Do
+   not substitute a tag such as `latest`, `main`, or a commit tag, and do not
+   build images on the production host. The CI images include OCI SBOM and
+   provenance attestations; retain the manifest artifact alongside the release
+   and Gate C evidence.
+
+5. Validate the release input before Compose. This preflight reads the real
+   private environment file and the downloaded manifest, rejects every image
+   tag, and requires API, migrate, and web to exactly match the approved
+   manifest values. It does not contact a registry or start services:
 
    ```powershell
-   docker compose --env-file ops/private-online/.env.private-online -f docker-compose.private-online.yml build api migrate
+   node scripts/verify-private-online-release-preflight.mjs --env-file ops/private-online/.env.private-online --manifest C:\path\to\baseer-release-manifest.json
    ```
 
-5. Start the release stack through the dedicated post-migration reconciler.
+6. Validate the resolved production configuration without contacting a
+   registry or starting services:
+
+   ```powershell
+   docker compose --env-file ops/private-online/.env.private-online -f docker-compose.private-online.yml config -q
+   ```
+
+7. Start the release stack through the dedicated post-migration reconciler.
    Compose waits for `migrate` to succeed, then reapplies only the restricted
    runtime grants to `BASEER_DB_APP_USER`, including the explicit
    `AuditEvent` append-only revocation that cannot be completed before the
@@ -50,14 +69,14 @@ Only the reverse proxy exposes HTTPS. PostgreSQL has no host port and remains on
    image builds, so a future dependency change cannot silently put migration
    tooling back into the API container.
 
-6. The release order is technically enforced: backup/restore gate → successful
+8. The release order is technically enforced: backup/restore gate → successful
    `migrate` job → successful restricted-role reconciler → API rollout. A
    failed migration or reconciliation stops API startup. The migration job is
    read-only except for its temporary filesystem,
    has no public port, uses `no-new-privileges`, and has access only to the
    database network.
 
-7. Create users only through the approved administrator process. Do not enable public sign-up.
+9. Create users only through the approved administrator process. Do not enable public sign-up.
 
 ## Gate C evidence required before real financial data
 

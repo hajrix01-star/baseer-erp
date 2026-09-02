@@ -114,3 +114,120 @@ jobs:
         run: npm audit --omit=dev --omit=optional
       - name: Monitor isolated Prisma toolchain advisory
         run: npm run check:prisma-advisory-status
+      - name: Verify immutable private-online release contract
+        run: node scripts/check-release-provenance-contract.mjs
+
+  release-api:
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    needs: quality
+    runs-on: ubuntu-latest
+    outputs:
+      digest: ${{ steps.build.outputs.digest }}
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+    env:
+      IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/baseer-erp-api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          target: runtime
+          push: true
+          tags: ${{ env.IMAGE_NAME }}:${{ github.sha }}
+          provenance: mode=max
+          sbom: true
+
+  release-migrate:
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    needs: quality
+    runs-on: ubuntu-latest
+    outputs:
+      digest: ${{ steps.build.outputs.digest }}
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+    env:
+      IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/baseer-erp-migrate
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          target: migrate
+          push: true
+          tags: ${{ env.IMAGE_NAME }}:${{ github.sha }}
+          provenance: mode=max
+          sbom: true
+
+  release-web:
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    needs: quality
+    runs-on: ubuntu-latest
+    outputs:
+      digest: ${{ steps.build.outputs.digest }}
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+    env:
+      IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/baseer-erp-web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.web
+          push: true
+          tags: ${{ env.IMAGE_NAME }}:${{ github.sha }}
+          provenance: mode=max
+          sbom: true
+
+  release-manifest:
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    needs: [release-api, release-migrate, release-web]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create an archiveable immutable release manifest
+        env:
+          API_IMAGE: ghcr.io/${{ github.repository_owner }}/baseer-erp-api@${{ needs.release-api.outputs.digest }}
+          MIGRATE_IMAGE: ghcr.io/${{ github.repository_owner }}/baseer-erp-migrate@${{ needs.release-migrate.outputs.digest }}
+          WEB_IMAGE: ghcr.io/${{ github.repository_owner }}/baseer-erp-web@${{ needs.release-web.outputs.digest }}
+          SOURCE_COMMIT: ${{ github.sha }}
+          SOURCE_REPOSITORY: ${{ github.repository }}
+        run: |
+          node -e "const { writeFileSync } = require('node:fs'); const images = { api: process.env.API_IMAGE, migrate: process.env.MIGRATE_IMAGE, web: process.env.WEB_IMAGE }; const manifest = { schemaVersion: 1, source: { repository: process.env.SOURCE_REPOSITORY, commit: process.env.SOURCE_COMMIT }, images, attestations: { provenance: 'OCI provenance attached by docker/build-push-action@v6 (mode=max)', sbom: 'OCI SBOM attached by docker/build-push-action@v6' } }; writeFileSync('baseer-release-manifest.json', JSON.stringify(manifest, null, 2) + '\\n');"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: baseer-release-manifest-${{ github.sha }}
+          path: baseer-release-manifest.json
+          retention-days: 90
