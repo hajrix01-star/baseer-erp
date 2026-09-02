@@ -4,7 +4,6 @@
 .recurring-expense-form { display: grid; gap: 14px; }
 .recurring-expense-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .recurring-expense-grid label { display: grid; gap: 5px; font-size: var(--font-label); font-weight: 650; color: var(--ink); }
-.recurring-expense-grid input, .recurring-expense-grid select { min-height: 38px; }
 .recurring-expense-grid .recurring-span { grid-column: span 2; }
 .recurring-expense-form footer { display: flex; justify-content: flex-start; gap: 8px; }
 .recurring-expense-heading__actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
@@ -21,3 +20,9 @@
 .recurring-expense-grid { gap: var(--space-3); }
 .recurring-expense-grid label { gap: var(--space-2); }
 .recurring-expense-form footer { gap: var(--space-2); }
+
+/* Shared field primitives keep the settlement dialog and inline grid visually
+   identical without depending on native input/select browser styling. */
+.recurring-expense-grid :is(.baseer-text-input, .baseer-money-input, .baseer-integer-input, .baseer-static-select),
+.baseer-batch-workspace :is(.baseer-text-input, .baseer-money-input, .baseer-integer-input, .baseer-static-select) { inline-size: 100%; }
+.recurring-expense-grid .purchase-tax-toggle { display: flex; align-items: center; gap: var(--space-2); min-block-size: var(--control-height); }

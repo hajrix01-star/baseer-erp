@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from "@nestjs/common";
 import { Prisma } from "../generated/prisma/client.js";
 import type { TrustedCompanyActorContext } from "../core-controls/trusted-context.js";
 import { DatabaseService } from "../database/database.service.js";
+import { FINANCIAL_MOVEMENT_SOURCE_TOKENS, financialMovementSemantic } from "./financial-movement-classification.js";
 import { financeJournalPresentation } from "./finance-journal-presentation.js";
 
 type Kind = "SALE" | "PURCHASE" | "EXPENSE" | "OBLIGATION" | "OTHER";
@@ -36,7 +37,7 @@ export class InvoiceRegisterService {
         tx.$queryRaw<Array<{ id: string }>>(pageSql(predicate, query.pageSize + 1)),
         tx.financeSupplier.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, status: "ACTIVE" }, orderBy: { nameAr: "asc" }, take: 1000, select: { id: true, nameAr: true, nameEn: true } }),
         tx.financeCategory.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, status: "ACTIVE", isPosting: true }, orderBy: { nameAr: "asc" }, take: 500, select: { id: true, nameAr: true, nameEn: true } }),
-        tx.financeCategory.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, status: "ACTIVE" }, select: { id: true, accountId: true, parentId: true, nameAr: true, nameEn: true } }),
+        tx.financeCategory.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, status: "ACTIVE" }, select: { id: true, code: true, accountId: true, parentId: true, nameAr: true, nameEn: true } }),
       ]);
       const pageIds = pageRows.slice(0, query.pageSize).map((row) => row.id);
       const entries = pageIds.length ? await tx.financeJournalEntry.findMany({ where: { id: { in: pageIds }, tenantId: context.tenantId, companyId: context.companyId }, select: entrySelect }) : [];
@@ -44,7 +45,7 @@ export class InvoiceRegisterService {
       const records = pageIds.map((id) => {
         const entry = entriesById.get(id);
         if (!entry) throw new BadRequestException("The register page changed while it was being read.");
-        return mapEntry(entry, classificationByAccountId(classifications));
+        return mapEntry(entry, classificationByAccountId(classifications), classificationByCode(classifications));
       });
       const summary = summaryRows[0] ?? zeroSummary();
       return {
@@ -75,7 +76,7 @@ export class InvoiceRegisterService {
         select: detailEntrySelect,
       });
       if (!entry) throw new BadRequestException("The financial movement is not available for this company.");
-      const classifications = await tx.financeCategory.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, status: "ACTIVE" }, select: { id: true, accountId: true, parentId: true, nameAr: true, nameEn: true } });
+      const classifications = await tx.financeCategory.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, status: "ACTIVE" }, select: { id: true, code: true, accountId: true, parentId: true, nameAr: true, nameEn: true } });
       const outflow = entry.outflowDocument;
       const sourceDetail = {
         supplierInvoiceNumber: outflow?.supplierInvoiceNumber ?? null,
@@ -85,7 +86,7 @@ export class InvoiceRegisterService {
           : null,
       };
       return {
-        movement: mapEntry(entry, classificationByAccountId(classifications)),
+        movement: mapEntry(entry, classificationByAccountId(classifications), classificationByCode(classifications)),
         journal: {
           id: entry.id,
           sourceType: entry.sourceType,
@@ -213,10 +214,10 @@ function operationClassExpression() { return Prisma.sql`CASE
   WHEN o."id" IS NOT NULL AND o."recurringExpenseProfileId" IS NOT NULL THEN 'RECURRING_EXPENSE'
   WHEN o."id" IS NOT NULL THEN 'EXPENSE_INVOICE'
   WHEN payment."id" IS NOT NULL THEN 'SUPPLIER_SETTLEMENT'
-  WHEN j."sourceType" = 'hr_payroll_accrual' THEN 'PAYROLL_ACCRUAL'
-  WHEN j."sourceType" = 'hr_payroll_payment' THEN 'PAYROLL_PAYMENT'
-  WHEN j."sourceType" = 'hr_employee_advance' THEN 'EMPLOYEE_ADVANCE'
-  WHEN j."sourceType" = 'hr_employee_advance_receipt' THEN 'EMPLOYEE_ADVANCE_SETTLEMENT'
+  WHEN LOWER(j."sourceType") LIKE ${`%${FINANCIAL_MOVEMENT_SOURCE_TOKENS.payroll}%`} AND LOWER(j."sourceType") LIKE ${`%${FINANCIAL_MOVEMENT_SOURCE_TOKENS.accrual}%`} THEN 'PAYROLL_ACCRUAL'
+  WHEN LOWER(j."sourceType") LIKE ${`%${FINANCIAL_MOVEMENT_SOURCE_TOKENS.payroll}%`} THEN 'PAYROLL_PAYMENT'
+  WHEN LOWER(j."sourceType") LIKE ${`%${FINANCIAL_MOVEMENT_SOURCE_TOKENS.advance}%`} AND (LOWER(j."sourceType") LIKE ${`%${FINANCIAL_MOVEMENT_SOURCE_TOKENS.settlement}%`} OR LOWER(j."sourceType") LIKE ${`%${FINANCIAL_MOVEMENT_SOURCE_TOKENS.receipt}%`}) THEN 'EMPLOYEE_ADVANCE_SETTLEMENT'
+  WHEN LOWER(j."sourceType") LIKE ${`%${FINANCIAL_MOVEMENT_SOURCE_TOKENS.advance}%`} THEN 'EMPLOYEE_ADVANCE'
   WHEN j."sourceType" = 'hr_final_settlement_accrual' THEN 'FINAL_SETTLEMENT_ACCRUAL'
   WHEN j."sourceType" = 'hr_final_settlement_payment' THEN 'FINAL_SETTLEMENT_PAYMENT'
   WHEN loan."id" IS NOT NULL THEN 'LOAN_OPENING'
@@ -238,10 +239,14 @@ function pageSql(predicate: Prisma.Sql, take: number) { return Prisma.sql`SELECT
 function monthRanges(months: readonly string[]) { return [...new Set(months)].sort().map((month) => { const [year, value] = month.split("-").map(Number); const last = new Date(Date.UTC(year!, value!, 0)).getUTCDate(); return { from: `${month}-01`, to: `${month}-${String(last).padStart(2, "0")}` }; }); }
 function zeroSummary(): SummaryRow { return { documentCount: 0, postedCount: 0, cancelledCount: 0, salesCount: 0, purchaseCount: 0, expenseCount: 0, obligationCount: 0, otherCount: 0, paidCount: 0, payableCount: 0 }; }
 type Classification = Readonly<{ id: string; nameAr: string; nameEn: string | null }>;
-type ClassificationCategory = Classification & Readonly<{ accountId: string | null; parentId: string | null }>;
+type ClassificationCategory = Classification & Readonly<{ code: string; accountId: string | null; parentId: string | null }>;
 
 function classificationByAccountId(categories: readonly ClassificationCategory[]) {
   return new Map(categories.filter((category) => category.accountId && category.parentId === null).map((category) => [category.accountId!, toClassification(category)]));
+}
+
+function classificationByCode(categories: readonly ClassificationCategory[]) {
+  return new Map(categories.map((category) => [category.code, toClassification(category)]));
 }
 
 function toClassification(value: Classification) { return { id: value.id, nameAr: value.nameAr, nameEn: value.nameEn }; }
@@ -267,14 +272,14 @@ function mainAccountClassification(entry: any, operationClass: OperationClass, c
   return classifications.get(line.accountId) ?? toClassification(line.account);
 }
 
-function mapEntry(entry: any, classifications: ReadonlyMap<string, Classification>) {
+function mapEntry(entry: any, classifications: ReadonlyMap<string, Classification>, classificationsByCode: ReadonlyMap<string, Classification>) {
   const totals = journalTotals(entry.lines); const movement = totals.debit; const payrollAccrual = payrollAccrualSummary(entry.hrPayrollAccrual); const outflow = entry.outflowDocument; const sales = entry.dailySalesClosing; const duePayment = entry.supplierDuePayment; const businessDate = dateValue(entry.businessDate);
   if (outflow) { const operationClass = operationClassForEntry(entry); return { id: outflow.id, source: "OUTFLOW_DOCUMENT" as const, sourceType: entry.sourceType, documentNumber: outflow.documentNumber, displayLabelAr: outflow.kind === "PURCHASE" ? "فاتورة مشتريات" : "فاتورة مصروف", displayLabelEn: outflow.kind === "PURCHASE" ? "Purchase invoice" : "Expense invoice", businessDate, supplierInvoiceDate: outflow.supplierInvoiceDate ? dateValue(outflow.supplierInvoiceDate) : null, kind: outflow.kind as Kind, operationFamily: operationFamilyForClass(operationClass), operationClass, settlementKind: outflow.settlementKind, status: outflow.status, supplier: outflow.supplier, category: toClassification(outflow.category), parentClassification: categoryParent(outflow.category), grossAmount: outflow.grossAmount.toFixed(4), netAmount: outflow.netAmount.toFixed(4), vatAmount: outflow.vatAmount.toFixed(4), payrollAccrual, journalEntryId: entry.id, batchNumber: outflow.batch?.batchNumber ?? null, notes: outflow.notes, recurring: outflow.recurringExpenseProfileId !== null, createdAt: entry.postedAt }; }
   if (sales) { const operationClass = operationClassForEntry(entry); return { id: sales.id, source: "DAILY_SALES" as const, sourceType: entry.sourceType, documentNumber: sales.documentNumber, displayLabelAr: "تحصيل مبيعات", displayLabelEn: "Sales collection", businessDate, supplierInvoiceDate: null, kind: "SALE" as const, operationFamily: operationFamilyForClass(operationClass), operationClass, settlementKind: "PAID" as const, status: sales.status === "POSTED" ? "POSTED" as const : "CANCELLED" as const, supplier: null, category: null, parentClassification: mainAccountClassification(entry, operationClass, classifications), grossAmount: sales.grossAmount.toFixed(4), netAmount: sales.netAmount.toFixed(4), vatAmount: sales.vatAmount.toFixed(4), payrollAccrual, journalEntryId: entry.id, batchNumber: null, notes: sales.notes, recurring: false, createdAt: entry.postedAt }; }
   if (duePayment) { const operationClass = operationClassForEntry(entry); return { id: duePayment.id, source: "SUPPLIER_DUE_PAYMENT" as const, sourceType: entry.sourceType, documentNumber: entry.sourceReference, displayLabelAr: "سداد التزام", displayLabelEn: "Payable settlement", businessDate, supplierInvoiceDate: null, kind: duePayment.due.category?.kind === "PURCHASE" ? "PURCHASE" as const : "EXPENSE" as const, operationFamily: operationFamilyForClass(operationClass), operationClass, settlementKind: "PAID" as const, status: "POSTED" as const, supplier: duePayment.due.supplier, category: toClassification(duePayment.due.category), parentClassification: categoryParent(duePayment.due.category), grossAmount: duePayment.amount.toFixed(4), netAmount: duePayment.amount.toFixed(4), vatAmount: "0.0000", payrollAccrual, journalEntryId: entry.id, batchNumber: null, notes: entry.description, recurring: false, createdAt: entry.postedAt }; }
-  if (entry.inclusiveLoan) return generic(entry, "LOAN_OPENING", "OBLIGATION", entry.inclusiveLoan.originalAmount, entry.inclusiveLoan.notes, totals, payrollAccrual, classifications, { labelAr: "إثبات قرض", labelEn: "Loan opening", reference: entry.sourceReference });
-  if (entry.inclusiveLoanPayment) return generic(entry, "LOAN_REPAYMENT", "OBLIGATION", entry.inclusiveLoanPayment.amount, entry.inclusiveLoanPayment.loan.notes, totals, payrollAccrual, classifications, { labelAr: "سداد قرض", labelEn: "Loan repayment", reference: entry.sourceReference });
-  return generic(entry, "JOURNAL", "OTHER", movement, entry.description, totals, payrollAccrual, classifications);
+  if (entry.inclusiveLoan) return generic(entry, "LOAN_OPENING", "OBLIGATION", entry.inclusiveLoan.originalAmount, entry.inclusiveLoan.notes, totals, payrollAccrual, classifications, classificationsByCode, { labelAr: "إثبات قرض", labelEn: "Loan opening", reference: entry.sourceReference });
+  if (entry.inclusiveLoanPayment) return generic(entry, "LOAN_REPAYMENT", "OBLIGATION", entry.inclusiveLoanPayment.amount, entry.inclusiveLoanPayment.loan.notes, totals, payrollAccrual, classifications, classificationsByCode, { labelAr: "سداد قرض", labelEn: "Loan repayment", reference: entry.sourceReference });
+  return generic(entry, "JOURNAL", "OTHER", movement, entry.description, totals, payrollAccrual, classifications, classificationsByCode);
 }
 function operationClassForEntry(entry: any): OperationClass {
   if (entry.dailySalesClosing) return "SALE_COLLECTION";
@@ -289,7 +294,11 @@ function operationClassForEntry(entry: any): OperationClass {
     case "hr_employee_advance_receipt": return "EMPLOYEE_ADVANCE_SETTLEMENT";
     case "hr_final_settlement_accrual": return "FINAL_SETTLEMENT_ACCRUAL";
     case "hr_final_settlement_payment": return "FINAL_SETTLEMENT_PAYMENT";
-    default: return entry.inclusiveLoan ? "LOAN_OPENING" : entry.inclusiveLoanPayment ? "LOAN_REPAYMENT" : "GENERAL_JOURNAL";
+    default: {
+      const semantic = financialMovementSemantic(entry.sourceType);
+      if (semantic) return semantic.registerOperationClass;
+      return entry.inclusiveLoan ? "LOAN_OPENING" : entry.inclusiveLoanPayment ? "LOAN_REPAYMENT" : "GENERAL_JOURNAL";
+    }
   }
 }
 function operationFamilyForClass(operationClass: OperationClass): OperationFamily {
@@ -305,7 +314,20 @@ function operationFamilyForClass(operationClass: OperationClass): OperationFamil
 }
 function journalTotals(lines: readonly { debitAmount: Prisma.Decimal; creditAmount: Prisma.Decimal }[]) { const debit = lines.reduce((total, line) => total.plus(line.debitAmount), new Prisma.Decimal(0)); return { debit }; }
 function payrollAccrualSummary(run: { grossAmount: Prisma.Decimal; advanceSettlementAmount: Prisma.Decimal; administrativeDeductionAmount: Prisma.Decimal; netPayableAmount: Prisma.Decimal } | null | undefined) { return run ? { grossExpense: run.grossAmount.toFixed(4), advanceSettlement: run.advanceSettlementAmount.toFixed(4), administrativeRecovery: run.administrativeDeductionAmount.toFixed(4), netPayable: run.netPayableAmount.toFixed(4) } : null; }
-function generic(entry: any, source: "LOAN_OPENING" | "LOAN_REPAYMENT" | "JOURNAL", kind: Kind, value: Prisma.Decimal, notes: string | null, _totals: ReturnType<typeof journalTotals>, payrollAccrual: ReturnType<typeof payrollAccrualSummary>, classifications: ReadonlyMap<string, Classification>, display = financeJournalPresentation(entry)) { const operationClass = operationClassForEntry(entry); return { id: entry.id, source, sourceType: entry.sourceType, documentNumber: display.reference, displayLabelAr: display.labelAr, displayLabelEn: display.labelEn, businessDate: dateValue(entry.businessDate), supplierInvoiceDate: null, kind, operationFamily: operationFamilyForClass(operationClass), operationClass, settlementKind: null, status: entry.status === "REVERSED" ? "CANCELLED" as const : "POSTED" as const, supplier: null, category: null, parentClassification: mainAccountClassification(entry, operationClass, classifications), grossAmount: value.toFixed(4), netAmount: value.toFixed(4), vatAmount: "0.0000", payrollAccrual, journalEntryId: entry.id, batchNumber: null, notes, recurring: false, createdAt: entry.postedAt }; }
+function generic(entry: any, source: "LOAN_OPENING" | "LOAN_REPAYMENT" | "JOURNAL", kind: Kind, value: Prisma.Decimal, notes: string | null, _totals: ReturnType<typeof journalTotals>, payrollAccrual: ReturnType<typeof payrollAccrualSummary>, classifications: ReadonlyMap<string, Classification>, classificationsByCode: ReadonlyMap<string, Classification>, display = financeJournalPresentation(entry)) {
+  const operationClass = operationClassForEntry(entry);
+  const semantic = financialMovementSemantic(entry.sourceType);
+  const accountClassification = mainAccountClassification(entry, operationClass, classifications);
+  const category = semantic
+    ? classificationsByCode.get(semantic.categoryCode) ?? accountClassification
+    : null;
+  const parentClassification = semantic
+    ? semantic.parentCategoryCode
+      ? classificationsByCode.get(semantic.parentCategoryCode) ?? accountClassification
+      : null
+    : accountClassification;
+  return { id: entry.id, source, sourceType: entry.sourceType, documentNumber: display.reference, displayLabelAr: display.labelAr, displayLabelEn: display.labelEn, businessDate: dateValue(entry.businessDate), supplierInvoiceDate: null, kind, operationFamily: operationFamilyForClass(operationClass), operationClass, settlementKind: null, status: entry.status === "REVERSED" ? "CANCELLED" as const : "POSTED" as const, supplier: null, category, parentClassification, grossAmount: value.toFixed(4), netAmount: value.toFixed(4), vatAmount: "0.0000", payrollAccrual, journalEntryId: entry.id, batchNumber: null, notes, recurring: false, createdAt: entry.postedAt };
+}
 function dateValue(value: Date) { return value.toISOString().slice(0, 10); }
 
 function detailAllocations(entry: any) {

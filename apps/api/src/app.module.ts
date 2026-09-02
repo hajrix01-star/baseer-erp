@@ -84,9 +84,12 @@ import { FinancePnlMappingService } from './finance/finance-pnl-mapping.service.
 import { ReportRunService } from './reports/report-run.service.js';
 import { ReportCatalogService } from './reports/report-catalog.service.js';
 import { ReportCatalogController } from './reports/report-catalog.controller.js';
+import { AccrualProfitLossController } from './reports/accrual-profit-loss.controller.js';
+import { AccrualProfitLossReportService } from './reports/accrual-profit-loss-report.service.js';
 import { ReportsController } from './reports/reports.controller.js';
 import { CashPerformanceCoverageService } from './reports/cash-performance-coverage.service.js';
 import { PersonalCashPerformanceReportService } from './reports/personal-cash-performance-report.service.js';
+import { FinancialEvidenceRegistryService } from './reports/financial-evidence-registry.service.js';
 import { CashPerformanceHistoricalImportService } from './reports/cash-performance-historical-import.service.js';
 import { LedgerTrialBalanceController } from './reports/ledger-trial-balance.controller.js';
 import { LedgerTrialBalanceReportService } from './reports/ledger-trial-balance-report.service.js';
@@ -185,7 +188,7 @@ import { OfficialReportRunsController } from './reports/official-report-runs.con
       ],
     }),
   ],
-  controllers: [AdministrationController, BackupController, NurixMigrationReviewController, NurixExcelImportController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinanceAccountsController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController, HrOverviewController, AttendanceController, ReportCatalogController, ReportsController, LedgerTrialBalanceController, InternalVatReportController, VatSimulationController, ReportDocumentController, OfficialReportRunsController, OperationsCatalogController, OperationsExecutionController, OperationsInternalRegistrationController, OperationsInventoryReportingController, OperationsAssetsWarrantyController, OperationsOverviewController, DecisionIntelligenceController, MarketingController, InboundEvidenceController, OwnerDailyBriefController, OwnerDashboardController],
+  controllers: [AdministrationController, BackupController, NurixMigrationReviewController, NurixExcelImportController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinanceAccountsController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController, HrOverviewController, AttendanceController, ReportCatalogController, ReportsController, AccrualProfitLossController, LedgerTrialBalanceController, InternalVatReportController, VatSimulationController, ReportDocumentController, OfficialReportRunsController, OperationsCatalogController, OperationsExecutionController, OperationsInternalRegistrationController, OperationsInventoryReportingController, OperationsAssetsWarrantyController, OperationsOverviewController, DecisionIntelligenceController, MarketingController, InboundEvidenceController, OwnerDailyBriefController, OwnerDashboardController],
   providers: [
     DatabaseService,
     BackupService,
@@ -253,9 +256,11 @@ import { OfficialReportRunsController } from './reports/official-report-runs.con
     FinancePnlMappingService,
     ReportRunService,
     ReportCatalogService,
+    AccrualProfitLossReportService,
     CashPerformanceCoverageService,
     CashPerformanceHistoricalImportService,
     PersonalCashPerformanceReportService,
+    FinancialEvidenceRegistryService,
     LedgerTrialBalanceReportService,
     InternalVatReportService,
     VatSimulationService,

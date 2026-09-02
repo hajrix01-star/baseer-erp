@@ -1,7 +1,7 @@
 /** Run after API build: `node apps/api/dist/nurix-migration/nurix-excel-package-closure-audit.policy-verification.js`. */
 import assert from 'node:assert/strict';
 
-import { countDistinctSourceMaps, countDistinctSourceMapsWithSupplierDeletions, resolveHrExceptionSheetEvidence, resolveHrHistoryClosureCoverage } from './nurix-excel-package-closure-audit.service.js';
+import { countDistinctSourceMaps, countDistinctSourceMapsWithSupplierDeletions, filterPackageBoundFinancialEvidence, resolveHrExceptionSheetEvidence, resolveHrHistoryClosureCoverage } from './nurix-excel-package-closure-audit.service.js';
 
 // Retried/reused maps are final coverage, but retries must not inflate the
 // number of settled source rows. Five immutable vault identities therefore
@@ -17,6 +17,21 @@ const maps = countDistinctSourceMaps([
 ]);
 assert.equal(maps.get('Vault'), 5);
 assert.equal(maps.get('Invoice'), 1);
+
+// A later enrichment may share the package control plane, but closure counts
+// only accepted workbook identities. A matching ID may have a normalized
+// writer checksum, while an entirely new ID must not inflate the counters.
+const boundedEvidence = filterPackageBoundFinancialEvidence([
+  { sourceEntity: 'Invoice', sourceId: 'invoice-1', sourceChecksum: 'a'.repeat(64) },
+  { sourceEntity: 'Invoice', sourceId: 'invoice-1', sourceChecksum: 'b'.repeat(64) },
+  { sourceEntity: 'Invoice', sourceId: 'invoice-later', sourceChecksum: 'c'.repeat(64) },
+  { sourceEntity: 'LedgerEntry', sourceId: 'ledger-1', sourceChecksum: 'd'.repeat(64) },
+], [
+  { sheet: 'Invoices', sourceId: 'invoice-1', sourceChecksum: 'a'.repeat(64) },
+  { sheet: 'LedgerEntries', sourceId: 'ledger-1', sourceChecksum: 'd'.repeat(64) },
+]);
+assert.deepEqual(boundedEvidence.map((row) => `${row.sourceEntity}:${row.sourceId}`), ['Invoice:invoice-1', 'Invoice:invoice-1', 'LedgerEntry:ledger-1']);
+assert.equal(countDistinctSourceMaps(boundedEvidence).get('Invoice'), 1);
 
 const supplierCoverage = countDistinctSourceMapsWithSupplierDeletions(
   [{ sourceEntity: 'Supplier', sourceId: 'supplier-mapped' }],

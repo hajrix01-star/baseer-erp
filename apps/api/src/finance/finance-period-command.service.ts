@@ -14,6 +14,7 @@ import {
   Prisma,
 } from "../generated/prisma/client.js";
 import { RequestContext } from "../observability/request-context.js";
+import { assertPayrollReadyForPeriodClose } from "./finance-period-close-readiness.js";
 
 @Injectable()
 export class FinancePeriodCommandService {
@@ -118,6 +119,13 @@ export class FinancePeriodCommandService {
         if (!initial)
           throw new NotFoundException("The fiscal period was not found.");
         await transaction.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${`${context.tenantId}:${context.companyId}:finance-period:${periodId}`}, 0))`;
+        const current = await transaction.financeFiscalPeriod.findFirst({
+          where: { id: periodId, tenantId: context.tenantId, companyId: context.companyId },
+          select: { status: true, startDate: true, endDate: true },
+        });
+        if (!current) throw new NotFoundException("The fiscal period was not found.");
+        if (current.status !== expected) throw new ConflictException("The fiscal period is not in the required lifecycle state.");
+        if (next === FinanceFiscalPeriodStatus.CLOSED) await assertPayrollReadyForPeriodClose(transaction, context, current);
         const updated = await transaction.financeFiscalPeriod.updateMany({
           where: {
             id: periodId,

@@ -11,12 +11,13 @@ import { RequestContext } from '../observability/request-context.js';
 import { LedgerTrialBalanceReportService } from './ledger-trial-balance-report.service.js';
 import { InternalVatReportService } from './internal-vat-report.service.js';
 import { PersonalCashPerformanceReportService } from './personal-cash-performance-report.service.js';
+import { AccrualProfitLossReportService } from './accrual-profit-loss-report.service.js';
 import { canonicalJson, ReportRunService } from './report-run.service.js';
 
 const MAX_INLINE_ARTIFACT_BYTES = 5 * 1024 * 1024;
 type ReportLocale = 'ar' | 'en';
 type OutputFormat = 'preview' | 'xlsx';
-type ReportCode = 'ledger_trial_balance' | 'personal_cash_performance' | 'internal_vat_report';
+type ReportCode = 'ledger_trial_balance' | 'accrual_profit_loss' | 'personal_cash_performance' | 'internal_vat_report';
 
 /**
  * Owns the optional, user-retained report-document library. It never accepts
@@ -28,6 +29,7 @@ export class ReportDocumentService {
   constructor(
     private readonly database: DatabaseService,
     private readonly reportRuns: ReportRunService,
+    private readonly accrualProfitLoss: AccrualProfitLossReportService,
     private readonly trialBalance: LedgerTrialBalanceReportService,
     private readonly cashPerformance: PersonalCashPerformanceReportService,
     private readonly internalVat: InternalVatReportService,
@@ -96,6 +98,7 @@ export class ReportDocumentService {
   private async snapshotForRun(context: TrustedCompanyActorContext, reportRunId: string, locale: ReportLocale): Promise<ReportSnapshot> {
     const run = await this.reportRuns.findReady(context, reportRunId);
     switch (reportCodeOf(run.reportCode)) {
+      case 'accrual_profit_loss': return this.accrualProfitLoss.snapshotForDocument(context, reportRunId, locale);
       case 'ledger_trial_balance': return this.trialBalance.snapshotForDocument(context, reportRunId, locale);
       case 'personal_cash_performance': return this.cashPerformance.snapshotForDocument(context, reportRunId, locale);
       case 'internal_vat_report': return this.internalVat.snapshotForDocument(context, reportRunId, locale);
@@ -123,10 +126,10 @@ export class ReportDocumentService {
 }
 
 function reportCodeOf(value: string): ReportCode {
-  if (value === 'ledger_trial_balance' || value === 'personal_cash_performance' || value === 'internal_vat_report') return value;
+  if (value === 'ledger_trial_balance' || value === 'accrual_profit_loss' || value === 'personal_cash_performance' || value === 'internal_vat_report') return value;
   throw new NotFoundException('The report does not support saved report documents.');
 }
-function reportTitles(code: ReportCode) { return code === 'ledger_trial_balance' ? { ar: 'ميزان المراجعة', en: 'Trial Balance' } : code === 'personal_cash_performance' ? { ar: 'الربح والخسارة المالي', en: 'Financial profit and loss' } : { ar: 'التقرير الضريبي الداخلي', en: 'Internal VAT report' }; }
+function reportTitles(code: ReportCode) { return code === 'ledger_trial_balance' ? { ar: 'ميزان المراجعة', en: 'Trial Balance' } : code === 'accrual_profit_loss' ? { ar: 'الربح والخسارة', en: 'Profit and loss' } : code === 'personal_cash_performance' ? { ar: 'حركة النقد الفعلية', en: 'Actual cash movement' } : { ar: 'التقرير الضريبي الداخلي', en: 'Internal VAT report' }; }
 function hash(value: unknown): string { return createHash('sha256').update(stableJson(value)).digest('hex'); }
 function stableJson(value: unknown): string {
   if (value === null || typeof value === 'boolean' || typeof value === 'number' || typeof value === 'string') return JSON.stringify(value);

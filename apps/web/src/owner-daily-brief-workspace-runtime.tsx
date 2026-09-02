@@ -6,7 +6,7 @@ import { BaseerCard } from "./baseer-card";
 import { BaseerTextInput } from "./baseer-form-fields";
 import { BaseerWorkspace } from "./baseer-workspace";
 import { activeSession, api, requestId } from "./daily-sales-client";
-import { formatCount, formatLongDate, formatTime } from "./number-format";
+import { formatCount, formatLongDate, formatPercent, formatTime } from "./number-format";
 import "./owner-daily-brief-workspace.css";
 
 type Language = "ar" | "en";
@@ -178,7 +178,7 @@ function CompanyCard({ company, language }: { company: OwnerDailyBriefApi["compa
     <header><div><span>{name}</span><small>{ar ? "شامل الضريبة" : "VAT inclusive"}</small></div><em className={`is-${company.sales.monthToDateStatus.toLowerCase()}`}>{statusLabel(company.sales.monthToDateStatus, language)}</em></header>
     <div className="owner-daily-brief__company-sales"><span className="owner-daily-brief__company-sales-label">{ar ? "مبيعات أمس" : "Yesterday's sales"}</span><bdi dir="ltr">{display(values?.yesterdayGrossAmount)}</bdi><span>{ar ? "التغير اليومي: " : "Daily change: "}<strong dir="ltr">{display(values?.dailyChangeGrossAmount)}</strong></span></div>
     <div className="owner-daily-brief__trend" aria-label={ar ? `اتجاه مبيعات ${name}` : `${name} sales trend`}>{company.sales.trend?.length ? company.sales.trend.map((point) => <span key={point.businessDate} className={point.barHeightPercent === null || point.barHeightPercent === undefined ? "is-missing" : ""} style={{ height: `${point.barHeightPercent ?? 8}%` }} aria-label={`${point.businessDate}: ${display(point.grossAmountDisplay)}`} />) : <span className="is-empty">{ar ? "لا تتوفر بيانات اتجاه كافية" : "Trend data is unavailable"}</span>}</div>
-    <dl><div><dt>{ar ? "الشهر حتى تاريخه" : "Month to date"}</dt><dd dir="ltr">{display(values?.monthToDateGrossAmount)}</dd></div><div><dt>{ar ? "المتوسط اليومي" : "Daily average"}</dt><dd dir="ltr">{display(values?.dailyAverageGrossAmount)}</dd></div><div><dt>{ar ? "توقع نهاية الشهر" : "Month-end forecast"}</dt><dd dir="ltr">{display(values?.monthEndForecastGrossAmount)}</dd></div><div><dt>{ar ? "مقابل الفترة السابقة" : "Prior period"}</dt><dd dir="ltr">{display(values?.priorPeriodTrendPercent)}</dd></div></dl>
+    <dl><div><dt>{ar ? "الشهر حتى تاريخه" : "Month to date"}</dt><dd dir="ltr">{display(values?.monthToDateGrossAmount)}</dd></div><div><dt>{ar ? "المتوسط اليومي" : "Daily average"}</dt><dd dir="ltr">{display(values?.dailyAverageGrossAmount)}</dd></div><div><dt>{ar ? "توقع نهاية الشهر" : "Month-end forecast"}</dt><dd dir="ltr">{display(values?.monthEndForecastGrossAmount)}</dd></div><div><dt>{ar ? "مقابل الفترة السابقة" : "Prior period"}</dt><dd dir="ltr">{formatPercent(values?.priorPeriodTrendPercent, language)}</dd></div></dl>
     {coverage ? <small className="owner-daily-brief__coverage">{ar ? `تغطية أيام التشغيل: ${coverage}` : `Operating-day coverage: ${coverage}`}</small> : null}
   </BaseerCard>;
 }

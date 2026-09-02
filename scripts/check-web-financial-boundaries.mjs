@@ -25,6 +25,15 @@ const centralFinancialSources = [
   "apps/web/src/operations-overview-workspace.tsx",
   "apps/web/src/baseer-chart.tsx",
 ].map((file) => [file, readFileSync(file, "utf8")]);
+// These receipts intentionally arrive with presentation values owned by the
+// server. A generic money formatter or a raw-value coercion here would silently
+// reintroduce a second tax/currency/rounding policy in React.
+const serverFormattedFinancialReadSources = [
+  "apps/web/src/reports-workspace-runtime.tsx",
+  "apps/web/src/marketing-overview-spend-runtime.tsx",
+  "apps/web/src/marketing-calendar-workspace-runtime.tsx",
+  "apps/web/src/command-center-workspace-runtime.tsx",
+].map((file) => [file, readFileSync(file, "utf8")]);
 if (/\bfetch\(/.test(signIn) || /\bfetch\(/.test(workspace)) {
   throw new Error("Screen components must use a typed adapter, not fetch directly.");
 }
@@ -50,6 +59,14 @@ const centralMoneyReduction = /\.reduce\([^\n]*(?:amount|sales|gross|net|vat|spe
 for (const [file, source] of centralFinancialSources) {
   if (centralMoneyComputation.test(source) || centralMoneyReduction.test(source)) {
     throw new Error(`${file} must render central financial read-model values without browser money aggregation.`);
+  }
+}
+const serverReadMoneyFormatter = /\bformatMoney\(/;
+const serverReadMoneyCoercion = /(?:Number|parseFloat|parseInt)\([^\n)]*\.(?:raw|amount|balance|debit|credit|gross|net|vat|spend|purchase|inflow|outflow|cash)/i;
+const localCurrencySuffix = /`[^`]*\$\{[^}]+(?:amount|sales|spend|gross|net|debit|credit)[^}]*\}[^`]*(?:SAR|ر\.س)/i;
+for (const [file, source] of serverFormattedFinancialReadSources) {
+  if (serverReadMoneyFormatter.test(source) || serverReadMoneyCoercion.test(source) || localCurrencySuffix.test(source)) {
+    throw new Error(`${file} must display its server-formatted financial receipt without local money parsing, formatting, or currency suffixes.`);
   }
 }
 console.log("Web financial boundaries verified.");

@@ -191,6 +191,9 @@ export const activeCompanyReceiptSchema = z
     // This is an identity attribute, not a permission inference. It lets the
     // shell tailor owner-oriented navigation without granting a capability.
     isOwner: z.boolean().default(false),
+    // An active migration review permits reads only. The shell uses this
+    // state to avoid presenting operational controls that the server blocks.
+    migrationReviewLocked: z.boolean().default(false),
   })
   .strict();
 export const availableCompaniesReceiptSchema = z

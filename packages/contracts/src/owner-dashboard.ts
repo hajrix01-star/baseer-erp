@@ -17,8 +17,12 @@ export const ownerFinancialMovementRowCodeSchema = z.enum([
   "PURCHASES",
   "EXPENSES",
   "RECURRING_EXPENSES",
-  "EMPLOYEE_PAYMENTS",
+  "PAYROLL",
+  "EMPLOYEE_ADVANCES",
+  "FINAL_SETTLEMENTS",
   "VAT",
+  "OTHER_INFLOWS",
+  "OTHER_OUTFLOWS",
   "TOTAL",
 ]);
 
@@ -45,7 +49,7 @@ export const ownerFinancialMovementDashboardReceiptSchema = z.object({
       direction: z.enum(["INFLOW", "OUTFLOW", "NEUTRAL"]),
       percentOfSales: percentSchema.nullable(),
       percentOfSalesDisplay: z.string().min(1).max(32).nullable(),
-    }).strict()).length(7),
+    }).strict()).length(11),
   }).strict()).max(1_000),
 }).strict();
 

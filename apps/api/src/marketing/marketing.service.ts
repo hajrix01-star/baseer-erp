@@ -337,17 +337,23 @@ export class MarketingService {
       return {
         businessDate: salesDay.businessDate,
         officialGrossSales: salesDay.grossAmount,
+        officialGrossSalesDisplay: displayVatInclusiveAmount(salesDay.grossAmount),
+        officialGrossSalesCalendarDisplay: displayCalendarAmount(salesDay.grossAmount),
         officialNetSales: salesDay.netAmount,
         customerCount: salesDay.customerCount,
         salesDayQuality: salesDay.dayQuality,
         dailySalesTarget: target ? target.amount.div(daysInMonth(salesDay.businessDate)).toFixed(4) : null,
+        dailySalesTargetDisplay: target ? displayVatInclusiveAmount(target.amount.div(daysInMonth(salesDay.businessDate))) : null,
         targetStatus: targetStatus(salesDay.grossAmount, target?.amount.div(daysInMonth(salesDay.businessDate)) ?? null),
         linkedActualSpend: isReadableDay ? linked.amount.toFixed(4) : null,
+        linkedActualSpendDisplay: isReadableDay ? displayVatInclusiveAmount(linked.amount) : null,
         linkedFinancialDocumentCount: linked.count,
         campaignSpend,
         financialOutflows: isReadableDay ? outflows.amount.toFixed(4) : null,
+        financialOutflowsDisplay: isReadableDay ? displayVatInclusiveAmount(outflows.amount) : null,
         financialOutflowDocumentCount: outflows.count,
         purchaseOutflows: isReadableDay ? purchases.amount.toFixed(4) : null,
+        purchaseOutflowsDisplay: isReadableDay ? displayVatInclusiveAmount(purchases.amount) : null,
         purchaseOutflowDocumentCount: purchases.count,
         activeCampaignIds,
       };
@@ -358,19 +364,24 @@ export class MarketingService {
       const weekday = new Date(`${salesDay.businessDate}T00:00:00.000Z`).getUTCDay();
       weekdayAmounts[weekday]!.push(new Prisma.Decimal(salesDay.grossAmount));
     }
-    const weekdayAverages = weekdayAmounts.map((amounts, weekday) => ({
-      weekday,
-      averageOfficialGrossSales: amounts.length
-        ? amounts.reduce((total, amount) => total.plus(amount), new Prisma.Decimal(0)).div(amounts.length).toFixed(4)
-        : null,
-      eligibleDayCount: amounts.length,
-    }));
+    const weekdayAverages = weekdayAmounts.map((amounts, weekday) => {
+      const average = amounts.length
+        ? amounts.reduce((total, amount) => total.plus(amount), new Prisma.Decimal(0)).div(amounts.length)
+        : null;
+      return {
+        weekday,
+        averageOfficialGrossSales: average?.toFixed(4) ?? null,
+        averageOfficialGrossSalesDisplay: displayVatInclusiveAmount(average),
+        averageOfficialGrossSalesCalendarDisplay: displayCalendarAmount(average),
+        eligibleDayCount: amounts.length,
+      };
+    });
     const timeline = calendarTimeline(days, data.campaigns.map((campaign) => campaign.id));
     const plannedCampaignCost = data.campaigns.reduce((total, campaign) => total.plus(campaign.plannedCost ?? new Prisma.Decimal(0)), new Prisma.Decimal(0));
-    return { period: { fromBusinessDate: day(period.from)!, toBusinessDate: day(period.to)!, timezone: "Asia/Riyadh" as const }, sales, campaigns: data.campaigns.map(publicCampaign), days, timeline, weekdayAverages,
-      salesTargets: data.salesTargets.map((target) => ({ periodMonth: monthKey(target.periodMonth), amount: target.amount.toFixed(4) })),
+    return { financialRead: { contractVersion: "financial-read.v1" as const, subject: "MIXED_ANALYTICS" as const, defaultTaxView: "VAT_INCLUDED" as const, allowedTaxViews: ["VAT_INCLUDED"] as const, authority: "OFFICIAL_SALES_AND_POSTED_FINANCE", quality: sales.dataQuality, currencyScope: { mode: "SINGLE_CURRENCY" as const, currencyCode: "SAR" as const }, presentationPolicy: "SERVER_FORMATTED" as const }, period: { fromBusinessDate: day(period.from)!, toBusinessDate: day(period.to)!, timezone: "Asia/Riyadh" as const }, sales, campaigns: data.campaigns.map(publicCampaign), days, timeline, weekdayAverages,
+      salesTargets: data.salesTargets.map((target) => ({ periodMonth: monthKey(target.periodMonth), amount: target.amount.toFixed(4), amountDisplay: displayVatInclusiveAmount(target.amount)! })),
       context: contextTimeline.map((event) => ({ id: event.id, scope: event.scope, eventKind: event.eventKind, titleAr: event.titleAr, startsOn: event.startsOn, endsOn: event.endsOn, verificationStatus: event.verificationStatus })),
-      linkedActualGrossAmount: data.linkedActualGrossAmount, spendResult: spendResult(sales, plannedCampaignCost, new Prisma.Decimal(data.linkedActualGrossAmount), data.campaigns.length), dataQuality: sales.dataQuality, analysisBoundary: "TEMPORAL_CONTEXT_ONLY_NOT_CAUSATION" as const };
+      linkedActualGrossAmount: data.linkedActualGrossAmount, linkedActualGrossAmountDisplay: displayVatInclusiveAmount(data.linkedActualGrossAmount)!, spendResult: spendResult(sales, plannedCampaignCost, new Prisma.Decimal(data.linkedActualGrossAmount), data.campaigns.length), dataQuality: sales.dataQuality, analysisBoundary: "TEMPORAL_CONTEXT_ONLY_NOT_CAUSATION" as const };
   }
 
   /** A target is planning metadata. It is company-scoped and audited, and can
@@ -569,7 +580,7 @@ function timelineDataset(buckets: readonly CalendarTimelineBucket[], campaignIds
     for (const item of bucket.campaignSpendByCampaign.values()) if (item.amount.gt(current)) current = item.amount;
     return current;
   }, new Prisma.Decimal(0));
-  const metric = (amount: Prisma.Decimal | null) => amount === null ? { amount: null, chartValue: null, display: null } : { amount: amount.toFixed(4), chartValue: amount.toNumber(), display: amount.toFixed(2) };
+  const metric = (amount: Prisma.Decimal | null) => amount === null ? { amount: null, chartValue: null, display: null } : { amount: amount.toFixed(4), chartValue: amount.toNumber(), display: displayVatInclusiveAmount(amount) };
   const campaignMetric = (campaignId: string, item: Readonly<{ amount: Prisma.Decimal; documentCount: number }> | null) => ({
     campaignId, ...metric(item?.amount ?? null), documentCount: item?.documentCount ?? 0,
     barHeightPercent: item === null || item.amount.lte(0) || maximum.lte(0) ? 0 : Math.max(15, Math.round(item.amount.div(maximum).mul(100).toNumber())),
@@ -604,7 +615,26 @@ function spendResult(sales: Awaited<ReturnType<DecisionIntelligenceService["read
   const hasSpend = linkedActualSpend.gt(0);
   const conclusionAr = !sales ? "أضف فترة للحملة لقراءة المبيعات الرسمية ونتيجة الصرف الوصفية." : !salesReady || !officialGrossSales ? "لا يمكن مقارنة الصرف بالمبيعات لأن جودة قراءة المبيعات ليست جاهزة؛ لا تتحول البيانات الناقصة إلى صفر." : !hasSpend ? "لا توجد مصروفات تسويقية مثبتة مرتبطة في هذه الفترة؛ لا يمكن تقييم نتيجة الصرف بعد." : `المصروف المرتبط المثبت ${linkedActualSpend.toFixed(4)} ر.س مقابل مبيعات رسمية شاملة الضريبة ${officialGrossSales.toFixed(4)} ر.س${spendToSalesPercent ? ` (${spendToSalesPercent}% من مبيعات الفترة)` : ""}. هذه قراءة وصفية زمنية وليست ROI أو إثباتاً للأثر.`;
   const conclusionEn = !sales ? "Add campaign dates to read official sales and descriptive spend results." : !salesReady || !officialGrossSales ? "Spend cannot be compared with sales because sales data quality is not ready; incomplete data is never turned into zero." : !hasSpend ? "There is no posted campaign-linked spend in this period, so spend results cannot yet be assessed." : `Posted linked spend is ${linkedActualSpend.toFixed(4)} SAR against VAT-inclusive official sales of ${officialGrossSales.toFixed(4)} SAR${spendToSalesPercent ? ` (${spendToSalesPercent}% of period sales)` : ""}. This is a descriptive temporal read, not ROI or proof of impact.`;
-  return { plannedCampaignCost: plannedCampaignCost?.toFixed(4) ?? null, linkedActualSpend: linkedActualSpend.toFixed(4), linkedPostedSpendOnly: true as const, spendDataQuality: excludedLinkedDocumentCount > 0 ? "CONFLICTED" as const : linkedActualSpend.gt(0) ? "READY" as const : "NO_DATA" as const, excludedLinkedDocumentCount, officialGrossSales: officialGrossSales?.toFixed(4) ?? null, spendToSalesPercent, campaignCount, salesDataQuality: sales?.dataQuality ?? "NO_DATA", googleAdsStatus: "NOT_CONNECTED" as const, conclusionAr, conclusionEn, analysisBoundary: "DESCRIPTIVE_SPEND_SALES_ONLY_NOT_ROI_OR_CAUSATION" as const };
+  return { plannedCampaignCost: plannedCampaignCost?.toFixed(4) ?? null, plannedCampaignCostDisplay: displayVatInclusiveAmount(plannedCampaignCost), linkedActualSpend: linkedActualSpend.toFixed(4), linkedActualSpendDisplay: displayVatInclusiveAmount(linkedActualSpend)!, linkedPostedSpendOnly: true as const, spendDataQuality: excludedLinkedDocumentCount > 0 ? "CONFLICTED" as const : linkedActualSpend.gt(0) ? "READY" as const : "NO_DATA" as const, excludedLinkedDocumentCount, officialGrossSales: officialGrossSales?.toFixed(4) ?? null, officialGrossSalesDisplay: displayVatInclusiveAmount(officialGrossSales), officialGrossSalesCalendarDisplay: displayCalendarAmount(officialGrossSales), spendToSalesPercent, campaignCount, salesDataQuality: sales?.dataQuality ?? "NO_DATA", googleAdsStatus: "NOT_CONNECTED" as const, conclusionAr, conclusionEn, analysisBoundary: "DESCRIPTIVE_SPEND_SALES_ONLY_NOT_ROI_OR_CAUSATION" as const };
+}
+
+/** The non-report Marketing read is fixed to the company operational gross
+ * VAT-inclusive basis.  React receives this final label and never owns money
+ * rounding, grouping, or the currency suffix. */
+function displayVatInclusiveAmount(value: Prisma.Decimal | string | null) {
+  if (value === null) return null;
+  const fixed = (typeof value === "string" ? new Prisma.Decimal(value) : value).toFixed(2);
+  const [whole, fraction] = fixed.split(".");
+  return `${whole!.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}.${fraction} SAR`;
+}
+
+/** Compact, server-owned calendar label. The full monetary display remains available for detail and assistive text. */
+function displayCalendarAmount(value: Prisma.Decimal | string | null) {
+  if (value === null) return null;
+  const rounded = (typeof value === "string" ? new Prisma.Decimal(value) : value)
+    .toDecimalPlaces(0, Prisma.Decimal.ROUND_HALF_UP)
+    .toFixed(0);
+  return rounded.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 function campaignManagerSummary(comparison: Awaited<ReturnType<DecisionIntelligenceService["readSalesComparison"]>>, spend: ReturnType<typeof spendResult>, context: Array<{ titleAr: string }>) {

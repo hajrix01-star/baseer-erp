@@ -6,7 +6,12 @@ import { BaseerCard } from "./baseer-card";
 import { BaseerDatePicker } from "./baseer-date-picker";
 import { BaseerConfirmDialog } from "./baseer-confirm-dialog";
 import { BaseerDialog } from "./baseer-dialog";
-import { BaseerMoneyInput, normalizeBaseerAmount } from "./baseer-form-fields";
+import {
+  BaseerCheckbox,
+  BaseerIntegerInput,
+  BaseerMoneyInput,
+  BaseerTextInput,
+} from "./baseer-form-fields";
 import { BaseerStaticSelect } from "./baseer-static-select";
 import { BaseerDataGridField as DataTable } from "./baseer-data-grid-field";
 import { activeSession, api, requestId } from "./daily-sales-client";
@@ -16,7 +21,7 @@ import {
   sumMoneyDecimals,
   tryMoneyDecimal,
 } from "./decimal-string";
-import { formatNumber } from "./number-format";
+import { formatNumber, formatPercent } from "./number-format";
 import { displayName } from "./baseer-localization";
 import { financeText } from "./finance-copy";
 import { useDialogFocusTrap } from "./use-dialog-focus-trap";
@@ -274,10 +279,10 @@ export function RecurringExpenseWorkspaceRuntime({
           <span>{dueCount ? dueCount + " " + text.due : text.allTracked}</span>
         </div>
         <div className="recurring-expense-heading__actions">
-          <BaseerButton type="button" variant="secondary" onClick={() => setShowArchived((visible) => !visible)}>
+          <BaseerButton type="button" variant="secondary" size="compact" onClick={() => setShowArchived((visible) => !visible)}>
             {language === "ar" ? `الأرشيف (${archivedProfiles.length})` : `Archive (${archivedProfiles.length})`}
           </BaseerButton>
-          <BaseerButton type="button" variant="primary" onClick={() => setCreating(true)}>
+          <BaseerButton type="button" variant="primary" size="prominent" onClick={() => setCreating(true)}>
             {text.addRecurring}
           </BaseerButton>
         </div>
@@ -745,7 +750,8 @@ export function RecurringExpensePaymentBatchRuntime({
             </label>
             <label>
               {text.recurringProfile}
-              <select
+              <BaseerStaticSelect
+                label={text.recurringProfile}
                 aria-label={text.recurringProfile}
                 defaultValue=""
                 onChange={(event) => {
@@ -761,7 +767,7 @@ export function RecurringExpensePaymentBatchRuntime({
                     {displayName(language, profile)}
                   </option>
                 ))}
-              </select>
+              </BaseerStaticSelect>
             </label>
           </div>
           {message.type !== "idle" ? (
@@ -790,7 +796,8 @@ export function RecurringExpensePaymentBatchRuntime({
                 id: "profile",
                 header: text.recurringProfile,
                 cell: (row) => (
-                  <select
+                  <BaseerStaticSelect
+                    label={text.recurringProfile}
                     aria-label={text.recurringProfile}
                     value={row.profileId}
                     onChange={(event) =>
@@ -803,7 +810,7 @@ export function RecurringExpensePaymentBatchRuntime({
                         {displayName(language, profile)}
                       </option>
                     ))}
-                  </select>
+                  </BaseerStaticSelect>
                 ),
               },
               {
@@ -811,16 +818,12 @@ export function RecurringExpensePaymentBatchRuntime({
                 header: text.coverageYear,
                 align: "center",
                 cell: (row) => (
-                  <input
+                  <BaseerIntegerInput
                     aria-label={text.coverageYear}
-                    inputMode="numeric"
-                    dir="ltr"
                     min="2000"
                     max="2100"
                     value={row.coverageYear}
-                    onChange={(event) =>
-                      change(row.id, "coverageYear", normalizeBaseerAmount(event.target.value).replace(".", ""))
-                    }
+                    onValueChange={(coverageYear) => change(row.id, "coverageYear", coverageYear)}
                   />
                 ),
               },
@@ -871,7 +874,8 @@ export function RecurringExpensePaymentBatchRuntime({
                 id: "vault",
                 header: text.paymentChannel,
                 cell: (row) => (
-                  <select
+                  <BaseerStaticSelect
+                    label={text.paymentChannel}
                     aria-label={text.paymentChannel}
                     value={row.vaultId}
                     onChange={(event) =>
@@ -884,14 +888,14 @@ export function RecurringExpensePaymentBatchRuntime({
                         {displayName(language, vault)}
                       </option>
                     ))}
-                  </select>
+                  </BaseerStaticSelect>
                 ),
               },
               {
                 id: "invoice",
                 header: text.invoiceNumber,
                 cell: (row) => (
-                  <input
+                  <BaseerTextInput
                     aria-label={text.invoiceNumber}
                     value={row.invoiceNumber}
                     placeholder={text.supplierInvoiceNumber}
@@ -932,7 +936,7 @@ export function RecurringExpensePaymentBatchRuntime({
                   >
                     {row.isTaxable &&
                     configuration.profile?.vatAccountingEnabled
-                      ? `${(configuration.profile?.vatRateBasisPoints ?? 1500) / 100}%`
+                      ? formatPercent((configuration.profile?.vatRateBasisPoints ?? 1500) / 100, language)
                       : "—"}
                   </BaseerButton>
                 ),
@@ -1038,15 +1042,11 @@ export function RecurringExpensePaymentBatchRuntime({
                 </label>
                 <label>
                   {text.coverageYear}
-                  <input
-                    inputMode="numeric"
-                    dir="ltr"
+                  <BaseerIntegerInput
                     min="2000"
                     max="2100"
                     value={individual.coverageYear}
-                    onChange={(event) =>
-                      updateIndividual("coverageYear", normalizeBaseerAmount(event.target.value).replace(".", ""))
-                    }
+                    onValueChange={(coverageYear) => updateIndividual("coverageYear", coverageYear)}
                   />
                 </label>
                 <label>
@@ -1080,8 +1080,7 @@ export function RecurringExpensePaymentBatchRuntime({
                 </label>
                 {configuration.profile?.vatAccountingEnabled ? (
                   <label className="purchase-tax-toggle">
-                    <input
-                      type="checkbox"
+                    <BaseerCheckbox
                       checked={individual.isTaxable}
                       onChange={(event) =>
                         updateIndividual("isTaxable", event.target.checked)
@@ -1092,7 +1091,7 @@ export function RecurringExpensePaymentBatchRuntime({
                 ) : null}
                 <label>
                   {text.invoiceNumber}
-                  <input
+                  <BaseerTextInput
                     value={individual.supplierInvoiceNumber}
                     placeholder={text.supplierInvoiceNumber}
                     onChange={(event) =>
@@ -1120,7 +1119,7 @@ export function RecurringExpensePaymentBatchRuntime({
                 </label>
                 <label className="recurring-span">
                   {text.invoiceMissingReason}
-                  <input
+                  <BaseerTextInput
                     value={individual.supplierInvoiceMissingReason}
                     placeholder={text.optional}
                     onChange={(event) =>
@@ -1142,7 +1141,8 @@ export function RecurringExpensePaymentBatchRuntime({
                     id: "vault",
                     header: text.paymentChannel,
                     cell: (allocation) => (
-                      <select
+                      <BaseerStaticSelect
+                        label={text.paymentChannel}
                         value={allocation.vaultId}
                         onChange={(event) =>
                           updateAllocation(allocation.id, {
@@ -1156,7 +1156,7 @@ export function RecurringExpensePaymentBatchRuntime({
                             {displayName(language, vault)}
                           </option>
                         ))}
-                      </select>
+                      </BaseerStaticSelect>
                     ),
                   },
                   {
@@ -1167,7 +1167,8 @@ export function RecurringExpensePaymentBatchRuntime({
                         (item) => item.id === allocation.vaultId,
                       );
                       return (
-                        <select
+                        <BaseerStaticSelect
+                          label={text.paymentMethod}
                           value={allocation.paymentMethod}
                           disabled={!vault}
                           onChange={(event) =>
@@ -1183,7 +1184,7 @@ export function RecurringExpensePaymentBatchRuntime({
                               {paymentMethodLabel(text, method)}
                             </option>
                           ))}
-                        </select>
+                        </BaseerStaticSelect>
                       );
                     },
                   },

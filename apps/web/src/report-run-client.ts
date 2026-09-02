@@ -3,7 +3,7 @@ import { api, type ActiveSession } from './daily-sales-client';
 export type OfficialReportRunPurpose = 'evidence' | 'preview' | 'xlsx' | 'save';
 
 export type OfficialReportRunRequest = Readonly<{
-  reportCode: 'ledger_trial_balance' | 'personal_cash_performance' | 'internal_vat_report';
+  reportCode: 'ledger_trial_balance' | 'accrual_profit_loss' | 'personal_cash_performance' | 'internal_vat_report';
   purpose: OfficialReportRunPurpose;
   request: Readonly<Record<string, unknown>>;
 }>;

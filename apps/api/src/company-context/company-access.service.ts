@@ -71,7 +71,7 @@ export class CompanyAccessService {
               },
               orderBy: { nameAr: "asc" },
               take: 250,
-              select: { id: true, nameAr: true, nameEn: true },
+              select: { id: true, nameAr: true, nameEn: true, migrationReviewLocked: true },
             })
             .then((companies) =>
               companies.map((company) => ({
@@ -93,7 +93,7 @@ export class CompanyAccessService {
             orderBy: { company: { nameAr: "asc" } },
             take: 250,
             select: {
-              company: { select: { id: true, nameAr: true, nameEn: true } },
+              company: { select: { id: true, nameAr: true, nameEn: true, migrationReviewLocked: true } },
               role: {
                 select: { code: true, isSystem: true, grants: { select: { permissionCode: true } } },
               },

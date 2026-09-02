@@ -1,6 +1,8 @@
 import { z } from 'zod';
 
 import { businessDateSchema } from './business-date.js';
+import { financialReadContractSchema } from './financial-read.js';
+import { financialEvidenceDescriptorSchema } from './financial-evidence.js';
 
 export const personalCashPerformanceCoverageRequestSchema = z.object({
   coverageStartBusinessDate: businessDateSchema,
@@ -31,21 +33,78 @@ export const reportMoneyDisplaySchema = z.object({
 }).strict();
 
 const reportPercentSchema = z.string().regex(/^\d+\.\d{4}$/);
+/**
+ * A server-owned operating-cost roll-up over the exact same sealed-ledger
+ * movement scope as the financial report. Amounts are positive display
+ * values because every included group is an outflow; raw financial rows keep
+ * their signed amounts separately in `rows`.
+ */
+const personalCashPerformanceOperatingCostGroupSchema = z.object({
+  code: z.enum(['purchases', 'recurring_expenses', 'expenses', 'payroll']),
+  labelAr: z.string().min(1).max(160),
+  labelEn: z.string().min(1).max(160),
+  amount: reportMoneyDisplaySchema,
+  evidence: financialEvidenceDescriptorSchema,
+  eventCount: z.number().int().nonnegative(),
+  shareOfCollectedSalesPercent: reportPercentSchema.nullable(),
+  /** Only direct category rows; descendant hierarchy is intentionally omitted. */
+  rows: z.array(z.object({
+    code: z.string().min(1).max(160),
+    /** Stable row code accepted by the live evidence endpoint. */
+    evidenceRowCode: z.string().min(1).max(160),
+    labelAr: z.string().min(1).max(160),
+    labelEn: z.string().min(1).max(160),
+    amount: reportMoneyDisplaySchema,
+    evidence: financialEvidenceDescriptorSchema,
+    eventCount: z.number().int().nonnegative(),
+    shareOfParentPercent: reportPercentSchema.nullable(),
+  }).strict()).max(500),
+}).strict();
+
+const personalCashPerformanceOperatingCostsSchema = z.object({
+  /** This is a movement report, not an accrual/P&L reclassification. */
+  basisLabelAr: z.literal('الحركات المالية المثبتة'),
+  total: reportMoneyDisplaySchema,
+  evidence: financialEvidenceDescriptorSchema,
+  shareOfCollectedSalesPercent: reportPercentSchema.nullable(),
+  /** Exactly one direct group per eligible movement: never parents + children. */
+  groups: z.tuple([
+    personalCashPerformanceOperatingCostGroupSchema,
+    personalCashPerformanceOperatingCostGroupSchema,
+    personalCashPerformanceOperatingCostGroupSchema,
+    personalCashPerformanceOperatingCostGroupSchema,
+  ]),
+}).strict();
+
 const personalCashPerformanceRowSchema = z.object({
   code: z.string().min(1).max(160), labelAr: z.string().min(1).max(160), labelEn: z.string().min(1).max(160),
   kind: z.enum(['SECTION', 'LINE']), parentCode: z.string().min(1).max(160).nullable(),
   direction: z.enum(['INFLOW', 'OUTFLOW']), eventCount: z.number().int().positive(), amount: reportMoneyDisplaySchema,
+  evidence: financialEvidenceDescriptorSchema,
   shareOfCollectedSalesPercent: reportPercentSchema.nullable(),
   /** Presentation-ready category measures.  The client must not recompute
    * ranks or financial denominators from visible rows. */
   rankWithinParent: z.number().int().positive(),
   shareOfDirectionPercent: reportPercentSchema.nullable(),
+  shareOfTotalOutflowPercent: reportPercentSchema.nullable(),
   shareOfParentPercent: reportPercentSchema.nullable(),
+}).strict();
+
+const personalCashPerformancePeriodComparisonSchema = z.object({
+  /** Calendar-month columns in the exact user-selected order. */
+  columns: z.array(z.object({ key: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/) }).strict()).min(2).max(24),
+  /** Amounts are server-calculated at the same ledger revision as the total. */
+  rows: z.array(z.object({
+    code: z.string().min(1).max(160),
+    amounts: z.array(reportMoneyDisplaySchema).min(2).max(24),
+  }).strict()).max(500),
+  netCashResultAmounts: z.array(reportMoneyDisplaySchema).min(2).max(24),
 }).strict();
 
 const personalCashPerformanceVaultSchema = z.object({
   vaultId: z.string().uuid(), vaultNameAr: z.string().min(1).max(160), vaultNameEn: z.string().min(1).max(160),
   inflows: reportMoneyDisplaySchema, outflows: reportMoneyDisplaySchema, balance: reportMoneyDisplaySchema,
+  inflowsEvidence: financialEvidenceDescriptorSchema, outflowsEvidence: financialEvidenceDescriptorSchema, balanceEvidence: financialEvidenceDescriptorSchema,
 }).strict();
 
 const personalCashPerformanceMetadataSchema = z.object({
@@ -59,6 +118,8 @@ const personalCashPerformanceMetadataSchema = z.object({
   selectedPeriod: z.object({ from: businessDateSchema, to: businessDateSchema, months: z.array(z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/)).optional() }).strict(),
   basisLabelAr: z.string().min(1).max(200),
   vatInclusive: z.boolean(),
+  /** Optional until all financial reads have adopted the common envelope. */
+  financialRead: financialReadContractSchema.optional(),
   cancellationTreatmentAr: z.string().min(1).max(500),
   dataCoverage: z.object({
     state: z.literal('COMPLETE'),
@@ -84,13 +145,16 @@ export const personalCashPerformanceResultSchema = z.discriminatedUnion('state',
     state: z.literal('NO_DATA'), messageAr: z.string().min(1).max(500),
     rows: z.array(z.never()).max(0),
     vaults: z.array(personalCashPerformanceVaultSchema).max(500),
-    totals: z.object({ inflows: reportMoneyDisplaySchema, outflows: reportMoneyDisplaySchema, netCashResult: reportMoneyDisplaySchema, netCashResultShareOfCollectedSalesPercent: reportPercentSchema.nullable() }).strict(),
+    totals: z.object({ inflows: reportMoneyDisplaySchema, outflows: reportMoneyDisplaySchema, netCashResult: reportMoneyDisplaySchema, netCashResultShareOfCollectedSalesPercent: reportPercentSchema.nullable(), inflowsEvidence: financialEvidenceDescriptorSchema, outflowsEvidence: financialEvidenceDescriptorSchema, netCashResultEvidence: financialEvidenceDescriptorSchema }).strict(),
+    operatingCosts: personalCashPerformanceOperatingCostsSchema,
   }).strict(),
   personalCashPerformanceMetadataSchema.extend({
     state: z.literal('READY'),
     rows: z.array(personalCashPerformanceRowSchema).max(500),
     vaults: z.array(personalCashPerformanceVaultSchema).max(500),
-    totals: z.object({ inflows: reportMoneyDisplaySchema, outflows: reportMoneyDisplaySchema, netCashResult: reportMoneyDisplaySchema, netCashResultShareOfCollectedSalesPercent: reportPercentSchema.nullable() }).strict(),
+    totals: z.object({ inflows: reportMoneyDisplaySchema, outflows: reportMoneyDisplaySchema, netCashResult: reportMoneyDisplaySchema, netCashResultShareOfCollectedSalesPercent: reportPercentSchema.nullable(), inflowsEvidence: financialEvidenceDescriptorSchema, outflowsEvidence: financialEvidenceDescriptorSchema, netCashResultEvidence: financialEvidenceDescriptorSchema }).strict(),
+    operatingCosts: personalCashPerformanceOperatingCostsSchema,
+    periodComparison: personalCashPerformancePeriodComparisonSchema.optional(),
   }).strict(),
 ]);
 
@@ -103,6 +167,7 @@ const personalCashPerformanceEvidenceItemSchema = z.object({
     eventId: z.string().uuid(), businessDate: businessDateSchema, direction: z.enum(['INFLOW', 'OUTFLOW']), amount: reportMoneyDisplaySchema,
       source: z.object({
         journalEntryId: z.string().uuid(), labelAr: z.string().min(1).max(160), labelEn: z.string().min(1).max(160), reference: z.string().min(1).max(160),
+        counterparty: z.object({ labelAr: z.string().min(1).max(160), labelEn: z.string().min(1).max(160) }).strict().nullable(),
         // Current workspaces use stable page hashes. Keep the legacy section
         // form valid for saved evidence created before the page registry.
         origin: z.object({ labelAr: z.string().min(1).max(160), labelEn: z.string().min(1).max(160), route: z.string().regex(/^#module=[a-z-]+&(page=[a-z][a-z0-9-]*|section=\d+)(?:&stage=[a-z][a-z0-9-]{0,31})?$/) }).strict(),
@@ -123,9 +188,20 @@ export const personalCashPerformanceLiveEvidenceReceiptSchema = personalCashPerf
 
 export const personalCashPerformanceSourceReceiptSchema = z.object({
   journalEntry: z.object({
-    id: z.string().uuid(), businessDate: businessDateSchema, sourceType: z.string().min(1).max(80), sourceReference: z.string().min(1).max(160), description: z.string().max(1000).nullable(),
+    id: z.string().uuid(), businessDate: businessDateSchema, sourceType: z.string().min(1).max(80), labelAr: z.string().min(1).max(160), labelEn: z.string().min(1).max(160), sourceReference: z.string().min(1).max(160), description: z.string().max(1000).nullable(),
+    counterparty: z.object({ labelAr: z.string().min(1).max(160), labelEn: z.string().min(1).max(160) }).strict().nullable(),
     status: z.enum(['POSTED', 'REVERSED']), postedAt: z.string().datetime(),
-    lines: z.array(z.object({ id: z.string().uuid(), lineNumber: z.number().int().positive(), accountCode: z.string().min(1).max(80), accountNameAr: z.string().min(1).max(160), accountNameEn: z.string().min(1).max(160), debitAmount: z.string().regex(/^\d+\.\d{4}$/), creditAmount: z.string().regex(/^\d+\.\d{4}$/), description: z.string().max(1000).nullable() }).strict()).min(2),
+    lines: z.array(z.object({
+      id: z.string().uuid(), lineNumber: z.number().int().positive(), accountCode: z.string().min(1).max(80), accountNameAr: z.string().min(1).max(160), accountNameEn: z.string().max(160),
+      /** Retained for existing API readers that need the exact stored scale. */
+      debitAmount: z.string().regex(/^\d+\.\d{4}$/), creditAmount: z.string().regex(/^\d+\.\d{4}$/),
+      /**
+       * Server-owned visual amounts. Optional while the shared receipt is
+       * still consumed by the legacy internal-VAT source endpoint.
+       */
+      debit: reportMoneyDisplaySchema.optional(), credit: reportMoneyDisplaySchema.optional(),
+      description: z.string().max(1000).nullable(),
+    }).strict()).min(2),
   }).strict(),
 }).strict();
 

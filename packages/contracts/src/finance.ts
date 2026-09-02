@@ -914,6 +914,7 @@ export const financialCoverageSchema = z.object({
 const dailySalesAnalyticsDisplaySchema = z.object({
   salesGrossAmount: z.string().min(1).max(64).nullable(),
   applicationSalesGrossAmount: z.string().min(1).max(64).nullable(),
+  otherOfficialSalesGrossAmount: z.string().min(1).max(64).nullable(),
   dailyAverageSalesAmount: z.string().min(1).max(64).nullable(),
   recordedCustomerCount: z.string().min(1).max(64).nullable(),
   dailyAverageCustomerCount: z.string().min(1).max(64).nullable(),
@@ -926,6 +927,9 @@ const dailySalesAnalyticsDisplaySchema = z.object({
   // parsing, formatting, or aggregating money in the browser.
   salesGrossPlotValue: z.number().finite().nullable(),
   applicationSalesGrossPlotValue: z.number().finite().nullable(),
+  // The complement is calculated by the server from the same posted-sales
+  // read. This permits a reconciled stacked chart without browser arithmetic.
+  otherOfficialSalesGrossPlotValue: z.number().finite().min(0).nullable(),
 }).strict();
 const dailySalesAnalyticsChangeSchema = z.object({
   dailyAverageSalesPercent: z.string().min(1).max(64).nullable(),
@@ -1545,7 +1549,7 @@ export const financeInvoiceRegisterDetailSchema = z.object({
       lineNumber: z.number().int().positive(),
       accountCode: z.string().min(1).max(80),
       accountNameAr: z.string().min(1).max(160),
-      accountNameEn: z.string().min(1).max(160),
+      accountNameEn: z.string().max(160),
       debitAmount: financeAmountSchema,
       creditAmount: financeAmountSchema,
       description: z.string().max(1_000).nullable(),
@@ -1660,7 +1664,7 @@ export const financeJournalEntryDetailSchema = z.object({
   reversalEntryId: z.string().uuid().nullable(),
   lines: z.array(z.object({
     id: z.string().uuid(), lineNumber: z.number().int().positive(), accountCode: z.string().min(1).max(80),
-    accountNameAr: z.string().min(1).max(160), accountNameEn: z.string().min(1).max(160),
+    accountNameAr: z.string().min(1).max(160), accountNameEn: z.string().max(160),
     debitAmount: financeAmountSchema, creditAmount: financeAmountSchema, description: z.string().max(1_000).nullable(),
   }).strict()).min(2).max(100),
 }).strict();

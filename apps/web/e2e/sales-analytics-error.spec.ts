@@ -10,8 +10,8 @@ const analyticsMonth = {
   dataQuality: "READY",
   coverage: { recordedSalesDays: 31, requiredOperatingDays: 31, scheduledClosedDays: 0, missingDays: 0, partialDays: 0 },
   display: {
-    salesGrossAmount: "120,000 ر.س", applicationSalesGrossAmount: "42,000 ر.س", dailyAverageSalesAmount: "3,871 ر.س", recordedCustomerCount: "620", dailyAverageCustomerCount: "20", applicationSalesSharePercent: "35%",
-    salesGrossPlotValue: 120000, applicationSalesGrossPlotValue: 42000, applicationSalesSharePlotValue: 35,
+    salesGrossAmount: "120,000 ر.س", applicationSalesGrossAmount: "42,000 ر.س", otherOfficialSalesGrossAmount: "78,000 ر.س", dailyAverageSalesAmount: "3,871 ر.س", recordedCustomerCount: "620", dailyAverageCustomerCount: "20", applicationSalesSharePercent: "35%",
+    salesGrossPlotValue: 120000, applicationSalesGrossPlotValue: 42000, otherOfficialSalesGrossPlotValue: 78000, applicationSalesSharePlotValue: 35,
   },
 };
 

@@ -24,6 +24,7 @@ import { BaseerStaticSelect } from "./baseer-static-select";
 import { BaseerMoneyInput, BaseerTextArea, BaseerTextInput } from "./baseer-form-fields";
 import { BaseerPeriodFilter, baseerPeriodLabel, defaultBaseerPeriodRange, iso, riyadhToday, type BaseerPeriodRange } from "./baseer-period-filter";
 import { BaseerLoadFailure } from "./baseer-load-failure";
+import { BaseerNotice } from "./baseer-workspace";
 import { formatMoney } from "./number-format";
 import { presentBaseerApiError, presentBaseerLoadError } from "./baseer-api-error";
 import { DailySalesSignIn } from "./daily-sales-sign-in";
@@ -52,6 +53,9 @@ const OutflowBatchEntryTable =
 const PurchaseExpenseCreditPanel = lazy(async () => ({
   default: (await import("./purchase-expense-credit-panel"))
     .PurchaseExpenseCreditPanel,
+}));
+const QuickAdvanceDialog = lazy(async () => ({
+  default: (await import("./quick-advance-dialog")).QuickAdvanceDialog,
 }));
 
 type Configuration = {
@@ -178,10 +182,12 @@ type PurchaseWorkspaceTab = "entry" | "history" | "credit";
 
 export function PurchaseExpenseWorkspaceRuntime({
   language,
+  migrationReviewLocked = false,
   activeTab = "entry",
   onTabChange,
 }: {
   language: "ar" | "en";
+  migrationReviewLocked?: boolean;
   activeTab?: PurchaseWorkspaceTab;
   onTabChange?: (tab: PurchaseWorkspaceTab) => void;
 }) {
@@ -210,8 +216,14 @@ export function PurchaseExpenseWorkspaceRuntime({
     "ALL" | Document["status"]
   >("POSTED");
   const [credit, setCredit] = useState<CreditWorkspace | null>(null);
-  const [tab, setTab] = useState<PurchaseWorkspaceTab>(activeTab);
-  const canCreate = hasActivePermission("finance.purchase_expense.create");
+  const [tab, setTab] = useState<PurchaseWorkspaceTab>(() => migrationReviewLocked && hasActivePermission("finance.purchase_expense.read") ? "history" : activeTab);
+  const [quickAdvanceOpen, setQuickAdvanceOpen] = useState(false);
+  // The server deliberately rejects every operational capability while a
+  // company is migration-review locked. Do not request entry references with
+  // a create capability merely to render this page; switch to an available
+  // read surface instead.
+  const canCreate = hasActivePermission("finance.purchase_expense.create") && !migrationReviewLocked;
+  const canIssueAdvance = hasActivePermission("hr.advances.issue") && !migrationReviewLocked;
   const canReadHistory = hasActivePermission("finance.purchase_expense.read");
   const canReadCredit = canReadHistory && hasActivePermission("finance.supplier_dues.read");
   const availableTabs = useMemo(() => [
@@ -251,7 +263,7 @@ export function PurchaseExpenseWorkspaceRuntime({
     setSession(current);
     if (!current) return;
     const [nextConfiguration, nextDocuments] = await Promise.all([
-      api<Configuration>(current, canCreate ? "/finance/purchase-expense-documents/entry-references" : "/finance/configuration"),
+      canCreate ? api<Configuration>(current, "/finance/purchase-expense-documents/entry-references") : Promise.resolve<Configuration>({ profile: null, vaults: [], categories: [], suppliers: [] }),
       canReadHistory ? api<{ documents: Document[]; ownerCanAmend: boolean }>(
         current,
         "/finance/purchase-expense-documents",
@@ -292,6 +304,7 @@ export function PurchaseExpenseWorkspaceRuntime({
   const retryLoad = useCallback(() => { void load().catch(reportLoadFailure); }, [load, reportLoadFailure]);
   useEffect(() => { retryLoad(); }, [retryLoad]);
   useEffect(() => {
+    if (!canCreate) return;
     const current = activeSession();
     if (!current) return;
     const draft = takeMarketingFinanceHandoff(current.companyId);
@@ -304,7 +317,7 @@ export function PurchaseExpenseWorkspaceRuntime({
     setRows([{ ...row, kind: "EXPENSE", grossAmount: draft.plannedCost ?? "", notes }]);
     setMarketingHandoff(draft);
     setMessage({ kind: "success", text: language === "ar" ? "تمت تعبئة فاتورة الحملة. أكمل المورد والتصنيف وطريقة السداد ثم احفظ." : "Campaign invoice details were prefilled. Complete supplier, category, and settlement, then save." });
-  }, [language, session?.companyId]);
+  }, [canCreate, language, session?.companyId]);
   useEffect(() => {
     const stage = typeof window === "undefined"
       ? null
@@ -852,6 +865,7 @@ export function PurchaseExpenseWorkspaceRuntime({
     }
   };
   if (!session) return <DailySalesSignIn language={language} />;
+  if (migrationReviewLocked && !canReadHistory) return <section className="daily-sales-workspace baseer-batch-workspace purchase-expense-workspace" aria-label={text.purchases}><BaseerCard><div className="baseer-workspace__heading"><div><p className="overline">{language === "ar" ? "مراجعة ترحيل" : "Migration review"}</p><h2>{language === "ar" ? "المشتريات للقراءة فقط" : "Purchases are read-only"}</h2><p>{language === "ar" ? "الشركة مقفلة لمراجعة الترحيل. لا تتاح عمليات إنشاء أو تعديل المشتريات حتى يرفع المالك القفل." : "This company is locked for migration review. Purchase creation and changes remain unavailable until the owner removes the lock."}</p></div></div></BaseerCard></section>;
   return (
     <section
       className="daily-sales-workspace baseer-batch-workspace purchase-expense-workspace"
@@ -866,17 +880,22 @@ export function PurchaseExpenseWorkspaceRuntime({
         </BaseerCard>
       ) : (
         <section style={{ minWidth: 0 }}>
-          <BaseerWorkspaceTabs
-            ariaLabel={text.batchInvoices}
-            idPrefix="purchase-tab"
-            activeId={tab}
-            tabs={availableTabs}
-            onChange={(id) => {
-              const next = id as PurchaseWorkspaceTab;
-              setTab(next);
-              onTabChange?.(next);
-            }}
-          />
+          {migrationReviewLocked ? <BaseerNotice tone="warning" title={language === "ar" ? "إدخال المشتريات مقفل لمراجعة الترحيل" : "Purchase entry is locked for migration review"}>{language === "ar" ? "الشركة في وضع القراءة فقط؛ لذلك لا يظهر تبويب الإدخال أو زر الإضافة. يرفع مالك الشركة القفل من الإدارة ← الشركات بعد اكتمال مراجعة الترحيل." : "This company is read-only, so the entry tab and add button are hidden. A company owner can remove the lock from Administration → Companies after the migration review is complete."}</BaseerNotice> : null}
+          <div className="purchase-expense-workspace__tabs-row">
+            <BaseerWorkspaceTabs
+              ariaLabel={text.batchInvoices}
+              idPrefix="purchase-tab"
+              activeId={tab}
+              tabs={availableTabs}
+              onChange={(id) => {
+                const next = id as PurchaseWorkspaceTab;
+                setTab(next);
+                onTabChange?.(next);
+              }}
+            />
+            {canIssueAdvance ? <button type="button" className="purchase-expense-workspace__advance-add" aria-label={language === "ar" ? "إدخال سلفة" : "Enter advance"} title={language === "ar" ? "إدخال سلفة" : "Enter advance"} onClick={() => setQuickAdvanceOpen(true)}>+</button> : null}
+          </div>
+          {quickAdvanceOpen ? <Suspense fallback={null}><QuickAdvanceDialog open language={language} onClose={() => setQuickAdvanceOpen(false)} /></Suspense> : null}
           {tab === "entry" ? (
             <>
               <BaseerBatchPanel

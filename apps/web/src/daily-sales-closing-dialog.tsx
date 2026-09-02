@@ -181,7 +181,7 @@ function ShiftCard({
             {displayGrossAmount !== null &&
             isPositiveMoneyDecimal(displayGrossAmount)
               ? formatMoney(displayGrossAmount)
-              : copy.previewUnavailable}
+              : "—"}
           </strong>
         </span>
         <span>
@@ -200,6 +200,7 @@ function ShiftCard({
     </section>
   );
 }
+
 export function DailySalesClosingDialog({
   language,
   open,

@@ -6,6 +6,7 @@ import { DatabaseService } from '../database/database.service.js';
 import { FinanceFiscalPeriodStatus, Prisma } from '../generated/prisma/client.js';
 import { RequestContext } from '../observability/request-context.js';
 import { FinancePeriodService } from './finance-period.service.js';
+import { assertPayrollReadyForPeriodClose } from './finance-period-close-readiness.js';
 
 type CreatePeriodInput = Readonly<{
   nameAr: string;
@@ -106,11 +107,14 @@ export class FinancePeriodLifecycleService {
       `;
       const existing = await transaction.financeFiscalPeriod.findFirst({
         where: { id: selected.id, tenantId: context.tenantId, companyId: context.companyId },
-        select: { id: true, status: true },
+        select: { id: true, status: true, startDate: true, endDate: true },
       });
       if (!existing) throw new NotFoundException('The fiscal period was not found.');
       if (existing.status !== expected) {
         throw new ConflictException('The fiscal period is not in the required lifecycle state.');
+      }
+      if (next === FinanceFiscalPeriodStatus.CLOSED) {
+        await assertPayrollReadyForPeriodClose(transaction, context, existing);
       }
 
       const now = new Date();

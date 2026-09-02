@@ -46,11 +46,15 @@ export type MarketingCopy = Record<string, string>;
 
 export type MarketingSpendResult = {
   plannedCampaignCost: string | null;
+  plannedCampaignCostDisplay: string | null;
   linkedActualSpend: string;
+  linkedActualSpendDisplay: string;
   linkedPostedSpendOnly: true;
   spendDataQuality: string;
   excludedLinkedDocumentCount: number;
   officialGrossSales: string | null;
+  officialGrossSalesDisplay: string | null;
+  officialGrossSalesCalendarDisplay: string | null;
   spendToSalesPercent: string | null;
   campaignCount: number;
   salesDataQuality: string;
@@ -60,25 +64,51 @@ export type MarketingSpendResult = {
 };
 
 export type MarketingCalendarRead = {
+  financialRead: {
+    contractVersion: "financial-read.v1";
+    subject: "SALES" | "CASH_MOVEMENT" | "PURCHASE_SPEND" | "MIXED_ANALYTICS";
+    defaultTaxView: "VAT_INCLUDED";
+    allowedTaxViews: Array<"VAT_INCLUDED" | "VAT_SEPARATED">;
+    authority: string;
+    quality: string;
+    currencyScope: { mode: "SINGLE_CURRENCY"; currencyCode: string } | { mode: "MIXED_OR_UNCONFIGURED" };
+    presentationPolicy: "SERVER_FORMATTED";
+  };
   period: { fromBusinessDate: string; toBusinessDate: string };
   sales: { dataQuality: string; payload: { netAmount: string | null; grossAmount: string | null } };
   campaigns: MarketingCampaign[];
   days: Array<{
     businessDate: string;
     officialGrossSales: string | null;
+    officialGrossSalesDisplay: string | null;
+    officialGrossSalesCalendarDisplay: string | null;
     officialNetSales: string | null;
     customerCount: number | null;
     salesDayQuality: "READY" | "PENDING" | "PARTIAL" | "MISSING";
+    dailySalesTarget: string | null;
+    dailySalesTargetDisplay: string | null;
+    targetStatus: "NO_TARGET" | "NO_SALES" | "BELOW" | "NEAR" | "MET" | "EXCEEDED";
     linkedActualSpend: string | null;
+    linkedActualSpendDisplay: string | null;
     linkedFinancialDocumentCount: number;
     campaignSpend: Array<{ campaignId: string; amount: string; documentCount: number }>;
     financialOutflows: string | null;
+    financialOutflowsDisplay: string | null;
     financialOutflowDocumentCount: number;
     purchaseOutflows: string | null;
+    purchaseOutflowsDisplay: string | null;
     purchaseOutflowDocumentCount: number;
     activeCampaignIds: string[];
   }>;
   timeline: BaseerMarketingTimeline;
+  weekdayAverages: Array<{
+    weekday: number;
+    averageOfficialGrossSales: string | null;
+    averageOfficialGrossSalesDisplay: string | null;
+    averageOfficialGrossSalesCalendarDisplay: string | null;
+    eligibleDayCount: number;
+  }>;
+  salesTargets: Array<{ periodMonth: string; amount: string; amountDisplay: string }>;
   context: Array<{
     id: string;
     scope: "GLOBAL" | "AREA" | "COMPANY";
@@ -89,6 +119,7 @@ export type MarketingCalendarRead = {
     verificationStatus: string;
   }>;
   linkedActualGrossAmount: string;
+  linkedActualGrossAmountDisplay: string;
   spendResult: MarketingSpendResult;
 };
 

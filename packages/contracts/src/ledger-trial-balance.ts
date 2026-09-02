@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 import { businessDateSchema } from './business-date.js';
 import { reportMoneyDisplaySchema } from './reporting.js';
+import { financialEvidenceDescriptorSchema } from './financial-evidence.js';
 
 const uuidSchema = z.string().uuid();
 const amountColumnsSchema = z.object({
@@ -11,6 +12,14 @@ const amountColumnsSchema = z.object({
   periodCredit: reportMoneyDisplaySchema,
   closingDebit: reportMoneyDisplaySchema,
   closingCredit: reportMoneyDisplaySchema,
+}).strict();
+const evidenceColumnsSchema = z.object({
+  openingDebit: financialEvidenceDescriptorSchema,
+  openingCredit: financialEvidenceDescriptorSchema,
+  periodDebit: financialEvidenceDescriptorSchema,
+  periodCredit: financialEvidenceDescriptorSchema,
+  closingDebit: financialEvidenceDescriptorSchema,
+  closingCredit: financialEvidenceDescriptorSchema,
 }).strict();
 
 export const ledgerTrialBalanceRequestSchema = z.object({
@@ -49,6 +58,8 @@ export const ledgerTrialBalanceRowSchema = z.object({
   type: z.enum(['ASSET', 'LIABILITY', 'EQUITY', 'REVENUE', 'EXPENSE']),
   isSystem: z.boolean(),
   amounts: amountColumnsSchema,
+  /** One server-owned predicate per visible amount cell. */
+  evidence: evidenceColumnsSchema,
 }).strict();
 
 export const ledgerTrialBalanceResultSchema = z.discriminatedUnion('state', [
@@ -58,11 +69,13 @@ export const ledgerTrialBalanceResultSchema = z.discriminatedUnion('state', [
     state: z.literal('NO_DATA'), messageAr: z.string().min(1).max(500),
     rows: z.array(z.never()).max(0),
     totals: amountColumnsSchema,
+    totalsEvidence: evidenceColumnsSchema,
   }).strict(),
   ledgerTrialBalanceMetadataSchema.extend({
     state: z.literal('READY'),
     rows: z.array(ledgerTrialBalanceRowSchema).max(1_000),
     totals: amountColumnsSchema,
+    totalsEvidence: evidenceColumnsSchema,
   }).strict(),
 ]);
 
@@ -101,7 +114,7 @@ export const ledgerTrialBalanceSourceReceiptSchema = z.object({
     description: z.string().max(1_000).nullable(),
     cancellationLabelAr: z.string().max(200).nullable(),
     lines: z.array(z.object({
-      id: uuidSchema, lineNumber: z.number().int().positive(), accountCode: z.string().min(1).max(80), accountNameAr: z.string().min(1).max(160), accountNameEn: z.string().min(1).max(160), debit: reportMoneyDisplaySchema, credit: reportMoneyDisplaySchema, description: z.string().max(1_000).nullable(),
+      id: uuidSchema, lineNumber: z.number().int().positive(), accountCode: z.string().min(1).max(80), accountNameAr: z.string().min(1).max(160), accountNameEn: z.string().max(160), debit: reportMoneyDisplaySchema, credit: reportMoneyDisplaySchema, description: z.string().max(1_000).nullable(),
     }).strict()).min(2),
   }).strict(),
 }).strict();

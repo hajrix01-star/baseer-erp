@@ -4,6 +4,7 @@ import { officialReportRunReceiptSchema, officialReportRunRequestSchema } from '
 
 import { CompanyContextService } from '../company-context/company-context.service.js';
 import { InternalVatReportService } from './internal-vat-report.service.js';
+import { AccrualProfitLossReportService } from './accrual-profit-loss-report.service.js';
 import { LedgerTrialBalanceReportService } from './ledger-trial-balance-report.service.js';
 import { PersonalCashPerformanceReportService } from './personal-cash-performance-report.service.js';
 import { REPORTS_READ_CAPABILITY } from './report-catalog.service.js';
@@ -20,6 +21,7 @@ import { REPORTS_READ_CAPABILITY } from './report-catalog.service.js';
 export class OfficialReportRunsController {
   constructor(
     private readonly contexts: CompanyContextService,
+    private readonly accrualProfitLoss: AccrualProfitLossReportService,
     private readonly cashPerformance: PersonalCashPerformanceReportService,
     private readonly trialBalance: LedgerTrialBalanceReportService,
     private readonly internalVat: InternalVatReportService,
@@ -49,6 +51,8 @@ export class OfficialReportRunsController {
     input: typeof officialReportRunRequestSchema._output,
   ) {
     switch (input.reportCode) {
+      case 'accrual_profit_loss':
+        return this.accrualProfitLoss.issueOfficialRun(context, { from: businessDate(input.request.from), to: businessDate(input.request.to), vatInclusive: input.request.vatInclusive });
       case 'personal_cash_performance':
         return this.cashPerformance.issueOfficialRun(context, { from: businessDate(input.request.from), to: businessDate(input.request.to), ...(input.request.months ? { months: input.request.months } : {}), vatInclusive: input.request.vatInclusive });
       case 'ledger_trial_balance':
@@ -74,9 +78,10 @@ function businessDate(value: string) {
   return date;
 }
 
-function definitionVersion(reportCode: 'personal_cash_performance' | 'ledger_trial_balance' | 'internal_vat_report') {
+function definitionVersion(reportCode: 'accrual_profit_loss' | 'personal_cash_performance' | 'ledger_trial_balance' | 'internal_vat_report') {
   switch (reportCode) {
-    case 'personal_cash_performance': return 'actual_financial_movements_v4';
+    case 'accrual_profit_loss': return 'accrual_profit_loss_v1';
+    case 'personal_cash_performance': return 'actual_financial_movements_v5';
     case 'ledger_trial_balance': return 'ledger_trial_balance_v1';
     case 'internal_vat_report': return 'internal_vat_report_v1';
   }

@@ -3,6 +3,7 @@ import { type OwnerFinancialMovementDashboardReceipt } from "@baseer-erp/contrac
 
 import type { TrustedTenantAdministratorContext } from "../administration/tenant-administration-context.service.js";
 import { DatabaseService } from "../database/database.service.js";
+import { financialMovementSemantic } from "../finance/financial-movement-classification.js";
 import {
   CompanyStatus,
   FinanceCashPerformanceEventKind,
@@ -10,9 +11,9 @@ import {
   Prisma,
 } from "../generated/prisma/client.js";
 
-type MovementCode = "SALES" | "PURCHASES" | "EXPENSES" | "RECURRING_EXPENSES" | "EMPLOYEE_PAYMENTS" | "VAT";
+type MovementCode = "SALES" | "PURCHASES" | "EXPENSES" | "RECURRING_EXPENSES" | "PAYROLL" | "EMPLOYEE_ADVANCES" | "FINAL_SETTLEMENTS" | "VAT" | "OTHER_INFLOWS" | "OTHER_OUTFLOWS";
 
-const movementCodes: readonly MovementCode[] = ["SALES", "PURCHASES", "EXPENSES", "RECURRING_EXPENSES", "EMPLOYEE_PAYMENTS", "VAT"];
+const movementCodes: readonly MovementCode[] = ["SALES", "PURCHASES", "EXPENSES", "RECURRING_EXPENSES", "PAYROLL", "EMPLOYEE_ADVANCES", "FINAL_SETTLEMENTS", "VAT", "OTHER_INFLOWS", "OTHER_OUTFLOWS"];
 
 /**
  * Owner-only cash-movement summary. It reads the same sealed vault lines used
@@ -24,7 +25,9 @@ export class OwnerDashboardService {
   constructor(private readonly database: DatabaseService) {}
 
   async financialMovement(context: TrustedTenantAdministratorContext): Promise<OwnerFinancialMovementDashboardReceipt> {
-    const toBusinessDate = previousRiyadhDate(new Date());
+    // Cash movement is a live owner read. Unlike a daily close snapshot, it
+    // must include every sealed posting made today in Riyadh.
+    const toBusinessDate = riyadhBusinessDate(new Date());
     const fromBusinessDate = `${toBusinessDate.slice(0, 7)}-01`;
     const from = dateAtUtcStart(fromBusinessDate);
     const to = dateAtUtcStart(toBusinessDate);
@@ -104,8 +107,12 @@ export class OwnerDashboardService {
         const amount = line.debitAmount.minus(line.creditAmount);
         if (amount.isZero()) continue;
         const event = eventByJournal.get(entry.id);
-        const code = movementCode(sourceType, event?.kind, Boolean(event && recurringDocumentIds.has(event.sourceId)));
-        if (!code) continue;
+        // A sealed vault movement must never disappear simply because a new
+        // source type has not yet received a named presentation category.
+        // Keep it reconciled in an explicit direction-based catch-all, which
+        // is the same accounting boundary used by the detailed cash report.
+        const code = movementCode(sourceType, event?.kind, Boolean(event && recurringDocumentIds.has(event.sourceId)))
+          ?? (amount.gt(0) ? "OTHER_INFLOWS" : "OTHER_OUTFLOWS");
         totalsByCompany.get(line.companyId)![code] = totalsByCompany.get(line.companyId)![code].plus(amount);
       }
 
@@ -176,7 +183,9 @@ function groupDecimal(value: string) {
 function movementCode(sourceType: string, eventKind: FinanceCashPerformanceEventKind | undefined, recurringExpense: boolean): MovementCode | null {
   if (sourceType === "daily_sales_closing") return "SALES";
   if (sourceType === "finance_vat_settlement") return "VAT";
-  if (sourceType === "hr_employee_advance" || sourceType === "hr_employee_advance_receipt" || sourceType === "hr_payroll_payment" || sourceType === "hr_final_settlement_payment") return "EMPLOYEE_PAYMENTS";
+  if (sourceType === "hr_final_settlement_payment") return "FINAL_SETTLEMENTS";
+  const semantic = financialMovementSemantic(sourceType);
+  if (semantic) return semantic.ownerDashboardCode;
   if (eventKind === FinanceCashPerformanceEventKind.PURCHASE_PAYMENT) return "PURCHASES";
   if (eventKind === FinanceCashPerformanceEventKind.OPERATING_EXPENSE_PAYMENT) return recurringExpense ? "RECURRING_EXPENSES" : "EXPENSES";
   if (sourceType === "finance_outflow_document") return "EXPENSES";
@@ -197,13 +206,10 @@ function emptyReceipt(fromBusinessDate: string, toBusinessDate: string): OwnerFi
   };
 }
 
-function previousRiyadhDate(value: Date) {
+function riyadhBusinessDate(value: Date) {
   const parts = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Riyadh", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(value);
   const fields = new Map(parts.filter((part) => part.type !== "literal").map((part) => [part.type, part.value]));
-  const riyadhToday = `${fields.get("year")}-${fields.get("month")}-${fields.get("day")}`;
-  const previous = new Date(`${riyadhToday}T00:00:00.000Z`);
-  previous.setUTCDate(previous.getUTCDate() - 1);
-  return previous.toISOString().slice(0, 10);
+  return `${fields.get("year")}-${fields.get("month")}-${fields.get("day")}`;
 }
 
 function dateAtUtcStart(value: string) {

@@ -47,7 +47,7 @@ const copy = {
 } as const;
 
 /** Purchasing is an operational destination: opening it must enter the managed workspace directly. */
-export function PurchaseExpenseWorkspaceContent({ language, activeTab = "entry", onTabChange }: { language: Language; activeTab?: PurchaseWorkspaceTab; onTabChange?: (tab: PurchaseWorkspaceTab) => void }) {
+export function PurchaseExpenseWorkspaceContent({ language, migrationReviewLocked = false, activeTab = "entry", onTabChange }: { language: Language; migrationReviewLocked?: boolean; activeTab?: PurchaseWorkspaceTab; onTabChange?: (tab: PurchaseWorkspaceTab) => void }) {
   const text = copy[language];
   const [session] = useState<ActiveSession | null>(activeSession);
   const [openRuntime, setOpenRuntime] = useState(true);
@@ -76,7 +76,7 @@ export function PurchaseExpenseWorkspaceContent({ language, activeTab = "entry",
   }, [canRead, session]);
 
   if (!session) return <DailySalesSignIn language={language} />;
-  if (openRuntime) return <Suspense fallback={<BaseerCard>{text.preparing}</BaseerCard>}><PurchaseExpenseWorkspaceRuntime language={language} activeTab={activeTab} onTabChange={onTabChange} /></Suspense>;
+  if (openRuntime) return <Suspense fallback={<BaseerCard>{text.preparing}</BaseerCard>}><PurchaseExpenseWorkspaceRuntime language={language} migrationReviewLocked={migrationReviewLocked} activeTab={activeTab} onTabChange={onTabChange} /></Suspense>;
   return <section className="purchase-expense-workspace">
     <BaseerCard>
       <div className="baseer-workspace__heading">

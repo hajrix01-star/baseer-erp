@@ -25,10 +25,16 @@ const prismaModelByDelegate = {
   financeJournalLine: "FinanceJournalLine",
   financeLedgerRevision: "FinanceLedgerRevision",
   financeOutflowDocument: "FinanceOutflowDocument",
+  financePnlMappingVersion: "FinancePnlMappingVersion",
   financeSupplierDuePayment: "FinanceSupplierDuePayment",
   financeVatSettlement: "FinanceVatSettlement",
   financeVault: "FinanceVault",
   hrPayrollPayment: "HrPayrollPayment",
+  hrPayrollRun: "HrPayrollRun",
+  // Cash-performance evidence reads issued advances to distinguish an
+  // advance from payroll settlement. HR owns its RLS migration, but Reports
+  // must still prove the delegate is protected before using it.
+  hrEmployeeAdvance: "HrEmployeeAdvance",
   reportDocument: "ReportDocument",
   reportRun: "ReportRun",
   vatSimulation: "VatSimulation",

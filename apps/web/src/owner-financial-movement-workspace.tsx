@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
 import { BaseerEmptyState, BaseerSectionHeader, BaseerWorkspace } from "./baseer-workspace";
-import { activeSession, api } from "./daily-sales-client";
-import { formatDate } from "./number-format";
+import { activeSession, activeSessionChangedEvent, api, type ActiveSession } from "./daily-sales-client";
+import { formatDate, formatPercent } from "./number-format";
 import "./owner-financial-movement-workspace.css";
 
 type Language = "ar" | "en";
-type MovementCode = "SALES" | "PURCHASES" | "EXPENSES" | "RECURRING_EXPENSES" | "EMPLOYEE_PAYMENTS" | "VAT" | "TOTAL";
+type MovementCode = "SALES" | "PURCHASES" | "EXPENSES" | "RECURRING_EXPENSES" | "PAYROLL" | "EMPLOYEE_ADVANCES" | "FINAL_SETTLEMENTS" | "VAT" | "OTHER_INFLOWS" | "OTHER_OUTFLOWS" | "TOTAL";
 
 type OwnerFinancialMovementReceipt = Readonly<{
   generatedAt: string;
@@ -34,15 +34,19 @@ type OwnerFinancialMovementReceipt = Readonly<{
   }>[];
 }>;
 
-const rowOrder: readonly MovementCode[] = ["SALES", "PURCHASES", "EXPENSES", "RECURRING_EXPENSES", "EMPLOYEE_PAYMENTS", "VAT", "TOTAL"];
+const rowOrder: readonly MovementCode[] = ["SALES", "PURCHASES", "EXPENSES", "RECURRING_EXPENSES", "PAYROLL", "EMPLOYEE_ADVANCES", "FINAL_SETTLEMENTS", "VAT", "OTHER_INFLOWS", "OTHER_OUTFLOWS", "TOTAL"];
 
 const rowLabels: Record<MovementCode, { ar: string; en: string }> = {
   SALES: { ar: "المبيعات", en: "Sales" },
   PURCHASES: { ar: "المشتريات", en: "Purchases" },
   EXPENSES: { ar: "المصروفات", en: "Expenses" },
   RECURRING_EXPENSES: { ar: "المصروفات الدورية", en: "Recurring expenses" },
-  EMPLOYEE_PAYMENTS: { ar: "رواتب وسلف الموظفين", en: "Payroll & employee advances" },
+  PAYROLL: { ar: "الرواتب والأجور المدفوعة", en: "Paid salaries & wages" },
+  EMPLOYEE_ADVANCES: { ar: "سلف الموظفين", en: "Employee advances" },
+  FINAL_SETTLEMENTS: { ar: "مستحقات نهاية الخدمة المدفوعة", en: "Paid final settlements" },
   VAT: { ar: "الضريبة", en: "VAT" },
+  OTHER_INFLOWS: { ar: "حركات داخلة أخرى", en: "Other inflows" },
+  OTHER_OUTFLOWS: { ar: "حركات خارجة أخرى", en: "Other outflows" },
   TOTAL: { ar: "المجموع", en: "Total" },
 };
 
@@ -51,29 +55,69 @@ export function OwnerFinancialMovementWorkspace({ language }: { language: Langua
   const [receipt, setReceipt] = useState<OwnerFinancialMovementReceipt | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [refreshing, setRefreshing] = useState(false);
+  const [refreshWarning, setRefreshWarning] = useState("");
+  const [refreshRevision, setRefreshRevision] = useState(0);
+  const hasLoaded = useRef(false);
+  const receiptRef = useRef<OwnerFinancialMovementReceipt | null>(null);
+  receiptRef.current = receipt;
 
-  const load = async () => {
-    const session = activeSession();
-    if (!session) {
-      setError(ar ? "انتهت الجلسة. سجّل الدخول ثم أعد المحاولة." : "Your session has ended. Sign in and try again.");
-      setLoading(false);
-      return;
-    }
-    setLoading(true);
-    setError("");
-    try {
-      setReceipt(await api<OwnerFinancialMovementReceipt>(session, "/owner/dashboard/financial-movement"));
-    } catch (reason) {
-      setError(presentBaseerApiError(reason, language, ar ? "تعذر تحميل الحركة المالية للشركات." : "Could not load the companies’ financial movement."));
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    const controller = new AbortController();
+    let timer: number | undefined;
+    let disposed = false;
+    let inFlight = false;
 
-  useEffect(() => { void load(); }, [language]);
+    const schedule = () => {
+      if (!disposed && !controller.signal.aborted) timer = window.setTimeout(() => { void refresh(); }, 15_000);
+    };
+    const refresh = async () => {
+      if (disposed || controller.signal.aborted || inFlight) return;
+      inFlight = true;
+      const session = activeSession();
+      const hasReceipt = receiptRef.current !== null;
+      if (!session) {
+        if (!hasReceipt) setError(ar ? "انتهت الجلسة. سجّل الدخول ثم أعد المحاولة." : "Your session has ended. Sign in and try again.");
+        setLoading(false);
+        inFlight = false;
+        return;
+      }
+      if (!hasLoaded.current && !hasReceipt) setLoading(true);
+      if (hasReceipt) setRefreshing(true);
+      try {
+        const next = await api<OwnerFinancialMovementReceipt>(session, "/owner/dashboard/financial-movement", { signal: controller.signal });
+        if (controller.signal.aborted || disposed || !sameSession(activeSession(), session)) return;
+        setReceipt(next);
+        setError("");
+        setRefreshWarning("");
+      } catch (reason) {
+        if (!controller.signal.aborted && !disposed) {
+          const message = presentBaseerApiError(reason, language, ar ? "تعذر تحديث الحركة المالية للشركات." : "Could not refresh the companies’ financial movement.");
+          if (hasReceipt) setRefreshWarning(message); else setError(message);
+        }
+      } finally {
+        if (!disposed && !controller.signal.aborted) {
+          hasLoaded.current = true;
+          setLoading(false);
+          setRefreshing(false);
+          inFlight = false;
+          schedule();
+        }
+      }
+    };
 
-  if (loading) return <BaseerWorkspace className="owner-financial-movement"><p className="owner-financial-movement__state" dir={ar ? "rtl" : "ltr"}>{ar ? "جارٍ تحميل الحركة المالية…" : "Loading financial movement…"}</p></BaseerWorkspace>;
-  if (error || !receipt) return <BaseerWorkspace className="owner-financial-movement"><div dir={ar ? "rtl" : "ltr"}><BaseerCard className="owner-financial-movement__failure"><strong>{error || (ar ? "لا تتوفر حركة مالية." : "No financial movement is available.")}</strong><BaseerButton type="button" onClick={() => void load()}>{ar ? "إعادة المحاولة" : "Try again"}</BaseerButton></BaseerCard></div></BaseerWorkspace>;
+    void refresh();
+    return () => { disposed = true; if (timer !== undefined) window.clearTimeout(timer); controller.abort(); };
+  }, [ar, language, refreshRevision]);
+
+  useEffect(() => {
+    const refreshForSession = () => setRefreshRevision((current) => current + 1);
+    window.addEventListener(activeSessionChangedEvent, refreshForSession);
+    return () => window.removeEventListener(activeSessionChangedEvent, refreshForSession);
+  }, []);
+
+  if (loading && !receipt) return <BaseerWorkspace className="owner-financial-movement"><p className="owner-financial-movement__state" dir={ar ? "rtl" : "ltr"}>{ar ? "جارٍ تحميل الحركة المالية…" : "Loading financial movement…"}</p></BaseerWorkspace>;
+  if (!receipt) return <BaseerWorkspace className="owner-financial-movement"><div dir={ar ? "rtl" : "ltr"}><BaseerCard className="owner-financial-movement__failure"><strong>{error || (ar ? "لا تتوفر حركة مالية." : "No financial movement is available.")}</strong><BaseerButton type="button" onClick={() => setRefreshRevision((current) => current + 1)}>{ar ? "إعادة المحاولة" : "Try again"}</BaseerButton></BaseerCard></div></BaseerWorkspace>;
 
   const period = `${formatDate(receipt.period.fromBusinessDate, language)} — ${formatDate(receipt.period.toBusinessDate, language)}`;
   return <BaseerWorkspace className="owner-financial-movement"><div dir={ar ? "rtl" : "ltr"}>
@@ -81,10 +125,14 @@ export function OwnerFinancialMovementWorkspace({ language }: { language: Langua
       eyebrow={ar ? "لوحة المالك · كل الشركات" : "Owner dashboard · all companies"}
       title={ar ? "الحركة المالية حسب البند" : "Financial movement by category"}
       description={ar ? `من بداية الشهر حتى ${formatDate(receipt.period.toBusinessDate, language)}. الأرقام إجمالية شاملة الضريبة ومن القيود المختومة في الخادم.` : `Month to date through ${formatDate(receipt.period.toBusinessDate, language)}. Gross VAT-inclusive figures come from sealed server-side entries.`}
-      actions={<span className="owner-financial-movement__period" dir="ltr">{period}</span>}
+      actions={<div className="owner-financial-movement__status"><span className="owner-financial-movement__period" dir="ltr">{period}</span>{refreshing ? <span aria-live="polite">{ar ? "جارٍ التحديث…" : "Refreshing…"}</span> : refreshWarning ? <span className="owner-financial-movement__warning" role="status">{refreshWarning}</span> : null}</div>}
     />
     {receipt.companies.length ? <div className="owner-financial-movement__grid">{receipt.companies.map((company) => <CompanyMovementCard key={company.companyId} company={company} language={language} />)}</div> : <BaseerEmptyState title={ar ? "لا توجد شركات نشطة" : "No active companies"} description={ar ? "ستظهر الشركات النشطة هنا تلقائيًا." : "Active companies appear here automatically."} />}
   </div></BaseerWorkspace>;
+}
+
+function sameSession(current: ActiveSession | null, expected: ActiveSession) {
+  return current?.accessToken === expected.accessToken && current.companyId === expected.companyId && current.sessionExpiresAt === expected.sessionExpiresAt;
 }
 
 function CompanyMovementCard({ company, language }: { company: OwnerFinancialMovementReceipt["companies"][number]; language: Language }) {
@@ -97,7 +145,7 @@ function CompanyMovementCard({ company, language }: { company: OwnerFinancialMov
       const className = ["owner-financial-movement__row", code === "SALES" ? "is-sales" : "", code === "TOTAL" ? "is-total" : "", row?.direction === "OUTFLOW" ? "is-outflow" : "", row?.direction === "INFLOW" && code !== "SALES" && code !== "TOTAL" ? "is-inflow" : ""].filter(Boolean).join(" ");
       return <div key={code} className={className}>
         <dt>{rowLabels[code][language]}</dt>
-        <dd><bdi dir="ltr">{row?.amountDisplay ?? "—"}</bdi>{row?.percentOfSalesDisplay !== null && row?.percentOfSalesDisplay !== undefined ? <small dir="ltr">{row.percentOfSalesDisplay}</small> : null}</dd>
+        <dd><bdi dir="ltr">{row?.amountDisplay ?? "—"}</bdi>{row?.percentOfSalesDisplay !== null && row?.percentOfSalesDisplay !== undefined ? <small dir="ltr">{formatPercent(row.percentOfSalesDisplay, language)}</small> : null}</dd>
       </div>;
     })}</dl>
   </BaseerCard>;

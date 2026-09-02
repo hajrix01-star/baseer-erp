@@ -99,6 +99,7 @@ type HrStagingRow = Readonly<{ sheet: string; sourceId: string; sourceChecksum: 
 type HrRecordMap = Readonly<{ sourceId: string; sourceChecksum: string; targetId: string; state: string; targetEntity: string }>;
 type HrException = Readonly<{ sourceEntity: string | null; sourceId: string | null; code: string; severity: string }>;
 type FinancialClosureItem = Readonly<{ sourceEntity: string; sourceId: string; sourceChecksum: string; status: string; resultCode: string | null }>;
+type FinancialClosureSourceMap = Readonly<{ sourceEntity: string; sourceId: string; sourceChecksum: string }>;
 type RecurringProfileEvidenceItem = FinancialClosureItem & Readonly<{ targetEntity: string | null; transformVersion: string }>;
 export type HrHistoryClosureCoverage = Readonly<Record<'EmployeeServices' | 'EmployeeDeductions' | 'EmployeeMovements', Readonly<{
   settledRows: number;
@@ -146,7 +147,7 @@ export class NurixExcelPackageClosureAuditService {
           // number of attempts. REUSED is also final evidence for a map whose
           // target already existed and was safely retained.
           where: { tenantId: context.tenantId, execution: { packageId, status: 'COMPLETED' }, state: { in: ['APPLIED', 'REVERSED', 'REUSED'] } },
-          select: { sourceEntity: true, sourceId: true },
+          select: { sourceEntity: true, sourceId: true, sourceChecksum: true },
         }),
         tx.auditEvent.findMany({
           where: {
@@ -214,8 +215,15 @@ export class NurixExcelPackageClosureAuditService {
       const masters = countBy(masterItems, (row) => row.entity);
       // A remediation may safely reuse one source fact in a later completed
       // execution. Closure coverage is per source identity, not per retry.
-      const written = countDistinctFinancialItems(financialItems);
-      const maps = countDistinctSourceMapsWithSupplierDeletions(sourceMaps, sourceRows, deletedSupplierEvents);
+      // Later approved remediation/enrichment waves can legitimately reuse the
+      // same package control plane for source facts that were not rows in the
+      // immutable workbook. Closure must count only accepted row identities
+      // (entity + source ID), otherwise a later wave can
+      // inflate coverage or make a previously reconciled package look open.
+      const packageBoundFinancialItems = filterPackageBoundFinancialEvidence(financialItems, sourceRows);
+      const packageBoundSourceMaps = filterPackageBoundFinancialEvidence(sourceMaps, sourceRows);
+      const written = countDistinctFinancialItems(packageBoundFinancialItems);
+      const maps = countDistinctSourceMapsWithSupplierDeletions(packageBoundSourceMaps, sourceRows, deletedSupplierEvents);
       const recurringProfileExclusions = resolveRecurringProfileEvidenceExclusions(sourceRows, financialItems.map((item) => ({ ...item, transformVersion: item.execution.transformVersion })));
       const financialHealth = {
         completed: executions.filter((execution) => execution.status === 'COMPLETED').length,
@@ -528,6 +536,33 @@ export function countDistinctFinancialItems(rows: readonly FinancialClosureItem[
     idsByEntity.set(row.sourceEntity, ids);
   }
   return new Map([...idsByEntity.entries()].map(([entity, ids]) => [entity, ids.size]));
+}
+
+/**
+ * Bind closure evidence to an accepted workbook row identity. The writer's
+ * checksum can legitimately be a normalized financial-payload checksum rather
+ * than the raw staging-row checksum, so identity is entity + source ID here.
+ * Package-scoped
+ * executions are also used by later, separately approved remediations; those
+ * facts remain auditable but cannot increase or invalidate the original
+ * workbook's completion counters.
+ */
+export function filterPackageBoundFinancialEvidence<T extends FinancialClosureSourceMap>(
+  rows: readonly T[],
+  packageRows: readonly HrStagingRow[],
+): T[] {
+  const accepted = new Map<string, Set<string>>();
+  for (const [sheet, entity] of Object.entries(sourceEntityBySheet)) {
+    const identities = accepted.get(entity) ?? new Set<string>();
+    for (const row of packageRows) {
+      if (row.sheet === sheet) identities.add(row.sourceId);
+    }
+    accepted.set(entity, identities);
+  }
+  accepted.set('CategoryAudit', new Set(packageRows
+    .filter((row) => row.sheet === 'CategoryAudit')
+    .map((row) => row.sourceId)));
+  return rows.filter((row) => accepted.get(row.sourceEntity)?.has(row.sourceId) === true);
 }
 
 /**

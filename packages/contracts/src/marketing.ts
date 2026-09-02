@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { decisionDataQualityStatusSchema, decisionSalesComparisonReadSchema, decisionSalesMetricReadSchema, verificationStatusSchema } from "./decision-intelligence.js";
+import { financialReadContractSchema } from "./financial-read.js";
 import { companyIdSchema } from "./identity.js";
 import { idempotencyKeySchema } from "./finance.js";
 
@@ -8,6 +9,14 @@ const marketingIdSchema = z.string().uuid();
 const marketingAmountSchema = z.string().regex(/^\d+(\.\d{1,4})?$/);
 const marketingDateSchema = z.string().date();
 export const marketingTargetMonthSchema = z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/);
+
+/**
+ * The calendar is an operational read, not a financial report.  Every amount
+ * it exposes is consequently VAT-inclusive and already formatted by the
+ * server.  Keeping this envelope at the read boundary prevents React views
+ * from silently choosing a tax basis, a currency label, or a rounding rule.
+ */
+export const marketingFinancialReadSchema = financialReadContractSchema;
 
 /** A campaign is business context, never a financial posting or a provider action. */
 export const marketingCampaignPlatformSchema = z.enum(["MANUAL", "GOOGLE_ADS", "META", "TIKTOK", "SNAPCHAT", "OTHER"]);
@@ -141,12 +150,17 @@ export const marketingLinkableFinancialDocumentsSchema = z.object({
  * attribution: Ads facts are a separate source and may be unavailable. */
 export const marketingSpendResultSchema = z.object({
   plannedCampaignCost: marketingAmountSchema.nullable(),
+  plannedCampaignCostDisplay: z.string().min(1).max(80).nullable(),
   linkedActualSpend: marketingAmountSchema,
+  linkedActualSpendDisplay: z.string().min(1).max(80),
   linkedPostedSpendOnly: z.literal(true),
   spendDataQuality: decisionDataQualityStatusSchema,
   excludedLinkedDocumentCount: z.number().int().nonnegative(),
   /** Campaign spend is compared with VAT-inclusive official sales. */
   officialGrossSales: marketingAmountSchema.nullable(),
+  officialGrossSalesDisplay: z.string().min(1).max(80).nullable(),
+  /** Rounded, currency-free compact label for a narrow calendar cell. */
+  officialGrossSalesCalendarDisplay: z.string().min(1).max(80).nullable(),
   spendToSalesPercent: z.string().regex(/^\d+(\.\d{1,2})?$/).nullable(),
   campaignCount: z.number().int().nonnegative(),
   salesDataQuality: decisionDataQualityStatusSchema,
@@ -209,22 +223,29 @@ export const marketingCalendarDaySchema = z.object({
   businessDate: marketingDateSchema,
   /** VAT-inclusive sales for collection-aligned operational summaries. */
   officialGrossSales: marketingAmountSchema.nullable(),
+  officialGrossSalesDisplay: z.string().min(1).max(80).nullable(),
+  /** Rounded, currency-free compact label for a narrow calendar cell. */
+  officialGrossSalesCalendarDisplay: z.string().min(1).max(80).nullable(),
   officialNetSales: marketingAmountSchema.nullable(),
   /** Customer count is only available when the daily sales read is complete. */
   customerCount: z.number().int().nonnegative().nullable(),
   salesDayQuality: z.enum(["READY", "PENDING", "PARTIAL", "MISSING"]),
   dailySalesTarget: marketingAmountSchema.nullable(),
+  dailySalesTargetDisplay: z.string().min(1).max(80).nullable(),
   targetStatus: z.enum(["NO_TARGET", "NO_SALES", "BELOW", "NEAR", "MET", "EXCEEDED"]),
   /** Posted campaign spend is unavailable when this daily read is unavailable. */
   linkedActualSpend: marketingAmountSchema.nullable(),
+  linkedActualSpendDisplay: z.string().min(1).max(80).nullable(),
   linkedFinancialDocumentCount: z.number().int().nonnegative(),
   /** Posted financial spend grouped by the campaign explicitly linked to each document. */
   campaignSpend: z.array(z.object({ campaignId: marketingIdSchema, amount: marketingAmountSchema, documentCount: z.number().int().nonnegative() }).strict()).max(1_000),
   /** Uses the same sealed-vault scope as the financial movement report. */
   financialOutflows: marketingAmountSchema.nullable(),
+  financialOutflowsDisplay: z.string().min(1).max(80).nullable(),
   financialOutflowDocumentCount: z.number().int().nonnegative(),
   /** Purchase movements from the same sealed financial-movement scope as the purchases card. */
   purchaseOutflows: marketingAmountSchema.nullable(),
+  purchaseOutflowsDisplay: z.string().min(1).max(80).nullable(),
   purchaseOutflowDocumentCount: z.number().int().nonnegative(),
   activeCampaignIds: z.array(marketingIdSchema).max(1_000),
 }).strict();
@@ -236,6 +257,9 @@ export const marketingCalendarWeekdayAverageSchema = z.object({
   weekday: z.number().int().min(0).max(6),
   /** Server-owned VAT-inclusive daily average for completed days only. */
   averageOfficialGrossSales: marketingAmountSchema.nullable(),
+  averageOfficialGrossSalesDisplay: z.string().min(1).max(80).nullable(),
+  /** Rounded, currency-free compact label for a narrow calendar weekday header. */
+  averageOfficialGrossSalesCalendarDisplay: z.string().min(1).max(80).nullable(),
   eligibleDayCount: z.number().int().nonnegative(),
 }).strict();
 
@@ -244,7 +268,8 @@ export const marketingCalendarWeekdayAverageSchema = z.object({
 const marketingTimelineAmountSchema = z.object({
   amount: marketingAmountSchema.nullable(),
   chartValue: z.number().finite().nonnegative().nullable(),
-  display: z.string().regex(/^\d+\.\d{2}$/).nullable(),
+  /** Full, VAT-inclusive server display including the currency label. */
+  display: z.string().min(1).max(80).nullable(),
 }).strict();
 
 const marketingTimelineCampaignAmountSchema = marketingTimelineAmountSchema.extend({
@@ -288,6 +313,7 @@ export const marketingCalendarTimelineSchema = z.object({
 export const marketingSalesTargetSchema = z.object({
   periodMonth: marketingTargetMonthSchema,
   amount: marketingAmountSchema,
+  amountDisplay: z.string().min(1).max(80),
 }).strict();
 
 export const upsertMarketingSalesTargetRequestSchema = z.object({
@@ -306,6 +332,7 @@ export const marketingCalendarContextSchema = z.object({
 }).strict();
 
 export const marketingCalendarReadSchema = z.object({
+  financialRead: marketingFinancialReadSchema,
   period: z.object({ fromBusinessDate: marketingDateSchema, toBusinessDate: marketingDateSchema, timezone: z.literal("Asia/Riyadh") }).strict(),
   sales: decisionSalesMetricReadSchema,
   campaigns: z.array(marketingCampaignSchema).max(1_000),
@@ -315,6 +342,7 @@ export const marketingCalendarReadSchema = z.object({
   salesTargets: z.array(marketingSalesTargetSchema).max(13),
   context: z.array(marketingCalendarContextSchema).max(500),
   linkedActualGrossAmount: marketingAmountSchema,
+  linkedActualGrossAmountDisplay: z.string().min(1).max(80),
   spendResult: marketingSpendResultSchema,
   dataQuality: decisionDataQualityStatusSchema,
   analysisBoundary: z.literal("TEMPORAL_CONTEXT_ONLY_NOT_CAUSATION"),
@@ -358,6 +386,7 @@ export type LinkMarketingCampaignContextRequest = z.infer<typeof linkMarketingCa
 export type MarketingLinkableFinancialDocuments = z.infer<typeof marketingLinkableFinancialDocumentsSchema>;
 export type MarketingCampaignAnalysis = z.infer<typeof marketingCampaignAnalysisSchema>;
 export type MarketingCalendarRead = z.infer<typeof marketingCalendarReadSchema>;
+export type MarketingFinancialRead = z.infer<typeof marketingFinancialReadSchema>;
 export type UpsertMarketingSalesTargetRequest = z.infer<typeof upsertMarketingSalesTargetRequestSchema>;
 export type UpdateMarketingReputationReplyPolicyRequest = z.infer<typeof updateMarketingReputationReplyPolicyRequestSchema>;
 export type CreateMarketingCampaignAnalysisFeedbackRequest = z.infer<typeof createMarketingCampaignAnalysisFeedbackRequestSchema>;

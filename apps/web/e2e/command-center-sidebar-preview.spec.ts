@@ -59,26 +59,22 @@ async function openCommandCenter(page: Page) {
   await expect(page.locator(".module-page")).toBeVisible();
 }
 
-for (const presentation of [
-  { id: "modern-1", name: "theme-1" },
-  { id: "modern-2", name: "theme-2" },
-] as const) {
-  test(`captures the Command Center navigation in ${presentation.name}`, async ({ page, isMobile }, testInfo) => {
+test("captures the modern admin Command Center navigation", async ({ page, isMobile }, testInfo) => {
     await openCommandCenter(page);
-    const picker = page.locator(".interface-theme-control select");
-    await picker.selectOption(presentation.id);
-    await expect(page.locator("body")).toHaveAttribute("data-ui-theme", presentation.id);
+    await expect(page.locator("body")).toHaveAttribute("data-ui-theme", "modern-3");
 
     if (isMobile) {
       await page.getByRole("button", { name: "الأقسام" }).click();
       const drawer = page.getByRole("dialog", { name: "مركز القيادة", exact: true });
       await expect(drawer).toBeVisible();
-      await drawer.screenshot({ path: testInfo.outputPath(`command-center-sidebar-${presentation.name}-mobile.png`) });
+      await drawer.screenshot({ path: testInfo.outputPath("command-center-sidebar-modern-admin-mobile.png") });
       return;
     }
 
     const sidebar = page.locator(".module-sidebar");
     await expect(sidebar).toBeVisible();
-    await sidebar.screenshot({ path: testInfo.outputPath(`command-center-sidebar-${presentation.name}-desktop.png`) });
-  });
-}
+    // Capture the stable page canvas rather than a replaceable lazy sidebar
+    // node. The rail remains visible in the image while route hydration may
+    // still reconcile its contents.
+    await page.screenshot({ path: testInfo.outputPath("command-center-sidebar-modern-admin-desktop.png") });
+});

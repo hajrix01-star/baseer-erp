@@ -27,6 +27,12 @@ function availableCompanies(permissionCodes: string[]) {
   };
 }
 
+function migrationReviewCompanies(permissionCodes: string[]) {
+  return {
+    companies: [{ id: companyId, nameAr: "شركة الاختبار", nameEn: "Test company", permissionCodes, migrationReviewLocked: true }],
+  };
+}
+
 async function mockFinanceSetup(page: Page, language: "ar" | "en", permissionCodes = permissions) {
   await page.addInitScript(({ locale, company }) => {
     sessionStorage.setItem("baseer.erp.access-token", "finance-e2e-token");
@@ -208,8 +214,32 @@ test("purchase-entry clerk sees and loads only the entry surface", async ({ page
   await expect(page.getByRole("tab", { name: "إدخال" })).toBeVisible();
   await expect(page.getByRole("tab", { name: "سجل الفواتير" })).toHaveCount(0);
   await expect(page.getByRole("tab", { name: "الآجل" })).toHaveCount(0);
+  await expect(page.locator(".advance-quick-add")).toHaveCount(0);
   await expect.poll(() => requests.some((request) => request === "GET /v1/finance/purchase-expense-documents/entry-references")).toBeTruthy();
   expect(requests.some((request) => request.includes("/v1/finance/configuration"))).toBeFalsy();
   expect(requests.some((request) => request.includes("/v1/finance/purchase-expense-documents?") || request.endsWith("/v1/finance/purchase-expense-documents"))).toBeFalsy();
   expect(requests.some((request) => request.includes("/v1/finance/purchase-expense-documents/credit-workspace"))).toBeFalsy();
+});
+
+test("a migration-review lock opens purchase history without requesting a write-only entry read", async ({ page }) => {
+  const requests: string[] = [];
+  const permissionCodes = ["finance.purchase_expense.create", "finance.purchase_expense.read"];
+  await mockAuthenticatedSession(page, "ar", permissionCodes);
+  await page.route("**/v1/**", async (route) => {
+    const url = new URL(route.request().url());
+    requests.push(`${route.request().method()} ${url.pathname}${url.search}`);
+    if (url.pathname === "/v1/companies/available") return fulfill(route, migrationReviewCompanies(permissionCodes));
+    if (url.pathname === "/v1/finance/purchase-expense-documents") return fulfill(route, { documents: [], ownerCanAmend: false });
+    if (url.pathname === "/v1/finance/purchase-expense-documents/entry-references") return fulfill(route, { error: { code: "CONFLICT", message: { ar: "يتعارض الطلب مع الحالة الحالية.", en: "Request conflicts with the current state." } } }, 409);
+    return fulfill(route, {});
+  });
+
+  await page.goto("/#module=operations&section=2");
+
+  await expect(page.getByRole("tab", { name: "سجل الفواتير" })).toBeVisible();
+  await expect(page.getByRole("tab", { name: "إدخال" })).toHaveCount(0);
+  await expect(page.locator(".advance-quick-add")).toHaveCount(0);
+  await expect(page.getByText("إدخال المشتريات مقفل لمراجعة الترحيل")).toBeVisible();
+  await expect(page.getByText("يتعارض الطلب مع الحالة الحالية.")).toHaveCount(0);
+  expect(requests.some((request) => request.includes("/finance/purchase-expense-documents/entry-references"))).toBeFalsy();
 });

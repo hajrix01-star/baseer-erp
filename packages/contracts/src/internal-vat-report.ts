@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 import { businessDateSchema } from './business-date.js';
 import { reportMoneyDisplaySchema } from './reporting.js';
+import { financialEvidenceDescriptorSchema } from './financial-evidence.js';
 
 const uuidSchema = z.string().uuid();
 const monthSchema = z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/);
@@ -27,13 +28,14 @@ export const internalVatReportRowSchema = z.object({
   labelAr: z.string().min(1).max(160),
   labelEn: z.string().min(1).max(160),
   amount: reportMoneyDisplaySchema,
+  evidence: financialEvidenceDescriptorSchema,
   eventCount: z.number().int().nonnegative(),
 }).strict();
 
 export const internalVatReportResultSchema = z.discriminatedUnion('state', [
   z.object({ state: z.literal('NOT_READY'), messageAr: z.string().min(1).max(500) }).strict(),
-  metadata.extend({ state: z.literal('NO_DATA'), messageAr: z.string().min(1).max(500), rows: z.array(z.never()).max(0), netVat: reportMoneyDisplaySchema }).strict(),
-  metadata.extend({ state: z.literal('READY'), rows: z.array(internalVatReportRowSchema).max(4), netVat: reportMoneyDisplaySchema }).strict(),
+  metadata.extend({ state: z.literal('NO_DATA'), messageAr: z.string().min(1).max(500), rows: z.array(z.never()).max(0), netVat: reportMoneyDisplaySchema, netVatEvidence: financialEvidenceDescriptorSchema }).strict(),
+  metadata.extend({ state: z.literal('READY'), rows: z.array(internalVatReportRowSchema).max(4), netVat: reportMoneyDisplaySchema, netVatEvidence: financialEvidenceDescriptorSchema }).strict(),
 ]);
 
 export const internalVatReportEvidenceQuerySchema = z.object({

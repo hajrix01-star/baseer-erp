@@ -103,16 +103,16 @@ export class LedgerTrialBalanceReportService {
     assertBalanced(totals);
     const metadata = metadataFor({ company: source.company, profile: source.profile }, request, ledgerRevision);
     if (!rows.length) {
-      return { state: 'NO_DATA' as const, messageAr: 'لا توجد حسابات مؤهلة ضمن الفترة المحددة.', ...metadata, rows: [], totals: displayAmounts(totals) };
+      return { state: 'NO_DATA' as const, messageAr: 'لا توجد حسابات مؤهلة ضمن الفترة المحددة.', ...metadata, rows: [], totals: displayAmounts(totals), totalsEvidence: trialEvidence() };
     }
     return {
       state: 'READY' as const,
       ...metadata,
       rows: rows.map(({ account, amounts }) => ({
         accountId: account.id, code: account.code, nameAr: account.nameAr, nameEn: account.nameEn, type: account.type, isSystem: account.isSystem,
-        amounts: displayAmounts(amounts),
+        amounts: displayAmounts(amounts), evidence: trialEvidence(account.id),
       })),
-      totals: displayAmounts(totals),
+      totals: displayAmounts(totals), totalsEvidence: trialEvidence(),
     };
   }
 
@@ -171,6 +171,124 @@ export class LedgerTrialBalanceReportService {
         debit: money(line.debitAmount), credit: money(line.creditAmount),
         cancellationLabelAr: cancellationLabel(line.journalEntry, run.ledgerRevision),
       })),
+    };
+  }
+
+  /**
+   * Interactive drill-down deliberately reads the current sealed ledger.  It
+   * shares the exact predicate with the table, but never depends on an
+   * official-report snapshot id that the browser may no longer hold.
+   */
+  async liveEvidence(
+    context: TrustedCompanyActorContext,
+    request: TrialBalanceRequest,
+    target: Readonly<{ accountId?: string; scope: 'OPENING' | 'PERIOD' | 'CLOSING'; side: 'DEBIT' | 'CREDIT' }>,
+    cursor?: string,
+  ) {
+    assertPeriod(request);
+    const current = await this.dates.currentForTrustedContext(context);
+    if (request.to > businessDate(current.businessDate)) throw new BadRequestException('The Trial Balance evidence end date cannot be after the current business date.');
+    if (Math.floor((request.to.valueOf() - request.from.valueOf()) / 86_400_000) + 1 > MAX_INTERACTIVE_DAYS) throw new BadRequestException('The Trial Balance evidence period exceeds the interactive limit.');
+    const revision = await this.reportRuns.currentLedgerRevision(context);
+    const parsedCursor = cursor ? decodeCursor(cursor) : null;
+    const dateScope = scopeDateFilter(target.scope, request);
+    const baseWhere: Prisma.FinanceJournalLineWhereInput = {
+      tenantId: context.tenantId,
+      companyId: context.companyId,
+      ...(target.accountId ? { accountId: target.accountId } : {}),
+      ...(target.side === 'DEBIT' ? { debitAmount: { gt: new Prisma.Decimal(0) } } : { creditAmount: { gt: new Prisma.Decimal(0) } }),
+      journalEntry: { is: { ...ledgerPredicate(context, revision), businessDate: dateScope } },
+    };
+    const lines = await this.database.inTenantTransaction(context.tenantId, async (transaction) => {
+      const verifiedCursor = parsedCursor ? await transaction.financeJournalLine.findFirst({
+        where: { ...baseWhere, id: parsedCursor.id },
+        select: { businessDate: true, createdAt: true, lineNumber: true, id: true },
+      }) : null;
+      if (parsedCursor && !verifiedCursor) throw new BadRequestException('The Trial Balance evidence cursor is outside this live report scope.');
+      const cursorWhere: Prisma.FinanceJournalLineWhereInput | undefined = verifiedCursor ? { OR: [
+        { businessDate: { lt: verifiedCursor.businessDate } },
+        { businessDate: verifiedCursor.businessDate, createdAt: { lt: verifiedCursor.createdAt } },
+        { businessDate: verifiedCursor.businessDate, createdAt: verifiedCursor.createdAt, lineNumber: { lt: verifiedCursor.lineNumber } },
+        { businessDate: verifiedCursor.businessDate, createdAt: verifiedCursor.createdAt, lineNumber: verifiedCursor.lineNumber, id: { lt: verifiedCursor.id } },
+      ] } : undefined;
+      return transaction.financeJournalLine.findMany({
+        where: cursorWhere ? { ...baseWhere, AND: [cursorWhere] } : baseWhere,
+        orderBy: [{ businessDate: 'desc' }, { createdAt: 'desc' }, { lineNumber: 'desc' }, { id: 'desc' }],
+        take: PAGE_SIZE + 1,
+        select: {
+          id: true, businessDate: true, createdAt: true, lineNumber: true, debitAmount: true, creditAmount: true,
+          journalEntry: { select: { id: true, businessDate: true, sourceType: true, sourceReference: true, description: true, reversalEntry: { select: { ledgerRevision: true } }, ...journalPresentationSelect } },
+        },
+      });
+    });
+    const page = lines.slice(0, PAGE_SIZE);
+    const last = page.at(-1);
+    return {
+      nextCursor: lines.length > page.length && last ? encodeCursor(last) : null,
+      items: page.map((line) => {
+        const label = journalLabel(line.journalEntry);
+        return {
+          lineId: line.id,
+          journalEntryId: line.journalEntry.id,
+          businessDate: dateText(line.journalEntry.businessDate),
+          // One ledger side per descriptor: an amount cell can never silently
+          // include the opposite side of a Trial Balance account.
+          amount: money(target.side === 'DEBIT' ? line.debitAmount : line.creditAmount),
+          labelAr: label.labelAr,
+          labelEn: label.labelEn || label.labelAr,
+          reference: label.reference,
+          description: line.journalEntry.description,
+        };
+      }),
+    };
+  }
+
+  /** Opens a source only if it belongs to the live evidence predicate. */
+  async liveSource(
+    context: TrustedCompanyActorContext,
+    request: TrialBalanceRequest,
+    target: Readonly<{ accountId?: string; scope: 'OPENING' | 'PERIOD' | 'CLOSING'; side: 'DEBIT' | 'CREDIT' }>,
+    journalEntryId: string,
+  ) {
+    assertPeriod(request);
+    const current = await this.dates.currentForTrustedContext(context);
+    if (request.to > businessDate(current.businessDate)) throw new BadRequestException('The Trial Balance evidence end date cannot be after the current business date.');
+    if (Math.floor((request.to.valueOf() - request.from.valueOf()) / 86_400_000) + 1 > MAX_INTERACTIVE_DAYS) throw new BadRequestException('The Trial Balance evidence period exceeds the interactive limit.');
+    const revision = await this.reportRuns.currentLedgerRevision(context);
+    const entry = await this.database.inTenantTransaction(context.tenantId, (transaction) => transaction.financeJournalEntry.findFirst({
+      where: {
+        id: journalEntryId,
+        ...ledgerPredicate(context, revision),
+        businessDate: scopeDateFilter(target.scope, request),
+        lines: { some: {
+          ...(target.accountId ? { accountId: target.accountId } : {}),
+          ...(target.side === 'DEBIT' ? { debitAmount: { gt: new Prisma.Decimal(0) } } : { creditAmount: { gt: new Prisma.Decimal(0) } }),
+        } },
+      },
+      select: {
+        id: true, businessDate: true, sourceType: true, sourceReference: true, description: true,
+        reversalEntry: { select: { ledgerRevision: true } }, ...journalPresentationSelect,
+        lines: { orderBy: { lineNumber: 'asc' }, select: { id: true, lineNumber: true, debitAmount: true, creditAmount: true, description: true, account: { select: { code: true, nameAr: true, nameEn: true } } } },
+      },
+    }));
+    if (!entry) throw new NotFoundException('The Trial Balance source journal is not available in this live report scope.');
+    const label = journalLabel(entry);
+    return {
+      journalEntry: {
+        id: entry.id,
+        businessDate: dateText(entry.businessDate),
+        labelAr: label.labelAr,
+        labelEn: label.labelEn || label.labelAr,
+        sourceReference: label.reference,
+        description: entry.description,
+        counterparty: null,
+        status: cancellationLabel(entry, revision) ? 'REVERSED' as const : 'POSTED' as const,
+        lines: entry.lines.map((line) => ({
+          id: line.id, lineNumber: line.lineNumber, accountCode: line.account.code,
+          accountNameAr: line.account.nameAr, accountNameEn: localizedFallback(line.account.nameEn, line.account.nameAr),
+          debit: money(line.debitAmount), credit: money(line.creditAmount), description: line.description,
+        })),
+      },
     };
   }
 
@@ -239,7 +357,7 @@ export class LedgerTrialBalanceReportService {
       journalEntry: {
         id: entry.id, businessDate: dateText(entry.businessDate),
         ...journalLabel(entry), description: entry.description, cancellationLabelAr: cancellationLabel(entry, run.ledgerRevision),
-        lines: entry.lines.map((item) => ({ id: item.id, lineNumber: item.lineNumber, accountCode: item.account.code, accountNameAr: item.account.nameAr, accountNameEn: item.account.nameEn, debit: money(item.debitAmount), credit: money(item.creditAmount), description: item.description })),
+        lines: entry.lines.map((item) => ({ id: item.id, lineNumber: item.lineNumber, accountCode: item.account.code, accountNameAr: item.account.nameAr, accountNameEn: localizedFallback(item.account.nameEn, item.account.nameAr), debit: money(item.debitAmount), credit: money(item.creditAmount), description: item.description })),
       },
     };
   }
@@ -266,12 +384,23 @@ export function calculateTrialAmounts(opening: Aggregate | undefined, period: Ag
 function zeroAmounts(): TrialAmounts { return { openingDebit: zero(), openingCredit: zero(), periodDebit: zero(), periodCredit: zero(), closingDebit: zero(), closingCredit: zero() }; }
 function addAmounts(left: TrialAmounts, right: TrialAmounts): TrialAmounts { return { openingDebit: left.openingDebit.plus(right.openingDebit), openingCredit: left.openingCredit.plus(right.openingCredit), periodDebit: left.periodDebit.plus(right.periodDebit), periodCredit: left.periodCredit.plus(right.periodCredit), closingDebit: left.closingDebit.plus(right.closingDebit), closingCredit: left.closingCredit.plus(right.closingCredit) }; }
 function displayAmounts(value: TrialAmounts) { return { openingDebit: money(value.openingDebit), openingCredit: money(value.openingCredit), periodDebit: money(value.periodDebit), periodCredit: money(value.periodCredit), closingDebit: money(value.closingDebit), closingCredit: money(value.closingCredit) }; }
+function trialEvidence(accountId?: string) {
+  const metric = (scope: 'OPENING' | 'PERIOD' | 'CLOSING', side: 'DEBIT' | 'CREDIT') => accountId
+    ? { reportCode: 'ledger_trial_balance' as const, metric: { kind: 'TRIAL_ACCOUNT' as const, accountId, scope, side } }
+    : { reportCode: 'ledger_trial_balance' as const, metric: { kind: 'TRIAL_TOTAL' as const, scope, side } };
+  return {
+    openingDebit: metric('OPENING', 'DEBIT'), openingCredit: metric('OPENING', 'CREDIT'),
+    periodDebit: metric('PERIOD', 'DEBIT'), periodCredit: metric('PERIOD', 'CREDIT'),
+    closingDebit: metric('CLOSING', 'DEBIT'), closingCredit: metric('CLOSING', 'CREDIT'),
+  };
+}
 function isZero(value: TrialAmounts) { return Object.values(value).every((amount) => amount.isZero()); }
-export function isEligibleTrialBalanceAccount(account: { status: string; isSystem: boolean }, hasHistoricalEvidence: boolean, amounts: TrialAmounts, includeZeroRows: boolean) { if (!(account.status === 'ACTIVE' || account.isSystem || hasHistoricalEvidence)) return false; return includeZeroRows || account.isSystem || !isZero(amounts); }
+export function isEligibleTrialBalanceAccount(account: { status: string; isSystem: boolean }, hasHistoricalEvidence: boolean, amounts: TrialAmounts, includeZeroRows: boolean) { if (!(account.status === 'ACTIVE' || account.isSystem || hasHistoricalEvidence)) return false; return includeZeroRows || !isZero(amounts); }
 function assertBalanced(value: TrialAmounts) { for (const [debit, credit] of [['openingDebit', 'openingCredit'], ['periodDebit', 'periodCredit'], ['closingDebit', 'closingCredit']] as const) if (!value[debit].equals(value[credit])) throw new BadRequestException('The Trial Balance is not balanced for the eligible ledger scope.'); }
 function metadataFor(source: { company: { nameAr: string; nameEn: string; businessTimezone: string }; profile: { functionalCurrencyCode: string } }, request: TrialBalanceRequest, ledgerRevision: bigint) { return { reportCode: REPORT_CODE, definitionVersion: DEFINITION_VERSION, dataMode: 'LIVE' as const, ledgerRevision: ledgerRevision.toString(), company: { displayName: source.company.nameAr || source.company.nameEn, functionalCurrency: source.profile.functionalCurrencyCode }, businessTimezone: source.company.businessTimezone, selectedPeriod: { from: dateText(request.from), to: dateText(request.to) }, economicAsOfDate: dateText(request.to), basisLabelAr: 'دفتر الأستاذ — القيود المختومة', sourceKindAr: 'قيود دفتر مختومة', cancellationTreatmentAr: 'يبقى أصل العملية في تاريخه الاقتصادي، ويبدأ أثر الإلغاء من تاريخ عمل قيد الإلغاء.', dataCoverage: { state: 'COMPLETE' as const }, reconciliation: { state: 'RECONCILED' as const, messageAr: 'تساوت إجماليات المدين والدائن للافتتاح والحركة والختام.' }, roundingRule: 'تُحسب المبالغ بأربع منازل عشرية وتُعرض بمنزلتين عشريتين.' }; }
 function scopeDateFilter(scope: 'OPENING' | 'PERIOD' | 'CLOSING', request: TrialBalanceRequest) { return scope === 'OPENING' ? { lt: request.from } : scope === 'PERIOD' ? { gte: request.from, lte: request.to } : { lte: request.to }; }
 function journalLabel(entry: Parameters<typeof financeJournalPresentation>[0]) { return financeJournalPresentation(entry); }
+function localizedFallback(value: string | null | undefined, fallback: string) { return value?.trim() || fallback; }
 function cancellationLabel(entry: { sourceType: string; reversalEntry?: { ledgerRevision: bigint } | null }, reportRevision: bigint) { if (entry.sourceType === 'journal_reversal') return 'قيد إلغاء'; return entry.reversalEntry && entry.reversalEntry.ledgerRevision <= reportRevision ? 'ملغى' : null; }
 function money(value: Prisma.Decimal) { const sign = value.gt(0) ? 'positive' as const : value.lt(0) ? 'negative' as const : 'zero' as const; return { raw: value.toFixed(4), display: value.abs().toFixed(2), sign }; }
 function decimal(value: Prisma.Decimal | null | undefined) { return value ?? zero(); }

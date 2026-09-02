@@ -4,10 +4,15 @@ import { init, use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
 import { useEffect, useRef } from "react";
 import { chartAlpha, useBaseerChartPalette } from "./baseer-chart-theme";
+import { formatPercent } from "./number-format";
 
 use([BarChart, LineChart, GridComponent, LegendComponent, TooltipComponent, CanvasRenderer]);
 
 type Language = "ar" | "en";
+
+function shareDisplay(value: string | null, language: Language) {
+  return formatPercent(value, language);
+}
 
 function designFontSize(styles: CSSStyleDeclaration, token: "--font-caption" | "--font-label", fallback: number) {
   const value = styles.getPropertyValue(token).trim();
@@ -30,10 +35,12 @@ export type MonthlyApplicationSalesSharePoint = {
   shortLabel: string;
   totalSalesPlotValue: number | null;
   applicationSalesPlotValue: number | null;
+  otherOfficialSalesPlotValue: number | null;
   sharePlotValue: number | null;
   shareDisplay: string | null;
   totalSalesDisplay: string | null;
   applicationSalesDisplay: string | null;
+  otherOfficialSalesDisplay: string | null;
 };
 
 export function MonthlyApplicationSalesShareChart({ language, title, points }: { language: Language; title: string; points: readonly MonthlyApplicationSalesSharePoint[] }) {
@@ -47,18 +54,17 @@ export function MonthlyApplicationSalesShareChart({ language, title, points }: {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const rootStyles = getComputedStyle(document.documentElement);
     const brand = chartPalette.primary;
-    // Theme 2 intentionally shares its brand and secondary hues. The application
-    // bar must still remain distinguishable from total sales on a financial chart.
-    const applicationBar = chartPalette.secondary === brand ? chartPalette.info : chartPalette.secondary;
-    const shareLine = chartPalette.info === applicationBar ? chartPalette.danger : chartPalette.info;
+    const otherSalesBar = chartAlpha(brand, .22);
+    const shareLine = chartPalette.secondary === brand ? chartPalette.info : chartPalette.secondary;
     const captionFontSize = designFontSize(rootStyles, "--font-caption", 13);
     const labelFontSize = designFontSize(rootStyles, "--font-label", 14);
-    const totalsLabel = ar ? "إجمالي المبيعات" : "Total sales";
     const applicationLabel = ar ? "مبيعات التطبيقات" : "Application sales";
+    const otherSalesLabel = ar ? "بقية المبيعات الرسمية" : "Other official sales";
+    const totalsLabel = ar ? "إجمالي المبيعات الرسمية" : "Total official sales";
     const shareLabel = ar ? "نسبة التطبيقات" : "Application share";
     const description = ar
-      ? `${title}. ${points.map((point) => `${point.label}: ${totalsLabel} ${point.totalSalesDisplay ?? "بيانات غير مكتملة"}، ${applicationLabel} ${point.applicationSalesDisplay ?? "—"}، ${shareLabel} ${point.shareDisplay ?? "—"}`).join("؛ ")}`
-      : `${title}. ${points.map((point) => `${point.label}: ${totalsLabel} ${point.totalSalesDisplay ?? "Incomplete data"}, ${applicationLabel} ${point.applicationSalesDisplay ?? "—"}, ${shareLabel} ${point.shareDisplay ?? "—"}`).join("; ")}`;
+      ? `${title}. ${points.map((point) => `${point.label}: ${totalsLabel} ${point.totalSalesDisplay ?? "بيانات غير مكتملة"}، ${applicationLabel} ${point.applicationSalesDisplay ?? "—"}، ${otherSalesLabel} ${point.otherOfficialSalesDisplay ?? "—"}، ${shareLabel} ${shareDisplay(point.shareDisplay, language)}`).join("؛ ")}`
+      : `${title}. ${points.map((point) => `${point.label}: ${totalsLabel} ${point.totalSalesDisplay ?? "Incomplete data"}, ${applicationLabel} ${point.applicationSalesDisplay ?? "—"}, ${otherSalesLabel} ${point.otherOfficialSalesDisplay ?? "—"}, ${shareLabel} ${shareDisplay(point.shareDisplay, language)}`).join("; ")}`;
     const renderForAvailableSpace = () => {
       const compact = element.current!.clientWidth < 580;
       const axisFontSize = compact ? Math.min(captionFontSize, 10) : captionFontSize;
@@ -70,7 +76,7 @@ export function MonthlyApplicationSalesShareChart({ language, title, points }: {
       animationEasing: "cubicOut",
       animationEasingUpdate: "cubicInOut",
       aria: { enabled: true, description },
-      color: [brand, applicationBar, shareLine],
+      color: [brand, otherSalesBar, shareLine],
       legend: {
         top: 3,
         left: compact ? 2 : 4,
@@ -89,9 +95,9 @@ export function MonthlyApplicationSalesShareChart({ language, title, points }: {
           const index = item && typeof item === "object" && "dataIndex" in item ? Number(item.dataIndex) : -1;
           const point = points[index];
           if (!point) return "";
-          const rows = point.shareDisplay === null
+          const rows = point.shareDisplay === null || point.otherOfficialSalesDisplay === null
             ? [[ar ? "الحالة" : "Status", ar ? "بيانات غير مكتملة" : "Incomplete data"]]
-            : [[totalsLabel, point.totalSalesDisplay ?? "—"], [applicationLabel, point.applicationSalesDisplay ?? "—"], [shareLabel, point.shareDisplay]];
+            : [[totalsLabel, point.totalSalesDisplay ?? "—"], [applicationLabel, point.applicationSalesDisplay ?? "—"], [otherSalesLabel, point.otherOfficialSalesDisplay], [shareLabel, shareDisplay(point.shareDisplay, language)]];
           return `<div dir="${ar ? "rtl" : "ltr"}" class="application-sales-share-tooltip"><strong>${point.label}</strong>${rows.map(([label, value]) => `<span><em>${label}</em><b>${value}</b></span>`).join("")}</div>`;
         },
       },
@@ -133,9 +139,10 @@ export function MonthlyApplicationSalesShareChart({ language, title, points }: {
       ],
       series: [
         {
-          name: totalsLabel,
+          name: applicationLabel,
           type: "bar",
-          data: points.map((point) => point.totalSalesPlotValue),
+          stack: "official-sales",
+          data: points.map((point) => point.applicationSalesPlotValue),
           yAxisIndex: 0,
           barMaxWidth: compact ? 20 : 30,
           barGap: "18%",
@@ -144,20 +151,21 @@ export function MonthlyApplicationSalesShareChart({ language, title, points }: {
           emphasis: { focus: "series", itemStyle: { color: brand } },
         },
         {
-          name: applicationLabel,
+          name: otherSalesLabel,
           type: "bar",
-          data: points.map((point) => point.applicationSalesPlotValue),
+          stack: "official-sales",
+          data: points.map((point) => point.otherOfficialSalesPlotValue),
           yAxisIndex: 0,
           barMaxWidth: compact ? 20 : 30,
-          itemStyle: { color: applicationBar, borderRadius: [4, 4, 0, 0] },
-          emphasis: { focus: "series", itemStyle: { color: applicationBar } },
+          itemStyle: { color: otherSalesBar, borderRadius: [4, 4, 0, 0] },
+          emphasis: { focus: "series", itemStyle: { color: otherSalesBar } },
         },
         {
           name: shareLabel,
           type: "line",
           data: points.map((point) => point.sharePlotValue),
           yAxisIndex: 1,
-          smooth: .28,
+          smooth: false,
           connectNulls: false,
           showSymbol: !compact,
           symbol: "circle",

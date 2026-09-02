@@ -8,6 +8,8 @@ export * from './file-metadata.js';
 
 export * from './observability.js';
 export * from './finance.js';
+export * from './financial-read.js';
+export * from './financial-evidence.js';
 
 export * from './ai-platform.js';
 export * from './decision-intelligence.js';
@@ -16,6 +18,7 @@ export * from './administration.js';
 export * from './hr.js';
 export * from './attendance.js';
 export * from './reporting.js';
+export * from './accrual-profit-loss.js';
 export * from './ledger-trial-balance.js';
 export * from './internal-vat-report.js';
 export * from './vat-simulation.js';

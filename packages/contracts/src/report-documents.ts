@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { outputFormatSchema, outputLocaleSchema } from './output.js';
 
 const reportDocumentIdSchema = z.string().uuid();
-const reportDocumentCodeSchema = z.enum(['ledger_trial_balance', 'personal_cash_performance', 'internal_vat_report']);
+const reportDocumentCodeSchema = z.enum(['ledger_trial_balance', 'accrual_profit_loss', 'personal_cash_performance', 'internal_vat_report']);
 
 export const createReportDocumentRequestSchema = z.object({
   reportRunId: reportDocumentIdSchema,

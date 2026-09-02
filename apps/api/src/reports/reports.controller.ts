@@ -1,9 +1,10 @@
-import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Param, Post, Query, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, HttpException, InternalServerErrorException, Param, Post, Query, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { SkipThrottle, Throttle, ThrottlerGuard } from '@nestjs/throttler';
-import { companyIdSchema, personalCashPerformanceCoverageRequestSchema, personalCashPerformanceEvidenceQuerySchema, personalCashPerformanceEvidenceReceiptSchema, personalCashPerformanceLiveEvidenceReceiptSchema, personalCashPerformanceRequestSchema, personalCashPerformanceResultSchema, personalCashPerformanceSourceReceiptSchema } from '@baseer-erp/contracts';
+import { companyIdSchema, financialEvidenceLiveRequestSchema, financialEvidenceReceiptSchema, financialEvidenceSourceReceiptSchema, personalCashPerformanceCoverageRequestSchema, personalCashPerformanceEvidenceQuerySchema, personalCashPerformanceEvidenceReceiptSchema, personalCashPerformanceLiveEvidenceReceiptSchema, personalCashPerformanceRequestSchema, personalCashPerformanceResultSchema, personalCashPerformanceSourceReceiptSchema } from '@baseer-erp/contracts';
 
 import { CompanyContextService } from '../company-context/company-context.service.js';
 import { CashPerformanceCoverageService } from './cash-performance-coverage.service.js';
+import { FinancialEvidenceRegistryService } from './financial-evidence-registry.service.js';
 import { PersonalCashPerformanceReportService } from './personal-cash-performance-report.service.js';
 import { REPORTS_READ_CAPABILITY } from './report-catalog.service.js';
 
@@ -18,6 +19,7 @@ export class ReportsController {
     private readonly companyContexts: CompanyContextService,
     private readonly coverage: CashPerformanceCoverageService,
     private readonly cashPerformance: PersonalCashPerformanceReportService,
+    private readonly financialEvidence: FinancialEvidenceRegistryService,
   ) {}
 
   @Post('personal-cash-performance/coverage')
@@ -48,6 +50,40 @@ export class ReportsController {
       await this.context(authorization, companyId, REPORTS_READ_CAPABILITY),
       { from: parseDate(request.data.from), to: parseDate(request.data.to), ...(request.data.months ? { months: request.data.months } : {}), vatInclusive: request.data.vatInclusive },
     ));
+  }
+
+  @Get('financial-evidence/live')
+  async liveFinancialEvidence(
+    @Query() query: Record<string, unknown>,
+    @Headers('authorization') authorization?: string,
+    @Headers('x-baseer-company-id') companyId?: string,
+  ) {
+    const request = financialEvidenceRequest(query);
+    try {
+      return financialEvidenceReceiptSchema.parse(await this.financialEvidence.liveEvidence(
+        await this.context(authorization, companyId, REPORTS_READ_CAPABILITY), request,
+      ));
+    } catch (error) {
+      throw withFinancialEvidenceDiagnostic(error, request.descriptor.reportCode);
+    }
+  }
+
+  @Get('financial-evidence/live/source/:journalEntryId')
+  async liveFinancialEvidenceSource(
+    @Param('journalEntryId') journalEntryId: string,
+    @Query() query: Record<string, unknown>,
+    @Headers('authorization') authorization?: string,
+    @Headers('x-baseer-company-id') companyId?: string,
+  ) {
+    if (!companyIdSchema.safeParse(journalEntryId).success) throw new BadRequestException('Invalid financial evidence source.');
+    const { cursor: _cursor, ...request } = financialEvidenceRequest(query);
+    try {
+      return financialEvidenceSourceReceiptSchema.parse(await this.financialEvidence.liveSource(
+        await this.context(authorization, companyId, REPORTS_READ_CAPABILITY), request, journalEntryId,
+      ));
+    } catch (error) {
+      throw withFinancialEvidenceDiagnostic(error, request.descriptor.reportCode);
+    }
   }
 
   @Get('personal-cash-performance/live/evidence')
@@ -137,4 +173,54 @@ function liveEvidenceRequest(query: Record<string, unknown>) {
   });
   if (!request.success) throw new BadRequestException('Invalid live report evidence request.');
   return { from: parseDate(request.data.from), to: parseDate(request.data.to), ...(request.data.months ? { months: request.data.months } : {}), vatInclusive: request.data.vatInclusive };
+}
+
+function financialEvidenceRequest(query: Record<string, unknown>) {
+  const reportCode = query.reportCode;
+  const metricKind = query.metricKind;
+  const descriptor = reportCode === 'personal_cash_performance' && metricKind === 'CASH_ROW' && typeof query.rowCode === 'string'
+    ? { reportCode, metric: { kind: metricKind, rowCode: query.rowCode } }
+    : reportCode === 'accrual_profit_loss' && metricKind === 'STATEMENT_LINE' && typeof query.statementLineId === 'string'
+      ? { reportCode, metric: { kind: metricKind, statementLineId: query.statementLineId } }
+      : reportCode === 'accrual_profit_loss' && (metricKind === 'REVENUE_TOTAL' || metricKind === 'EXPENSES_TOTAL' || metricKind === 'NET_PROFIT')
+        ? { reportCode, metric: { kind: metricKind } }
+        : reportCode === 'ledger_trial_balance' && metricKind === 'TRIAL_ACCOUNT' && typeof query.accountId === 'string' && (query.scope === 'OPENING' || query.scope === 'PERIOD' || query.scope === 'CLOSING') && (query.side === 'DEBIT' || query.side === 'CREDIT')
+          ? { reportCode, metric: { kind: metricKind, accountId: query.accountId, scope: query.scope, side: query.side } }
+          : reportCode === 'ledger_trial_balance' && metricKind === 'TRIAL_TOTAL' && (query.scope === 'OPENING' || query.scope === 'PERIOD' || query.scope === 'CLOSING') && (query.side === 'DEBIT' || query.side === 'CREDIT')
+            ? { reportCode, metric: { kind: metricKind, scope: query.scope, side: query.side } }
+            : reportCode === 'internal_vat_report' && metricKind === 'VAT_ROW' && (query.rowCode === 'output_vat' || query.rowCode === 'input_vat' || query.rowCode === 'vat_paid' || query.rowCode === 'vat_refunded')
+              ? { reportCode, metric: { kind: metricKind, rowCode: query.rowCode } }
+              : reportCode === 'internal_vat_report' && metricKind === 'VAT_NET'
+                ? { reportCode, metric: { kind: metricKind } }
+        : null;
+  const months = Array.isArray(query.months) ? query.months : typeof query.months === 'string' ? query.months.split(',').filter(Boolean) : undefined;
+  const parsed = financialEvidenceLiveRequestSchema.safeParse({
+    descriptor,
+    from: query.from,
+    to: query.to,
+    ...(months?.length ? { months } : {}),
+    vatInclusive: parseBoolean(typeof query.vatInclusive === 'string' ? query.vatInclusive : undefined, true),
+    ...(typeof query.cursor === 'string' ? { cursor: query.cursor } : {}),
+  });
+  if (!parsed.success) throw new BadRequestException('Invalid financial evidence request.');
+  return {
+    descriptor: parsed.data.descriptor,
+    from: parseDate(parsed.data.from),
+    to: parseDate(parsed.data.to),
+    ...(parsed.data.months ? { months: parsed.data.months } : {}),
+    vatInclusive: parsed.data.vatInclusive,
+    ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}),
+  };
+}
+
+/** A short code is safe to show to a user and lets support locate the failed
+ * boundary without exposing the database predicate or journal contents. */
+function withFinancialEvidenceDiagnostic(error: unknown, reportCode: string): HttpException {
+  const requestCode = `FE-${reportCode.replace(/[^a-z0-9]+/gi, '-').toUpperCase()}-LIVE`;
+  if (error instanceof HttpException) {
+    const response = error.getResponse();
+    const body = typeof response === 'string' ? { message: response } : response;
+    return new HttpException({ ...body, requestCode }, error.getStatus());
+  }
+  return new InternalServerErrorException({ message: 'Financial evidence is temporarily unavailable.', requestCode });
 }

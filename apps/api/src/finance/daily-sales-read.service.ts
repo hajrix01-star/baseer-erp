@@ -33,6 +33,7 @@ type SalesAnalyticsPeriod = Readonly<{
   display: Readonly<{
     salesGrossAmount: string | null;
     applicationSalesGrossAmount: string | null;
+    otherOfficialSalesGrossAmount: string | null;
     dailyAverageSalesAmount: string | null;
     recordedCustomerCount: string | null;
     dailyAverageCustomerCount: string | null;
@@ -40,6 +41,7 @@ type SalesAnalyticsPeriod = Readonly<{
     applicationSalesSharePlotValue: number | null;
     salesGrossPlotValue: number | null;
     applicationSalesGrossPlotValue: number | null;
+    otherOfficialSalesGrossPlotValue: number | null;
   }>;
 }>;
 type ComputedSalesAnalyticsPeriod = Readonly<{
@@ -377,6 +379,12 @@ function analyticsPeriodReceipt(
 ): SalesAnalyticsPeriod {
   const ready = dataQuality === "READY" && values;
   const share = ready && values.gross.gt(0) ? values.applicationGross.div(values.gross).times(100) : null;
+  // Application sales are a subset of posted official sales. Keeping their
+  // complement in this server-owned receipt allows the chart to reconcile to
+  // the total without the browser deriving an accounting amount.
+  const otherOfficialSales = ready && values.applicationGross.gte(0) && values.applicationGross.lte(values.gross)
+    ? values.gross.minus(values.applicationGross)
+    : null;
   return {
     fromBusinessDate,
     toBusinessDate,
@@ -387,6 +395,7 @@ function analyticsPeriodReceipt(
     display: {
       salesGrossAmount: ready ? formatDecimal(values.gross, 2) : null,
       applicationSalesGrossAmount: ready ? formatDecimal(values.applicationGross, 2) : null,
+      otherOfficialSalesGrossAmount: otherOfficialSales ? formatDecimal(otherOfficialSales, 2) : null,
       dailyAverageSalesAmount: ready && values.dailyAverageSalesAmount ? formatDecimal(values.dailyAverageSalesAmount, 2) : null,
       recordedCustomerCount: ready ? formatDecimal(new Prisma.Decimal(values.customerCount), 0) : null,
       dailyAverageCustomerCount: ready && values.dailyAverageCustomerCount ? formatDecimal(values.dailyAverageCustomerCount, 2) : null,
@@ -396,6 +405,7 @@ function analyticsPeriodReceipt(
       // formatted decimal strings above; a chart must not derive them client-side.
       salesGrossPlotValue: ready ? Number(values.gross.toDecimalPlaces(4).toFixed(4)) : null,
       applicationSalesGrossPlotValue: ready ? Number(values.applicationGross.toDecimalPlaces(4).toFixed(4)) : null,
+      otherOfficialSalesGrossPlotValue: otherOfficialSales ? Number(otherOfficialSales.toDecimalPlaces(4).toFixed(4)) : null,
     },
   };
 }

@@ -52,7 +52,7 @@ try {
   const alternate = await server.inject({ method: "GET", url, headers: headers(reader.accessToken, fixture.alternateCompanyId) });
   assert.equal(alternate.statusCode, 200, alternate.body);
   assert.equal(alternate.json().companyId, fixture.alternateCompanyId);
-  assert.deepEqual(alternate.json().days.map((day) => [day.operationalStatus, day.dataStatus, day.salesGrossAmount]), [["CLOSED", "CLOSED", "0.0000"]], "A company selection must never return the first company's calendar.");
+  assert.deepEqual(alternate.json().days.map((day) => [day.operationalStatus, day.dataStatus, day.salesGrossAmount]), [["CLOSED", "CLOSED", null]], "A company selection must never return the first company's calendar; a closed day without a recorded projection remains unknown rather than invented zero sales.");
 
   const unknownCompany = await server.inject({ method: "GET", url, headers: headers(reader.accessToken, randomUUID()) });
   assert.equal(unknownCompany.statusCode, 403, unknownCompany.body);

@@ -63,19 +63,23 @@ try {
   const parsedCalendar = marketingCalendarReadSchema.parse(calendar);
   assert.equal(calendar.campaigns.some((campaign) => campaign.id === created.id), true, "The marketing calendar must consume the campaign register for the selected period.");
   assert.equal(calendar.days.length, 31, "The calendar must return one server-owned point per requested Riyadh business day.");
+  assert.deepEqual(parsedCalendar.financialRead, {
+    contractVersion: "financial-read.v1", subject: "MIXED_ANALYTICS", defaultTaxView: "VAT_INCLUDED", allowedTaxViews: ["VAT_INCLUDED"],
+    authority: "OFFICIAL_SALES_AND_POSTED_FINANCE", quality: "INCOMPLETE", currencyScope: { mode: "SINGLE_CURRENCY", currencyCode: "SAR" }, presentationPolicy: "SERVER_FORMATTED",
+  }, "Marketing must declare the shared VAT-inclusive, server-formatted financial-read contract.");
   assert.deepEqual(
     parsedCalendar.days.find((entry) => entry.businessDate === "2026-08-01"),
     {
-      businessDate: "2026-08-01", officialGrossSales: "115.0000", officialNetSales: "100.0000", customerCount: 2, salesDayQuality: "READY",
-      dailySalesTarget: null, targetStatus: "NO_TARGET", linkedActualSpend: "0.0000", linkedFinancialDocumentCount: 0, campaignSpend: [],
-      financialOutflows: "0.0000", financialOutflowDocumentCount: 0, purchaseOutflows: "0.0000", purchaseOutflowDocumentCount: 0, activeCampaignIds: [created.id],
+      businessDate: "2026-08-01", officialGrossSales: "115.0000", officialGrossSalesDisplay: "115.00 SAR", officialGrossSalesCalendarDisplay: "115", officialNetSales: "100.0000", customerCount: 2, salesDayQuality: "READY",
+      dailySalesTarget: null, dailySalesTargetDisplay: null, targetStatus: "NO_TARGET", linkedActualSpend: "0.0000", linkedActualSpendDisplay: "0.00 SAR", linkedFinancialDocumentCount: 0, campaignSpend: [],
+      financialOutflows: "0.0000", financialOutflowsDisplay: "0.00 SAR", financialOutflowDocumentCount: 0, purchaseOutflows: "0.0000", purchaseOutflowsDisplay: "0.00 SAR", purchaseOutflowDocumentCount: 0, activeCampaignIds: [created.id],
     },
     "A ready calendar day must retain both VAT-inclusive and net sales from the server-owned daily summary.",
   );
   assert.equal(calendar.days.every((entry) => entry.officialNetSales !== null || entry.salesDayQuality !== "READY"), true, "A missing, pending, or partial sales day must never become a zero-valued ready point.");
   assert.equal(calendar.days.every((entry) => entry.officialGrossSales !== null || entry.salesDayQuality !== "READY"), true, "VAT-inclusive sales must also be absent, not zero, on unread days.");
-  assert.deepEqual(parsedCalendar.weekdayAverages.find((entry) => entry.weekday === 6), { weekday: 6, averageOfficialGrossSales: "115.0000", eligibleDayCount: 1 }, "Weekday averages must be server-calculated from VAT-inclusive completed daily sales only.");
-  assert.deepEqual(parsedCalendar.timeline.daily.rows.find((entry) => entry.label === "2026-08-01")?.sales, { amount: "115.0000", chartValue: 115, display: "115.00" }, "Daily chart values must be VAT-inclusive and precomputed by the server.");
+  assert.deepEqual(parsedCalendar.weekdayAverages.find((entry) => entry.weekday === 6), { weekday: 6, averageOfficialGrossSales: "115.0000", averageOfficialGrossSalesDisplay: "115.00 SAR", averageOfficialGrossSalesCalendarDisplay: "115", eligibleDayCount: 1 }, "Weekday averages must be server-calculated from VAT-inclusive completed daily sales only.");
+  assert.deepEqual(parsedCalendar.timeline.daily.rows.find((entry) => entry.label === "2026-08-01")?.sales, { amount: "115.0000", chartValue: 115, display: "115.00 SAR" }, "Daily chart values must be VAT-inclusive and fully formatted by the server.");
   const unreadTimelineRow = parsedCalendar.timeline.daily.rows.find((entry) => entry.salesDayQuality !== "READY");
   assert.deepEqual(unreadTimelineRow?.sales, { amount: null, chartValue: null, display: null }, "An incomplete daily chart row must be unavailable, never a fabricated zero.");
   const augustTimelineRow = parsedCalendar.timeline.monthly.rows.find((entry) => entry.label === "2026-08");

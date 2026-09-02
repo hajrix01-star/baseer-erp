@@ -81,9 +81,15 @@ export function formatMoney(value: NumericValue, currency = "SAR", language: Bas
   return formatted === "—" ? formatted : `${formatted} ${currency}`;
 }
 
-/** Percentages use their own precision and must never inherit money rounding. */
-export function formatPercent(value: NumericValue, maximumFractionDigits = 1, language: BaseerLanguage = "en"): string {
-  const formatted = formatNumeric(value, { minimumFractionDigits: 0, maximumFractionDigits }, language);
+/**
+ * Percentages have one presentation policy across Baseer: retain at most one
+ * fractional digit and never render a meaningless trailing `.0`.
+ *
+ * Calculation and API values may retain greater precision; this helper is the
+ * only boundary that turns them into user-facing text.
+ */
+export function formatPercent(value: NumericValue, language: BaseerLanguage = "en"): string {
+  const formatted = formatNumeric(value, { minimumFractionDigits: 0, maximumFractionDigits: 1 }, language);
   return formatted === "—" ? formatted : `${formatted}%`;
 }
 

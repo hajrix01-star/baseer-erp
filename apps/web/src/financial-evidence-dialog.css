@@ -1,0 +1,47 @@
+.baseer-dialog.financial-evidence-dialog { inline-size: min(58rem, calc(100vw - 2rem)); }
+.financial-evidence-dialog__content { display: grid; gap: 1rem; color: var(--ink); }
+.financial-evidence-dialog__summary { display: flex; flex-wrap: wrap; gap: .75rem; }
+.financial-evidence-dialog__summary > div { display: grid; flex: 1 1 14rem; gap: .25rem; min-inline-size: 0; padding: .8rem .9rem; border: 1px solid var(--border-subtle); border-radius: var(--control-radius); background: var(--surface-subtle); }
+.financial-evidence-dialog__summary span, .financial-evidence-dialog__operation-meta dt { color: var(--muted); font-size: var(--font-caption); font-weight: 650; }
+.financial-evidence-dialog__summary bdi { color: var(--brand-strong); font-size: var(--font-title); font-weight: 800; }
+.financial-evidence-dialog__section-heading { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+.financial-evidence-dialog__section-heading h4 { margin: 0; font-size: var(--font-body); }
+.financial-evidence-dialog__section-heading > span { min-inline-size: 1.7rem; padding: .15rem .45rem; border-radius: 999px; color: var(--muted); background: var(--surface-subtle); font-size: var(--font-caption); font-weight: 750; text-align: center; font-variant-numeric: tabular-nums; }
+.financial-evidence-dialog__state { display: grid; gap: .7rem; place-items: center; min-block-size: 8rem; padding: 1rem; border: 1px dashed var(--border-subtle); border-radius: var(--control-radius); color: var(--muted); text-align: center; }
+.financial-evidence-dialog__state p { margin: 0; }
+.financial-evidence-dialog__state.is-error { border-color: color-mix(in srgb, var(--status-danger) 38%, var(--border-subtle)); color: var(--status-danger); background: var(--status-danger-surface); }
+.financial-evidence-dialog__operations { display: grid; gap: .65rem; margin: 0; padding: 0; list-style: none; }
+.financial-evidence-dialog__operation { overflow: hidden; border: 1px solid var(--border-subtle); border-radius: var(--control-radius); background: var(--surface-raised); }
+.financial-evidence-dialog__operation-summary { display: flex; inline-size: 100%; align-items: center; justify-content: space-between; gap: .9rem; padding: .8rem .9rem; border: 0; color: inherit; background: transparent; text-align: start; cursor: pointer; }
+.financial-evidence-dialog__operation-summary:hover { background: color-mix(in srgb, var(--brand) 5%, transparent); }
+.financial-evidence-dialog__operation-summary:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: -2px; }
+.financial-evidence-dialog__operation-main { display: grid; gap: .15rem; min-inline-size: 0; }
+.financial-evidence-dialog__operation-main strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.financial-evidence-dialog__operation-main small { overflow: hidden; color: var(--muted); font-size: var(--font-caption); text-overflow: ellipsis; white-space: nowrap; }
+.financial-evidence-dialog__money { flex: 0 0 auto; color: var(--brand-strong); font-variant-numeric: tabular-nums; font-weight: 800; white-space: nowrap; }
+.financial-evidence-dialog__money.is-negative { color: var(--status-danger); }
+.financial-evidence-dialog__money.is-positive { color: var(--status-success, var(--brand-strong)); }
+.financial-evidence-dialog__operation-meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .55rem; margin: 0; padding: .7rem .9rem; border-block-start: 1px solid var(--border-subtle); background: var(--surface-subtle); }
+.financial-evidence-dialog__operation-meta div { display: grid; gap: .12rem; min-inline-size: 0; }
+.financial-evidence-dialog__operation-meta dd { overflow: hidden; margin: 0; font-size: var(--font-caption); font-variant-numeric: tabular-nums; text-overflow: ellipsis; white-space: nowrap; }
+.financial-evidence-dialog__operation-actions { display: flex; flex-wrap: wrap; gap: .5rem; padding: .65rem .9rem; border-block-start: 1px solid var(--border-subtle); }
+.financial-evidence-dialog__more { display: flex; justify-content: center; }
+.financial-evidence-dialog__journal { display: grid; gap: 1rem; }
+.financial-evidence-dialog__journal > header { display: grid; gap: .45rem; padding: .85rem .9rem; border: 1px solid var(--border-subtle); border-radius: var(--control-radius); background: var(--surface-subtle); }
+.financial-evidence-dialog__journal > header > div { display: flex; flex-wrap: wrap; gap: .4rem; align-items: baseline; }
+.financial-evidence-dialog__journal > header span { color: var(--muted); font-size: var(--font-caption); }
+.financial-evidence-dialog__journal > header p { margin: 0; color: var(--muted); font-size: var(--font-body); }
+.financial-evidence-dialog__journal-status { justify-self: start; padding: .15rem .45rem; border-radius: 999px; color: var(--status-success, var(--brand-strong)) !important; background: color-mix(in srgb, var(--status-success, var(--brand)) 13%, transparent); font-size: var(--font-caption) !important; font-weight: 750; }
+.financial-evidence-dialog__journal-status.is-reversed { color: var(--status-danger) !important; background: var(--status-danger-surface); }
+.financial-evidence-dialog__journal-table-shell { overflow: auto; border: 1px solid var(--border-subtle); border-radius: var(--control-radius); }
+.financial-evidence-dialog__journal table { inline-size: 100%; min-inline-size: 40rem; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.financial-evidence-dialog__journal th, .financial-evidence-dialog__journal td { padding: .6rem .7rem; border-block-end: 1px solid var(--border-subtle); text-align: start; }
+.financial-evidence-dialog__journal th { color: var(--muted); background: var(--table-header); font-size: var(--font-caption); }
+.financial-evidence-dialog__journal td:nth-last-child(-n + 2), .financial-evidence-dialog__journal th:nth-last-child(-n + 2) { text-align: end; }
+
+@media (max-width: 640px) {
+  .baseer-dialog.financial-evidence-dialog { inline-size: calc(100dvw - 1rem); }
+  .financial-evidence-dialog__summary > div { flex-basis: 100%; }
+  .financial-evidence-dialog__operation-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .financial-evidence-dialog__operation-meta div:last-child:nth-child(odd) { grid-column: 1 / -1; }
+}

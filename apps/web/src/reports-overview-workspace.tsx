@@ -8,7 +8,7 @@ import { BaseerCompanyReadQuery } from "./baseer-company-read-query";
 import { pageRouteHash } from "./page-registry";
 
 type Language = "ar" | "en";
-type ReportCode = "ledger_trial_balance" | "personal_cash_performance" | "internal_vat_report";
+type ReportCode = "ledger_trial_balance" | "accrual_profit_loss" | "personal_cash_performance" | "internal_vat_report";
 type CatalogueReport = Readonly<{ code: ReportCode; titleAr: string; titleEn: string; basis: string; readiness: "READY" | "NOT_READY"; readinessMessageAr?: string }>;
 type Catalogue = Readonly<{ companyId: string; reports: readonly CatalogueReport[] }>;
 
@@ -20,7 +20,8 @@ const copy = {
     loading: "يتم التحقق من جاهزية التقارير…",
     retry: "إعادة المحاولة",
     openTrial: "فتح ميزان المراجعة",
-    openFinancial: "فتح الربح والخسارة المالي",
+    openFinancial: "فتح الربح والخسارة الاستحقاقي",
+    openCash: "فتح حركة النقد الفعلية",
     openVat: "فتح التقرير الضريبي",
     unavailable: "غير متاح حالياً",
   },
@@ -31,7 +32,8 @@ const copy = {
     loading: "Checking report availability…",
     retry: "Retry",
     openTrial: "Open trial balance",
-    openFinancial: "Open financial profit and loss",
+    openFinancial: "Open accrual profit and loss",
+    openCash: "Open actual cash movement",
     openVat: "Open VAT report",
     unavailable: "Not available yet",
   },
@@ -39,7 +41,8 @@ const copy = {
 
 const reportCards: ReadonlyArray<{ code: ReportCode; target: string; icon: string; action: keyof typeof copy.ar }> = [
   { code: "ledger_trial_balance", target: pageRouteHash("reports-financial", "trial-balance"), icon: "⚖", action: "openTrial" },
-  { code: "personal_cash_performance", target: pageRouteHash("reports-financial", "cash-performance"), icon: "↕", action: "openFinancial" },
+  { code: "accrual_profit_loss", target: pageRouteHash("reports-financial", "accrual-profit-loss"), icon: "∑", action: "openFinancial" },
+  { code: "personal_cash_performance", target: pageRouteHash("reports-financial", "cash-performance"), icon: "↕", action: "openCash" },
   { code: "internal_vat_report", target: pageRouteHash("reports-vat"), icon: "٪", action: "openVat" },
 ];
 

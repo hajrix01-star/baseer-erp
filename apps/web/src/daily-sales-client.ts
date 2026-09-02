@@ -109,6 +109,9 @@ export type AvailableCompany = {
   // Older private deployments may not have returned this identity hint yet.
   // The shell retains a guarded compatibility path until their API is rebuilt.
   isOwner?: boolean;
+  // A migration-locked company permits review reads only; operational controls
+  // must not be rendered optimistically and then fail with a generic conflict.
+  migrationReviewLocked?: boolean;
 };
 export type DailySalesScope = "MORNING" | "EVENING" | "ALL";
 export type FormState = {
