@@ -7,14 +7,14 @@
       "file": "baseer-chart.tsx",
       "decision": "central-adapter"
     },
-    "chart:hr-overview-workspace.tsx": {
-      "kind": "chart",
-      "file": "hr-overview-workspace.tsx",
-      "decision": "migrated-hr-central-chart"
-    },
     "editable-date:baseer-aria-date-picker.tsx": {
       "kind": "editable-date",
       "file": "baseer-aria-date-picker.tsx",
+      "decision": "central-adapter"
+    },
+    "editable-date:baseer-date-picker-runtime.tsx": {
+      "kind": "editable-date",
+      "file": "baseer-date-picker-runtime.tsx",
       "decision": "central-adapter"
     },
     "editable-date:baseer-date-picker.tsx": {
@@ -27,20 +27,35 @@
       "file": "daily-sales-closing-dialog.tsx",
       "decision": "migrated-finance-central-date-picker"
     },
-    "editable-date:decision-intelligence-workspace-content.tsx": {
+    "editable-date:decision-intelligence-workspace-runtime.tsx": {
       "kind": "editable-date",
-      "file": "decision-intelligence-workspace-content.tsx",
-      "decision": "migrated-decision-central-date-picker-lazy-content"
+      "file": "decision-intelligence-workspace-runtime.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
     },
-    "editable-date:expenses-obligations-workspace.tsx": {
+    "editable-date:expenses-obligations-workspace-runtime.tsx": {
       "kind": "editable-date",
-      "file": "expenses-obligations-workspace.tsx",
+      "file": "expenses-obligations-workspace-runtime.tsx",
       "decision": "migrated-finance-central-date-picker"
     },
-    "editable-date:finance-setup-workspace.tsx": {
+    "editable-date:finance-setup-workspace-runtime.tsx": {
       "kind": "editable-date",
-      "file": "finance-setup-workspace.tsx",
+      "file": "finance-setup-workspace-runtime.tsx",
       "decision": "migrated-finance-central-date-picker"
+    },
+    "editable-date:hr-attendance-roster-editor.tsx": {
+      "kind": "editable-date",
+      "file": "hr-attendance-roster-editor.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "editable-date:hr-attendance-schedules-panel.tsx": {
+      "kind": "editable-date",
+      "file": "hr-attendance-schedules-panel.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "editable-date:hr-attendance-workspace.tsx": {
+      "kind": "editable-date",
+      "file": "hr-attendance-workspace.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
     },
     "editable-date:hr-employee-documents-panel.tsx": {
       "kind": "editable-date",
@@ -51,6 +66,11 @@
       "kind": "editable-date",
       "file": "hr-employee-onboarding-dialog.tsx",
       "decision": "migrated-hr-central-date-picker"
+    },
+    "editable-date:hr-employee-profile-dialog.tsx": {
+      "kind": "editable-date",
+      "file": "hr-employee-profile-dialog.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
     },
     "editable-date:hr-employee-promotions-panel.tsx": {
       "kind": "editable-date",
@@ -72,15 +92,25 @@
       "file": "hr-payroll-detail-dialog.tsx",
       "decision": "migrated-hr-central-date-picker"
     },
-    "editable-date:hr-services-workspace-content.tsx": {
+    "editable-date:hr-services-workspace-runtime.tsx": {
       "kind": "editable-date",
-      "file": "hr-services-workspace-content.tsx",
-      "decision": "migrated-hr-central-date-picker-lazy-route"
+      "file": "hr-services-workspace-runtime.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
     },
     "editable-date:hr-workspace-content.tsx": {
       "kind": "editable-date",
       "file": "hr-workspace-content.tsx",
       "decision": "migrated-hr-central-date-picker-lazy-route"
+    },
+    "editable-date:marketing-campaign-mutation-dialog.tsx": {
+      "kind": "editable-date",
+      "file": "marketing-campaign-mutation-dialog.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "editable-date:marketing-workspace-content.tsx": {
+      "kind": "editable-date",
+      "file": "marketing-workspace-content.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
     },
     "editable-date:operations-asset-register-dialog.tsx": {
       "kind": "editable-date",
@@ -95,11 +125,6 @@
     "editable-date:operations-internal-registration-entry.tsx": {
       "kind": "editable-date",
       "file": "operations-internal-registration-entry.tsx",
-      "decision": "migrated-operations-wave-1"
-    },
-    "editable-date:operations-internal-registration-workspace.tsx": {
-      "kind": "editable-date",
-      "file": "operations-internal-registration-workspace.tsx",
       "decision": "migrated-operations-wave-1"
     },
     "editable-date:operations-purchase-completion-dialog.tsx": {
@@ -122,35 +147,40 @@
       "file": "purchase-expense-credit-panel.tsx",
       "decision": "migrated-finance-central-date-picker"
     },
-    "editable-date:purchase-expense-workspace.tsx": {
+    "editable-date:purchase-expense-workspace-runtime.tsx": {
       "kind": "editable-date",
-      "file": "purchase-expense-workspace.tsx",
+      "file": "purchase-expense-workspace-runtime.tsx",
       "decision": "migrated-finance-central-date-picker"
+    },
+    "editable-date:quick-advance-dialog.tsx": {
+      "kind": "editable-date",
+      "file": "quick-advance-dialog.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
     },
     "editable-date:recurring-expense-profile-dialog.tsx": {
       "kind": "editable-date",
       "file": "recurring-expense-profile-dialog.tsx",
       "decision": "migrated-finance-central-date-picker"
     },
-    "editable-date:recurring-expense-workspace.tsx": {
+    "editable-date:recurring-expense-workspace-runtime.tsx": {
       "kind": "editable-date",
-      "file": "recurring-expense-workspace.tsx",
+      "file": "recurring-expense-workspace-runtime.tsx",
       "decision": "migrated-finance-central-date-picker"
     },
-    "editable-date:treasury-workspace.tsx": {
+    "editable-date:treasury-workspace-runtime.tsx": {
       "kind": "editable-date",
-      "file": "treasury-workspace.tsx",
+      "file": "treasury-workspace-runtime.tsx",
       "decision": "migrated-finance-central-date-picker"
-    },
-    "form:administration-companies-panel.tsx": {
-      "kind": "form",
-      "file": "administration-companies-panel.tsx",
-      "decision": "migrated-administration-central-validated-form"
     },
     "form:administration-ai-settings-panel.tsx": {
       "kind": "form",
       "file": "administration-ai-settings-panel.tsx",
       "decision": "basira-provider-configuration-central-validated-form"
+    },
+    "form:administration-companies-panel.tsx": {
+      "kind": "form",
+      "file": "administration-companies-panel.tsx",
+      "decision": "migrated-administration-central-validated-form"
     },
     "form:administration-roles-panel.tsx": {
       "kind": "form",
@@ -161,6 +191,11 @@
       "kind": "form",
       "file": "administration-users-panel.tsx",
       "decision": "migrated-administration-central-validated-form"
+    },
+    "form:attendance-employee-portal.tsx": {
+      "kind": "form",
+      "file": "attendance-employee-portal.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
     },
     "form:baseer-login.tsx": {
       "kind": "form",
@@ -182,6 +217,11 @@
       "file": "baseer-validated-form.tsx",
       "decision": "central-adapter"
     },
+    "form:basira-interpretation-center.tsx": {
+      "kind": "form",
+      "file": "basira-interpretation-center.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
     "form:daily-sales-closing-dialog.tsx": {
       "kind": "form",
       "file": "daily-sales-closing-dialog.tsx",
@@ -192,14 +232,14 @@
       "file": "daily-sales-sign-in.tsx",
       "decision": "migrated-finance-central-auth-form"
     },
-    "form:decision-intelligence-workspace-content.tsx": {
+    "form:decision-intelligence-workspace-runtime.tsx": {
       "kind": "form",
-      "file": "decision-intelligence-workspace-content.tsx",
-      "decision": "migrated-decision-central-validated-form-lazy-content"
+      "file": "decision-intelligence-workspace-runtime.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
     },
-    "form:expenses-obligations-workspace.tsx": {
+    "form:expenses-obligations-workspace-runtime.tsx": {
       "kind": "form",
-      "file": "expenses-obligations-workspace.tsx",
+      "file": "expenses-obligations-workspace-runtime.tsx",
       "decision": "migrated-finance-central-form-decimal-safe"
     },
     "form:finance-category-form-dialog.tsx": {
@@ -207,15 +247,30 @@
       "file": "finance-category-form-dialog.tsx",
       "decision": "migrated-finance-central-form-decimal-safe"
     },
-    "form:finance-setup-workspace.tsx": {
+    "form:finance-setup-workspace-runtime.tsx": {
       "kind": "form",
-      "file": "finance-setup-workspace.tsx",
+      "file": "finance-setup-workspace-runtime.tsx",
       "decision": "migrated-finance-central-form-decimal-safe"
     },
     "form:finance-supplier-form-dialog.tsx": {
       "kind": "form",
       "file": "finance-supplier-form-dialog.tsx",
       "decision": "migrated-finance-central-form-decimal-safe"
+    },
+    "form:hr-attendance-roster-editor.tsx": {
+      "kind": "form",
+      "file": "hr-attendance-roster-editor.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "form:hr-attendance-schedules-panel.tsx": {
+      "kind": "form",
+      "file": "hr-attendance-schedules-panel.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "form:hr-attendance-workspace.tsx": {
+      "kind": "form",
+      "file": "hr-attendance-workspace.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
     },
     "form:hr-compensation-agreement-dialog.tsx": {
       "kind": "form",
@@ -226,6 +281,11 @@
       "kind": "form",
       "file": "hr-compensation-policies-dialog.tsx",
       "decision": "migrated-hr-central-form"
+    },
+    "form:hr-employee-attendance-pin-dialog.tsx": {
+      "kind": "form",
+      "file": "hr-employee-attendance-pin-dialog.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
     },
     "form:hr-employee-documents-panel.tsx": {
       "kind": "form",
@@ -241,6 +301,11 @@
       "kind": "form",
       "file": "hr-employee-onboarding-dialog.tsx",
       "decision": "migrated-hr-central-form-decimal-string"
+    },
+    "form:hr-employee-profile-dialog.tsx": {
+      "kind": "form",
+      "file": "hr-employee-profile-dialog.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
     },
     "form:hr-employee-promotions-panel.tsx": {
       "kind": "form",
@@ -272,15 +337,40 @@
       "file": "hr-salary-adjustment-dialog.tsx",
       "decision": "migrated-hr-central-form-decimal-string"
     },
-    "form:hr-services-workspace-content.tsx": {
+    "form:hr-services-workspace-runtime.tsx": {
       "kind": "form",
-      "file": "hr-services-workspace-content.tsx",
-      "decision": "migrated-hr-central-form-decimal-string-lazy-route"
+      "file": "hr-services-workspace-runtime.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
     },
     "form:hr-workspace-content.tsx": {
       "kind": "form",
       "file": "hr-workspace-content.tsx",
       "decision": "migrated-hr-central-form-decimal-string-lazy-route"
+    },
+    "form:inbound-evidence-workspace.tsx": {
+      "kind": "form",
+      "file": "inbound-evidence-workspace.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "form:marketing-campaign-details-dialog.tsx": {
+      "kind": "form",
+      "file": "marketing-campaign-details-dialog.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "form:marketing-campaign-mutation-dialog.tsx": {
+      "kind": "form",
+      "file": "marketing-campaign-mutation-dialog.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "form:marketing-reputation-reply-policy-editor.tsx": {
+      "kind": "form",
+      "file": "marketing-reputation-reply-policy-editor.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "form:marketing-workspace-content.tsx": {
+      "kind": "form",
+      "file": "marketing-workspace-content.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
     },
     "form:operations-asset-register-dialog.tsx": {
       "kind": "form",
@@ -307,6 +397,11 @@
       "file": "operations-catalog-price-form.tsx",
       "decision": "migrated-operations-catalog-price-command"
     },
+    "form:operations-catalog-workspace.tsx": {
+      "kind": "form",
+      "file": "operations-catalog-workspace.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
     "form:operations-custody-return-dialog.tsx": {
       "kind": "form",
       "file": "operations-custody-return-dialog.tsx",
@@ -327,24 +422,34 @@
       "file": "operations-unit-form-dialog.tsx",
       "decision": "migrated-operations-wave-1"
     },
+    "form:owner-daily-brief-workspace-runtime.tsx": {
+      "kind": "form",
+      "file": "owner-daily-brief-workspace-runtime.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
     "form:purchase-expense-credit-panel.tsx": {
       "kind": "form",
       "file": "purchase-expense-credit-panel.tsx",
       "decision": "migrated-finance-central-form-decimal-safe"
     },
-    "form:purchase-expense-workspace.tsx": {
+    "form:purchase-expense-workspace-runtime.tsx": {
       "kind": "form",
-      "file": "purchase-expense-workspace.tsx",
+      "file": "purchase-expense-workspace-runtime.tsx",
       "decision": "migrated-finance-central-form-decimal-safe"
+    },
+    "form:quick-advance-dialog.tsx": {
+      "kind": "form",
+      "file": "quick-advance-dialog.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
     },
     "form:recurring-expense-profile-dialog.tsx": {
       "kind": "form",
       "file": "recurring-expense-profile-dialog.tsx",
       "decision": "migrated-finance-central-form-decimal-safe"
     },
-    "form:recurring-expense-workspace.tsx": {
+    "form:recurring-expense-workspace-runtime.tsx": {
       "kind": "form",
-      "file": "recurring-expense-workspace.tsx",
+      "file": "recurring-expense-workspace-runtime.tsx",
       "decision": "migrated-finance-central-form-decimal-safe"
     },
     "form:treasury-vault-form-dialog.tsx": {
@@ -352,54 +457,114 @@
       "file": "treasury-vault-form-dialog.tsx",
       "decision": "migrated-finance-central-form-decimal-safe"
     },
-    "form:treasury-workspace.tsx": {
+    "form:treasury-workspace-runtime.tsx": {
       "kind": "form",
-      "file": "treasury-workspace.tsx",
+      "file": "treasury-workspace-runtime.tsx",
       "decision": "migrated-finance-central-form-decimal-safe"
     },
-    "query:administration-workspace.tsx": {
+    "query:accrual-profit-loss-workspace.tsx": {
       "kind": "query",
-      "file": "administration-workspace.tsx",
-      "decision": "migrated-administration-company-session-query"
+      "file": "accrual-profit-loss-workspace.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
     },
     "query:administration-ai-settings-panel.tsx": {
       "kind": "query",
       "file": "administration-ai-settings-panel.tsx",
       "decision": "basira-provider-configuration-company-session-query"
     },
+    "query:administration-workspace.tsx": {
+      "kind": "query",
+      "file": "administration-workspace.tsx",
+      "decision": "migrated-administration-company-session-query"
+    },
     "query:baseer-company-read-query.tsx": {
       "kind": "query",
       "file": "baseer-company-read-query.tsx",
       "decision": "central-adapter"
+    },
+    "query:basira-interpretation-center.tsx": {
+      "kind": "query",
+      "file": "basira-interpretation-center.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
     },
     "query:command-center-sales-calendar.tsx": {
       "kind": "query",
       "file": "command-center-sales-calendar.tsx",
       "decision": "migrated-command-center-company-session-period-query"
     },
-    "query:decision-intelligence-workspace-content.tsx": {
+    "query:decision-intelligence-workspace-runtime.tsx": {
       "kind": "query",
-      "file": "decision-intelligence-workspace-content.tsx",
-      "decision": "migrated-decision-section-scoped-company-session-query"
+      "file": "decision-intelligence-workspace-runtime.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
     },
     "query:hr-overview-workspace.tsx": {
       "kind": "query",
       "file": "hr-overview-workspace.tsx",
       "decision": "migrated-hr-central-query"
     },
-    "query:internal-vat-report-workspace.tsx": {
+    "query:internal-vat-report-workspace-runtime.tsx": {
       "kind": "query",
-      "file": "internal-vat-report-workspace.tsx",
+      "file": "internal-vat-report-workspace-runtime.tsx",
       "decision": "migrated-reports-snapshot-company-session-query"
     },
-    "query:ledger-trial-balance-workspace.tsx": {
+    "query:ledger-trial-balance-workspace-runtime.tsx": {
       "kind": "query",
-      "file": "ledger-trial-balance-workspace.tsx",
+      "file": "ledger-trial-balance-workspace-runtime.tsx",
       "decision": "migrated-reports-snapshot-company-session-query"
     },
-    "query:operations-reports-workspace.tsx": {
+    "query:marketing-calendar-workspace-runtime.tsx": {
       "kind": "query",
-      "file": "operations-reports-workspace.tsx",
+      "file": "marketing-calendar-workspace-runtime.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "query:marketing-campaign-details-dialog.tsx": {
+      "kind": "query",
+      "file": "marketing-campaign-details-dialog.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "query:marketing-campaigns-workspace.tsx": {
+      "kind": "query",
+      "file": "marketing-campaigns-workspace.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "query:marketing-overview-spend-runtime.tsx": {
+      "kind": "query",
+      "file": "marketing-overview-spend-runtime.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "query:marketing-overview-workspace.tsx": {
+      "kind": "query",
+      "file": "marketing-overview-workspace.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "query:marketing-policies-workspace.tsx": {
+      "kind": "query",
+      "file": "marketing-policies-workspace.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "query:marketing-reputation-workspace.tsx": {
+      "kind": "query",
+      "file": "marketing-reputation-workspace.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "query:marketing-workspace-content.tsx": {
+      "kind": "query",
+      "file": "marketing-workspace-content.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "query:operations-internal-registration-report.tsx": {
+      "kind": "query",
+      "file": "operations-internal-registration-report.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "query:operations-overview-workspace.tsx": {
+      "kind": "query",
+      "file": "operations-overview-workspace.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "query:operations-reports-workspace-runtime.tsx": {
+      "kind": "query",
+      "file": "operations-reports-workspace-runtime.tsx",
       "decision": "migrated-operations-report-read-boundary"
     },
     "query:report-documents-workspace.tsx": {
@@ -412,9 +577,9 @@
       "file": "reports-overview-workspace.tsx",
       "decision": "migrated-reports-company-session-query"
     },
-    "query:reports-workspace.tsx": {
+    "query:reports-workspace-runtime.tsx": {
       "kind": "query",
-      "file": "reports-workspace.tsx",
+      "file": "reports-workspace-runtime.tsx",
       "decision": "migrated-reports-snapshot-company-session-query"
     },
     "searchable-selector:baseer-combobox-field.tsx": {
@@ -427,15 +592,45 @@
       "file": "baseer-combobox.tsx",
       "decision": "central-adapter"
     },
+    "searchable-selector:baseer-period-filter.tsx": {
+      "kind": "searchable-selector",
+      "file": "baseer-period-filter.tsx",
+      "decision": "central-adapter"
+    },
     "searchable-selector:baseer-select.tsx": {
       "kind": "searchable-selector",
       "file": "baseer-select.tsx",
       "decision": "central-adapter"
     },
+    "searchable-selector:expenses-obligations-workspace-runtime.tsx": {
+      "kind": "searchable-selector",
+      "file": "expenses-obligations-workspace-runtime.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "searchable-selector:finance-category-form-dialog.tsx": {
+      "kind": "searchable-selector",
+      "file": "finance-category-form-dialog.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "searchable-selector:finance-supplier-form-dialog.tsx": {
+      "kind": "searchable-selector",
+      "file": "finance-supplier-form-dialog.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "searchable-selector:hr-attendance-workspace.tsx": {
+      "kind": "searchable-selector",
+      "file": "hr-attendance-workspace.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
     "searchable-selector:hr-compensation-agreement-dialog.tsx": {
       "kind": "searchable-selector",
       "file": "hr-compensation-agreement-dialog.tsx",
       "decision": "migrated-hr-lazy-central-combobox"
+    },
+    "searchable-selector:hr-employee-profile-dialog.tsx": {
+      "kind": "searchable-selector",
+      "file": "hr-employee-profile-dialog.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
     },
     "searchable-selector:hr-final-settlement-panel.tsx": {
       "kind": "searchable-selector",
@@ -467,20 +662,70 @@
       "file": "hr-salary-tools-workspace.tsx",
       "decision": "migrated-hr-scoped-remote-combobox"
     },
-    "searchable-selector:hr-services-workspace-content.tsx": {
+    "searchable-selector:hr-services-workspace-runtime.tsx": {
       "kind": "searchable-selector",
-      "file": "hr-services-workspace-content.tsx",
-      "decision": "migrated-hr-scoped-remote-combobox-lazy-route"
+      "file": "hr-services-workspace-runtime.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
     },
     "searchable-selector:hr-workspace-content.tsx": {
       "kind": "searchable-selector",
       "file": "hr-workspace-content.tsx",
       "decision": "migrated-hr-scoped-remote-combobox-lazy-route"
     },
+    "searchable-selector:inbound-evidence-workspace.tsx": {
+      "kind": "searchable-selector",
+      "file": "inbound-evidence-workspace.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "searchable-selector:marketing-campaign-details-dialog.tsx": {
+      "kind": "searchable-selector",
+      "file": "marketing-campaign-details-dialog.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "searchable-selector:marketing-campaign-mutation-dialog.tsx": {
+      "kind": "searchable-selector",
+      "file": "marketing-campaign-mutation-dialog.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "searchable-selector:marketing-reputation-reply-policy-editor.tsx": {
+      "kind": "searchable-selector",
+      "file": "marketing-reputation-reply-policy-editor.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "searchable-selector:marketing-workspace-content.tsx": {
+      "kind": "searchable-selector",
+      "file": "marketing-workspace-content.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
     "searchable-selector:operations-catalog-conversion-form.tsx": {
       "kind": "searchable-selector",
       "file": "operations-catalog-conversion-form.tsx",
       "decision": "migrated-operations-inventory-conversion-command"
+    },
+    "searchable-selector:operations-catalog-item-create-dialog.tsx": {
+      "kind": "searchable-selector",
+      "file": "operations-catalog-item-create-dialog.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "searchable-selector:operations-catalog-item-details-form.tsx": {
+      "kind": "searchable-selector",
+      "file": "operations-catalog-item-details-form.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "searchable-selector:operations-custody-return-dialog.tsx": {
+      "kind": "searchable-selector",
+      "file": "operations-custody-return-dialog.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "searchable-selector:operations-internal-registration-entry.tsx": {
+      "kind": "searchable-selector",
+      "file": "operations-internal-registration-entry.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "searchable-selector:operations-purchase-completion-dialog.tsx": {
+      "kind": "searchable-selector",
+      "file": "operations-purchase-completion-dialog.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
     },
     "searchable-selector:operations-recipe-editor.tsx": {
       "kind": "searchable-selector",
@@ -491,6 +736,31 @@
       "kind": "searchable-selector",
       "file": "outflow-batch-entry-table.tsx",
       "decision": "migrated-finance-scoped-central-combobox"
+    },
+    "searchable-selector:purchase-expense-workspace-runtime.tsx": {
+      "kind": "searchable-selector",
+      "file": "purchase-expense-workspace-runtime.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "searchable-selector:quick-advance-dialog.tsx": {
+      "kind": "searchable-selector",
+      "file": "quick-advance-dialog.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "searchable-selector:recurring-expense-profile-dialog.tsx": {
+      "kind": "searchable-selector",
+      "file": "recurring-expense-profile-dialog.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "searchable-selector:treasury-workspace-runtime.tsx": {
+      "kind": "searchable-selector",
+      "file": "treasury-workspace-runtime.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "table:accrual-profit-loss-workspace.tsx": {
+      "kind": "table",
+      "file": "accrual-profit-loss-workspace.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
     },
     "table:administration-users-panel.tsx": {
       "kind": "table",
@@ -517,15 +787,20 @@
       "file": "data-table.tsx",
       "decision": "central-intentional-lightweight-bounded-table"
     },
-    "table:finance-accounts-workspace.tsx": {
+    "table:finance-accounts-workspace-runtime.tsx": {
       "kind": "table",
-      "file": "finance-accounts-workspace.tsx",
+      "file": "finance-accounts-workspace-runtime.tsx",
       "decision": "migrated-finance-central-data-grid"
     },
-    "table:finance-setup-workspace.tsx": {
+    "table:finance-setup-workspace-runtime.tsx": {
       "kind": "table",
-      "file": "finance-setup-workspace.tsx",
+      "file": "finance-setup-workspace-runtime.tsx",
       "decision": "migrated-finance-central-data-grid"
+    },
+    "table:hr-attendance-employee-report.tsx": {
+      "kind": "table",
+      "file": "hr-attendance-employee-report.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
     },
     "table:hr-compensation-policies-dialog.tsx": {
       "kind": "table",
@@ -577,24 +852,29 @@
       "file": "hr-services-workspace-content.tsx",
       "decision": "migrated-hr-central-data-grid-lazy-route"
     },
+    "table:hr-services-workspace-runtime.tsx": {
+      "kind": "table",
+      "file": "hr-services-workspace-runtime.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
     "table:hr-workspace-content.tsx": {
       "kind": "table",
       "file": "hr-workspace-content.tsx",
       "decision": "migrated-hr-central-data-grid-lazy-route"
     },
-    "table:internal-vat-report-workspace.tsx": {
+    "table:internal-vat-report-workspace-runtime.tsx": {
       "kind": "table",
-      "file": "internal-vat-report-workspace.tsx",
+      "file": "internal-vat-report-workspace-runtime.tsx",
       "decision": "intentional-bounded-report-snapshot-detail"
     },
-    "table:invoice-register-workspace.tsx": {
+    "table:invoice-register-workspace-runtime.tsx": {
       "kind": "table",
-      "file": "invoice-register-workspace.tsx",
+      "file": "invoice-register-workspace-runtime.tsx",
       "decision": "migrated-finance-central-data-grid"
     },
-    "table:ledger-trial-balance-workspace.tsx": {
+    "table:ledger-trial-balance-workspace-runtime.tsx": {
       "kind": "table",
-      "file": "ledger-trial-balance-workspace.tsx",
+      "file": "ledger-trial-balance-workspace-runtime.tsx",
       "decision": "intentional-bounded-report-snapshot-detail"
     },
     "table:operations-catalog-workspace.tsx": {
@@ -602,19 +882,19 @@
       "file": "operations-catalog-workspace.tsx",
       "decision": "migrated-item-tabs-server-grid-retained-bounded-unit-reference"
     },
-    "table:operations-execution-workspace.tsx": {
+    "table:operations-execution-workspace-runtime.tsx": {
       "kind": "table",
-      "file": "operations-execution-workspace.tsx",
+      "file": "operations-execution-workspace-runtime.tsx",
       "decision": "migrated-operations-bounded-execution-grid"
     },
-    "table:operations-internal-registration-workspace.tsx": {
+    "table:operations-internal-registration-report.tsx": {
       "kind": "table",
-      "file": "operations-internal-registration-workspace.tsx",
-      "decision": "retained-lightweight-table-bounded-report"
+      "file": "operations-internal-registration-report.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
     },
-    "table:operations-reports-workspace.tsx": {
+    "table:operations-reports-workspace-runtime.tsx": {
       "kind": "table",
-      "file": "operations-reports-workspace.tsx",
+      "file": "operations-reports-workspace-runtime.tsx",
       "decision": "migrated-materials-server-grid-retained-bounded-custody-months"
     },
     "table:outflow-batch-entry-table.tsx": {
@@ -627,19 +907,24 @@
       "file": "purchase-expense-credit-panel.tsx",
       "decision": "migrated-finance-central-data-grid"
     },
-    "table:recurring-expense-workspace.tsx": {
+    "table:purchase-expense-workspace-content.tsx": {
       "kind": "table",
-      "file": "recurring-expense-workspace.tsx",
+      "file": "purchase-expense-workspace-content.tsx",
+      "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "table:recurring-expense-workspace-runtime.tsx": {
+      "kind": "table",
+      "file": "recurring-expense-workspace-runtime.tsx",
       "decision": "migrated-finance-central-data-grid"
     },
-    "table:reports-workspace.tsx": {
+    "table:reports-workspace-runtime.tsx": {
       "kind": "table",
-      "file": "reports-workspace.tsx",
+      "file": "reports-workspace-runtime.tsx",
       "decision": "intentional-bounded-report-snapshot-detail"
     },
-    "table:treasury-workspace.tsx": {
+    "table:treasury-workspace-runtime.tsx": {
       "kind": "table",
-      "file": "treasury-workspace.tsx",
+      "file": "treasury-workspace-runtime.tsx",
       "decision": "migrated-finance-central-data-grid"
     }
   }

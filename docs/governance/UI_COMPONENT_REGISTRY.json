@@ -618,7 +618,7 @@
       "lifecycle": "active",
       "owner": "UI Platform",
       "source": "apps/web/src/baseer-chart.tsx",
-      "publicApi": "lazy chart presentation over complete server series",
+      "publicApi": "the only ECharts lifecycle adapter plus server-owned chart presentation",
       "states": [
         "loading",
         "summary",
@@ -632,7 +632,7 @@
       "consumers": [
         "apps/web/src/hr-overview-workspace.tsx"
       ],
-      "notes": "Charts do not aggregate or infer business metrics."
+      "notes": "Owns ECharts registration, canvas resize and disposal; feature charts provide only server-owned series and presentation options, never direct ECharts imports or business aggregation."
     },
     {
       "id": "baseer-select-facade",

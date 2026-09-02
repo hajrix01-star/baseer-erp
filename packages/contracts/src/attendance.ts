@@ -189,6 +189,15 @@ export const attendanceEmployeeScheduleListReceiptSchema = z.object({
     context.addIssue({ code: z.ZodIssueCode.custom, message: "A continuation cursor is required exactly when another schedule page exists.", path: ["nextCursor"] });
   }
 });
+/** One bounded manager-workspace receipt prevents the schedules tab from
+ * opening four independent HTTP requests for the same company/date. */
+export const attendanceScheduleWorkspaceQuerySchema = z.object({ date: businessDate.optional() }).strict();
+export const attendanceScheduleWorkspaceReceiptSchema = z.object({
+  templates: z.array(attendanceScheduleTemplateSchema),
+  coverage: attendanceCoverageReceiptSchema,
+  roster: attendanceRosterReceiptSchema,
+  employeeSchedules: attendanceEmployeeScheduleListReceiptSchema,
+}).strict();
 export const attendanceEffectiveEmployeeScheduleSchema = z.object({
   employeeId: uuid, businessDate, source: z.enum(["ROSTER", "EXCEPTION", "WEEKLY_ADJUSTMENT", "TEMPLATE", "NONE"]), kind: z.enum(["FULL_REST", "CUSTOM_PERIODS"]).nullable(), templateId: uuid.nullable(), templateVersionId: uuid.nullable(),
   periods: z.array(z.object({ startTime: scheduleTime, endTime: scheduleTime, endsNextDay: z.boolean(), minutes: z.number().int().positive() }).strict()),
@@ -214,6 +223,7 @@ export type ApproveAttendanceRosterRequest = z.infer<typeof approveAttendanceRos
 export type AttendanceDailyEvaluation = z.infer<typeof attendanceDailyEvaluationSchema>;
 export type AttendanceAlertsReceipt = z.infer<typeof attendanceAlertsReceiptSchema>;
 export type AttendanceEmployeeScheduleListQuery = z.infer<typeof attendanceEmployeeScheduleListQuerySchema>;
+export type AttendanceScheduleWorkspaceReceipt = z.infer<typeof attendanceScheduleWorkspaceReceiptSchema>;
 export type CreateAttendanceScheduleTemplateRequest = z.infer<typeof createAttendanceScheduleTemplateRequestSchema>;
 export type UpdateAttendanceScheduleTemplateRequest = z.infer<typeof updateAttendanceScheduleTemplateRequestSchema>;
 export type CreateAttendanceScheduleVersionRequest = z.infer<typeof createAttendanceScheduleVersionRequestSchema>;

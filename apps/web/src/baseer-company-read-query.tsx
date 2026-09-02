@@ -21,15 +21,41 @@ type BaseerCompanyReadQueryProps<T> = {
   children: (state: QueryState<T>) => ReactNode;
 };
 
-const queryDefaults = { queries: { retry: false, staleTime: 30_000, gcTime: 0 } } as const;
+// Reads are shared by the authenticated shell.  Navigation, a focus change,
+// or a short network interruption must not fan the same screen out into many
+// requests; an explicit Refresh remains available to each workspace.
+const queryDefaults = {
+  queries: {
+    retry: false,
+    staleTime: 30_000,
+    gcTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  },
+} as const;
+
+const sessionClients = new Map<string, QueryClient>();
+
+function sessionQueryClient(session: ActiveSession) {
+  const sessionKey = `${session.companyId}:${session.sessionExpiresAt}:${session.accessToken}`;
+  const existing = sessionClients.get(sessionKey);
+  if (existing) return { client: existing, sessionKey };
+
+  // The authenticated app holds one active company/session at a time. Drop
+  // the prior client on company change or token rotation instead of retaining
+  // stale data in a module cache.
+  sessionClients.clear();
+  const client = new QueryClient({ defaultOptions: queryDefaults });
+  sessionClients.set(sessionKey, client);
+  return { client, sessionKey };
+}
 
 /**
- * The app-shell cache boundary. Its identity changes on company, session or
- * token rotation, discarding every prior query and cancelling its observers.
+ * Optional shell bridge for a future authenticated shell. Its client is the
+ * same session-scoped cache used by each route observer.
  */
 export function BaseerSessionQueryProvider({ session, children }: { session: ActiveSession; children: ReactNode }) {
-  const sessionKey = `${session.companyId}:${session.sessionExpiresAt}:${session.accessToken}`;
-  const client = useMemo(() => new QueryClient({ defaultOptions: queryDefaults }), [sessionKey]);
+  const { client, sessionKey } = useMemo(() => sessionQueryClient(session), [session.companyId, session.sessionExpiresAt, session.accessToken]);
   return <QueryClientProvider key={sessionKey} client={client}>{children}</QueryClientProvider>;
 }
 
@@ -49,9 +75,8 @@ function CompanyQuery<T>({ session, resource, scope, mode, refreshIntervalMs, lo
   return <>{children({ data: query.data, loading: query.isPending, error: query.error, reload, refetch: async () => { await reload(); } })}</>;
 }
 
-/** A lazy company/session-scoped read cache for a single read surface. */
+/** A company/session-scoped read observer backed by the authenticated shell cache. */
 export function BaseerCompanyReadQuery<T>(props: BaseerCompanyReadQueryProps<T>) {
-  const sessionKey = `${props.session.companyId}:${props.session.sessionExpiresAt}:${props.session.accessToken}:${props.scope?.join(":") ?? ""}`;
-  const client = useMemo(() => new QueryClient({ defaultOptions: queryDefaults }), [sessionKey]);
+  const { client, sessionKey } = useMemo(() => sessionQueryClient(props.session), [props.session.companyId, props.session.sessionExpiresAt, props.session.accessToken]);
   return <QueryClientProvider key={sessionKey} client={client}><CompanyQuery {...props} /></QueryClientProvider>;
 }

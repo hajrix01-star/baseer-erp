@@ -12,6 +12,37 @@ import { formatCompactNumber, formatCount, formatDate, formatMoney, formatMonthY
 use([BarChart, LineChart, GridComponent, TooltipComponent, CanvasRenderer]);
 
 type Language = "ar" | "en";
+
+/**
+ * The sole lifecycle boundary for ECharts canvases in the web application.
+ * Feature charts supply server-owned series and presentation options, while
+ * this primitive owns registration, resize handling and disposal.
+ */
+export type BaseerEChartsCanvasRenderer = (chart: ReturnType<typeof init>, element: HTMLDivElement) => void;
+
+export function useBaseerEChartsCanvas(render: BaseerEChartsCanvasRenderer) {
+  const element = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const container = element.current;
+    if (!container) return;
+
+    const chart = init(container, undefined, { renderer: "canvas" });
+    const renderChart = () => {
+      chart.resize();
+      render(chart, container);
+    };
+    renderChart();
+    const observer = new ResizeObserver(renderChart);
+    observer.observe(container);
+    return () => {
+      observer.disconnect();
+      chart.dispose();
+    };
+  }, [render]);
+
+  return element;
+}
 export type BaseerOperationalChartPoint = { id?: string; label: string; value: number; displayValue?: string; rank?: number; shareOfTotalPercent?: string };
 export type BaseerMarketingTimelineAmount = Readonly<{ amount: string | null; chartValue: number | null; display: string | null }>;
 export type BaseerMarketingTimelineCampaignAmount = BaseerMarketingTimelineAmount & Readonly<{ campaignId: string; documentCount: number; barHeightPercent: number }>;

@@ -27,17 +27,8 @@ foreach ($required in @('BASEER_DB_NAME', 'BASEER_DB_APP_USER')) {
   }
 }
 
-$grantSql = @'
-GRANT USAGE ON SCHEMA public TO :"baseer_app_user";
-GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO :"baseer_app_user";
-REVOKE UPDATE, DELETE ON TABLE "AuditEvent" FROM :"baseer_app_user";
-GRANT USAGE, SELECT, UPDATE ON ALL SEQUENCES IN SCHEMA public TO :"baseer_app_user";
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO :"baseer_app_user";
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, SELECT, UPDATE ON SEQUENCES TO :"baseer_app_user";
-'@
-
-$composeArguments = @('--env-file', $EnvironmentFile, '-f', $ComposeFile, 'exec', '-T', 'postgres', 'psql', '--set=ON_ERROR_STOP=1', "--set=baseer_app_user=$($settings['BASEER_DB_APP_USER'])", '--username', 'postgres', '--dbname', $settings['BASEER_DB_NAME'])
-$grantSql | & docker compose @composeArguments
+$composeArguments = @('--env-file', $EnvironmentFile, '-f', $ComposeFile, 'exec', '-T', 'postgres', 'psql', '--set=ON_ERROR_STOP=1', '--username', 'postgres', '--dbname', $settings['BASEER_DB_NAME'], '--file', '/docker-entrypoint-initdb.d/20-reconcile-baseer-app-access.sql')
+& docker compose @composeArguments
 if ($LASTEXITCODE -ne 0) {
   throw 'Database application-role grants failed.'
 }

@@ -27,37 +27,37 @@ Only the reverse proxy exposes HTTPS. PostgreSQL has no host port and remains on
    docker compose --env-file ops/private-online/.env.private-online -f docker-compose.private-online.yml build api migrate
    ```
 
-5. Run database migrations with the separate bootstrap service, then grant only the required schema/table/sequence privileges to `BASEER_DB_APP_USER`:
+5. Start the release stack through the dedicated post-migration reconciler.
+   Compose waits for `migrate` to succeed, then reapplies only the restricted
+   runtime grants to `BASEER_DB_APP_USER`, including the explicit
+   `AuditEvent` append-only revocation that cannot be completed before the
+   first migration creates that table:
 
    ```powershell
-   docker compose --env-file ops/private-online/.env.private-online -f docker-compose.private-online.yml run --rm migrate
-   .\scripts\Grant-BaseerPrivateAppAccess.ps1
+   docker compose --env-file ops/private-online/.env.private-online -f docker-compose.private-online.yml up -d
    ```
 
    The API must run only with `BASEER_DB_APP_USER`, never `postgres`. The
    `migrate` job has the bootstrap database credential, no public listener,
-   and exits after `prisma migrate deploy`; it must not be kept running.
+   and exits after `prisma migrate deploy`; it must not be kept running. The
+   `grant-app-access` job is also internal and one-shot; a non-zero exit from
+   either job blocks API startup through the Compose dependency graph. The PowerShell grant script remains the
+   supported explicit reconciliation command for an already-migrated existing
+   database.
 
    The public `api` image intentionally excludes the Prisma CLI,
    `@prisma/config`, and `deepmerge-ts`. This boundary is checked while the
    image builds, so a future dependency change cannot silently put migration
    tooling back into the API container.
 
-6. The release order is mandatory: backup/restore gate → successful `migrate`
-   job → migration status plus restricted-application-role/RLS verification →
-   API rollout. A failed migration or verification stops the rollout; the
-   compose profile deliberately does not start the API after migrations by
-   itself. The migration job is read-only except for its temporary filesystem,
+6. The release order is technically enforced: backup/restore gate → successful
+   `migrate` job → successful restricted-role reconciler → API rollout. A
+   failed migration or reconciliation stops API startup. The migration job is
+   read-only except for its temporary filesystem,
    has no public port, uses `no-new-privileges`, and has access only to the
    database network.
 
-7. Start the private stack only after the preceding review:
-
-   ```powershell
-   docker compose --env-file ops/private-online/.env.private-online -f docker-compose.private-online.yml up -d
-   ```
-
-8. Create users only through the approved administrator process. Do not enable public sign-up.
+7. Create users only through the approved administrator process. Do not enable public sign-up.
 
 ## Gate C evidence required before real financial data
 

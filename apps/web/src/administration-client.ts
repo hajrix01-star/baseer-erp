@@ -1,4 +1,4 @@
-import { api, requestId, type ActiveSession } from "./daily-sales-client";
+import { api, baseerApiBaseUrl, requestId, type ActiveSession } from "./daily-sales-client";
 import type { AdministrationOverview } from "./administration-types";
 
 const jsonHeaders = () => ({ "Content-Type": "application/json", "X-Request-Id": requestId() });
@@ -10,7 +10,7 @@ export async function uploadAdministrationCompanyLogo(session: ActiveSession, co
   return api(session, `/administration/companies/${companyId}/logo`, { method: "POST", headers: jsonHeaders(), body: JSON.stringify({ fileName: file.name, contentBase64 }) });
 }
 export async function loadAdministrationCompanyLogo(session: ActiveSession, companyId: string): Promise<string | null> {
-  const response = await fetch(`/v1/administration/companies/${companyId}/logo`, { headers: { Authorization: `Bearer ${session.accessToken}` } });
+  const response = await fetch(`${baseerApiBaseUrl}/administration/companies/${companyId}/logo`, { cache: "no-store", headers: { Accept: "image/*", Authorization: `Bearer ${session.accessToken}`, "X-Baseer-Company-Id": session.companyId } });
   if (response.status === 404) return null;
   if (!response.ok) throw new Error("Could not load company logo.");
   return URL.createObjectURL(await response.blob());

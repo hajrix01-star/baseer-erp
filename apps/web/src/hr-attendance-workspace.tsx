@@ -8,7 +8,7 @@ import { BaseerMoneyInput, BaseerRadio, BaseerTextArea, BaseerTextInput, BaseerT
 import { BaseerNotice, BaseerSectionHeader, BaseerWorkspace } from "./baseer-workspace";
 import { activeSession, requestId } from "./daily-sales-client";
 import { createHrEmployeeAdministrativeDeduction } from "./hr-client";
-import { approveAttendanceRoster, archiveAttendanceScheduleTemplate, assignAttendanceEmployeesSchedule, closeAttendanceSession, createAttendanceBranch, createAttendanceScheduleException, createAttendanceScheduleTemplate, createAttendanceScheduleVersion, decideAttendanceScheduleException, getAttendanceAlerts, getAttendanceCompanySettings, getAttendanceCoverage, getAttendanceDashboard, getAttendanceEmployeePortalScope, getAttendanceReport, getAttendanceRoster, issueAttendanceQr, listAttendanceBranches, listAttendanceEmployeeSchedules, listAttendanceOpenSessionsForClose, listAttendanceScheduleTemplates, saveAttendanceRosterDraft, updateAttendanceCompanySettings, updateAttendanceScheduleTemplate, type AttendanceAlerts, type AttendanceBranch, type AttendanceCompanySettings, type AttendanceCoverage, type AttendanceDashboardV2, type AttendanceEmployeeSchedule, type AttendanceOpenSession, type AttendanceReportV2, type AttendanceRoster, type AttendanceScheduleTemplateReceipt } from "./attendance-client";
+import { approveAttendanceRoster, archiveAttendanceScheduleTemplate, assignAttendanceEmployeesSchedule, closeAttendanceSession, createAttendanceBranch, createAttendanceScheduleException, createAttendanceScheduleTemplate, createAttendanceScheduleVersion, decideAttendanceScheduleException, getAttendanceAlerts, getAttendanceCompanySettings, getAttendanceDashboard, getAttendanceEmployeePortalScope, getAttendanceReport, getAttendanceScheduleWorkspace, issueAttendanceQr, listAttendanceBranches, listAttendanceEmployeeSchedules, listAttendanceOpenSessionsForClose, saveAttendanceRosterDraft, updateAttendanceCompanySettings, updateAttendanceScheduleTemplate, type AttendanceAlerts, type AttendanceBranch, type AttendanceCompanySettings, type AttendanceCoverage, type AttendanceDashboardV2, type AttendanceEmployeeSchedule, type AttendanceOpenSession, type AttendanceReportV2, type AttendanceRoster, type AttendanceScheduleTemplateReceipt } from "./attendance-client";
 import { BaseerApiError, presentBaseerApiError, presentBaseerLoadError } from "./baseer-api-error";
 import { formatNumberFixed, formatTime, riyadhBusinessDate } from "./number-format";
 import type { AttendanceScheduleDraft, AttendanceScheduleTemplate } from "./hr-attendance-schedules-panel";
@@ -129,6 +129,8 @@ export function HrAttendanceWorkspace({ language }: { language: Language }) {
   const [openSessionsLoadingMore, setOpenSessionsLoadingMore] = useState(false);
   const loadRequest = useRef(0);
   const loadAbort = useRef<AbortController | null>(null);
+  const employeeSchedulesLoadMoreAbort = useRef<AbortController | null>(null);
+  const openSessionsLoadMoreAbort = useRef<AbortController | null>(null);
   const employeePortalUrl = employeePortalScope ? `${window.location.origin}${window.location.pathname}#attendance?tenant=${employeePortalScope.tenantId}&company=${employeePortalScope.companyId}` : null;
 
   useEffect(() => {
@@ -152,15 +154,15 @@ export function HrAttendanceWorkspace({ language }: { language: Language }) {
         return;
       }
       if (activeTab === "manager") {
-        const receipt = await listAttendanceOpenSessionsForClose(current);
+        const receipt = await listAttendanceOpenSessionsForClose(current, readOptions);
         if (request !== loadRequest.current) return;
         setOpenSessionsForClose(receipt.sessions); setOpenSessionsCursor(receipt.hasMore ? receipt.nextCursor : null);
         return;
       }
       if (activeTab === "schedules") {
-        const [scheduleReceipt, coverageReceipt, rosterReceipt, schedulesReceipt] = await Promise.all([listAttendanceScheduleTemplates(current, readOptions), getAttendanceCoverage(current, selectedDate, readOptions), getAttendanceRoster(current, selectedDate, readOptions), listAttendanceEmployeeSchedules(current, readOptions)]);
+        const scheduleWorkspace = await getAttendanceScheduleWorkspace(current, selectedDate, readOptions);
         if (request !== loadRequest.current) return;
-        setScheduleTemplates(scheduleReceipt.templates); setCoverage(coverageReceipt); setRoster(rosterReceipt); setEmployeeSchedules(Object.fromEntries(schedulesReceipt.schedules.map((schedule) => [schedule.employeeId, schedule]))); setEmployeeSchedulesNextCursor(schedulesReceipt.hasMore ? schedulesReceipt.nextCursor : null);
+        setScheduleTemplates(scheduleWorkspace.templates); setCoverage(scheduleWorkspace.coverage); setRoster(scheduleWorkspace.roster); setEmployeeSchedules(Object.fromEntries(scheduleWorkspace.employeeSchedules.schedules.map((schedule) => [schedule.employeeId, schedule]))); setEmployeeSchedulesNextCursor(scheduleWorkspace.employeeSchedules.hasMore ? scheduleWorkspace.employeeSchedules.nextCursor : null);
         return;
       }
       if (activeTab === "reports") {
@@ -174,27 +176,34 @@ export function HrAttendanceWorkspace({ language }: { language: Language }) {
       setBranches(branchReceipt.branches); setCompanySettings(settingsReceipt);
     } catch (error) { if (!controller.signal.aborted && request === loadRequest.current) { if (activeTab === "today" && error instanceof BaseerApiError && error.status === 403) { setActiveTab("manager"); setMessage({ tone: "info", text: ar ? "لديك صلاحية إغلاق الجلسات المفتوحة فقط. استخدم القائمة المحدودة أدناه." : "You have access to close open sessions only. Use the limited list below." }); } else setMessage({ tone: "danger", text: presentBaseerLoadError(error, language, { ar: "بيانات الحضور", en: "attendance data" }) }); } }
   }, [activeTab, selectedDate]);
-  useEffect(() => { void load(); return () => loadAbort.current?.abort(); }, [load]);
+  useEffect(() => { void load(); return () => { loadAbort.current?.abort(); employeeSchedulesLoadMoreAbort.current?.abort(); openSessionsLoadMoreAbort.current?.abort(); }; }, [load]);
 
   const loadMoreEmployeeSchedules = async () => {
     const current = activeSession();
     const cursor = employeeSchedulesNextCursor;
     if (!current || !cursor || employeeSchedulesLoadingMore) return;
     setEmployeeSchedulesLoadingMore(true);
+    employeeSchedulesLoadMoreAbort.current?.abort();
+    const controller = new AbortController();
+    employeeSchedulesLoadMoreAbort.current = controller;
     try {
-      const receipt = await listAttendanceEmployeeSchedules(current, { cursor, pageSize: 500 });
+      const receipt = await listAttendanceEmployeeSchedules(current, { cursor, pageSize: 500, signal: controller.signal });
+      if (controller.signal.aborted) return;
       setEmployeeSchedules((previous) => ({ ...previous, ...Object.fromEntries(receipt.schedules.map((schedule) => [schedule.employeeId, schedule])) }));
       setEmployeeSchedulesNextCursor(receipt.hasMore ? receipt.nextCursor : null);
     } catch (error) {
-      setMessage({ tone: "danger", text: presentBaseerLoadError(error, language, { ar: "جداول الموظفين", en: "employee schedules" }) });
+      if (!controller.signal.aborted) setMessage({ tone: "danger", text: presentBaseerLoadError(error, language, { ar: "جداول الموظفين", en: "employee schedules" }) });
     } finally { setEmployeeSchedulesLoadingMore(false); }
   };
   const loadMoreOpenSessionsForClose = async () => {
     const current = activeSession(); const cursor = openSessionsCursor;
     if (!current || !cursor || openSessionsLoadingMore) return;
     setOpenSessionsLoadingMore(true);
-    try { const receipt = await listAttendanceOpenSessionsForClose(current, { cursor }); setOpenSessionsForClose((previous) => [...previous, ...receipt.sessions]); setOpenSessionsCursor(receipt.hasMore ? receipt.nextCursor : null); }
-    catch (error) { setMessage({ tone: "danger", text: presentBaseerLoadError(error, language, { ar: "الجلسات المفتوحة", en: "open sessions" }) }); }
+    openSessionsLoadMoreAbort.current?.abort();
+    const controller = new AbortController();
+    openSessionsLoadMoreAbort.current = controller;
+    try { const receipt = await listAttendanceOpenSessionsForClose(current, { cursor, signal: controller.signal }); if (controller.signal.aborted) return; setOpenSessionsForClose((previous) => [...previous, ...receipt.sessions]); setOpenSessionsCursor(receipt.hasMore ? receipt.nextCursor : null); }
+    catch (error) { if (!controller.signal.aborted) setMessage({ tone: "danger", text: presentBaseerLoadError(error, language, { ar: "الجلسات المفتوحة", en: "open sessions" }) }); }
     finally { setOpenSessionsLoadingMore(false); }
   };
 

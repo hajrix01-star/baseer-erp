@@ -1,33 +1,9 @@
-import { BarChart, LineChart } from "echarts/charts";
-import { GridComponent, LegendComponent, TooltipComponent } from "echarts/components";
-import { init, use } from "echarts/core";
-import { CanvasRenderer } from "echarts/renderers";
-import { useEffect, useRef } from "react";
-import { chartAlpha, useBaseerChartPalette } from "./baseer-chart-theme";
+import { useMemo } from "react";
+
+import { useBaseerChartPalette } from "./baseer-chart-theme";
 import { formatPercent } from "./number-format";
 
-use([BarChart, LineChart, GridComponent, LegendComponent, TooltipComponent, CanvasRenderer]);
-
 type Language = "ar" | "en";
-
-function shareDisplay(value: string | null, language: Language) {
-  return formatPercent(value, language);
-}
-
-function designFontSize(styles: CSSStyleDeclaration, token: "--font-caption" | "--font-label", fallback: number) {
-  const value = styles.getPropertyValue(token).trim();
-  const numeric = Number.parseFloat(value);
-  if (!Number.isFinite(numeric)) return fallback;
-  if (value.endsWith("rem")) return numeric * (Number.parseFloat(styles.fontSize) || 16);
-  return numeric;
-}
-
-function compactAmount(value: number, language: Language) {
-  const ar = language === "ar";
-  if (Math.abs(value) >= 1_000_000) return `${Math.round(value / 1_000_000)} ${ar ? "م" : "M"}`;
-  if (Math.abs(value) >= 1_000) return `${Math.round(value / 1_000)} ${ar ? "ألف" : "k"}`;
-  return String(Math.round(value));
-}
 
 export type MonthlyApplicationSalesSharePoint = {
   label: string;
@@ -43,148 +19,57 @@ export type MonthlyApplicationSalesSharePoint = {
   otherOfficialSalesDisplay: string | null;
 };
 
-export function MonthlyApplicationSalesShareChart({ language, title, points }: { language: Language; title: string; points: readonly MonthlyApplicationSalesSharePoint[] }) {
-  const element = useRef<HTMLDivElement | null>(null);
+const width = 960;
+const height = 360;
+const edge = { top: 34, right: 52, bottom: 52, left: 52 };
+
+function compactAmount(value: number, language: Language) {
   const ar = language === "ar";
-  const chartPalette = useBaseerChartPalette();
+  if (Math.abs(value) >= 1_000_000) return `${Math.round(value / 1_000_000)} ${ar ? "م" : "M"}`;
+  if (Math.abs(value) >= 1_000) return `${Math.round(value / 1_000)} ${ar ? "ألف" : "k"}`;
+  return String(Math.round(value));
+}
 
-  useEffect(() => {
-    if (!element.current) return;
-    const chart = init(element.current, undefined, { renderer: "canvas" });
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const rootStyles = getComputedStyle(document.documentElement);
-    const brand = chartPalette.primary;
-    const otherSalesBar = chartAlpha(brand, .22);
-    const shareLine = chartPalette.secondary === brand ? chartPalette.info : chartPalette.secondary;
-    const captionFontSize = designFontSize(rootStyles, "--font-caption", 13);
-    const labelFontSize = designFontSize(rootStyles, "--font-label", 14);
-    const applicationLabel = ar ? "مبيعات التطبيقات" : "Application sales";
-    const otherSalesLabel = ar ? "بقية المبيعات الرسمية" : "Other official sales";
-    const totalsLabel = ar ? "إجمالي المبيعات الرسمية" : "Total official sales";
-    const shareLabel = ar ? "نسبة التطبيقات" : "Application share";
-    const description = ar
-      ? `${title}. ${points.map((point) => `${point.label}: ${totalsLabel} ${point.totalSalesDisplay ?? "بيانات غير مكتملة"}، ${applicationLabel} ${point.applicationSalesDisplay ?? "—"}، ${otherSalesLabel} ${point.otherOfficialSalesDisplay ?? "—"}، ${shareLabel} ${shareDisplay(point.shareDisplay, language)}`).join("؛ ")}`
-      : `${title}. ${points.map((point) => `${point.label}: ${totalsLabel} ${point.totalSalesDisplay ?? "Incomplete data"}, ${applicationLabel} ${point.applicationSalesDisplay ?? "—"}, ${otherSalesLabel} ${point.otherOfficialSalesDisplay ?? "—"}, ${shareLabel} ${shareDisplay(point.shareDisplay, language)}`).join("; ")}`;
-    const renderForAvailableSpace = () => {
-      const compact = element.current!.clientWidth < 580;
-      const axisFontSize = compact ? Math.min(captionFontSize, 10) : captionFontSize;
-      const yAxisName = compact ? "" : ar ? "ر.س" : "SAR";
-      chart.setOption({
-      animation: !reducedMotion,
-      animationDuration: 820,
-      animationDurationUpdate: 420,
-      animationEasing: "cubicOut",
-      animationEasingUpdate: "cubicInOut",
-      aria: { enabled: true, description },
-      color: [brand, otherSalesBar, shareLine],
-      legend: {
-        top: 3,
-        left: compact ? 2 : 4,
-        right: compact ? 2 : 4,
-        selectedMode: false,
-        itemWidth: compact ? 8 : 10,
-        itemHeight: compact ? 8 : 10,
-        itemGap: compact ? 6 : 12,
-        textStyle: { color: chartPalette.axis, fontFamily: "inherit", fontSize: compact ? Math.min(captionFontSize, 11) : captionFontSize, fontWeight: 700 },
-      },
-      tooltip: {
-        trigger: "axis", confine: true, backgroundColor: chartPalette.tooltipSurface, borderColor: chartPalette.tooltipBorder, borderWidth: 1, padding: [10, 12], textStyle: { color: chartPalette.primaryDeep, fontFamily: "inherit" },
-        axisPointer: { type: "shadow", shadowStyle: { color: chartAlpha(brand, .08) } },
-        formatter: (items: unknown) => {
-          const item = Array.isArray(items) ? items[0] : undefined;
-          const index = item && typeof item === "object" && "dataIndex" in item ? Number(item.dataIndex) : -1;
-          const point = points[index];
-          if (!point) return "";
-          const rows = point.shareDisplay === null || point.otherOfficialSalesDisplay === null
-            ? [[ar ? "الحالة" : "Status", ar ? "بيانات غير مكتملة" : "Incomplete data"]]
-            : [[totalsLabel, point.totalSalesDisplay ?? "—"], [applicationLabel, point.applicationSalesDisplay ?? "—"], [otherSalesLabel, point.otherOfficialSalesDisplay], [shareLabel, shareDisplay(point.shareDisplay, language)]];
-          return `<div dir="${ar ? "rtl" : "ltr"}" class="application-sales-share-tooltip"><strong>${point.label}</strong>${rows.map(([label, value]) => `<span><em>${label}</em><b>${value}</b></span>`).join("")}</div>`;
-        },
-      },
-      // `containLabel` reserves each axis label inside this box. Keeping the
-      // outer offsets small lets the chart use the card width rather than
-      // paying a second fixed margin for the two Y axes on narrow phones.
-      grid: { left: compact ? 2 : 10, right: compact ? 2 : 20, top: compact ? 48 : 60, bottom: compact ? 30 : 40, containLabel: true },
-      xAxis: {
-        type: "category",
-        data: points.map((point) => compact ? point.shortLabel : point.monthLabel),
-        axisTick: { show: false },
-        axisLine: { lineStyle: { color: chartPalette.tooltipBorder } },
-        axisLabel: { color: chartPalette.axis, fontSize: axisFontSize, fontWeight: 700, interval: compact ? 2 : 0, hideOverlap: true, margin: compact ? 5 : 8 },
-      },
-      yAxis: [
-        {
-          type: "value",
-          min: 0,
-          name: yAxisName,
-          nameTextStyle: { color: chartPalette.axis, fontSize: compact ? axisFontSize : labelFontSize, fontWeight: 700, padding: [0, 0, 0, compact ? 0 : 5] },
-          axisLabel: { color: chartPalette.axis, fontSize: axisFontSize, fontWeight: 650, margin: compact ? 4 : 8, formatter: (value: number) => compactAmount(value, language) },
-          axisTick: { show: false },
-          axisLine: { show: false },
-          splitLine: { lineStyle: { color: chartPalette.grid, type: "dashed" } },
-        },
-        {
-          type: "value",
-          min: 0,
-          max: 100,
-          interval: 25,
-          position: "right",
-          name: compact ? "" : "%",
-          nameTextStyle: { color: chartPalette.axis, fontSize: compact ? axisFontSize : labelFontSize, fontWeight: 700, padding: [0, 0, 0, compact ? 0 : 5] },
-          axisLabel: { color: chartPalette.axis, fontSize: axisFontSize, fontWeight: 650, margin: compact ? 4 : 8, formatter: (value: number) => `${value}%` },
-          axisTick: { show: false },
-          axisLine: { show: false },
-          splitLine: { show: false },
-        },
-      ],
-      series: [
-        {
-          name: applicationLabel,
-          type: "bar",
-          stack: "official-sales",
-          data: points.map((point) => point.applicationSalesPlotValue),
-          yAxisIndex: 0,
-          barMaxWidth: compact ? 20 : 30,
-          barGap: "18%",
-          animationDelay: (index: number) => index * 45,
-          itemStyle: { color: brand, borderRadius: [4, 4, 0, 0] },
-          emphasis: { focus: "series", itemStyle: { color: brand } },
-        },
-        {
-          name: otherSalesLabel,
-          type: "bar",
-          stack: "official-sales",
-          data: points.map((point) => point.otherOfficialSalesPlotValue),
-          yAxisIndex: 0,
-          barMaxWidth: compact ? 20 : 30,
-          itemStyle: { color: otherSalesBar, borderRadius: [4, 4, 0, 0] },
-          emphasis: { focus: "series", itemStyle: { color: otherSalesBar } },
-        },
-        {
-          name: shareLabel,
-          type: "line",
-          data: points.map((point) => point.sharePlotValue),
-          yAxisIndex: 1,
-          smooth: false,
-          connectNulls: false,
-          showSymbol: !compact,
-          symbol: "circle",
-          symbolSize: compact ? 5 : 7,
-          lineStyle: { width: compact ? 2.5 : 3, color: shareLine },
-          itemStyle: { color: shareLine, borderColor: chartPalette.tooltipSurface, borderWidth: 1.5 },
-          emphasis: { focus: "series", scale: true },
-        },
-      ],
-      });
-    };
-    renderForAvailableSpace();
-    const observer = new ResizeObserver(() => {
-      chart.resize();
-      renderForAvailableSpace();
-    });
-    observer.observe(element.current);
-    return () => { observer.disconnect(); chart.dispose(); };
-  }, [ar, chartPalette.revision, language, points, title]);
+/** A bounded SVG view keeps sales analysis independent of the ECharts runtime. */
+export function MonthlyApplicationSalesShareChart({ language, title, points }: { language: Language; title: string; points: readonly MonthlyApplicationSalesSharePoint[] }) {
+  const ar = language === "ar";
+  const palette = useBaseerChartPalette();
+  const copy = {
+    application: ar ? "مبيعات التطبيقات" : "Application sales",
+    other: ar ? "بقية المبيعات الرسمية" : "Other official sales",
+    share: ar ? "نسبة التطبيقات" : "Application share",
+    total: ar ? "إجمالي المبيعات الرسمية" : "Total official sales",
+    incomplete: ar ? "بيانات غير مكتملة" : "Incomplete data",
+  };
+  const description = useMemo(() => `${title}. ${points.map((point) => `${point.label}: ${copy.total} ${point.totalSalesDisplay ?? copy.incomplete}; ${copy.application} ${point.applicationSalesDisplay ?? "—"}; ${copy.other} ${point.otherOfficialSalesDisplay ?? "—"}; ${copy.share} ${formatPercent(point.shareDisplay, language)}`).join(ar ? "؛ " : "; ")}`, [ar, copy.application, copy.incomplete, copy.other, copy.share, copy.total, language, points, title]);
+  const plotWidth = width - edge.left - edge.right;
+  const plotHeight = height - edge.top - edge.bottom;
+  const maximum = Math.max(1, ...points.map((point) => Math.max(0, point.totalSalesPlotValue ?? 0)));
+  const slot = plotWidth / Math.max(points.length, 1);
+  const barWidth = Math.min(42, Math.max(10, slot * .56));
+  const yForSales = (value: number) => edge.top + plotHeight - (Math.max(0, value) / maximum) * plotHeight;
+  const xFor = (index: number) => edge.left + slot * index + slot / 2;
+  const sharePath = points.flatMap((point, index) => point.sharePlotValue === null ? [] : [`${index === 0 || points[index - 1]?.sharePlotValue === null ? "M" : "L"}${xFor(index)} ${edge.top + plotHeight - (point.sharePlotValue / 100) * plotHeight}`]).join(" ");
 
-  return <div ref={element} className="application-sales-share-chart" role="img" aria-label={title} />;
+  return <figure className="application-sales-share-chart" aria-label={description}>
+    <figcaption className="visually-hidden">{description}</figcaption>
+    <div className="application-sales-share-chart__legend" aria-hidden="true"><span><i style={{ background: palette.primary }} />{copy.application}</span><span><i style={{ background: palette.primary, opacity: .24 }} />{copy.other}</span><span><i className="application-sales-share-chart__line" style={{ background: palette.secondary === palette.primary ? palette.info : palette.secondary }} />{copy.share}</span></div>
+    <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={description} preserveAspectRatio="none">
+      {[0, .25, .5, .75, 1].map((ratio) => {
+        const y = edge.top + plotHeight - ratio * plotHeight;
+        return <g key={ratio}><line x1={edge.left} x2={width - edge.right} y1={y} y2={y} stroke={palette.grid} strokeDasharray="4 5" /><text x={edge.left - 8} y={y + 4} textAnchor="end" fill={palette.axis} fontSize="12">{compactAmount(maximum * ratio, language)}</text>{ratio < 1 ? <text x={width - edge.right + 8} y={y + 4} fill={palette.axis} fontSize="12">{Math.round(ratio * 100)}%</text> : null}</g>;
+      })}
+      {points.map((point, index) => {
+        const application = Math.max(0, point.applicationSalesPlotValue ?? 0);
+        const other = Math.max(0, point.otherOfficialSalesPlotValue ?? 0);
+        const bottom = edge.top + plotHeight;
+        const applicationTop = yForSales(application);
+        const totalTop = yForSales(application + other);
+        const label = `${point.label}: ${copy.total} ${point.totalSalesDisplay ?? copy.incomplete}; ${copy.application} ${point.applicationSalesDisplay ?? "—"}; ${copy.other} ${point.otherOfficialSalesDisplay ?? "—"}; ${copy.share} ${formatPercent(point.shareDisplay, language)}`;
+        return <g key={point.label}><title>{label}</title><rect x={xFor(index) - barWidth / 2} y={applicationTop} width={barWidth} height={bottom - applicationTop} rx="3" fill={palette.primary} /><rect x={xFor(index) - barWidth / 2} y={totalTop} width={barWidth} height={applicationTop - totalTop} rx="3" fill={palette.primary} opacity=".24" /><text x={xFor(index)} y={height - 24} textAnchor="middle" fill={palette.axis} fontSize="12" fontWeight="700">{points.length > 8 ? point.shortLabel : point.monthLabel}</text></g>;
+      })}
+      {sharePath ? <path d={sharePath} fill="none" stroke={palette.secondary === palette.primary ? palette.info : palette.secondary} strokeWidth="3" vectorEffect="non-scaling-stroke" /> : null}
+      {points.map((point, index) => point.sharePlotValue === null ? null : <circle key={`${point.label}-share`} cx={xFor(index)} cy={edge.top + plotHeight - (point.sharePlotValue / 100) * plotHeight} r="4" fill={palette.secondary === palette.primary ? palette.info : palette.secondary} stroke={palette.tooltipSurface} strokeWidth="2" vectorEffect="non-scaling-stroke" />)}
+    </svg>
+  </figure>;
 }

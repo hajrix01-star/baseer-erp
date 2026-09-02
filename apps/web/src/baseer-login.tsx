@@ -1,11 +1,11 @@
 import { useState, type ReactNode } from "react";
-import { BaseerApiError, parseBaseerApiResponse, presentBaseerApiError } from "./baseer-api-error";
+import { BaseerApiError, presentBaseerApiError } from "./baseer-api-error";
 import { BaseerBrand } from "./baseer-brand";
 import { BaseerButton } from "./baseer-button";
 import { BaseerTextInput } from "./baseer-text-input";
 import { baseerLoginCopy } from "./baseer-login-copy";
-import { baseerApiBaseUrl, persistActiveSession, type AuthSessionReceipt } from "./daily-sales-client";
-import { activateGeneralOwner } from "./daily-sales-auth-client";
+import { persistActiveSession, type AuthSessionReceipt } from "./daily-sales-client";
+import { activateGeneralOwner, listAuthenticatedCompanies, signInForDailySales } from "./daily-sales-auth-client";
 
 type Language = "ar" | "en";
 type Props = {
@@ -44,12 +44,10 @@ export function BaseerLogin({ language, onLanguage, themeControl, onAuthenticate
   const submit = async (event: React.FormEvent) => {
     event.preventDefault(); setLoading(true); setError(""); setNotice("");
     try {
-      const signIn = await fetch(`${baseerApiBaseUrl}/auth/sign-in`, { method: "POST", headers: { Accept: "application/json", "Content-Type": "application/json" }, body: JSON.stringify({ login: login.trim(), password }) });
-      const session = await parseBaseerApiResponse<AuthSessionReceipt>(signIn);
+      const session = await signInForDailySales({ login: login.trim(), password });
       let available: Company[];
       try {
-        const result = await fetch(`${baseerApiBaseUrl}/companies/available`, { headers: { Accept: "application/json", Authorization: `Bearer ${session.accessToken}` } });
-        available = (await parseBaseerApiResponse<{ companies: Company[] }>(result)).companies;
+        available = await listAuthenticatedCompanies(session.accessToken);
       } catch (failure) {
         setError(presentBaseerApiError(failure, language, text.sessionSetupFailed));
         return;

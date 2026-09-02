@@ -30,8 +30,6 @@ services:
 
   migrate:
     image: baseer-erp-migrate:${BASEER_RELEASE_TAG:?BASEER_RELEASE_TAG is required}
-    profiles:
-      - bootstrap
     restart: "no"
     logging: *default-logging
     build:
@@ -50,6 +48,34 @@ services:
       - no-new-privileges:true
     networks:
       - database
+
+  grant-app-access:
+    image: postgres:16-alpine
+    restart: "no"
+    logging: *default-logging
+    environment:
+      PGPASSWORD: ${BASEER_DB_BOOTSTRAP_PASSWORD:?BASEER_DB_BOOTSTRAP_PASSWORD is required}
+      POSTGRES_DB: ${BASEER_DB_NAME:?BASEER_DB_NAME is required}
+      BASEER_APP_USER: ${BASEER_DB_APP_USER:?BASEER_DB_APP_USER is required}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    command:
+      - sh
+      - -ec
+      - exec psql --host postgres --set=ON_ERROR_STOP=1 --username postgres --dbname "$$POSTGRES_DB" --file /docker-entrypoint-initdb.d/20-reconcile-baseer-app-access.sql
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - ./docker/baseer-private-init:/docker-entrypoint-initdb.d:ro
+    networks:
+      - database
+
   api:
     image: baseer-erp-api:${BASEER_RELEASE_TAG:?BASEER_RELEASE_TAG is required}
     build:
@@ -113,8 +139,8 @@ services:
       BASEER_INBOUND_EVIDENCE_ENCRYPTION_KEY: ${BASEER_INBOUND_EVIDENCE_ENCRYPTION_KEY:-}
       BASEER_INBOUND_EVIDENCE_STORAGE_ENCRYPTION_KEY: ${BASEER_INBOUND_EVIDENCE_STORAGE_ENCRYPTION_KEY:-}
     depends_on:
-      postgres:
-        condition: service_healthy
+      grant-app-access:
+        condition: service_completed_successfully
     expose:
       - "5200"
     read_only: true

@@ -34,6 +34,8 @@ jobs:
       # fixtures, never deploy credentials.
       IDENTITY_JWT_SECRET: baseer-ci-identity-jwt-secret-at-least-32-chars
       AI_CREDENTIAL_ENCRYPTION_KEY: MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=
+      ATTENDANCE_PIN_PEPPER: baseer-ci-attendance-pin-pepper
+      ATTENDANCE_QR_SECRET: baseer-ci-attendance-qr-secret-at-least-32-chars
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -55,8 +57,18 @@ jobs:
       - run: git diff --exit-code -- apps/api/src/generated/prisma
       - run: git diff --check
       - run: npm run check:architecture
+      - run: npm run check:web-api-transport
+      - run: npm run check:library-migration-inventory
       - run: npm run check:nest-registration
       - run: npm run check:permissions
+      - run: npm run check:authorization-consistency
+      - run: npm run check:session-resilience
+      - run: npm run check:hr-rls
+      - run: npm run check:finance-rls
+      - run: npm run check:administration-rls
+      - run: npm run check:reports-rls
+      - run: npm run check:decision-intelligence-rls
+      - run: npm run check:command-center-rls
       - run: npm run check:ai-gate-b
       - run: npm run check:web-financial-boundaries
       - run: npm run check:web-dialog-conventions
@@ -87,6 +99,8 @@ jobs:
       - run: npm run verify:ai-gate-b-http
       - run: npm run verify:daily-sales-db
       - run: npm run verify:daily-sales-http
+      - name: Verify attendance HTTP boundaries and retention
+        run: node scripts/run-attendance-http-verification.mjs
       - run: npm run build --workspace @baseer-erp/web
       - run: npm run verify:web-budget
       - name: Run web accessibility and interaction acceptance tests

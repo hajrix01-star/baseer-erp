@@ -478,6 +478,19 @@ export class AttendanceService {
     });
   }
 
+  /** Bounded manager read model for the schedules tab. Each nested receipt
+   * keeps its existing contract and employee page ceiling; this joins only
+   * the browser round trips, never business calculations in the client. */
+  async scheduleWorkspace(context: TrustedCompanyActorContext, date?: string) {
+    const [templates, coverage, roster, employeeSchedules] = await Promise.all([
+      this.listScheduleTemplates(context),
+      this.coverage(context, date),
+      this.roster(context, date),
+      this.employeeSchedules(context, { pageSize: 500 }),
+    ]);
+    return { templates, coverage, roster, employeeSchedules };
+  }
+
   private async readEmployeeSchedules(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, employeeIds: string[]) {
     if (!employeeIds.length) return [];
     const asOf = businessDateValue(riyadhDate(new Date()));

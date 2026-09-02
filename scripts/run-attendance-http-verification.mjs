@@ -42,6 +42,15 @@ try {
   const ownerHeaders = { authorization: `Bearer ${ownerSession.accessToken}`, 'x-baseer-company-id': fixture.companyId };
   const managerHeaders = { authorization: `Bearer ${managerSession.accessToken}`, 'x-baseer-company-id': fixture.companyId };
 
+  const scheduleWorkspace = await server.inject({ method: 'GET', url: `/v1/attendance/schedule-workspace?date=${fixture.businessDate}`, headers: ownerHeaders });
+  assert.equal(scheduleWorkspace.statusCode, 200, scheduleWorkspace.body);
+  assert.equal(scheduleWorkspace.json().coverage.date, fixture.businessDate, 'Schedule workspace must preserve the selected business date.');
+  assert.equal(scheduleWorkspace.json().employeeSchedules.schedules.some((schedule) => schedule.employeeId === fixture.employeeId), true, 'One bounded schedule receipt must include the active employee page.');
+  await expectError(
+    server.inject({ method: 'GET', url: `/v1/attendance/schedule-workspace?date=${fixture.businessDate}`, headers: managerHeaders }), 403, 'AUTHORIZATION_DENIED',
+    'A company manager must not read owner-only attendance schedules.',
+  );
+
   const managerOpen = await server.inject({ method: 'GET', url: '/v1/attendance/sessions/open?pageSize=30', headers: managerHeaders });
   assert.equal(managerOpen.statusCode, 200, managerOpen.body);
   assert.equal(managerOpen.json().sessions.find((session) => session.sessionId === fixture.sessionId)?.employeeId, fixture.employeeId, 'Manager must see only the narrow open-session queue.');
@@ -120,7 +129,7 @@ try {
   assert.equal(locationRedactedCount, 1, 'Coordinates older than 14 days must be redacted while preserving the event.');
   await expectDatabaseRejection(execute('UPDATE "AttendanceEvent" SET "requestKey" = $3 WHERE "tenantId" = $1::uuid AND "id" = $2::uuid', [fixture.tenantId, retentionEventId, randomUUID()]), 'AttendanceEvent rows are immutable');
 
-  console.log('Attendance HTTP verification passed: owner/manager boundaries, open-session queue, chosen administrative checkout, location-off/on retention, settings idempotency, and a 12-record attendance burst.');
+  console.log('Attendance HTTP verification passed: bounded schedule workspace receipt, owner/manager boundaries, open-session queue, chosen administrative checkout, location-off/on retention, settings idempotency, and a 12-record attendance burst.');
 } finally {
   if (app) await app.close();
   await pool.end();

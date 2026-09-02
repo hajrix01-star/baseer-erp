@@ -17,7 +17,10 @@ const targetEntries = [
   ...targetsFor('editable-date', /BaseerDatePicker|BaseerAriaDatePicker/),
   ...targetsFor('table', /DataTable|BaseerDataGrid|data-baseer-report-table/),
   ...targetsFor('query', /useQuery|useMutation|BaseerCompanyReadQuery/),
-  ...targetsFor('chart', /BaseerChart|echarts/),
+  // A chart target is either the central public component or a prohibited
+  // direct library import. Theme/output helpers are implementation details,
+  // not parallel chart integrations.
+  ...targetsFor('chart', /BaseerChart\b|from ["']echarts(?:\/|["'])/),
 ].sort((left, right) => left.id.localeCompare(right.id));
 
 // Classifications are reviewed decisions, not generated data.  Preserve them
@@ -25,6 +28,20 @@ const targetEntries = [
 // silently reset already-approved module closure decisions to "pending".
 const existingManifestForWrite = existsSync(manifestPath) ? JSON.parse(readFileSync(manifestPath, 'utf8')) : null;
 const existingTargetDecisions = existingManifestForWrite?.targets ?? {};
+const legacyRuntimeTargetIds = (entry) => entry.file.endsWith('-runtime.tsx')
+  ? [`${entry.kind}:${entry.file.replace(/-runtime\.tsx$/, '.tsx')}`]
+  : [];
+const reviewedDecisionFor = (entry) => {
+  const direct = existingTargetDecisions[entry.id]?.decision;
+  if (direct) return direct;
+  // Runtime facades replaced an identically named former workspace. Carry
+  // forward only that exact, reviewed decision; a renamed or newly discovered
+  // file remains unclassified for a human decision.
+  return legacyRuntimeTargetIds(entry)
+    .map((id) => existingTargetDecisions[id]?.decision)
+    .find(Boolean)
+    ?? defaultDecision(entry);
+};
 
 const inventory = {
   manifestVersion: 1,
@@ -63,7 +80,7 @@ const generatedManifest = {
   targets: Object.fromEntries(targetEntries.map((entry) => [entry.id, {
     kind: entry.kind,
     file: entry.file,
-    decision: existingTargetDecisions[entry.id]?.decision ?? defaultDecision(entry),
+    decision: reviewedDecisionFor(entry),
   }])),
 };
 
@@ -76,13 +93,18 @@ const manifest = existsSync(manifestPath) ? JSON.parse(readFileSync(manifestPath
 const manifestTargets = manifest?.targets ?? {};
 const targetIds = new Set(targetEntries.map((entry) => entry.id));
 const unclassified = targetEntries.filter((entry) => !manifestTargets[entry.id]).map((entry) => entry.id);
-const staleManifestTargets = Object.keys(manifestTargets).filter((id) => !targetIds.has(id));
+const legacyRuntimeIds = new Set(targetEntries.flatMap(legacyRuntimeTargetIds));
+const staleManifestTargets = Object.keys(manifestTargets).filter((id) => !targetIds.has(id) && !legacyRuntimeIds.has(id));
+const pendingModuleClosures = Object.entries(manifestTargets)
+  .filter(([id, entry]) => targetIds.has(id) && entry.decision === 'pending-module-closure')
+  .map(([id]) => id);
 
-if (directLibraryImports.length || !manifest || unclassified.length || staleManifestTargets.length) {
+if (directLibraryImports.length || !manifest || unclassified.length || staleManifestTargets.length || pendingModuleClosures.length) {
   if (directLibraryImports.length) console.error(`Library architecture violation(s): ${directLibraryImports.join(', ')}`);
   if (!manifest) console.error(`Missing library migration manifest: ${manifestPath}. Run this command with --write and review the result.`);
   if (unclassified.length) console.error(`Unclassified migration target(s): ${unclassified.join(', ')}`);
   if (staleManifestTargets.length) console.error(`Stale migration manifest target(s): ${staleManifestTargets.join(', ')}`);
+  if (pendingModuleClosures.length) console.error(`Pending module closure decision(s): ${pendingModuleClosures.join(', ')}`);
   process.exit(1);
 }
 
