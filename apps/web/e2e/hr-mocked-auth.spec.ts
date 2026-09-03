@@ -526,7 +526,7 @@ test("all seven HR top-level sections render without page overflow", async ({ pa
 
 test("employee profile covers all tabs and its principal dialogs", async ({ page }) => {
   const requested: string[] = [];
-  await mockHr(page, requested, { terminatedEmployee: true });
+  await mockHr(page, requested);
   await page.goto("/#module=hr&section=1");
   await page.getByRole("listitem").filter({ hasText: employee.nameAr }).click();
   const profile = await expectTopmostDialog(page, employee.nameAr);

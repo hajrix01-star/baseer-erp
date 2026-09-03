@@ -278,7 +278,7 @@ test("custody return keeps decimal text and Gregorian business date through its 
   await page.getByRole("button", { name: "تسجيل مرتجع عهدة" }).click();
   const dialog = page.getByRole("dialog");
   await dialog.getByRole("button", { name: "فتح التقويم" }).click();
-  await expect(page.getByRole("grid")).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "التاريخ" })).toBeVisible();
   await page.keyboard.press("Escape");
   await dialog.getByLabel("ربط بالطلب").selectOption("request-1");
   await dialog.getByLabel("الإجمالي").fill("12.5000");
@@ -300,16 +300,16 @@ test("purchase request and completion expose the shared Gregorian date adapter",
   await page.getByRole("button", { name: "إنشاء طلب شراء" }).click();
   let dialog = page.getByRole("dialog");
   await dialog.getByRole("button", { name: "فتح التقويم" }).click();
-  await expect(page.getByRole("grid")).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "التاريخ" })).toBeVisible();
   await page.keyboard.press("Escape");
   await dialog.getByRole("button", { name: "إلغاء" }).click();
 
   await page.getByRole("button", { name: "اعتماد الشراء الفعلي" }).click();
   dialog = page.getByRole("dialog");
   await dialog.getByRole("button", { name: "فتح التقويم" }).click();
-  await expect(page.getByRole("grid")).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "التاريخ" })).toBeVisible();
   await page.keyboard.press("Escape");
-  await expect(page.getByRole("grid")).toHaveCount(0);
+  await expect(page.getByRole("dialog", { name: "التاريخ" })).toHaveCount(0);
 });
 
 test("modern administrative shell keeps compound purchase and recipe surfaces inside their viewport", async ({ page, isMobile }, testInfo) => {
