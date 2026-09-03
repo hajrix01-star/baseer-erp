@@ -1,7 +1,13 @@
 # BASEER ERP — Current Delivery Authority
 
-**Last updated:** 2026-08-23
+**Last updated:** 2026-09-03
 **Purpose:** single authority for the active delivery order, local acceptance status, and production boundaries.
+
+## توضيح المرجع التشغيلي — 2026-09-03
+
+الأقسام المؤرخة 2026-08-23 أدناه تبقى دليلاً تاريخياً ولا تمنح نطاق عمل جديداً تلقائياً. عند تعارضها مع سجل أحدث، تكون الأولوية: (1) قرار مالك صريح لاحق، ثم (2) إدخال أحدث ذي صلة في [سجل حوكمة البناء](../build-governance/BUILD-GOVERNANCE.md)، ثم (3) [سجل تسليم الموديولات](MODULE_DELIVERY_REGISTER.md) كصورة محفظة. لا يبدأ نطاق وظيفي واسع من عبارة «Active» تاريخية وحدها.
+
+الشجرة المرجعية المحلية الآن هي `codex/attendance-release-candidate` عند `ab46de7` بعد نقل انتقائي موثق للحضور. لا يغير ذلك حدود الإنتاج أو الترحيل أو النسخ الاحتياطي أو الصلاحيات المذكورة في هذه الوثيقة.
 
 ## Read order
 
