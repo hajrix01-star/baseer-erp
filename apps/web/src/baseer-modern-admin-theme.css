@@ -171,11 +171,11 @@ body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .them
 body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__section.is-active {
   padding-inline-start: .34rem;
   border-inline-start: .22rem solid var(--navigation-active);
-  color: var(--navigation-active);
+  color: var(--brand-deep);
   background: var(--navigation-active-surface);
   font-weight: 820;
 }
-body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__section.is-active svg { color: var(--navigation-active); }
+body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .theme-navigation--tree .theme-navigation__section.is-active svg { color: var(--brand-deep); }
 body[data-ui-theme="modern-3"] .module-sidebar .overline,
 body[data-ui-theme="modern-3"] .mobile-drawer__panel .overline { color: var(--muted); }
 body[data-ui-theme="modern-3"] :is(.module-sidebar, .mobile-drawer__panel) .nav-item {
