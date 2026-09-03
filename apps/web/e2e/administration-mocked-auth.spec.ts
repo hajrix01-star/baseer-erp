@@ -193,7 +193,7 @@ for (const language of ["ar", "en"] as const) {
       await page.getByRole("tab", { name: language === "ar" ? "إعدادات متقدمة" : "Advanced settings" }).click();
     }
     await expect(page.locator(".administration-ai-settings")).toBeVisible();
-    await expect(page.getByLabel(language === "ar" ? "مفتاح API لمزوّد الذكاء" : "AI provider API key")).toBeVisible();
+    await expect(page.getByLabel(language === "ar" ? /مفتاح مزوّد الذكاء/ : "AI provider API key")).toBeVisible();
     await expect(page).toHaveScreenshot(`basira-connection-${language}.png`, { animations: "disabled" });
   });
 }
