@@ -1,16 +1,18 @@
 # BASEER-IMPACT-2026-09-03-CI-WEB-ACCEPTANCE-ISOLATION
 
 - **Registry:** `BASEER-ARCH v1.0`; **classification:** `ARCHITECTURAL` (release-gate orchestration).
-- **Scope:** `.github/workflows/verify.yml`, `apps/web/playwright.config.ts`, and the finance browser-acceptance fixture.
+- **Scope:** `.github/workflows/verify.yml`, `apps/web/playwright.config.ts`, browser-acceptance fixtures, and deployable runtime dependency lock resolution.
 - **Observed evidence:** run `33751242460` passed 53 quality gates, then its 596 Playwright tests were cancelled by the quality job's 20-minute ceiling.  GitHub allocated one default Playwright worker despite `fullyParallel`; browser setup and the serial quality sequence left roughly eleven minutes for web acceptance.
 - **Decision:** preserve every existing acceptance test, but run web acceptance in an isolated required job.  Give that job its own 30-minute ceiling, run two CI workers (the hosted runner's available capacity), preserve traces/screenshots, and make every release-image job require both `quality` and `web-acceptance`.
+- **Clean-checkout correction:** browser acceptance must build `@baseer-erp/contracts` before Vite starts.  The package exports `dist/*`; local workspaces can conceal a missing build through pre-existing artifacts, while a clean GitHub checkout correctly exposes it.
+- **Security correction:** retain the blocking runtime audit and update the lockfile only to patched, compatible Fastify/URI releases. The Fastify adapter moves to `@nestjs/platform-fastify` 12.0.0 because it is the first patched adapter release; its declared peer boundary still accepts the existing Nest Core/Common 11 line. The gate is not reduced and Nest Core/Common are not upgraded.
 
 ## Gates and boundaries
 
 - **G0:** release images and their immutable manifest must remain blocked when either quality or web acceptance fails, is cancelled, or times out.
 - **G1:** the CI executor has two available cores; two browser workers are the bounded capacity choice.  The separate job prevents unrelated database/container checks from consuming the E2E time budget.
 - **G2:** no production API, database, tenancy, financial truth, browser-to-API contract, or deployment resource changes.  The Vite proxy remains test behavior; a completed E2E result, not a timeout, is required before treating proxy messages as defects.
-- **G3–G4:** no runtime dependency, UI, or product behavior changes.  Official GitHub Actions and Playwright already in the repository are reused.
+- **G3–G4:** no UI or product behavior changes. Official GitHub Actions and Playwright already in the repository are reused. Runtime dependency changes are restricted to patched compatible releases and require type/build/audit verification.
 - **Acceptance-fixture alignment:** the finance fixture must assert the centralized text-based Gregorian calendar and the reference-tree navigation actually rendered by Baseer ERP. It must not require the retired native `input[type=date]` control or the retired `module-navigation` class. This changes test evidence only, not customer-visible behavior or the browser-to-API contract.
 - **Accessibility correction:** the active finance setup step uses the semantic deep brand token, keeping the required 4.5:1 contrast threshold in the shared stepper without changing its interaction, route, API, or financial behavior.
 - **HR fixture alignment:** workforce signals are read-only operational indicators. The acceptance test verifies their labelled content and does not assert an obsolete button/pressed-state interaction.

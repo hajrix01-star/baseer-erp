@@ -126,6 +126,10 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      # Workspace packages publish their runtime exports from dist/.  Build the
+      # contract before starting Vite so this clean CI checkout exercises the
+      # same import boundary as the production web image.
+      - run: npm run build --workspace @baseer-erp/contracts
       - name: Run web accessibility and interaction acceptance tests
         run: |
           npx playwright install --with-deps chromium
