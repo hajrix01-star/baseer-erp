@@ -224,7 +224,7 @@ test("purchase-entry clerk sees and loads only the entry surface", async ({ page
   await mockPurchaseEntryClerk(page, requests);
 
   await page.goto("/#module=operations&section=2");
-  await page.getByRole("button", { name: "إدارة المشتريات" }).click();
+  await page.getByRole("button", { name: "المشتريات", exact: true }).click();
 
   await expect(page.getByRole("tab", { name: "إدخال" })).toBeVisible();
   await expect(page.getByRole("tab", { name: "سجل الفواتير" })).toHaveCount(0);

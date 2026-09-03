@@ -53,7 +53,7 @@ async function mockInternalRegistration(page: Page, options: { isOwner?: boolean
     if (url.pathname === "/v1/operations/internal-registration/workstation") {
       return fulfill(route, {
         sections: [{ id: "section-1", nameAr: "المطبخ", nameEn: "Kitchen" }],
-        products: [{ id: "product-1", sectionId: "section-1", nameAr: "صنف الاختبار", nameEn: "Test item", units: [{ unitId: "unit-1", nameAr: "حبة", nameEn: "Each" }] }],
+        products: [{ id: "menu-1", sectionId: "section-1", nameAr: "منتج الاختبار", nameEn: "Test menu product", units: [{ unitId: "unit-1", nameAr: "حبة", nameEn: "Each" }] }],
       });
     }
     if (url.pathname === "/v1/operations/internal-registration/report") {
@@ -110,16 +110,17 @@ test("internal registration keeps its Gregorian business date through the Baseer
   await expect(page.getByText("سلة التسجيل")).toBeVisible();
   const entryCalendar = page.getByRole("button", { name: "فتح التقويم" }).first();
   await entryCalendar.click();
-  await expect(page.getByRole("grid")).toBeVisible();
+  const calendar = page.getByRole("dialog", { name: "تاريخ العمل" });
+  await expect(calendar).toBeVisible();
   await page.keyboard.press("Escape");
-  await expect(page.getByRole("grid")).toHaveCount(0);
+  await expect(calendar).toHaveCount(0);
 
-  await page.getByRole("button", { name: /صنف الاختبار/ }).click();
+  await page.getByRole("button", { name: /منتج الاختبار/ }).click();
   await page.getByRole("button", { name: "حفظ التسجيل" }).click();
   await expect.poll(() => requested.find((request) => request.method === "POST" && request.path === "/v1/operations/internal-registration")?.body).toMatchObject({
     businessDate: expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/),
     sectionId: "section-1",
-    lines: [{ menuProductItemId: "product-1", unitId: "unit-1", quantity: "1" }],
+    lines: [{ menuProductItemId: "menu-1", unitId: "unit-1", quantity: "1" }],
   });
 
   const accessibility = await new AxeBuilder({ page }).include(".operations-internal-registration").analyze();

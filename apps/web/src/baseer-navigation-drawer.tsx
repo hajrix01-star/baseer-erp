@@ -23,6 +23,14 @@ const focusableSelector = [
   "[tabindex]:not([tabindex='-1'])",
 ].join(",");
 
+function drawerFocusable(panel: HTMLElement | null) {
+  return Array.from(panel?.querySelectorAll<HTMLElement>(focusableSelector) ?? []).filter((element) => {
+    if (element.closest("[aria-hidden='true'], [inert]")) return false;
+    const style = getComputedStyle(element);
+    return style.visibility !== "hidden" && style.display !== "none" && element.getClientRects().length > 0;
+  });
+}
+
 /**
  * Mobile-only navigation overlay. It owns portal placement, focus, Escape,
  * backdrop dismissal and document scrolling so module workspaces keep one
@@ -41,7 +49,7 @@ export function BaseerNavigationDrawer({ open, title, eyebrow, closeLabel, onClo
     document.body.style.overflow = "hidden";
     document.body.style.overscrollBehavior = "contain";
     const timer = window.setTimeout(() => {
-      panelRef.current?.querySelector<HTMLElement>(focusableSelector)?.focus();
+      drawerFocusable(panelRef.current)[0]?.focus();
     }, 0);
     return () => {
       window.clearTimeout(timer);
@@ -61,7 +69,7 @@ export function BaseerNavigationDrawer({ open, title, eyebrow, closeLabel, onClo
         return;
       }
       if (event.key !== "Tab") return;
-      const focusable = Array.from(panelRef.current?.querySelectorAll<HTMLElement>(focusableSelector) ?? []);
+      const focusable = drawerFocusable(panelRef.current);
       if (!focusable.length) return;
       const first = focusable[0];
       const last = focusable.at(-1)!;

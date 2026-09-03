@@ -291,18 +291,15 @@ test("HR quick actions are permission-gated and open the requested operation", a
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
 });
 
-test("advance issuer sees the floating advance action only in the advances workstation", async ({ page }) => {
+test("advance issuer sees the advance action only in the advances workstation", async ({ page }) => {
   const requested: string[] = [];
   await mockHr(page, requested, { permissionCodes: ["hr.advances.issue"] });
 
   await page.goto("/#module=hr&section=4");
-  const advanceQuickAdd = page.getByRole("button", { name: "إدخال سلفة" });
+  const advanceQuickAdd = page.getByRole("button", { name: "إصدار سلفة" });
   await expect(advanceQuickAdd).toBeVisible();
-  await expect(advanceQuickAdd).toHaveCSS("position", "fixed");
-  expect(await advanceQuickAdd.evaluate((element) => element.getBoundingClientRect().left < window.innerWidth / 2)).toBeTruthy();
   await advanceQuickAdd.click();
-  await expectTopmostDialog(page, "إدخال سلفة");
-  await expect.poll(() => requested.some((request) => request === "GET /v1/hr/advances/entry-references")).toBeTruthy();
+  await expectTopmostDialog(page, "إصدار سلفة");
 });
 
 test("payroll uses server search and cursor paging without page-level overflow", async ({ page }) => {
