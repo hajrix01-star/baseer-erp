@@ -216,6 +216,12 @@ async function expectTopmostDialog(page: Page, name: string | RegExp) {
   return dialog;
 }
 
+async function openAdvanceDetail(page: Page) {
+  await page.locator(".hr-advance-group > button").first().click();
+  await page.getByRole("button", { name: advance.advanceNumber }).click();
+  return expectTopmostDialog(page, advance.advanceNumber);
+}
+
 async function fillOnboarding(page: Page) {
   const dialog = page.getByRole("dialog", { name: "إضافة موظف" });
   await dialog.getByLabel("الاسم الكامل*").fill("موظف جديد");
@@ -878,17 +884,16 @@ test("advance deduction and service create/detail dialogs are centralized", asyn
   await page.getByRole("button", { name: "إضافة خصم إداري" }).click();
   await expectTopmostDialog(page, "إضافة خصم إداري");
   await page.keyboard.press("Escape");
-  await page.getByRole("button", { name: advance.advanceNumber }).click();
-  const advanceDetail = await expectTopmostDialog(page, advance.advanceNumber);
+  const advanceDetail = await openAdvanceDetail(page);
   await advanceDetail.getByRole("button", { name: "إلغاء إصدار السلفة" }).click();
   await expectTopmostDialog(page, "إلغاء إصدار السلفة");
-  await page.keyboard.press("Escape");
   await page.keyboard.press("Escape");
   await page.getByRole("button", { name: "سداد السلفة" }).click();
   await expectTopmostDialog(page, "سداد السلفة");
   await page.keyboard.press("Escape");
   await page.getByRole("button", { name: "تأجيل الرصيد" }).click();
   await expectTopmostDialog(page, "تأجيل الرصيد");
+  await page.keyboard.press("Escape");
   await page.keyboard.press("Escape");
   await page.getByRole("button", { name: deduction.deductionNumber }).click();
   await expectTopmostDialog(page, deduction.deductionNumber);
@@ -945,8 +950,7 @@ test("advance deferral pagination advances and clears its own cursor", async ({ 
   });
 
   await page.goto("/#module=hr&section=4");
-  await page.getByRole("button", { name: advance.advanceNumber }).click();
-  const advanceDetail = await expectTopmostDialog(page, advance.advanceNumber);
+  const advanceDetail = await openAdvanceDetail(page);
   await expect(advanceDetail.getByText("تأجيل أول")).toBeVisible();
   await advanceDetail.getByRole("button", { name: "تحميل المزيد" }).click();
   await expect(advanceDetail.getByText("تأجيل ثانٍ")).toBeVisible();

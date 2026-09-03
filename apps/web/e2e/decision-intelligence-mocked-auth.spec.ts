@@ -91,7 +91,7 @@ async function mockDecision(page: Page, language: "ar" | "en", permissions: stri
     let body: Record<string, unknown> | null = null;
     try { body = request.postDataJSON() as Record<string, unknown>; } catch { /* request has no JSON body */ }
     requests.push({ method: request.method(), pathname: url.pathname, search: url.search, body, company: request.headers()["x-baseer-company-id"] ?? null, idempotencyKey: request.headers()["x-idempotency-key"] ?? null });
-    if (url.pathname === "/v1/companies/available") return fulfill(route, { companies: [{ id: companyId, name: "شركة اختبار", functionalCurrency: "SAR", permissionCodes: permissions }] });
+    if (url.pathname === "/v1/companies/available") return fulfill(route, { companies: [{ id: companyId, nameAr: "شركة اختبار", nameEn: "Test company", functionalCurrency: "SAR", permissionCodes: permissions }] });
     if (url.pathname === "/v1/administration/ai/runtime/decision-alert-explanations" && request.method() === "POST") return fulfill(route, {
       receiptId: "77777777-7777-4777-8777-777777777777", alertId, skillKey: "decision.command_center_analyst", model: "gpt-5-mini",
       explanation: { summary: "The frozen evidence shows a reconciled sales change that needs review.", evidence: ["The evidence snapshot checksum is valid."], limitations: ["This is not proof of causation."], reviewSteps: ["Review the source ledger evidence."] },
