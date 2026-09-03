@@ -1,8 +1,14 @@
 import dotenv from 'dotenv';
 import { existsSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { resolve } from 'node:path';
 import { NestFactory } from '@nestjs/core';
-import { FastifyAdapter } from '@nestjs/platform-fastify';
+
+// This verification lives at the repository root, while Fastify is an API
+// workspace dependency. Resolve it from that workspace rather than relying on
+// npm hoisting it into the root node_modules directory.
+const requireApiWorkspace = createRequire(new URL('../apps/api/package.json', import.meta.url));
+const { FastifyAdapter } = requireApiWorkspace('@nestjs/platform-fastify');
 
 import { AppModule } from '../apps/api/dist/app.module.js';
 import { ApiExceptionFilter } from '../apps/api/dist/common/api-exception.filter.js';
