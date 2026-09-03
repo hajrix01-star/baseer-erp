@@ -622,6 +622,11 @@
       "file": "hr-attendance-workspace.tsx",
       "decision": "verified-central-library-boundary-2026-09-02"
     },
+    "searchable-selector:hr-employee-attendance-compliance-card.tsx": {
+      "kind": "searchable-selector",
+      "file": "hr-employee-attendance-compliance-card.tsx",
+      "decision": "uses-central-combobox-field-2026-09-03"
+    },
     "searchable-selector:hr-compensation-agreement-dialog.tsx": {
       "kind": "searchable-selector",
       "file": "hr-compensation-agreement-dialog.tsx",
