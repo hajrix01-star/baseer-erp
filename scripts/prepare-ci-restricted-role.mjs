@@ -13,7 +13,14 @@ await admin.connect();
 try {
   await admin.query("BEGIN");
   await admin.query("DO $$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'baseer_ci_app') THEN CREATE ROLE baseer_ci_app LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOINHERIT NOBYPASSRLS; END IF; END $$;");
-  await admin.query("ALTER ROLE baseer_ci_app PASSWORD $1", [password]);
+  // PostgreSQL utility statements such as ALTER ROLE do not accept bind
+  // parameters. Build only this identifier/literal-safe statement inside
+  // PostgreSQL, then execute it without exposing the password to a shell.
+  const passwordStatement = await admin.query(
+    "SELECT format('ALTER ROLE %I PASSWORD %L', $1::text, $2::text) AS statement",
+    ["baseer_ci_app", password],
+  );
+  await admin.query(passwordStatement.rows[0].statement);
   await admin.query("GRANT CONNECT ON DATABASE baseer_erp_test TO baseer_ci_app");
   await admin.query("GRANT USAGE ON SCHEMA public TO baseer_ci_app");
   await admin.query("GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO baseer_ci_app");
