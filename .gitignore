@@ -6,6 +6,7 @@ coverage/
 test-results/
 *.tsbuildinfo
 .codex-localization-literals.txt
+.seo-cache/
 .env
 .env.*
 !.env.example
