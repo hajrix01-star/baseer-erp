@@ -34,7 +34,7 @@ jobs:
       # fixtures, never deploy credentials.
       IDENTITY_JWT_SECRET: baseer-ci-identity-jwt-secret-at-least-32-chars
       AI_CREDENTIAL_ENCRYPTION_KEY: MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=
-      ATTENDANCE_PIN_PEPPER: baseer-ci-attendance-pin-pepper
+      ATTENDANCE_PIN_PEPPER: baseer-ci-attendance-pin-pepper-at-least-32-chars
       ATTENDANCE_QR_SECRET: baseer-ci-attendance-qr-secret-at-least-32-chars
     steps:
       - uses: actions/checkout@v4
