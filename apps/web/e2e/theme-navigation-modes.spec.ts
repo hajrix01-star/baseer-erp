@@ -11,6 +11,8 @@ const financeAccountsRuntimeSource = readFileSync(resolve(testDirectory, "../src
 const reportsOverviewSource = readFileSync(resolve(testDirectory, "../src/reports-overview-workspace.tsx"), "utf8");
 const reportDocumentsSource = readFileSync(resolve(testDirectory, "../src/report-documents-workspace.tsx"), "utf8");
 const vatSimulationSource = readFileSync(resolve(testDirectory, "../src/vat-simulation-workspace.tsx"), "utf8");
+const cashEvidence = { reportCode: "personal_cash_performance", metric: { kind: "CASH_ROW", rowCode: "net_cash_result" } };
+const zeroMoney = { raw: "0.0000", display: "0.00", sign: "zero" as const };
 
 async function fulfill(route: Route, json: unknown) {
   await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(json) });
@@ -42,11 +44,12 @@ async function openModernCommandCenter(page: Page) {
     if (path === "/v1/reports/personal-cash-performance") return fulfill(route, {
       state: "READY", selectedPeriod: { from: "2026-08-01", to: "2026-08-31" }, rows: [], vaults: [],
       totals: {
-        inflows: { raw: "0.0000", display: "0.00", sign: "zero" },
-        outflows: { raw: "0.0000", display: "0.00", sign: "zero" },
-        netCashResult: { raw: "0.0000", display: "0.00", sign: "zero" },
+        inflows: zeroMoney, outflows: zeroMoney, netCashResult: zeroMoney,
         netCashResultShareOfCollectedSalesPercent: "0.0000",
+        inflowsEvidence: cashEvidence, outflowsEvidence: cashEvidence, netCashResultEvidence: cashEvidence,
       },
+      operatingCosts: { basisLabelAr: "الحركات المالية المثبتة خلال الفترة", total: zeroMoney, shareOfCollectedSalesPercent: "0.0000", evidence: cashEvidence, groups: [] },
+      comparison: { state: "UNAVAILABLE", netCashResultPercentChange: null },
     });
     if (path === "/v1/finance/daily-sales/analytics") return fulfill(route, {
       primary: { weeks: [], monthSummary: { dataQuality: "READY", coverage: { recordedSalesDays: 0, requiredOperatingDays: 0 }, display: { dailyAverageSalesAmount: "0.00", dailyAverageCustomerCount: "0" } } },

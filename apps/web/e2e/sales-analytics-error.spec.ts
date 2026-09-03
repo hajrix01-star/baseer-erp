@@ -74,7 +74,7 @@ test("sales analytics turns a proxy failure into an actionable retry state", asy
   await error.getByRole("button", { name: "إعادة المحاولة" }).click();
   await expect.poll(service.analyticsRequests).toBeGreaterThanOrEqual(3);
   await expect(page.getByRole("alert")).toHaveCount(0);
-  const chart = page.locator(".application-sales-share-chart");
-  await expect(chart.locator("canvas")).toBeVisible();
+  const chart = page.getByRole("img", { name: /نسبة مبيعات التطبيقات من إجمالي المبيعات/ });
+  await expect(chart).toBeVisible();
   expect(await chart.evaluate((node) => node.clientWidth)).toBeGreaterThan(200);
 });

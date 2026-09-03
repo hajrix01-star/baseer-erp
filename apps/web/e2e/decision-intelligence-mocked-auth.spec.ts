@@ -67,6 +67,13 @@ function evidence() {
 }
 
 const policy = { enabled: true, comparisonPolicyCode: "PREVIOUS_EQUAL_PERIOD", comparisonPolicyVersion: "previous_equal_period.v1", decreaseThresholdBasisPoints: 1250, increaseThresholdBasisPoints: 2500, minimumBaselineAmount: "100.1250", minimumAbsoluteDifferenceAmount: "20.5000", cooldownHours: 24, updatedAt: "2026-08-23T08:00:00.000Z" };
+const analysisReadiness = {
+  scope: "DECISION_ALERT",
+  subjectId: null,
+  status: "READY",
+  reasons: [],
+  checkedAt: "2026-08-23T08:30:00.000Z",
+};
 const candidate = { id: candidateId, eventKind: "PUBLIC_EVENT", titleAr: "عطلة تجريبية", startsOn: "2026-08-20T00:00:00.000Z", endsOn: "2026-08-20T23:59:59.999Z", scope: "TENANT_GLOBAL", locationCode: null, locationLabelAr: null, relevanceReasonAr: "مصدر رسمي ثابت", status: "PENDING_REVIEW", sourceUpdatedAt: "2026-08-19T10:00:00.000Z", createdAt: "2026-08-19T10:00:00.000Z", source: { sourceCode: "SA_NCM_WEATHER_FORECAST", displayNameAr: "المركز الوطني للأرصاد", sourceUrl: "https://ncm.gov.sa/" } };
 const review = { id: reviewId, eventKind: "PUBLIC_EVENT", scope: "TENANT_GLOBAL", locationLabelAr: null, currentRevision: 1, source: { sourceCode: "SA_SPL_FIXTURES", displayNameAr: "رابطة الدوري السعودي" }, revisions: [{ revision: 2, titleAr: "مباراة مراجعة", startsOn: "2026-08-24T00:00:00.000Z", endsOn: "2026-08-24T23:59:59.999Z", sourceUpdatedAt: "2026-08-22T12:00:00.000Z", sourceChecksum: checksum }] };
 const sourceHealth = [{ category: "RESEARCH", sourceCode: "SA_NCM_WEATHER_FORECAST", displayNameAr: "المركز الوطني للأرصاد", sourceUrl: "https://ncm.gov.sa/", scheduleCode: "daily", readiness: "READY_TO_SYNC", readinessReason: "موصل حكومي معتمد", lastRun: { status: "SUCCEEDED", startedAt: "2026-08-23T06:00:00.000Z", finishedAt: "2026-08-23T06:01:00.000Z" } }];
@@ -95,6 +102,7 @@ async function mockDecision(page: Page, language: "ar" | "en", permissions: stri
     if (url.pathname === "/v1/decision-intelligence/metrics/sales-matched-weekday") return fulfill(route, options?.incompleteComparisons ? incompleteComparison(url, true) : comparison(url, true));
     if (url.pathname === "/v1/decision-intelligence/context/timeline") return fulfill(route, [event]);
     if (url.pathname === "/v1/decision-intelligence/alerts") return fulfill(route, [alert]);
+    if (url.pathname === "/v1/decision-intelligence/basira/analysis-readiness") return fulfill(route, analysisReadiness);
     if (url.pathname === `/v1/decision-intelligence/alerts/${alertId}/evidence`) return fulfill(route, evidence());
     if (url.pathname === "/v1/decision-intelligence/policies/sales-change" && request.method() === "GET") return fulfill(route, policy);
     if (url.pathname === "/v1/decision-intelligence/context/research/candidates") return fulfill(route, [candidate]);
