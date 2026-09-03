@@ -75,9 +75,9 @@ try {
   const first = await server.inject({ method: "POST", url: "/v1/administration/ai/runtime/preflight", headers, payload });
   assert.equal(first.statusCode, 200, first.body);
   assert.equal(first.json().outcome, "BLOCKED", "Gate B must never call a provider.");
-  assert.equal(first.json().safeReasonCode, "AI_SKILL_NOT_ACTIVATED");
+  assert.equal(first.json().safeReasonCode, "AI_PROVIDER_EXECUTION_DISABLED");
   assert.equal(first.json().policyVersion, 1);
-  assert.deepEqual(first.json().requiredCapabilities, ["platform.ai.use"]);
+  assert.deepEqual(first.json().requiredCapabilities, ["marketing.insights.read"]);
 
   const replay = await server.inject({ method: "POST", url: "/v1/administration/ai/runtime/preflight", headers, payload });
   assert.equal(replay.statusCode, 200, replay.body);
