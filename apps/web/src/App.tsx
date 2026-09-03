@@ -257,7 +257,7 @@ function LiveUiDiagnostic() {
   return enabled ? createPortal(<output className="live-ui-diagnostic" aria-live="polite">{details || "UI 30901 · loading…"}</output>, document.body) : null;
 }
 
-function HeaderProfileMenu({ language, palette, onPalette, onLanguage, onSignOut }: { language: Language; palette: ColorPalette; onPalette: (palette: ColorPalette) => void; onLanguage: () => void; onSignOut: () => void }) {
+function HeaderProfileMenu({ language, palette, onPalette, onLanguage, onSignOut, drawerOpen }: { language: Language; palette: ColorPalette; onPalette: (palette: ColorPalette) => void; onLanguage: () => void; onSignOut: () => void; drawerOpen: boolean }) {
   const menuRef = useRef<HTMLDetailsElement>(null);
   const summaryRef = useRef<HTMLElement>(null);
   const [open, setOpen] = useState(false);
@@ -292,6 +292,12 @@ function HeaderProfileMenu({ language, palette, onPalette, onLanguage, onSignOut
       document.removeEventListener('keydown', closeOnEscape);
     };
   }, []);
+
+  useEffect(() => {
+    if (!drawerOpen || !menuRef.current?.open) return;
+    menuRef.current.open = false;
+    setOpen(false);
+  }, [drawerOpen]);
 
   return <details ref={menuRef} className="header-profile-menu" onToggle={(event) => setOpen(event.currentTarget.open)}>
     <summary ref={summaryRef} aria-label={profileLabel} aria-expanded={open} title={profileLabel}>
@@ -328,7 +334,7 @@ function AppHeader({ language, palette, onPalette, hasNavigation, drawerOpen, on
     <div className="topbar-spacer" />
     <LiveUiDiagnostic />
     <Suspense fallback={null}><CompanySessionControl language={language} /></Suspense>
-    <HeaderProfileMenu language={language} palette={palette} onPalette={onPalette} onLanguage={onLanguage} onSignOut={onSignOut} />
+    <HeaderProfileMenu language={language} palette={palette} onPalette={onPalette} onLanguage={onLanguage} onSignOut={onSignOut} drawerOpen={drawerOpen} />
   </header>;
 }
 
@@ -338,7 +344,7 @@ function ModuleLauncher({ language, palette, onPalette, onLanguage, onOpen, onSi
   const visible = visibleModules(permissionCodes);
   const open = (route: ResolvedRoute) => { if (!canOpenRoute(route, permissionCodes)) return; onOpen(route); setRecent(readRecent()); };
   return <div className="launcher-page">
-    <header className="launcher-topbar"><button className="launcher-brand-anchor sidebar-brand brand-button" type="button"><BaseerBrand /></button><div className="topbar-spacer" /><Suspense fallback={null}><CompanySessionControl language={language} /></Suspense><HeaderProfileMenu language={language} palette={palette} onPalette={onPalette} onLanguage={onLanguage} onSignOut={onSignOut} /></header>
+    <header className="launcher-topbar"><button className="launcher-brand-anchor sidebar-brand brand-button" type="button"><BaseerBrand /></button><div className="topbar-spacer" /><Suspense fallback={null}><CompanySessionControl language={language} /></Suspense><HeaderProfileMenu language={language} palette={palette} onPalette={onPalette} onLanguage={onLanguage} onSignOut={onSignOut} drawerOpen={false} /></header>
     <main className="launcher-page__content">
       <div className="launcher-page__heading"><p className="launcher-kicker">Baseer ERP</p><h1>{text.choose}</h1></div>
       {recent.filter((route) => canOpenRoute(route, permissionCodes)).length > 0 && <section className="recent"><h2>{text.recent}</h2><div className="recent__list">{recent.filter((route) => canOpenRoute(route, permissionCodes)).map((route) => { const module = getModule(route.moduleId); return <button key={routeIdentity(route)} onClick={() => open(route)} type="button">{module.title[language]} · {routeTitle(route, language)}</button>; })}</div></section>}
