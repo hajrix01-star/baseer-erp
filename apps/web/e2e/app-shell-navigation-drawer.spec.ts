@@ -132,7 +132,7 @@ test("Pixel 5 navigation drawer traps focus, restores it, and remains accessible
   await expect(page.getByRole("dialog", { name: "مركز القيادة", exact: true })).toHaveCount(0);
   await expect(openArabicDrawer).toBeFocused();
 
-  await page.getByLabel("حسابي وإعدادات الجلسة", { exact: true }).click();
+  await page.locator(".header-profile-menu > summary[aria-label='حسابي وإعدادات الجلسة']").click();
   await page.getByRole("group", { name: "حسابي وإعدادات الجلسة" }).getByRole("button", { name: "English", exact: true }).click();
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
   const openEnglishDrawer = page.getByRole("button", { name: "Sections" });
