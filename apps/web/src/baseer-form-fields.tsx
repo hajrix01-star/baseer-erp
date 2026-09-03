@@ -1,5 +1,6 @@
 import { forwardRef, useState, type ComponentProps, type ReactNode } from "react";
 import { normalizeBaseerNumericInput } from "./number-format";
+import { BaseerCalendarPicker } from "./baseer-calendar-picker";
 import "./baseer-form.css";
 export { BaseerTextInput } from "./baseer-text-input";
 
@@ -75,9 +76,9 @@ export const BaseerNumericSuffixInput = forwardRef<HTMLInputElement, NumericSuff
 
 type MonthPickerProps = Omit<ComponentProps<"input">, "type">;
 
-/** Shared native month picker, with RHF refs and a single RTL/LTR visual contract. */
+/** Shared Baseer-owned month picker, preserving RHF refs and input events. */
 export const BaseerMonthPicker = forwardRef<HTMLInputElement, MonthPickerProps>(function BaseerMonthPicker({ className, ...props }, ref) {
-  return <input ref={ref} {...props} className={["baseer-text-input", "baseer-month-picker", className].filter(Boolean).join(" ")} type="month" />;
+  return <BaseerCalendarPicker ref={ref} {...props} mode="month" label={props["aria-label"] ?? "Month"} inputClassName={["baseer-text-input", "baseer-month-picker", className].filter(Boolean).join(" ")} />;
 });
 
 type TimeInputProps = Omit<ComponentProps<"input">, "type">;

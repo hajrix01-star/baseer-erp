@@ -239,7 +239,7 @@
       "consumers": [
         "apps/web/src"
       ],
-      "notes": "The runtime implementation is a semantic native date input behind this one public contract; it remains registered to preserve the performance ceiling."
+      "notes": "The runtime implementation is a Baseer-owned calendar popover over a text field. It keeps the fixed Gregorian ISO contract without opening the browser-native calendar."
     },
     {
       "id": "baseer-aria-date-picker",

@@ -74,7 +74,7 @@ function readColorPalettePreference(): ColorPalette {
   }
 }
 
-function ThemePicker({ language, palette, onPalette, className = 'theme-button', showLabel = false }: { language: Language; palette: ColorPalette; onPalette: (palette: ColorPalette) => void; className?: string; showLabel?: boolean }) {
+function ThemePicker({ language, palette, onPalette, className = 'theme-button' }: { language: Language; palette: ColorPalette; onPalette: (palette: ColorPalette) => void; className?: string }) {
   const text = appText(language);
   const [appearance, setAppearance] = useState<Appearance>(readAppearancePreference);
   useEffect(() => {
@@ -98,13 +98,14 @@ function ThemePicker({ language, palette, onPalette, className = 'theme-button',
     { id: 'editorial-copper', label: text.paletteEditorialCopper, swatch: '#9c4f28' },
     { id: 'modern-admin', label: text.paletteModernAdmin, swatch: '#127f73' },
   ];
-  return <details className={className}>
-    <summary aria-label={text.appearance}><span className="theme-dot" style={{ width: "14px", height: "14px", background: 'var(--brand)' }} />{showLabel ? <span className="theme-picker-trigger-label">{text.appearance}</span> : null}</summary>
-    <div className="theme-picker-menu">
-      <section className="palette-picker"><p>{text.colorPalette}</p><div>{palettes.map((item) => <button key={item.id} type="button" onClick={() => onPalette(item.id)} className={palette === item.id ? 'is-selected' : ''} aria-pressed={palette === item.id}><span className="palette-picker__swatch" style={{ background: item.swatch }} aria-hidden="true" /><span>{item.label}</span></button>)}</div></section>
-      <section className="appearance-picker"><p>{text.appearance}</p><div>{appearances.map((item) => <button key={item.id} type="button" onClick={() => setAppearance(item.id)} className={appearance === item.id ? 'is-selected' : ''} aria-pressed={appearance === item.id}><span aria-hidden="true">{item.icon}</span>{item.label}</button>)}</div></section>
+  return <div className={`theme-picker ${className}`.trim()}>
+    <div className="theme-picker__palette" role="group" aria-label={text.colorPalette}>
+      {palettes.map((item) => <button key={item.id} type="button" title={item.label} aria-label={item.label} onClick={() => onPalette(item.id)} className={palette === item.id ? 'is-selected' : ''} aria-pressed={palette === item.id}><span className="theme-picker__swatch" style={{ background: item.swatch }} aria-hidden="true" /></button>)}
     </div>
-  </details>;
+    <div className="theme-picker__appearance" role="group" aria-label={text.appearance}>
+      {appearances.map((item) => <button key={item.id} type="button" title={item.label} aria-label={item.label} onClick={() => setAppearance(item.id)} className={appearance === item.id ? 'is-selected' : ''} aria-pressed={appearance === item.id}><span aria-hidden="true">{item.icon}</span></button>)}
+    </div>
+  </div>;
 }
 
 function readLanguagePreference(): Language {
@@ -306,7 +307,7 @@ function HeaderProfileMenu({ language, palette, onPalette, onLanguage, onSignOut
       <section className="header-profile-menu__preferences" aria-label={preferencesLabel}>
         <p>{preferencesLabel}</p>
         <button className="header-profile-menu__language" onClick={onLanguage} type="button">{language === 'ar' ? 'English' : 'العربية'}</button>
-        <ThemePicker language={language} palette={palette} onPalette={onPalette} className="header-profile-menu__appearance" showLabel />
+        <ThemePicker language={language} palette={palette} onPalette={onPalette} className="header-profile-menu__appearance" />
       </section>
       <div className="header-profile-menu__session-action">
         <small>{signOutHint}</small>

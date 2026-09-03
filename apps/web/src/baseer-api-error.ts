@@ -72,8 +72,8 @@ export function presentBaseerApiError(
   }
   if (error.status === 403 || error.code === "AUTHORIZATION_DENIED") {
     return language === "ar"
-      ? "لا تملك صلاحية عرض هذه التحليلات."
-      : "You do not have permission to view these analytics.";
+      ? "لا تملك صلاحية تنفيذ هذا الإجراء."
+      : "You do not have permission to perform this action.";
   }
   if (error.status === 429 || error.code === "RATE_LIMITED") {
     return language === "ar"

@@ -103,6 +103,14 @@ test("Pixel 5 navigation drawer traps focus, restores it, and remains accessible
   const arabicDrawer = page.getByRole("dialog", { name: "مركز القيادة", exact: true });
   const arabicClose = arabicDrawer.getByRole("button", { name: "إغلاق", exact: true });
   await expect(arabicDrawer).toHaveAttribute("aria-modal", "true");
+  const brandContrast = await arabicDrawer.locator(".mobile-drawer__brand").evaluate((element) => {
+    const wordmark = element.querySelector(".baseer-brand__image");
+    const pseudo = getComputedStyle(element, "::before");
+    return { imageDisplay: wordmark ? getComputedStyle(wordmark).display : null, maskImage: pseudo.maskImage || pseudo.webkitMaskImage, background: pseudo.backgroundColor };
+  });
+  expect(brandContrast.imageDisplay).toBe("none");
+  expect(brandContrast.maskImage).toContain("baseer-wordmark.png");
+  expect(brandContrast.background).not.toBe("rgba(0, 0, 0, 0)");
   await expect(arabicClose).toBeFocused();
   await expect.poll(() => page.evaluate(() => document.body.style.overflow)).toBe("hidden");
   await expectDrawerHasNoWcagAAIssues(page);

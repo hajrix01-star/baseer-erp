@@ -204,6 +204,21 @@ test("accounts and invoice register retain server cursor pagination", async ({ p
   expect(requests.some((request) => request.includes("/v1/finance/invoice-register") && request.includes("cursor=invoice-next"))).toBeTruthy();
 });
 
+test("invoice-register search uses the authorised full-history period and exposes the central All filter", async ({ page }) => {
+  const requests: string[] = [];
+  await mockFinancialReads(page, requests);
+  await page.goto("/#module=finance&section=1");
+
+  await expect(page.getByText("PUR-001")).toBeVisible();
+  await page.locator(".baseer-filter-bar__search input").fill("PUR");
+  await expect.poll(() => requests.some((request) => request.includes("/v1/finance/invoice-register") && request.includes("q=PUR") && request.includes("fromBusinessDate=0001-01-01"))).toBeTruthy();
+
+  await page.getByRole("button", { name: "الفلاتر" }).click();
+  await page.locator(".baseer-period-filter__trigger").click();
+  await page.getByRole("combobox", { name: "نوع الفترة" }).click();
+  await expect(page.getByRole("option", { name: "الكل" })).toBeVisible();
+});
+
 test("purchase-entry clerk sees and loads only the entry surface", async ({ page }) => {
   const requests: string[] = [];
   await mockPurchaseEntryClerk(page, requests);
@@ -219,6 +234,38 @@ test("purchase-entry clerk sees and loads only the entry surface", async ({ page
   expect(requests.some((request) => request.includes("/v1/finance/configuration"))).toBeFalsy();
   expect(requests.some((request) => request.includes("/v1/finance/purchase-expense-documents?") || request.endsWith("/v1/finance/purchase-expense-documents"))).toBeFalsy();
   expect(requests.some((request) => request.includes("/v1/finance/purchase-expense-documents/credit-workspace"))).toBeFalsy();
+});
+
+test("purchase date calendar escapes the data table and keeps its action clear of the ISO value", async ({ page, isMobile }) => {
+  const requests: string[] = [];
+  await mockPurchaseEntryClerk(page, requests);
+
+  await page.goto("/#module=operations&section=2");
+  let navigation = page.locator(".module-sidebar .theme-navigation");
+  if (isMobile) {
+    await page.getByRole("button", { name: /الأقسام/ }).click();
+    navigation = page.locator(".mobile-drawer .theme-navigation");
+  }
+  await navigation.getByText("المشتريات", { exact: true }).click();
+  if (isMobile) await page.getByRole("button", { name: "إغلاق" }).click();
+  const label = isMobile ? "تاريخ القيد" : "تاريخ الفاتورة";
+  const input = page.getByRole("textbox", { name: label }).first();
+  const trigger = page.getByRole("button", { name: `فتح التقويم: ${label}` }).first();
+  await expect(input).toBeVisible();
+  await expect(input).toHaveValue("");
+  await expect(trigger).toBeVisible();
+  const inputBox = await input.boundingBox();
+  const triggerBox = await trigger.boundingBox();
+  expect(inputBox).not.toBeNull();
+  expect(triggerBox).not.toBeNull();
+  expect(triggerBox!.x).toBeGreaterThan(inputBox!.x + inputBox!.width - 96);
+
+  await trigger.click();
+  const calendar = page.getByRole("dialog", { name: label });
+  await expect(calendar).toBeVisible();
+  expect(await calendar.evaluate((element) => element.parentElement === document.body)).toBe(true);
+  await page.mouse.click(4, 4);
+  await expect(calendar).toHaveCount(0);
 });
 
 test("a migration-review lock opens purchase history without requesting a write-only entry read", async ({ page }) => {

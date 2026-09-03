@@ -50,8 +50,8 @@ try {
       otherAllowance: "0.0000",
     },
   };
-  const receipt = await payroll.onboardEmployee(context, onboardingInput, onboardingKey);
-  const onboardingReplay = await payroll.onboardEmployee(context, onboardingInput, onboardingKey);
+  const receipt = await payroll.onboardEmployee(context, onboardingInput, onboardingKey, { canBackdate: true });
+  const onboardingReplay = await payroll.onboardEmployee(context, onboardingInput, onboardingKey, { canBackdate: true });
 
   assert.equal(onboardingReplay.id, receipt.id, "Replaying onboarding must return the original employee.");
   assert.equal(onboardingReplay.compensationId, receipt.compensationId, "Replaying onboarding must return the original salary.");

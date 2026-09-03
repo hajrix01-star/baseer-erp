@@ -16,6 +16,8 @@
     "check:web-api-transport": "node scripts/check-web-api-transport.mjs",
         "check:nest-registration": "node scripts/check-nest-registration.mjs",
         "check:library-migration-inventory": "node scripts/check-library-migration-inventory.mjs",
+        "audit:dead-code": "node node_modules/knip/bin/knip.js --config knip.json --workspace apps/web --workspace apps/api --workspace packages/contracts --include files,dependencies,unlisted --no-exit-code --reporter compact",
+        "check:dead-code": "node scripts/check-dead-code-baseline.mjs",
         "verify:local-database": "node scripts/verify-local-database.mjs",
         "recover:local-prisma-migration-history": "node scripts/reconcile-local-prisma-migration-history.mjs",
         "recover:local-prisma-migration-checksums": "node scripts/reconcile-local-prisma-migration-checksums.mjs",
@@ -103,6 +105,7 @@
         "@testing-library/user-event": "^14.6.6",
         "@vitest/coverage-v8": "^4.1.11",
         "jsdom": "^30.0.1",
+        "knip": "^6.34.0",
         "msw": "^2.15.0",
         "vitest": "^4.1.11"
     }

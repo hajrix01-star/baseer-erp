@@ -22,7 +22,7 @@ import { BaseerFilterBar } from "./baseer-filter-bar";
 import { BaseerFilterSelect } from "./baseer-filter-controls";
 import { BaseerStaticSelect } from "./baseer-static-select";
 import { BaseerMoneyInput, BaseerTextArea, BaseerTextInput } from "./baseer-form-fields";
-import { BaseerPeriodFilter, baseerPeriodLabel, baseerPeriodQuery, defaultBaseerPeriodRange, iso, riyadhToday, type BaseerPeriodRange } from "./baseer-period-filter";
+import { BaseerPeriodFilter, baseerPeriodLabel, baseerPeriodQuery, baseerPeriodRange, defaultBaseerPeriodRange, type BaseerPeriodRange } from "./baseer-period-filter";
 import { BaseerLoadFailure } from "./baseer-load-failure";
 import { BaseerNotice } from "./baseer-workspace";
 import { formatMoney } from "./number-format";
@@ -131,11 +131,7 @@ type BatchRow = {
   notes: string;
 };
 
-const systemBusinessDate = () => {
-  const { year, month, day } = riyadhToday();
-  return iso(year, month, day);
-};
-const newRow = (supplierInvoiceDate = systemBusinessDate()): BatchRow => ({
+const newRow = (supplierInvoiceDate = ""): BatchRow => ({
   id: requestId(),
   kind: "",
   settlementKind: "PAID",
@@ -234,7 +230,7 @@ export function PurchaseExpenseWorkspaceRuntime({
     ...(canReadHistory ? [{ id: "history" as const, label: text.invoiceHistory }] : []),
     ...(canReadCredit ? [{ id: "credit" as const, label: text.credit }] : []),
   ], [canCreate, canReadCredit, canReadHistory, text.credit, text.entry, text.invoiceHistory]);
-  const [businessDate, setBusinessDate] = useState(systemBusinessDate);
+  const [businessDate, setBusinessDate] = useState("");
   const [lastReceipt, setLastReceipt] = useState<{
     grossAmount: string;
     netAmount: string;
@@ -262,7 +258,7 @@ export function PurchaseExpenseWorkspaceRuntime({
   const reversalSchemaFactory = ({ z }: Parameters<NonNullable<React.ComponentProps<typeof BaseerValidatedForm>["schemaFactory"]>>[0]) => z.object({ businessDate: z.string().date(validationMessage), reason: z.string().trim().min(1, validationMessage).max(1000) }).strict();
   const amendmentSchemaFactory = ({ z }: Parameters<NonNullable<React.ComponentProps<typeof BaseerValidatedForm>["schemaFactory"]>>[0]) => z.object({ businessDate: z.string().date(validationMessage), row: z.custom<BatchRow>() }).strict().superRefine((value, context) => { if (!validRow(value.row)) context.addIssue({ code: "custom", path: ["row"], message: validationMessage }); });
   const historyRequest = useCallback((cursor?: string) => {
-    const query = new URLSearchParams(baseerPeriodQuery(historyPeriod));
+    const query = new URLSearchParams(baseerPeriodQuery(historySearch.trim() ? baseerPeriodRange("ALL") : historyPeriod));
     query.set("pageSize", "50");
     if (historySearch.trim()) query.set("q", historySearch.trim());
     if (historyKind !== "ALL") query.set("kind", historyKind);
@@ -332,7 +328,7 @@ export function PurchaseExpenseWorkspaceRuntime({
     if (!draft) return;
     const period = draft.startsOn && draft.endsOn ? `${draft.startsOn} — ${draft.endsOn}` : draft.startsOn ?? draft.endsOn ?? "غير محددة";
     const notes = [`حملة تسويقية: ${draft.campaignTitleAr}`, `فترة الحملة: ${period}`, ...(draft.campaignSummary ? [`تفاصيل الحملة: ${draft.campaignSummary}`] : [])].join("\n");
-    const row = newRow(draft.startsOn ?? systemBusinessDate());
+    const row = newRow(draft.startsOn ?? "");
     setBusinessDate(draft.startsOn ?? "");
     setBatchNotes(notes);
     setRows([{ ...row, kind: "EXPENSE", grossAmount: draft.plannedCost ?? "", notes }]);

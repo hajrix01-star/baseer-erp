@@ -49,15 +49,18 @@ test("legacy presentations migrate into their matching modern administrative col
   }
 });
 
-test("the profile menu exposes three colour palettes without a competing interface layout", async ({ page }) => {
+test("the profile menu exposes direct icon-only theme controls without a competing interface layout", async ({ page }) => {
   await openThemePreview(page, "modern-1");
   const profileMenu = page.locator(".header-profile-menu");
   await profileMenu.locator(":scope > summary").click();
 
   await expect(profileMenu.locator(".header-profile-menu__interface")).toHaveCount(0);
   await expect(profileMenu.locator("select")).toHaveCount(0);
-  await expect(profileMenu.locator(".palette-picker button")).toHaveCount(3);
-  await expect(profileMenu.locator(".header-profile-menu__appearance summary")).toHaveAttribute("aria-label", "المظهر");
+  await expect(profileMenu.locator(".header-profile-menu__appearance details")).toHaveCount(0);
+  await expect(profileMenu.locator(".theme-picker__palette button")).toHaveCount(3);
+  await expect(profileMenu.locator(".theme-picker__appearance button")).toHaveCount(3);
+  await expect(profileMenu.getByRole("button", { name: "أخضر هادئ", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await expect(profileMenu.getByRole("button", { name: "ليلي", exact: true })).toHaveAttribute("aria-pressed", "false");
 });
 
 test("palette and appearance remain switchable without changing the modern administrative interface", async ({ page }) => {
@@ -69,7 +72,6 @@ test("palette and appearance remain switchable without changing the modern admin
   await expect(page.locator("body")).toHaveAttribute("data-color-palette", "calm-green");
   await expect.poll(() => page.evaluate(() => getComputedStyle(document.body).getPropertyValue("--brand").trim())).toBe("#16815f");
   await expect.poll(() => page.evaluate((storageKey) => localStorage.getItem(storageKey), paletteStorageKey)).toBe("calm-green");
-  await profileMenu.locator(".header-profile-menu__appearance summary").click();
   await page.getByRole("button", { name: "ليلي", exact: true }).click();
 
   await expect(page.locator("body")).toHaveAttribute("data-ui-theme", "modern-3");
@@ -85,7 +87,6 @@ test("every saved palette supplies its own light and dark semantic brand token",
     await expect.poll(() => page.evaluate(() => getComputedStyle(document.body).getPropertyValue("--brand").trim())).toBe(lightBrand);
     const profileMenu = page.locator(".header-profile-menu");
     await profileMenu.locator(":scope > summary").click();
-    await profileMenu.locator(".header-profile-menu__appearance summary").click();
     await page.getByRole("button", { name: "ليلي", exact: true }).click();
     await expect.poll(() => page.evaluate(() => getComputedStyle(document.body).getPropertyValue("--brand").trim())).toBe(darkBrand);
   }

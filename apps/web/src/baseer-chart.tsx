@@ -295,7 +295,9 @@ export function BaseerMarketingTimelineChart({ language, title, timeline, campai
       animationThreshold: 2_000,
       stateAnimation: { duration: 360, easing: "cubicInOut" },
       aria: { enabled: true, description },
-      tooltip: { trigger: "axis", confine: true, appendToBody: false, backgroundColor: chartPalette.tooltipSurface, borderColor: chartPalette.tooltipBorder, borderWidth: 1, padding: [11, 13], textStyle: { color: chartPalette.primaryDeep, fontFamily: "inherit" }, axisPointer: { type: "line", lineStyle: { color: chartAlpha(chartPalette.primary, .42), width: 1.4 } }, formatter: (params: unknown) => { const first = Array.isArray(params) ? params[0] : params; const value = first && typeof first === "object" ? first as { axisValue?: string } : {}; const row = timelineRows.find((item) => item.label === value.axisValue); return row ? tooltipForRow(row) : ""; } },
+      // The read is intentionally opt-in: an incidental mouse move must not
+      // cover the plot on desktop or immediately surface a card on touch.
+      tooltip: { trigger: "axis", triggerOn: "click", confine: true, appendToBody: false, backgroundColor: chartPalette.tooltipSurface, borderColor: chartPalette.tooltipBorder, borderWidth: 1, padding: [11, 13], textStyle: { color: chartPalette.primaryDeep, fontFamily: "inherit" }, axisPointer: { type: "line", lineStyle: { color: chartAlpha(chartPalette.primary, .42), width: 1.4 } }, formatter: (params: unknown) => { const first = Array.isArray(params) ? params[0] : params; const value = first && typeof first === "object" ? first as { axisValue?: string } : {}; const row = timelineRows.find((item) => item.label === value.axisValue); return row ? tooltipForRow(row) : ""; } },
       grid: isCompactTimeline
         ? { left: 8, right: 8, top: 20, bottom: 32, containLabel: false }
         : { left: 16, right: 58, top: 30, bottom: 36, containLabel: true },
@@ -306,8 +308,25 @@ export function BaseerMarketingTimelineChart({ language, title, timeline, campai
       ],
       series,
     });
-    const observer = new ResizeObserver(() => timeline.resize()); observer.observe(timelineElement.current);
-    return () => { observer.disconnect(); if (timelineChart.current === timeline) timelineChart.current = null; timeline.dispose(); };
+    const container = timelineElement.current;
+    const hideTooltip = () => timeline.dispatchAction({ type: "hideTip" });
+    const hideTooltipOnExternalPointerDown = (event: PointerEvent) => {
+      if (event.target instanceof Node && !container.contains(event.target)) hideTooltip();
+    };
+    // ECharts does not keep click-triggered details scoped to the user's
+    // current reading area by default.  Clear it on either kind of exit.
+    timeline.on("globalout", hideTooltip);
+    container.addEventListener("pointerleave", hideTooltip);
+    document.addEventListener("pointerdown", hideTooltipOnExternalPointerDown);
+    const observer = new ResizeObserver(() => timeline.resize()); observer.observe(container);
+    return () => {
+      observer.disconnect();
+      timeline.off("globalout", hideTooltip);
+      container.removeEventListener("pointerleave", hideTooltip);
+      document.removeEventListener("pointerdown", hideTooltipOnExternalPointerDown);
+      if (timelineChart.current === timeline) timelineChart.current = null;
+      timeline.dispose();
+    };
   }, [ar, campaignsById, chartPalette.revision, context, hasPlotControls, isCompactTimeline, language, mode, showPointLabels, timelineRows, title, visibleSeries]);
   return <section className={`baseer-chart baseer-marketing-timeline${showModeControls ? " baseer-marketing-timeline--command" : ""}${expandedView ? " baseer-marketing-timeline--expanded" : ""}`} aria-label={title} data-chart-revision="cc-30904-chart-scale" data-chart-density={isCompactTimeline ? "compact" : "regular"}>
     <header className="baseer-marketing-timeline__header"><div>{showModeControls ? <p className="baseer-marketing-timeline__eyebrow">{ar ? "مركز القيادة" : "Command center"}</p> : null}<h3>{title}</h3>{periodLabel ? <small>{periodLabel}</small> : null}</div><div className="baseer-marketing-timeline__header-meta"><small className="baseer-marketing-timeline__as-of">{language === "ar" ? `قراءة خادمية في ${formatDate(asOf, language)}` : `Server read as of ${formatDate(asOf, language)}`}</small>{headerMetrics}</div></header>

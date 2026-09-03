@@ -62,7 +62,6 @@
 .baseer-money-input[aria-invalid="true"]:focus-visible,
 .baseer-integer-input[aria-invalid="true"]:focus-visible,
 .baseer-textarea[aria-invalid="true"]:focus-visible { outline-color: color-mix(in srgb, var(--status-danger) 34%, transparent); border-color: var(--status-danger); }
-.baseer-form-grid input[type="date"] { direction: ltr; text-align: start; }
 .baseer-form-grid input[type="checkbox"] { inline-size: 1.1rem; block-size: 1.1rem; min-height: 0; padding: 0; accent-color: var(--brand); }
 .baseer-checkbox { inline-size: 1.1rem; block-size: 1.1rem; min-height: 0; min-inline-size: 0; padding: 0; accent-color: var(--brand); }
 .baseer-radio { inline-size: 1.1rem; block-size: 1.1rem; min-height: 0; min-inline-size: 0; padding: 0; accent-color: var(--brand); }

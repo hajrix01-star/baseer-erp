@@ -18,6 +18,7 @@ const fixture = {
   foreignCompanyId: randomUUID(),
   managerUserId: randomUUID(),
   readerUserId: randomUUID(),
+  payrollUserId: randomUUID(),
   activeEmployeeId: randomUUID(),
   terminatedEmployeeId: randomUUID(),
   payrollRunId: randomUUID(),
@@ -53,6 +54,11 @@ try {
     password: `Reader-${suffix}`,
     requestId: randomUUID(),
   });
+  const payrollSession = await auth.signIn({
+    login: `hr-payroll-${suffix}@baseer.test`,
+    password: `Payroll-${suffix}`,
+    requestId: randomUUID(),
+  });
   const server = app.getHttpAdapter().getInstance();
   const managerHeaders = {
     authorization: `Bearer ${managerSession.accessToken}`,
@@ -60,6 +66,10 @@ try {
   };
   const readerHeaders = {
     authorization: `Bearer ${readerSession.accessToken}`,
+    "x-baseer-company-id": fixture.companyId,
+  };
+  const payrollHeaders = {
+    authorization: `Bearer ${payrollSession.accessToken}`,
     "x-baseer-company-id": fixture.companyId,
   };
 
@@ -278,6 +288,46 @@ try {
     hireDate: "2026-01-01",
     idempotencyKey: createKey,
   };
+  const retroactiveOnboardingRequest = {
+    nameAr: "موظف أثر رجعي",
+    nameEn: "Backdated employee",
+    jobTitle: "موظف اختبار",
+    hireDate: "2026-01-15",
+    initialCompensation: {
+      monthlyGross: "5000.0000",
+      compensationMethod: "FIXED_MONTHLY",
+      foodAllowance: "0.0000",
+      housingAllowance: "0.0000",
+      transportAllowance: "0.0000",
+      otherAllowance: "0.0000",
+    },
+    idempotencyKey: randomUUID(),
+  };
+  await expectError(
+    server.inject({ method: "POST", url: "/v1/hr/employees/onboard", headers: payrollHeaders, payload: retroactiveOnboardingRequest }),
+    403,
+    "AUTHORIZATION_DENIED",
+    "A payroll creator without the retroactive capability must not create a backdated employee or salary.",
+  );
+  const retroactiveOnboarding = await server.inject({ method: "POST", url: "/v1/hr/employees/onboard", headers: managerHeaders, payload: retroactiveOnboardingRequest });
+  assert.equal(retroactiveOnboarding.statusCode, 201, retroactiveOnboarding.body);
+  assert.equal(retroactiveOnboarding.json().replayed, false);
+  await expectError(
+    server.inject({ method: "POST", url: "/v1/hr/compensation", headers: managerHeaders, payload: {
+      employeeId: fixture.activeEmployeeId,
+      effectiveFrom: "2026-07-01",
+      monthlyGross: "7100.0000",
+      compensationMethod: "FIXED_MONTHLY",
+      foodAllowance: "0.0000",
+      housingAllowance: "0.0000",
+      transportAllowance: "0.0000",
+      otherAllowance: "0.0000",
+      idempotencyKey: randomUUID(),
+    } }),
+    409,
+    "CONFLICT",
+    "A backdated salary must not alter an approved payroll month for that employee.",
+  );
   const created = await server.inject({ method: "POST", url: "/v1/hr/employees", headers: managerHeaders, payload: employeeRequest });
   assert.equal(created.statusCode, 201, created.body);
   assert.equal(created.json().replayed, false);
@@ -365,8 +415,10 @@ async function expectError(responsePromise, expectedStatus, expectedCode, messag
 async function seedFixture() {
   const managerRoleId = randomUUID();
   const readerRoleId = randomUUID();
+  const payrollRoleId = randomUUID();
   const managerPasswordHash = await bcrypt.hash(`Manager-${suffix}`, 12);
   const readerPasswordHash = await bcrypt.hash(`Reader-${suffix}`, 12);
+  const payrollPasswordHash = await bcrypt.hash(`Payroll-${suffix}`, 12);
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
@@ -377,6 +429,10 @@ async function seedFixture() {
       [fixture.managerUserId, fixture.tenantId, `hr-manager-${suffix}@baseer.test`, "مدير موارد بشرية", "HR manager", managerPasswordHash, fixture.readerUserId, `hr-reader-${suffix}@baseer.test`, "قارئ موارد بشرية", "HR reader", readerPasswordHash],
     );
     await client.query(
+      'INSERT INTO "User" ("id", "tenantId", "loginNormalized", "nameAr", "nameEn", "passwordHash") VALUES ($1::uuid, $2::uuid, $3, $4, $5, $6)',
+      [fixture.payrollUserId, fixture.tenantId, `hr-payroll-${suffix}@baseer.test`, "منشئ مسير", "Payroll creator", payrollPasswordHash],
+    );
+    await client.query(
       'INSERT INTO "Company" ("id", "tenantId", "nameAr", "nameEn") VALUES ($1::uuid, $2::uuid, $3, $4), ($5::uuid, $2::uuid, $6, $7)',
       [fixture.companyId, fixture.tenantId, "شركة فحص الموارد البشرية", "HR verification company", fixture.foreignCompanyId, "شركة خارج النطاق", "Out-of-scope company"],
     );
@@ -384,11 +440,16 @@ async function seedFixture() {
       'INSERT INTO "Role" ("id", "tenantId", "code", "nameAr", "nameEn") VALUES ($1::uuid, $2::uuid, $3, $4, $5), ($6::uuid, $2::uuid, $7, $8, $9)',
       [managerRoleId, fixture.tenantId, `HR_MANAGER_${suffix}`, "مدير الموارد البشرية", "HR manager", readerRoleId, `HR_READER_${suffix}`, "قارئ الموارد البشرية", "HR reader"],
     );
+    await client.query(
+      'INSERT INTO "Role" ("id", "tenantId", "code", "nameAr", "nameEn") VALUES ($1::uuid, $2::uuid, $3, $4, $5)',
+      [payrollRoleId, fixture.tenantId, `HR_PAYROLL_${suffix}`, "منشئ مسير", "Payroll creator"],
+    );
     const managerCapabilities = [
       "hr.employees.read",
       "hr.employees.write",
       "hr.payroll.read",
       "hr.payroll.create",
+      "hr.compensation.backdate",
       "hr.final_settlements.read",
       "hr.leaves.read",
       "hr.advances.read",
@@ -405,9 +466,16 @@ async function seedFixture() {
       await client.query('INSERT INTO "RolePermission" ("tenantId", "roleId", "permissionCode") VALUES ($1::uuid, $2::uuid, $3)', [fixture.tenantId, managerRoleId, capability]);
     }
     await client.query('INSERT INTO "RolePermission" ("tenantId", "roleId", "permissionCode") VALUES ($1::uuid, $2::uuid, $3)', [fixture.tenantId, readerRoleId, "hr.employees.read"]);
+    for (const capability of ["hr.employees.write", "hr.payroll.create"]) {
+      await client.query('INSERT INTO "RolePermission" ("tenantId", "roleId", "permissionCode") VALUES ($1::uuid, $2::uuid, $3)', [fixture.tenantId, payrollRoleId, capability]);
+    }
     await client.query(
       'INSERT INTO "CompanyMembership" ("tenantId", "userId", "companyId", "roleId") VALUES ($1::uuid, $2::uuid, $3::uuid, $4::uuid), ($1::uuid, $5::uuid, $3::uuid, $6::uuid)',
       [fixture.tenantId, fixture.managerUserId, fixture.companyId, managerRoleId, fixture.readerUserId, readerRoleId],
+    );
+    await client.query(
+      'INSERT INTO "CompanyMembership" ("tenantId", "userId", "companyId", "roleId") VALUES ($1::uuid, $2::uuid, $3::uuid, $4::uuid)',
+      [fixture.tenantId, fixture.payrollUserId, fixture.companyId, payrollRoleId],
     );
     await client.query(
       `INSERT INTO "HrEmployee" ("id", "tenantId", "companyId", "employeeNumber", "nameAr", "nameEn", "jobTitle", "hireDate", "status", "updatedAt")
@@ -428,6 +496,11 @@ async function seedFixture() {
               ($5::uuid, $2::uuid, $3::uuid, 'PAY-HTTP-TARGET', DATE '2026-07-01', DATE '2026-07-31', 'APPROVED', 1, 1000.0000, 100.0000, 50.0000, 850.0000, $4::uuid, CURRENT_TIMESTAMP),
               (gen_random_uuid(), $2::uuid, $3::uuid, 'PAY-HTTP-CANCELLED', DATE '2026-06-01', DATE '2026-06-30', 'REVERSED', 1, 9000.0000, 900.0000, 450.0000, 7650.0000, $4::uuid, CURRENT_TIMESTAMP)`,
       [fixture.payrollRunId, fixture.tenantId, fixture.companyId, fixture.managerUserId, fixture.approvedPayrollRunId],
+    );
+    await client.query(
+      `INSERT INTO "HrPayrollLine" ("id", "tenantId", "companyId", "payrollRunId", "employeeId", "employeeNumberSnapshot", "employeeNameArSnapshot", "grossSalary", "netPayableAmount", "updatedAt")
+       VALUES (gen_random_uuid(), $1::uuid, $2::uuid, $3::uuid, $4::uuid, 'EMP-HTTP-001', 'موظف نشط', 1000.0000, 850.0000, CURRENT_TIMESTAMP)`,
+      [fixture.tenantId, fixture.companyId, fixture.approvedPayrollRunId, fixture.activeEmployeeId],
     );
     await client.query(
       `INSERT INTO "HrEmployeeLeave" ("id", "tenantId", "companyId", "employeeId", "leaveType", "status", "startDate", "endDate", "actualReturnDate", "approvedByUserId", "returnedByUserId", "returnedAt", "updatedAt")

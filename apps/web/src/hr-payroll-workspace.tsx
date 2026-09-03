@@ -120,7 +120,8 @@ export function HrPayrollWorkspace({ language, stage }: { language: Language; st
     const requestNumber = ++loadRequestRef.current;
     if (!append) setLoading(true);
     try {
-      const payroll = await listHrPayrollRuns(current, { periodFrom: period.from, periodTo: period.to, search: serverSearch || undefined, cursor, pageSize: 50 });
+      const searchPeriod = serverSearch ? baseerPeriodRange("ALL") : period;
+      const payroll = await listHrPayrollRuns(current, { periodFrom: searchPeriod.from, periodTo: searchPeriod.to, search: serverSearch || undefined, cursor, pageSize: 50 });
       if (requestNumber !== loadRequestRef.current) return;
       setRuns((rows) => append ? [...rows, ...payroll.payrollRuns] : payroll.payrollRuns); setNextCursor(payroll.nextCursor);
       // An older API process can temporarily omit the newly-added cancelled

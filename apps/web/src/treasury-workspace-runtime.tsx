@@ -17,6 +17,7 @@ import {
 } from "./baseer-summary-metric";
 import { BaseerConfirmDialog } from "./baseer-confirm-dialog";
 import { BaseerDialog } from "./baseer-dialog";
+import { BaseerDatePicker } from "./baseer-date-picker";
 import { BaseerFilterToggle } from "./baseer-filter-controls";
 import { BaseerStaticSelect } from "./baseer-static-select";
 import { BaseerMoneyInput, BaseerTextArea, BaseerTextInput } from "./baseer-form-fields";
@@ -181,9 +182,6 @@ const emptyVault: VaultForm = {
   isSalesChannel: false,
   isPaymentDestination: true,
 };
-const LazyBaseerDatePicker = lazy(async () => ({
-  default: (await import("./baseer-date-picker")).BaseerDatePicker,
-}));
 const LazyBaseerFilterBar = lazy(async () => ({
   default: (await import("./baseer-filter-bar")).BaseerFilterBar,
 }));
@@ -219,26 +217,6 @@ function BaseerValidatedFormField<Values extends Record<string, unknown>>(
       }
     >
       <Form {...props} />
-    </Suspense>
-  );
-}
-
-/** Date picking is needed only after opening a Treasury form, not on the initial workspace route. */
-function BaseerDatePicker(props: ComponentProps<typeof LazyBaseerDatePicker>) {
-  return (
-    <Suspense
-      fallback={
-        <input
-          aria-label={props.label}
-          type="date"
-          value={props.value}
-          min={props.min}
-          max={props.max}
-          disabled
-        />
-      }
-    >
-      <LazyBaseerDatePicker {...props} />
     </Suspense>
   );
 }

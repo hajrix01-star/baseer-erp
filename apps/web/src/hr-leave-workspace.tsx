@@ -6,7 +6,7 @@ import { BaseerCard } from "./baseer-card";
 import { BaseerDialog } from "./baseer-dialog";
 import { BaseerFilterBar } from "./baseer-filter-bar";
 import { BaseerFilterSelect } from "./baseer-filter-controls";
-import { BaseerPeriodFilter, baseerPeriodLabel, defaultBaseerPeriodRange, type BaseerPeriodRange } from "./baseer-period-filter";
+import { BaseerPeriodFilter, baseerPeriodLabel, baseerPeriodRange, defaultBaseerPeriodRange, type BaseerPeriodRange } from "./baseer-period-filter";
 import { BaseerSummaryMetric, BaseerSummaryMetricGrid } from "./baseer-summary-metric";
 import { uiCopy } from "./baseer-ui-copy";
 import type { BaseerDataGridColumn } from "./baseer-data-grid";
@@ -66,7 +66,8 @@ export function HrLeaveWorkspace({ language, stage }: { language: Language; stag
     const requestNumber = ++loadRequestRef.current;
     if (!append) setLoading(true);
     try {
-      const [leaveReceipt, employeeReceipt] = await Promise.all([listHrEmployeeLeaves(current, { employeeId: employeeFilter || undefined, status: statusFilter || undefined, leaveType: typeFilter || undefined, periodFrom: period.from, periodTo: period.to, search: serverSearch || undefined, cursor, pageSize: 50, sortDirection }), append ? Promise.resolve(null) : listHrEmployees(current, { pageSize: 100 })]);
+      const searchPeriod = serverSearch ? baseerPeriodRange("ALL") : period;
+      const [leaveReceipt, employeeReceipt] = await Promise.all([listHrEmployeeLeaves(current, { employeeId: employeeFilter || undefined, status: statusFilter || undefined, leaveType: typeFilter || undefined, periodFrom: searchPeriod.from, periodTo: searchPeriod.to, search: serverSearch || undefined, cursor, pageSize: 50, sortDirection }), append ? Promise.resolve(null) : listHrEmployees(current, { pageSize: 100 })]);
       if (requestNumber !== loadRequestRef.current) return;
       setLeaves((rows) => append ? [...rows, ...leaveReceipt.leaves] : leaveReceipt.leaves); setNextCursor(leaveReceipt.nextCursor);
       setSummary(leaveReceipt.summary);

@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "بصير ERP — خريطة الفحص الشامل",
+    "quality_profile": "showcase",
+    "engineering_profile": "deployment-ownership",
+    "viewBox": [1600, 900]
+  },
+  "components": [
+    { "id": "users", "type": "external", "label": "المستخدمون", "pos": [80, 360], "size": [145, 68] },
+    { "id": "caddy", "type": "security", "label": "Caddy", "tag": "المالك: فريق المنصة", "pos": [270, 360], "size": [150, 68] },
+    { "id": "web", "type": "frontend", "label": "واجهة بصير", "tag": "المالك: فريق المنتج", "pos": [500, 200], "size": [170, 68] },
+    { "id": "api", "type": "backend", "label": "Baseer API", "tag": "المالك: فريق الخلفية", "pos": [740, 360], "size": [170, 68] },
+    { "id": "identity", "type": "security", "label": "الهوية والصلاحيات", "tag": "المالك: فريق الخلفية", "pos": [740, 80], "size": [170, 68] },
+    { "id": "domains", "type": "backend", "label": "وحدات الأعمال", "tag": "المالك: فريق المنتج", "pos": [980, 360], "size": [185, 68] },
+    { "id": "postgres", "type": "database", "label": "PostgreSQL", "tag": "المالك: فريق المنصة", "pos": [1230, 360], "size": [150, 68] },
+    { "id": "migrate", "type": "backend", "label": "مهمة الترحيل", "tag": "المالك: فريق المنصة", "pos": [1040, 660], "size": [185, 68] },
+    { "id": "storage", "type": "cloud", "label": "تخزين ملفات خاص", "tag": "المالك: فريق المنصة", "pos": [1300, 100], "size": [150, 68] },
+    { "id": "scheduler", "type": "backend", "label": "المجدولات", "tag": "المالك: فريق الخلفية", "pos": [720, 660], "size": [170, 68] },
+    { "id": "external", "type": "external", "label": "تكاملات اختيارية", "pos": [980, 120], "size": [185, 68] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "بيئة private-online المثبتة بالدليل", "wraps": ["caddy", "web", "api", "identity", "domains", "postgres", "migrate", "storage", "scheduler"] },
+    { "kind": "security-group", "label": "حد الثقة الخاص: edge ↔ API ↔ PostgreSQL", "wraps": ["caddy", "api", "identity", "postgres"] }
+  ],
+  "connections": [
+    { "from": "users", "to": "caddy", "label": "HTTPS", "variant": "emphasis" },
+    { "from": "caddy", "to": "web", "label": "أصول الواجهة" },
+    { "from": "caddy", "to": "api", "label": "REST عبر proxy", "variant": "security" },
+    { "from": "web", "to": "api", "label": "طلبات REST" },
+    { "from": "api", "to": "identity", "label": "تحقق الهوية والنطاق", "variant": "security" },
+    { "from": "api", "to": "domains", "label": "أوامر الأعمال" },
+    { "from": "domains", "to": "postgres", "label": "Prisma + RLS", "labelAt": [1200, 330] },
+    { "from": "migrate", "to": "postgres", "label": "اتصال DB مقيّد", "variant": "security", "fromSide": "top", "toSide": "bottom", "via": [[1132.5, 580], [1305, 580]], "labelAt": [1170, 564] },
+    { "from": "scheduler", "to": "postgres", "label": "اتصال DB مقيّد", "fromSide": "right", "toSide": "bottom", "via": [[950, 694], [950, 500], [1305, 500]], "labelAt": [1015, 485] },
+    { "from": "domains", "to": "storage", "fromSide": "top", "toSide": "bottom", "via": [[1072.5, 280], [1375, 280]] },
+    { "from": "domains", "to": "external", "label": "تكامل HTTPS اختياري", "variant": "dashed", "labelAt": [1200, 220] }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "مثبت بالدليل", "items": ["React/Nest/PostgreSQL ضمن compose الخاص", "الترحيلات منفصلة عن runtime", "RLS ونطاق الشركة داخل API"] },
+    { "dot": "amber", "title": "مسارات عالية المخاطر", "items": ["الهوية والصلاحيات", "المالية وHR", "الترحيلات والاستعادة", "التكاملات والملفات"] },
+    { "dot": "rose", "title": "حد الفحص", "items": ["لا يتم افتراض تكامل مفعّل بلا إعداد مثبت", "قرار النشر لا يساوي الفحص المحلي"] }
+  ]
+}

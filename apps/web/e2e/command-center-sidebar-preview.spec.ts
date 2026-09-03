@@ -6,6 +6,42 @@ async function fulfill(route: Route, json: unknown) {
   await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(json) });
 }
 
+function money(raw: string, display: string, sign: "positive" | "negative" | "zero" = "zero") {
+  return { raw, display, sign };
+}
+
+const cashEvidence = { reportCode: "personal_cash_performance", metric: { kind: "CASH_ROW", rowCode: "net_cash_result" } };
+
+// This test renders the actual command-center route before capturing navigation.
+// Keep its receipt structurally valid: a partial legacy fixture makes the page
+// fail before the navigation under test is ever mounted.
+const financialRead = {
+  state: "READY",
+  selectedPeriod: { from: "2026-08-01", to: "2026-08-31" },
+  rows: [],
+  vaults: [],
+  totals: {
+    inflows: money("0.0000", "0.00"),
+    outflows: money("0.0000", "0.00"),
+    netCashResult: money("0.0000", "0.00"),
+    netCashResultShareOfCollectedSalesPercent: "0.0000",
+    inflowsEvidence: cashEvidence,
+    outflowsEvidence: cashEvidence,
+    netCashResultEvidence: cashEvidence,
+  },
+  operatingCosts: { basisLabelAr: "الحركات المالية المثبتة خلال الفترة", total: money("0.0000", "0.00"), shareOfCollectedSalesPercent: "0.0000", evidence: cashEvidence, groups: [] },
+  comparison: { state: "UNAVAILABLE", netCashResultPercentChange: null },
+};
+
+const marketingRead = {
+  financialRead: { contractVersion: "financial-read.v1", subject: "MIXED_ANALYTICS", defaultTaxView: "VAT_INCLUDED", allowedTaxViews: ["VAT_INCLUDED"], authority: "mock", quality: "READY", currencyScope: { mode: "SINGLE_CURRENCY", currencyCode: "SAR" }, presentationPolicy: "SERVER_FORMATTED" },
+  period: { fromBusinessDate: "2026-08-01", toBusinessDate: "2026-08-31" },
+  sales: { dataQuality: "READY", payload: { netAmount: "0.0000", grossAmount: "0.0000" } },
+  campaigns: [], days: [], weekdayAverages: [], salesTargets: [], context: [], linkedActualGrossAmount: "0.0000", linkedActualGrossAmountDisplay: "0.00",
+  timeline: { daily: { rows: [], campaignLanes: [] }, monthly: { rows: [], campaignLanes: [] } },
+  spendResult: { plannedCampaignCost: "0.0000", plannedCampaignCostDisplay: "0.00", linkedActualSpend: "0.0000", linkedActualSpendDisplay: "0.00", linkedPostedSpendOnly: true, spendDataQuality: "READY", excludedLinkedDocumentCount: 0, officialGrossSales: "0.0000", officialGrossSalesDisplay: "0.00", officialGrossSalesCalendarDisplay: "0.00", spendToSalesPercent: "0.0000", campaignCount: 0, salesDataQuality: "READY", googleAdsStatus: "NOT_CONNECTED", conclusionAr: "", conclusionEn: "" },
+};
+
 async function openCommandCenter(page: Page) {
   await page.addInitScript((company) => {
     sessionStorage.setItem("baseer.erp.access-token", "sidebar-preview-access-token");
@@ -25,17 +61,7 @@ async function openCommandCenter(page: Page) {
         permissionCodes: ["reports.read", "marketing.insights.read"],
       }],
     });
-    if (path === "/v1/reports/personal-cash-performance") return fulfill(route, {
-      state: "READY",
-      selectedPeriod: { from: "2026-08-01", to: "2026-08-31" },
-      rows: [], vaults: [],
-      totals: {
-        inflows: { raw: "0.0000", display: "0.00", sign: "zero" },
-        outflows: { raw: "0.0000", display: "0.00", sign: "zero" },
-        netCashResult: { raw: "0.0000", display: "0.00", sign: "zero" },
-        netCashResultShareOfCollectedSalesPercent: "0.0000",
-      },
-    });
+    if (path === "/v1/reports/personal-cash-performance") return fulfill(route, financialRead);
     if (path === "/v1/finance/daily-sales/analytics") return fulfill(route, {
       primary: {
         monthSummary: { dataQuality: "READY", coverage: { recordedSalesDays: 31, requiredOperatingDays: 31 }, display: { dailyAverageSalesAmount: "0.00", dailyAverageCustomerCount: "0" } },
@@ -46,16 +72,11 @@ async function openCommandCenter(page: Page) {
         weeks: [],
       },
     });
-    if (path === "/v1/marketing/calendar") return fulfill(route, {
-      period: { fromBusinessDate: "2026-08-01", toBusinessDate: "2026-08-31", timezone: "Asia/Riyadh" },
-      sales: { dataQuality: "READY", payload: { netAmount: "0.0000" } },
-      campaigns: [], days: [], weekdayAverages: [], salesTargets: [], context: [], linkedActualGrossAmount: "0.0000",
-      spendResult: { plannedCampaignCost: "0.0000", linkedActualSpend: "0.0000", officialNetSales: "0.0000", spendToSalesPercent: "0.0000", campaignCount: 0, salesDataQuality: "READY", conclusionAr: "", conclusionEn: "" },
-    });
+    if (path === "/v1/marketing/calendar") return fulfill(route, marketingRead);
     return fulfill(route, {});
   });
 
-  await page.goto("/#module=command&section=0");
+  await page.goto("/#module=command&page=command-money-marketing");
   await expect(page.locator(".module-page")).toBeVisible();
 }
 

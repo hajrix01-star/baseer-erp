@@ -14,6 +14,7 @@ import {
   BaseerPeriodFilter,
   baseerPeriodLabel,
   baseerPeriodQuery,
+  baseerPeriodRange,
   defaultBaseerPeriodRange,
   type BaseerPeriodRange,
 } from "./baseer-period-filter";
@@ -212,7 +213,7 @@ export function FinanceAccountsWorkspaceRuntime({ language }: { language: Langua
   const [pane, setPane] = useState<"activity" | "journal">("activity");
 
   const query = useCallback(() => {
-    const params = new URLSearchParams(baseerPeriodQuery(period));
+    const params = new URLSearchParams(baseerPeriodQuery(search.trim() ? baseerPeriodRange("ALL") : period));
     if (search.trim()) params.set("q", search.trim());
     return params;
   }, [period, search]);

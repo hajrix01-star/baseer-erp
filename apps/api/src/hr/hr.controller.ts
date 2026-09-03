@@ -174,9 +174,9 @@ export class HrController {
   async createEmployee(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = createHrEmployeeRequestSchema.safeParse(body);
     if (!parsed.success) throw new BadRequestException('Invalid employee request.');
-    const context = await this.authorize(authorization, companyId, WRITE_CAPABILITY);
+    const access = await this.authorizeWithRetroactiveCompensation(authorization, companyId, WRITE_CAPABILITY);
     const { idempotencyKey, ...input } = parsed.data;
-    return hrEmployeeEntityReceiptSchema.parse(await this.hr.createEmployee(context, input, idempotencyKey));
+    return hrEmployeeEntityReceiptSchema.parse(await this.hr.createEmployee(access.context, input, idempotencyKey, { canBackdate: access.canBackdate }));
   }
 
   @Post('employees/work-terms')
@@ -194,9 +194,9 @@ export class HrController {
   async onboardEmployee(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = onboardHrEmployeeRequestSchema.safeParse(body);
     if (!parsed.success) throw new BadRequestException('Invalid employee onboarding request.');
-    const context = await this.authorize(authorization, companyId, [WRITE_CAPABILITY, 'hr.payroll.create']);
+    const access = await this.authorizeWithRetroactiveCompensation(authorization, companyId, [WRITE_CAPABILITY, 'hr.payroll.create']);
     const { idempotencyKey, ...input } = parsed.data;
-    return hrEmployeeOnboardingReceiptSchema.parse(await this.payroll.onboardEmployee(context, input, idempotencyKey));
+    return hrEmployeeOnboardingReceiptSchema.parse(await this.payroll.onboardEmployee(access.context, input, idempotencyKey, { canBackdate: access.canBackdate }));
   }
 
   @Post('employees/update')
@@ -407,9 +407,9 @@ export class HrController {
   async setCompensation(@Body() body: unknown, @Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
     const parsed = setHrEmployeeCompensationRequestSchema.safeParse(body);
     if (!parsed.success) throw new BadRequestException('Invalid employee compensation request.');
-    const context = await this.authorize(authorization, companyId, 'hr.payroll.create');
+    const access = await this.authorizeWithRetroactiveCompensation(authorization, companyId, 'hr.payroll.create');
     const { idempotencyKey, ...request } = parsed.data;
-    return hrEmployeeCompensationProfileReceiptSchema.parse(await this.payroll.setCompensation(context, request, idempotencyKey));
+    return hrEmployeeCompensationProfileReceiptSchema.parse(await this.payroll.setCompensation(access.context, request, idempotencyKey, { canBackdate: access.canBackdate }));
   }
 
   @Get('compensation-policies')
@@ -649,6 +649,24 @@ export class HrController {
     if (!parsedCompanyId.success) throw new ForbiddenException('Company HR scope is not permitted.');
     const authorized = await this.companyContext.authorize({ accessToken, companyId: parsedCompanyId.data, requiredCapabilities: Array.isArray(capability) ? capability : [capability] });
     return { tenantId: authorized.principal.tenantId, companyId: authorized.company.id, actorUserId: authorized.principal.userId };
+  }
+
+  private async authorizeWithRetroactiveCompensation(authorization: string | undefined, companyId: string | undefined, capability: string | readonly string[]) {
+    const accessToken = /^Bearer\s+(.+)$/i.exec(authorization ?? '')?.[1];
+    if (!accessToken) throw new UnauthorizedException('Invalid authentication credentials.');
+    const parsedCompanyId = companyIdSchema.safeParse(companyId);
+    if (!parsedCompanyId.success) throw new ForbiddenException('Company HR scope is not permitted.');
+    const requiredCapabilities = Array.isArray(capability) ? capability : [capability];
+    const authorized = await this.companyContext.authorizeAvailable({
+      accessToken,
+      companyId: parsedCompanyId.data,
+      requestedCapabilities: [...requiredCapabilities, 'hr.compensation.backdate'],
+    });
+    if (!requiredCapabilities.every((code) => authorized.capabilities.includes(code))) throw new ForbiddenException('Company HR scope is not permitted.');
+    return {
+      context: { tenantId: authorized.principal.tenantId, companyId: authorized.company.id, actorUserId: authorized.principal.userId },
+      canBackdate: authorized.capabilities.includes('hr.compensation.backdate'),
+    };
   }
 
   private async authorizeEmployeeRead(authorization: string | undefined, companyId: string | undefined) {

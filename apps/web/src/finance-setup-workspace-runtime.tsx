@@ -5,13 +5,13 @@ import {
   useEffect,
   useMemo,
   useState,
-  type ComponentProps,
 } from "react";
 
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
 import { BaseerConfirmDialog } from "./baseer-confirm-dialog";
 import { BaseerDialog } from "./baseer-dialog";
+import { BaseerDatePicker } from "./baseer-date-picker";
 import { BaseerFilterBar } from "./baseer-filter-bar";
 import { BaseerCheckbox, BaseerTextInput } from "./baseer-form-fields";
 import {
@@ -156,33 +156,10 @@ const dateValue = (offset = 0) => {
   date.setDate(date.getDate() + offset);
   return date.toISOString().slice(0, 10);
 };
-const LazyBaseerDatePicker = lazy(async () => ({
-  default: (await import("./baseer-date-picker")).BaseerDatePicker,
-}));
 const LazyFinanceSupplierFormDialog = lazy(async () => ({
   default: (await import("./finance-supplier-form-dialog"))
     .FinanceSupplierFormDialog,
 }));
-
-/** The calendar control is fetched only when the finance setup form renders. */
-function BaseerDatePicker(props: ComponentProps<typeof LazyBaseerDatePicker>) {
-  return (
-    <Suspense
-      fallback={
-        <input
-          aria-label={props.label}
-          type="date"
-          value={props.value}
-          min={props.min}
-          max={props.max}
-          disabled
-        />
-      }
-    >
-      <LazyBaseerDatePicker {...props} />
-    </Suspense>
-  );
-}
 
 export function FinanceSetupWorkspaceRuntime({
   language,

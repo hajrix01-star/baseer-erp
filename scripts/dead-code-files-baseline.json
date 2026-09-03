@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-03",
+  "tool": {
+    "name": "knip",
+    "version": "6.34.0"
+  },
+  "scope": "unused source files only; web, API, and contracts workspaces",
+  "workspaces": [
+    "apps/web",
+    "apps/api",
+    "packages/contracts"
+  ],
+  "allowedFiles": [
+    "apps/api/src/finance/index.ts",
+    "apps/api/src/finance/journal/index.ts",
+    "apps/api/src/finance/noorix-category-mapping.ts",
+    "apps/web/src/backup-recovery-download.ts",
+    "apps/web/src/baseer-aria-date-picker.tsx",
+    "apps/web/src/baseer-required-textarea-form.tsx",
+    "apps/web/src/command-center-sales-calendar.tsx",
+    "apps/web/src/decision-intelligence-workspace-content.tsx",
+    "apps/web/src/feature-coming-soon.tsx",
+    "apps/web/src/finance-setup-workspace-content.tsx",
+    "apps/web/src/hr-attendance-deferred-styles.tsx",
+    "apps/web/src/hr-salary-adjustment-dialog.tsx",
+    "apps/web/src/marketing-workspace-content.tsx"
+  ]
+}

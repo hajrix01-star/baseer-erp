@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 
 import type {
@@ -77,6 +77,7 @@ type ReverseInput = Omit<ReverseHrPayrollRunRequest, 'idempotencyKey'>;
 export type PayrollPaymentReversalInput = Readonly<{ payrollPaymentId: string; businessDate: Date; reason: string }>;
 type CompensationInput = Omit<SetHrEmployeeCompensationRequest, 'idempotencyKey'>;
 type EmployeeOnboardingInput = Omit<OnboardHrEmployeeRequest, 'idempotencyKey'>;
+type RetroactiveCompensationAuthorization = Readonly<{ canBackdate: boolean }>;
 type CompensationPolicyCreateInput = Omit<CreateHrCompensationPolicyRequest, 'idempotencyKey'>;
 type CompensationPolicyVersionInput = Omit<CreateHrCompensationPolicyVersionRequest, 'idempotencyKey'>;
 type CompensationPolicyApprovalInput = Omit<ApproveHrCompensationPolicyVersionRequest, 'idempotencyKey'>;
@@ -171,25 +172,21 @@ export class HrPayrollService {
     });
   }
 
-  async setCompensation(context: TrustedCompanyActorContext, input: CompensationInput, key: string) {
+  async setCompensation(context: TrustedCompanyActorContext, input: CompensationInput, key: string, authorization: RetroactiveCompensationAuthorization = { canBackdate: false }) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       // Serialise all effective-dated agreements for one employee. A generic
       // uniqueness key cannot protect range overlap when two future requests
       // race in separate transactions.
       await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${`${context.tenantId}:${context.companyId}:employee-compensation:${input.employeeId}`}, 0))`;
       const currentDate = await this.dates.resolveInTransaction(tx, context, { kind: 'current' });
-      const employee = await tx.hrEmployee.findFirst({ where: { id: input.employeeId, tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrEmployeeStatus.ACTIVE, HrEmployeeStatus.ON_LEAVE] } }, select: { id: true, hireDate: true } });
+      const employee = await tx.hrEmployee.findFirst({ where: { id: input.employeeId, tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrEmployeeStatus.ACTIVE, HrEmployeeStatus.ON_LEAVE] } }, select: { id: true } });
       if (!employee) throw new NotFoundException('The employee is not available for compensation.');
       const agreements = await tx.hrEmployeeCompensationProfile.findMany({
         where: { tenantId: context.tenantId, companyId: context.companyId, employeeId: input.employeeId },
         orderBy: { effectiveFrom: 'asc' },
       });
-      const isFirstAgreementForCurrentMonthHire = agreements.length === 0
-        && firstOfMonth(input.effectiveFrom).getTime() === firstOfMonth(employee.hireDate).getTime()
-        && firstOfMonth(input.effectiveFrom).getTime() === firstOfMonth(new Date(`${currentDate.businessDate}T00:00:00.000Z`)).getTime();
-      if (!isFirstAgreementForCurrentMonthHire) {
-        assertNotPast(input.effectiveFrom, currentDate.businessDate, 'Compensation cannot start in the past. Create a future agreement instead.');
-      }
+      const isRetroactive = ymd(input.effectiveFrom) < currentDate.businessDate;
+      if (isRetroactive && !authorization.canBackdate) throw new ForbiddenException('Backdated compensation requires the dedicated permission.');
       assertFirstDayOfMonth(input.effectiveFrom, 'A compensation agreement must start on the first day of a month.');
       const begun = await this.begin(tx, context, COMPENSATION_OPERATION, key, input);
       if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; replayed: boolean }>(begun.response.body);
@@ -226,7 +223,7 @@ export class HrPayrollService {
       } });
       const receipt = { id, replayed: false };
       await this.complete(tx, context, begun.receiptId, receipt);
-      await this.audit(tx, context, 'hr.compensation.set', 'HrEmployeeCompensationProfile', id, receipt);
+      await this.audit(tx, context, 'hr.compensation.set', 'HrEmployeeCompensationProfile', id, { ...receipt, effectiveFrom: ymd(input.effectiveFrom), retroactive: isRetroactive });
       return receipt;
     });
   }
@@ -234,24 +231,20 @@ export class HrPayrollService {
   /** The first agreement belongs to the employee creation itself. Keeping both
    * writes in one transaction prevents an employee record without a salary
    * agreement when a later request fails. */
-  async onboardEmployee(context: TrustedCompanyActorContext, input: EmployeeOnboardingInput, key: string) {
+  async onboardEmployee(context: TrustedCompanyActorContext, input: EmployeeOnboardingInput, key: string, authorization: RetroactiveCompensationAuthorization = { canBackdate: false }) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const begun = await this.begin(tx, context, EMPLOYEE_ONBOARDING_OPERATION, key, input);
-      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; compensationId: string; replayed: boolean }>(begun.response.body);
-      if (begun.kind === 'in-progress') throw new ConflictException('The employee onboarding request is already being processed.');
-
       const [currentDate, employeeNumber] = await Promise.all([
         this.dates.resolveInTransaction(tx, context, { kind: 'current' }),
         generateHrEmployeeNumber(tx, context.companyId),
       ]);
+      const effectiveFrom = firstOfMonth(input.hireDate);
+      const isRetroactive = ymd(effectiveFrom) < currentDate.businessDate;
+      if (isRetroactive && !authorization.canBackdate) throw new ForbiddenException('Backdated employee onboarding requires the dedicated permission.');
+      const begun = await this.begin(tx, context, EMPLOYEE_ONBOARDING_OPERATION, key, input);
+      if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; compensationId: string; replayed: boolean }>(begun.response.body);
+      if (begun.kind === 'in-progress') throw new ConflictException('The employee onboarding request is already being processed.');
       const duplicate = await tx.hrEmployee.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeNumber }, select: { id: true } });
       if (duplicate) throw new ConflictException('Employee-number generation conflicted. Please submit the employee again.');
-
-      const effectiveFrom = firstOfMonth(input.hireDate);
-      const currentMonth = firstOfMonth(new Date(`${currentDate.businessDate}T00:00:00.000Z`));
-      if (effectiveFrom.getTime() !== currentMonth.getTime()) {
-        assertNotPast(effectiveFrom, currentDate.businessDate, 'Compensation cannot start in the past. Choose a hire date in the current month or create the employee without payroll onboarding.');
-      }
 
       const employeeId = randomUUID();
       const employee = await tx.hrEmployee.create({ data: {
@@ -277,8 +270,8 @@ export class HrPayrollService {
         notes: nullable(input.initialCompensation.notes), createdByUserId: context.actorUserId,
       } });
       const receipt = { id: employeeId, compensationId, replayed: false };
-      await this.audit(tx, context, 'hr.employee.created', 'HrEmployee', employeeId, { employeeNumber: employee.employeeNumber, onboarding: true });
-      await this.audit(tx, context, 'hr.compensation.set', 'HrEmployeeCompensationProfile', compensationId, receipt);
+      await this.audit(tx, context, 'hr.employee.created', 'HrEmployee', employeeId, { employeeNumber: employee.employeeNumber, onboarding: true, effectiveFrom: ymd(effectiveFrom), retroactive: isRetroactive });
+      await this.audit(tx, context, 'hr.compensation.set', 'HrEmployeeCompensationProfile', compensationId, { ...receipt, effectiveFrom: ymd(effectiveFrom), retroactive: isRetroactive });
       await this.complete(tx, context, begun.receiptId, receipt);
       return receipt;
     });

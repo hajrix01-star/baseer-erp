@@ -1,0 +1,55 @@
+{
+  "registryVersion": "1.0",
+  "application": "Baseer ERP",
+  "lastVerified": { "date": "2026-09-03", "commit": "working-tree" },
+  "modules": [
+    {
+      "id": "platform-identity-administration",
+      "purpose": "Identity, company context, permissions, audit and administration.",
+      "owners": ["apps/api/src/identity", "apps/api/src/company-context", "apps/api/src/administration", "apps/web/src/administration-*.tsx", "packages/contracts/src/identity.ts", "packages/contracts/src/administration.ts"],
+      "truth": "Identity, company context and permission enforcement are server-owned.",
+      "riskTriggers": ["authentication", "permission", "company isolation", "session", "role"],
+      "verification": ["apps/api/src/identity", "apps/web/e2e"]
+    },
+    {
+      "id": "finance-accounting",
+      "purpose": "Official financial truth, daily sales, journals, accounts, treasury and reports.",
+      "owners": ["apps/api/src/finance", "apps/web/src/finance-*.tsx", "apps/web/src/owner-financial-movement-workspace*.tsx", "packages/contracts/src/finance.ts", "packages/contracts/src/financial-read.ts"],
+      "truth": "The backend and posted journal/read models own financial amounts and decisions.",
+      "riskTriggers": ["money", "journal", "posting", "tax", "period", "report", "treasury"],
+      "verification": ["docs/governance/FINANCIAL_AND_FACTUAL_SOURCE_OF_TRUTH_POLICY_2026-08-15.md", "apps/api/src/finance"]
+    },
+    {
+      "id": "operations-inventory-commercial",
+      "purpose": "Catalog, procurement, inventory, custody, assets and operational execution.",
+      "owners": ["apps/api/src/operations", "apps/web/src/operations-*.tsx", "packages/contracts/src/operations.ts"],
+      "truth": "Operations owns its workflow; accounting effects use explicit server contracts.",
+      "riskTriggers": ["inventory", "purchase", "custody", "asset", "warranty", "cost"],
+      "verification": ["apps/api/src/operations"]
+    },
+    {
+      "id": "people-attendance-payroll",
+      "purpose": "Employees, attendance, schedules, timekeeping, HR services and payroll lifecycle.",
+      "owners": ["apps/api/src/hr", "apps/api/src/attendance", "apps/web/src/hr-*.tsx", "apps/web/src/attendance-*.tsx", "packages/contracts/src/hr.ts", "packages/contracts/src/attendance.ts"],
+      "truth": "Attendance and payroll decisions remain server-owned with explicit employee/company scope.",
+      "riskTriggers": ["employee", "attendance", "schedule", "payroll", "leave", "settlement"],
+      "verification": ["docs/architecture/ATTENDANCE_AND_TIMEKEEPING_IMPLEMENTATION_BLUEPRINT_AR_2026-08-27.md", "apps/api/src/hr", "apps/api/src/attendance"]
+    },
+    {
+      "id": "marketing-decision-reports",
+      "purpose": "Marketing data, command center, decision intelligence and read-only reporting.",
+      "owners": ["apps/api/src/marketing", "apps/api/src/reports", "apps/api/src/decision-intelligence", "apps/web/src/marketing-*.tsx", "apps/web/src/command-center-*.tsx", "packages/contracts/src/marketing.ts", "packages/contracts/src/reporting.ts"],
+      "truth": "The server publishes read models; dashboards do not create operational or financial truth.",
+      "riskTriggers": ["dashboard", "analytics", "KPI", "marketing", "AI", "export"],
+      "verification": ["apps/api/src/marketing", "apps/api/src/reports", "apps/web/e2e"]
+    },
+    {
+      "id": "platform-data-contracts",
+      "purpose": "Shared Prisma data model, contracts, API conventions, observability, files and recovery.",
+      "owners": ["apps/api/prisma/schema.prisma", "packages/contracts/src", "apps/api/src/common", "apps/api/src/database", "apps/api/src/observability", "apps/api/src/file-metadata", "apps/api/src/backup"],
+      "truth": "Schema and typed contracts are executable references; registry only indexes them.",
+      "riskTriggers": ["schema", "migration", "API", "contract", "integration", "backup", "observability", "deployment"],
+      "verification": ["apps/api/prisma/schema.prisma", "packages/contracts/src/index.ts"]
+    }
+  ]
+}

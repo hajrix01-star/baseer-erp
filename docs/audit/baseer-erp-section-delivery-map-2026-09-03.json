@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "خريطة تسليم BASEER ERP بحسب الأقسام",
+    "quality_profile": "showcase",
+    "viewBox": [1280, 760]
+  },
+  "components": [
+    { "id": "users", "type": "external", "label": "المستخدمون", "sublabel": "مالك · مدير · موظف", "pos": [50, 310], "size": [150, 72] },
+    { "id": "web", "type": "frontend", "label": "واجهة BASEER", "sublabel": "React / مساحات العمل", "pos": [280, 310], "size": [170, 72] },
+    { "id": "identity", "type": "security", "label": "الهوية والتفويض", "sublabel": "جلسة · صلاحيات · شركة", "pos": [530, 130], "size": [180, 72] },
+    { "id": "api", "type": "backend", "label": "API وطبقات المجالات", "sublabel": "مالية · HR · حضور · عمليات · تقارير", "pos": [530, 310], "size": [200, 72] },
+    { "id": "admin", "type": "backend", "label": "الإدارة والمنصة", "sublabel": "شركات · مستخدمون · أدوار", "pos": [800, 130], "size": [185, 72] },
+    { "id": "postgres", "type": "database", "label": "PostgreSQL", "sublabel": "RLS · التدقيق · العقود الدائمة", "pos": [810, 310], "size": [190, 72] },
+    { "id": "storage", "type": "cloud", "label": "التخزين الخاص", "sublabel": "مستندات وملفات الشركة", "pos": [810, 510], "size": [190, 72] },
+    { "id": "edge", "type": "security", "label": "الحافة والتشغيل", "sublabel": "Caddy · TLS · readiness", "pos": [1080, 310], "size": [160, 72] }
+  ],
+  "boundaries": [
+    { "kind": "security-group", "label": "حد الشركة: جلسة وصلاحيات وRLS", "wraps": ["identity", "api", "admin", "postgres"], "pad": 28 },
+    { "kind": "region", "label": "بيئة BASEER الخاصة", "wraps": ["web", "identity", "api", "admin", "postgres", "storage", "edge"], "pad": 42 }
+  ],
+  "connections": [
+    { "id": "user-web", "from": "users", "to": "web", "label": "HTTPS", "variant": "emphasis" },
+    { "id": "web-api", "from": "web", "to": "api", "label": "API /v1", "variant": "emphasis" },
+    { "id": "identity-api", "from": "identity", "to": "api", "label": "جلسة وصلاحيات", "variant": "security", "fromSide": "bottom", "toSide": "top" },
+    { "id": "api-admin", "from": "api", "to": "admin", "label": "إدارة الشركة", "fromSide": "top", "toSide": "bottom" },
+    { "id": "api-db", "from": "api", "to": "postgres", "label": "قراءة وكتابة مقيدة", "variant": "security" },
+    { "id": "api-storage", "from": "api", "to": "storage", "label": "ملفات خاصة", "fromSide": "bottom", "toSide": "top" },
+    { "id": "edge-web", "from": "edge", "to": "web", "label": "TLS والواجهة", "fromSide": "left", "toSide": "right" },
+    { "id": "edge-api", "from": "edge", "to": "api", "label": "Proxy وreadiness", "variant": "security", "fromSide": "left", "toSide": "right" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "ترتيب الفحص", "items": ["المنصة والهوية والإدارة أولاً", "ثم المالية والموارد البشرية والعمليات والتقارير"] },
+    { "dot": "emerald", "title": "قاعدة التوقيع", "items": ["كل قسم يملك قراراً مستقلاً", "لا يُفتح القسم التالي قبل توقيع القسم الحالي"] },
+    { "dot": "amber", "title": "حدود الدليل", "items": ["المثبت من ملفات المشروع", "النشر الخارجي وبيانات الإنتاج خارج الفحص المحلي"] }
+  ]
+}

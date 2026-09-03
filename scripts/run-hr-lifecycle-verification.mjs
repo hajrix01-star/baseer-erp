@@ -121,10 +121,10 @@ try {
   for (const [key, nameAr] of employeeDefinitions) {
     const idempotencyKey = randomUUID();
     const input = onboardingInput(nameAr);
-    const receipt = await payroll.onboardEmployee(creator, input, idempotencyKey);
+    const receipt = await payroll.onboardEmployee(creator, input, idempotencyKey, { canBackdate: true });
     assert.equal(receipt.replayed, false);
     if (key === 'payroll') {
-      const replay = await payroll.onboardEmployee(creator, input, idempotencyKey);
+      const replay = await payroll.onboardEmployee(creator, input, idempotencyKey, { canBackdate: true });
       assert.equal(replay.id, receipt.id);
       assert.equal(replay.compensationId, receipt.compensationId);
       assert.equal(replay.replayed, true, 'Onboarding replay must be explicit.');
@@ -426,7 +426,7 @@ try {
     'Only one active payroll may exist for a company/month after a cancelled predecessor.',
   );
 
-  const reversalEmployee = await payroll.onboardEmployee(reversalCreator, onboardingInput('موظف عكس المسير'), randomUUID());
+  const reversalEmployee = await payroll.onboardEmployee(reversalCreator, onboardingInput('موظف عكس المسير'), randomUUID(), { canBackdate: true });
   const reversalAdvance = await advances.issue(reversalCreator, {
     employeeId: reversalEmployee.id,
     businessDate: monthStart,

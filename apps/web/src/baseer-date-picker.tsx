@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { BaseerDatePickerRuntime } from "./baseer-date-picker-runtime";
 
 type Language = "ar" | "en";
 
@@ -17,24 +17,7 @@ export type BaseerDatePickerProps = {
   className?: string;
 };
 
-const LazyBaseerDatePicker = lazy(async () => ({ default: (await import("./baseer-date-picker-runtime")).BaseerDatePickerRuntime }));
-
-/**
- * Public business-date contract. The accessible calendar implementation is
- * intentionally loaded only when a route renders a date field, keeping React
- * Aria out of the route's initial JavaScript closure.
- */
+/** Public business-date contract, rendered through the Baseer-owned calendar. */
 export function BaseerDatePicker({ presentation: _presentation, ...props }: BaseerDatePickerProps) {
-  return <Suspense fallback={<input
-    className={["baseer-date-picker__input", props.className].filter(Boolean).join(" ")}
-    type="date"
-    dir="ltr"
-    lang="en"
-    aria-label={props.label}
-    disabled={props.disabled}
-    value={props.value}
-    min={props.min}
-    max={props.max}
-    onChange={(event) => props.onChange(event.target.value)}
-  />}><LazyBaseerDatePicker {...props} /></Suspense>;
+  return <BaseerDatePickerRuntime {...props} />;
 }

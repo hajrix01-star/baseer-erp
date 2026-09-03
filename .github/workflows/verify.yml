@@ -59,6 +59,7 @@ jobs:
       - run: npm run check:architecture
       - run: npm run check:web-api-transport
       - run: npm run check:library-migration-inventory
+      - run: npm run check:dead-code
       - run: npm run check:nest-registration
       - run: npm run check:permissions
       - run: npm run check:authorization-consistency

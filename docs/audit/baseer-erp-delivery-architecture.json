@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Baseer ERP — خريطة التسليم الأولية",
+    "quality_profile": "showcase",
+    "viewBox": [1240, 620]
+  },
+  "components": [
+    {"id":"users","type":"external","label":"المستخدمون","sublabel":"متصفح الويب","pos":[40,285],"size":[145,64]},
+    {"id":"edge","type":"security","label":"حافة TLS","sublabel":"Caddy","pos":[255,285],"size":[145,64]},
+    {"id":"web","type":"frontend","label":"تطبيق الويب","sublabel":"React / Vite — apps/web","pos":[470,420],"size":[175,64]},
+    {"id":"api","type":"backend","label":"واجهة التطبيق","sublabel":"NestJS / Fastify — apps/api","pos":[470,285],"size":[175,64]},
+    {"id":"contracts","type":"backend","label":"عقود مشتركة","sublabel":"packages/contracts","pos":[470,105],"size":[175,64]},
+    {"id":"output","type":"backend","label":"منصة المخرجات","sublabel":"packages/output-platform","pos":[700,105],"size":[185,64]},
+    {"id":"persistence","type":"database","label":"PostgreSQL","sublabel":"Prisma + RLS","pos":[700,285],"size":[185,64]},
+    {"id":"storage","type":"cloud","label":"تخزين خاص","sublabel":"ملفات ونسخ احتياطية","pos":[965,285],"size":[175,64]},
+    {"id":"deploy","type":"cloud","label":"حزم التشغيل","sublabel":"Docker / Compose","pos":[965,105],"size":[175,64]}
+  ],
+  "connections": [
+    {"id":"users-edge","from":"users","to":"edge","variant":"emphasis"},
+    {"id":"edge-api","from":"edge","to":"api","variant":"emphasis"},
+    {"id":"edge-web","from":"edge","to":"web"},
+    {"id":"contracts-api","from":"contracts","to":"api","variant":"dashed"},
+    {"id":"api-output","from":"api","to":"output","variant":"dashed"},
+    {"id":"api-persistence","from":"api","to":"persistence"},
+    {"id":"persistence-storage","from":"persistence","to":"storage","variant":"dashed"}
+  ],
+  "cards": [
+    {"dot":"cyan","title":"الحافة والتشغيل","items":["Caddy يقدّم TLS ويوجّه API والواجهة.","Compose يشغّل Web وAPI وPostgreSQL في النشر الخاص."]},
+    {"dot":"rose","title":"حدود الثقة","items":["الـ API يملك التحقق والصلاحيات وسياق الشركة.","PostgreSQL/RLS هو حد عزل إضافي للشركات."]},
+    {"dot":"amber","title":"حدود المراجعة","items":["الخريطة من ملفات المستودع، لا من بيئة منشورة.","تفعيل التكاملات الخارجية يتطلب فحص إعداد المرشح."]}
+  ]
+}

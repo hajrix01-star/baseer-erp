@@ -654,25 +654,33 @@ test("leave and payroll dialogs include nested return and destructive confirmati
   await expectTopmostDialog(page, "إلغاء دفعة المسير");
 });
 
-test("leave date picker uses a keyboard-operable Gregorian native date input in Arabic", async ({ page }) => {
+test("leave date picker uses the Baseer calendar in Arabic without a native date input", async ({ page }) => {
   const requested: string[] = [];
   await mockHr(page, requested);
 
   await page.goto("/#module=hr&section=2");
   await page.getByRole("button", { name: "تسجيل إجازة" }).click();
   const dialog = await expectTopmostDialog(page, "تسجيل إجازة");
-  const from = dialog.locator('input[type="date"][aria-label="من"]');
-  const to = dialog.locator('input[type="date"][aria-label="إلى"]');
+  const from = dialog.getByRole("textbox", { name: "من" });
+  const to = dialog.getByRole("textbox", { name: "إلى" });
   await expect(from).toBeVisible();
   await expect(from).toHaveAttribute("lang", "en");
+  await expect(from).toHaveAttribute("type", "text");
   await from.focus();
   await expect(from).toBeFocused();
-  await from.press("ArrowUp");
-  await from.fill("2026-08-10");
-  await to.fill("2026-08-11");
-  await expect(from).toHaveValue("2026-08-10");
-  await expect(to).toHaveAttribute("min", "2026-08-10");
-  await expect(dialog).toHaveScreenshot("baseer-date-picker-ar.png", { animations: "disabled" });
+  await from.fill("2026-09-10");
+  await dialog.getByRole("button", { name: "فتح التقويم: من" }).click();
+  const calendar = page.getByRole("dialog", { name: "من" });
+  await expect(calendar).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(calendar).toHaveCount(0);
+  await dialog.getByRole("button", { name: "فتح التقويم: من" }).click();
+  await page.getByRole("dialog", { name: "من" }).getByRole("button", { name: "11", exact: true }).click();
+  await expect(from).toHaveValue("2026-09-11");
+  await dialog.getByRole("button", { name: "فتح التقويم: إلى" }).click();
+  await expect(page.getByRole("dialog", { name: "إلى" }).getByRole("button", { name: "10", exact: true }).first()).toBeDisabled();
+  await expect(page.locator('input[type="date"]')).toHaveCount(0);
+  await to.fill("2026-09-12");
 });
 
 test("leave date picker remains labeled, bounded and usable in English LTR", async ({ page }) => {
@@ -684,16 +692,19 @@ test("leave date picker remains labeled, bounded and usable in English LTR", asy
   const dialog = page.getByRole("dialog", { name: "Record leave" });
   await expect(dialog).toBeVisible();
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
-  const from = dialog.locator('input[type="date"][aria-label="From"]');
-  const to = dialog.locator('input[type="date"][aria-label="To"]');
-  await from.fill("2026-08-11");
-  await to.fill("2026-08-12");
-  await expect(from).toHaveValue("2026-08-11");
-  await expect(to).toHaveAttribute("min", "2026-08-11");
-  await expect(dialog).toHaveScreenshot("baseer-date-picker-en.png", { animations: "disabled" });
+  const from = dialog.getByRole("textbox", { name: "From" });
+  const to = dialog.getByRole("textbox", { name: "To" });
+  await from.fill("2026-09-11");
+  await dialog.getByRole("button", { name: "Open calendar: From" }).click();
+  await page.getByRole("dialog", { name: "From" }).getByRole("button", { name: "12", exact: true }).click();
+  await expect(from).toHaveValue("2026-09-12");
+  await dialog.getByRole("button", { name: "Open calendar: To" }).click();
+  await expect(page.getByRole("dialog", { name: "To" }).getByRole("button", { name: "11", exact: true }).first()).toBeDisabled();
+  await to.fill("2026-09-13");
+  await expect(page.locator('input[type="date"]')).toHaveCount(0);
 });
 
-test("clearable document dates clear through the native date control", async ({ page }) => {
+test("clearable document dates clear through the Baseer date control", async ({ page }) => {
   const requested: string[] = [];
   await mockHr(page, requested);
 
@@ -703,7 +714,7 @@ test("clearable document dates clear through the native date control", async ({ 
   await profile.getByRole("tab", { name: "المستندات والخطابات" }).click();
   await profile.getByRole("button", { name: "إضافة مستند" }).click();
   const create = await expectTopmostDialog(page, "إضافة مستند");
-  const issueDate = create.locator('input[type="date"][aria-label="تاريخ الإصدار"]');
+  const issueDate = create.getByRole("textbox", { name: "تاريخ الإصدار" });
   await issueDate.fill("2026-08-10");
   await expect(issueDate).toHaveValue("2026-08-10");
   await create.getByRole("button", { name: "مسح التاريخ" }).click();

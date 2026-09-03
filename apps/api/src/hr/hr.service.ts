@@ -20,6 +20,7 @@ type EmployeeReadProjection = Readonly<{
   includeDocuments?: boolean;
 }>;
 type EmployeeCreateInput = Omit<CreateHrEmployeeRequest, 'idempotencyKey'>;
+type RetroactiveEmployeeAuthorization = Readonly<{ canBackdate: boolean }>;
 type EmployeeUpdateInput = Omit<UpdateHrEmployeeRequest, 'idempotencyKey'>;
 type EmployeePromotionCreateInput = Omit<CreateHrEmployeePromotionRequest, 'idempotencyKey'>;
 type EmployeeWorkTermsCreateInput = Omit<CreateHrEmployeeWorkTermsRequest, 'idempotencyKey'>;
@@ -197,9 +198,12 @@ export class HrService {
     });
   }
 
-  async createEmployee(context: TrustedCompanyActorContext, raw: EmployeeCreateInput, idempotencyKey: string) {
+  async createEmployee(context: TrustedCompanyActorContext, raw: EmployeeCreateInput, idempotencyKey: string, authorization: RetroactiveEmployeeAuthorization = { canBackdate: false }) {
     const input = employeeCreateInput(raw);
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const current = await this.businessDates.resolveInTransaction(tx, context, { kind: 'current' });
+      const isRetroactive = input.hireDate.getTime() < new Date(`${current.businessDate}T00:00:00.000Z`).getTime();
+      if (isRetroactive && !authorization.canBackdate) throw new ForbiddenException('Backdated employee registration requires the dedicated permission.');
       const begun = await this.idempotency.beginInTransaction(tx, context, {
         operation: 'hr.employee.create', key: idempotencyKey, request: jsonPayload(input), expiresAt: tomorrow(),
       });
@@ -211,7 +215,7 @@ export class HrService {
       const id = randomUUID();
       await tx.hrEmployee.create({ data: { id, tenantId: context.tenantId, companyId: context.companyId, ...input, employeeNumber } });
       const receipt = { id, replayed: false };
-      await this.audit(tx, context, 'hr.employee.created', 'HrEmployee', id, null, input);
+      await this.audit(tx, context, 'hr.employee.created', 'HrEmployee', id, null, { ...input, retroactive: isRetroactive });
       await this.idempotency.completeInTransaction(tx, context, { receiptId: begun.receiptId, response: { status: 201, headers: null, body: receipt } });
       return receipt;
     }).catch(rethrowIdempotency);

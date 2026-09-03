@@ -2,7 +2,7 @@ import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from "react
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
 import { BaseerDialog } from "./baseer-dialog";
-import { BaseerPeriodFilter, baseerPeriodLabel, baseerPeriodQuery, defaultBaseerPeriodRange, type BaseerPeriodRange } from "./baseer-period-filter";
+import { BaseerPeriodFilter, baseerPeriodLabel, baseerPeriodQuery, baseerPeriodRange, defaultBaseerPeriodRange, type BaseerPeriodRange } from "./baseer-period-filter";
 import { BaseerSummaryMetric, BaseerSummaryMetricGrid } from "./baseer-summary-metric";
 import { BaseerWorkspaceTabs } from "./baseer-batch-layout";
 import type { BaseerDataGridColumn } from "./baseer-data-grid";
@@ -47,7 +47,7 @@ export function InvoiceRegisterWorkspaceRuntime({ language }: { language: Langua
 
   const load = useCallback(async (cursor?: string) => {
     const current = activeSession(); setSession(current); if (!current) return;
-    const query = new URLSearchParams(baseerPeriodQuery(period));
+    const query = new URLSearchParams(baseerPeriodQuery(filters.q.trim() ? baseerPeriodRange("ALL") : period));
     if (filters.kinds.length) query.set("kinds", filters.kinds.join(","));
     if (filters.operationClasses.length) query.set("operationClasses", filters.operationClasses.join(","));
     if (filters.supplierIds.length) query.set("supplierIds", filters.supplierIds.join(","));

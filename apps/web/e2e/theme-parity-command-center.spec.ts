@@ -10,6 +10,7 @@ const companyId = "44444444-4444-4444-8444-444444444444";
 type Presentation = "modern-3";
 
 const money = (raw: string, display: string, sign: "positive" | "negative" | "zero" = "positive") => ({ raw, display, sign });
+const cashEvidence = (rowCode: string) => ({ reportCode: "personal_cash_performance", metric: { kind: "CASH_ROW", rowCode } });
 
 const financialRead = {
   state: "READY",
@@ -18,7 +19,7 @@ const financialRead = {
     { code: "sales", labelAr: "المبيعات", labelEn: "Sales", kind: "SECTION", parentCode: null, direction: "INFLOW", eventCount: 12, amount: money("12500.0000", "12,500.00"), shareOfCollectedSalesPercent: "100.0000", rankWithinParent: 1, shareOfDirectionPercent: "100.0000", shareOfParentPercent: null },
     { code: "purchases", labelAr: "المشتريات", labelEn: "Purchases", kind: "SECTION", parentCode: null, direction: "OUTFLOW", eventCount: 4, amount: money("3200.0000", "3,200.00", "negative"), shareOfCollectedSalesPercent: "25.6000", rankWithinParent: 1, shareOfDirectionPercent: "64.0000", shareOfTotalOutflowPercent: "64.0000", shareOfParentPercent: null },
     { code: "recurring_expenses", labelAr: "التكاليف الدورية", labelEn: "Recurring costs", kind: "SECTION", parentCode: null, direction: "OUTFLOW", eventCount: 2, amount: money("700.0000", "700.00", "negative"), shareOfCollectedSalesPercent: "5.6000", rankWithinParent: 2, shareOfDirectionPercent: "14.0000", shareOfTotalOutflowPercent: "14.0000", shareOfParentPercent: null },
-    { code: "expenses", labelAr: "مصاريف أخرى", labelEn: "Other expenses", kind: "SECTION", parentCode: null, direction: "OUTFLOW", eventCount: 3, amount: money("1100.0000", "1,100.00", "negative"), shareOfCollectedSalesPercent: "8.8000", rankWithinParent: 3, shareOfDirectionPercent: "22.0000", shareOfTotalOutflowPercent: "22.0000", shareOfParentPercent: null },
+    { code: "expenses", labelAr: "مصاريف أخرى", labelEn: "Other expenses", kind: "SECTION", parentCode: null, direction: "OUTFLOW", eventCount: 3, amount: money("1100.0000", "1,100.00", "negative"), shareOfCollectedSalesPercent: "8.8000", rankWithinParent: 3, shareOfDirectionPercent: "22.0000", shareOfTotalOutflowPercent: "22.0000", shareOfParentPercent: null, evidence: cashEvidence("expenses") },
     { code: "purchase-supplies", labelAr: "مستلزمات التشغيل", labelEn: "Operating supplies", kind: "LINE", parentCode: "purchases", direction: "OUTFLOW", eventCount: 4, amount: money("3200.0000", "3,200.00", "negative"), shareOfCollectedSalesPercent: "25.6000", rankWithinParent: 1, shareOfDirectionPercent: "64.0000", shareOfTotalOutflowPercent: "64.0000", shareOfParentPercent: "100.0000" },
     { code: "recurring-rent", labelAr: "إيجار دوري", labelEn: "Recurring rent", kind: "LINE", parentCode: "recurring_expenses", direction: "OUTFLOW", eventCount: 2, amount: money("700.0000", "700.00", "negative"), shareOfCollectedSalesPercent: "5.6000", rankWithinParent: 1, shareOfDirectionPercent: "14.0000", shareOfTotalOutflowPercent: "14.0000", shareOfParentPercent: "100.0000" },
     { code: "expense-other", labelAr: "مصروفات تشغيلية", labelEn: "Operating expenses", kind: "LINE", parentCode: "expenses", direction: "OUTFLOW", eventCount: 3, amount: money("1100.0000", "1,100.00", "negative"), shareOfCollectedSalesPercent: "8.8000", rankWithinParent: 1, shareOfDirectionPercent: "22.0000", shareOfTotalOutflowPercent: "22.0000", shareOfParentPercent: "100.0000" },
@@ -122,12 +123,12 @@ async function openCommandCenter(page: Page, presentation: Presentation) {
     if (path === "/v1/reports/personal-cash-performance") return fulfill(route, financialRead);
     if (path === "/v1/finance/daily-sales/analytics") return fulfill(route, dailySalesRead);
     if (path === "/v1/marketing/calendar") return fulfill(route, marketingRead);
-    if (path === "/v1/reports/personal-cash-performance/live/evidence") return fulfill(route, {
-      rowCode: "expenses", nextCursor: null,
-      items: [{ eventId: "expense-1", businessDate: "2026-08-06", amount: money("1800.0000", "1,800.00", "negative"), source: { journalEntryId: "journal-1", labelAr: "إيجار المقر", labelEn: "Office rent", reference: "EXP-001", origin: { labelAr: "المصروفات", labelEn: "Expenses", route: "#module=operations&page=operations-purchases" } } }],
+    if (path === "/v1/reports/financial-evidence/live") return fulfill(route, {
+      descriptor: { reportCode: "personal_cash_performance", metric: { kind: "CASH_ROW", rowCode: "expenses" } }, nextCursor: null,
+      items: [{ evidenceId: "expense-1", businessDate: "2026-08-06", amount: money("1800.0000", "1,800.00", "negative"), source: { journalEntryId: "journal-1", labelAr: "إيجار المقر", labelEn: "Office rent", reference: "EXP-001", description: "إيجار المقر", counterparty: null } }],
     });
-    if (path === "/v1/reports/personal-cash-performance/live/evidence/expense-1/source") return fulfill(route, {
-      journalEntry: { businessDate: "2026-08-06", sourceType: "EXPENSE", sourceReference: "EXP-001", description: "إيجار المقر", status: "POSTED", lines: [{ id: "line-1", lineNumber: 1, accountCode: "6100", accountNameAr: "مصروف الإيجار", accountNameEn: "Rent expense", debitAmount: "1800.0000", creditAmount: "0.0000" }] },
+    if (path === "/v1/reports/financial-evidence/live/source/journal-1") return fulfill(route, {
+      journalEntry: { businessDate: "2026-08-06", labelAr: "إيجار المقر", labelEn: "Office rent", sourceReference: "EXP-001", description: "إيجار المقر", counterparty: null, status: "POSTED", lines: [{ id: "line-1", lineNumber: 1, accountCode: "6100", accountNameAr: "مصروف الإيجار", accountNameEn: "Rent expense", debit: money("1800.0000", "1,800.00"), credit: money("0.0000", "0.00") }] },
     });
     return fulfill(route, {});
   });
@@ -141,7 +142,7 @@ async function openCommandCenter(page: Page, presentation: Presentation) {
 async function assertSharedCommandCenterSurfaces(page: Page, isMobile: boolean) {
   await expect(page.locator(".topbar")).toBeVisible();
   await expect(page.locator(".header-profile-menu > summary")).toBeVisible();
-  await expect(page.locator(".command-center__financial-grid")).toBeVisible();
+  await expect(page.locator(".command-center__cash-explorer")).toBeVisible();
   await expect(page.getByText("إجمالي الداخل", { exact: true })).toBeVisible();
   const operatingCosts = page.locator(".command-center__operating-costs");
   await expect(operatingCosts.getByText("إجمالي التكاليف التشغيلية", { exact: true })).toBeVisible();
@@ -150,7 +151,7 @@ async function assertSharedCommandCenterSurfaces(page: Page, isMobile: boolean) 
   await expect(operatingCosts.getByText("مصاريف أخرى", { exact: true })).toBeVisible();
   await expect(operatingCosts.getByText("المسددة", { exact: true })).toHaveCount(0);
   await expect(page.locator(".command-center__metric").first()).toHaveClass(/baseer-card--metric/);
-  await expect(page.locator(".command-center__financial-grid .command-center__breakdown").first()).toHaveClass(/baseer-card--record/);
+  await expect(page.locator(".command-center__cash-report")).toHaveClass(/baseer-card--record/);
   await expect(page.locator(".command-center__vault-ledger")).toHaveClass(/baseer-card--joined-ledger/);
   await expect(page.locator(".command-center__daily-sales-average")).toHaveClass(/baseer-card--record/);
   await expect(page.locator(".command-center__weekly-sales")).toHaveClass(/baseer-card--record/);
@@ -167,7 +168,7 @@ async function assertSharedCommandCenterSurfaces(page: Page, isMobile: boolean) 
   await salesSeries.click();
   await expect(salesSeries).toHaveAttribute("aria-pressed", "true");
 
-  await page.getByRole("button", { name: "الفترة" }).click();
+  await page.locator(".baseer-section-header .baseer-period-filter__trigger").click();
   const filterDialog = page.getByRole("dialog", { name: "اختيار الفترة" });
   await expect(filterDialog).toBeVisible();
   await expect(filterDialog.getByRole("button", { name: "تطبيق" })).toBeVisible();
@@ -183,8 +184,11 @@ async function assertSharedCommandCenterSurfaces(page: Page, isMobile: boolean) 
   await periodType.click();
   await page.getByRole("option", { name: "شهر", exact: true }).click();
   const year = filterDialog.getByRole("spinbutton", { name: "السنة" });
-  await periodType.focus();
-  await page.keyboard.press("Tab");
+  // The period controls may expose contextual month fields between the type
+  // selector and the year input. Focus the named control directly so this
+  // acceptance test verifies its accessible focus treatment, not that
+  // incidental internal tab order.
+  await year.focus();
   await expect(year).toBeFocused();
   const yearFocus = await focusedControlStyle(year);
   expect(yearFocus.borderColor).not.toBe("rgb(0, 0, 0)");
@@ -192,10 +196,9 @@ async function assertSharedCommandCenterSurfaces(page: Page, isMobile: boolean) 
   await page.getByRole("button", { name: "إلغاء" }).click();
   await expect(filterDialog).toHaveCount(0);
 
-  await page.getByRole("button", { name: "تفصيل العمليات — المصروفات" }).first().click();
+  await page.locator(".command-center__cash-report").getByRole("button", { name: "تفصيل العمليات — المصروفات", exact: true }).click();
   const details = page.getByRole("dialog", { name: "تفصيل العمليات — المصروفات" });
   await expect(details).toBeVisible();
-  await expect(details.locator("table.command-center__evidence-table")).toBeVisible();
   await expect(details).toContainText("EXP-001");
   await details.getByLabel("إغلاق", { exact: true }).click();
   await expect(details).toHaveCount(0);
@@ -275,10 +278,21 @@ async function assertNavigationGeometry(page: Page, isMobile: boolean, presentat
     await expect(profilePanel).toBeVisible();
     await expect(profilePanel.locator(".header-profile-menu__interface select")).toHaveCount(0);
     await expect(profilePanel.getByRole("button", { name: "English", exact: true })).toBeVisible();
+    await expect(profilePanel.locator(".header-profile-menu__appearance details")).toHaveCount(0);
+    await expect(profilePanel.locator(".header-profile-menu__appearance button")).toHaveCount(6);
+    await expect(profilePanel.getByRole("button", { name: "ليلي", exact: true })).toHaveAttribute("aria-pressed", "false");
     await profileTrigger.click();
     await sections.click();
     const drawer = page.getByRole("dialog", { name: "مركز القيادة", exact: true });
     await expect(drawer).toBeVisible();
+    const brandContrast = await drawer.locator(".mobile-drawer__brand").evaluate((element) => {
+      const wordmark = element.querySelector(".baseer-brand__image");
+      const pseudo = getComputedStyle(element, "::before");
+      return { imageDisplay: wordmark ? getComputedStyle(wordmark).display : null, maskImage: pseudo.maskImage || pseudo.webkitMaskImage, background: pseudo.backgroundColor };
+    });
+    expect(brandContrast.imageDisplay).toBe("none");
+    expect(brandContrast.maskImage).toContain("baseer-wordmark.png");
+    expect(brandContrast.background).not.toBe("rgba(0, 0, 0, 0)");
     await expect(drawer.locator(".theme-navigation--tree")).toBeVisible();
     // Durable evidence for the visual review: the full-page mobile capture
     // intentionally shows the destination canvas, whereas these capture the
@@ -375,18 +389,17 @@ async function readTimelineViewportUse(page: Page) {
       };
     };
     const timeline = read(".command-center .baseer-marketing-timeline--command");
-    const financialGrid = read(".command-center .command-center__financial-grid");
+    const cashExplorer = read(".command-center .command-center__cash-explorer");
     const plot = read(".command-center .baseer-marketing-timeline__plot");
     const canvas = read(".command-center .baseer-marketing-timeline__plot canvas");
     return {
       viewport: { width: innerWidth, height: innerHeight },
       documentOverflow: document.documentElement.scrollWidth - innerWidth,
       timeline,
-      financialGrid,
+      cashExplorer,
       plot,
       canvas,
       timelineViewportRatio: timeline ? rounded(timeline.width / innerWidth) : 0,
-      timelineGridRatio: timeline && financialGrid ? rounded(timeline.width / financialGrid.width) : 0,
       plotContentRatio: timeline && plot ? rounded(plot.width / Math.max(1, timeline.width - timeline.paddingInline)) : 0,
       canvasPlotRatio: canvas && plot ? rounded(canvas.width / plot.width) : 0,
     };
@@ -403,6 +416,32 @@ test("the modern admin interface keeps an unobstructed timeline composition", as
   await expect(timeline.locator(".baseer-marketing-timeline__plot-period")).toHaveCount(0);
   await expect(page.locator(".advance-quick-add")).toHaveCount(0);
   await page.screenshot({ path: "artifacts/command-center-modern-admin.png", fullPage: true });
+});
+
+test("the marketing timeline shows its detail read only after an explicit click", async ({ page }) => {
+  await openCommandCenter(page, "modern-3");
+  const plot = page.locator(".command-center .baseer-marketing-timeline__plot");
+  await expect(plot.locator("canvas").first()).toBeVisible();
+  await plot.scrollIntoViewIfNeeded();
+  const plotBox = await plot.boundingBox();
+  expect(plotBox).not.toBeNull();
+  if (!plotBox) throw new Error("Marketing timeline plot has no visible bounds.");
+
+  const detail = page.getByText(/^\d{1,2} أغسطس 2026$/);
+  // Hovering is an incidental gesture; it must never surface the reading.
+  await page.mouse.move(plotBox.x + plotBox.width * .5, plotBox.y + plotBox.height * .5);
+  await expect(detail).toHaveCount(0);
+
+  await page.mouse.click(plotBox.x + plotBox.width * .5, plotBox.y + plotBox.height * .5);
+  await expect(detail).toBeVisible();
+
+  // Moving outside the chart and clicking elsewhere both clear a selected read.
+  await page.mouse.move(0, 0);
+  await expect(detail).toBeHidden();
+  await page.mouse.click(plotBox.x + plotBox.width * .5, plotBox.y + plotBox.height * .5);
+  await expect(detail).toBeVisible();
+  await page.getByText("الحركة المالية حسب البند", { exact: true }).click();
+  await expect(detail).toBeHidden();
 });
 
 for (const presentation of ["modern-3"] as const) {
@@ -422,11 +461,11 @@ for (const presentation of ["modern-3"] as const) {
     expect(geometry.timeline?.left ?? -Infinity).toBeGreaterThanOrEqual(-1);
     expect(geometry.timeline?.right ?? Infinity).toBeLessThanOrEqual(geometry.viewport.width + 1);
     // On a 393px phone the chart becomes the full-width decision surface.
-    // Desktop intentionally places the financial breakdown beside it; the
-    // chart must still retain the dominant 1.48 / 2.20 grid track, rather
-    // than being reduced to a narrow leftover column.
+    // Desktop now places the financial explorer in its own reading row. The
+    // timeline must still use the broad module canvas rather than a narrow
+    // residual grid track.
     if (isMobile) expect(geometry.timelineViewportRatio).toBeGreaterThanOrEqual(.92);
-    else expect(geometry.timelineGridRatio).toBeGreaterThanOrEqual(.65);
+    else expect(geometry.timelineViewportRatio).toBeGreaterThanOrEqual(.7);
     // Headers, legends and card padding must not collapse the actual plot.
     // Compare against the card's content box, not its border box: intentional
     // card padding is reading space, while unused content width is a defect.
@@ -482,12 +521,14 @@ for (const presentation of ["modern-3"] as const) {
     await assertNavigationGeometry(page, isMobile, presentation);
     await page.screenshot({ path: `artifacts/command-center-${presentation}-${isMobile ? "mobile" : "desktop"}.png`, fullPage: true });
 
-    // The compact mobile header intentionally omits the appearance menu; its
-    // geometry is exercised above. Dark state is accepted through the real
-    // desktop appearance control for each presentation.
+    // The compact mobile header omits the appearance panel; its geometry is
+    // exercised above. Desktop uses the same direct theme buttons inside the
+    // profile panel, without the retired dropdown control.
     if (!isMobile) {
-      await page.locator(".theme-button summary").click();
-      await page.getByRole("button", { name: "ليلي", exact: true }).click();
+      await page.locator(".header-profile-menu > summary").click();
+      const profilePanel = page.locator(".header-profile-menu__panel");
+      await expect(profilePanel).toBeVisible();
+      await profilePanel.getByRole("button", { name: "ليلي", exact: true }).click();
       await expect(page.locator("body")).toHaveAttribute("data-color-scheme", "dark");
       await expect(page.locator("body")).toHaveAttribute("data-ui-theme", presentation);
       await expect.poll(() => page.evaluate(() => getComputedStyle(document.body).getPropertyValue("--canvas").trim())).not.toBe("");
