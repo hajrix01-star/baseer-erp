@@ -1,7 +1,10 @@
 [CmdletBinding()]
 param(
   [ValidateSet('quality', 'web-acceptance', 'all')]
-  [string]$Job = 'all'
+  [string]$Job = 'all',
+  # Keep the isolated Linux clone only when diagnosing a failed acceptance
+  # run. This preserves Playwright traces, screenshots, and diffs for review.
+  [switch]$KeepArtifacts
 )
 
 $ErrorActionPreference = 'Stop'
@@ -40,5 +43,9 @@ try {
     exit $LASTEXITCODE
   }
 } finally {
-  & $wsl.Source -d Ubuntu -u root -- bash -c "rm -rf '$linuxParityClone'"
+  if (-not $KeepArtifacts) {
+    & $wsl.Source -d Ubuntu -u root -- bash -c "rm -rf '$linuxParityClone'"
+  } else {
+    Write-Host "Retained Linux CI evidence at $linuxParityClone" -ForegroundColor Yellow
+  }
 }

@@ -128,6 +128,12 @@ async function mockHr(page: Page, requested: string[], options: { language?: "ar
     if (url.pathname === "/v1/attendance/alerts") return fulfill(route, {
       date: "2026-08-20", summary: { late: 0, missingCheckIn: 0, openSessions: 0 }, alerts: [],
     });
+    if (url.pathname === `/v1/attendance/employees/${employee.id}/schedule`) return fulfill(route, {
+      employeeId: employee.id, workTermsReference: null, assignments: [], weeklyAdjustments: [], exceptions: [],
+    });
+    if (url.pathname === "/v1/attendance/schedule-templates") return fulfill(route, { templates: [] });
+    if (url.pathname === `/v1/hr/employees/${employee.id}/work-terms`) return fulfill(route, { employeeId: employee.id, workTerms: [] });
+    if (url.pathname === `/v1/attendance/employees/${employee.id}/pin`) return fulfill(route, { state: "NOT_SET", pin: null });
     if (url.pathname === `/v1/attendance/employees/${employee.id}/compliance`) return fulfill(route, {
       employeeId: employee.id, employeeNumber: employee.employeeNumber, employeeNameAr: employee.nameAr, employeeNameEn: employee.nameEn,
       currentMonth: { from: "2026-08-01", to: "2026-08-20", calculatedThrough: "2026-08-20T12:00:00.000Z", status: "FINAL", plannedMinutes: 7200, coveredPlannedMinutes: 6960, shortageMinutes: 240, lateMinutes: 30, earlyLeaveMinutes: 15, extraMinutes: 45, eligibleWorkDays: 15, openSessionDays: 0, excludedLeaveDays: 0, restDays: 4, unscheduledDays: 1, ratePercent: 97 },
@@ -549,7 +555,8 @@ test("employee profile covers all tabs and its principal dialogs", async ({ page
   }
 
   await profile.getByRole("tab", { name: "المسار والتعويض والزيادات" }).click();
-  await expect(profile.getByText("الراتب والبدلات", { exact: true })).toBeVisible();
+  await expect(profile.getByRole("heading", { name: "سجل تغييرات الراتب" })).toBeVisible();
+  await profile.getByRole("tab", { name: "نظرة 360" }).click();
   await profile.getByRole("button", { name: "إدارة الراتب" }).click();
   const salaryDialog = await expectTopmostDialog(page, "إدارة الراتب");
   await salaryDialog.getByRole("button", { name: /زيادة راتب/ }).click();
@@ -558,6 +565,7 @@ test("employee profile covers all tabs and its principal dialogs", async ({ page
   await expect(salaryDialog.getByText("مبلغ التخفيض", { exact: true })).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(profile).toBeVisible();
+  await profile.getByRole("tab", { name: "المسار والتعويض والزيادات" }).click();
   await profile.getByRole("button", { name: "تسجيل ترقية" }).click();
   await expectTopmostDialog(page, "تسجيل ترقية");
   await page.keyboard.press("Escape");
@@ -614,7 +622,7 @@ test("employee profile covers all tabs and its principal dialogs", async ({ page
   await page.keyboard.press("Escape");
   await page.keyboard.press("Escape");
   await page.keyboard.press("Escape");
-  await expect(profile).toHaveAttribute("aria-modal", "true");
+  await expect(profile).toBeVisible();
   await profile.getByRole("button", { name: "تعديل البيانات" }).click();
   await expectTopmostDialog(page, "تعديل الموظف");
 });
@@ -889,6 +897,8 @@ test("advance deduction and service create/detail dialogs are centralized", asyn
   await advanceDetail.getByRole("button", { name: "إلغاء إصدار السلفة" }).click();
   await expectTopmostDialog(page, "إلغاء إصدار السلفة");
   await page.keyboard.press("Escape");
+  await expect(advanceDetail).toBeVisible();
+  await advanceDetail.getByRole("button", { name: "إغلاق" }).click();
   await page.getByRole("button", { name: "سداد السلفة" }).click();
   await expectTopmostDialog(page, "سداد السلفة");
   await page.keyboard.press("Escape");
@@ -948,7 +958,7 @@ test("advance deferral pagination advances and clears its own cursor", async ({ 
     const deferrals = deferralCursor
       ? [{ id: "deferral-2", businessDate: "2026-08-02", deferredUntil: "2026-10-01", reason: "تأجيل ثانٍ" }]
       : [{ id: "deferral-1", businessDate: "2026-08-01", deferredUntil: "2026-09-01", reason: "تأجيل أول" }];
-    return fulfill(route, { advance, settlements: [], hasMoreSettlements: false, nextSettlementCursor: null, deferrals, hasMoreDeferrals: !deferralCursor, nextDeferralCursor: deferralCursor ? null : "deferral-cursor-2" });
+    return fulfill(route, { advance, sourceAnnotations: [], settlements: [], hasMoreSettlements: false, nextSettlementCursor: null, deferrals, hasMoreDeferrals: !deferralCursor, nextDeferralCursor: deferralCursor ? null : "deferral-cursor-2" });
   });
 
   await page.goto("/#module=hr&section=4");

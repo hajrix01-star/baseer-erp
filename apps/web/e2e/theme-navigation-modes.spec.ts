@@ -51,6 +51,9 @@ async function openModernCommandCenter(page: Page) {
       operatingCosts: { basisLabelAr: "الحركات المالية المثبتة خلال الفترة", total: zeroMoney, shareOfCollectedSalesPercent: "0.0000", evidence: cashEvidence, groups: [] },
       comparison: { state: "UNAVAILABLE", netCashResultPercentChange: null },
     });
+    if (path === "/v1/reports/accrual-profit-loss") return fulfill(route, {
+      state: "NOT_READY", messageAr: "لا توجد قراءة مالية جاهزة ضمن بيانات اختبار التنقل.",
+    });
     if (path === "/v1/finance/daily-sales/analytics") return fulfill(route, {
       primary: { weeks: [], monthSummary: { dataQuality: "READY", coverage: { recordedSalesDays: 0, requiredOperatingDays: 0 }, display: { dailyAverageSalesAmount: "0.00", dailyAverageCustomerCount: "0" } } },
       comparison: { weeks: [], monthSummary: { dataQuality: "READY", coverage: { recordedSalesDays: 0, requiredOperatingDays: 0 }, display: { dailyAverageSalesAmount: "0.00", dailyAverageCustomerCount: "0" } } },
@@ -141,12 +144,13 @@ test("documented page stages render in the workspace without duplicating the cur
   await expect(navigationRoot.locator(".theme-navigation__tree-node[open]")).toHaveCount(1);
   await expect(navigationRoot.locator(".theme-navigation__tree-node.is-current-module")).toHaveAttribute("open", "");
   await expect(navigationRoot.locator(".theme-navigation__page-tabs")).toHaveCount(0);
+  if (isMobile) await page.keyboard.press("Escape");
   const reportTabs = page.getByRole("tablist", { name: "التقارير المالية" });
   await expect(reportTabs).toBeVisible();
   await expect(reportTabs.getByRole("tab", { name: "ميزان المراجعة" })).toHaveAttribute("aria-selected", "true");
-  await reportTabs.getByRole("tab", { name: "الربح والخسارة المالي" }).click();
-  await expect(page).toHaveURL(/#module=reports&page=reports-financial&stage=cash-performance$/);
-  await expect(reportTabs.getByRole("tab", { name: "الربح والخسارة المالي" })).toHaveAttribute("aria-selected", "true");
+  await reportTabs.getByRole("tab", { name: "الربح والخسارة" }).click();
+  await expect(page).toHaveURL(/#module=reports&page=reports-financial&stage=accrual-profit-loss$/);
+  await expect(reportTabs.getByRole("tab", { name: "الربح والخسارة" })).toHaveAttribute("aria-selected", "true");
   await expect(page.getByText("لوحة المالك", { exact: true })).toHaveCount(0);
 });
 

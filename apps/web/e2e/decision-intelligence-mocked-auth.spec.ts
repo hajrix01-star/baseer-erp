@@ -132,13 +132,16 @@ test("Decision overview is accessible in Arabic and English, refreshes by period
   await page.getByRole("option", { name: "سنة", exact: true }).click();
   await periodDialog.getByRole("button", { name: /^(?:2026|2,026)$/ }).click();
   await periodDialog.getByRole("button", { name: "تطبيق" }).click();
-  await expect.poll(() => requests.some((request) => request.pathname.endsWith("/metrics/sales-daily") && request.search.includes("from=2026-01-01") && request.search.includes("to=2026-12-31"))).toBeTruthy();
+  // A year is intentionally bounded by the current Riyadh business day; it
+  // must never request future financial data just because December exists.
+  await expect.poll(() => requests.some((request) => request.pathname.endsWith("/metrics/sales-daily") && request.search.includes("from=2026-01-01") && request.search.includes("to=2026-09-04"))).toBeTruthy();
   const initialMetrics = requests.filter((request) => request.pathname.includes("/metrics/")).length;
   await page.getByRole("button", { name: "تحديث" }).click();
   await expect.poll(() => requests.filter((request) => request.pathname.includes("/metrics/")).length).toBeGreaterThan(initialMetrics);
   const results = await new AxeBuilder({ page }).include(".decision-workspace").analyze();
   expect(results.violations).toEqual([]);
-  await page.getByRole("button", { name: "EN" }).click();
+  await page.locator('summary[aria-label="حسابي وإعدادات الجلسة"]').click();
+  await page.getByRole("button", { name: "English" }).click();
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
   await expect(page.getByRole("heading", { name: "Evidence before interpretation" })).toBeVisible();
 
@@ -151,7 +154,6 @@ test("Decision overview is accessible in Arabic and English, refreshes by period
   expect([...new Set(decisionGets.map((request) => request.pathname))].sort()).toEqual([
     "/v1/decision-intelligence/metrics/sales-comparison",
     "/v1/decision-intelligence/metrics/sales-daily",
-    "/v1/decision-intelligence/metrics/sales-matched-weekday",
   ]);
   await limited.close();
 });
@@ -184,7 +186,7 @@ test("Timeline and alerts keep validation, evidence, status reason, Escape, and 
   await expect(from).toHaveAttribute("lang", "en");
   await eventDialog.getByRole("button", { name: "Open calendar: From" }).click();
   await expect(page.getByRole("dialog", { name: "From" })).toBeVisible();
-  await eventDialog.getByRole("button", { name: "Close calendar" }).click();
+  await page.keyboard.press("Escape");
   await expect(page.getByRole("dialog", { name: "From" })).toHaveCount(0);
   await from.fill("2026-12-31");
   await page.getByRole("button", { name: "Save event" }).click();

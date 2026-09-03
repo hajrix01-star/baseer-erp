@@ -282,8 +282,7 @@ test("custody return keeps decimal text and Gregorian business date through its 
   await dialog.getByRole("button", { name: "فتح التقويم" }).click();
   await expect(page.getByRole("dialog", { name: "التاريخ" })).toBeVisible();
   await page.keyboard.press("Escape");
-  const requestSelector = dialog.getByLabel("ربط بالطلب");
-  await requestSelector.click();
+  await dialog.getByRole("button", { name: "فتح قائمة ربط بالطلب" }).click();
   await page.getByRole("option", { name: /REQ-001/ }).click();
   await dialog.getByLabel("الإجمالي").fill("12.5000");
   await dialog.getByLabel("سبب المرتجع").fill("باقي العهدة");
