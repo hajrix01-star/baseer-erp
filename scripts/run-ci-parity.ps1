@@ -7,57 +7,35 @@ param(
 $ErrorActionPreference = 'Stop'
 $repositoryRoot = Split-Path -Parent $PSScriptRoot
 $candidateCommit = (& git -C $repositoryRoot rev-parse HEAD).Trim()
-$parityClone = Join-Path ([System.IO.Path]::GetTempPath()) "baseer-erp-ci-parity-$($candidateCommit.Substring(0, 12))"
+$parityCloneName = "baseer-erp-ci-parity-$($candidateCommit.Substring(0, 12))"
 
-# act executes the repository's actual GitHub workflow in a Linux container.
-# It receives a dedicated LF clone at the committed candidate, never the Windows
-# checkout. A standalone clone keeps .git visible to Linux, avoids CRLF false
-# positives, and protects the developer checkout and its node_modules.
-$actCommand = Get-Command act -ErrorAction SilentlyContinue
-if ($null -eq $actCommand) {
-  $wingetAct = Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Packages\nektos.act_Microsoft.Winget.Source_8wekyb3d8bbwe\act.exe'
-  if (-not (Test-Path -LiteralPath $wingetAct)) {
-    throw 'act is required. Install it with: winget install --id nektos.act --exact --source winget'
-  }
-  $actPath = $wingetAct
-} else {
-  $actPath = $actCommand.Source
+# act must run from the Ubuntu WSL integration, not the Windows Docker named
+# pipe. The quality job itself builds and runs Docker images; Windows act cannot
+# pass that inner Docker socket into its Linux job container. Ubuntu exposes the
+# real /var/run/docker.sock, matching the GitHub runner contract.
+$wsl = Get-Command wsl -ErrorAction SilentlyContinue
+if ($null -eq $wsl) {
+  throw 'WSL Ubuntu with Docker integration is required for CI parity. Install or enable WSL, then run Docker Desktop > Settings > Resources > WSL Integration.'
 }
 
-$workflowPath = Join-Path $repositoryRoot '.github\workflows\verify.yml'
+$drive = $repositoryRoot.Substring(0, 1).ToLowerInvariant()
+$relativeRepositoryPath = $repositoryRoot.Substring(3).Replace('\', '/')
+$linuxRepositoryRoot = "/mnt/$drive/$relativeRepositoryPath"
+$linuxParityClone = "/tmp/$parityCloneName"
+
 $jobs = if ($Job -eq 'all') { @('quality', 'web-acceptance') } else { @($Job) }
 
-if (Test-Path -LiteralPath $parityClone) {
-  Remove-Item -LiteralPath $parityClone -Recurse -Force
-}
-
-& git -C $repositoryRoot -c core.autocrlf=false clone --no-local --no-checkout $repositoryRoot $parityClone
-if ($LASTEXITCODE -ne 0) {
-  exit $LASTEXITCODE
-}
-
-& git -C $parityClone -c core.autocrlf=false checkout --detach $candidateCommit
-if ($LASTEXITCODE -ne 0) {
-  Remove-Item -LiteralPath $parityClone -Recurse -Force
-  exit $LASTEXITCODE
-}
-
-Push-Location $parityClone
 try {
+  $workflowRelativePath = '.github/workflows/verify.yml'
+  $linuxCommand = "set -e; test -S /var/run/docker.sock; test -x ~/.local/bin/act; rm -rf '$linuxParityClone'; git -C '$linuxRepositoryRoot' -c core.autocrlf=false clone --no-local --no-checkout '$linuxRepositoryRoot' '$linuxParityClone'; git -C '$linuxParityClone' -c core.autocrlf=false checkout --detach '$candidateCommit'; cd '$linuxParityClone';"
   foreach ($selectedJob in $jobs) {
-    Write-Host "Running GitHub workflow parity job: $selectedJob" -ForegroundColor Cyan
-    & $actPath push `
-      --workflows $workflowPath `
-      --job $selectedJob `
-      --platform 'ubuntu-latest=ghcr.io/catthehacker/ubuntu:full-latest' `
-      --container-architecture 'linux/amd64' `
-      --bind `
-      --no-recurse
-    if ($LASTEXITCODE -ne 0) {
-      exit $LASTEXITCODE
-    }
+    Write-Host "Running GitHub workflow parity job in Ubuntu: $selectedJob" -ForegroundColor Cyan
+    $linuxCommand += " ~/.local/bin/act push --workflows '$workflowRelativePath' --job '$selectedJob' --platform 'ubuntu-latest=ghcr.io/catthehacker/ubuntu:full-latest' --container-architecture 'linux/amd64' --bind --no-recurse;"
+  }
+  & $wsl.Source -d Ubuntu -- bash -c $linuxCommand
+  if ($LASTEXITCODE -ne 0) {
+    exit $LASTEXITCODE
   }
 } finally {
-  Pop-Location
-  Remove-Item -LiteralPath $parityClone -Recurse -Force
+  & $wsl.Source -d Ubuntu -- bash -c "rm -rf '$linuxParityClone'"
 }
