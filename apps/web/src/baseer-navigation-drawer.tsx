@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect, useId, useRef } from "react";
+import { type KeyboardEvent as ReactKeyboardEvent, type ReactNode, useEffect, useId, useRef } from "react";
 import { createPortal } from "react-dom";
 
 import { BASEER_OVERLAY_LAYER } from "./baseer-overlay-policy";
@@ -16,6 +16,7 @@ type Props = {
 
 const focusableSelector = [
   "a[href]",
+  "summary",
   "button:not([disabled])",
   "input:not([disabled])",
   "select:not([disabled])",
@@ -40,6 +41,25 @@ export function BaseerNavigationDrawer({ open, title, eyebrow, closeLabel, onClo
   const panelRef = useRef<HTMLElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const titleId = useId();
+  const handleKeyDown = (event: ReactKeyboardEvent<HTMLElement>) => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      onClose();
+      return;
+    }
+    if (event.key !== "Tab") return;
+    const focusable = drawerFocusable(panelRef.current);
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable.at(-1)!;
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  };
 
   useEffect(() => {
     if (!open) return;
@@ -60,36 +80,11 @@ export function BaseerNavigationDrawer({ open, title, eyebrow, closeLabel, onClo
     };
   }, [open]);
 
-  useEffect(() => {
-    if (!open) return;
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        onClose();
-        return;
-      }
-      if (event.key !== "Tab") return;
-      const focusable = drawerFocusable(panelRef.current);
-      if (!focusable.length) return;
-      const first = focusable[0];
-      const last = focusable.at(-1)!;
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
-      }
-    };
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, [onClose, open]);
-
   if (!open) return null;
   return createPortal(
     <div className="mobile-drawer is-open" role="presentation" style={{ zIndex: BASEER_OVERLAY_LAYER.navigationDrawer }}>
       <div className="mobile-drawer__backdrop" aria-hidden="true" onClick={(event) => { event.preventDefault(); onClose(); }} />
-      <aside ref={panelRef} className="mobile-drawer__panel" role="dialog" aria-modal="true" aria-labelledby={titleId}>
+      <aside ref={panelRef} className="mobile-drawer__panel" role="dialog" aria-modal="true" aria-labelledby={titleId} onKeyDownCapture={handleKeyDown}>
         <header>
           <div className="mobile-drawer__identity">
             <BaseerBrand className="mobile-drawer__brand" />
