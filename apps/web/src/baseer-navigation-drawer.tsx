@@ -16,7 +16,6 @@ type Props = {
 
 const focusableSelector = [
   "a[href]",
-  "summary",
   "button:not([disabled])",
   "input:not([disabled])",
   "select:not([disabled])",
@@ -27,6 +26,10 @@ const focusableSelector = [
 function drawerFocusable(panel: HTMLElement | null) {
   return Array.from(panel?.querySelectorAll<HTMLElement>(focusableSelector) ?? []).filter((element) => {
     if (element.closest("[aria-hidden='true'], [inert]")) return false;
+    // Browsers may still report a layout box for controls nested in a closed
+    // <details>. They are not reachable in the drawer's visible navigation,
+    // so including them would send the focus loop to a hidden branch.
+    if (element.closest("details:not([open])")) return false;
     const style = getComputedStyle(element);
     return style.visibility !== "hidden" && style.display !== "none" && element.getClientRects().length > 0;
   });
