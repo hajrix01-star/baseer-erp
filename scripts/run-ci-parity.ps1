@@ -27,7 +27,10 @@ $jobs = if ($Job -eq 'all') { @('quality', 'web-acceptance') } else { @($Job) }
 
 try {
   $workflowRelativePath = '.github/workflows/verify.yml'
-  $linuxCommand = "set -e; test -S /var/run/docker.sock; test -x ~/.local/bin/act; rm -rf '$linuxParityClone'; git -C '$linuxRepositoryRoot' -c core.autocrlf=false clone --no-local --no-checkout '$linuxRepositoryRoot' '$linuxParityClone'; git -C '$linuxParityClone' -c core.autocrlf=false checkout --detach '$candidateCommit'; cd '$linuxParityClone';"
+  # act changes mounted test files to the runner uid. Clean as root before and
+  # after the run so a failed acceptance pass cannot fill WSL /tmp with clones.
+  & $wsl.Source -d Ubuntu -u root -- bash -c "rm -rf '$linuxParityClone'"
+  $linuxCommand = "set -e; test -S /var/run/docker.sock; test -x ~/.local/bin/act; git -C '$linuxRepositoryRoot' -c core.autocrlf=false clone --no-local --no-checkout '$linuxRepositoryRoot' '$linuxParityClone'; git -C '$linuxParityClone' -c core.autocrlf=false checkout --detach '$candidateCommit'; cd '$linuxParityClone';"
   foreach ($selectedJob in $jobs) {
     Write-Host "Running GitHub workflow parity job in Ubuntu: $selectedJob" -ForegroundColor Cyan
     $linuxCommand += " ~/.local/bin/act push --workflows '$workflowRelativePath' --job '$selectedJob' --platform 'ubuntu-latest=ghcr.io/catthehacker/ubuntu:full-latest' --container-architecture 'linux/amd64' --bind --no-recurse;"
@@ -37,5 +40,5 @@ try {
     exit $LASTEXITCODE
   }
 } finally {
-  & $wsl.Source -d Ubuntu -- bash -c "rm -rf '$linuxParityClone'"
+  & $wsl.Source -d Ubuntu -u root -- bash -c "rm -rf '$linuxParityClone'"
 }

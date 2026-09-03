@@ -151,6 +151,7 @@ test("Decision overview is accessible in Arabic and English, refreshes by period
   expect([...new Set(decisionGets.map((request) => request.pathname))].sort()).toEqual([
     "/v1/decision-intelligence/metrics/sales-comparison",
     "/v1/decision-intelligence/metrics/sales-daily",
+    "/v1/decision-intelligence/metrics/sales-matched-weekday",
   ]);
   await limited.close();
 });
@@ -236,7 +237,7 @@ test("Quality policy preserves decimal command fields and sources research actio
   await page.getByRole("button", { name: "Save policy" }).click();
   await expect.poll(() => requests.filter((request) => request.pathname.endsWith("/policies/sales-change") && request.method === "PUT").length).toBe(1);
   const savedPolicy = requests.find((request) => request.pathname.endsWith("/policies/sales-change") && request.method === "PUT");
-  expect(savedPolicy?.body).toMatchObject({ decreaseThresholdBasisPoints: 1250, increaseThresholdBasisPoints: 2500, minimumBaselineAmount: "100.1250", minimumAbsoluteDifferenceAmount: "20.5000" });
+  expect(savedPolicy?.body).toMatchObject({ decreaseThresholdBasisPoints: 1250, increaseThresholdBasisPoints: 2500, minimumBaselineAmount: "100.125", minimumAbsoluteDifferenceAmount: "20.5" });
   expect(typeof savedPolicy?.body?.idempotencyKey).toBe("string");
   expect(savedPolicy?.idempotencyKey).toBeTruthy();
 

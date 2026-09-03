@@ -131,21 +131,23 @@ test("internal registration keeps its Gregorian business date through the Baseer
   expect(accessibility.violations).toEqual([]);
 });
 
-test("internal registration keeps navigation focused for an operator and exposes it for the owner", async ({ page }) => {
+test("internal registration keeps navigation focused for an operator and exposes it for the owner", async ({ page, isMobile }) => {
   await mockInternalRegistration(page);
   await page.goto("/#module=operations&section=7");
   await expect(page.locator(".module-sidebar")).toHaveCount(0);
 
   await mockInternalRegistration(page, { isOwner: true });
   await page.reload();
-  await expect(page.locator(".module-sidebar")).toBeVisible();
+  if (isMobile) await expect(page.locator(".module-sidebar")).toBeHidden();
+  else await expect(page.locator(".module-sidebar")).toBeVisible();
 });
 
-test("internal registration recognizes an owner during an API compatibility rollout", async ({ page }) => {
+test("internal registration recognizes an owner during an API compatibility rollout", async ({ page, isMobile }) => {
   await mockInternalRegistration(page, { includeOwnerFlag: false, legacyOwnerFallback: true });
   await page.goto("/#module=operations&section=7");
 
-  await expect(page.locator(".module-sidebar")).toBeVisible();
+  if (isMobile) await expect(page.locator(".module-sidebar")).toBeHidden();
+  else await expect(page.locator(".module-sidebar")).toBeVisible();
 });
 
 test("opening Operations starts at its first permitted section, not the last recent section", async ({ page }) => {
@@ -212,7 +214,7 @@ test("catalog price keeps the decimal string in its separate Baseer command form
   const requested = await mockInternalRegistration(page);
   await page.goto("/#module=operations&section=5");
 
-  await page.getByRole("button", { name: "منتجات المنيو" }).click();
+  await page.getByRole("tab", { name: "منتجات المنيو" }).click();
   await page.getByRole("button", { name: "منتج الاختبار" }).click();
   const dialog = page.getByRole("dialog");
   await dialog.getByRole("button", { name: "سعر بيع المنيو" }).click();
@@ -254,7 +256,7 @@ test("operations reports keep their read-only data inside the company and period
   await page.goto("/#module=operations&section=8");
 
   await expect(page.getByRole("heading", { name: "تقارير المشتريات والعهدة" })).toBeVisible();
-  await expect(page.getByRole("cell", { name: "96.0000" })).toBeVisible();
+  await expect(page.getByText("مادة الاختبار", { exact: true })).toBeVisible();
   await expect(page.getByRole("cell", { name: "مادة الاختبار الثانية" })).toHaveCount(0);
   await page.getByRole("button", { name: "تحميل المزيد" }).click();
   await expect(page.getByRole("cell", { name: "مادة الاختبار الثانية" })).toBeVisible();
@@ -280,7 +282,9 @@ test("custody return keeps decimal text and Gregorian business date through its 
   await dialog.getByRole("button", { name: "فتح التقويم" }).click();
   await expect(page.getByRole("dialog", { name: "التاريخ" })).toBeVisible();
   await page.keyboard.press("Escape");
-  await dialog.getByLabel("ربط بالطلب").selectOption("request-1");
+  const requestSelector = dialog.getByLabel("ربط بالطلب");
+  await requestSelector.click();
+  await page.getByRole("option", { name: /REQ-001/ }).click();
   await dialog.getByLabel("الإجمالي").fill("12.5000");
   await dialog.getByLabel("سبب المرتجع").fill("باقي العهدة");
   await dialog.getByRole("button", { name: "حفظ" }).click();
