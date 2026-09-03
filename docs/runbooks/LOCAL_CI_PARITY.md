@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Before a release-candidate push, run the same `quality` and `web-acceptance` jobs defined in `.github/workflows/verify.yml` locally. The runner is Linux Docker via `act`; it creates a temporary LF worktree from the committed candidate, then copies that into the job container. Linux `npm ci` output never contaminates the Windows workspace and CRLF cannot create a false `git diff --check` failure.
+Before a release-candidate push, run the same `quality` and `web-acceptance` jobs defined in `.github/workflows/verify.yml` locally. The runner is Linux Docker via `act`; it creates a temporary LF Git clone from the committed candidate and binds that clone into the job container. Linux `npm ci` output never contaminates the Windows workspace, Git metadata remains available to the workflow, and CRLF cannot create a false `git diff --check` failure.
 
 GitHub remains the release authority because it is the hosted runner and publishes immutable release images. This gate catches clean-install, workspace resolution, PostgreSQL-service, and browser-acceptance faults before the remote run.
 

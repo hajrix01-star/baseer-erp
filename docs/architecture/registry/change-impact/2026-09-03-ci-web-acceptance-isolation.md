@@ -7,7 +7,7 @@
 - **Clean-checkout correction:** browser acceptance must build `@baseer-erp/contracts` before Vite starts.  The package exports `dist/*`; local workspaces can conceal a missing build through pre-existing artifacts, while a clean GitHub checkout correctly exposes it.
 - **Security correction:** retain the blocking runtime audit and update the lockfile only to patched, compatible Fastify/URI releases. Nest 11's Fastify adapter is retained because its 12.0.0 package is not ESM-compatible with the existing Nest 11 runtime despite its peer declaration. A scoped package override lifts only its embedded Fastify dependency to 5.12.1; the gate is not reduced and no Nest framework package is upgraded.
 - **Verification resolution correction:** every root-level API verification/maintenance launcher resolves the API-owned Fastify adapter through one `apps/api/package.json` resolver, not through an accidental root hoist. This keeps CI and clean local installs on the same module-resolution contract.
-- **Local parity gate:** `scripts/run-ci-parity.ps1` runs the exact `quality` and `web-acceptance` workflow jobs through Linux Docker/act from a disposable LF worktree for the committed candidate. It is mandatory for release candidates and infrastructure/dependency/test-runner changes; targeted checks remain the fast feedback path for isolated product changes.
+- **Local parity gate:** `scripts/run-ci-parity.ps1` runs the exact `quality` and `web-acceptance` workflow jobs through Linux Docker/act from a disposable LF Git clone of the committed candidate. It is mandatory for release candidates and infrastructure/dependency/test-runner changes; targeted checks remain the fast feedback path for isolated product changes.
 
 ## Gates and boundaries
 
