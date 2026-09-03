@@ -6,6 +6,7 @@ export type BaseerApiErrorCode =
   | "IDEMPOTENCY_MISMATCH"
   | "INTERNAL_ERROR"
   | "NOT_FOUND"
+  | "PAYROLL_PREVIEW_FAILED"
   | "RATE_LIMITED"
   | "REPORT_RUN_EXPIRED"
   | "VALIDATION_FAILED";
@@ -81,6 +82,9 @@ export function presentBaseerApiError(
       : "The service is temporarily busy. Try again shortly.";
   }
   if ([502, 503, 504].includes(error.status)) {
+    if (error.code === "PAYROLL_PREVIEW_FAILED" && error.localizedMessage?.[language]) {
+      return error.localizedMessage[language];
+    }
     return language === "ar"
       ? "الخدمة غير متاحة مؤقتًا. أعد المحاولة."
       : "The service is temporarily unavailable. Try again.";

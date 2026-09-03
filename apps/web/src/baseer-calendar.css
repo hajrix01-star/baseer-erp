@@ -53,7 +53,10 @@
 .baseer-calendar-picker__trigger:hover, .baseer-calendar-picker__clear:hover { background: color-mix(in srgb, var(--brand) 9%, transparent); }
 .baseer-calendar-picker__trigger:focus-visible, .baseer-calendar-picker__clear:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
 .baseer-calendar-picker__trigger:disabled, .baseer-calendar-picker__clear:disabled { cursor: not-allowed; opacity: .55; }
-.baseer-calendar-picker__popover { box-sizing: border-box; padding: .65rem; border: 1px solid var(--line); border-radius: .85rem; color: var(--ink); background: var(--surface); box-shadow: 0 12px 28px rgb(10 45 31 / 16%); transform-origin: top center; }
+.baseer-calendar-picker__popover { position: relative; box-sizing: border-box; padding: .65rem; border: 1px solid var(--line); border-radius: .85rem; color: var(--ink); background: var(--surface); box-shadow: 0 12px 28px rgb(10 45 31 / 16%); transform-origin: top center; }
+.baseer-calendar-picker__close { position: absolute; inset-block-start: .4rem; inset-inline-end: .4rem; z-index: 1; display: none; place-items: center; inline-size: 2rem; block-size: 2rem; padding: 0; border: 1px solid var(--line); border-radius: .5rem; color: var(--brand-deep); background: var(--surface); font: inherit; font-size: 1.25rem; line-height: 1; cursor: pointer; }
+.baseer-calendar-picker__close:hover { border-color: var(--brand); background: color-mix(in srgb, var(--brand) 8%, var(--surface)); }
+.baseer-calendar-picker__close:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
 .baseer-calendar-picker__header { display: grid; grid-template-columns: 2.25rem minmax(0, 1fr) 2.25rem; align-items: center; gap: .35rem; margin-block-end: .55rem; text-align: center; }
 .baseer-calendar-picker__header > strong { color: var(--brand-deep); font-size: var(--font-body); font-weight: 850; }
 .baseer-calendar-picker__header button { inline-size: 2.25rem; block-size: 2.25rem; padding: 0; border: 1px solid var(--line); border-radius: .55rem; color: var(--brand-deep); background: var(--surface); font-size: 1.35rem; line-height: 1; cursor: pointer; }
@@ -72,4 +75,4 @@
 .baseer-calendar-picker__popover footer { display: flex; justify-content: flex-end; margin-block-start: .5rem; padding-block-start: .5rem; border-block-start: 1px solid var(--line); }
 .baseer-calendar-picker__popover footer button { min-block-size: 2rem; padding-inline: .7rem; border: 1px solid var(--line); border-radius: .5rem; color: var(--brand-deep); background: var(--surface); font: inherit; font-size: var(--font-caption); font-weight: 750; cursor: pointer; }
 .baseer-calendar-picker__format-error { display: block; margin-block-start: .5rem; color: var(--status-danger); font-size: var(--font-caption); }
-@media (max-width: 640px) { .baseer-calendar-picker__popover { transform-origin: bottom center; } .baseer-calendar-picker__days button { min-block-size: 2.25rem; } }
+@media (max-width: 640px) { .baseer-calendar-picker__popover { transform-origin: bottom center; } .baseer-calendar-picker__close { display: inline-grid; } .baseer-calendar-picker__days button { min-block-size: 2.25rem; } }

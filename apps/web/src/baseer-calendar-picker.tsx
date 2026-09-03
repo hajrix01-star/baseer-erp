@@ -86,7 +86,12 @@ export const BaseerCalendarPicker = forwardRef<HTMLInputElement, CalendarPickerP
   const isDate = mode === "date";
   const openLabel = language === "ar" ? `فتح التقويم: ${label}` : `Open calendar: ${label}`;
   const closeLabel = language === "ar" ? "إغلاق التقويم" : "Close calendar";
+  const returnToFieldLabel = language === "ar" ? "العودة إلى حقل التاريخ" : "Return to date field";
   const clearLabel = language === "ar" ? "مسح التاريخ" : "Clear date";
+  const closePopover = () => {
+    setOpen(false);
+    requestAnimationFrame(() => triggerRef.current?.focus());
+  };
 
   useEffect(() => {
     if (!open) setCursor(cursorForCalendar(currentValue));
@@ -215,6 +220,7 @@ export const BaseerCalendarPicker = forwardRef<HTMLInputElement, CalendarPickerP
     : (language === "ar" ? "استخدم صيغة YYYY-MM" : "Use YYYY-MM");
 
   const popover = open ? <section ref={popoverRef} id={popoverId} className="baseer-calendar-picker__popover" style={popoverStyle} role="dialog" aria-modal="false" aria-label={label} dir={language === "ar" ? "rtl" : "ltr"}>
+    <button className="baseer-calendar-picker__close" type="button" aria-label={closeLabel} onClick={closePopover}>×</button>
     <header className="baseer-calendar-picker__header">
       <button type="button" aria-label={language === "ar" ? "السابق" : "Previous"} onClick={() => setCursor(shiftCalendarCursor(cursor, isDate ? -1 : -12))}>‹</button>
       <strong>{isDate ? calendarMonthName(language, cursor, "long") : cursor.slice(0, 4)}</strong>
@@ -271,7 +277,7 @@ export const BaseerCalendarPicker = forwardRef<HTMLInputElement, CalendarPickerP
         }
       }}
     />
-    <button ref={triggerRef} className="baseer-calendar-picker__trigger" type="button" disabled={disabled} aria-label={open ? closeLabel : openLabel} aria-controls={open ? popoverId : undefined} aria-expanded={open} onClick={() => {
+    <button ref={triggerRef} className="baseer-calendar-picker__trigger" type="button" disabled={disabled} aria-label={open ? returnToFieldLabel : openLabel} aria-controls={open ? popoverId : undefined} aria-expanded={open} onClick={() => {
       setCursor(cursorForCalendar(currentValue));
       setOpen((current) => !current);
     }}><BaseerCalendarIcon /></button>

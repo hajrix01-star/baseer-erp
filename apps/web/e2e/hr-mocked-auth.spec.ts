@@ -221,7 +221,7 @@ async function fillOnboarding(page: Page) {
   await dialog.getByLabel("الاسم الكامل*").fill("موظف جديد");
   await dialog.getByRole("button", { name: "تاريخ التعيين" }).click();
   await page.getByRole("dialog", { name: "تاريخ التعيين" })
-    .locator(".baseer-period-filter__days button:not(.is-outside):not([disabled])")
+    .locator(".baseer-calendar-picker__days button:not(.is-outside):not([disabled])")
     .first()
     .click();
   await dialog.getByLabel("إجمالي الراتب الشهري*").fill("3000");
@@ -381,7 +381,7 @@ test("payroll preview failure reports once without a request loop", async ({ pag
 test("employee profile shows exact counts, lazy compliance paging, and topmost modal semantics", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   const requested: string[] = [];
-  await mockHr(page, requested, { terminatedEmployee: true });
+  await mockHr(page, requested);
   await page.goto("/#module=hr&section=1");
   await page.getByRole("listitem").filter({ hasText: "موظف الاختبار" }).click();
   const profile = page.getByRole("dialog", { name: "موظف الاختبار" });
@@ -407,7 +407,7 @@ test("employee profile shows exact counts, lazy compliance paging, and topmost m
 
 test("employee profile presents server-owned attendance compliance without payroll actions", async ({ page }) => {
   const requested: string[] = [];
-  await mockHr(page, requested, { terminatedEmployee: true });
+  await mockHr(page, requested);
   await page.goto("/#module=hr&section=1");
   await page.getByRole("listitem").filter({ hasText: employee.nameAr }).click();
   const profile = page.getByRole("dialog", { name: employee.nameAr });
@@ -500,7 +500,7 @@ test("all seven HR top-level sections render without page overflow", async ({ pa
     { section: 2, text: "الإجازات والعودة" },
     { section: 3, text: "مسير الرواتب" },
     { section: 4, text: "السلف والخصومات" },
-    { section: 5, text: "خدمات الموظفين والامتثال" },
+    { section: 5, text: "خدمات الموظفين" },
     { section: 6, text: "حاسبة الراتب" },
   ];
   for (const surface of surfaces) {

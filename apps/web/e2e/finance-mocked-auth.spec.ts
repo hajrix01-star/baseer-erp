@@ -219,12 +219,18 @@ test("invoice-register search uses the authorised full-history period and expose
   await expect(page.getByRole("option", { name: "الكل" })).toBeVisible();
 });
 
-test("purchase-entry clerk sees and loads only the entry surface", async ({ page }) => {
+test("purchase-entry clerk sees and loads only the entry surface", async ({ page, isMobile }) => {
   const requests: string[] = [];
   await mockPurchaseEntryClerk(page, requests);
 
   await page.goto("/#module=operations&section=2");
-  await page.getByRole("button", { name: "المشتريات", exact: true }).click();
+  let navigation = page.locator(".module-sidebar .theme-navigation");
+  if (isMobile) {
+    await page.getByRole("button", { name: /الأقسام/ }).click();
+    navigation = page.locator(".mobile-drawer .theme-navigation");
+  }
+  await navigation.getByText("المشتريات", { exact: true }).click();
+  if (isMobile) await page.getByRole("button", { name: "إغلاق" }).click();
 
   await expect(page.getByRole("tab", { name: "إدخال" })).toBeVisible();
   await expect(page.getByRole("tab", { name: "سجل الفواتير" })).toHaveCount(0);

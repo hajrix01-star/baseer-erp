@@ -130,7 +130,7 @@ test("Decision overview is accessible in Arabic and English, refreshes by period
   const periodDialog = page.getByRole("dialog", { name: "اختيار الفترة" });
   await periodDialog.getByRole("combobox", { name: "نوع الفترة" }).click();
   await page.getByRole("option", { name: "سنة", exact: true }).click();
-  await periodDialog.getByRole("button", { name: "2026", exact: true }).click();
+  await periodDialog.getByRole("button", { name: /^(?:2026|2,026)$/ }).click();
   await periodDialog.getByRole("button", { name: "تطبيق" }).click();
   await expect.poll(() => requests.some((request) => request.pathname.endsWith("/metrics/sales-daily") && request.search.includes("from=2026-01-01") && request.search.includes("to=2026-12-31"))).toBeTruthy();
   const initialMetrics = requests.filter((request) => request.pathname.includes("/metrics/")).length;
@@ -229,8 +229,8 @@ test("Quality policy preserves decimal command fields and sources research actio
   await expect(page.getByRole("heading", { name: "Sales-change alert policy" })).toBeVisible();
   const policyCard = page.locator(".decision-sales-policy");
   await expect(policyCard.locator("form[data-baseer-rhf-form]:not([aria-busy])")).toBeVisible();
-  await policyCard.getByRole("textbox", { name: "Alert for a decrease of %" }).fill("12.50");
-  await policyCard.getByRole("textbox", { name: "Alert for an increase of %" }).fill("25.00");
+  await policyCard.getByRole("textbox", { name: "Alert for a decrease of" }).fill("12.50");
+  await policyCard.getByRole("textbox", { name: "Alert for an increase of" }).fill("25.00");
   await policyCard.getByRole("textbox", { name: "Minimum comparison-period sales (SAR)" }).fill("100.1250");
   await policyCard.getByRole("textbox", { name: "Minimum cash difference (SAR)" }).fill("20.5000");
   await page.getByRole("button", { name: "Save policy" }).click();
