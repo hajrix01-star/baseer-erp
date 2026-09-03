@@ -103,6 +103,10 @@ async function mockInternalRegistration(page: Page, options: { isOwner?: boolean
   return requested;
 }
 
+async function openOperationsManagement(page: Page) {
+  await page.getByRole("button", { name: "فتح إدارة طلبات الشراء والعهدة" }).click();
+}
+
 test("internal registration keeps its Gregorian business date through the Baseer date adapter", async ({ page }) => {
   const requested = await mockInternalRegistration(page);
   await page.goto("/#module=operations&section=7");
@@ -159,12 +163,12 @@ test("execution workspace reads its bounded summary before management is opened"
   const requested = await mockInternalRegistration(page);
   await page.goto("/#module=operations&section=6");
 
-  await expect(page.getByRole("heading", { name: "طلبات الشراء والعهدة" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "طلبات المشتريات والعهدة" })).toBeVisible();
   await expect(page.getByText("طلبات مفتوحة", { exact: true })).toBeVisible();
   await expect.poll(() => requested.filter((request) => request.path === "/v1/operations/execution-workspace/summary").length).toBeGreaterThan(0);
   expect(requested.some((request) => request.path === "/v1/operations/execution-workspace")).toBeFalsy();
 
-  await page.getByRole("button", { name: "فتح إدارة طلبات الشراء والعهدة" }).click();
+  await openOperationsManagement(page);
   await expect.poll(() => requested.some((request) => request.path === "/v1/operations/execution-workspace")).toBeTruthy();
 });
 
@@ -269,6 +273,7 @@ test("operations reports keep their read-only data inside the company and period
 test("custody return keeps decimal text and Gregorian business date through its adapter", async ({ page }) => {
   const requested = await mockInternalRegistration(page);
   await page.goto("/#module=operations&section=6");
+  await openOperationsManagement(page);
 
   await page.getByRole("button", { name: "تسجيل مرتجع عهدة" }).click();
   const dialog = page.getByRole("dialog");
@@ -290,6 +295,7 @@ test("custody return keeps decimal text and Gregorian business date through its 
 test("purchase request and completion expose the shared Gregorian date adapter", async ({ page }) => {
   await mockInternalRegistration(page);
   await page.goto("/#module=operations&section=6");
+  await openOperationsManagement(page);
 
   await page.getByRole("button", { name: "إنشاء طلب شراء" }).click();
   let dialog = page.getByRole("dialog");
