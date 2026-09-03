@@ -80,10 +80,10 @@ jobs:
       - run: npm run check:ui-native-control-ratchet
       - run: npm run check:ui-inline-style-ratchet
       - run: npm run check --workspace @baseer-erp/contracts
-      - run: npm run check --workspace @baseer-erp/api
-      - run: npm run check --workspace @baseer-erp/web
       - run: npm run build --workspace @baseer-erp/contracts
       - run: npm run build --workspace @baseer-erp/output-platform
+      - run: npm run check --workspace @baseer-erp/api
+      - run: npm run check --workspace @baseer-erp/web
       - run: npm run build --workspace @baseer-erp/api
       - name: Verify separated API and migration images
         run: |
