@@ -148,7 +148,10 @@ async function seedFixture() {
       'INSERT INTO "Role" ("id", "tenantId", "code", "nameAr", "nameEn") VALUES ($1::uuid, $2::uuid, $3, $4, $5), ($6::uuid, $2::uuid, $7, $8, $9)',
       [authorizedRoleId, fixture.tenantId, `AI_AUTH_${suffix}`, "دور بصيرة", "AI role", limitedRoleId, `AI_LIMITED_${suffix}`, "دور محدود", "Limited role"],
     );
-    await client.query('INSERT INTO "RolePermission" ("tenantId", "roleId", "permissionCode") VALUES ($1::uuid, $2::uuid, $3)', [fixture.tenantId, authorizedRoleId, "platform.ai.use"]);
+    await client.query(
+      'INSERT INTO "RolePermission" ("tenantId", "roleId", "permissionCode") VALUES ($1::uuid, $2::uuid, $3), ($1::uuid, $2::uuid, $4)',
+      [fixture.tenantId, authorizedRoleId, "platform.ai.use", "marketing.insights.read"],
+    );
     await client.query(
       'INSERT INTO "CompanyMembership" ("tenantId", "userId", "companyId", "roleId") VALUES ($1::uuid, $2::uuid, $3::uuid, $4::uuid), ($1::uuid, $5::uuid, $3::uuid, $6::uuid)',
       [fixture.tenantId, fixture.authorizedUserId, fixture.companyId, authorizedRoleId, fixture.limitedUserId, limitedRoleId],
