@@ -1,6 +1,6 @@
 import { BaseerApiError, parseBaseerApiResponse } from "./baseer-api-error";
 import { api, baseerApiBaseUrl, type ActiveSession } from "./daily-sales-client";
-import type { ApproveAttendanceRosterRequest, AssignAttendanceEmployeeScheduleRequest, AssignAttendanceEmployeesScheduleRequest, AttendanceCoverageReceipt, AttendanceRosterReceipt, ConfigureAttendanceEmployeeScheduleRequest, SaveAttendanceRosterDraftRequest, SetAttendanceEmployeeWeeklyAdjustmentRequest } from "@baseer-erp/contracts";
+import type { ApproveAttendanceRosterRequest, AssignAttendanceEmployeeScheduleRequest, AssignAttendanceEmployeesScheduleRequest, AttendanceCoverageReceipt, AttendanceEmployeeComplianceReceipt, AttendanceRosterReceipt, ConfigureAttendanceEmployeeScheduleRequest, SaveAttendanceRosterDraftRequest, SetAttendanceEmployeeWeeklyAdjustmentRequest } from "@baseer-erp/contracts";
 
 export type AttendanceBranch = { id: string; nameAr: string; nameEn: string | null; latitude: number; longitude: number; radiusMeters: number; maxAccuracyMeters: number; qrValiditySeconds: number; isActive: boolean };
 export type AttendanceCompanySettings = { locationEnabled: boolean; locationRetentionDays: number };
@@ -19,6 +19,8 @@ export type AttendanceAlert = { employeeId: string; employeeNumber: string; empl
 export type AttendanceAlerts = { date: string; summary: { late: number; missingCheckIn: number; openSessions: number }; alerts: AttendanceAlert[] };
 export type AttendanceCoverage = AttendanceCoverageReceipt;
 export type AttendanceRoster = AttendanceRosterReceipt;
+export type AttendanceEmployeeCompliance = AttendanceEmployeeComplianceReceipt;
+export type AttendanceEmployeeComplianceScope = "MONTH" | "YEAR" | "LAST_6_MONTHS" | "LAST_12_MONTHS" | "EMPLOYMENT" | "CUSTOM";
 export type AttendanceDashboardEmployee = { employeeId: string; employeeNumber: string; employeeNameAr: string; employeeNameEn: string | null; state: "NOT_RECORDED" | "IN_PROGRESS" | "CHECKED_OUT"; checkInAt: string | null; checkOutAt: string | null; workedMinutes: number; evaluation: AttendanceEvaluation };
 export type AttendanceDashboardV2 = Omit<AttendanceDashboard, "employees"> & { employees: AttendanceDashboardEmployee[] };
 export type AttendanceReportRow = { employeeId: string; employeeNumber: string; employeeNameAr: string; employeeNameEn: string | null; sessions: number; completedSessions: number; workedMinutes: number; plannedMinutes: number; lateMinutes: number; earlyLeaveMinutes: number; extraMinutes: number; shortageMinutes: number; missingCheckInDays: number; days: AttendanceEvaluation[] };
@@ -34,6 +36,15 @@ export function createAttendanceBranch(session: ActiveSession, payload: unknown)
 export function updateAttendanceBranch(session: ActiveSession, payload: unknown) { return api<{ branch: AttendanceBranch }>(session, "/attendance/branches/update", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
 export function setAttendanceEmployeePin(session: ActiveSession, payload: unknown) { return api<{ employeeId: string }>(session, "/attendance/employees/pin", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }); }
 export function getAttendanceEmployeePin(session: ActiveSession, employeeId: string) { return api<AttendanceEmployeePinDisplay>(session, `/attendance/employees/${encodeURIComponent(employeeId)}/pin`); }
+/** Manager-only reference; the server owns tenant scope and every calculation. */
+export function getAttendanceEmployeeCompliance(session: ActiveSession, employeeId: string, query: { scope?: AttendanceEmployeeComplianceScope; from?: string; to?: string } = {}) {
+  const search = new URLSearchParams();
+  if (query.scope) search.set("scope", query.scope);
+  if (query.from) search.set("from", query.from);
+  if (query.to) search.set("to", query.to);
+  const suffix = search.size ? `?${search.toString()}` : "";
+  return api<AttendanceEmployeeCompliance>(session, `/attendance/employees/${encodeURIComponent(employeeId)}/compliance${suffix}`);
+}
 export function issueAttendanceQr(session: ActiveSession, branchId: string) { return api<{ token: string; expiresAt: string }>(session, `/attendance/branches/${encodeURIComponent(branchId)}/qr`); }
 export function getAttendanceEmployeePortalScope(session: ActiveSession) { return api<{ tenantId: string; companyId: string }>(session, "/attendance/employee-portal-scope"); }
 export function getAttendanceDashboard(session: ActiveSession, date?: string, options?: RequestInit) { return api<AttendanceDashboardV2>(session, `/attendance/dashboard${date ? `?date=${encodeURIComponent(date)}` : ""}`, options); }

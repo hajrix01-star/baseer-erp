@@ -5,6 +5,7 @@ import { escapeHtml, formatDisplayNumber, formatReportCell } from './formatting.
 export function renderPrintPreviewDocument(snapshot: ReportSnapshot): string {
   if (snapshot.template === 'payroll-signature-slips') return renderPayrollSignatureSlips(snapshot);
   if (snapshot.template === 'payroll-run') return renderPayrollRun(snapshot);
+  if (snapshot.template === 'attendance-weekly-roster') return renderAttendanceWeeklyRoster(snapshot);
   if (snapshot.reportCode === 'personal_cash_performance') return renderFinancialPerformance(snapshot);
   const headers = snapshot.columns.map((column) => `<th>${escapeHtml(column.label)}</th>`).join('');
   const rows = snapshot.rows.map((row) => `<tr>${snapshot.columns.map((column) => `<td>${escapeHtml(String(formatReportCell(row[column.key] ?? null, column, snapshot.locale)))}</td>`).join('')}</tr>`).join('');
@@ -38,6 +39,33 @@ export function renderPrintPreviewDocument(snapshot: ReportSnapshot): string {
     .report-footer { display: flex; justify-content: space-between; gap: 12px; margin-top: 13px; padding-top: 8px; border-top: 1px solid #d9e4de; color: #63736c; font-size: 9px; }
     @media print { .report-header, .report-meta, tr { break-inside: avoid; } }
   </style></head><body><header class="report-header"><div class="brand">${logo}<div><p class="company-name">${escapeHtml(companyNames)}</p><p class="report-kind">Baseer ERP</p></div></div><h1>${escapeHtml(snapshot.title)}</h1></header><section class="report-meta"><div class="meta-item"><span class="meta-label">${periodLabel}</span><span class="meta-value">${escapeHtml(snapshot.periodLabel)}</span></div><div class="meta-item"><span class="meta-label">${sourceLabel}</span><span class="meta-value">${escapeHtml(snapshot.sourceLabel)}</span></div><div class="meta-item"><span class="meta-label">${generatedLabel}</span><span class="meta-value">${escapeHtml(snapshot.generatedAtRiyadh)}</span></div></section><table><thead><tr>${headers}</tr></thead><tbody>${rows}</tbody></table><footer class="report-footer"><span>${verified}</span><span>${escapeHtml(snapshot.reportCode)} · ${escapeHtml(snapshot.snapshotId)}</span></footer></body></html>`;
+}
+
+/** Central A4 landscape attendance board. Rows paginate naturally and the
+ * table header repeats on every page, making it practical as an office copy. */
+function renderAttendanceWeeklyRoster(snapshot: ReportSnapshot): string {
+  const roster = snapshot.attendanceWeeklyRoster;
+  if (!roster) throw new Error('Attendance weekly roster data is missing.');
+  const ar = snapshot.locale === 'ar';
+  const company = snapshot.companies.map((item) => item.name).join(ar ? '، ' : ', ');
+  const logo = snapshot.companyLogoDataUri ? `<img class="brand-logo" src="${escapeHtml(snapshot.companyLogoDataUri)}" alt="${escapeHtml(company)}">` : '<div class="brand-mark" aria-hidden="true">B</div>';
+  const dayHeaders = roster.days.map((day) => `<th><span>${escapeHtml(day.label)}</span><small dir="ltr">${escapeHtml(day.date.slice(5))}</small></th>`).join('');
+  const cell = (day: (typeof roster.rows)[number]['days'][number]) => {
+    if (day.kind === 'LEAVE') return `<td class="leave"><b>${escapeHtml(day.label)}</b></td>`;
+    if (day.kind === 'REST') return `<td class="rest"><b>${escapeHtml(day.label)}</b></td>`;
+    if (day.kind === 'OFF') return `<td class="off"><b>${escapeHtml(day.label)}</b></td>`;
+    const shifts = day.periods.map((period) => `<span class="shift" dir="ltr">${escapeHtml(period.startTime)}–${escapeHtml(period.endTime)}${period.endsNextDay ? '<sup>+1</sup>' : ''}</span>`).join('');
+    return `<td class="work">${shifts || `<b>${escapeHtml(day.label)}</b>`}</td>`;
+  };
+  const rows = roster.rows.map((row) => `<tr><th scope="row"><b>${escapeHtml(row.employeeName)}</b><small dir="ltr">${escapeHtml(row.employeeNumber)}</small>${row.jobTitle ? `<em>${escapeHtml(row.jobTitle)}</em>` : ''}</th>${row.days.map(cell).join('')}</tr>`).join('');
+  const legend = ar ? 'دوام' : 'Work'; const leave = ar ? 'إجازة' : 'Leave'; const rest = ar ? 'راحة' : 'Rest'; const off = ar ? 'غير مجدول' : 'Off';
+  const verified = ar ? 'جدول صادر من لقطة خادمية موثقة في بصير' : 'Schedule issued from a verified Baseer server snapshot';
+  return `<!doctype html><html lang="${snapshot.locale}" dir="${snapshot.direction}"><head><meta charset="utf-8"><title>${escapeHtml(snapshot.title)}</title><style>
+    @page { size: A4 landscape; margin: 10mm 9mm 12mm; } * { box-sizing:border-box; } body { margin:0; color:#173428; font-family:Arial,"Noto Sans Arabic",sans-serif; font-size:8.5px; line-height:1.35; }
+    .header { display:flex; align-items:center; justify-content:space-between; gap:12px; padding-bottom:8px; border-bottom:2px solid #0b7651; }.brand { display:flex; align-items:center; gap:8px; }.brand-logo,.brand-mark { width:32px; height:32px; object-fit:contain; }.brand-mark { display:grid; place-items:center; border-radius:8px; background:#0b7651; color:#fff; font-size:18px; font-weight:800; }.company { margin:0; color:#0b7651; font-size:12px; font-weight:800; }.system { margin:1px 0 0; color:#63736c; font-size:8px; }.title { text-align:end; }.title h1 { margin:0; font-size:17px; }.title p { margin:2px 0 0; color:#63736c; font-size:8px; }
+    .meta { display:flex; justify-content:space-between; gap:8px; margin:7px 0; color:#52675e; font-size:8px; }.legend { display:flex; flex-wrap:wrap; gap:5px; align-items:center; }.key { display:inline-flex; gap:3px; align-items:center; }.key i { width:8px; height:8px; border-radius:2px; background:#caeee0; border:1px solid #66b997; }.key.leave i { background:#f9ddd6; border-color:#dc8a77; }.key.rest i { background:#f5e9bd; border-color:#cba941; }.key.off i { background:#eef0ef; border-color:#b9c2bd; }
+    table { width:100%; border-collapse:collapse; table-layout:fixed; border:1px solid #cfe0d7; } thead { display:table-header-group; } th,td { border:1px solid #dce8e2; padding:5px 4px; text-align:center; vertical-align:middle; } thead th { background:#0b7651; color:#fff; font-size:8px; } thead th:first-child { width:25%; text-align:inherit; } thead small { display:block; margin-top:1px; font-size:7px; opacity:.88; } tbody th { background:#f8fbf9; text-align:inherit; font-weight:600; } tbody th b,tbody th small,tbody th em { display:block; } tbody th small { margin-top:1px; color:#617269; font-size:7px; } tbody th em { margin-top:1px; color:#788980; font-size:7px; font-style:normal; }.work { background:#f4fbf7; }.shift { display:block; margin:2px 0; padding:2px 3px; border-radius:3px; background:#caeee0; color:#075f3f; font-size:7.4px; font-weight:800; white-space:nowrap; }.shift sup { margin-inline-start:1px; color:#8a5526; }.leave { background:#fff0ec; color:#9d3320; }.rest { background:#fff9df; color:#755b00; }.off { background:#f4f6f5; color:#68776f; }.leave b,.rest b,.off b { font-size:8px; }.footer { display:flex; justify-content:space-between; gap:10px; margin-top:7px; padding-top:5px; border-top:1px solid #d6e4dc; color:#63736c; font-size:7px; } @media print { tr { break-inside:avoid; } }
+  </style></head><body><main><header class="header"><div class="brand">${logo}<div><p class="company">${escapeHtml(company)}</p><p class="system">Baseer ERP</p></div></div><div class="title"><h1>${escapeHtml(snapshot.title)}</h1><p>${escapeHtml(snapshot.periodLabel)}</p></div></header><section class="meta"><div class="legend"><span class="key"><i></i>${legend}</span><span class="key leave"><i></i>${leave}</span><span class="key rest"><i></i>${rest}</span><span class="key off"><i></i>${off}</span></div><span>${escapeHtml(snapshot.generatedAtRiyadh)}</span></section><table><thead><tr><th>${ar ? 'الموظف' : 'Employee'}</th>${dayHeaders}</tr></thead><tbody>${rows}</tbody></table><footer class="footer"><span>${verified}</span><span dir="ltr">${escapeHtml(snapshot.reportCode)} · ${escapeHtml(snapshot.snapshotId)}</span></footer></main></body></html>`;
 }
 
 /**

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import interact from "interactjs";
 import type { DragEvent as InteractDragEvent, ResizeEvent as InteractResizeEvent } from "@interactjs/types";
 import { animate, motion } from "motion/react";
@@ -108,12 +108,13 @@ function RosterHoursCounter({ minutes, language }: { minutes: number; language: 
   return <span className="hr-roster__hours-counter"><strong dir="ltr">{remainder ? `${hours}:${String(remainder).padStart(2, "0")}` : hours}</strong><small>{language === "ar" ? "ساعة" : "hours"}</small></span>;
 }
 
-export function HrAttendanceRosterEditor({ roster, language, busy, onSave, onApprove }: {
+export function HrAttendanceRosterEditor({ roster, language, busy, onSave, onApprove, printAction }: {
   roster: AttendanceRoster;
   language: Language;
   busy?: boolean;
   onSave: (entries: Entry[], peakPeriods: PeakPeriod[], baseRevision?: number) => Promise<void>;
   onApprove: (mode: ApprovalMode, baseRevision: number, effectiveFrom: string, temporaryDays?: 7 | 10) => Promise<void>;
+  printAction?: ReactNode;
 }) {
   const ar = language === "ar";
   const [employees, setEmployees] = useState(() => cloneEmployees(roster.employees));
@@ -265,7 +266,7 @@ export function HrAttendanceRosterEditor({ roster, language, busy, onSave, onApp
 
   // The draggable roster owns its horizontal overflow, so it deliberately keeps the surface variant.
   return <BaseerCard variant="surface" className="hr-roster">
-    <header className="hr-roster__header"><div><span>{ar ? "تخطيط تشغيلي" : "Operational planning"}</span><h3>{ar ? "محرر جدول الدوام" : "Work roster editor"}</h3><p>{ar ? "اسحب الشريط لتغيير الوقت أو نقله لموظف آخر؛ وعند تلامس فترتين تندمجان. انقر نقراً مزدوجاً فوق الشريط لقصه. كل التغييرات مسودة حتى الاعتماد." : "Drag a bar to adjust or move it; touching periods merge automatically. Double click a bar to split it. Changes stay draft until approved."}</p></div><div className="hr-roster__actions"><BaseerButton type="button" variant="secondary" disabled={!dirty || busy} onClick={() => void save()}>{ar ? "حفظ المسودة" : "Save draft"}</BaseerButton><BaseerButton type="button" disabled={!roster.plan || dirty || busy} onClick={() => setApproveOpen(true)}>{ar ? "اعتماد الجدول" : "Approve roster"}</BaseerButton></div></header>
+    <header className="hr-roster__header"><div><span>{ar ? "تخطيط تشغيلي" : "Operational planning"}</span><h3>{ar ? "محرر جدول الدوام" : "Work roster editor"}</h3><p>{ar ? "اسحب الشريط لتغيير الوقت أو نقله لموظف آخر؛ وعند تلامس فترتين تندمجان. انقر نقراً مزدوجاً فوق الشريط لقصه. كل التغييرات مسودة حتى الاعتماد." : "Drag a bar to adjust or move it; touching periods merge automatically. Double click a bar to split it. Changes stay draft until approved."}</p></div><div className="hr-roster__actions">{printAction}<BaseerButton type="button" variant="secondary" disabled={!dirty || busy} onClick={() => void save()}>{ar ? "حفظ المسودة" : "Save draft"}</BaseerButton><BaseerButton type="button" disabled={!roster.plan || dirty || busy} onClick={() => setApproveOpen(true)}>{ar ? "اعتماد الجدول" : "Approve roster"}</BaseerButton></div></header>
     <div className="hr-roster__status"><span className={dirty ? "is-draft" : undefined}>{dirty ? (ar ? "تغييرات غير محفوظة" : "Unsaved changes") : roster.plan ? (ar ? `مسودة محفوظة · إصدار ${roster.plan.revision}` : `Saved draft · revision ${roster.plan.revision}`) : (ar ? "لم تُنشأ مسودة بعد" : "No draft yet")}</span><small>{ar ? "السجل الفعلي والرواتب لا يتغيران هنا." : "Actual attendance and payroll never change here."}</small></div>
     <div className="hr-roster__days" role="tablist" aria-label={ar ? "أيام جدول الدوام" : "Roster days"}>{roster.days.map((date, index) => <BaseerButton key={date} type="button" variant={dayIndex === index ? "primary" : "quiet"} aria-selected={dayIndex === index} role="tab" onClick={() => setDayIndex(index)}>{attendanceWeekdayName(index, language, !ar)}<small dir="ltr">{date.slice(5)}</small></BaseerButton>)}</div>
     <section className="hr-roster__peak-editor"><div><span>{ar ? "تغطية مطلوبة" : "Required coverage"}</span><h4>{ar ? `أوقات الذروة · ${attendanceWeekdayName(dayIndex, language)}` : `Peak periods · ${attendanceWeekdayName(dayIndex, language, true)}`}</h4><p>{ar ? "تظهر باللون الأحمر الخفيف في الشبكة. لا تعدّل الحضور أو الرواتب." : "They appear as a soft red band in the grid and never change attendance or payroll."}</p></div><div className="hr-roster__peak-periods">{selectedPeakPeriods.map((period) => { const index = peakPeriods.indexOf(period); return <div className="hr-roster__peak-period" key={`${period.businessDate}-${period.startMinute}-${period.endMinute}-${index}`}><BaseerTimeInput aria-label={ar ? "بداية الذروة" : "Peak start"} value={formatAttendanceMinute(period.startMinute)} onChange={(event) => changePeak(index, "startMinute", event.target.value)} /><span>—</span><BaseerTimeInput aria-label={ar ? "نهاية الذروة" : "Peak end"} value={formatAttendanceMinute(period.endMinute)} onChange={(event) => changePeak(index, "endMinute", event.target.value)} /><BaseerButton type="button" variant="quiet" aria-label={ar ? "حذف فترة الذروة" : "Remove peak period"} onClick={() => removePeak(index)}>×</BaseerButton></div>; })}<BaseerButton type="button" variant="secondary" disabled={selectedPeakPeriods.length >= 4 || busy} onClick={addPeak}>{ar ? "+ إضافة فترة ذروة" : "+ Add peak period"}</BaseerButton></div></section>

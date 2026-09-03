@@ -1,7 +1,7 @@
 import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { createCipheriv, createDecipheriv, createHash, createHmac, randomBytes, randomUUID } from 'node:crypto';
-import type { ApproveAttendanceRosterRequest, ArchiveAttendanceScheduleTemplateRequest, AssignAttendanceEmployeeScheduleRequest, AssignAttendanceEmployeesScheduleRequest, AttendanceEmployeePortalSessionRequest, AttendanceEmployeeRecordRequest, AttendanceEmployeeScheduleListQuery, AttendanceOpenSessionsQuery, CloseAttendanceSessionRequest, ConfigureAttendanceEmployeeScheduleRequest, CreateAttendanceBranchRequest, CreateAttendanceScheduleExceptionRequest, CreateAttendanceScheduleTemplateRequest, CreateAttendanceScheduleVersionRequest, DecideAttendanceScheduleExceptionRequest, SaveAttendanceRosterDraftRequest, SetAttendanceEmployeePinRequest, SetAttendanceEmployeeWeeklyAdjustmentRequest, UpdateAttendanceBranchRequest, UpdateAttendanceCompanySettingsRequest, UpdateAttendanceScheduleTemplateRequest } from '@baseer-erp/contracts';
-import { AttendanceEventType, AttendanceRosterApprovalMode, AttendanceRosterPlanStatus, AttendanceScheduleExceptionStatus, AttendanceScheduleTemplateStatus, AttendanceWeeklyAdjustmentKind, AttendanceWorkSessionStatus, HrEmployeeStatus, Prisma } from '../generated/prisma/client.js';
+import type { ApproveAttendanceRosterRequest, ArchiveAttendanceScheduleTemplateRequest, AssignAttendanceEmployeeScheduleRequest, AssignAttendanceEmployeesScheduleRequest, AttendanceEmployeeComplianceQuery, AttendanceEmployeePortalSessionRequest, AttendanceEmployeeRecordRequest, AttendanceEmployeeScheduleListQuery, AttendanceOpenSessionsQuery, CloseAttendanceSessionRequest, ConfigureAttendanceEmployeeScheduleRequest, CreateAttendanceBranchRequest, CreateAttendanceScheduleExceptionRequest, CreateAttendanceScheduleTemplateRequest, CreateAttendanceScheduleVersionRequest, DecideAttendanceScheduleExceptionRequest, SaveAttendanceRosterDraftRequest, SetAttendanceEmployeePinRequest, SetAttendanceEmployeeWeeklyAdjustmentRequest, UpdateAttendanceBranchRequest, UpdateAttendanceCompanySettingsRequest, UpdateAttendanceScheduleTemplateRequest } from '@baseer-erp/contracts';
+import { AttendanceEventType, AttendanceRosterApprovalMode, AttendanceRosterPlanStatus, AttendanceScheduleExceptionStatus, AttendanceScheduleTemplateStatus, AttendanceWeeklyAdjustmentKind, AttendanceWorkSessionStatus, HrEmployeeLeaveStatus, HrEmployeeStatus, Prisma } from '../generated/prisma/client.js';
 import type { TrustedCompanyActorContext } from '../core-controls/trusted-context.js';
 import { IdempotencyService } from '../core-controls/idempotency.service.js';
 import { DatabaseService } from '../database/database.service.js';
@@ -369,6 +369,46 @@ export class AttendanceService {
     });
   }
 
+  /** A print snapshot is intentionally separate from the editable board: it
+   * reads the effective schedule once, applies approved leave as an overlay,
+   * and never mutates attendance, payroll, or a roster draft. */
+  async weeklyRosterPrintSnapshot(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, requestedWeekStart: string, locale: 'ar' | 'en') {
+    const weekStart = sundayAtOrBefore(requestedWeekStart);
+    if (weekStart !== requestedWeekStart) throw new BadRequestException('Attendance print weeks must start on Sunday.');
+    const dates = businessDates(weekStart, addBusinessDays(weekStart, 6));
+    const start = businessDateValue(dates[0]!); const end = businessDateValue(dates.at(-1)!);
+    const employees = await tx.hrEmployee.findMany({
+      where: { tenantId: context.tenantId, companyId: context.companyId, status: { in: [HrEmployeeStatus.ACTIVE, HrEmployeeStatus.ON_LEAVE] } },
+      select: {
+        id: true, employeeNumber: true, nameAr: true, nameEn: true, jobTitle: true,
+        leaves: { where: { status: HrEmployeeLeaveStatus.APPROVED, startDate: { lte: end }, endDate: { gte: start } }, select: { startDate: true, endDate: true, actualReturnDate: true } },
+      },
+      orderBy: [{ employeeNumber: 'asc' }, { id: 'asc' }],
+    });
+    const schedules = await this.resolveEffectiveSchedules(tx, context, employees.map((employee) => employee.id), dates);
+    const labels = locale === 'ar'
+      ? ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت']
+      : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    return {
+      weekStart,
+      days: dates.map((date, index) => ({ date, label: labels[index]! })),
+      rows: employees.map((employee) => ({
+        employeeNumber: employee.employeeNumber,
+        employeeName: locale === 'ar' ? employee.nameAr : employee.nameEn ?? employee.nameAr,
+        jobTitle: employee.jobTitle,
+        days: dates.map((date) => {
+          const dateValue = businessDateValue(date);
+          const onLeave = employee.leaves.some((leave) => leave.startDate <= dateValue && leave.endDate >= dateValue && (!leave.actualReturnDate || leave.actualReturnDate > dateValue));
+          if (onLeave) return { kind: 'LEAVE' as const, label: locale === 'ar' ? 'إجازة' : 'Leave', periods: [] };
+          const schedule = schedules.get(scheduleResolutionKey(employee.id, date))!;
+          if (schedule.kind === AttendanceWeeklyAdjustmentKind.FULL_REST) return { kind: 'REST' as const, label: locale === 'ar' ? 'راحة' : 'Rest', periods: [] };
+          if (schedule.source === 'NONE' || !schedule.periods.length) return { kind: 'OFF' as const, label: locale === 'ar' ? 'غير مجدول' : 'Off', periods: [] };
+          return { kind: 'WORK' as const, label: locale === 'ar' ? 'دوام' : 'Work', periods: schedule.periods.map(({ startTime, endTime, endsNextDay }) => ({ startTime, endTime, endsNextDay })) };
+        }),
+      })),
+    };
+  }
+
   /** Saving only persists a draft snapshot. It cannot alter a published
    * schedule, attendance evidence, payroll, or a historical employee file. */
   async saveRosterDraft(context: TrustedCompanyActorContext, input: SaveAttendanceRosterDraftRequest) {
@@ -722,6 +762,82 @@ export class AttendanceService {
           gapStartMinute: gap?.startMinute ?? null, gapEndMinute: gap?.endMinute ?? null,
           actualAttendancePercent: plannedEmployees.length ? Math.round((actualPresent / plannedEmployees.length) * 100) : 0,
         },
+      };
+    });
+  }
+
+  /**
+   * Read-only employee attendance reference. Planned-time coverage is bounded
+   * by the effective schedule, and approved leave/rest/unscheduled days stay
+   * out of the denominator. It deliberately produces no payroll or deduction
+   * command, even when a shortage is present.
+   */
+  async employeeCompliance(context: TrustedCompanyActorContext, employeeId: string, input: AttendanceEmployeeComplianceQuery) {
+    const now = new Date(); const today = riyadhDate(now);
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const employee = await tx.hrEmployee.findFirst({
+        where: { id: employeeId, tenantId: context.tenantId, companyId: context.companyId },
+        select: { id: true, employeeNumber: true, nameAr: true, nameEn: true, hireDate: true },
+      });
+      if (!employee) throw new NotFoundException('Employee was not found in this company.');
+      const hireDate = dateOnly(employee.hireDate);
+      if (hireDate > today) throw new BadRequestException('Attendance compliance is unavailable before the employee hire date.');
+      if (input.scope === 'CUSTOM') {
+        if (input.to! > today) throw new BadRequestException('A custom compliance period cannot include future dates.');
+        if (businessDates(input.from!, input.to!).length > 366) throw new BadRequestException('A custom compliance period cannot exceed 366 days. Use EMPLOYMENT for the full service period.');
+      }
+      const currentMonthFrom = maxBusinessDate(hireDate, monthStart(today));
+      const aggregateRequested = complianceAggregateRange(input, today, hireDate);
+      const aggregateFrom = maxBusinessDate(hireDate, aggregateRequested.from);
+      const aggregateTo = minBusinessDate(today, aggregateRequested.to);
+      if (aggregateFrom > aggregateTo) throw new BadRequestException('The selected compliance period has no elapsed employment days.');
+      const dataFrom = minBusinessDate(currentMonthFrom, aggregateFrom);
+      const dates = businessDates(dataFrom, today);
+      const range = businessDateRange(dataFrom, today);
+      const [sessions, leaves, schedules] = await Promise.all([
+        tx.attendanceWorkSession.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeId, businessDate: { gte: range.start, lt: range.end } }, select: { businessDate: true, status: true, checkInAt: true, checkOutAt: true } }),
+        tx.hrEmployeeLeave.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, employeeId, status: HrEmployeeLeaveStatus.APPROVED, startDate: { lte: businessDateValue(today) }, endDate: { gte: businessDateValue(dataFrom) } }, select: { startDate: true, endDate: true, actualReturnDate: true } }),
+        this.resolveEffectiveSchedules(tx, context, [employeeId], dates),
+      ]);
+      const sessionsByDate = groupBy(sessions, (session) => dateOnly(session.businessDate));
+      const isLeaveDay = (date: string) => {
+        const dateValue = businessDateValue(date);
+        return leaves.some((leave) => leave.startDate <= dateValue && leave.endDate >= dateValue && (!leave.actualReturnDate || leave.actualReturnDate > dateValue));
+      };
+      const calculate = (from: string, to: string) => {
+        const summary = emptyCompliancePeriod(from, to, now);
+        for (const date of businessDates(from, to)) {
+          if (isLeaveDay(date)) { summary.excludedLeaveDays += 1; continue; }
+          const schedule = schedules.get(scheduleResolutionKey(employeeId, date))!;
+          if (schedule.kind === AttendanceWeeklyAdjustmentKind.FULL_REST) { summary.restDays += 1; continue; }
+          if (schedule.source === 'NONE' || !schedule.periods.length) { summary.unscheduledDays += 1; continue; }
+          const evidence = sessionsByDate.get(date) ?? [];
+          const planned = elapsedPlannedIntervals(date, schedule.periods, now);
+          if (!planned.length) continue;
+          const actual = attendanceActualIntervals(date, schedule.periods, evidence, now);
+          const plannedMinutes = intervalMinutes(planned);
+          const coveredPlannedMinutes = intersectedMinutes(planned, actual);
+          const evaluation = evaluateAttendanceDay(date, schedule, evidence, now);
+          summary.eligibleWorkDays += 1;
+          if (evaluation.hasOpenSession) {
+            summary.openSessionDays += 1;
+            const plannedStillInProgress = schedule.periods.some((period) => periodToInterval(date, period).end > now);
+            if (plannedStillInProgress) { if (summary.status === 'FINAL') summary.status = 'PROVISIONAL'; }
+            else summary.status = 'NEEDS_REVIEW';
+          }
+          summary.plannedMinutes += plannedMinutes;
+          summary.coveredPlannedMinutes += coveredPlannedMinutes;
+          summary.shortageMinutes += Math.max(0, plannedMinutes - coveredPlannedMinutes);
+          summary.lateMinutes += evaluation.lateMinutes;
+          summary.earlyLeaveMinutes += evaluation.hasOpenSession && schedule.periods.some((period) => periodToInterval(date, period).end > now) ? 0 : evaluation.earlyLeaveMinutes;
+          summary.extraMinutes += evaluation.extraMinutes;
+        }
+        summary.ratePercent = summary.plannedMinutes ? Math.round((summary.coveredPlannedMinutes / summary.plannedMinutes) * 100) : 100;
+        return summary;
+      };
+      return {
+        employeeId: employee.id, employeeNumber: employee.employeeNumber, employeeNameAr: employee.nameAr, employeeNameEn: employee.nameEn,
+        currentMonth: calculate(currentMonthFrom, today), aggregate: calculate(aggregateFrom, aggregateTo),
       };
     });
   }
@@ -1107,6 +1223,21 @@ function rosterEntriesByEmployeeWeekday(entries: Array<{ employeeId: string; bus
 function businessDateValue(value: string) { if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) throw new BadRequestException('Invalid attendance business date.'); const date = new Date(`${value}T00:00:00.000Z`); if (Number.isNaN(date.valueOf()) || dateOnly(date) !== value) throw new BadRequestException('Invalid attendance business date.'); return date; }
 function businessDateRange(from: string, to: string) { const start = businessDateValue(from); const end = businessDateValue(to); if (end < start) throw new BadRequestException('Invalid attendance report range.'); return { start, end: new Date(end.valueOf() + 24 * 60 * 60 * 1_000) }; }
 function dateOnly(value: Date) { return value.toISOString().slice(0, 10); }
+function monthStart(value: string) { return `${value.slice(0, 7)}-01`; }
+function maxBusinessDate(a: string, b: string) { return a > b ? a : b; }
+function minBusinessDate(a: string, b: string) { return a < b ? a : b; }
+function addCalendarMonths(value: string, delta: number) { const date = businessDateValue(monthStart(value)); date.setUTCMonth(date.getUTCMonth() + delta); return dateOnly(date); }
+function complianceAggregateRange(input: AttendanceEmployeeComplianceQuery, today: string, hireDate: string) {
+  if (input.scope === 'MONTH') return { from: monthStart(today), to: today };
+  if (input.scope === 'YEAR') return { from: `${today.slice(0, 4)}-01-01`, to: today };
+  if (input.scope === 'LAST_6_MONTHS') return { from: monthStart(addCalendarMonths(today, -5)), to: today };
+  if (input.scope === 'LAST_12_MONTHS') return { from: monthStart(addCalendarMonths(today, -11)), to: today };
+  if (input.scope === 'EMPLOYMENT') return { from: hireDate, to: today };
+  return { from: input.from!, to: input.to! };
+}
+function emptyCompliancePeriod(from: string, to: string, now: Date): CompliancePeriod {
+  return { from, to, calculatedThrough: now.toISOString(), status: to === riyadhDate(now) ? 'PROVISIONAL' : 'FINAL', plannedMinutes: 0, coveredPlannedMinutes: 0, shortageMinutes: 0, lateMinutes: 0, earlyLeaveMinutes: 0, extraMinutes: 0, eligibleWorkDays: 0, openSessionDays: 0, excludedLeaveDays: 0, restDays: 0, unscheduledDays: 0, ratePercent: 100 };
+}
 function isoWeekday(date: Date) { const weekday = date.getUTCDay(); return weekday === 0 ? 7 : weekday; }
 function distanceMeters(aLat: number, aLng: number, bLat: number, bLng: number) { const r = 6_371_000; const rad = Math.PI / 180; const dLat = (bLat - aLat) * rad; const dLng = (bLng - aLng) * rad; const h = Math.sin(dLat / 2) ** 2 + Math.cos(aLat * rad) * Math.cos(bLat * rad) * Math.sin(dLng / 2) ** 2; return 2 * r * Math.asin(Math.sqrt(h)); }
 function riyadhDate(value: Date) { const parts = new Intl.DateTimeFormat('en', { timeZone: 'Asia/Riyadh', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(value); const values = Object.fromEntries(parts.filter((part) => part.type !== 'literal').map((part) => [part.type, part.value])); return `${values.year}-${values.month}-${values.day}`; }
@@ -1117,6 +1248,11 @@ type EffectiveSchedule = { source: 'ROSTER' | 'EXCEPTION' | 'WEEKLY_ADJUSTMENT' 
 type ResolvedEffectiveSchedule = EffectiveSchedule & { employeeId: string; businessDate: string; templateId: string | null; templateVersionId: string | null };
 type SessionEvidence = { status: AttendanceWorkSessionStatus; checkInAt: Date; checkOutAt: Date | null };
 type DateInterval = { start: Date; end: Date };
+type CompliancePeriod = {
+  from: string; to: string; calculatedThrough: string; status: 'FINAL' | 'PROVISIONAL' | 'NEEDS_REVIEW';
+  plannedMinutes: number; coveredPlannedMinutes: number; shortageMinutes: number; lateMinutes: number; earlyLeaveMinutes: number; extraMinutes: number;
+  eligibleWorkDays: number; openSessionDays: number; excludedLeaveDays: number; restDays: number; unscheduledDays: number; ratePercent: number;
+};
 
 function scheduleResolutionKey(employeeId: string, businessDate: string) { return `${employeeId}:${businessDate}`; }
 function emptyEffectiveSchedule(employeeId: string, businessDate: string, templateId: string | null = null): ResolvedEffectiveSchedule { return { employeeId, businessDate, source: 'NONE', kind: null, templateId, templateVersionId: null, periods: [] }; }
@@ -1159,6 +1295,30 @@ function evaluateAttendanceDay(businessDate: string, schedule: EffectiveSchedule
   const staleOpen = sessions.some((session) => session.status === AttendanceWorkSessionStatus.OPEN && isOpenSessionStale(businessDate, schedule.periods, session.checkInAt, now));
   const state = staleOpen ? 'ATTENTION' as const : !actual.length ? (started ? 'MISSING_CHECK_IN' as const : 'ON_TIME' as const) : hasOpenSession ? 'IN_PROGRESS' as const : lateMinutes || earlyLeaveMinutes || shortageMinutes ? 'ATTENTION' as const : 'ON_TIME' as const;
   return { businessDate, scheduleSource: schedule.source, scheduleKind: schedule.kind, state, plannedMinutes, workedMinutes, lateMinutes, earlyLeaveMinutes, extraMinutes, shortageMinutes, hasOpenSession };
+}
+
+/** The current shift counts only through now, preventing a future portion
+ * from turning into a false shortage while it is legitimately in progress. */
+function elapsedPlannedIntervals(businessDate: string, periods: EffectiveSchedule['periods'], now: Date) {
+  return unionIntervals(periods.map((period) => {
+    const interval = periodToInterval(businessDate, period);
+    const end = now < interval.end ? now : interval.end;
+    return end > interval.start ? { start: interval.start, end } : null;
+  }).filter((interval): interval is DateInterval => interval !== null));
+}
+function attendanceActualIntervals(businessDate: string, periods: EffectiveSchedule['periods'], sessions: SessionEvidence[], now: Date) {
+  return unionIntervals(sessions.flatMap((session) => {
+    const end = session.checkOutAt ?? (isOpenSessionStale(businessDate, periods, session.checkInAt, now) ? null : now);
+    return end && end > session.checkInAt ? [{ start: session.checkInAt, end }] : [];
+  }));
+}
+function intersectedMinutes(planned: DateInterval[], actual: DateInterval[]) {
+  let total = 0; let actualIndex = 0;
+  for (const expected of planned) {
+    while (actualIndex < actual.length && actual[actualIndex]!.end <= expected.start) actualIndex += 1;
+    for (let index = actualIndex; index < actual.length && actual[index]!.start < expected.end; index += 1) total += overlapMinutes(expected, actual[index]!);
+  }
+  return total;
 }
 
 function periodToInterval(businessDate: string, period: EffectiveSchedule['periods'][number]) { return { start: riyadhMoment(businessDate, toMinute(period.startTime)), end: riyadhMoment(businessDate, toMinute(period.endTime), period.endsNextDay ? 1 : 0) }; }

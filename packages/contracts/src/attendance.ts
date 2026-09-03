@@ -81,6 +81,28 @@ export const attendanceDashboardReceiptSchema = z.object({
 }).strict();
 export const attendanceReportQuerySchema = z.object({ from: businessDate, to: businessDate, employeeId: uuid.optional() }).strict();
 export const attendanceReportReceiptSchema = z.object({ from: businessDate, to: businessDate, summary: z.object({ sessions: z.number().int().nonnegative(), completedSessions: z.number().int().nonnegative(), openSessions: z.number().int().nonnegative(), workedMinutes: z.number().int().nonnegative(), plannedMinutes: z.number().int().nonnegative(), lateMinutes: z.number().int().nonnegative(), earlyLeaveMinutes: z.number().int().nonnegative(), extraMinutes: z.number().int().nonnegative(), shortageMinutes: z.number().int().nonnegative(), missingCheckInDays: z.number().int().nonnegative() }).strict(), rows: z.array(z.object({ employeeId: uuid, employeeNumber: z.string(), employeeNameAr: z.string(), employeeNameEn: z.string().nullable(), sessions: z.number().int().nonnegative(), completedSessions: z.number().int().nonnegative(), workedMinutes: z.number().int().nonnegative(), plannedMinutes: z.number().int().nonnegative(), lateMinutes: z.number().int().nonnegative(), earlyLeaveMinutes: z.number().int().nonnegative(), extraMinutes: z.number().int().nonnegative(), shortageMinutes: z.number().int().nonnegative(), missingCheckInDays: z.number().int().nonnegative(), days: z.array(attendanceDailyEvaluationSchema).max(366) }).strict()).max(500) }).strict();
+/** The employee card is a read-only attendance reference. It never creates a
+ * payroll line, overtime approval, or administrative deduction. */
+export const attendanceEmployeeComplianceQuerySchema = z.object({
+  scope: z.enum(["MONTH", "YEAR", "LAST_6_MONTHS", "LAST_12_MONTHS", "EMPLOYMENT", "CUSTOM"]).default("YEAR"),
+  from: businessDate.optional(),
+  to: businessDate.optional(),
+}).strict().superRefine((value, context) => {
+  if (value.scope === "CUSTOM" && (!value.from || !value.to)) context.addIssue({ code: z.ZodIssueCode.custom, message: "A custom compliance period requires both from and to dates." });
+  if (value.scope !== "CUSTOM" && (value.from || value.to)) context.addIssue({ code: z.ZodIssueCode.custom, message: "Custom dates are only accepted when scope is CUSTOM." });
+  if (value.from && value.to && value.from > value.to) context.addIssue({ code: z.ZodIssueCode.custom, message: "Compliance period end must not precede its start." });
+});
+const attendanceCompliancePeriodSchema = z.object({
+  from: businessDate, to: businessDate, calculatedThrough: dateTime,
+  status: z.enum(["FINAL", "PROVISIONAL", "NEEDS_REVIEW"]),
+  plannedMinutes: z.number().int().nonnegative(), coveredPlannedMinutes: z.number().int().nonnegative(), shortageMinutes: z.number().int().nonnegative(),
+  lateMinutes: z.number().int().nonnegative(), earlyLeaveMinutes: z.number().int().nonnegative(), extraMinutes: z.number().int().nonnegative(),
+  eligibleWorkDays: z.number().int().nonnegative(), openSessionDays: z.number().int().nonnegative(), excludedLeaveDays: z.number().int().nonnegative(), restDays: z.number().int().nonnegative(), unscheduledDays: z.number().int().nonnegative(), ratePercent: z.number().int().min(0).max(100),
+}).strict();
+export const attendanceEmployeeComplianceReceiptSchema = z.object({
+  employeeId: uuid, employeeNumber: z.string(), employeeNameAr: z.string(), employeeNameEn: z.string().nullable(),
+  currentMonth: attendanceCompliancePeriodSchema, aggregate: attendanceCompliancePeriodSchema,
+}).strict();
 export const attendanceCoverageQuerySchema = z.object({ date: businessDate.optional() }).strict();
 const attendanceCoveragePeriodSchema = z.object({ startMinute: z.number().int().min(0).max(2_880), endMinute: z.number().int().min(0).max(2_880) }).strict();
 export const attendanceCoverageReceiptSchema = z.object({
@@ -216,6 +238,8 @@ export type AttendanceEmployeePortalSessionRequest = z.infer<typeof attendanceEm
 export type AttendanceEmployeePinDisplayReceipt = z.infer<typeof attendanceEmployeePinDisplayReceiptSchema>;
 export type AttendanceDashboardReceipt = z.infer<typeof attendanceDashboardReceiptSchema>;
 export type AttendanceReportReceipt = z.infer<typeof attendanceReportReceiptSchema>;
+export type AttendanceEmployeeComplianceQuery = z.infer<typeof attendanceEmployeeComplianceQuerySchema>;
+export type AttendanceEmployeeComplianceReceipt = z.infer<typeof attendanceEmployeeComplianceReceiptSchema>;
 export type AttendanceCoverageReceipt = z.infer<typeof attendanceCoverageReceiptSchema>;
 export type AttendanceRosterReceipt = z.infer<typeof attendanceRosterReceiptSchema>;
 export type SaveAttendanceRosterDraftRequest = z.infer<typeof saveAttendanceRosterDraftRequestSchema>;

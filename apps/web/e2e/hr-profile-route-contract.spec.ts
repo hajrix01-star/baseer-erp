@@ -39,6 +39,11 @@ async function prepareEmployeeProfile(page: Page) {
     if (path === `/v1/attendance/employees/${employeeId}/schedule`) return fulfill(route, { employeeId, assignments: [], weeklyAdjustments: [], exceptions: [] });
     if (path === "/v1/attendance/schedule-templates") return fulfill(route, { templates: [] });
     if (path === `/v1/attendance/employees/${employeeId}/pin`) return fulfill(route, { employeeId, state: "NOT_SET", pin: null });
+    if (path === `/v1/attendance/employees/${employeeId}/compliance`) return fulfill(route, {
+      employeeId, employeeNumber: employee.employeeNumber, employeeNameAr: employee.nameAr, employeeNameEn: employee.nameEn,
+      currentMonth: { from: "2026-08-01", to: "2026-08-20", calculatedThrough: "2026-08-20T12:00:00.000Z", status: "FINAL", plannedMinutes: 480, coveredPlannedMinutes: 480, shortageMinutes: 0, lateMinutes: 0, earlyLeaveMinutes: 0, extraMinutes: 0, eligibleWorkDays: 1, openSessionDays: 0, excludedLeaveDays: 0, restDays: 0, unscheduledDays: 0, ratePercent: 100 },
+      aggregate: { from: "2026-01-01", to: "2026-08-20", calculatedThrough: "2026-08-20T12:00:00.000Z", status: "FINAL", plannedMinutes: 480, coveredPlannedMinutes: 480, shortageMinutes: 0, lateMinutes: 0, earlyLeaveMinutes: 0, extraMinutes: 0, eligibleWorkDays: 1, openSessionDays: 0, excludedLeaveDays: 0, restDays: 0, unscheduledDays: 0, ratePercent: 100 },
+    });
     return fulfill(route, {});
   });
 }

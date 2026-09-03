@@ -98,3 +98,26 @@ test('renders bilingual A4 payroll signature slips with a clear acknowledgment a
   assert.match(html, /Employee signature/);
   assert.match(html, /2,350 <small>SAR<\/small>/);
 });
+
+test('renders the weekly attendance board as a central A4 landscape document with leave and rest', () => {
+  const html = renderPrintPreviewDocument({
+    snapshotId: 'attendance-week-1', reportCode: 'hr.attendance-weekly-roster', templateVersion: '1', template: 'attendance-weekly-roster', title: 'جدول الدوام الأسبوعي للموظفين', direction: 'rtl', locale: 'ar', generatedAtRiyadh: '2026-09-03T12:00:00+03:00',
+    companies: [{ id: 'company-1', name: 'ARZ Lounge' }], periodLabel: '2026-08-30 — 2026-09-05', taxPresentation: 'gross', sourceLabel: 'خطط الدوام المعتمدة والإجازات المعتمدة', columns: [], rows: [],
+    attendanceWeeklyRoster: {
+      days: [{ date: '2026-08-30', label: 'الأحد' }, { date: '2026-08-31', label: 'الاثنين' }],
+      rows: [{ employeeNumber: 'EMP-001', employeeName: 'محمد أحمد', jobTitle: 'مشرف', days: [
+        { kind: 'WORK', label: 'دوام', periods: [{ startTime: '10:00', endTime: '15:30', endsNextDay: false }, { startTime: '20:00', endTime: '01:00', endsNextDay: true }] },
+        { kind: 'LEAVE', label: 'إجازة', periods: [] },
+      ] }, { employeeNumber: 'EMP-002', employeeName: 'علي', jobTitle: null, days: [
+        { kind: 'REST', label: 'راحة', periods: [] }, { kind: 'OFF', label: 'غير مجدول', periods: [] },
+      ] }],
+    },
+  });
+  assert.match(html, /@page \{ size: A4 landscape/);
+  assert.match(html, /محمد أحمد/);
+  assert.match(html, /20:00–01:00<sup>\+1<\/sup>/);
+  assert.match(html, /إجازة/);
+  assert.match(html, /راحة/);
+  assert.match(html, /جدول صادر من لقطة خادمية موثقة في بصير/);
+  assert.doesNotMatch(html, /daily-sales-workspace|sidebar|launcher/);
+});

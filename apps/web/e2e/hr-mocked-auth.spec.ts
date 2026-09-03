@@ -128,6 +128,11 @@ async function mockHr(page: Page, requested: string[], options: { language?: "ar
     if (url.pathname === "/v1/attendance/alerts") return fulfill(route, {
       date: "2026-08-20", summary: { late: 0, missingCheckIn: 0, openSessions: 0 }, alerts: [],
     });
+    if (url.pathname === `/v1/attendance/employees/${employee.id}/compliance`) return fulfill(route, {
+      employeeId: employee.id, employeeNumber: employee.employeeNumber, employeeNameAr: employee.nameAr, employeeNameEn: employee.nameEn,
+      currentMonth: { from: "2026-08-01", to: "2026-08-20", calculatedThrough: "2026-08-20T12:00:00.000Z", status: "FINAL", plannedMinutes: 7200, coveredPlannedMinutes: 6960, shortageMinutes: 240, lateMinutes: 30, earlyLeaveMinutes: 15, extraMinutes: 45, eligibleWorkDays: 15, openSessionDays: 0, excludedLeaveDays: 0, restDays: 4, unscheduledDays: 1, ratePercent: 97 },
+      aggregate: { from: "2026-01-01", to: "2026-08-20", calculatedThrough: "2026-08-20T12:00:00.000Z", status: "FINAL", plannedMinutes: 72000, coveredPlannedMinutes: 70200, shortageMinutes: 1800, lateMinutes: 240, earlyLeaveMinutes: 120, extraMinutes: 480, eligibleWorkDays: 150, openSessionDays: 0, excludedLeaveDays: 2, restDays: 36, unscheduledDays: 3, ratePercent: 98 },
+    });
     if (url.pathname === "/v1/hr/employees" && route.request().method() === "GET") {
       if (options.slowEmployeeSearch && url.searchParams.has("search")) await new Promise((resolve) => setTimeout(resolve, 350));
       return fulfill(route, { companyId: requestCompanyId, employees: isAlternateCompany ? [] : [profileEmployee], hasMore: false, nextCursor: null, summary: { activeEmployees: isAlternateCompany ? 0 : 7, employeesOnLeave: isAlternateCompany ? 0 : 1, openAdvances: 2, openAdministrativeDeductions: 1 } });
@@ -400,6 +405,22 @@ test("employee profile shows exact counts, lazy compliance paging, and topmost m
   await expect(page.locator('[role="dialog"]')).toHaveCount(1);
   await expect(profile).toBeVisible();
   await expectViewportContained(page);
+});
+
+test("employee profile presents server-owned attendance compliance without payroll actions", async ({ page }) => {
+  const requested: string[] = [];
+  await mockHr(page, requested, { terminatedEmployee: true });
+  await page.goto("/#module=hr&section=1");
+  await page.getByRole("listitem").filter({ hasText: employee.nameAr }).click();
+  const profile = page.getByRole("dialog", { name: employee.nameAr });
+  await expect(profile).toBeVisible();
+  const card = profile.locator(".hr-attendance-compliance");
+  await expect(card).toBeVisible();
+  await expect(card).toContainText("مؤشر الالتزام بالدوام");
+  await expect(card).toContainText("لا يرتبط بالراتب أو احتساب الأوفر تايم");
+  await expect(card).toContainText("97%");
+  await expect.poll(() => requested.some((request) => request === `GET /v1/attendance/employees/${employee.id}/compliance?scope=YEAR`)).toBe(true);
+  await expect(card.getByRole("button", { name: /راتب|خصم|مسير/ })).toHaveCount(0);
 });
 
 test("a stale employee profile link self-recovers to the current company register", async ({ page }) => {

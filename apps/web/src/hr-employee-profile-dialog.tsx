@@ -19,6 +19,7 @@ import { requestId } from "./daily-sales-client";
 import { riyadhBusinessDate } from "./number-format";
 import { compensationBreakdown } from "./hr-compensation-breakdown";
 import { HrEmployeePhoto } from "./hr-employee-photo";
+import { HrEmployeeAttendanceComplianceCard } from "./hr-employee-attendance-compliance-card";
 import { hrEnumLabel, hrText } from "./hr-copy";
 import { createHrEmployeeWorkTerms, listHrAdministrativeDeductions, listHrAdvances, listHrEmployeeLeaves, listHrEmployeePayrollHistory, listHrEmployeeWorkTerms, listHrFinalSettlements, type HrAdministrativeDeduction, type HrAdvance, type HrDetail, type HrEmployeeLeave, type HrEmployeePayrollHistoryLine, type HrEmployeeWorkTerm, type HrFinalSettlement } from "./hr-client";
 import { listHrEmployeeServices, type HrEmployeeServiceRecord } from "./hr-services-client";
@@ -70,7 +71,7 @@ function EmployeeWorkTermsPanel({ language, employeeId, workTerms, canManage, on
 function HrEmployeeProfileSummary({ detail, language, canReadPayroll, canReadAdvances, canReadLeaves, canReadDocuments }: Pick<HrEmployeeProfileProps, "detail" | "language"> & Readonly<{ canReadPayroll: boolean; canReadAdvances: boolean; canReadLeaves: boolean; canReadDocuments: boolean; }>) {
     const ar = language === "ar";
     const summary = detail.profileSummary;
-    return <section className="hr-employee-profile__summary" aria-label={ar ? "ملخص ملف الموظف" : "Employee file summary"}>
+    return <><section className="hr-employee-profile__summary" aria-label={ar ? "ملخص ملف الموظف" : "Employee file summary"}>
       <BaseerSummaryMetricGrid role="list" ariaLabel={ar ? "مؤشرات ملف الموظف" : "Employee file metrics"}>
         {canReadPayroll ? <BaseerSummaryMetric role="listitem" label={ar ? "إجمالي الراتب" : "Total salary"} value={detail.compensation ? <BaseerMoney value={detail.compensation.monthlyGross} language={language}/> : "—"}/> : null}
         {canReadAdvances ? <BaseerSummaryMetric role="listitem" label={ar ? "سجل السلفيات" : "Advance register"} value={summary.advanceCount}/> : null}
@@ -81,7 +82,7 @@ function HrEmployeeProfileSummary({ detail, language, canReadPayroll, canReadAdv
         {canReadDocuments ? <BaseerSummaryMetric role="listitem" label={ar ? "ملفات الموظف" : "Employee files"} value={summary.documentCount}/> : null}
         <BaseerSummaryMetric role="listitem" label={ar ? "الترقيات وتغييرات الراتب" : "Promotions & salary changes"} value={summary.promotionCount + detail.compensationHistoryCount}/>
       </BaseerSummaryMetricGrid>
-    </section>;
+    </section>{hasActivePermission("attendance.manage") ? <HrEmployeeAttendanceComplianceCard employeeId={detail.employee.id} language={language} /> : null}</>;
 }
 /** The employee file is the HR workspace. Salary history stays internal while the UI stays simple. */
 export function HrEmployeeProfileDialog({ detail, language, onClose, onEdit, onManageCompensation, onLoadMoreMovements, onError, onChanged }: HrEmployeeProfileProps) {

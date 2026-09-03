@@ -49,8 +49,29 @@ export interface ReportSnapshot {
   readonly rows: readonly Readonly<Record<string, string | number | null>>[];
   readonly sourceLabel: string;
   /** A centrally rendered document variant; reports remain server-snapshotted. */
-  readonly template?: 'table' | 'payroll-run' | 'payroll-signature-slips';
+  readonly template?: 'table' | 'payroll-run' | 'payroll-signature-slips' | 'attendance-weekly-roster';
   readonly payrollSignatureSlips?: readonly PayrollSignatureSlip[];
+  /** A server-snapshotted weekly board, intentionally separate from the
+   * interactive editor so its printed facts remain auditable. */
+  readonly attendanceWeeklyRoster?: AttendanceWeeklyRoster;
+}
+
+export interface AttendanceWeeklyRoster {
+  readonly days: readonly { readonly date: string; readonly label: string }[];
+  readonly rows: readonly AttendanceWeeklyRosterRow[];
+}
+
+export interface AttendanceWeeklyRosterRow {
+  readonly employeeNumber: string;
+  readonly employeeName: string;
+  readonly jobTitle: string | null;
+  readonly days: readonly AttendanceWeeklyRosterDay[];
+}
+
+export interface AttendanceWeeklyRosterDay {
+  readonly kind: 'WORK' | 'REST' | 'LEAVE' | 'OFF';
+  readonly label: string;
+  readonly periods: readonly { readonly startTime: string; readonly endTime: string; readonly endsNextDay: boolean }[];
 }
 
 export interface PayrollSignatureSlip {

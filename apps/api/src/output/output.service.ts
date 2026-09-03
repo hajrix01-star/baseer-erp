@@ -27,6 +27,7 @@ import type { TrustedCompanyActorContext } from '../core-controls/trusted-contex
 import { DatabaseService } from '../database/database.service.js';
 import { RequestContext } from '../observability/request-context.js';
 import { IdempotencyReceiptStatus, Prisma } from '../generated/prisma/client.js';
+import { AttendanceService } from '../attendance/attendance.service.js';
 
 const GENERATE_OPERATION = 'platform.output.generate';
 const MAX_INLINE_ARTIFACT_BYTES = 5 * 1024 * 1024;
@@ -39,6 +40,7 @@ export class OutputService {
     private readonly businessDate: BusinessDateService,
     private readonly companyContext: CompanyContextService,
     private readonly idempotency: IdempotencyService,
+    private readonly attendance: AttendanceService,
   ) {}
 
   async generate(input: {
@@ -50,7 +52,7 @@ export class OutputService {
     const capability = input.request.format === 'preview'
       ? 'platform.output.preview'
       : 'platform.output.export';
-    const hrCapability = input.reportCode.startsWith('hr.payroll') ? 'hr.payroll.read' : input.reportCode === 'hr.employee-letter' ? 'hr.employee_letters.read' : input.reportCode === 'hr.final-settlement' ? 'hr.final_settlements.read' : null;
+    const hrCapability = input.reportCode.startsWith('hr.payroll') ? 'hr.payroll.read' : input.reportCode === 'hr.employee-letter' ? 'hr.employee_letters.read' : input.reportCode === 'hr.final-settlement' ? 'hr.final_settlements.read' : input.reportCode === 'hr.attendance-weekly-roster' ? 'attendance.manage' : null;
     const context = await this.companyContext.authorize({
       accessToken: input.accessToken,
       companyId: input.companyId,
@@ -61,6 +63,7 @@ export class OutputService {
       companyId: context.company.id,
       actorUserId: context.principal.userId,
     };
+    if (input.reportCode === 'hr.attendance-weekly-roster') await this.attendance.assertManagementAuthority(trusted);
 
     return this.database.inTenantTransaction(trusted.tenantId, async (transaction) => {
       let begun;
@@ -165,6 +168,7 @@ export class OutputService {
     reportCode: string,
     request: OutputRequest,
   ): Promise<ReportSnapshot> {
+    if (reportCode === 'hr.attendance-weekly-roster') return this.createAttendanceWeeklyRosterSnapshot(transaction, context, request);
     if (reportCode === 'hr.payroll-run') {
       return this.createPayrollRunSnapshot(transaction, context, request);
     }
@@ -219,6 +223,24 @@ export class OutputService {
         status: company.status,
       }],
       sourceLabel: arabic ? 'سجل شركات بصير' : 'Baseer company registry',
+    };
+  }
+
+  private async createAttendanceWeeklyRosterSnapshot(transaction: Prisma.TransactionClient, context: TrustedCompanyActorContext, request: OutputRequest): Promise<ReportSnapshot> {
+    if (request.format !== 'preview') throw new BadRequestException('The weekly attendance roster is print-only.');
+    const weekStart = typeof request.filters['weekStart'] === 'string' ? request.filters['weekStart'] : null;
+    if (!weekStart || Object.keys(request.filters).length !== 1) throw new BadRequestException('The weekly attendance roster requires exactly one weekStart filter.');
+    const company = await transaction.company.findFirst({ where: { id: context.companyId, tenantId: context.tenantId }, select: { id: true, nameAr: true, nameEn: true, branding: { select: { logoFileMetadataId: true } } } });
+    if (!company) throw new ForbiddenException('Company output scope is not permitted.');
+    const roster = await this.attendance.weeklyRosterPrintSnapshot(transaction, context, weekStart, request.locale);
+    const ar = request.locale === 'ar';
+    return {
+      snapshotId: randomUUID(), reportCode: 'hr.attendance-weekly-roster', templateVersion: '1', template: 'attendance-weekly-roster',
+      title: ar ? 'جدول الدوام الأسبوعي للموظفين' : 'Weekly employee work schedule', direction: ar ? 'rtl' : 'ltr', locale: request.locale,
+      generatedAtRiyadh: (await this.businessDate.resolveInTransaction(transaction, context)).generatedAt,
+      companies: [{ id: company.id, name: ar ? company.nameAr : company.nameEn || company.nameAr }], companyLogoDataUri: await this.readPrintLogo(transaction, context, company.branding?.logoFileMetadataId ?? null),
+      periodLabel: `${roster.days[0]!.date} — ${roster.days.at(-1)!.date}`, taxPresentation: 'gross', columns: [], rows: [],
+      sourceLabel: ar ? 'خطط الدوام المعتمدة والإجازات المعتمدة' : 'Approved work schedules and approved leave', attendanceWeeklyRoster: { days: roster.days, rows: roster.rows },
     };
   }
 
