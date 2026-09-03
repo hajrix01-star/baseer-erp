@@ -6,7 +6,7 @@
 - **Decision:** preserve every existing acceptance test, but run web acceptance in an isolated required job.  Give that job its own 30-minute ceiling, run two CI workers (the hosted runner's available capacity), preserve traces/screenshots, and make every release-image job require both `quality` and `web-acceptance`.
 - **Clean-checkout correction:** browser acceptance must build `@baseer-erp/contracts` before Vite starts.  The package exports `dist/*`; local workspaces can conceal a missing build through pre-existing artifacts, while a clean GitHub checkout correctly exposes it.
 - **Security correction:** retain the blocking runtime audit and update the lockfile only to patched, compatible Fastify/URI releases. Nest 11's Fastify adapter is retained because its 12.0.0 package is not ESM-compatible with the existing Nest 11 runtime despite its peer declaration. A scoped package override lifts only its embedded Fastify dependency to 5.12.1; the gate is not reduced and no Nest framework package is upgraded.
-- **Verification resolution correction:** root-level verification scripts resolve API-owned packages from `apps/api/package.json`, not from an accidental root hoist. This keeps CI and clean local installs on the same module-resolution contract.
+- **Verification resolution correction:** every root-level API verification/maintenance launcher resolves the API-owned Fastify adapter through one `apps/api/package.json` resolver, not through an accidental root hoist. This keeps CI and clean local installs on the same module-resolution contract.
 
 ## Gates and boundaries
 

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 
 import dotenv from 'dotenv';
 import { NestFactory } from '@nestjs/core';
-import { FastifyAdapter } from '@nestjs/platform-fastify';
+import { FastifyAdapter } from './api-workspace-dependencies.mjs';
 
 import { AppModule } from '../apps/api/dist/app.module.js';
 import { DatabaseService } from '../apps/api/dist/database/database.service.js';

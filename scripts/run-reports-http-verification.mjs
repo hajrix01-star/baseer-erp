@@ -4,7 +4,7 @@ import { createHash, randomUUID } from "node:crypto";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 import { NestFactory } from "@nestjs/core";
-import { FastifyAdapter } from "@nestjs/platform-fastify";
+import { FastifyAdapter } from "./api-workspace-dependencies.mjs";
 import pg from "pg";
 
 dotenv.config({ path: "apps/api/.env.baseer-test" });
