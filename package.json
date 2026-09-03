@@ -12,6 +12,7 @@
         "test:unit:coverage": "vitest run --coverage",
         "verify:acceptance": "node scripts/verify-acceptance.mjs",
         "verify:acceptance:quick": "node scripts/verify-acceptance.mjs --quick",
+        "verify:ci:parity": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/run-ci-parity.ps1",
     "check:architecture": "node scripts/check-architecture.mjs",
     "check:web-api-transport": "node scripts/check-web-api-transport.mjs",
         "check:nest-registration": "node scripts/check-nest-registration.mjs",
