@@ -113,6 +113,12 @@ function entryKeyForSource(source) {
   return key;
 }
 
+function entryKeyForName(name) {
+  const key = entries.find(([, entry]) => entry.name === name)?.[0];
+  if (!key) throw new Error(`Expected named manifest entry is missing: ${name}`);
+  return key;
+}
+
 function entryKeyForSourceOrNull(source) {
   return entries.find(([, entry]) => entry.src === source)?.[0] ?? null;
 }
@@ -180,14 +186,13 @@ const ownerDailyBriefInteractionJs = workspaceInteractionJs("src/owner-dashboard
 const totalLazyJs = total(".js") - initialJs;
 const totalCss = total(".css");
 const comboboxLazyJs = files.filter((file) => /^baseer-combobox-.*\.js$/.test(file.name)).reduce((sum, file) => sum + file.size, 0);
-// The public DatePicker facade lazy-loads this runtime. Measure its full
-// post-startup manifest closure, not a retired adapter filename or merely a
-// wrapper chunk, so a React Aria dependency regression cannot look like a
-// zero-byte interaction.
-const datePickerRuntimeKey = entryKeyForSource("src/baseer-date-picker-runtime.tsx");
+// Vite folds the private runtime into the public DatePicker facade. Measure
+// that public entry's full post-startup closure so a calendar dependency
+// regression cannot look like a zero-byte interaction.
+const datePickerRuntimeKey = entryKeyForName("baseer-date-picker");
 const datePickerRuntimeFile = manifest[datePickerRuntimeKey]?.file;
-if (!datePickerRuntimeFile?.startsWith("assets/baseer-date-picker-runtime-") || !datePickerRuntimeFile.endsWith(".js")) {
-  throw new Error(`DatePicker runtime must emit a named baseer-date-picker-runtime chunk; received ${datePickerRuntimeFile ?? "no file"}.`);
+if (!datePickerRuntimeFile?.startsWith("assets/baseer-date-picker-") || !datePickerRuntimeFile.endsWith(".js")) {
+  throw new Error(`DatePicker must emit a named baseer-date-picker chunk; received ${datePickerRuntimeFile ?? "no file"}.`);
 }
 const datePickerLazyJs = jsSize(new Set([...closureKeys(datePickerRuntimeKey)].filter((key) => !startupKeys.has(key))));
 const formLazyJs = files.filter((file) => /^baseer-(?:required-textarea-form|validated-form)-.*\.js$/.test(file.name)).reduce((sum, file) => sum + file.size, 0);
