@@ -273,9 +273,10 @@ test("HR quick actions are permission-gated and open the requested operation", a
   await page.goto("/#module=hr&section=0");
   await expect(page.getByRole("heading", { name: "اليوم في الموارد البشرية" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "صورة القوى العاملة اليوم" })).toBeVisible();
-  await expect(page.getByRole("button", { name: /موظفون نشطون/ })).toHaveAttribute("aria-pressed", "true");
-  await page.locator(".hr-workforce-chart__insight").nth(1).click();
-  await expect(page.locator(".hr-workforce-chart__insight").nth(1)).toHaveAttribute("aria-pressed", "true");
+  const workforceSignals = page.locator(".hr-workforce-chart__insight");
+  await expect(workforceSignals).toHaveCount(3);
+  await expect(workforceSignals.first()).toContainText("موظفون نشطون");
+  await expect(workforceSignals.first()).toContainText("إشارة مستقلة");
   await expect(page.getByRole("button", { name: "موظف جديد" })).toBeVisible();
   await expect(page.getByRole("button", { name: "إنشاء مسير" })).toBeVisible();
   await expect(page.getByRole("button", { name: "تسجيل إجازة" })).toBeVisible();

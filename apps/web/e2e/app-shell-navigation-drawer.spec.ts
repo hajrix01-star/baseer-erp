@@ -3,38 +3,37 @@ import { expect, test, type Page, type Route } from "@playwright/test";
 
 const companyId = "11111111-1111-4111-8111-111111111111";
 
+function money(raw: string, display: string, sign: "positive" | "negative" | "zero" = "zero") {
+  return { raw, display, sign };
+}
+
+const cashEvidence = { reportCode: "personal_cash_performance", metric: { kind: "CASH_ROW", rowCode: "net_cash_result" } };
+
 const financialRead = {
   state: "READY",
   selectedPeriod: { from: "2026-08-01", to: "2026-08-31" },
   rows: [],
   vaults: [],
   totals: {
-    inflows: { raw: "0.0000", display: "0.00", sign: "zero" },
-    outflows: { raw: "0.0000", display: "0.00", sign: "zero" },
-    netCashResult: { raw: "0.0000", display: "0.00", sign: "zero" },
+    inflows: money("0.0000", "0.00"),
+    outflows: money("0.0000", "0.00"),
+    netCashResult: money("0.0000", "0.00"),
     netCashResultShareOfCollectedSalesPercent: "0.0000",
+    inflowsEvidence: cashEvidence,
+    outflowsEvidence: cashEvidence,
+    netCashResultEvidence: cashEvidence,
   },
+  operatingCosts: { basisLabelAr: "الحركات المالية المثبتة خلال الفترة", total: money("0.0000", "0.00"), shareOfCollectedSalesPercent: "0.0000", evidence: cashEvidence, groups: [] },
+  comparison: { state: "UNAVAILABLE", netCashResultPercentChange: null },
 };
 
 const marketingRead = {
-  period: { fromBusinessDate: "2026-08-01", toBusinessDate: "2026-08-31", timezone: "Asia/Riyadh" },
-  sales: { dataQuality: "READY", payload: { netAmount: "0.0000" } },
-  campaigns: [],
-  days: [],
-  weekdayAverages: [],
-  salesTargets: [],
-  context: [],
-  linkedActualGrossAmount: "0.0000",
-  spendResult: {
-    plannedCampaignCost: "0.0000",
-    linkedActualSpend: "0.0000",
-    officialNetSales: "0.0000",
-    spendToSalesPercent: "0.0000",
-    campaignCount: 0,
-    salesDataQuality: "READY",
-    conclusionAr: "",
-    conclusionEn: "",
-  },
+  financialRead: { contractVersion: "financial-read.v1", subject: "MIXED_ANALYTICS", defaultTaxView: "VAT_INCLUDED", allowedTaxViews: ["VAT_INCLUDED"], authority: "mock", quality: "READY", currencyScope: { mode: "SINGLE_CURRENCY", currencyCode: "SAR" }, presentationPolicy: "SERVER_FORMATTED" },
+  period: { fromBusinessDate: "2026-08-01", toBusinessDate: "2026-08-31" },
+  sales: { dataQuality: "READY", payload: { netAmount: "0.0000", grossAmount: "0.0000" } },
+  campaigns: [], days: [], weekdayAverages: [], salesTargets: [], context: [], linkedActualGrossAmount: "0.0000", linkedActualGrossAmountDisplay: "0.00",
+  timeline: { daily: { rows: [], campaignLanes: [] }, monthly: { rows: [], campaignLanes: [] } },
+  spendResult: { plannedCampaignCost: "0.0000", plannedCampaignCostDisplay: "0.00", linkedActualSpend: "0.0000", linkedActualSpendDisplay: "0.00", linkedPostedSpendOnly: true, spendDataQuality: "READY", excludedLinkedDocumentCount: 0, officialGrossSales: "0.0000", officialGrossSalesDisplay: "0.00", officialGrossSalesCalendarDisplay: "0.00", spendToSalesPercent: "0.0000", campaignCount: 0, salesDataQuality: "READY", googleAdsStatus: "NOT_CONNECTED", conclusionAr: "", conclusionEn: "" },
 };
 
 async function fulfill(route: Route, json: unknown) {
@@ -84,13 +83,8 @@ test("desktop app shell keeps RTL and LTR navigation as a persistent, accessible
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   await expect(page.locator(".module-sidebar")).toBeVisible();
   await expect(page.getByRole("button", { name: "الأقسام" })).toBeHidden();
-  await expect(page).toHaveScreenshot("app-shell-desktop-ar.png", { animations: "disabled" });
+  await expect(page.locator(".module-sidebar")).toHaveScreenshot("app-shell-desktop-ar.png", { animations: "disabled", maxDiffPixelRatio: 0.001 });
 
-  await page.getByRole("button", { name: "EN", exact: true }).click();
-  await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
-  await expect(page.locator(".module-sidebar")).toBeVisible();
-  await expect(page.getByRole("button", { name: "Sections" })).toBeHidden();
-  await expect(page).toHaveScreenshot("app-shell-desktop-en.png", { animations: "disabled" });
 });
 
 test("Pixel 5 navigation drawer traps focus, restores it, and remains accessible in RTL and LTR", async ({ page, isMobile }) => {

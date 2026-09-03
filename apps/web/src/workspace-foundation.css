@@ -117,7 +117,7 @@ html[dir="rtl"] .baseer-metric::before { inset: 0 0 0 auto; }
 .baseer-batch-panel { min-width: 0; padding: var(--space-card); border: 1px solid var(--border-subtle); border-radius: var(--card-radius); border-start-start-radius: 0; background: var(--surface-raised); }
 .baseer-stepper { display: grid; gap: var(--space-section); }
 .baseer-stepper__tabs { display: flex; flex-wrap: wrap; gap: var(--space-2); padding: var(--space-2); border: 1px solid var(--border-subtle); border-radius: var(--card-radius); background: var(--tab-rail); }
-.baseer-stepper__tabs .baseer-button[aria-selected="true"] { color: var(--on-brand); border-color: var(--brand); background: var(--brand); box-shadow: 0 .25rem .65rem color-mix(in srgb, var(--brand) 22%, transparent); }
+.baseer-stepper__tabs .baseer-button[aria-selected="true"] { color: var(--on-brand); border-color: var(--brand-deep); background: var(--brand-deep); box-shadow: 0 .25rem .65rem color-mix(in srgb, var(--brand-deep) 22%, transparent); }
 .baseer-stepper__panel { min-width: 0; padding: var(--space-card); border: 1px solid var(--border-subtle); border-radius: var(--card-radius); background: var(--surface-raised); }
 .baseer-stepper__footer { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: var(--space-2); }
 .baseer-dialog { --control-height: 2.5rem; --control-radius: .7rem; box-sizing: border-box; width: min(36rem, calc(100vw - 2rem)); max-height: calc(100dvh - 2rem); padding: clamp(.9rem, 2vw, 1.25rem); border-radius: 1rem; }.baseer-dialog--wide { width: min(58rem, calc(100vw - 2rem)); }

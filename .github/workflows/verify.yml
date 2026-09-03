@@ -104,10 +104,6 @@ jobs:
         run: node scripts/run-attendance-http-verification.mjs
       - run: npm run build --workspace @baseer-erp/web
       - run: npm run verify:web-budget
-      - name: Run web accessibility and interaction acceptance tests
-        run: |
-          npx playwright install --with-deps chromium
-          npm run test:e2e --workspace @baseer-erp/web
       - run: npx prisma generate --schema apps/api/prisma/schema.prisma
       - run: git diff --exit-code -- apps/api/src/generated/prisma
       - run: git diff --check
@@ -118,9 +114,36 @@ jobs:
       - name: Verify immutable private-online release contract
         run: node scripts/check-release-provenance-contract.mjs
 
+  web-acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Run web accessibility and interaction acceptance tests
+        run: |
+          npx playwright install --with-deps chromium
+          npm run test:e2e --workspace @baseer-erp/web
+      - name: Preserve Playwright failure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: baseer-web-acceptance-${{ github.sha }}
+          path: |
+            apps/web/test-results
+            apps/web/playwright-report
+          if-no-files-found: ignore
+          retention-days: 14
+
   release-api:
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
-    needs: quality
+    needs: [quality, web-acceptance]
     runs-on: ubuntu-latest
     outputs:
       digest: ${{ steps.build.outputs.digest }}
@@ -152,7 +175,7 @@ jobs:
 
   release-migrate:
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
-    needs: quality
+    needs: [quality, web-acceptance]
     runs-on: ubuntu-latest
     outputs:
       digest: ${{ steps.build.outputs.digest }}
@@ -184,7 +207,7 @@ jobs:
 
   release-web:
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
-    needs: quality
+    needs: [quality, web-acceptance]
     runs-on: ubuntu-latest
     outputs:
       digest: ${{ steps.build.outputs.digest }}

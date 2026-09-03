@@ -4,7 +4,7 @@ import { BaseerCalendarIcon } from "./baseer-calendar-icon";
 import { calendarDays, calendarMonthName, cursorForCalendar, shiftCalendarCursor, shiftCalendarDay } from "./baseer-calendar-utils";
 import { BASEER_OVERLAY_LAYER } from "./baseer-overlay-policy";
 import { iso, riyadhToday } from "./baseer-period-values";
-import { normalizeBaseerNumericInput } from "./number-format";
+import { normalizeBaseerNumericInput, toLatinDigits } from "./number-format";
 import "./baseer-calendar.css";
 
 type Language = "ar" | "en";
@@ -34,6 +34,18 @@ function validDate(value: string) {
 
 function validMonth(value: string) {
   return /^\d{4}-\d{2}$/.test(value);
+}
+
+/**
+ * Calendar fields are date-shaped values, not generic decimal numbers. Keep
+ * their ISO separators while accepting Arabic and Persian numerals, so manual
+ * entry remains readable and matches the API contract.
+ */
+function normalizeCalendarInput(value: string, mode: Mode) {
+  const digits = toLatinDigits(value).replace(/\D/g, "").slice(0, mode === "date" ? 8 : 6);
+  if (digits.length <= 4) return digits;
+  if (mode === "month" || digits.length <= 6) return `${digits.slice(0, 4)}-${digits.slice(4)}`;
+  return `${digits.slice(0, 4)}-${digits.slice(4, 6)}-${digits.slice(6)}`;
 }
 
 function dateWithinBounds(value: string, min?: string, max?: string) {
@@ -244,7 +256,7 @@ export const BaseerCalendarPicker = forwardRef<HTMLInputElement, CalendarPickerP
       aria-describedby={inputProps["aria-describedby"]}
       disabled={disabled}
       onChange={(event) => {
-        const normalized = normalizeBaseerNumericInput(event.target.value);
+        const normalized = normalizeCalendarInput(normalizeBaseerNumericInput(event.target.value), mode);
         if (normalized !== event.target.value) event.target.value = normalized;
         onChange?.(event);
         onValueChange?.(event.target.value);

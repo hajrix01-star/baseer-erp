@@ -121,8 +121,8 @@ test("finance setup uses the shared Gregorian form and date adapters in RTL", as
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   const form = page.locator("[data-baseer-rhf-form]");
   await expect(form).toBeVisible();
-  const startDate = form.locator('input[type="date"][aria-label="بداية الفترة"]');
-  const endDate = form.locator('input[type="date"][aria-label="نهاية الفترة"]');
+  const startDate = form.locator('input[type="text"][aria-label="بداية الفترة"]');
+  const endDate = form.locator('input[type="text"][aria-label="نهاية الفترة"]');
   await expect(startDate).toBeVisible();
   await expect(endDate).toBeVisible();
   await expect(startDate).toHaveAttribute("lang", "en");
@@ -143,7 +143,7 @@ test("finance setup keeps the Gregorian adapter available in LTR", async ({ page
   await page.goto("/#module=finance&section=0");
 
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
-  await expect(page.locator('[data-baseer-rhf-form] input[type="date"][aria-label="Period start"]')).toBeVisible();
+  await expect(page.locator('[data-baseer-rhf-form] input[type="text"][aria-label="Period start"]')).toBeVisible();
 });
 
 test("finance settings displays last while old numeric links retain their page identity", async ({ page }) => {
@@ -151,10 +151,10 @@ test("finance settings displays last while old numeric links retain their page i
   await page.goto("/#module=finance&section=0");
 
   await expect(page).toHaveURL(/#module=finance&page=finance-settings$/);
-  let navigation = page.locator(".module-sidebar .module-navigation");
+  let navigation = page.locator(".module-sidebar .theme-navigation");
   if (test.info().project.name === "mobile-chromium") {
     await page.getByRole("button", { name: /الأقسام/ }).click();
-    navigation = page.locator(".mobile-drawer .module-navigation");
+    navigation = page.locator(".mobile-drawer .theme-navigation");
   }
   await expect(navigation.getByRole("button")).toHaveText([
     "السجل المالي الموحد",
