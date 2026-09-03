@@ -147,7 +147,9 @@ async function mockHr(page: Page, requested: string[], options: { language?: "ar
     if (url.pathname === `/v1/hr/employees/${employee.id}/payroll`) return fulfill(route, { companyId, lines: [], hasMore: false, nextCursor: null });
     if (url.pathname === "/v1/hr/employees/stale-employee-id") return fulfill(route, { error: { code: "NOT_FOUND", message: { ar: "السجل المطلوب غير موجود.", en: "The requested record was not found." }, correlationId: "e2e-stale-employee", retry: { kind: "do-not-retry" } } }, 404);
     if (url.pathname === `/v1/hr/employees/${employee.id}`) return fulfill(route, {
-      companyId, employee: profileEmployee, compensation, compensationHistory: [], compensationHistoryCount: 14, services: [], serviceCount: 52, servicesHasMore: true,
+      companyId, employee: profileEmployee, compensation, compensationHistory: [], compensationHistoryCount: 14,
+      profileSummary: { payrollRunCount: 12, advanceCount: 2, openAdvanceCount: 1, openAdvanceBalance: "500.0000", leaveCount: 9, documentCount: 1, promotionCount: 0 },
+      services: [], serviceCount: 52, servicesHasMore: true,
       movements: [{ id: "movement-1", journalEntryId: "journal-1", movementType: "PAYROLL_ACCRUAL", businessDate: "2026-08-20", amount: "3000.0000", sourceReference: payrollRun.runNumber, description: null }], movementCount: 81, hasMoreMovements: false, nextMovementCursor: null,
     });
     if (url.pathname === `/v1/hr/services/${service.id}`) return fulfill(route, { service });
@@ -406,11 +408,7 @@ test("employee profile shows exact counts, lazy compliance paging, and topmost m
   await expect(profile.getByText("SRV-001")).toBeVisible();
   await profile.getByRole("button", { name: "تحميل المزيد" }).click();
   await expect(profile.getByText("SRV-002")).toBeVisible();
-  await profile.getByRole("button", { name: "نهاية الخدمة" }).click();
-  await expect(page.locator('[role="dialog"]')).toHaveCount(1);
-  await expect(page.locator('[role="dialog"][aria-modal="true"]')).toHaveCount(1);
-  await expect(page.locator('[role="dialog"][aria-hidden="true"]')).toHaveCount(0);
-  await page.keyboard.press("Escape");
+  await expect(profile.getByRole("button", { name: "نهاية الخدمة" })).toBeDisabled();
   await expect(page.locator('[role="dialog"]')).toHaveCount(0);
   await expect(profile).toBeVisible();
   await expectViewportContained(page);
@@ -529,9 +527,10 @@ test("all seven HR top-level sections render without page overflow", async ({ pa
 
 test("employee profile covers all tabs and its principal dialogs", async ({ page }) => {
   const requested: string[] = [];
-  await mockHr(page, requested);
-  await page.goto("/#module=hr&section=1");
-  const profile = await openEmployeeProfile(page);
+  await mockHr(page, requested, { terminatedEmployee: true });
+  await page.goto(`/#module=hr&page=hr-employees&stage=employee-${employee.id}`);
+  const profile = page.locator(".hr-employee-profile-page");
+  await expect(profile).toBeVisible();
 
   await profile.locator('input[type="file"][accept="image/jpeg,image/png"]').setInputFiles({
     name: "profile.png", mimeType: "image/png", buffer: Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]),
