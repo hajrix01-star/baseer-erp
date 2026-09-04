@@ -6,6 +6,7 @@ import { BaseerCard } from "./baseer-card";
 import { BaseerCompanyReadQuery } from "./baseer-company-read-query";
 import { BaseerDataGrid, type BaseerDataGridColumn } from "./baseer-data-grid";
 import { BaseerFilterBar } from "./baseer-filter-bar";
+import { BaseerOutputActions } from "./baseer-output-actions";
 import { BaseerPeriodFilter, defaultBaseerPeriodRange, type BaseerPeriodRange } from "./baseer-period-filter";
 import { api, type ActiveSession } from "./daily-sales-client";
 import { formatCount, formatDate, formatMoney, formatQuantity } from "./number-format";
@@ -58,7 +59,7 @@ export function OperationsInternalRegistrationReport({ language, session }: { la
   return <BaseerCompanyReadQuery session={session} resource="operations.internal-registration.report" scope={[period.from, period.to]} load={load}>
     {({ data, loading, error, refetch }) => <div className="administration-list">
       <div className="operations-catalog__card-heading"><div><h3>{t.title}</h3></div></div>
-      <BaseerFilterBar language={language} controls={<><BaseerPeriodFilter language={language} value={period} onChange={setPeriod} presets={["DAY", "MONTH", "QUARTER", "YEAR", "RANGE"]} allowNonContiguousMonths={false} /><BaseerButton type="button" variant="secondary" disabled={loading} onClick={() => void refetch()}>{t.refresh}</BaseerButton></>} />
+      <BaseerFilterBar language={language} controls={<><BaseerPeriodFilter language={language} value={period} onChange={setPeriod} presets={["DAY", "MONTH", "QUARTER", "YEAR", "RANGE"]} allowNonContiguousMonths={false} /><BaseerOutputActions session={session} reportCode="operations.internal-registration-report" language={language} filters={{ from: period.from, to: period.to }} printLabel={ar ? "طباعة A4" : "Print A4"} /><BaseerButton type="button" variant="secondary" disabled={loading} onClick={() => void refetch()}>{t.refresh}</BaseerButton></>} />
       {error ? <p className="daily-sales-message error">{presentBaseerApiError(error, language, t.failed)}</p> : null}
       {data ? <><div className="baseer-card-grid">
         <BaseerCard><strong>{t.registrations}</strong><p><bdi dir="ltr">{formatCount(data.totals.registrationCount, language)}</bdi></p></BaseerCard>

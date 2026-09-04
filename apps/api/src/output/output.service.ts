@@ -30,6 +30,7 @@ import { IdempotencyReceiptStatus, Prisma } from '../generated/prisma/client.js'
 import { AttendanceService } from '../attendance/attendance.service.js';
 import { MarketingService } from '../marketing/marketing.service.js';
 import { OperationsExecutionService } from '../operations/operations-execution.service.js';
+import { OperationsInternalRegistrationService } from '../operations/operations-internal-registration.service.js';
 
 const GENERATE_OPERATION = 'platform.output.generate';
 const MAX_INLINE_ARTIFACT_BYTES = 5 * 1024 * 1024;
@@ -45,6 +46,7 @@ export class OutputService {
     private readonly attendance: AttendanceService,
     private readonly marketing: MarketingService,
     private readonly operations: OperationsExecutionService,
+    private readonly internalRegistrations: OperationsInternalRegistrationService,
   ) {}
 
   async generate(input: {
@@ -60,8 +62,10 @@ export class OutputService {
       : input.reportCode === 'hr.employee-letter' ? ['hr.employee_letters.read']
         : input.reportCode === 'hr.final-settlement' ? ['hr.final_settlements.read']
           : input.reportCode === 'hr.attendance-weekly-roster' ? ['attendance.manage']
-            : input.reportCode === 'operations.purchase-custody-reports' ? ['operations.purchase_request.read', 'operations.custody.read']
+              : input.reportCode === 'operations.purchase-custody-reports' ? ['operations.purchase_request.read', 'operations.custody.read']
+              : input.reportCode === 'operations.internal-registration-report' ? ['operations.internal_registration.read']
               : input.reportCode === 'marketing.performance-calendar' ? ['marketing.insights.read']
+              : input.reportCode === 'marketing.campaign-register' ? ['marketing.insights.read']
               : [];
     const context = await this.companyContext.authorize({
       accessToken: input.accessToken,
@@ -198,8 +202,14 @@ export class OutputService {
     if (reportCode === 'operations.purchase-custody-reports') {
       return this.createOperationsPurchaseCustodySnapshot(transaction, context, request);
     }
+    if (reportCode === 'operations.internal-registration-report') {
+      return this.createOperationsInternalRegistrationSnapshot(transaction, context, request);
+    }
     if (reportCode === 'marketing.performance-calendar') {
       return this.createMarketingPerformanceCalendarSnapshot(transaction, context, request);
+    }
+    if (reportCode === 'marketing.campaign-register') {
+      return this.createMarketingCampaignRegisterSnapshot(transaction, context, request);
     }
     if (reportCode !== 'platform.company-context') {
       throw new NotFoundException('The requested output definition was not found.');
@@ -351,6 +361,113 @@ export class OutputService {
       sourceLabel: ar
         ? 'مبيعات رسمية شاملة الضريبة وتدفقات مالية مثبّتة مرتبطة صراحةً بالحملات؛ القراءة وصفية زمنية وليست إثبات عائد أو سببية.'
         : 'VAT-inclusive official sales and explicitly linked posted financial flows; this is a descriptive temporal read, not ROI or causal proof.',
+    };
+  }
+
+  /**
+   * The internal-registration workspace already exposes a server-owned audit
+   * report.  Output regenerates that bounded report rather than receiving its
+   * grid rows, totals, or pricing from the browser.
+   */
+  private async createOperationsInternalRegistrationSnapshot(
+    transaction: Prisma.TransactionClient,
+    context: TrustedCompanyActorContext,
+    request: OutputRequest,
+  ): Promise<ReportSnapshot> {
+    const from = outputBusinessDate(request.filters['from']);
+    const to = outputBusinessDate(request.filters['to']);
+    if (!from || !to || from > to || Object.keys(request.filters).some((key) => key !== 'from' && key !== 'to')) {
+      throw new BadRequestException('Internal registration output requires only a valid from and to period.');
+    }
+    const company = await transaction.company.findFirst({
+      where: { id: context.companyId, tenantId: context.tenantId },
+      select: { id: true, nameAr: true, nameEn: true, branding: { select: { logoFileMetadataId: true } } },
+    });
+    if (!company) throw new ForbiddenException('Company output scope is not permitted.');
+    const [report, dateResolution] = await Promise.all([
+      this.internalRegistrations.report(context, { from, to }),
+      this.businessDate.resolveInTransaction(transaction, context),
+    ]);
+    const ar = request.locale === 'ar';
+    return {
+      snapshotId: randomUUID(), reportCode: 'operations.internal-registration-report', templateVersion: '1',
+      title: ar ? 'تقرير التسجيل الداخلي' : 'Internal registration report', direction: ar ? 'rtl' : 'ltr', locale: request.locale,
+      generatedAtRiyadh: dateResolution.generatedAt,
+      companies: [{ id: company.id, name: ar ? company.nameAr : company.nameEn || company.nameAr }],
+      companyLogoDataUri: await this.readPrintLogo(transaction, context, company.branding?.logoFileMetadataId ?? null),
+      periodLabel: `${from} — ${to}`, taxPresentation: 'gross',
+      columns: [
+        { key: 'registrationNumber', label: ar ? 'رقم التسجيل' : 'Registration no.', kind: 'text', width: 17 },
+        { key: 'businessDate', label: ar ? 'تاريخ العمل' : 'Business date', kind: 'date', width: 14 },
+        { key: 'section', label: ar ? 'القسم' : 'Section', kind: 'text', width: 16 },
+        { key: 'products', label: ar ? 'الأصناف والكميات' : 'Products and quantities', kind: 'text', width: 28 },
+        { key: 'amount', label: ar ? 'إجمالي القيمة' : 'Total value', kind: 'amount', width: 16 },
+      ],
+      rows: report.registrations.map((registration) => ({
+        registrationNumber: registration.registrationNumber,
+        businessDate: registration.businessDate,
+        section: ar ? registration.sectionNameAr : registration.sectionNameEn || registration.sectionNameAr,
+        products: registration.lines.map((line) => `${ar ? line.productNameAr : line.productNameEn || line.productNameAr} · ${line.quantity} ${ar ? line.unitNameAr : line.unitNameEn || line.unitNameAr}`).join(' | '),
+        amount: registration.lines.reduce((sum, line) => sum.plus(line.lineTotal ?? 0), new Prisma.Decimal(0)).toFixed(4),
+      })),
+      sourceLabel: ar
+        ? 'سجل تسجيل داخلي مقيد بالشركة والفترة؛ يعرض لقطات الأصناف والكميات والقيم المسجلة، ولا ينشئ أو يغيّر حركة مخزون.'
+        : 'Company- and period-scoped internal-registration audit read; it shows stored item, quantity and value snapshots and never creates or changes inventory movement.',
+    };
+  }
+
+  /**
+   * Campaign output is a register of stored campaign context only.  Planned
+   * cost is labelled as planned; no provider, spend, revenue or causality is
+   * inferred by the output layer.
+   */
+  private async createMarketingCampaignRegisterSnapshot(
+    transaction: Prisma.TransactionClient,
+    context: TrustedCompanyActorContext,
+    request: OutputRequest,
+  ): Promise<ReportSnapshot> {
+    const status = typeof request.filters['status'] === 'string' ? request.filters['status'] : null;
+    const validStatuses = new Set(['DRAFT', 'PLANNED', 'ACTIVE', 'COMPLETED', 'CANCELLED', 'ARCHIVED']);
+    if (Object.keys(request.filters).some((key) => key !== 'status') || (status !== null && !validStatuses.has(status))) {
+      throw new BadRequestException('Campaign register output accepts only an optional valid status.');
+    }
+    const company = await transaction.company.findFirst({
+      where: { id: context.companyId, tenantId: context.tenantId },
+      select: { id: true, nameAr: true, nameEn: true, branding: { select: { logoFileMetadataId: true } } },
+    });
+    if (!company) throw new ForbiddenException('Company output scope is not permitted.');
+    const [workspace, dateResolution] = await Promise.all([
+      this.marketing.workspace(context),
+      this.businessDate.resolveInTransaction(transaction, context),
+    ]);
+    const ar = request.locale === 'ar';
+    const campaigns = status ? workspace.campaigns.filter((campaign) => campaign.status === status) : workspace.campaigns;
+    return {
+      snapshotId: randomUUID(), reportCode: 'marketing.campaign-register', templateVersion: '1',
+      title: ar ? 'سجل الحملات التسويقية' : 'Marketing campaign register', direction: ar ? 'rtl' : 'ltr', locale: request.locale,
+      generatedAtRiyadh: dateResolution.generatedAt,
+      companies: [{ id: company.id, name: ar ? company.nameAr : company.nameEn || company.nameAr }],
+      companyLogoDataUri: await this.readPrintLogo(transaction, context, company.branding?.logoFileMetadataId ?? null),
+      periodLabel: status ?? (ar ? 'كل الحالات' : 'All statuses'), taxPresentation: 'gross',
+      columns: [
+        { key: 'title', label: ar ? 'الحملة' : 'Campaign', kind: 'text', width: 26 },
+        { key: 'platform', label: ar ? 'المنصة' : 'Platform', kind: 'text', width: 15 },
+        { key: 'status', label: ar ? 'الحالة' : 'Status', kind: 'text', width: 14 },
+        { key: 'startsOn', label: ar ? 'من' : 'From', kind: 'date', width: 13 },
+        { key: 'endsOn', label: ar ? 'إلى' : 'To', kind: 'date', width: 13 },
+        { key: 'plannedCost', label: ar ? 'تكلفة مخططة' : 'Planned cost', kind: 'amount', width: 16 },
+      ],
+      rows: campaigns.map((campaign) => ({
+        title: ar ? campaign.titleAr : campaign.titleEn || campaign.titleAr,
+        platform: campaign.platform,
+        status: campaign.status,
+        startsOn: campaign.startsOn ?? '',
+        endsOn: campaign.endsOn ?? '',
+        plannedCost: campaign.plannedCost ?? '',
+      })),
+      sourceLabel: ar
+        ? 'سجل سياق الحملات المخزن في بصير. تكلفة «مخططة» وليست إنفاقًا مثبتًا أو عائدًا أو تحويلات أو إثبات سببية.'
+        : 'Stored Baseer campaign context. “Planned cost” is not posted spend, revenue, conversions, or proof of causality.',
     };
   }
 

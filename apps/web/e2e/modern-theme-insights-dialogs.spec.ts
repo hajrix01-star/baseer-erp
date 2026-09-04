@@ -86,6 +86,8 @@ test("Modern admin insights: marketing campaign form is bounded", async ({ page 
     await mockMarketing(page);
     await page.goto("/#module=marketing&page=marketing-campaigns");
     await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+    await page.getByRole("button", { name: "مشاركة" }).click();
+    await expect(page.getByRole("menuitem", { name: "طباعة سجل الحملات A4" })).toBeVisible();
     await page.getByRole("button", { name: "إضافة حملة" }).click();
     await expectBounded(page, page.getByRole("dialog", { name: "إضافة حملة" }));
     await expectModernShell(page);

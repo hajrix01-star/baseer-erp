@@ -270,6 +270,11 @@ test("operations reports keep their read-only data inside the company and period
   ]));
   const accessibility = await new AxeBuilder({ page }).include(".baseer-data-table").analyze();
   expect(accessibility.violations).toEqual([]);
+
+  await page.getByRole("tab", { name: "تقرير التسجيل الداخلي" }).click();
+  await expect(page.getByRole("button", { name: "مشاركة" })).toBeVisible();
+  await page.getByRole("button", { name: "مشاركة" }).click();
+  await expect(page.getByRole("menuitem", { name: "طباعة A4" })).toBeVisible();
 });
 
 test("custody return keeps decimal text and Gregorian business date through its adapter", async ({ page }) => {
