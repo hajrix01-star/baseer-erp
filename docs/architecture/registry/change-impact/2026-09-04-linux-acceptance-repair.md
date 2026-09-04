@@ -30,6 +30,11 @@ available to `act`. The GitHub workflow preserves its `always()` artifact
 behavior because that flag is absent there; build and acceptance commands are
 unchanged in both environments.
 
+The deployable runtime audit retries only bounded, identifiable npm-registry
+transport failures (such as a 503 or connection reset). A returned vulnerability
+report or any non-transient audit failure still fails immediately; the guard is
+not weakened and the same command is used in Linux parity and GitHub.
+
 ## Rollback
 
 Revert the acceptance-repair commit. No migration, financial data, API contract,

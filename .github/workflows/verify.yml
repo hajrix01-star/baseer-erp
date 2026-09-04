@@ -108,7 +108,7 @@ jobs:
       - run: git diff --exit-code -- apps/api/src/generated/prisma
       - run: git diff --check
       - name: Audit deployable runtime dependency graph
-        run: npm audit --omit=dev --omit=optional
+        run: npm run audit:runtime-dependencies
       - name: Monitor isolated Prisma toolchain advisory
         run: npm run check:prisma-advisory-status
       - name: Verify immutable private-online release contract
