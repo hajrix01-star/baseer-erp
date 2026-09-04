@@ -189,6 +189,10 @@ test("Timeline and alerts keep validation, evidence, status reason, Escape, and 
   await page.keyboard.press("Escape");
   await expect(page.getByRole("dialog", { name: "From" })).toHaveCount(0);
   await from.fill("2026-12-31");
+  await eventDialog.getByRole("button", { name: "Open calendar: To" }).click();
+  const toCalendar = page.getByRole("dialog", { name: "To" });
+  await expect(toCalendar.locator("button[aria-current='date']")).toBeDisabled();
+  await page.keyboard.press("Escape");
   await page.getByRole("button", { name: "Save event" }).click();
   await expect(eventDialog.getByText("End date cannot precede start date.")).toBeVisible();
   expect(requests.some((request) => request.pathname.endsWith("/context/company-events") && request.method === "POST")).toBeFalsy();
