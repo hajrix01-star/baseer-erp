@@ -9,16 +9,18 @@ import pg from "pg";
 dotenv.config({ path: "apps/api/.env.baseer-test" });
 
 const password = process.env.BASEER_LOCAL_VIEWER_PASSWORD ?? process.env.BASEER_TEST_BOOTSTRAP_PASSWORD;
-if (!password || password.length < 12)
+const allowWeakLocalPassword = process.env.BASEER_LOCAL_VIEWER_ALLOW_WEAK_PASSWORD === "true";
+if (!password || (!allowWeakLocalPassword && password.length < 12))
   throw new Error(
-    "BASEER_LOCAL_VIEWER_PASSWORD must contain at least 12 characters.",
+    "BASEER_LOCAL_VIEWER_PASSWORD must contain at least 12 characters unless BASEER_LOCAL_VIEWER_ALLOW_WEAK_PASSWORD=true is set for the isolated local viewer.",
   );
 const { Pool } = pg;
 const pool = new Pool({
   connectionString: requiredEnvironment("DATABASE_URL"),
 });
 const tenantCode = "baseer-viewer";
-const login = "owner@hajrix.com";
+const login = (process.env.BASEER_LOCAL_VIEWER_LOGIN ?? "owner@hajrix.com").trim().toLowerCase();
+if (!login) throw new Error("BASEER_LOCAL_VIEWER_LOGIN must not be empty.");
 let app;
 
 try {
