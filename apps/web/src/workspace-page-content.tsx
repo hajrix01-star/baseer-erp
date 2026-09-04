@@ -66,7 +66,7 @@ export function WorkspacePageContent({ route, language, permissionCodes, migrati
     : route.moduleId === "operations" && route.section === 2 ? <PurchaseExpenseWorkspace language={language} migrationReviewLocked={migrationReviewLocked} activeTab={route.stage === "credit" ? "credit" : "entry"} onTabChange={onStage} />
     : route.moduleId === "operations" && route.section === 3 ? <ExpensesObligationsWorkspace language={language} activeTab={route.stage === "batch" || route.stage === "history" ? route.stage : "items"} onTabChange={onStage} />
     : route.moduleId === "operations" && route.section === 4 ? <FinanceSetupWorkspace language={language} view="suppliers" />
-    : route.moduleId === "operations" && (route.section === 5 || route.section === 6 || route.section === 7 || route.section === 8) ? <OperationsRequestsWorkspace language={language} initialTab={route.section === 5 ? "catalog" : route.section === 6 ? "requests" : route.section === 7 ? "registration" : "reports"} />
+    : route.moduleId === "operations" && (route.section === 5 || route.section === 6 || route.section === 7 || route.section === 8) ? <OperationsRequestsWorkspace key={`operations-requests-${route.section}`} language={language} initialTab={route.section === 5 || route.section === 6 ? "requests" : route.section === 7 ? "registration" : "reports"} />
     : route.moduleId === "finance" && route.pageId === "finance-settings" ? <FinanceSetupWorkspace language={language} />
     : route.moduleId === "finance" && route.pageId === "finance-ledger" ? <InvoiceRegisterWorkspace language={language} />
     : route.moduleId === "finance" && route.pageId === "finance-treasury" ? <TreasuryWorkspace language={language} />

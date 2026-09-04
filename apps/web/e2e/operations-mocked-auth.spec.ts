@@ -103,8 +103,8 @@ async function mockInternalRegistration(page: Page, options: { isOwner?: boolean
   return requested;
 }
 
-async function openOperationsManagement(page: Page) {
-  await page.getByRole("button", { name: "فتح إدارة طلبات الشراء والعهدة" }).click();
+async function openOperationsCatalog(page: Page) {
+  await page.getByRole("tab", { name: "إدارة الأصناف والمخزون" }).click();
 }
 
 test("internal registration keeps its Gregorian business date through the Baseer date adapter", async ({ page }) => {
@@ -161,22 +161,19 @@ test("opening Operations starts at its first permitted section, not the last rec
   await expect(page.getByRole("heading", { name: "الطلبات" })).toBeVisible();
 });
 
-test("execution workspace reads its bounded summary before management is opened", async ({ page }) => {
+test("requests open directly from the visible Operations entry", async ({ page }) => {
   const requested = await mockInternalRegistration(page);
-  await page.goto("/#module=operations&section=6");
+  await page.goto("/#module=operations&page=operations-catalog");
 
   await expect(page.getByRole("heading", { name: "طلبات المشتريات والعهدة" })).toBeVisible();
-  await expect(page.getByText("طلبات مفتوحة", { exact: true })).toBeVisible();
-  await expect.poll(() => requested.filter((request) => request.path === "/v1/operations/execution-workspace/summary").length).toBeGreaterThan(0);
-  expect(requested.some((request) => request.path === "/v1/operations/execution-workspace")).toBeFalsy();
-
-  await openOperationsManagement(page);
   await expect.poll(() => requested.some((request) => request.path === "/v1/operations/execution-workspace")).toBeTruthy();
+  await expect(page.getByRole("button", { name: "فتح إدارة طلبات الشراء والعهدة" })).toHaveCount(0);
 });
 
 test("operations catalog keeps filters and cursor paging on the server", async ({ page }) => {
   const requested = await mockInternalRegistration(page);
   await page.goto("/#module=operations&section=5");
+  await openOperationsCatalog(page);
 
   await expect(page.getByRole("cell", { name: /مادة الاختبار MAT-001/ })).toBeVisible();
   await expect(page.getByRole("cell", { name: /مادة الاختبار الثانية MAT-002/ })).toHaveCount(0);
@@ -196,6 +193,7 @@ test("operations catalog keeps filters and cursor paging on the server", async (
 test("catalog item details use the lazy Baseer form adapter without changing the update command", async ({ page }) => {
   const requested = await mockInternalRegistration(page);
   await page.goto("/#module=operations&section=5");
+  await openOperationsCatalog(page);
 
   await page.getByRole("button", { name: "مادة الاختبار" }).click();
   const dialog = page.getByRole("dialog");
@@ -213,6 +211,7 @@ test("catalog item details use the lazy Baseer form adapter without changing the
 test("catalog price keeps the decimal string in its separate Baseer command form", async ({ page }) => {
   const requested = await mockInternalRegistration(page);
   await page.goto("/#module=operations&section=5");
+  await openOperationsCatalog(page);
 
   await page.getByRole("tab", { name: "منتجات المنيو" }).click();
   await page.getByRole("button", { name: "منتج الاختبار" }).click();
@@ -230,6 +229,7 @@ test("catalog price keeps the decimal string in its separate Baseer command form
 test("catalog conversion uses the lazy Baseer form adapter without changing the three inventory commands", async ({ page }) => {
   const requested = await mockInternalRegistration(page);
   await page.goto("/#module=operations&section=5");
+  await openOperationsCatalog(page);
 
   await page.getByRole("button", { name: "مادة الاختبار" }).click();
   const dialog = page.getByRole("dialog");
@@ -275,7 +275,6 @@ test("operations reports keep their read-only data inside the company and period
 test("custody return keeps decimal text and Gregorian business date through its adapter", async ({ page }) => {
   const requested = await mockInternalRegistration(page);
   await page.goto("/#module=operations&section=6");
-  await openOperationsManagement(page);
 
   await page.getByRole("button", { name: "تسجيل مرتجع عهدة" }).click();
   const dialog = page.getByRole("dialog");
@@ -295,13 +294,13 @@ test("custody return keeps decimal text and Gregorian business date through its 
   });
 });
 
-test("purchase request and completion expose the shared Gregorian date adapter", async ({ page }) => {
+test("purchase request starts with no date and requires the shared Gregorian date adapter", async ({ page }) => {
   await mockInternalRegistration(page);
   await page.goto("/#module=operations&section=6");
-  await openOperationsManagement(page);
 
   await page.getByRole("button", { name: "إنشاء طلب شراء" }).click();
   let dialog = page.getByRole("dialog");
+  await expect(dialog.getByRole("textbox", { name: "التاريخ" })).toHaveValue("");
   await dialog.getByRole("button", { name: "فتح التقويم" }).click();
   await expect(page.getByRole("dialog", { name: "التاريخ" })).toBeVisible();
   await page.keyboard.press("Escape");
@@ -323,7 +322,6 @@ test("modern administrative shell keeps compound purchase and recipe surfaces in
   await mockInternalRegistration(page, { includeRecipe: true });
 
   await page.goto("/#module=operations&page=operations-execution");
-  await page.getByRole("button", { name: "فتح إدارة طلبات الشراء والعهدة" }).click();
   await page.getByRole("button", { name: "اعتماد الشراء الفعلي" }).click();
   const receipt = page.getByRole("dialog");
   const pos = receipt.locator(".operations-purchase-pos");
@@ -335,6 +333,7 @@ test("modern administrative shell keeps compound purchase and recipe surfaces in
   expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1);
 
   await page.goto("/#module=operations&page=operations-catalog");
+  await openOperationsCatalog(page);
   await page.getByRole("tab", { name: "منتجات المنيو" }).click();
   await page.getByRole("button", { name: "منتج الاختبار" }).click();
   const recipeDialog = page.getByRole("dialog");

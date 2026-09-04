@@ -4,10 +4,10 @@ import { BaseerCard } from "./baseer-card";
 
 type Language = "ar" | "en";
 
-const OperationsExecutionWorkspaceContent = lazy(async () => ({ default: (await import("./operations-execution-workspace-content")).OperationsExecutionWorkspaceContent }));
+const OperationsExecutionWorkspaceRuntime = lazy(async () => ({ default: (await import("./operations-execution-workspace-runtime")).OperationsExecutionWorkspaceRuntime }));
 
-/** The detailed management workspace remains behind an explicit action. */
+/** Requests open directly; the catalog and reports remain adjacent workspace tabs. */
 export function OperationsExecutionWorkspace({ language }: { language: Language }) {
-  const text = language === "ar" ? "جارٍ تحميل ملخص العمليات…" : "Loading operations summary…";
-  return <Suspense fallback={<BaseerCard aria-busy="true" role="status">{text}</BaseerCard>}><OperationsExecutionWorkspaceContent language={language} /></Suspense>;
+  const text = language === "ar" ? "جارٍ تحميل الطلبات…" : "Loading requests…";
+  return <Suspense fallback={<BaseerCard aria-busy="true" role="status">{text}</BaseerCard>}><OperationsExecutionWorkspaceRuntime language={language} /></Suspense>;
 }

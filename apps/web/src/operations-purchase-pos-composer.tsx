@@ -10,10 +10,6 @@ type Unit = { id: string; nameAr: string; nameEn: string | null; dimension: "COU
 type Material = { id: string; nameAr: string; nameEn: string | null; itemUnits: Array<{ unitId: string; isActive: boolean; isOrderEnabled: boolean; lastPurchaseUnitPrice: string | null }> };
 export type OperationsPurchasePosLine = { rawMaterialItemId: string; unitId: string; quantity: string; price?: string };
 
-// Catalog accents distinguish adjacent selectable rows only; they are UI
-// decoration, not an item, stock, or financial-data palette.
-const productAccentTokens = ["var(--chart-primary)", "var(--chart-info)", "var(--chart-secondary)", "var(--status-warning)", "var(--status-danger)", "var(--brand-deep)"];
-
 export function OperationsPurchasePosComposer({ language, materials, units, lines, onChange }: { language: Language; materials: Material[]; units: Unit[]; lines: OperationsPurchasePosLine[]; onChange: (lines: OperationsPurchasePosLine[]) => void }) {
   const ar = language === "ar";
   const text = ar ? { search: "ابحث باسم المادة أو رمزها…", all: "كل الأقسام", cart: "سلة الطلب", empty: "اختر مادة لإدخال الكمية وتغليف الشراء.", quantity: "الكمية", unit: "التغليف والوحدة", price: "السعر المقترح", total: "إجمالي الطلب", lines: "بنود", remove: "حذف", decrease: "إنقاص", increase: "زيادة", add: "إضافة إلى الطلب", cancel: "إلغاء", chooseUnit: "اختر تغليف الشراء", noMaterials: "لا توجد مواد جاهزة للطلب بهذه الفلاتر.", dimensions: { COUNT: "عدد", MASS: "وزن", VOLUME: "حجم", PACKAGE: "تغليف" } } : { search: "Search by material or code…", all: "All sections", cart: "Request basket", empty: "Choose a material to enter its quantity and purchase packaging.", quantity: "Quantity", unit: "Packaging & unit", price: "Suggested price", total: "Request total", lines: "Lines", remove: "Remove", decrease: "Decrease", increase: "Increase", add: "Add to request", cancel: "Cancel", chooseUnit: "Choose purchase packaging", noMaterials: "No materials are ready for these filters.", dimensions: { COUNT: "Count", MASS: "Mass", VOLUME: "Volume", PACKAGE: "Package" } };
@@ -53,7 +49,7 @@ export function OperationsPurchasePosComposer({ language, materials, units, line
         <div className="operations-purchase-pos__filters">{dimensions.map(([value, label]) => <BaseerButton key={value} type="button" variant={dimension === value ? "primary" : "secondary"} onClick={() => setDimension(value)}>{label}</BaseerButton>)}</div>
       </div>
       <div className="operations-purchase-pos__products">
-        {filtered.map((material, index) => { const selected = lines.find((line) => line.rawMaterialItemId === material.id); return <button key={material.id} type="button" onClick={() => openEditor(material)} className={`operations-purchase-pos__product${selected ? " is-selected" : ""}`}><span className="operations-purchase-pos__product-accent" style={{ background: productAccentTokens[index % productAccentTokens.length] }} /><strong>{name(material)}</strong><small>{eligible(material).map((line) => unitName(line.unitId)).join(" · ")}</small>{selected ? <span className="operations-purchase-pos__product-count" dir="ltr">{formatQuantity(selected.quantity, 3, language)}</span> : null}</button>; })}
+        {filtered.map((material) => { const selected = lines.find((line) => line.rawMaterialItemId === material.id); return <button key={material.id} type="button" onClick={() => openEditor(material)} className={`operations-purchase-pos__product${selected ? " is-selected" : ""}`}><strong>{name(material)}</strong><small>{eligible(material).map((line) => unitName(line.unitId)).join(" · ")}</small>{selected ? <span className="operations-purchase-pos__product-count" dir="ltr">{formatQuantity(selected.quantity, 3, language)}</span> : null}</button>; })}
       </div>
       {!filtered.length ? <p className="operations-purchase-pos__empty-catalog">{text.noMaterials}</p> : null}
     </div>

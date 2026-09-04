@@ -16,7 +16,6 @@ type PaymentChannel = "CUSTODY" | "CASH" | "BANK_TRANSFER";
 type Unit = { id: string; nameAr: string; nameEn: string | null; dimension: "COUNT" | "MASS" | "VOLUME" | "PACKAGE" };
 type Item = { id: string; nameAr: string; nameEn: string | null; kind: "RAW_MATERIAL" | "MENU_PRODUCT"; status: "ACTIVE" | "ARCHIVED"; itemUnits: Array<{ unitId: string; isActive: boolean; isOrderEnabled: boolean; lastPurchaseUnitPrice: string | null }> };
 
-const today = () => new Date().toISOString().slice(0, 10);
 const decimal = /^\d+(?:\.\d{1,4})?$/;
 
 function schema(language: Language) {
@@ -52,7 +51,9 @@ export function OperationsPurchaseRequestDialog({ open, language, busy, material
 }) {
   const ar = language === "ar";
   const text = ar ? { title: "إنشاء طلب شراء", review: "حفظ خطة الطلب", date: "التاريخ", channel: "قناة الدفع التشغيلية", custody: "عهدة المندوب", cash: "نقدي محلي", transfer: "تحويل بنكي", funding: "العهدة المسلّمة", representative: "اسم المندوب", notes: "ملاحظات", loading: "جارٍ تحميل البنود…", lines: "أضف مادة واحدة على الأقل قبل الحفظ.", plan: "هذه خطة تقديرية فقط. اعتماد الشراء الفعلي هو الذي يحدّث المخزون والتكلفة والعهدة." } : { title: "Create purchase request", review: "Save request plan", date: "Date", channel: "Operational payment channel", custody: "Representative custody", cash: "Local cash", transfer: "Bank transfer", funding: "Custody funding", representative: "Representative name", notes: "Notes", loading: "Loading lines…", lines: "Add at least one material before saving.", plan: "This is an estimate only. Confirming the actual purchase updates inventory, cost, and custody." };
-  const form = useBaseerForm<FormValues>({ schema: schema(language), defaultValues: { businessDate: today(), paymentChannel: "CASH", custodyFundingAmount: "", representativeName: "", notes: "" } });
+  // A purchase plan must be dated deliberately.  The API independently
+  // requires YYYY-MM-DD, so an omitted date cannot become a financial event.
+  const form = useBaseerForm<FormValues>({ schema: schema(language), defaultValues: { businessDate: "", paymentChannel: "CASH", custodyFundingAmount: "", representativeName: "", notes: "" } });
   const [lines, setLines] = useState<OperationsPurchasePosLine[]>([]);
   const channel = form.watch("paymentChannel");
   const businessDate = form.watch("businessDate");
@@ -60,7 +61,7 @@ export function OperationsPurchaseRequestDialog({ open, language, busy, material
 
   useEffect(() => {
     if (!open) return;
-    form.reset({ businessDate: today(), paymentChannel: "CASH", custodyFundingAmount: "", representativeName: defaultRepresentative, notes: "" });
+    form.reset({ businessDate: "", paymentChannel: "CASH", custodyFundingAmount: "", representativeName: defaultRepresentative, notes: "" });
     setLines([]);
   }, [defaultRepresentative, form, open]);
 

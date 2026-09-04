@@ -27,8 +27,8 @@ export function OperationsRequestsWorkspace({ language, initialTab }: { language
         : <LazyReports language={language} />;
   return <section className="operations-requests-workspace" dir={language === "ar" ? "rtl" : "ltr"}>
     <BaseerWorkspaceTabs ariaLabel={language === "ar" ? "الطلبات" : "Requests"} idPrefix="operations-requests" activeId={tab} onChange={(id) => setTab(id as RequestsTab)} tabs={[
-      { id: "catalog", label: labels.catalog },
       { id: "requests", label: labels.requests },
+      { id: "catalog", label: labels.catalog },
       { id: "registration", label: labels.registration },
       { id: "reports", label: labels.reports },
     ]} />
