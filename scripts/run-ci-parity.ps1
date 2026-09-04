@@ -36,7 +36,11 @@ try {
   $linuxCommand = "set -e; test -S /var/run/docker.sock; test -x ~/.local/bin/act; git -C '$linuxRepositoryRoot' -c core.autocrlf=false clone --no-local --no-checkout '$linuxRepositoryRoot' '$linuxParityClone'; git -C '$linuxParityClone' -c core.autocrlf=false checkout --detach '$candidateCommit'; cd '$linuxParityClone';"
   foreach ($selectedJob in $jobs) {
     Write-Host "Running GitHub workflow parity job in Ubuntu: $selectedJob" -ForegroundColor Cyan
-    $linuxCommand += " ~/.local/bin/act push --workflows '$workflowRelativePath' --job '$selectedJob' --platform 'ubuntu-latest=ghcr.io/catthehacker/ubuntu:full-latest' --container-architecture 'linux/amd64' --bind --no-recurse;"
+    # The only GitHub-hosted capability absent from local `act` is artifact
+    # upload. Mark the parity invocation so the workflow skips that external
+    # post-processing step; all build, test, and acceptance commands remain
+    # the workflow's exact commands.
+    $linuxCommand += " ~/.local/bin/act push --workflows '$workflowRelativePath' --job '$selectedJob' --platform 'ubuntu-latest=ghcr.io/catthehacker/ubuntu:full-latest' --container-architecture 'linux/amd64' --bind --no-recurse --env BASEER_CI_PARITY=true;"
   }
   & $wsl.Source -d Ubuntu -- bash -c $linuxCommand
   if ($LASTEXITCODE -ne 0) {

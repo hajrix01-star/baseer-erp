@@ -24,6 +24,12 @@ intentional current visual contract. Windows references were not copied or used.
 2. Full isolated `web-acceptance` job in Linux.
 3. Full isolated `quality` job in Linux before `main` is updated.
 
+The local runner declares `BASEER_CI_PARITY=true` solely to skip GitHub's
+artifact-upload action, which requires a short-lived GitHub runtime token not
+available to `act`. The GitHub workflow preserves its `always()` artifact
+behavior because that flag is absent there; build and acceptance commands are
+unchanged in both environments.
+
 ## Rollback
 
 Revert the acceptance-repair commit. No migration, financial data, API contract,
