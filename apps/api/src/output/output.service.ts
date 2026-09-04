@@ -28,6 +28,7 @@ import { DatabaseService } from '../database/database.service.js';
 import { RequestContext } from '../observability/request-context.js';
 import { IdempotencyReceiptStatus, Prisma } from '../generated/prisma/client.js';
 import { AttendanceService } from '../attendance/attendance.service.js';
+import { MarketingService } from '../marketing/marketing.service.js';
 import { OperationsExecutionService } from '../operations/operations-execution.service.js';
 
 const GENERATE_OPERATION = 'platform.output.generate';
@@ -42,6 +43,7 @@ export class OutputService {
     private readonly companyContext: CompanyContextService,
     private readonly idempotency: IdempotencyService,
     private readonly attendance: AttendanceService,
+    private readonly marketing: MarketingService,
     private readonly operations: OperationsExecutionService,
   ) {}
 
@@ -59,6 +61,7 @@ export class OutputService {
         : input.reportCode === 'hr.final-settlement' ? ['hr.final_settlements.read']
           : input.reportCode === 'hr.attendance-weekly-roster' ? ['attendance.manage']
             : input.reportCode === 'operations.purchase-custody-reports' ? ['operations.purchase_request.read', 'operations.custody.read']
+              : input.reportCode === 'marketing.performance-calendar' ? ['marketing.insights.read']
               : [];
     const context = await this.companyContext.authorize({
       accessToken: input.accessToken,
@@ -195,6 +198,9 @@ export class OutputService {
     if (reportCode === 'operations.purchase-custody-reports') {
       return this.createOperationsPurchaseCustodySnapshot(transaction, context, request);
     }
+    if (reportCode === 'marketing.performance-calendar') {
+      return this.createMarketingPerformanceCalendarSnapshot(transaction, context, request);
+    }
     if (reportCode !== 'platform.company-context') {
       throw new NotFoundException('The requested output definition was not found.');
     }
@@ -289,6 +295,62 @@ export class OutputService {
       sourceLabel: ar
         ? `مواد مشتراة مثبتة وعهدة تشغيلية مقيدة بالخادم${custody.representativeName ? ` · ${custody.representativeName}` : ''}`
         : `Server-scoped posted purchase materials and operational custody${custody.representativeName ? ` · ${custody.representativeName}` : ''}`,
+    };
+  }
+
+  /**
+   * This output deliberately reuses MarketingService's server-owned calendar
+   * read. It keeps the official-sales quality markers and posted-spend values
+   * intact rather than recomputing them from browser state or raw documents.
+   */
+  private async createMarketingPerformanceCalendarSnapshot(
+    transaction: Prisma.TransactionClient,
+    context: TrustedCompanyActorContext,
+    request: OutputRequest,
+  ): Promise<ReportSnapshot> {
+    const from = outputBusinessDate(request.filters['from']);
+    const to = outputBusinessDate(request.filters['to']);
+    if (!from || !to || from > to || Object.keys(request.filters).some((key) => key !== 'from' && key !== 'to')) {
+      throw new BadRequestException('Marketing performance output requires only a valid from and to period.');
+    }
+    const rangeDays = (Date.parse(`${to}T00:00:00.000Z`) - Date.parse(`${from}T00:00:00.000Z`)) / 86_400_000;
+    if (rangeDays > 365) throw new BadRequestException('Marketing performance output cannot exceed 366 days.');
+    const company = await transaction.company.findFirst({
+      where: { id: context.companyId, tenantId: context.tenantId },
+      select: { id: true, nameAr: true, nameEn: true, branding: { select: { logoFileMetadataId: true } } },
+    });
+    if (!company) throw new ForbiddenException('Company output scope is not permitted.');
+    const [calendar, dateResolution] = await Promise.all([
+      this.marketing.calendar(context, { from: new Date(`${from}T00:00:00.000Z`), to: new Date(`${to}T00:00:00.000Z`) }),
+      this.businessDate.resolveInTransaction(transaction, context),
+    ]);
+    const ar = request.locale === 'ar';
+    return {
+      snapshotId: randomUUID(), reportCode: 'marketing.performance-calendar', templateVersion: '1',
+      title: ar ? 'تقرير أداء التسويق' : 'Marketing performance report', direction: ar ? 'rtl' : 'ltr', locale: request.locale,
+      generatedAtRiyadh: dateResolution.generatedAt,
+      companies: [{ id: company.id, name: ar ? company.nameAr : company.nameEn || company.nameAr }],
+      companyLogoDataUri: await this.readPrintLogo(transaction, context, company.branding?.logoFileMetadataId ?? null),
+      periodLabel: `${from} — ${to}`, taxPresentation: 'gross',
+      columns: [
+        { key: 'businessDate', label: ar ? 'التاريخ' : 'Date', kind: 'date', width: 14 },
+        { key: 'salesQuality', label: ar ? 'جودة المبيعات' : 'Sales quality', kind: 'text', width: 15 },
+        { key: 'officialGrossSales', label: ar ? 'المبيعات الرسمية (شامل الضريبة)' : 'Official sales (VAT incl.)', kind: 'amount', width: 20 },
+        { key: 'linkedActualSpend', label: ar ? 'الإنفاق المرتبط المثبت' : 'Posted linked spend', kind: 'amount', width: 18 },
+        { key: 'purchaseOutflows', label: ar ? 'مدفوعات المشتريات' : 'Purchase outflows', kind: 'amount', width: 17 },
+        { key: 'financialOutflows', label: ar ? 'إجمالي التدفقات الخارجة' : 'Financial outflows', kind: 'amount', width: 17 },
+      ],
+      rows: calendar.days.map((day) => ({
+        businessDate: day.businessDate,
+        salesQuality: day.salesDayQuality,
+        officialGrossSales: day.officialGrossSales,
+        linkedActualSpend: day.linkedActualSpend,
+        purchaseOutflows: day.purchaseOutflows,
+        financialOutflows: day.financialOutflows,
+      })),
+      sourceLabel: ar
+        ? 'مبيعات رسمية شاملة الضريبة وتدفقات مالية مثبّتة مرتبطة صراحةً بالحملات؛ القراءة وصفية زمنية وليست إثبات عائد أو سببية.'
+        : 'VAT-inclusive official sales and explicitly linked posted financial flows; this is a descriptive temporal read, not ROI or causal proof.',
     };
   }
 

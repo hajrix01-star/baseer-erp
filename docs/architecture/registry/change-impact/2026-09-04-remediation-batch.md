@@ -76,7 +76,10 @@ central output boundary for received materials and representative custody;
 it replays bounded server reads for the requested period and never prints the
 application shell. The remaining output catalogue is still an architectural
 work item because each marketing/operations surface needs its own server
-source and authorization. P&L mapping remains an approved company
+source and authorization. The central output catalogue now also contains the
+marketing performance calendar: only a bounded `from/to` period reaches the
+server-owned marketing read, and the A4 action is displayed on that matching
+calendar surface. P&L mapping remains an approved company
 configuration; and CSP is
 not widened because the source contains no Google-Fonts request and the
 published host has not provided inspectable deployment assets during this
