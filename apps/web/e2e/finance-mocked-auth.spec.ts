@@ -260,8 +260,13 @@ test("purchase date calendar escapes the data table and keeps its action clear o
   await expect(input).toBeVisible();
   await expect(input).toHaveValue("");
   await expect(trigger).toBeVisible();
-  const inputBox = await input.boundingBox();
-  const triggerBox = await trigger.boundingBox();
+  // The mobile drawer closes immediately after navigation. Wait for the
+  // post-transition layout box, not only the locator's transient visibility.
+  await expect.poll(async () => {
+    const [inputBox, triggerBox] = await Promise.all([input.boundingBox(), trigger.boundingBox()]);
+    return Boolean(inputBox && triggerBox);
+  }).toBe(true);
+  const [inputBox, triggerBox] = await Promise.all([input.boundingBox(), trigger.boundingBox()]);
   expect(inputBox).not.toBeNull();
   expect(triggerBox).not.toBeNull();
   expect(triggerBox!.x).toBeGreaterThan(inputBox!.x + inputBox!.width - 96);

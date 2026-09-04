@@ -2,7 +2,8 @@
 
 - **Registry:** `BASEER-ARCH v1.0`; **classification:** `CONTROLLED`.
 - **Scope:** shared employee-profile attendance reads, profile-menu language action,
-  report-stage navigation, and Linux-only visual acceptance references.
+  report-stage navigation, purchase-calendar mobile geometry assertion, and
+  Linux-only visual acceptance references.
 
 ## Decision and boundaries
 
@@ -29,6 +30,12 @@ artifact-upload action, which requires a short-lived GitHub runtime token not
 available to `act`. The GitHub workflow preserves its `always()` artifact
 behavior because that flag is absent there; build and acceptance commands are
 unchanged in both environments.
+
+The purchase-calendar assertion waits for the post-navigation mobile layout box
+before comparing the ISO field with its calendar action. It still requires both
+controls to be visible and spatially separated, and still verifies the body
+portal and outside-click close behavior; only the transient drawer-close race is
+removed.
 
 The deployable runtime audit retries only bounded, identifiable npm-registry
 transport failures (such as a 503 or connection reset). A returned vulnerability
