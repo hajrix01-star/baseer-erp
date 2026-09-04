@@ -40,7 +40,7 @@ COPY --from=build --chown=node:node /app /app
 
 USER node
 
-CMD ["npx", "prisma", "migrate", "deploy", "--schema", "apps/api/prisma/schema.prisma"]
+CMD ["npx", "prisma", "migrate", "deploy", "--config", "apps/api/prisma.config.ts"]
 
 FROM node:24-alpine AS runtime-dependencies
 
