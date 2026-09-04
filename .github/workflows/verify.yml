@@ -11,7 +11,8 @@ permissions:
 jobs:
   quality:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    # Allows the bounded runtime-audit recovery window without making quality unbounded.
+    timeout-minutes: 30
     services:
       postgres:
         image: postgres:16

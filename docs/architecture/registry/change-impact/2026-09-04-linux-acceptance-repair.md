@@ -42,6 +42,12 @@ transport failures (such as a 503 or connection reset). A returned vulnerability
 report or any non-transient audit failure still fails immediately; the guard is
 not weakened and the same command is used in Linux parity and GitHub.
 
+The GitHub `quality` job has a bounded 30-minute window, aligned with the
+Linux acceptance job. The prior 20-minute limit cancelled the run while its
+runtime audit was still executing after all preceding quality gates had passed.
+This grants time for one controlled registry recovery; it does not skip or
+soften any quality, security, or release gate.
+
 ## Rollback
 
 Revert the acceptance-repair commit. No migration, financial data, API contract,
