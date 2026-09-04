@@ -1,10 +1,11 @@
-# ADR-UI-006 — زر مسح التقويم المركزي وسقف عناصره الأصلية
+# ADR-UI-006 — زر مسح التقويم المركزي وسقوف عناصره وطبقاته
 
 **الحالة:** Accepted
 **التاريخ:** 2026-09-04
 **المالك:** UI Platform
-**السجل المتأثر:** `baseer-date-picker` / `UI_NATIVE_CONTROL_RATCHET.json`
-**النطاق:** `apps/web/src/baseer-calendar-picker.tsx`
+**السجل المتأثر:** `baseer-date-picker` / `UI_NATIVE_CONTROL_RATCHET.json` /
+`UI_INLINE_STYLE_RATCHET.json`
+**النطاق:** `apps/web/src/baseer-calendar-picker.tsx` و`baseer-calendar.css`
 
 ## السياق
 
@@ -12,12 +13,17 @@
 يحتاج زر مسح مستقل قابل للوصول داخل حقل التاريخ، إضافة إلى زر الفتح، زر الإغلاق،
 أزرار التنقل، شبكة الأيام أو الشهور، وزر اليوم. سجل ratchet السابق بقي عند سبعة
 أزرار خام رغم أن تنفيذ العقد الملتزم يحتوي ثمانية أنماط JSX من عناصر `button`.
+كما أن إصلاح الجوال أضاف `z-index: 1` لزر الإغلاق داخل popover النسبي حتى لا
+يتوارى خلف محتواه؛ لذلك يملك ملف CSS المركزي ثلاثة تعريفات طبقة مقصودة بدلاً من
+السقف القديم ذي التعريفين.
 
 ## القرار
 
 يعتمد سقف `baseer-calendar-picker.tsx` بثمانية أزرار فقط (`[8, 0, 1, 0]`). هذه
 الأزرار جزء من primitive مركزي مسجل وليست عناصر ميزة محلية. يبقى أي ارتفاع لاحق
-مرفوضاً، ويظل عقد `clearable` وISO والحدود وReact Hook Form كما هو.
+مرفوضاً. ويعتمد سقف `baseer-calendar.css` بثلاثة تعريفات `z-index` فقط: طبقة
+popover للفترة، وطبقة أدوات الحقل، وطبقة زر الإغلاق على الجوال. يظل عقد
+`clearable` وISO والحدود وReact Hook Form كما هو.
 
 ## بدائل مرفوضة
 
@@ -38,6 +44,7 @@
 ## خطة التحقق والرجوع
 
 - الاختبارات: `npm run check:ui-native-control-ratchet` ثم `quality` و`web-acceptance` في Linux.
+- الطبقات: `npm run check:ui-inline-style-ratchet` قبل جولة `quality` الكاملة.
 - السجل: تحديث سقف ratchet وسجل المكوّن وفهرس القرار.
 - التراجع: يعكس هذا القرار والسقف إلى سبعة فقط إذا أزيل زر المسح من العقد والتطبيق معاً.
 

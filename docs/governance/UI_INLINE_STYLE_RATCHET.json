@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "title": "Baseer inline visual style and z-index ratchet",
   "authority": "docs/governance/BASEER_UI_SYSTEM_STANDARD.md",
-  "updatedAt": "2026-09-03",
+  "updatedAt": "2026-09-04",
   "policy": "JSX style attributes and CSS/JSX z-index declarations are a migration baseline, not an exception. New sources and increases are rejected. A cap change requires a UI-ADR, UI Platform review, and a measured reason; named portal layers must remain in the central overlay policy.",
   "tsx": {
     "apps/web/src/App.tsx": { "styleAttributes": 6, "legacyZIndex": 0, "namedOverlayZIndex": 0 },
@@ -36,7 +36,7 @@
     "apps/web/src/reports-workspace-runtime.tsx": { "styleAttributes": 1, "legacyZIndex": 0, "namedOverlayZIndex": 0 }
   },
   "css": {
-    "apps/web/src/baseer-calendar.css": { "zIndexDeclarations": 2 },
+    "apps/web/src/baseer-calendar.css": { "zIndexDeclarations": 3 },
     "apps/web/src/baseer-form.css": { "zIndexDeclarations": 1 },
     "apps/web/src/baseer-menu.css": { "zIndexDeclarations": 1 },
     "apps/web/src/baseer-modern-admin-theme.css": { "zIndexDeclarations": 4 },
