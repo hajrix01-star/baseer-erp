@@ -37,6 +37,12 @@ controls to be visible and spatially separated, and still verifies the body
 portal and outside-click close behavior; only the transient drawer-close race is
 removed.
 
+The decision-company-event acceptance test waits for the visible `To` calendar
+to apply the updated `From` bound before submitting the invalid range. It proves
+the user-facing calendar rule and then the schema message, instead of racing a
+React state update immediately after typing. The event-date contract itself is
+unchanged.
+
 The deployable runtime audit sets npm's internal request timeout to 45 seconds
 and disables npm's hidden transport retry. The repository's explicit bounded
 retry remains the only npm retry policy. If every attempt ends in an identified
