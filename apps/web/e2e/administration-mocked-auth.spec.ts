@@ -66,6 +66,7 @@ async function mockAdministration(page: Page, language: "ar" | "en", requests: s
     requests.push(`${route.request().method()} ${url.pathname}`);
     if (url.pathname === "/v1/companies/available") return fulfill(route, { companies: [{ id: companyId, nameAr: "شركة الاختبار", nameEn: "Test company", permissionCodes: permissions }] });
     if (url.pathname === "/v1/administration/overview") return fulfill(route, overview(owner));
+    if (url.pathname === "/v1/finance/configuration") return fulfill(route, { profile: { vatRateBasisPoints: 1500 } });
     if (url.pathname === "/v1/administration/ai/configuration") return fulfill(route, { companyId, providerCapabilities: [openAiCapability], activeProvider: null, providerConfigurations: [], latestProviderConnectionCheck: null, activeSystemIdentity: null, activeIdentity: null });
     if (url.pathname === "/v1/administration/ai/governance") return fulfill(route, basiraGovernance);
     if (url.pathname === "/v1/administration/ai/provider-connection" && route.request().method() === "POST") return fulfill(route, { state: "READY", reason: null, provider: "OPENAI_COMPATIBLE", model: "gpt-5-mini", checkedAt: "2026-08-23T12:00:00.000Z" });
@@ -218,6 +219,7 @@ test("company editor saves company and VAT atomically from one action", async ({
   await page.goto("/#module=administration&section=1");
   await page.locator(".administration-company-card", { hasText: "شركة الاختبار" }).click();
   const dialog = page.getByRole("dialog", { name: /تعديل: شركة الاختبار/ });
+  await expect(dialog.getByRole("button", { name: "حفظ التغييرات" })).toBeEnabled();
   await dialog.getByLabel("نسبة ضريبة القيمة المضافة").fill("12.5");
   await expect(dialog.getByRole("button", { name: "حفظ النسبة" })).toHaveCount(0);
   await expect(dialog.getByLabel(/سبب التغيير/)).toHaveCount(0);
@@ -226,6 +228,38 @@ test("company editor saves company and VAT atomically from one action", async ({
   await expect.poll(() => savedBody).not.toBeNull();
   expect(savedBody).toMatchObject({ vatRateBasisPoints: 1250, nameAr: "شركة الاختبار" });
   expect(requests.filter((request) => request === "POST /v1/finance/configuration/vat-rate")).toHaveLength(0);
+});
+
+test("company editor never saves an assumed VAT rate while the financial profile is loading", async ({ page }) => {
+  const requests: string[] = [];
+  let releaseFinanceResponse: (() => void) | undefined;
+  const financeResponse = new Promise<void>((resolve) => { releaseFinanceResponse = resolve; });
+  await mockAdministration(page, "ar", requests);
+  await page.route("**/v1/finance/configuration", async (route) => {
+    await financeResponse;
+    return fulfill(route, { profile: { vatRateBasisPoints: 750 } });
+  });
+  await page.goto("/#module=administration&section=1");
+  await page.locator(".administration-company-card", { hasText: "شركة الاختبار" }).click();
+  const dialog = page.getByRole("dialog", { name: /تعديل: شركة الاختبار/ });
+  const saveButton = dialog.getByRole("button", { name: "حفظ التغييرات" });
+  await expect(saveButton).toBeDisabled();
+  expect(requests.filter((request) => request === `PUT /v1/administration/companies/${companyId}/settings`)).toHaveLength(0);
+  releaseFinanceResponse?.();
+  await expect(saveButton).toBeEnabled();
+  await expect(dialog.getByLabel("نسبة ضريبة القيمة المضافة")).toHaveValue("7.5");
+});
+
+test("company editor blocks a combined save when the financial profile cannot load", async ({ page }) => {
+  const requests: string[] = [];
+  await mockAdministration(page, "ar", requests);
+  await page.route("**/v1/finance/configuration", async (route) => fulfill(route, { error: { code: "DEPENDENCY_UNAVAILABLE", message: "Finance unavailable" } }, 503));
+  await page.goto("/#module=administration&section=1");
+  await page.locator(".administration-company-card", { hasText: "شركة الاختبار" }).click();
+  const dialog = page.getByRole("dialog", { name: /تعديل: شركة الاختبار/ });
+  await expect(dialog.getByRole("button", { name: "حفظ التغييرات" })).toBeDisabled();
+  await expect(dialog.getByLabel("نسبة ضريبة القيمة المضافة")).toBeDisabled();
+  expect(requests.filter((request) => request === `PUT /v1/administration/companies/${companyId}/settings`)).toHaveLength(0);
 });
 
 test("company logo rejects an invalid browser file before requesting administration", async ({ page }) => {

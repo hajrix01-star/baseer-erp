@@ -67,6 +67,10 @@ try {
   const savedProfile = await database.inTenantTransaction(fixture.tenantId, (tx) => tx.companyFinanceProfile.findFirstOrThrow({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId }, select: { vatRateBasisPoints: true } }));
   assert.equal(savedCompany.nameAr, "شركة اختبار محدثة");
   assert.equal(savedProfile.vatRateBasisPoints, 1250);
+  const removeLogo = await server.inject({ method: "PUT", url: `/v1/administration/companies/${fixture.companyId}/settings`, headers, payload: { nameAr: "شركة اختبار محدثة", nameEn: "Updated test company", businessTimezone: "Asia/Riyadh", logoFileMetadataId: null, vatRateBasisPoints: 1250, contextLocationCode: null, contextLocationLabelAr: null, contextLatitude: null, contextLongitude: null } });
+  assert.equal(removeLogo.statusCode, 200, removeLogo.body);
+  const removedLogo = await server.inject({ method: "GET", url: `/v1/administration/companies/${fixture.companyId}/logo`, headers });
+  assert.equal(removedLogo.statusCode, 404, removedLogo.body);
 
   const updateSystemRole = await server.inject({ method: "PUT", url: `/v1/administration/roles/${fixture.systemRoleId}`, headers, payload: { nameAr: "تعديل محظور", nameEn: "Blocked update", permissionCodes: ["administration.roles.read"] } });
   assert.equal(updateSystemRole.statusCode, 403, updateSystemRole.body);

@@ -48,3 +48,9 @@ The complete administration visual suite has a pre-existing, reproducible mobile
 ## G8 — Delivery boundary
 
 The candidate must still pass independent delivery review and its commit-specific CI. Private-online publication additionally requires the existing immutable-image manifest, storage-mount preflight, and operator execution on the isolated Baseer Compose stack. No Noorix resource is in scope.
+
+## G5 re-open — independent delivery correction
+
+Independent delivery review found two correctness gaps before publication. The editor could begin from a display default before the finance profile completed, so it now disables the combined command and VAT editor until the profile is confirmed; a failed read stays non-saveable and requires a fresh, successful reload. The logo reader previously selected any historical reserved branding file, so it now follows only the active `CompanyBranding.logoFileMetadataId`; clearing that pointer returns not found even while immutable history remains retained. A staged-blob cleanup failure is now recorded server-side without masking the original transaction failure.
+
+The verification set now includes delayed and failed finance-profile reads in the browser, plus a real HTTP assertion that a cleared branding pointer cannot resurrect an older logo. The delivery gate remains open until these tests, commit-specific CI, and an independent re-review are green.

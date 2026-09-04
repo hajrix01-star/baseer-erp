@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from "node:crypto";
 import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { dirname, join, resolve, sep } from "node:path";
-import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, ConflictException, ForbiddenException, Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { companyContextLocationByCode, type AssignAdministrationMembershipRequest, type CreateAdministrationCompanyRequest, type CreateAdministrationRoleRequest, type CreateAdministrationUserRequest, type ResetAdministrationUserPasswordRequest, type ReplaceAdministrationUserAccessRequest, type UpdateAdministrationCompanyMigrationReviewLockRequest, type UpdateAdministrationCompanyRequest, type UpdateAdministrationCompanyStatusRequest, type UpdateAdministrationRoleRequest, type UpdateAdministrationUserLoginRequest, type UpdateAdministrationUserDisplayNameRequest, type UploadAdministrationCompanyLogoRequest, type UpdateAdministrationUserStatusRequest, type WithdrawAdministrationMembershipRequest } from "@baseer-erp/contracts";
 import { CompanyStatus, FileMetadataStatus, Prisma, SessionStatus, UserStatus } from "../generated/prisma/client.js";
 import { DatabaseService } from "../database/database.service.js";
@@ -13,6 +13,8 @@ import type { TrustedTenantAdministratorContext } from "./tenant-administration-
 
 @Injectable()
 export class AdministrationService {
+  private readonly logger = new Logger(AdministrationService.name);
+
   constructor(private readonly database: DatabaseService) {}
 
   async overview(context: TrustedTenantAdministratorContext) {
@@ -283,14 +285,20 @@ export class AdministrationService {
       });
       return { id: result.id, mimeType: result.mimeType, byteSize: result.byteSize };
     } catch (error) {
-      await rm(target, { force: true }).catch(() => undefined);
+      await rm(target, { force: true }).catch((cleanupError: unknown) => {
+        this.logger.error("Could not clean up a staged company logo after the database transaction failed.", cleanupError instanceof Error ? cleanupError.stack : undefined);
+      });
       throw error;
     }
   }
 
   async readCompanyLogo(context: TrustedTenantAdministratorContext, companyId: string) {
     this.ownerOnly(context);
-    const file = await this.database.inTenantTransaction(context.tenantId, async (tx) => tx.fileMetadata.findFirst({ where: { tenantId: context.tenantId, companyId, sourceType: "company.branding", sourceId: companyId, purpose: "logo", status: FileMetadataStatus.RESERVED }, select: { declaredMimeType: true, storageReference: true } }));
+    const file = await this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const branding = await tx.companyBranding.findFirst({ where: { tenantId: context.tenantId, companyId }, select: { logoFileMetadataId: true } });
+      if (!branding?.logoFileMetadataId) return null;
+      return tx.fileMetadata.findFirst({ where: { id: branding.logoFileMetadataId, tenantId: context.tenantId, companyId, sourceType: "company.branding", sourceId: companyId, purpose: "logo", status: FileMetadataStatus.RESERVED }, select: { declaredMimeType: true, storageReference: true } });
+    });
     if (!file) throw new NotFoundException("Company logo was not found.");
     try { return { mimeType: file.declaredMimeType, bytes: await readFile(this.companyLogoStoragePath(file.storageReference)) }; }
     catch { throw new NotFoundException("Company logo was not found."); }

@@ -24,6 +24,7 @@ import type { BaseerValidatedFormFieldProps, BaseerValidatedFormSchemaFactory } 
 type Company = AdministrationOverview["companies"][number];
 type DialogMode = "create" | "manage" | null;
 type CompanyForm = { nameAr: string; nameEn: string; businessTimezone: string; contextLocationCode: string };
+type VatLoadState = "loading" | "ready" | "failed";
 const formatVatBasisPoints = (basisPoints: number) => {
   const whole = Math.trunc(basisPoints / 100);
   const fraction = String(basisPoints % 100).padStart(2, "0").replace(/0+$/, "");
@@ -97,7 +98,8 @@ function CompanyDialog({ language, session, company, owner, onDone, onError, onC
   const [busy, setBusy] = useState(false);
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [logoFileMetadataId, setLogoFileMetadataId] = useState<string | null>(company?.logoFileMetadataId ?? null);
-  const [vatRate, setVatRate] = useState("15");
+  const [vatRate, setVatRate] = useState("");
+  const [vatLoadState, setVatLoadState] = useState<VatLoadState>(isCreate ? "ready" : "loading");
   const [vatError, setVatError] = useState("");
   const companySchemaFactory = useCallback<BaseerValidatedFormSchemaFactory>(({ z }) => z.object({
     nameAr: z.string().trim().min(1, language === "ar" ? "أدخل اسم الشركة بالعربية." : "Enter the company name in Arabic."),
@@ -120,15 +122,28 @@ function CompanyDialog({ language, session, company, owner, onDone, onError, onC
   useEffect(() => {
     if (!company) return;
     let active = true;
+    setVatLoadState("loading");
     void api<{ profile: { vatRateBasisPoints: number } | null }>({ ...session, companyId: company.id }, "/finance/configuration")
-      .then((receipt) => { if (active) setVatRate(formatVatBasisPoints(receipt.profile?.vatRateBasisPoints ?? 1500)); })
-      .catch(onError);
+      .then((receipt) => {
+        if (!active) return;
+        setVatRate(formatVatBasisPoints(receipt.profile?.vatRateBasisPoints ?? 1500));
+        setVatLoadState("ready");
+      })
+      .catch((error) => {
+        if (!active) return;
+        setVatLoadState("failed");
+        onError(error);
+      });
     return () => { active = false; };
   }, [company, onError, session]);
 
   const selectedLocation = COMPANY_CONTEXT_LOCATIONS.find((location) => location.code === values.contextLocationCode) ?? null;
   const save = async (next: CompanyForm) => {
     if (!owner) return;
+    if (!isCreate && vatLoadState !== "ready") {
+      setVatError(language === "ar" ? "تعذر تحميل إعداد الضريبة. أعد فتح الشركة ثم حاول مرة أخرى." : "The VAT setting could not be loaded. Reopen the company and try again.");
+      return;
+    }
     const vatRateBasisPoints = isCreate ? undefined : parseVatBasisPoints(vatRate);
     if (!isCreate && vatRateBasisPoints === null) { setVatError(text.invalidVatRate); return; }
     setBusy(true);
@@ -190,7 +205,7 @@ function CompanyDialog({ language, session, company, owner, onDone, onError, onC
   return <BaseerDialog open title={title} eyebrow={text.companyManagement} language={language} busy={busy} onClose={onClose} className="administration-company-dialog">
       <BaseerValidatedFormField<CompanyForm> id="administration-company" className="administration-dialog-form" values={values} schemaFactory={companySchemaFactory} onValid={(next) => void save(next)} errorSummaryLabel={text.checkRequiredFields}>
         {({ errors }) => <>
-        {owner ? <footer className="administration-company-dialog__save"><BaseerButton disabled={busy}>{busy ? text.saving : isCreate ? text.createCompany : text.saveChanges}</BaseerButton></footer> : <p className="daily-sales-message error">{text.ownerOnly}</p>}
+        {owner ? <footer className="administration-company-dialog__save"><BaseerButton disabled={busy || (!isCreate && vatLoadState !== "ready")}>{busy ? text.saving : isCreate ? text.createCompany : text.saveChanges}</BaseerButton></footer> : <p className="daily-sales-message error">{text.ownerOnly}</p>}
         <div className="administration-company-editor-profile">
           {logoUrl ? <img alt={`${text.companyLogo}: ${values.nameAr || text.companies}`} src={logoUrl} /> : <span>{values.nameAr.trim().slice(0, 1) || "ش"}</span>}
           <div><strong>{values.nameAr || text.companies}</strong><small>{isCreate ? text.newCompany : company.status === "ACTIVE" ? text.activeCompany : text.archivedCompany}</small></div>
@@ -204,7 +219,7 @@ function CompanyDialog({ language, session, company, owner, onDone, onError, onC
         </fieldset>}
         {!isCreate && company && <fieldset className="administration-access-list administration-company-tax">
           <legend>{language === "ar" ? "الإعدادات الضريبية" : "Tax settings"}</legend>
-          <label>{language === "ar" ? "نسبة ضريبة القيمة المضافة" : "VAT rate"}<input aria-invalid={Boolean(vatError)} disabled={!owner || busy} inputMode="decimal" dir="ltr" min="0" max="100" step="0.01" value={vatRate} onChange={(event) => { setVatRate(normalizeBaseerAmount(event.target.value)); setVatError(""); }} />{vatError ? <small role="alert">{vatError}</small> : null}</label>
+          <label>{language === "ar" ? "نسبة ضريبة القيمة المضافة" : "VAT rate"}<input aria-invalid={Boolean(vatError)} disabled={!owner || busy || vatLoadState !== "ready"} inputMode="decimal" dir="ltr" min="0" max="100" step="0.01" value={vatRate} onChange={(event) => { setVatRate(normalizeBaseerAmount(event.target.value)); setVatError(""); }} />{vatError ? <small role="alert">{vatError}</small> : null}</label>
         </fieldset>}
         {!isCreate && owner && <fieldset className="administration-company-status-action">
           <legend>{company.status === "ACTIVE" ? text.archiveCompany : text.reactivateCompany}</legend>
