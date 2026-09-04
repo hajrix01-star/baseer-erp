@@ -39,10 +39,22 @@ removed.
 
 The deployable runtime audit sets npm's internal request timeout to 45 seconds
 and disables npm's hidden transport retry. The repository's explicit bounded
-retry remains the only npm retry policy. A returned vulnerability report or any
-non-transient audit failure still fails immediately; the guard is not weakened.
-This eliminates the prior five-minute hidden wait per retry while retaining the
-same npm advisory source and the same command in Linux parity and GitHub.
+retry remains the only npm retry policy. If every attempt ends in an identified
+transient npm-registry failure (such as a 503 or connection reset), the same
+lockfile-derived, production-only dependency graph is checked through the
+independent OSV advisory source. Only package names and versions are sent to
+that fallback. A vulnerability, a malformed advisory response, or an unavailable
+fallback source fails the job; the guard is still fail-closed. This removes the
+single-registry availability dependency without treating an outage as success.
+
+OSV currently associates the `xlsx` package name with two advisories that apply
+through releases `0.19.2` and `0.20.1`, even when the exact SheetJS CDN release
+`0.20.3` is installed. The fallback recognises only those two advisory IDs when
+the package version, official CDN URL, and lockfile integrity hash all exactly
+match the reviewed release. SheetJS documents the respective fixes at
+`https://cdn.sheetjs.com/advisories/CVE-2023-30533` and
+`https://cdn.sheetjs.com/advisories/CVE-2024-22363`. Any other `xlsx` version,
+source, integrity value, or advisory remains a failure.
 
 The GitHub `quality` job has a bounded 30-minute window, aligned with the
 Linux acceptance job. The prior 20-minute limit cancelled the run while its
