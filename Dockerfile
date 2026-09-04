@@ -6,7 +6,20 @@ COPY package.json package-lock.json ./
 COPY apps/api/package.json apps/api/package.json
 COPY packages/contracts/package.json packages/contracts/package.json
 COPY packages/output-platform/package.json packages/output-platform/package.json
-RUN npm ci
+# Package downloads can suffer a short registry or network reset. Keep the
+# recovery deterministic: one 45-second request per attempt and at most three
+# full installs. A persistent install error still fails this image build.
+RUN set -eu; \
+  attempt=1; \
+  until npm ci --fetch-retries=0 --fetch-timeout=45000; do \
+    if [ "$attempt" -ge 3 ]; then \
+      echo "npm ci failed after $attempt attempts" >&2; \
+      exit 1; \
+    fi; \
+    attempt=$((attempt + 1)); \
+    echo "npm ci failed; retrying ($attempt/3) after 5 seconds" >&2; \
+    sleep 5; \
+  done
 
 FROM dependencies AS build
 
@@ -40,7 +53,17 @@ COPY packages/output-platform/package.json packages/output-platform/package.json
 
 # Do not copy the build workspace wholesale: omit the Prisma CLI and all
 # development-only packages from the public API runtime image.
-RUN npm ci --omit=dev --omit=optional --omit=peer --ignore-scripts
+RUN set -eu; \
+  attempt=1; \
+  until npm ci --omit=dev --omit=optional --omit=peer --ignore-scripts --fetch-retries=0 --fetch-timeout=45000; do \
+    if [ "$attempt" -ge 3 ]; then \
+      echo "runtime npm ci failed after $attempt attempts" >&2; \
+      exit 1; \
+    fi; \
+    attempt=$((attempt + 1)); \
+    echo "runtime npm ci failed; retrying ($attempt/3) after 5 seconds" >&2; \
+    sleep 5; \
+  done
 
 FROM node:24-alpine AS runtime
 
