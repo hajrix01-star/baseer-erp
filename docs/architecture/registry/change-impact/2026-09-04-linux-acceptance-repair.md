@@ -68,6 +68,14 @@ runtime audit was still executing after all preceding quality gates had passed.
 This grants time for one controlled registry recovery; it does not skip or
 soften any quality, security, or release gate.
 
+Both Docker dependency-install stages use the same explicit, bounded transport
+policy: a 45-second request timeout, npm's implicit retry disabled, and no more
+than three full install attempts with a five-second delay. This addresses the
+observed `ECONNRESET` while fetching a package during the image-separation
+quality gate. A malformed lockfile, unavailable package, or a third failed
+attempt exits the image build non-zero; the policy does not make the check
+advisory or allow an image to be published without dependencies.
+
 ## Rollback
 
 Revert the acceptance-repair commit. No migration, financial data, API contract,
