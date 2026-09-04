@@ -27,7 +27,7 @@ export function AdministrationWorkspace({ language, section }: { language: "ar" 
 function AdministrationContent({ language, section, session, overview, loading, loadError, refetch }: { language: "ar" | "en"; section: number; session: ActiveSession; overview: AdministrationOverview | undefined; loading: boolean; loadError: unknown; refetch: () => Promise<void> }) {
   const text = administrationText(language);
   const [message, setMessage] = useState("");
-  const reportError = (error: unknown) => setMessage(presentBaseerApiError(error, language, text.administrationCommandFailed));
+  const reportError = (error: unknown) => setMessage(typeof error === "string" ? error : presentBaseerApiError(error, language, text.administrationCommandFailed));
   const reload = async () => { setMessage(""); await refetch(); };
   if (loading || !overview) {
     const errorMessage = loadError ? presentBaseerApiError(loadError, language, text.noAdministrationAccess) : "";

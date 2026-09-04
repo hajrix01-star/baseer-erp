@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from "node:crypto";
 import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { dirname, join, resolve, sep } from "node:path";
-import { ConflictException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { companyContextLocationByCode, type AssignAdministrationMembershipRequest, type CreateAdministrationCompanyRequest, type CreateAdministrationRoleRequest, type CreateAdministrationUserRequest, type ResetAdministrationUserPasswordRequest, type ReplaceAdministrationUserAccessRequest, type UpdateAdministrationCompanyMigrationReviewLockRequest, type UpdateAdministrationCompanyRequest, type UpdateAdministrationCompanyStatusRequest, type UpdateAdministrationRoleRequest, type UpdateAdministrationUserLoginRequest, type UpdateAdministrationUserDisplayNameRequest, type UploadAdministrationCompanyLogoRequest, type UpdateAdministrationUserStatusRequest, type WithdrawAdministrationMembershipRequest } from "@baseer-erp/contracts";
 import { CompanyStatus, FileMetadataStatus, Prisma, SessionStatus, UserStatus } from "../generated/prisma/client.js";
 import { DatabaseService } from "../database/database.service.js";
@@ -223,8 +223,17 @@ export class AdministrationService {
         contextLatitude: location?.latitude ?? null,
         contextLongitude: location?.longitude ?? null,
       };
+      let vatBefore: { id: string; vatRateBasisPoints: number; vatAccountingEnabled: boolean } | null = null;
+      if (request.vatRateBasisPoints !== undefined) {
+        vatBefore = await tx.companyFinanceProfile.findFirst({ where: { tenantId: context.tenantId, companyId }, select: { id: true, vatRateBasisPoints: true, vatAccountingEnabled: true } });
+        if (!vatBefore) throw new ConflictException("The company financial setup is incomplete.");
+      }
       await tx.company.update({ where: { id: companyId }, data: { nameAr: next.nameAr, nameEn: next.nameEn, businessTimezone: next.businessTimezone, contextLocationCode: next.contextLocationCode, contextLocationLabelAr: next.contextLocationLabelAr, contextLatitude: next.contextLatitude === null ? null : new Prisma.Decimal(next.contextLatitude), contextLongitude: next.contextLongitude === null ? null : new Prisma.Decimal(next.contextLongitude) } });
       await tx.companyBranding.upsert({ where: { tenantId_companyId: { tenantId: context.tenantId, companyId } }, create: { tenantId: context.tenantId, companyId, logoFileMetadataId: request.logoFileMetadataId }, update: { logoFileMetadataId: request.logoFileMetadataId } });
+      if (vatBefore && request.vatRateBasisPoints !== undefined && (vatBefore.vatRateBasisPoints !== request.vatRateBasisPoints || !vatBefore.vatAccountingEnabled)) {
+        await tx.companyFinanceProfile.update({ where: { id: vatBefore.id }, data: { vatAccountingEnabled: true, vatRateBasisPoints: request.vatRateBasisPoints } });
+        await this.audit(tx, context, "finance.configuration.vat_rate.updated", "CompanyFinanceProfile", vatBefore.id, { vatRateBasisPoints: vatBefore.vatRateBasisPoints, vatAccountingEnabled: vatBefore.vatAccountingEnabled }, { vatRateBasisPoints: request.vatRateBasisPoints, vatAccountingEnabled: true });
+      }
       await this.audit(tx, context, "administration.company.settings_updated", "Company", companyId, {
         nameAr: company.nameAr,
         nameEn: company.nameEn,
@@ -242,9 +251,11 @@ export class AdministrationService {
   async uploadCompanyLogo(context: TrustedTenantAdministratorContext, companyId: string, request: UploadAdministrationCompanyLogoRequest) {
     this.ownerOnly(context);
     const content = Buffer.from(request.contentBase64, "base64");
-    if (!content.length || content.length > 512 * 1024) throw new ForbiddenException("Company logo size is not permitted.");
+    if (!content.length || content.length > 512 * 1024) throw new BadRequestException("Company logo size is not permitted.");
     const image = this.companyLogoImageType(content);
-    if (!image) throw new ForbiddenException("Company logo must be a PNG, JPEG, or WebP image.");
+    if (!image) throw new BadRequestException("Company logo must be a PNG, JPEG, or WebP image.");
+    const companyExists = await this.database.inTenantTransaction(context.tenantId, async (tx) => tx.company.findFirst({ where: { id: companyId, tenantId: context.tenantId }, select: { id: true } }));
+    if (!companyExists) throw new NotFoundException("Company was not found.");
     const fileId = randomUUID();
     const storageReference = `company-branding/${context.tenantId}/${companyId}/${fileId}.${image.extension}`;
     const target = this.companyLogoStoragePath(storageReference);
@@ -259,8 +270,6 @@ export class AdministrationService {
     }
     try {
       const result = await this.database.inTenantTransaction(context.tenantId, async (tx) => {
-        const company = await tx.company.findFirst({ where: { id: companyId, tenantId: context.tenantId }, select: { id: true } });
-        if (!company) throw new NotFoundException("Company was not found.");
         const existing = await tx.companyBranding.findFirst({ where: { tenantId: context.tenantId, companyId }, select: { logoFileMetadataId: true } });
         const [prior, history] = await Promise.all([
           existing?.logoFileMetadataId ? tx.fileMetadata.findFirst({ where: { id: existing.logoFileMetadataId, tenantId: context.tenantId, companyId }, select: { id: true, storageReference: true } }) : null,

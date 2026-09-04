@@ -51,7 +51,7 @@ export const createAdministrationRoleRequestSchema = z.object({ code: roleCode, 
 export const createAdministrationUserRequestSchema = z.object({ login: loginIdentifierSchema, nameAr: text160, nameEn: text160, preferredLanguage: languageSchema.default("ar"), avatarKind: userAvatarKind.default("INITIALS"), password, companyIds: z.array(companyIdSchema).min(1).max(250).refine((values) => new Set(values).size === values.length), roleId: z.string().uuid() }).strict();
 export const assignAdministrationMembershipRequestSchema = z.object({ userId: userIdSchema, companyId: companyIdSchema, roleId: z.string().uuid() }).strict();
 export const replaceAdministrationUserAccessRequestSchema = z.object({ roleId: z.string().uuid(), companyIds: z.array(companyIdSchema).min(1).max(250).refine((values) => new Set(values).size === values.length), reason: z.string().trim().min(3).max(500) }).strict();
-export const updateAdministrationCompanyRequestSchema = z.object({ nameAr: text160, nameEn: text160, businessTimezone: z.string().trim().min(1).max(64), logoFileMetadataId: z.string().uuid().nullable(), ...companyContextLocationFields }).strict().superRefine((value, context) => {
+export const updateAdministrationCompanyRequestSchema = z.object({ nameAr: text160, nameEn: text160, businessTimezone: z.string().trim().min(1).max(64), logoFileMetadataId: z.string().uuid().nullable(), vatRateBasisPoints: z.number().int().min(0).max(10_000).optional(), ...companyContextLocationFields }).strict().superRefine((value, context) => {
   const hasCode = value.contextLocationCode !== null;
   const hasLabel = value.contextLocationLabelAr !== null;
   const hasLatitude = value.contextLatitude !== null;

@@ -1,5 +1,8 @@
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
+import { mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
@@ -13,9 +16,11 @@ const { Pool } = pg;
 const pool = new Pool({ connectionString: requiredEnvironment("DATABASE_URL") });
 const suffix = randomUUID().replaceAll("-", "").slice(0, 12);
 const fixture = { tenantId: randomUUID(), ownerId: randomUUID(), userId: randomUUID(), companyId: randomUUID(), systemRoleId: randomUUID(), foreignTenantId: randomUUID(), foreignUserId: randomUUID() };
+const logoStorageRoot = await mkdtemp(join(tmpdir(), "baseer-administration-logo-"));
 let app;
 
 try {
+  process.env.BASEER_COMPANY_LOGO_STORAGE_ROOT = logoStorageRoot;
   await seedFixture();
   process.env.BASEER_SYSTEM_TENANT_CODE = `admin-http-${suffix}`;
   const [{ AppModule }, { AuthService }, { DatabaseService }] = await Promise.all([
@@ -43,6 +48,25 @@ try {
 
   const overview = await server.inject({ method: "GET", url: "/v1/administration/overview", headers });
   assert.equal(overview.statusCode, 200, overview.body);
+
+  const logoPng = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00, 0x0d]);
+  const uploadedLogo = await server.inject({ method: "POST", url: `/v1/administration/companies/${fixture.companyId}/logo`, headers, payload: { fileName: "company.png", contentBase64: logoPng.toString("base64") } });
+  assert.equal(uploadedLogo.statusCode, 201, uploadedLogo.body);
+  const uploadedLogoBody = JSON.parse(uploadedLogo.body);
+  assert.equal(uploadedLogoBody.mimeType, "image/png");
+  const loadedLogo = await server.inject({ method: "GET", url: `/v1/administration/companies/${fixture.companyId}/logo`, headers });
+  assert.equal(loadedLogo.statusCode, 200, loadedLogo.body);
+  assert.deepEqual(Buffer.from(loadedLogo.rawPayload), logoPng);
+  const rejectedLogo = await server.inject({ method: "POST", url: `/v1/administration/companies/${fixture.companyId}/logo`, headers, payload: { fileName: "not-an-image.png", contentBase64: Buffer.from("not an image").toString("base64") } });
+  assert.equal(rejectedLogo.statusCode, 400, rejectedLogo.body);
+
+  await database.inTenantTransaction(fixture.tenantId, (tx) => tx.companyFinanceProfile.create({ data: { id: randomUUID(), tenantId: fixture.tenantId, companyId: fixture.companyId, vatAccountingEnabled: true, vatRateBasisPoints: 1500 } }));
+  const saveAll = await server.inject({ method: "PUT", url: `/v1/administration/companies/${fixture.companyId}/settings`, headers, payload: { nameAr: "شركة اختبار محدثة", nameEn: "Updated test company", businessTimezone: "Asia/Riyadh", logoFileMetadataId: uploadedLogoBody.id, vatRateBasisPoints: 1250, contextLocationCode: null, contextLocationLabelAr: null, contextLatitude: null, contextLongitude: null } });
+  assert.equal(saveAll.statusCode, 200, saveAll.body);
+  const savedCompany = await database.inTenantTransaction(fixture.tenantId, (tx) => tx.company.findFirstOrThrow({ where: { id: fixture.companyId }, select: { nameAr: true } }));
+  const savedProfile = await database.inTenantTransaction(fixture.tenantId, (tx) => tx.companyFinanceProfile.findFirstOrThrow({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId }, select: { vatRateBasisPoints: true } }));
+  assert.equal(savedCompany.nameAr, "شركة اختبار محدثة");
+  assert.equal(savedProfile.vatRateBasisPoints, 1250);
 
   const updateSystemRole = await server.inject({ method: "PUT", url: `/v1/administration/roles/${fixture.systemRoleId}`, headers, payload: { nameAr: "تعديل محظور", nameEn: "Blocked update", permissionCodes: ["administration.roles.read"] } });
   assert.equal(updateSystemRole.statusCode, 403, updateSystemRole.body);
@@ -95,6 +119,7 @@ try {
 } finally {
   if (app) await app.close();
   await pool.end();
+  await rm(logoStorageRoot, { recursive: true, force: true });
 }
 
 async function seedFixture() {

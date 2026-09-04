@@ -206,3 +206,52 @@ test("modern administrative dialog shell bounds the company editor", async ({ pa
   await expectViewportBoundedDialog(page, "إضافة شركة");
   await expect(page.locator("body")).toHaveAttribute("data-ui-theme", "modern-3");
 });
+
+test("company editor saves company and VAT atomically from one action", async ({ page }) => {
+  const requests: string[] = [];
+  let savedBody: Record<string, unknown> | null = null;
+  await mockAdministration(page, "ar", requests);
+  await page.route(`**/v1/administration/companies/${companyId}/settings`, async (route) => {
+    savedBody = route.request().postDataJSON() as Record<string, unknown>;
+    return fulfill(route, { updated: true });
+  });
+  await page.goto("/#module=administration&section=1");
+  await page.locator(".administration-company-card", { hasText: "شركة الاختبار" }).click();
+  const dialog = page.getByRole("dialog", { name: /تعديل: شركة الاختبار/ });
+  await dialog.getByLabel("نسبة ضريبة القيمة المضافة").fill("12.5");
+  await expect(dialog.getByRole("button", { name: "حفظ النسبة" })).toHaveCount(0);
+  await expect(dialog.getByLabel(/سبب التغيير/)).toHaveCount(0);
+  await expect(dialog.getByText(/تطبّق على الفواتير الجديدة/)).toHaveCount(0);
+  await dialog.getByRole("button", { name: "حفظ التغييرات" }).click();
+  await expect.poll(() => savedBody).not.toBeNull();
+  expect(savedBody).toMatchObject({ vatRateBasisPoints: 1250, nameAr: "شركة الاختبار" });
+  expect(requests.filter((request) => request === "POST /v1/finance/configuration/vat-rate")).toHaveLength(0);
+});
+
+test("company logo rejects an invalid browser file before requesting administration", async ({ page }) => {
+  const requests: string[] = [];
+  await mockAdministration(page, "ar", requests);
+  await page.goto("/#module=administration&section=1");
+  await page.locator(".administration-company-card", { hasText: "شركة الاختبار" }).click();
+  const dialog = page.getByRole("dialog", { name: /تعديل: شركة الاختبار/ });
+  await dialog.locator('input[type="file"]').setInputFiles({ name: "logo.gif", mimeType: "image/gif", buffer: Buffer.from("gif") });
+  await expect(page.getByText("اختر شعاراً بصيغة PNG أو JPG أو WebP.")).toBeVisible();
+  expect(requests.filter((request) => request === `POST /v1/administration/companies/${companyId}/logo`)).toHaveLength(0);
+});
+
+test("company archive is a direct audited action without a reason field", async ({ page }) => {
+  const requests: string[] = [];
+  let archiveBody: Record<string, unknown> | null = null;
+  await mockAdministration(page, "ar", requests);
+  await page.route(`**/v1/administration/companies/${companyId}/status`, async (route) => {
+    archiveBody = route.request().postDataJSON() as Record<string, unknown>;
+    return fulfill(route, { updated: true, status: "ARCHIVED" });
+  });
+  await page.goto("/#module=administration&section=1");
+  await page.locator(".administration-company-card", { hasText: "شركة الاختبار" }).click();
+  const dialog = page.getByRole("dialog", { name: /تعديل: شركة الاختبار/ });
+  await expect(dialog.getByLabel(/سبب التغيير/)).toHaveCount(0);
+  await dialog.getByRole("button", { name: "أرشفة الشركة" }).click();
+  await expect.poll(() => archiveBody).not.toBeNull();
+  expect(archiveBody).toEqual({ status: "ARCHIVED" });
+});
