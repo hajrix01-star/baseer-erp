@@ -1,7 +1,8 @@
 # BASEER-IMPACT-2026-09-04-PRODUCTION-COMPANY-MIGRATION
 
 - **Registry:** `BASEER-ARCH v1.0`; **classification:** `ARCHITECTURAL`.
-- **Revision:** `913597e5382ec6f0e4f0d0b8ffcb833001574388`.
+- **Revision:** `0fd3ea6089c9dbd6c28dd85009098d6fe3b5fb74` (production release
+  verified on 2026-09-04).
 - **Source:** the locally verified BASEER ERP dataset, frozen in an immutable
   custom PostgreSQL dump on 2026-09-04.
 - **Target:** the isolated BASEER ERP production tenant on the Hostinger VPS.
@@ -73,3 +74,18 @@ database with the source schema only. The independent verifier reported:
 
 The rehearsal proves the bridge logic against the source snapshot, not a
 production cutover. The production review lock remains mandatory.
+
+## Production staging receipt
+
+The scoped writer ran once against the isolated Hostinger production tenant
+after the green CI release. The run is `STAGED` under the approved immutable
+source fingerprint. All 50 allow-listed entity counts matched the bridge
+package, the daily-sales gross/net/VAT and journal debit/credit totals matched
+per source company, and every journal remained balanced. The three companies
+remain `migrationReviewLocked=true`; each has exactly one membership for the
+active production owner. HTTPS health was green after the write and the
+temporary sensitive bridge package was removed from the host.
+
+This is a staging completion record, **not** an unlock decision. The next
+authority is the independent `$alpha-delivery-team` review, followed by an
+explicit owner decision to unlock the companies for normal operational writes.

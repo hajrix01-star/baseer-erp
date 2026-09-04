@@ -63,5 +63,23 @@ advisory lock and use the existing `LegacyMigrationRun`,
 - [x] Isolated local rehearsal and idempotent replay: all selected counts,
   daily-sales gross/net/VAT, and journal debit/credit matched; replay made no
   additional write.
-- [ ] Production waves and reconciliation.
+- [x] Production waves and reconciliation: 2026-09-04; all 50 allow-listed
+  table counts matched the approved package; daily-sales gross/net/VAT and
+  journal debit/credit matched for each of the three companies.
+- [x] Production HTTPS health verified after import.
+- [x] The temporary production copy of the sensitive bridge package was
+  deleted after the reconciliation.
 - [ ] Independent delivery approval and company unlock.
+
+## Production receipt
+
+- **Approved application commit:** `0fd3ea6089c9dbd6c28dd85009098d6fe3b5fb74`.
+- **Run state:** `STAGED`; the immutable bridge fingerprint is
+  `4c0dfcf9d133628956d237cbe075eada8233138e952db8c92e7cd9031b54f2f7`.
+- **Rollback point:** `baseer-erp-production-pre-company-migration-20260904T152601Z.dump`
+  with SHA-256
+  `c755b3d8c5830ffa9b04eb0434192cea625525f2e3a8a5c5af385ac2fa5d71b4`.
+- **Access and safety:** every target company remains review-locked and has
+  exactly one company membership, held by the active production owner.
+- **Release health:** `https://baseer-erp.hajrix.com/v1/health` returned
+  `status: ok` after the import.
