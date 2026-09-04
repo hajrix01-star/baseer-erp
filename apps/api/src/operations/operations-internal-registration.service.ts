@@ -93,6 +93,15 @@ export class OperationsInternalRegistrationService {
 
   /** Financial projection for management. The create/workstation projection stays price-free. */
   async report(context: TrustedCompanyActorContext, query: OperationsInternalRegistrationReportQuery) {
+    return this.readReport(context, query);
+  }
+
+  /** Output must reject an oversized period rather than loading or silently truncating it. */
+  async reportForOutput(context: TrustedCompanyActorContext, query: OperationsInternalRegistrationReportQuery) {
+    return this.readReport(context, query, 1_000);
+  }
+
+  private async readReport(context: TrustedCompanyActorContext, query: OperationsInternalRegistrationReportQuery, maximumRegistrations?: number) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const period = resolveInternalRegistrationReportPeriod(query);
       const registrations = await tx.operationsInternalRegistration.findMany({
@@ -102,8 +111,12 @@ export class OperationsInternalRegistrationService {
           businessDate: { gte: new Date(`${period.from}T00:00:00.000Z`), lte: new Date(`${period.to}T23:59:59.999Z`) },
         },
         orderBy: [{ businessDate: "desc" }, { createdAt: "desc" }],
+        ...(maximumRegistrations ? { take: maximumRegistrations + 1 } : {}),
         include: { section: { select: { nameAr: true, nameEn: true } }, lines: { orderBy: { lineNumber: "asc" } } },
       });
+      if (maximumRegistrations && registrations.length > maximumRegistrations) {
+        throw new BadRequestException("The internal-registration output exceeds the approved 1,000-registration limit. Narrow the period and try again.");
+      }
       const zero = new Prisma.Decimal(0);
       const lineCount = registrations.reduce((sum, registration) => sum + registration.lines.length, 0);
       const quantity = registrations.reduce((sum, registration) => registration.lines.reduce((lineSum, line) => lineSum.plus(line.quantity), sum), zero);

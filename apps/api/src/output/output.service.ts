@@ -379,13 +379,15 @@ export class OutputService {
     if (!from || !to || from > to || Object.keys(request.filters).some((key) => key !== 'from' && key !== 'to')) {
       throw new BadRequestException('Internal registration output requires only a valid from and to period.');
     }
+    const rangeDays = outputDateRangeDays(from, to);
+    if (rangeDays === null || rangeDays > 365) throw new BadRequestException('Internal registration output cannot exceed 366 days.');
     const company = await transaction.company.findFirst({
       where: { id: context.companyId, tenantId: context.tenantId },
       select: { id: true, nameAr: true, nameEn: true, branding: { select: { logoFileMetadataId: true } } },
     });
     if (!company) throw new ForbiddenException('Company output scope is not permitted.');
     const [report, dateResolution] = await Promise.all([
-      this.internalRegistrations.report(context, { from, to }),
+      this.internalRegistrations.reportForOutput(context, { from, to }),
       this.businessDate.resolveInTransaction(transaction, context),
     ]);
     const ar = request.locale === 'ar';
@@ -436,12 +438,11 @@ export class OutputService {
       select: { id: true, nameAr: true, nameEn: true, branding: { select: { logoFileMetadataId: true } } },
     });
     if (!company) throw new ForbiddenException('Company output scope is not permitted.');
-    const [workspace, dateResolution] = await Promise.all([
-      this.marketing.workspace(context),
+    const [campaigns, dateResolution] = await Promise.all([
+      this.marketing.campaignRegisterForOutput(context, status as 'DRAFT' | 'PLANNED' | 'ACTIVE' | 'COMPLETED' | 'CANCELLED' | 'ARCHIVED' | null),
       this.businessDate.resolveInTransaction(transaction, context),
     ]);
     const ar = request.locale === 'ar';
-    const campaigns = status ? workspace.campaigns.filter((campaign) => campaign.status === status) : workspace.campaigns;
     return {
       snapshotId: randomUUID(), reportCode: 'marketing.campaign-register', templateVersion: '1',
       title: ar ? 'سجل الحملات التسويقية' : 'Marketing campaign register', direction: ar ? 'rtl' : 'ltr', locale: request.locale,
@@ -753,5 +754,13 @@ function date(value: Date): string {
 }
 
 function outputBusinessDate(value: string | number | boolean | null | undefined): string | null {
-  return typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : null;
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
+  const timestamp = Date.parse(`${value}T00:00:00.000Z`);
+  return Number.isFinite(timestamp) && new Date(timestamp).toISOString().slice(0, 10) === value ? value : null;
+}
+
+function outputDateRangeDays(from: string, to: string): number | null {
+  const start = Date.parse(`${from}T00:00:00.000Z`);
+  const end = Date.parse(`${to}T00:00:00.000Z`);
+  return Number.isFinite(start) && Number.isFinite(end) ? (end - start) / 86_400_000 : null;
 }

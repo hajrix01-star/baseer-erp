@@ -1,6 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
 
-import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import type { ArchiveMarketingCampaignRequest, CreateMarketingCampaignAnalysisFeedbackRequest, CreateMarketingCampaignRequest, LinkMarketingCampaignContextRequest, LinkMarketingCampaignFinancialDocumentRequest, RequestMarketingProviderConnectionSetup, StopMarketingCampaignRequest, UpdateMarketingCampaignRequest, UpdateMarketingReputationReplyPolicyRequest, UpsertMarketingSalesTargetRequest } from "@baseer-erp/contracts";
 
 import type { TrustedCompanyActorContext } from "../core-controls/trusted-context.js";
@@ -58,6 +58,34 @@ export class MarketingService {
         ],
         replyPolicy: publicReplyPolicy(replyPolicy),
       };
+    });
+  }
+
+  /**
+   * Output uses a hard detectable limit instead of the workspace's visual cap:
+   * an A4 register must fail closed when its full source cannot fit the
+   * approved bounded snapshot.
+   */
+  async campaignRegisterForOutput(context: TrustedCompanyActorContext, status: "DRAFT" | "PLANNED" | "ACTIVE" | "COMPLETED" | "CANCELLED" | "ARCHIVED" | null) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const campaigns = await tx.marketingCampaign.findMany({
+        where: { tenantId: context.tenantId, companyId: context.companyId, ...(status ? { status } : {}) },
+        orderBy: [{ status: "asc" }, { startsOn: "desc" }, { createdAt: "desc" }],
+        take: 1_001,
+      });
+      if (campaigns.length > 1_000) {
+        throw new BadRequestException("The campaign-register output exceeds the approved 1,000-campaign limit. Select a lifecycle status and try again.");
+      }
+      return campaigns.map((campaign) => ({
+        id: campaign.id,
+        titleAr: campaign.titleAr,
+        titleEn: campaign.titleEn,
+        platform: campaign.platform,
+        startsOn: day(campaign.startsOn),
+        endsOn: day(campaign.endsOn),
+        status: campaign.status,
+        plannedCost: campaign.plannedCost?.toFixed(4) ?? null,
+      }));
     });
   }
 

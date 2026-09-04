@@ -12,7 +12,7 @@ Acceptance: each matching reading exposes one central A4 action; the snapshot ha
 
 ## G1 — Capacity and continuity
 
-Internal-registration output accepts an explicit `from/to` period only and reuses the report service's bounded tenant/company query.  Campaign-register output accepts only an optional status from the existing finite lifecycle enum and reuses the registered workspace's hard cap of 1,000 campaigns.  Neither creates a job, schema change, cache, migration, document, posting, inventory movement, financial transaction, provider request or client aggregation.  Output rendering remains subject to the platform's inline artifact ceiling and is reversible by one code change.
+Internal-registration output accepts an explicit `from/to` period of no more than 366 calendar days, and its server read rejects more than 1,000 registrations instead of truncating the report.  Campaign-register output accepts only an optional status from the existing finite lifecycle enum and its server read rejects more than 1,000 campaigns instead of silently rendering a prefix.  Neither creates a job, schema change, cache, migration, document, posting, inventory movement, financial transaction, provider request or client aggregation.  Output rendering remains subject to the platform's inline artifact ceiling and is reversible by one code change.
 
 ## G2 — Data, contracts and accounting boundary
 
@@ -28,7 +28,7 @@ Use `BaseerOutputActions`, `BaseerShareMenu`, `BaseerPeriodFilter`, existing hea
 
 ## G5 — implementation and focused verification
 
-`OutputService` now regenerates `operations.internal-registration-report` from `OperationsInternalRegistrationService.report` using only an explicit `from/to` period and `operations.internal_registration.read`.  `marketing.campaign-register` regenerates the campaign register from `MarketingService.workspace` using only an optional lifecycle status and `marketing.insights.read`.  Both use the central company logo, A4 renderer, output audit events and idempotency handling.  The Operations report tab and campaign register use `BaseerOutputActions`; the campaign action forwards the visible lifecycle filter.
+`OutputService` now regenerates `operations.internal-registration-report` from the bounded `OperationsInternalRegistrationService.reportForOutput` read using only an explicit `from/to` period and `operations.internal_registration.read`.  The period is capped at 366 days and more than 1,000 registrations is rejected before rendering.  `marketing.campaign-register` regenerates the bounded `MarketingService.campaignRegisterForOutput` read using only an optional lifecycle status and `marketing.insights.read`; more than 1,000 campaigns is rejected before rendering.  Both use the central company logo, A4 renderer, output audit events and idempotency handling.  The Operations report tab and campaign register use `BaseerOutputActions`; the campaign action forwards the visible lifecycle filter.
 
 Evidence on 2026-09-05:
 
