@@ -24,8 +24,10 @@ test("every visible registry page is inside the modern shell presentation contra
   const moduleIds = new Set(modules.map((module) => module.id));
 
   expect(pageRegistry).toHaveLength(53);
-  expect(visiblePages).toHaveLength(53);
-  expect(new Set(visiblePages.map((page) => page.id)).size).toBe(53);
+  // Four historical Operations deep links remain registered for compatibility,
+  // but their content is now reached through the one visible Requests node.
+  expect(visiblePages).toHaveLength(49);
+  expect(new Set(visiblePages.map((page) => page.id)).size).toBe(49);
   expect(visiblePages.every((page) => moduleIds.has(page.moduleId))).toBe(true);
 
   // App owns the presentation data attribute before it selects either the

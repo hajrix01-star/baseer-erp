@@ -179,6 +179,15 @@ async function mockHr(page: Page, requested: string[], options: { language?: "ar
       const more = url.searchParams.has("cursor");
       return fulfill(route, { companyId, payrollRuns: more ? [{ ...payrollRun, id: "66666666-6666-4666-8666-666666666666", runNumber: "PAY-2026-07" }] : [payrollRun, approvedPayrollRun], hasMore: !more, nextCursor: more ? null : payrollRun.id, summary: { count: 12, grossAmount: "36000.0000", advanceSettlementAmount: "500.0000", administrativeDeductionAmount: "250.0000", netPayableAmount: "35250.0000" } });
     }
+    if (url.pathname === "/v1/hr/payroll-runs/missing-month-preview") return fulfill(route, {
+      state: "READY", payrollMonth: "2026-07-01", payrollBusinessDate: "2026-07-31",
+      counts: { eligibleEmployees: 1, employeesMissingCompensation: 0, excludedEmployees: 0 },
+      totals: { grossEntitlementAmount: "3000.0000", eligibleAdvanceAmount: "500.0000", eligibleAdministrativeDeductionAmount: "200.0000" },
+      messageAr: null,
+    });
+    if (url.pathname === "/v1/hr/payroll-history/nurix") return fulfill(route, {
+      payrollRuns: [], summary: { count: 0, grossAmount: "0.0000", deductionsAmount: "0.0000", advancesAmount: "0.0000", netAmount: "0.0000" },
+    });
     if (url.pathname === `/v1/hr/payroll-runs/${payrollRun.id}`) {
       if (options.slowPayrollDetail) await new Promise((resolve) => setTimeout(resolve, 350));
       return fulfill(route, { payrollRun: { ...payrollRun, notes: "ملاحظة المسودة" }, lines: [{ id: "line-1", employeeId: employee.id, employeeNumber: employee.employeeNumber, employeeNameAr: employee.nameAr, employeeNameEn: employee.nameEn, grossSalary: "3000.0000", compensationMethod: "FIXED_MONTHLY", eligibilityCode: "FULL_MONTH_V1", basicSalary: "3000.0000", foodAllowance: "0.0000", housingAllowance: "0.0000", transportAllowance: "0.0000", otherAllowance: "0.0000", overtimeAmount: "0.0000", overtimeHours: "0.0000", scheduledHoursPerDay: null, scheduledWorkDays: null, compensationPolicySnapshot: null, payrollCalculationSnapshot: null, advanceSettlementAmount: "100.0000", administrativeDeductionAmount: "0.0000", netPayableAmount: "2900.0000", paidAmount: "0.0000", advances: [{ id: "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee", sourceId: advance.id, amount: "100.0000", referenceNumber: advance.advanceNumber }], administrativeDeductions: [] }], payments: [], hasMoreLines: false, nextLineCursor: null, hasMorePayments: false, nextPaymentCursor: null });
@@ -249,7 +258,7 @@ async function fillOnboarding(page: Page) {
   return dialog;
 }
 
-test("HR overview cards keep their semantic roles in the modern administrative shell", async ({ page, isMobile }) => {
+test("HR overview keeps only its actionable summary cards in the modern administrative shell", async ({ page, isMobile }) => {
   const requested: string[] = [];
   await page.addInitScript(() => {
     localStorage.setItem("baseer-erp.shell.presentation.v1", "modern-3");
@@ -259,7 +268,7 @@ test("HR overview cards keep their semantic roles in the modern administrative s
 
   await expect(page.locator("body")).toHaveAttribute("data-ui-theme", "modern-3");
   await expect(page.locator(".hr-overview__activity-card.baseer-card--record")).toHaveCount(3);
-  await expect(page.locator(".hr-workforce-chart")).toBeVisible();
+  await expect(page.locator(".hr-workforce-chart")).toHaveCount(0);
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);
   expect(isMobile || (await page.locator(".module-sidebar").isVisible())).toBeTruthy();
@@ -293,11 +302,7 @@ test("HR quick actions are permission-gated and open the requested operation", a
   await mockHr(page, requested);
   await page.goto("/#module=hr&section=0");
   await expect(page.getByRole("heading", { name: "اليوم في الموارد البشرية" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "صورة القوى العاملة اليوم" })).toBeVisible();
-  const workforceSignals = page.locator(".hr-workforce-chart__insight");
-  await expect(workforceSignals).toHaveCount(3);
-  await expect(workforceSignals.first()).toContainText("موظفون نشطون");
-  await expect(workforceSignals.first()).toContainText("إشارة مستقلة");
+  await expect(page.locator(".hr-workforce-chart")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "موظف جديد" })).toBeVisible();
   await expect(page.getByRole("button", { name: "إنشاء مسير" })).toBeVisible();
   await expect(page.getByRole("button", { name: "تسجيل إجازة" })).toBeVisible();
@@ -327,7 +332,7 @@ test("payroll uses server search and cursor paging without page-level overflow",
   const requested: string[] = [];
   await mockHr(page, requested);
   await page.goto("/#module=hr&section=3");
-  await expect(page.getByRole("heading", { name: "مسير الرواتب" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "الرواتب", exact: true })).toBeVisible();
   await page.getByRole("textbox", { name: "البحث في المسيرات" }).fill("PAY-2026");
   await expect.poll(() => requested.some((request) => request.includes("/v1/hr/payroll-runs?") && request.includes("search=PAY-2026"))).toBe(true);
   await page.getByRole("button", { name: "تحميل المزيد" }).click();
@@ -511,9 +516,9 @@ test("all seven HR top-level sections render without page overflow", async ({ pa
     { section: 0, text: "اليوم في الموارد البشرية" },
     { section: 1, text: "الموظفون" },
     { section: 2, text: "الإجازات والعودة" },
-    { section: 3, text: "مسير الرواتب" },
+    { section: 3, text: "الرواتب" },
     { section: 4, text: "السلف والخصومات" },
-    { section: 5, text: "خدمات الموظفين" },
+    { section: 5, text: "الإقامات والخدمات" },
     { section: 6, text: "حاسبة الراتب" },
   ];
   for (const surface of surfaces) {

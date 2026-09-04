@@ -158,7 +158,7 @@ test("opening Operations starts at its first permitted section, not the last rec
   await page.goto("/");
 
   await page.getByRole("button", { name: "العمليات", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "المخزون والمستودعات" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "الطلبات" })).toBeVisible();
 });
 
 test("execution workspace reads its bounded summary before management is opened", async ({ page }) => {
