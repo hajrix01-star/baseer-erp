@@ -115,6 +115,13 @@ async function mockDecision(page: Page, language: "ar" | "en", permissions: stri
 
 const allPermissions = ["platform.ai.use", "decision.metrics.read", "decision.context.read", "decision.alerts.read", "decision.alerts.manage", "decision.feedback.write", "decision.policy.manage", "decision.context.company.manage", "decision.context.global.manage"];
 
+function riyadhBusinessDate() {
+  const parts = new Intl.DateTimeFormat("en-US", { timeZone: "Asia/Riyadh", year: "numeric", month: "2-digit", day: "2-digit" })
+    .formatToParts(new Date())
+    .reduce<Record<string, string>>((result, part) => ({ ...result, [part.type]: part.value }), {});
+  return `${parts.year}-${parts.month}-${parts.day}`;
+}
+
 async function open(page: Page, section: number) {
   await page.goto(`/#module=decision&section=${section}`);
   await expect(page.locator(".decision-workspace")).toBeVisible();
@@ -134,7 +141,8 @@ test("Decision overview is accessible in Arabic and English, refreshes by period
   await periodDialog.getByRole("button", { name: "تطبيق" }).click();
   // A year is intentionally bounded by the current Riyadh business day; it
   // must never request future financial data just because December exists.
-  await expect.poll(() => requests.some((request) => request.pathname.endsWith("/metrics/sales-daily") && request.search.includes("from=2026-01-01") && request.search.includes("to=2026-09-04"))).toBeTruthy();
+  const currentRiyadhDate = riyadhBusinessDate();
+  await expect.poll(() => requests.some((request) => request.pathname.endsWith("/metrics/sales-daily") && request.search.includes("from=2026-01-01") && request.search.includes(`to=${currentRiyadhDate}`))).toBeTruthy();
   const initialMetrics = requests.filter((request) => request.pathname.includes("/metrics/")).length;
   await page.getByRole("button", { name: "تحديث" }).click();
   await expect.poll(() => requests.filter((request) => request.pathname.includes("/metrics/")).length).toBeGreaterThan(initialMetrics);
