@@ -71,6 +71,11 @@ ENV NODE_ENV=production
 WORKDIR /app
 
 COPY --from=runtime-dependencies --chown=node:node /app/node_modules /app/node_modules
+# npm can retain a dependency beneath the API workspace when its version
+# cannot be hoisted safely. Copy that production-only workspace directory as
+# well; otherwise the runtime image can build yet fail when Node resolves a
+# direct API dependency such as @nestjs/platform-fastify.
+COPY --from=runtime-dependencies --chown=node:node /app/apps/api/node_modules /app/apps/api/node_modules
 COPY --from=build --chown=node:node /app/apps/api/package.json /app/apps/api/package.json
 COPY --from=build --chown=node:node /app/apps/api/dist /app/apps/api/dist
 COPY --from=build --chown=node:node /app/packages/contracts/package.json /app/packages/contracts/package.json

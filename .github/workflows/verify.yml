@@ -90,7 +90,7 @@ jobs:
         run: |
           docker build --target runtime --tag baseer-erp-api-runtime-check .
           docker build --target migrate --tag baseer-erp-migrate-check .
-          docker run --rm --entrypoint node baseer-erp-api-runtime-check -e 'for (const name of ["prisma", "@prisma/config", "deepmerge-ts"]) { try { require.resolve(name); process.exit(1); } catch (error) { if (error.code !== "MODULE_NOT_FOUND") throw error; } } require.resolve("@prisma/client"); require.resolve("@prisma/adapter-pg");'
+          docker run --rm --entrypoint node baseer-erp-api-runtime-check -e 'for (const name of ["prisma", "@prisma/config", "deepmerge-ts"]) { try { require.resolve(name); process.exit(1); } catch (error) { if (error.code !== "MODULE_NOT_FOUND") throw error; } } for (const name of ["@nestjs/platform-fastify", "@prisma/client", "@prisma/adapter-pg"]) require.resolve(name, { paths: ["/app/apps/api"] });'
           docker run --rm --entrypoint npx baseer-erp-migrate-check prisma --version
       - run: node scripts/run-auth-throttling-verification.mjs
       - run: npm run verify:administration-lifecycle
