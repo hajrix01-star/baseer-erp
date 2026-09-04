@@ -37,10 +37,12 @@ controls to be visible and spatially separated, and still verifies the body
 portal and outside-click close behavior; only the transient drawer-close race is
 removed.
 
-The deployable runtime audit retries only bounded, identifiable npm-registry
-transport failures (such as a 503 or connection reset). A returned vulnerability
-report or any non-transient audit failure still fails immediately; the guard is
-not weakened and the same command is used in Linux parity and GitHub.
+The deployable runtime audit sets npm's internal request timeout to 45 seconds
+and disables npm's hidden transport retry. The repository's explicit bounded
+retry remains the only npm retry policy. A returned vulnerability report or any
+non-transient audit failure still fails immediately; the guard is not weakened.
+This eliminates the prior five-minute hidden wait per retry while retaining the
+same npm advisory source and the same command in Linux parity and GitHub.
 
 The GitHub `quality` job has a bounded 30-minute window, aligned with the
 Linux acceptance job. The prior 20-minute limit cancelled the run while its

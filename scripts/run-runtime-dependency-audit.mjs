@@ -1,19 +1,31 @@
 import { spawn } from "node:child_process";
 
 const attempts = Number.parseInt(process.env.BASEER_NPM_AUDIT_ATTEMPTS ?? "3", 10);
+const fetchTimeoutMs = Number.parseInt(process.env.BASEER_NPM_AUDIT_FETCH_TIMEOUT_MS ?? "45000", 10);
 const retryDelayMs = 10_000;
+const auditArguments = [
+  "audit",
+  "--omit=dev",
+  "--omit=optional",
+  "--fetch-retries=0",
+  `--fetch-timeout=${fetchTimeoutMs}`,
+];
 const auditCommand = process.platform === "win32"
-  ? { executable: process.env.ComSpec ?? "cmd.exe", args: ["/d", "/s", "/c", "npm audit --omit=dev --omit=optional"] }
-  : { executable: "npm", args: ["audit", "--omit=dev", "--omit=optional"] };
+  ? { executable: process.env.ComSpec ?? "cmd.exe", args: ["/d", "/s", "/c", `npm ${auditArguments.join(" ")}`] }
+  : { executable: "npm", args: auditArguments };
 const transientRegistryFailure = /\b(?:429|5\d\d)\b|EAI_AGAIN|ECONNRESET|ETIMEDOUT|ENOTFOUND|ECONNREFUSED|socket hang up|audit endpoint returned an error/i;
 
 if (!Number.isInteger(attempts) || attempts < 1) {
   throw new Error("BASEER_NPM_AUDIT_ATTEMPTS must be a positive integer.");
 }
+if (!Number.isInteger(fetchTimeoutMs) || fetchTimeoutMs < 1) {
+  throw new Error("BASEER_NPM_AUDIT_FETCH_TIMEOUT_MS must be a positive integer.");
+}
 
 function runAudit() {
   return new Promise((resolve, reject) => {
     const child = spawn(auditCommand.executable, auditCommand.args, {
+      env: process.env,
       stdio: ["ignore", "pipe", "pipe"],
     });
     let output = "";
