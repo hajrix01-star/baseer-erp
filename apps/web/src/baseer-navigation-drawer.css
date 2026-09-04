@@ -2,6 +2,25 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-gutter: stable;
+  padding-block: max(1rem, env(safe-area-inset-top)) 1rem;
+}
+
+/* A drawer is navigation, not a second landing page. Keep the identity
+   recognisable but bring the first available section within the initial
+   mobile viewport. */
+.mobile-drawer__panel > header {
+  margin-block-end: .7rem;
+  padding-block-end: .7rem;
+}
+
+.mobile-drawer__identity {
+  display: grid;
+  gap: .3rem;
+  min-inline-size: 0;
+}
+
+.mobile-drawer__context h2 {
+  margin-block-start: .1rem;
 }
 
 .mobile-drawer__panel:focus-visible {

@@ -28,6 +28,7 @@ import { DatabaseService } from '../database/database.service.js';
 import { RequestContext } from '../observability/request-context.js';
 import { IdempotencyReceiptStatus, Prisma } from '../generated/prisma/client.js';
 import { AttendanceService } from '../attendance/attendance.service.js';
+import { OperationsExecutionService } from '../operations/operations-execution.service.js';
 
 const GENERATE_OPERATION = 'platform.output.generate';
 const MAX_INLINE_ARTIFACT_BYTES = 5 * 1024 * 1024;
@@ -41,6 +42,7 @@ export class OutputService {
     private readonly companyContext: CompanyContextService,
     private readonly idempotency: IdempotencyService,
     private readonly attendance: AttendanceService,
+    private readonly operations: OperationsExecutionService,
   ) {}
 
   async generate(input: {
@@ -52,11 +54,16 @@ export class OutputService {
     const capability = input.request.format === 'preview'
       ? 'platform.output.preview'
       : 'platform.output.export';
-    const hrCapability = input.reportCode.startsWith('hr.payroll') ? 'hr.payroll.read' : input.reportCode === 'hr.employee-letter' ? 'hr.employee_letters.read' : input.reportCode === 'hr.final-settlement' ? 'hr.final_settlements.read' : input.reportCode === 'hr.attendance-weekly-roster' ? 'attendance.manage' : null;
+    const domainCapabilities = input.reportCode.startsWith('hr.payroll') ? ['hr.payroll.read']
+      : input.reportCode === 'hr.employee-letter' ? ['hr.employee_letters.read']
+        : input.reportCode === 'hr.final-settlement' ? ['hr.final_settlements.read']
+          : input.reportCode === 'hr.attendance-weekly-roster' ? ['attendance.manage']
+            : input.reportCode === 'operations.purchase-custody-reports' ? ['operations.purchase_request.read', 'operations.custody.read']
+              : [];
     const context = await this.companyContext.authorize({
       accessToken: input.accessToken,
       companyId: input.companyId,
-      requiredCapabilities: hrCapability ? [capability, hrCapability] : [capability],
+      requiredCapabilities: [capability, ...domainCapabilities],
     });
     const trusted: TrustedCompanyActorContext = {
       tenantId: context.principal.tenantId,
@@ -185,6 +192,9 @@ export class OutputService {
     if (reportCode === 'hr.final-settlement') {
       return this.createFinalSettlementSnapshot(transaction, context, request);
     }
+    if (reportCode === 'operations.purchase-custody-reports') {
+      return this.createOperationsPurchaseCustodySnapshot(transaction, context, request);
+    }
     if (reportCode !== 'platform.company-context') {
       throw new NotFoundException('The requested output definition was not found.');
     }
@@ -223,6 +233,62 @@ export class OutputService {
         status: company.status,
       }],
       sourceLabel: arabic ? 'سجل شركات بصير' : 'Baseer company registry',
+    };
+  }
+
+  /**
+   * A4 output for the read-only operations reports. The snapshot repeats the
+   * bounded server reads rather than accepting rows or totals from React.
+   */
+  private async createOperationsPurchaseCustodySnapshot(
+    transaction: Prisma.TransactionClient,
+    context: TrustedCompanyActorContext,
+    request: OutputRequest,
+  ): Promise<ReportSnapshot> {
+    const from = outputBusinessDate(request.filters['from']);
+    const to = outputBusinessDate(request.filters['to']);
+    if (!from || !to || from > to || Object.keys(request.filters).some((key) => key !== 'from' && key !== 'to')) {
+      throw new BadRequestException('Purchase and custody output requires only a valid from and to period.');
+    }
+    const company = await transaction.company.findFirst({
+      where: { id: context.companyId, tenantId: context.tenantId },
+      select: { id: true, nameAr: true, nameEn: true, branding: { select: { logoFileMetadataId: true } } },
+    });
+    if (!company) throw new ForbiddenException('Company output scope is not permitted.');
+    const [materials, custody, dateResolution] = await Promise.all([
+      this.operations.materialsReceivedReport(context, { from, to, pageSize: 1_000 }),
+      this.operations.custodyMonthlyReport(context, { from, to, pageSize: 1_000 }),
+      this.businessDate.resolveInTransaction(transaction, context),
+    ]);
+    const ar = request.locale === 'ar';
+    return {
+      snapshotId: randomUUID(), reportCode: 'operations.purchase-custody-reports', templateVersion: '1',
+      title: ar ? 'تقرير المواد المستلمة والعهدة' : 'Received materials and custody report', direction: ar ? 'rtl' : 'ltr', locale: request.locale,
+      generatedAtRiyadh: dateResolution.generatedAt,
+      companies: [{ id: company.id, name: ar ? company.nameAr : company.nameEn || company.nameAr }],
+      companyLogoDataUri: await this.readPrintLogo(transaction, context, company.branding?.logoFileMetadataId ?? null),
+      periodLabel: `${from} — ${to}`, taxPresentation: 'gross',
+      columns: [
+        { key: 'section', label: ar ? 'القسم' : 'Section', kind: 'text', width: 22 },
+        { key: 'item', label: ar ? 'البند' : 'Item', kind: 'text', width: 32 },
+        { key: 'unitOrMonth', label: ar ? 'الوحدة / الشهر' : 'Unit / month', kind: 'text', width: 17 },
+        { key: 'quantityOrOpening', label: ar ? 'الكمية / الافتتاحي' : 'Quantity / opening', kind: 'amount', width: 18 },
+        { key: 'amountOrClosing', label: ar ? 'القيمة / الختامي' : 'Value / closing', kind: 'amount', width: 18 },
+      ],
+      rows: [
+        ...materials.materials.map((row) => ({
+          section: ar ? 'المواد المستلمة' : 'Received materials', item: ar ? row.materialNameAr : row.materialNameEn || row.materialNameAr,
+          unitOrMonth: ar ? row.unitNameAr : row.unitNameEn || row.unitNameAr,
+          quantityOrOpening: row.quantity, amountOrClosing: row.amount,
+        })),
+        ...custody.months.map((row) => ({
+          section: ar ? 'عهدة المندوب' : 'Representative custody', item: custody.representativeName ?? (ar ? 'غير محدد' : 'Not set'),
+          unitOrMonth: row.month, quantityOrOpening: row.openingBalance, amountOrClosing: row.closingBalance,
+        })),
+      ],
+      sourceLabel: ar
+        ? `مواد مشتراة مثبتة وعهدة تشغيلية مقيدة بالخادم${custody.representativeName ? ` · ${custody.representativeName}` : ''}`
+        : `Server-scoped posted purchase materials and operational custody${custody.representativeName ? ` · ${custody.representativeName}` : ''}`,
     };
   }
 
@@ -505,4 +571,8 @@ function contentHash(value: string): string {
 
 function date(value: Date): string {
   return value.toISOString().slice(0, 10);
+}
+
+function outputBusinessDate(value: string | number | boolean | null | undefined): string | null {
+  return typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : null;
 }

@@ -666,6 +666,18 @@ export const hrPayrollRunSchema = z.object({
   notes: z.string().max(2_000).nullable(), accrualJournalEntryId: z.string().uuid().nullable(),
 }).strict();
 export const hrPayrollRunDetailSchema = z.object({ payrollRun: hrPayrollRunSchema, lines: z.array(hrPayrollLineSchema).max(1_000), payments: z.array(hrPayrollPaymentSchema).max(500) }).strict();
+/** Read-only operational prompt for the immediately preceding completed month.
+ * No settlement policy is implied: advance and deduction figures are the
+ * eligible open balances that a payroll editor must review before creation. */
+export const hrPayrollMissingMonthPreviewReceiptSchema = z.object({
+  companyId: companyIdSchema,
+  state: z.enum(["READY", "NO_UNCREATED_MONTH"]),
+  payrollMonth: businessDateSchema.nullable(),
+  payrollBusinessDate: businessDateSchema.nullable(),
+  counts: z.object({ eligibleEmployees: z.number().int().nonnegative(), employeesMissingCompensation: z.number().int().nonnegative(), excludedEmployees: z.number().int().nonnegative() }).strict(),
+  totals: z.object({ grossEntitlementAmount: hrAmountSchema, eligibleAdvanceAmount: hrAmountSchema, eligibleAdministrativeDeductionAmount: hrAmountSchema }).strict(),
+  messageAr: z.string().max(500).nullable(),
+}).strict();
 
 /**
  * Noorix historical payroll is archival migration evidence.  It is never an
@@ -970,3 +982,4 @@ export type HrPayrollPayment = z.infer<typeof hrPayrollPaymentSchema>;
 export type HrFinalSettlementPayment = z.infer<typeof hrFinalSettlementPaymentSchema>;
 export type HrFinalSettlementDetailReceipt = z.infer<typeof hrFinalSettlementDetailReceiptSchema>;
 export type HrOverviewReceipt = z.infer<typeof hrOverviewReceiptSchema>;
+export type HrPayrollMissingMonthPreviewReceipt = z.infer<typeof hrPayrollMissingMonthPreviewReceiptSchema>;

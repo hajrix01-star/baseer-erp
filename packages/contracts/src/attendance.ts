@@ -48,6 +48,14 @@ export const attendanceOpenSessionsReceiptSchema = z.object({
 export const attendanceEmployeePinDisplayReceiptSchema = z.object({ employeeId: uuid, state: z.enum(["SET", "NOT_SET", "RESET_REQUIRED"]), pin: pin.nullable() }).strict();
 export const attendanceEmployeeRecordReceiptSchema = z.object({ employeeId: uuid, employeeNameAr: z.string(), operation: z.enum(["CHECK_IN", "CHECK_OUT"]), occurredAt: dateTime, sessionId: uuid, replayed: z.boolean() }).strict();
 export const attendanceEmployeePortalScopeReceiptSchema = z.object({ tenantId: uuid, companyId: companyIdSchema }).strict();
+/** Public, presentation-only identity for an already scoped employee portal.
+ * It deliberately excludes operational company settings and all employee data. */
+export const attendanceEmployeePortalPresentationQuerySchema = attendanceEmployeePortalScopeReceiptSchema;
+export const attendanceEmployeePortalPresentationReceiptSchema = z.object({
+  companyNameAr: z.string().trim().min(1).max(160),
+  companyNameEn: z.string().trim().min(1).max(160),
+  hasCompanyLogo: z.boolean(),
+}).strict();
 // The issued employee link carries the immutable tenant/company scope. The
 // employee never enters either identifier; they only enter their four-digit PIN.
 export const attendanceEmployeePortalSessionRequestSchema = z.object({ tenantId: uuid, companyId: companyIdSchema, pin }).strict();
@@ -235,6 +243,8 @@ export type CloseAttendanceSessionRequest = z.infer<typeof closeAttendanceSessio
 export type CloseAttendanceSessionReceipt = z.infer<typeof closeAttendanceSessionReceiptSchema>;
 export type AttendanceOpenSessionsQuery = z.infer<typeof attendanceOpenSessionsQuerySchema>;
 export type AttendanceEmployeePortalSessionRequest = z.infer<typeof attendanceEmployeePortalSessionRequestSchema>;
+export type AttendanceEmployeePortalPresentationQuery = z.infer<typeof attendanceEmployeePortalPresentationQuerySchema>;
+export type AttendanceEmployeePortalPresentationReceipt = z.infer<typeof attendanceEmployeePortalPresentationReceiptSchema>;
 export type AttendanceEmployeePinDisplayReceipt = z.infer<typeof attendanceEmployeePinDisplayReceiptSchema>;
 export type AttendanceDashboardReceipt = z.infer<typeof attendanceDashboardReceiptSchema>;
 export type AttendanceReportReceipt = z.infer<typeof attendanceReportReceiptSchema>;

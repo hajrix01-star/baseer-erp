@@ -12,7 +12,6 @@ import { administrationText } from "./administration-copy";
 // them only when their section is opened keeps the primary route under the
 // release journey budget, particularly for the company and user dialogs.
 const AdministrationCompaniesPanel = lazy(async () => ({ default: (await import("./administration-companies-panel")).AdministrationCompaniesPanel }));
-const AdministrationOverviewPanel = lazy(async () => ({ default: (await import("./administration-overview-panel")).AdministrationOverviewPanel }));
 const AdministrationRolesPanel = lazy(async () => ({ default: (await import("./administration-roles-panel")).AdministrationRolesPanel }));
 const AdministrationUsersPanel = lazy(async () => ({ default: (await import("./administration-users-panel")).AdministrationUsersPanel }));
 const AdministrationAiSettingsPanel = lazy(async () => ({ default: (await import("./administration-ai-settings-panel")).AdministrationAiSettingsPanel }));
@@ -35,7 +34,7 @@ function AdministrationContent({ language, section, session, overview, loading, 
     return <section className="administration-shell"><p className={errorMessage ? "daily-sales-message error" : "administration-loading"}>{errorMessage || text.loadingAdministration}</p></section>;
   }
   const shared = { session, owner: overview.owner, onDone: reload, onError: reportError };
-  const panel = section === 1 ? <AdministrationCompaniesPanel {...shared} companies={overview.companies} language={language} /> : section === 2 ? <AdministrationUsersPanel {...shared} overview={overview} language={language} /> : section === 3 ? <AdministrationRolesPanel {...shared} overview={overview} language={language} /> : section === 4 ? <AdministrationAiSettingsPanel language={language} session={session} owner={overview.owner} /> : <AdministrationOverviewPanel overview={overview} session={session} language={language} />;
+  const panel = section === 2 ? <AdministrationUsersPanel {...shared} overview={overview} language={language} /> : section === 3 ? <AdministrationRolesPanel {...shared} overview={overview} language={language} /> : section === 4 ? <AdministrationAiSettingsPanel language={language} session={session} owner={overview.owner} /> : <AdministrationCompaniesPanel {...shared} companies={overview.companies} language={language} />;
   return <section className="administration-shell">
     {section !== 4 ? <header className="administration-heading">
       <div><p className="eyebrow">Baseer ERP / Administration</p><h2>{text.companiesAndAccess}</h2></div>

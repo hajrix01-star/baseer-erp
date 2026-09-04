@@ -70,6 +70,7 @@ import {
   hrCompensationPoliciesReceiptSchema,
   hrCompensationPolicyReceiptSchema,
   hrPayrollRunsReceiptSchema,
+  hrPayrollMissingMonthPreviewReceiptSchema,
   hrPayrollRunsQuerySchema,
   hrPayrollRunDetailQuerySchema,
   hrPayrollRunDetailReceiptSchema,
@@ -454,6 +455,12 @@ export class HrController {
     if (!parsed.success) throw new BadRequestException('Invalid payroll-run query.');
     const context = await this.authorize(authorization, companyId, 'hr.payroll.read');
     return hrPayrollRunsReceiptSchema.parse({ companyId: context.companyId, ...(await this.payroll.list(context, { pageSize: parsed.data.pageSize, ...(parsed.data.status ? { status: parsed.data.status } : {}), ...(parsed.data.periodFrom ? { periodFrom: parsed.data.periodFrom } : {}), ...(parsed.data.periodTo ? { periodTo: parsed.data.periodTo } : {}), ...(parsed.data.search ? { search: parsed.data.search } : {}), ...(parsed.data.cursor ? { cursor: parsed.data.cursor } : {}) })) });
+  }
+
+  @Get('payroll-runs/missing-month-preview')
+  async missingMonthPayrollPreview(@Headers('authorization') authorization?: string, @Headers('x-baseer-company-id') companyId?: string) {
+    const context = await this.authorize(authorization, companyId, 'hr.payroll.read');
+    return hrPayrollMissingMonthPreviewReceiptSchema.parse({ companyId: context.companyId, ...(await this.payroll.missingMonthPreview(context)) });
   }
 
   /**

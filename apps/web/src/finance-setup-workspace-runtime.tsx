@@ -50,6 +50,7 @@ type SupplierRecord = {
   status: "ACTIVE" | "ARCHIVED";
   categoryId: string | null;
 };
+type SupplierTableRow = SupplierRecord & { readonly ordinal: number };
 export type SupplierForm = {
   nameAr: string;
   nameEn: string;
@@ -1442,7 +1443,18 @@ function SuppliersWorkspacePanel({
         ]
       : []),
   ];
-  const columns: readonly BaseerDataGridColumn<SupplierRecord>[] = [
+  const tableRows: readonly SupplierTableRow[] = visibleSuppliers.map(
+    (supplier, index) => ({ ...supplier, ordinal: index + 1 }),
+  );
+  const columns: readonly BaseerDataGridColumn<SupplierTableRow>[] = [
+    {
+      id: "ordinal",
+      header: language === "ar" ? "م" : "#",
+      cell: (supplier) => supplier.ordinal,
+      align: "center",
+      numeric: true,
+      width: "4.5rem",
+    },
     {
       id: "supplier",
       header: text.supplier,
@@ -1569,7 +1581,7 @@ function SuppliersWorkspacePanel({
               ariaLabel={text.suppliers}
               caption={text.suppliers}
               columns={columns}
-              rows={visibleSuppliers}
+              rows={tableRows}
               rowKey={(supplier) => supplier.id}
             />
           ) : (

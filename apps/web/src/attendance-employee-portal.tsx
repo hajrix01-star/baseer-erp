@@ -3,9 +3,10 @@ import QrScanner from "qr-scanner";
 
 import { BaseerApiError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
+import { BaseerBrand } from "./baseer-brand";
 import { BaseerDialog } from "./baseer-dialog";
 import { BaseerTextInput } from "./baseer-text-input";
-import { createAttendanceEmployeePortalSession, getAttendanceEmployeePortalProfile, recordAttendance, type AttendanceEmployeePortalProfile, type AttendanceEmployeePortalSession, type AttendanceRecordReceipt } from "./attendance-client";
+import { attendanceEmployeePortalCompanyLogoUrl, createAttendanceEmployeePortalSession, getAttendanceEmployeePortalPresentation, getAttendanceEmployeePortalProfile, recordAttendance, type AttendanceEmployeePortalPresentation, type AttendanceEmployeePortalProfile, type AttendanceEmployeePortalSession, type AttendanceRecordReceipt } from "./attendance-client";
 import { requestId } from "./daily-sales-client";
 import { formatDate, formatTime, normalizeBaseerNumericInput } from "./number-format";
 import "./attendance-pwa.css";
@@ -75,6 +76,8 @@ export function AttendanceEmployeePortal({ language: initialLanguage }: { langua
   const storageKey = scope ? `baseer.attendance.employee.portal.${scope.tenantId}.${scope.companyId}` : null;
   const video = useRef<HTMLVideoElement>(null);
   const [portal, setPortal] = useState<PortalAccess | null>(null);
+  const [presentation, setPresentation] = useState<AttendanceEmployeePortalPresentation | null>(null);
+  const [showCompanyLogo, setShowCompanyLogo] = useState(false);
   const [intent, setIntent] = useState<PortalIntent>(null);
   const [pin, setPin] = useState("");
   const [scannerOpen, setScannerOpen] = useState(false);
@@ -83,6 +86,15 @@ export function AttendanceEmployeePortal({ language: initialLanguage }: { langua
   const [receipt, setReceipt] = useState<AttendanceRecordReceipt | null>(null);
 
   useEffect(() => { try { localStorage.setItem("baseer.attendance.employee.language", language); } catch { /* Preference storage is optional. */ } }, [language]);
+
+  useEffect(() => {
+    if (!tenantId || !companyId) { setPresentation(null); setShowCompanyLogo(false); return; }
+    let active = true;
+    void getAttendanceEmployeePortalPresentation(tenantId, companyId)
+      .then((value) => { if (active) { setPresentation(value); setShowCompanyLogo(value.hasCompanyLogo); } })
+      .catch(() => { if (active) { setPresentation(null); setShowCompanyLogo(false); } });
+    return () => { active = false; };
+  }, [tenantId, companyId]);
 
   useEffect(() => {
     if (!storageKey) return;
@@ -152,7 +164,7 @@ export function AttendanceEmployeePortal({ language: initialLanguage }: { langua
 
   return <main className="attendance-pwa" dir={ar ? "rtl" : "ltr"}>
     <section className="attendance-pwa__card" aria-live="polite">
-      <header className="attendance-pwa__topbar"><p className="attendance-pwa__eyebrow">Baseer ERP</p><button className="attendance-pwa__language" type="button" onClick={() => setLanguage((current) => current === "ar" ? "en" : "ar")} aria-label={ar ? "Switch to English" : "التبديل إلى العربية"}>{ar ? "English" : "العربية"}</button></header>
+      <header className="attendance-pwa__topbar"><div className="attendance-pwa__identity">{showCompanyLogo && tenantId && companyId ? <img className="attendance-pwa__company-logo" src={attendanceEmployeePortalCompanyLogoUrl(tenantId, companyId)} alt={ar ? presentation?.companyNameAr ?? "" : presentation?.companyNameEn ?? presentation?.companyNameAr ?? ""} onError={() => setShowCompanyLogo(false)} /> : <BaseerBrand className="attendance-pwa__brand" />}{presentation ? <span>{ar ? presentation.companyNameAr : presentation.companyNameEn}</span> : null}</div><button className="attendance-pwa__language" type="button" onClick={() => setLanguage((current) => current === "ar" ? "en" : "ar")} aria-label={ar ? "Switch to English" : "التبديل إلى العربية"}>{ar ? "English" : "العربية"}</button></header>
       {portal ? <><header className="attendance-pwa__employee-heading"><div><span>{ar ? "حسابي" : "My account"}</span><h1>{ar ? portal.profile.employeeNameAr : portal.profile.employeeNameEn ?? portal.profile.employeeNameAr}</h1><p dir="ltr">{portal.profile.employeeNumber}</p></div><BaseerButton type="button" variant="quiet" onClick={signOut}>{ar ? "خروج" : "Sign out"}</BaseerButton></header>
         <section className={`attendance-pwa__commitment is-${commitmentTone}`} aria-label={ar ? "تقييم الالتزام الشهري" : "Monthly commitment score"}>
           <div className="attendance-pwa__commitment-ring" style={{ "--attendance-commitment": `${commitmentScore ?? 0}%` } as React.CSSProperties}><strong>{commitmentScore === null ? "—" : `${commitmentScore}%`}</strong></div>
@@ -160,7 +172,7 @@ export function AttendanceEmployeePortal({ language: initialLanguage }: { langua
         </section>
         {receipt ? <div className="attendance-pwa__success" role="status"><strong>{receipt.operation === "CHECK_IN" ? (ar ? "تم تسجيل الحضور" : "Check-in recorded") : (ar ? "تم تسجيل الانصراف" : "Check-out recorded")}</strong><span>{formatTime(receipt.occurredAt, language, "Asia/Riyadh")}</span><BaseerButton type="button" onClick={() => setReceipt(null)}>{ar ? "العودة للحساب" : "Back to account"}</BaseerButton></div> : <BaseerButton className="attendance-pwa__operation" type="button" disabled={busy} onClick={() => startIntent("RECORD")}>{busy ? (ar ? "جارٍ التحقق…" : "Verifying…") : operationLabel}</BaseerButton>}
         <section className="attendance-pwa__schedule" aria-label={ar ? "دوام الأسبوع" : "Week schedule"}><header><span>{ar ? "دوامي" : "My schedule"}</span><small>{ar ? "الأيام السبعة القادمة" : "Next seven days"}</small></header><ul>{portal.profile.schedule.map((day) => <li key={day.businessDate}><div><b>{dayLabel(day.businessDate, language)}</b><small>{sourceLabel(day.source, ar)}</small></div><strong>{day.periods.length ? day.periods.map((period) => `${period.startTime}–${period.endTime}`).join(" · ") : (ar ? "راحة" : "Rest")}</strong></li>)}</ul></section>
-      </> : <><h1>{ar ? "الحضور والانصراف" : "Attendance"}</h1><div className="attendance-pwa__entry-actions"><BaseerButton className="attendance-pwa__operation" type="button" onClick={() => startIntent("RECORD")}>{ar ? "تسجيل حضور أو انصراف" : "Check in or out"}</BaseerButton><BaseerButton type="button" variant="secondary" onClick={() => startIntent("ACCOUNT")}>{ar ? "دخول حسابي" : "Open my account"}</BaseerButton></div></>}
+      </> : <><div className="attendance-pwa__welcome"><span>{ar ? "بوابة الموظف" : "Employee portal"}</span><h1>{ar ? "الحضور والانصراف" : "Attendance"}</h1><p>{ar ? "سجّل حضورك وانصرافك أو ادخل إلى حسابك بأمان." : "Securely record attendance or open your account."}</p></div><div className="attendance-pwa__entry-actions"><BaseerButton className="attendance-pwa__operation" type="button" onClick={() => startIntent("RECORD")}>{ar ? "تسجيل حضور أو انصراف" : "Check in or out"}</BaseerButton><BaseerButton type="button" variant="secondary" onClick={() => startIntent("ACCOUNT")}>{ar ? "دخول حسابي" : "Open my account"}</BaseerButton></div></>}
       {notice ? <p className="attendance-pwa__notice" role="alert">{notice}</p> : null}
     </section>
     <BaseerDialog open={intent !== null} title={intent === "RECORD" ? (ar ? "أدخل كودك ثم امسح QR" : "Enter your code, then scan QR") : (ar ? "دخول حسابي" : "Open my account")} language={language} className="attendance-pwa__pin-dialog" busy={busy} onClose={closeIntent} footer={<BaseerButton variant="primary" type="submit" form="attendance-employee-code" disabled={busy}>{busy ? (ar ? "جارٍ التحقق…" : "Verifying…") : intent === "RECORD" ? (ar ? "متابعة إلى الكاميرا" : "Continue to camera") : (ar ? "دخول" : "Open account")}</BaseerButton>}><form id="attendance-employee-code" className="attendance-pwa__pin-form" onSubmit={(event) => { event.preventDefault(); void openPortal(); }}><label>{ar ? "الكود الشخصي" : "Personal code"}<BaseerTextInput dir="ltr" autoFocus autoComplete="one-time-code" inputMode="numeric" pattern="[0-9]*" type="password" maxLength={4} value={pin} onChange={(event) => setPin(normalizeBaseerNumericInput(event.target.value, { allowNegative: false }).replace(/\D/g, "").slice(0, 4))} disabled={busy} /></label></form></BaseerDialog>

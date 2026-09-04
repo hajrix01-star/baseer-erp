@@ -853,7 +853,7 @@
 @media (max-width: 360px) {
   .daily-sales-dialog__date,
   .daily-sales-dialog__entry-fields,
-  .daily-sales-dialog__vault-grid { grid-template-columns: 1fr; }
+  .daily-sales-dialog__vault-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 /* Sales register: records open their own detail view; row actions do not crowd the table. */
 .visually-hidden {

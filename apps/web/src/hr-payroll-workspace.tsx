@@ -14,7 +14,7 @@ import { BaseerDataGridField as BaseerDataGrid } from "./baseer-data-grid-field"
 import { activeSession, type ActiveSession } from "./daily-sales-client";
 import { reportTopmostDialogError } from "./use-dialog-focus-trap";
 import { consumeHrRouteStage } from "./hr-route-stage";
-import { getHrNurixHistoricalPayroll, listHrNurixHistoricalPayrolls, listHrPayrollRuns, type HrNurixHistoricalPayroll, type HrNurixHistoricalPayrollDetail, type HrNurixHistoricalPayrollStatus, type HrPayrollRun } from "./hr-client";
+import { getHrNurixHistoricalPayroll, getHrPayrollMissingMonthPreview, listHrNurixHistoricalPayrolls, listHrPayrollRuns, type HrNurixHistoricalPayroll, type HrNurixHistoricalPayrollDetail, type HrNurixHistoricalPayrollStatus, type HrPayrollMissingMonthPreview, type HrPayrollRun } from "./hr-client";
 import { formatNumber } from "./number-format";
 import "./hr-payroll-create-dialog.css";
 
@@ -97,12 +97,13 @@ export function HrPayrollWorkspace({ language, stage }: { language: Language; st
   // Users can still narrow it to a month from the period control.
   const [period, setPeriod] = useState<BaseerPeriodRange>(() => baseerPeriodRange("YEAR"));
   const [serverSearch, setServerSearch] = useState("");
-  const [summary, setSummary] = useState({ count: 0, cancelledCount: 0, grossAmount: "0", advanceSettlementAmount: "0", administrativeDeductionAmount: "0", netPayableAmount: "0" });
+  const [missingMonthPreview, setMissingMonthPreview] = useState<HrPayrollMissingMonthPreview | null>(null);
   const [historicalRuns, setHistoricalRuns] = useState<HrNurixHistoricalPayroll[]>([]);
   const [historicalSummary, setHistoricalSummary] = useState({ count: 0, grossAmount: "0", deductionsAmount: "0", advancesAmount: "0", netAmount: "0" });
   const [message, setMessage] = useState<WorkspaceMessage | null>(null);
   const showError = useCallback((text: string) => { if (!reportTopmostDialogError(text)) setMessage({ tone: "error", text }); }, []);
   const [loading, setLoading] = useState(true);
+  const [missingMonthLoading, setMissingMonthLoading] = useState(true);
   const [historicalLoading, setHistoricalLoading] = useState(false);
   const [busy, setBusy] = useState(false);
   const [selectedRun, setSelectedRun] = useState<HrPayrollRun | null>(null);
@@ -124,14 +125,19 @@ export function HrPayrollWorkspace({ language, stage }: { language: Language; st
       const payroll = await listHrPayrollRuns(current, { periodFrom: searchPeriod.from, periodTo: searchPeriod.to, search: serverSearch || undefined, cursor, pageSize: 50 });
       if (requestNumber !== loadRequestRef.current) return;
       setRuns((rows) => append ? [...rows, ...payroll.payrollRuns] : payroll.payrollRuns); setNextCursor(payroll.nextCursor);
-      // An older API process can temporarily omit the newly-added cancelled
-      // count while it is being restarted. Never render the technical string
-      // "undefined" in the financial workspace.
-      setSummary({ ...payroll.summary, cancelledCount: payroll.summary.cancelledCount ?? 0 });
     } catch (error) { showError(presentBaseerLoadError(error, language, { ar: "مسيرات الرواتب", en: "payroll runs" })); }
     finally { if (requestNumber === loadRequestRef.current) setLoading(false); }
   }, [ar, language, period.from, period.to, serverSearch]);
   useEffect(() => { if (tab === "operational") void load(); }, [load, tab]);
+  const loadMissingMonthPreview = useCallback(async () => {
+    const current = activeSession();
+    if (!current) { setMissingMonthLoading(false); return; }
+    setMissingMonthLoading(true);
+    try { setMissingMonthPreview(await getHrPayrollMissingMonthPreview(current)); }
+    catch (error) { showError(presentBaseerLoadError(error, language, { ar: "معاينة استحقاق الشهر", en: "monthly entitlement preview" })); }
+    finally { setMissingMonthLoading(false); }
+  }, [language, showError]);
+  useEffect(() => { if (tab === "operational") void loadMissingMonthPreview(); }, [loadMissingMonthPreview, tab]);
   const loadHistorical = useCallback(async () => {
     const current = activeSession(); setSession(current); if (!current) { setHistoricalLoading(false); return; }
     const requestNumber = ++historicalLoadRequestRef.current;
@@ -143,7 +149,8 @@ export function HrPayrollWorkspace({ language, stage }: { language: Language; st
     } catch (error) { showError(presentBaseerLoadError(error, language, { ar: "مسيرات نوركس التاريخية", en: "Noorix historical payroll" })); }
     finally { if (requestNumber === historicalLoadRequestRef.current) setHistoricalLoading(false); }
   }, [language, showError]);
-  useEffect(() => { if (tab === "nurix-history") void loadHistorical(); }, [loadHistorical, tab]);
+  useEffect(() => { void loadHistorical(); }, [loadHistorical]);
+  useEffect(() => { if (!historicalLoading && historicalSummary.count === 0 && tab === "nurix-history") setTab("operational"); }, [historicalLoading, historicalSummary.count, tab]);
   const runStatus = (status: HrPayrollRun["status"]) => ({ DRAFT: ar ? "مسودة" : "Draft", APPROVED: ar ? "معتمد" : "Approved", PARTIALLY_PAID: ar ? "مدفوع جزئياً" : "Partially paid", PAID: ar ? "مدفوع" : "Paid", REVERSED: ar ? "ملغى" : "Cancelled" })[status];
   const openDetail = (run: HrPayrollRun) => { setReviewDraft(false); setSelectedRun(run); };
 
@@ -170,11 +177,13 @@ export function HrPayrollWorkspace({ language, stage }: { language: Language; st
     { id: "status", header: ar ? "الحالة التاريخية" : "Historical status", cell: (row) => <NurixHistoryStatus language={language} status={row.historicalStatus} />, sort: (row) => row.historicalStatus, width: "17rem" },
   ];
   if (!session) return null;
+  const missingMonth = missingMonthPreview?.state === "READY" ? missingMonthPreview : null;
   return <section className="administration-panel">
     <div className="administration-section-heading"><div><h2>{ar ? "مسير الرواتب" : "Payroll runs"}</h2></div>{tab === "operational" ? <div className="page-actions"><BaseerButton type="button" variant="secondary" onClick={() => setPoliciesOpen(true)}>{ar ? "سياسات التعويض" : "Compensation policies"}</BaseerButton><BaseerButton type="button" onClick={() => setCreateOpen(true)}>{ar ? "إنشاء مسير" : "Create payroll"}</BaseerButton></div> : null}</div>
-    <BaseerWorkspaceTabs ariaLabel={ar ? "أقسام مسيرات الرواتب" : "Payroll sections"} idPrefix="hr-payroll-workspace" tabs={[{ id: "operational", label: ar ? "مسيرات بصير" : "Baseer payroll" }, { id: "nurix-history", label: ar ? "مسيرات نوركس التاريخية" : "Noorix historical payroll" }]} activeId={tab} onChange={(value) => setTab(value as PayrollWorkspaceTab)} />
+    <BaseerWorkspaceTabs ariaLabel={ar ? "أقسام مسيرات الرواتب" : "Payroll sections"} idPrefix="hr-payroll-workspace" tabs={[{ id: "operational", label: ar ? "مسيرات بصير" : "Baseer payroll" }, ...(historicalSummary.count > 0 ? [{ id: "nurix-history", label: ar ? "مسيرات نوركس التاريخية" : "Noorix historical payroll" }] : [])]} activeId={tab} onChange={(value) => setTab(value as PayrollWorkspaceTab)} />
     {tab === "operational" ? <BaseerBatchPanel id="hr-payroll-workspace-panel-operational" labelledBy="hr-payroll-workspace-operational">
-      <BaseerSummaryMetricGrid ariaLabel={ar ? "ملخص مسيرات الرواتب" : "Payroll summary"}><BaseerSummaryMetric label={ar ? "إجمالي الاستحقاق" : "Gross entitlement"} value={money(summary.grossAmount)} /><BaseerSummaryMetric label={ar ? "تسوية السلف" : "Advance settlements"} value={money(summary.advanceSettlementAmount)} /><BaseerSummaryMetric label={ar ? "الخصومات الإدارية" : "Administrative deductions"} value={money(summary.administrativeDeductionAmount)} /><BaseerSummaryMetric label={ar ? "صافي المستحق" : "Net payable"} value={money(summary.netPayableAmount)} /><BaseerSummaryMetric tone="muted" label={ar ? "مسيرات ملغاة" : "Cancelled runs"} value={String(summary.cancelledCount)} /></BaseerSummaryMetricGrid>
+      <BaseerSummaryMetricGrid ariaLabel={ar ? "استحقاق أحدث شهر مكتمل بلا مسير" : "Latest completed month without payroll"}><BaseerSummaryMetric label={ar ? `إجمالي الاستحقاق${missingMonth?.payrollMonth ? ` · ${missingMonth.payrollMonth}` : ""}` : "Gross entitlement"} value={missingMonth ? money(missingMonth.totals.grossEntitlementAmount) : "—"} /><BaseerSummaryMetric label={ar ? "سلف مؤهلة للمراجعة" : "Eligible advances to review"} value={missingMonth ? money(missingMonth.totals.eligibleAdvanceAmount) : "—"} /><BaseerSummaryMetric label={ar ? "خصومات مؤهلة للمراجعة" : "Eligible deductions to review"} value={missingMonth ? money(missingMonth.totals.eligibleAdministrativeDeductionAmount) : "—"} /><BaseerSummaryMetric label={ar ? "موظفون مؤهلون" : "Eligible employees"} value={missingMonth ? String(missingMonth.counts.eligibleEmployees) : "—"} /><BaseerSummaryMetric tone="muted" label={ar ? "اتفاقات تحتاج مراجعة" : "Compensation agreements to review"} value={missingMonth ? String(missingMonth.counts.employeesMissingCompensation) : "—"} /></BaseerSummaryMetricGrid>
+      {missingMonthLoading ? <BaseerCard>{ar ? "جارٍ تحديد استحقاق أحدث شهر مكتمل بلا مسير…" : "Finding the latest completed month without payroll…"}</BaseerCard> : missingMonthPreview?.messageAr ? <BaseerCard>{missingMonthPreview.messageAr}</BaseerCard> : null}
       <BaseerFilterBar language={language} search={search} searchLabel={ar ? "البحث في المسيرات" : "Search payroll"} searchPlaceholder={ar ? "ابحث برقم المسير أو الحالة" : "Search run number or status"} onSearchChange={setSearch} controls={<BaseerPeriodFilter language={language} value={period} onChange={setPeriod} allowNonContiguousMonths={false} />} />
       {loading ? <BaseerCard>{ar ? "جارٍ تحميل مسيرات الرواتب…" : "Loading payroll runs…"}</BaseerCard> : runs.length ? <BaseerDataGrid<HrPayrollRun> ariaLabel={ar ? "سجل مسيرات الرواتب" : "Payroll run register"} caption={ar ? "سجل مسيرات الرواتب" : "Payroll run register"} rows={runs} columns={columns} rowKey={(row) => row.id} /> : <BaseerCard>{ar ? "لا توجد مسيرات رواتب ضمن الفترة المختارة." : "No payroll runs match the selected period."}</BaseerCard>}
       {nextCursor ? <BaseerButton type="button" variant="secondary" onClick={() => void load(nextCursor, true)}>{ar ? "تحميل المزيد" : "Load more"}</BaseerButton> : null}

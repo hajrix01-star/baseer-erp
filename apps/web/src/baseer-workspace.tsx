@@ -12,12 +12,13 @@ export function BaseerWorkspace({ children, className }: { children: ReactNode; 
  * callers, but it is deliberately not rendered: long instructional copy does
  * not belong in the primary working surface.
  */
-export function BaseerSectionHeader({ eyebrow, title, actions }: { eyebrow?: ReactNode; title: ReactNode; description?: ReactNode; actions?: ReactNode }) {
+export function BaseerSectionHeader({ eyebrow, title, actions }: { eyebrow?: ReactNode; title?: ReactNode; description?: ReactNode; actions?: ReactNode }) {
+  if (!eyebrow && !title && !actions) return null;
   return <header className="baseer-section-header">
-    <div className="baseer-section-header__copy">
+    {eyebrow || title ? <div className="baseer-section-header__copy">
       {eyebrow ? <p className="baseer-section-header__eyebrow">{eyebrow}</p> : null}
-      <h2>{title}</h2>
-    </div>
+      {title ? <h2>{title}</h2> : null}
+    </div> : null}
     {actions ? <div className="baseer-section-header__actions">{actions}</div> : null}
   </header>;
 }

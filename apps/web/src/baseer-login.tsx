@@ -5,7 +5,7 @@ import { BaseerButton } from "./baseer-button";
 import { BaseerTextInput } from "./baseer-text-input";
 import { baseerLoginCopy } from "./baseer-login-copy";
 import { persistActiveSession, type AuthSessionReceipt } from "./daily-sales-client";
-import { activateGeneralOwner, listAuthenticatedCompanies, signInForDailySales } from "./daily-sales-auth-client";
+import { listAuthenticatedCompanies, signInForDailySales } from "./daily-sales-auth-client";
 
 type Language = "ar" | "en";
 type Props = {
@@ -30,9 +30,7 @@ function LoginIcon({ name }: { name: "user" | "lock" | "eye" | "eyeOff" | "arrow
 export function BaseerLogin({ language, onLanguage, themeControl, onAuthenticated }: Props) {
   const text = baseerLoginCopy[language];
   const [login, setLogin] = useState(""); const [password, setPassword] = useState(""); const [visible, setVisible] = useState(false);
-  const [activationCode, setActivationCode] = useState(""); const [confirmPassword, setConfirmPassword] = useState("");
-  const [activationMode, setActivationMode] = useState(false);
-  const [error, setError] = useState(""); const [notice, setNotice] = useState(""); const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(""); const [loading, setLoading] = useState(false);
   // Do not reload the whole PWA immediately after storing a new token pair.
   // A full reload in development re-runs bootstrap reads while the session is
   // being established; notifying the already-mounted shell keeps that handoff
@@ -42,7 +40,7 @@ export function BaseerLogin({ language, onLanguage, themeControl, onAuthenticate
     onAuthenticated();
   };
   const submit = async (event: React.FormEvent) => {
-    event.preventDefault(); setLoading(true); setError(""); setNotice("");
+    event.preventDefault(); setLoading(true); setError("");
     try {
       const session = await signInForDailySales({ login: login.trim(), password });
       let available: Company[];
@@ -63,34 +61,16 @@ export function BaseerLogin({ language, onLanguage, themeControl, onAuthenticate
     }
     finally { setLoading(false); }
   };
-  const activate = async (event: React.FormEvent) => {
-    event.preventDefault();
-    setError(""); setNotice("");
-    if (password.length < 6) { setError(text.passwordTooShort); return; }
-    if (password !== confirmPassword) { setError(text.passwordMismatch); return; }
-    setLoading(true);
-    try {
-      await activateGeneralOwner({ email: login.trim(), activationCode: activationCode.trim(), password });
-      setActivationMode(false); setPassword(""); setConfirmPassword(""); setActivationCode("");
-      setNotice(text.activationComplete);
-    } catch (failure) {
-      setError(presentBaseerApiError(failure, language, text.serviceUnavailable));
-    } finally { setLoading(false); }
-  };
   return <main className="launcher-page" style={{ minHeight: "100dvh" }}>
     <header className="launcher-topbar"><BaseerBrand /><span className="topbar-spacer" /><button className="text-button" type="button" onClick={onLanguage}>{text.switchLanguage}</button>{themeControl}</header>
     <section className="launcher-page__content baseer-login" style={{ maxWidth: "760px", paddingTop: "clamp(42px, 8vw, 96px)" }}>
       <div className="baseer-login__panel">
         <div className="baseer-login__heading"><span className="baseer-login__mark"><LoginIcon name="lock" /></span><p>Baseer ERP</p><h1>{text.welcome}</h1><span>{text.secureAccess}</span></div>
-        <form className="baseer-login__form" onSubmit={(event) => void (activationMode ? activate(event) : submit(event))}>
+        <form className="baseer-login__form" onSubmit={(event) => void submit(event)}>
           <label><span>{text.login}</span><span className="baseer-login__field"><LoginIcon name="user" /><BaseerTextInput autoComplete="username" autoFocus required value={login} onChange={(event) => setLogin(event.target.value)} /></span></label>
-          {activationMode ? <><p>{text.activationDescription}</p><label><span>{text.activationCode}</span><BaseerTextInput required autoComplete="one-time-code" value={activationCode} onChange={(event) => setActivationCode(event.target.value)} /></label></> : null}
-          <label><span>{activationMode ? text.newPassword : text.password}</span><span className="baseer-login__field baseer-login__password"><LoginIcon name="lock" /><input autoComplete={activationMode ? "new-password" : "current-password"} required type={visible ? "text" : "password"} value={password} onChange={(event) => setPassword(event.target.value)} /><button type="button" aria-label={visible ? text.hide : text.show} title={visible ? text.hide : text.show} onClick={() => setVisible((value) => !value)}><LoginIcon name={visible ? "eyeOff" : "eye"} /></button></span></label>
-          {activationMode ? <label><span>{text.confirmPassword}</span><span className="baseer-login__field baseer-login__password"><LoginIcon name="lock" /><input autoComplete="new-password" required type={visible ? "text" : "password"} value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} /></span></label> : null}
+          <label><span>{text.password}</span><span className="baseer-login__field baseer-login__password"><LoginIcon name="lock" /><input autoComplete="current-password" required type={visible ? "text" : "password"} value={password} onChange={(event) => setPassword(event.target.value)} /><button type="button" aria-label={visible ? text.hide : text.show} title={visible ? text.hide : text.show} onClick={() => setVisible((value) => !value)}><LoginIcon name={visible ? "eyeOff" : "eye"} /></button></span></label>
           {error && <p className="daily-sales-message error" role="alert">{error}</p>}
-          {notice && <p className="daily-sales-message success" role="status">{notice}</p>}
-          <BaseerButton className="baseer-login__submit" type="submit" variant="primary" disabled={loading}>{loading ? text.loading : <><span>{activationMode ? text.activate : text.submit}</span><LoginIcon name="arrow" /></>}</BaseerButton>
-          <BaseerButton type="button" variant="secondary" disabled={loading} onClick={() => { setActivationMode((current) => !current); setError(""); setNotice(""); setPassword(""); setConfirmPassword(""); setActivationCode(""); }}>{activationMode ? text.backToSignIn : text.activateOwner}</BaseerButton>
+          <BaseerButton className="baseer-login__submit" type="submit" variant="primary" disabled={loading}>{loading ? text.loading : <><span>{text.submit}</span><LoginIcon name="arrow" /></>}</BaseerButton>
         </form>
       </div>
     </section>

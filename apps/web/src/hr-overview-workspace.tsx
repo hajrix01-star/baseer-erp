@@ -1,4 +1,3 @@
-import { lazy, Suspense } from "react";
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
 import { BaseerCompanyReadQuery } from "./baseer-company-read-query";
@@ -19,7 +18,6 @@ const routeTo = (section: number, stage?: string) => {
   if (page) window.location.hash = pageRouteHash(page.id, stage);
 };
 const dateValue = (value: string) => new Date(`${value}T00:00:00`).getTime();
-const LazyHrWorkforceStatusChart = lazy(() => import("./baseer-chart").then((module) => ({ default: module.HrWorkforceStatusChart })));
 
 function serviceTypeLabel(value: HrService["serviceType"], language: Language) {
   const labels = { IQAMA_ISSUANCE: ["إصدار إقامة", "Iqama issuance"], IQAMA_RENEWAL: ["تجديد إقامة", "Iqama renewal"], SPONSORSHIP_TRANSFER: ["نقل كفالة", "Sponsorship transfer"], EXIT_REENTRY_VISA: ["تأشيرة خروج وعودة", "Exit/re-entry visa"], FLIGHT_TICKET: ["تذكرة طيران", "Flight ticket"], MEDICAL_INSURANCE: ["تأمين طبي", "Medical insurance"], HEALTH_CERTIFICATE: ["شهادة صحية", "Health certificate"], OTHER: ["خدمة أخرى", "Other service"] } as const;
@@ -64,8 +62,6 @@ function HrOverviewContent({ language, data, loading, error, refetch }: { langua
   const countLabel = (value: number | null | undefined) => value == null ? "—" : formatNumber(value);
   const task = (section: number, tone: BaseerMetricActionTone, icon: SectionGlyph, title: string, detail: string, count: number | null) => <BaseerMetricActionCard layout="compact" title={title} value={countLabel(count)} detail={count == null ? unavailable : detail} icon={icon} tone={tone} disabled={count == null} onClick={() => routeTo(section)} />;
   const businessDateMs = data ? dateValue(data.businessDate) : Date.now();
-  const workforceChartPoints = workforce ? [{ label: ar ? "موظفون نشطون" : "Active employees", value: workforce.activeEmployees }, { label: ar ? "في إجازة" : "On leave", value: workforce.employeesOnLeave }, { label: ar ? "خدمات تحتاج متابعة" : "Services needing follow-up", value: serviceAttentionCount ?? 0 }] : [];
-
   return <BaseerWorkspace className="hr-overview">
     <BaseerSectionHeader eyebrow={ar ? "مركز عمل الموارد البشرية" : "HR operations hub"} title={ar ? "اليوم في الموارد البشرية" : "Today in human resources"} actions={<BaseerButton type="button" variant="primary" onClick={() => routeTo(1)}>{ar ? "إدارة الموظفين" : "Manage employees"}</BaseerButton>} />
     {error ? <BaseerNotice tone="danger" title={companyAccessLost ? (ar ? "تحتاج إلى إعادة بدء الجلسة" : "Session needs to be restarted") : (ar ? "تعذر التحديث" : "Unable to refresh")}>{companyAccessLost ? (ar ? "الشركة المحفوظة في جلسة المتصفح لم تعد متاحة. أعد بدء الجلسة ثم اختر الشركة الصحيحة." : "The company saved in this browser session is no longer available. Restart the session and select the correct company.") : (ar ? "تعذر تحميل ملخص الموارد البشرية. حاول مرة أخرى." : "The HR overview could not be loaded. Please try again.")}<div className="hr-overview__notice-action">{companyAccessLost ? <BaseerButton type="button" onClick={() => { clearActiveSession(); window.location.reload(); }}>{ar ? "إعادة بدء الجلسة" : "Restart session"}</BaseerButton> : <BaseerButton type="button" onClick={refetch}>{ar ? "إعادة المحاولة" : "Try again"}</BaseerButton>}</div></BaseerNotice> : null}
@@ -75,8 +71,7 @@ function HrOverviewContent({ language, data, loading, error, refetch }: { langua
       <BaseerMetricActionCard title={ar ? "سلف وخصومات مفتوحة" : "Open advances and deductions"} value={countLabel(financialCount)} detail={financial ? (ar ? "فتح التسويات" : "Open settlements") : unavailable} icon="wallet" tone="warning" disabled={!financial} onClick={() => routeTo(4)} />
       <BaseerMetricActionCard title={ar ? "مسيرات تحتاج إجراء" : "Payrolls needing action"} value={countLabel(payrollActionCount)} detail={payroll ? (ar ? "فتح مسير الرواتب" : "Open payroll") : unavailable} icon="clipboard" tone={payrollActionCount ? "danger" : "brand"} disabled={!payroll} onClick={() => routeTo(3)} />
     </section>
-    <section className={`hr-overview__operations${workforceChartPoints.length ? "" : " hr-overview__operations--without-chart"}`} aria-label={ar ? "اللقطة التشغيلية والمتابعة" : "Operational snapshot and follow-up"}>
-      {workforceChartPoints.length ? <Suspense fallback={<BaseerCard>{ar ? "جارٍ تحميل الرسم…" : "Loading chart…"}</BaseerCard>}><LazyHrWorkforceStatusChart language={language} title={ar ? "صورة القوى العاملة اليوم" : "Today's workforce picture"} points={workforceChartPoints} asOf={data?.businessDate ?? ""} /></Suspense> : null}
+    <section className="hr-overview__operations hr-overview__operations--without-chart" aria-label={ar ? "يحتاج إجراء" : "Needs action"}>
       <section className="hr-overview__work" aria-label={ar ? "يحتاج إجراء" : "Needs action"}><header><div><p>{ar ? "يحتاج إجراء" : "Needs action"}</p><h3>{hasTaskVisibility ? (taskCount ? (ar ? `${formatNumber(taskCount)} عناصر بانتظار المتابعة` : `${formatNumber(taskCount)} items need follow-up`) : (ar ? "لا توجد مهام معلقة" : "No pending work")) : unavailable}</h3></div></header><div className="hr-overview__task-grid">
       {task(3, payroll?.draftCount ? "warning" : "brand", "clipboard", ar ? "مسيرات مسودة" : "Draft payrolls", payroll?.draftCount ? (ar ? "راجعها ثم اعتمدها أو احذفها." : "Review, approve, or discard them.") : (ar ? "لا توجد مسيرات مسودة." : "No draft payrolls."), payroll?.draftCount ?? null)}
       {task(3, payroll?.awaitingPaymentCount ? "warning" : "brand", "wallet", ar ? "رواتب بانتظار السداد" : "Payrolls awaiting payment", payroll?.awaitingPaymentCount ? (ar ? "مسيرات معتمدة تحتاج دفعاً أو استكمال دفع." : "Approved runs need payment or completion.") : (ar ? "لا توجد رواتب بانتظار السداد." : "No payrolls await payment."), payroll?.awaitingPaymentCount ?? null)}

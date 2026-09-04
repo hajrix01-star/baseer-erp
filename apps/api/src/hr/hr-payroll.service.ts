@@ -332,6 +332,73 @@ export class HrPayrollService {
     });
   }
 
+  /**
+   * Gives the payroll workspace one server-owned prompt for the prior complete
+   * business month. It is intentionally not a draft and never chooses which
+   * recoveries to apply; those decisions remain explicit in the payroll flow.
+   */
+  async missingMonthPreview(context: TrustedCompanyActorContext) {
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      const current = await this.dates.resolveInTransaction(tx, context, { kind: 'current' });
+      const currentDate = new Date(`${current.businessDate}T00:00:00.000Z`);
+      const payrollMonth = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth() - 1, 1));
+      const payrollBusinessDate = lastDayOfMonth(payrollMonth);
+      const base = { tenantId: context.tenantId, companyId: context.companyId };
+      const existing = await tx.hrPayrollRun.findFirst({ where: { ...base, payrollMonth, status: { not: HrPayrollRunStatus.REVERSED } }, select: { id: true } });
+      if (existing) return {
+        state: 'NO_UNCREATED_MONTH' as const,
+        payrollMonth: null,
+        payrollBusinessDate: null,
+        counts: { eligibleEmployees: 0, employeesMissingCompensation: 0, excludedEmployees: 0 },
+        totals: { grossEntitlementAmount: '0.0000', eligibleAdvanceAmount: '0.0000', eligibleAdministrativeDeductionAmount: '0.0000' },
+        messageAr: 'لا يوجد شهر مكتمل سابق بلا مسير قائم.',
+      };
+
+      // Terminated/archived employees remain eligible when their recorded
+      // effective date follows this historical month. A termination inside the
+      // month is intentionally excluded: its partial entitlement belongs to
+      // the separately controlled final-settlement workflow.
+      const candidates = await tx.hrEmployee.findMany({
+        where: {
+          ...base,
+          hireDate: { lte: payrollBusinessDate },
+          OR: [
+            { status: { in: [HrEmployeeStatus.ACTIVE, HrEmployeeStatus.ON_LEAVE] } },
+            { status: { in: [HrEmployeeStatus.TERMINATED, HrEmployeeStatus.ARCHIVED] }, statusEffectiveAt: { gt: payrollBusinessDate } },
+          ],
+        },
+        select: { id: true, employeeNumber: true, nameAr: true, nameEn: true, status: true, hireDate: true },
+      });
+      const periodByEmployee = new Map<string, PayrollCalculationPeriod>(candidates.map((employee) => {
+        const isNewHire = employee.hireDate > payrollMonth;
+        const calendarDaysInMonth = daysInMonth(payrollMonth);
+        const eligibleDays = isNewHire ? inclusiveDays(employee.hireDate, payrollBusinessDate) : calendarDaysInMonth;
+        const prorationRatio = new Prisma.Decimal(eligibleDays).div(calendarDaysInMonth).toDecimalPlaces(4, Prisma.Decimal.ROUND_HALF_UP);
+        return [employee.id, { calculationPeriodStart: isNewHire ? employee.hireDate : payrollMonth, calculationPeriodEnd: payrollBusinessDate, eligibleDays, calendarDaysInMonth, prorationRatio, eligibilityCode: isNewHire ? HrPayrollLineEligibilityCode.PRORATED_NEW_HIRE_V1 : HrPayrollLineEligibilityCode.FULL_MONTH_V1, formulaCode: isNewHire ? HrPayrollCalculationFormulaCode.PRORATED_NEW_HIRE_V1 : HrPayrollCalculationFormulaCode.FULL_MONTH_V1 }] as const;
+      }));
+      const profiles = candidates.length ? await this.findProfilesForPeriods(tx, context, periodByEmployee) : { profileByEmployee: new Map(), incompleteCoverageEmployeeIds: new Set<string>() };
+      const eligibleEmployeeIds = [...profiles.profileByEmployee.keys()];
+      const grossEntitlement = sum(eligibleEmployeeIds.map((employeeId) => {
+        const profile = profiles.profileByEmployee.get(employeeId)!;
+        const formula = profile.policyVersion?.formulaCode ?? HrCompensationFormulaCode.STANDARD_MONTHLY_V1;
+        return prorateCompensation(calculateCompensation(profile, formula), periodByEmployee.get(employeeId)!).gross;
+      }));
+      const [advances, deductions] = eligibleEmployeeIds.length ? await Promise.all([
+        tx.hrEmployeeAdvance.aggregate({ where: { ...base, employeeId: { in: eligibleEmployeeIds }, businessDate: { lte: payrollBusinessDate }, OR: [{ nextSettlementDate: null }, { nextSettlementDate: { lte: payrollBusinessDate } }], status: { in: [HrEmployeeAdvanceStatus.ISSUED, HrEmployeeAdvanceStatus.PARTIALLY_SETTLED] } }, _sum: { remainingAmount: true } }),
+        tx.hrEmployeeAdministrativeDeduction.aggregate({ where: { ...base, employeeId: { in: eligibleEmployeeIds }, businessDate: { lte: payrollBusinessDate }, OR: [{ plannedPayrollDate: null }, { plannedPayrollDate: { lte: payrollBusinessDate } }], status: { in: [HrEmployeeAdministrativeDeductionStatus.OPEN, HrEmployeeAdministrativeDeductionStatus.PARTIALLY_APPLIED, HrEmployeeAdministrativeDeductionStatus.DEFERRED] } }, _sum: { remainingAmount: true } }),
+      ]) : [{ _sum: { remainingAmount: null } }, { _sum: { remainingAmount: null } }];
+      const employeesMissingCompensation = candidates.length - eligibleEmployeeIds.length;
+      return {
+        state: 'READY' as const,
+        payrollMonth: ymd(payrollMonth),
+        payrollBusinessDate: ymd(payrollBusinessDate),
+        counts: { eligibleEmployees: eligibleEmployeeIds.length, employeesMissingCompensation, excludedEmployees: employeesMissingCompensation },
+        totals: { grossEntitlementAmount: fixed(grossEntitlement), eligibleAdvanceAmount: fixed(advances._sum.remainingAmount ?? new Prisma.Decimal(0)), eligibleAdministrativeDeductionAmount: fixed(deductions._sum.remainingAmount ?? new Prisma.Decimal(0)) },
+        messageAr: employeesMissingCompensation ? 'بعض الموظفين المستحقين لا يملكون اتفاق تعويض يغطي الشهر، لذا استُبعدوا من الإجمالي حتى تراجع الاتفاقات.' : null,
+      };
+    });
+  }
+
   async listForEmployee(context: TrustedCompanyActorContext, employeeId: string, query: EmployeePayrollHistoryQuery) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const employee = await tx.hrEmployee.findFirst({ where: { id: employeeId, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true } });

@@ -37,6 +37,6 @@ for (const controller of [OfficialReportRunsController, ReportDocumentController
 verifyPolicy(HrEmployeeDocumentController.prototype.create, ['fileWrite']);
 verifyPolicy(HrEmployeeDocumentController.prototype.replace, ['fileWrite']);
 for (const endpoint of [AuthController.prototype.signIn, AuthController.prototype.activateOwner, AuthController.prototype.refresh]) verifyPolicy(endpoint, ['authIp', 'authIdentity']);
-for (const endpoint of [AttendanceController.prototype.record, AttendanceController.prototype.employeePortalSession, AttendanceController.prototype.employeePortalProfile]) verifyPolicy(endpoint, ['attendancePin']);
+for (const endpoint of [AttendanceController.prototype.record, AttendanceController.prototype.employeePortalSession, AttendanceController.prototype.employeePortalPresentation, AttendanceController.prototype.employeePortalLogo, AttendanceController.prototype.employeePortalProfile]) verifyPolicy(endpoint, ['attendancePin']);
 
 console.log('throttle policy verification passed');

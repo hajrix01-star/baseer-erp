@@ -7,6 +7,7 @@ import { BaseerCard } from "./baseer-card";
 import { BaseerCompanyReadQuery } from "./baseer-company-read-query";
 import { BaseerDataGrid, type BaseerDataGridColumn, type BaseerServerDataGridProps } from "./baseer-data-grid";
 import { BaseerFilterBar } from "./baseer-filter-bar";
+import { BaseerOutputActions } from "./baseer-output-actions";
 import { BaseerPeriodFilter, defaultBaseerPeriodRange, type BaseerPeriodRange } from "./baseer-period-filter";
 import { DailySalesSignIn } from "./daily-sales-sign-in";
 import { activeSession, api, type ActiveSession } from "./daily-sales-client";
@@ -247,7 +248,7 @@ export function OperationsReportsWorkspaceRuntime({ language }: { language: Lang
     {({ data, loading, error, refetch }) => <section className="daily-sales-workspace" dir={ar ? "rtl" : "ltr"}>
       <header className="administration-section-heading">
         <div><p className="eyebrow">Operations</p><h3>{t.title}</h3></div>
-        <BaseerButton type="button" variant="secondary" disabled={loading} onClick={refetch}>{t.refresh}</BaseerButton>
+        <div className="page-actions"><BaseerOutputActions session={session} reportCode="operations.purchase-custody-reports" language={language} filters={{ from: period.from, to: period.to }} printLabel={ar ? "طباعة A4" : "Print A4"} /><BaseerButton type="button" variant="secondary" disabled={loading} onClick={refetch}>{t.refresh}</BaseerButton></div>
       </header>
       <BaseerWorkspaceTabs ariaLabel={t.title} idPrefix="operations-reports" activeId={tab} onChange={(value) => setTab(value as ReportsTab)} tabs={[{ id: "inventory-materials", label: t.inventoryMaterials }, { id: "internal-registration", label: t.internalRegistration }]} />
       <BaseerBatchPanel id={`operations-reports-panel-${tab}`} labelledBy={`operations-reports-${tab}`}>

@@ -1,7 +1,9 @@
 import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { createCipheriv, createDecipheriv, createHash, createHmac, randomBytes, randomUUID } from 'node:crypto';
-import type { ApproveAttendanceRosterRequest, ArchiveAttendanceScheduleTemplateRequest, AssignAttendanceEmployeeScheduleRequest, AssignAttendanceEmployeesScheduleRequest, AttendanceEmployeeComplianceQuery, AttendanceEmployeePortalSessionRequest, AttendanceEmployeeRecordRequest, AttendanceEmployeeScheduleListQuery, AttendanceOpenSessionsQuery, CloseAttendanceSessionRequest, ConfigureAttendanceEmployeeScheduleRequest, CreateAttendanceBranchRequest, CreateAttendanceScheduleExceptionRequest, CreateAttendanceScheduleTemplateRequest, CreateAttendanceScheduleVersionRequest, DecideAttendanceScheduleExceptionRequest, SaveAttendanceRosterDraftRequest, SetAttendanceEmployeePinRequest, SetAttendanceEmployeeWeeklyAdjustmentRequest, UpdateAttendanceBranchRequest, UpdateAttendanceCompanySettingsRequest, UpdateAttendanceScheduleTemplateRequest } from '@baseer-erp/contracts';
-import { AttendanceEventType, AttendanceRosterApprovalMode, AttendanceRosterPlanStatus, AttendanceScheduleExceptionStatus, AttendanceScheduleTemplateStatus, AttendanceWeeklyAdjustmentKind, AttendanceWorkSessionStatus, HrEmployeeLeaveStatus, HrEmployeeStatus, Prisma } from '../generated/prisma/client.js';
+import { readFile } from 'node:fs/promises';
+import { join, resolve, sep } from 'node:path';
+import type { ApproveAttendanceRosterRequest, ArchiveAttendanceScheduleTemplateRequest, AssignAttendanceEmployeeScheduleRequest, AssignAttendanceEmployeesScheduleRequest, AttendanceEmployeeComplianceQuery, AttendanceEmployeePortalPresentationQuery, AttendanceEmployeePortalSessionRequest, AttendanceEmployeeRecordRequest, AttendanceEmployeeScheduleListQuery, AttendanceOpenSessionsQuery, CloseAttendanceSessionRequest, ConfigureAttendanceEmployeeScheduleRequest, CreateAttendanceBranchRequest, CreateAttendanceScheduleExceptionRequest, CreateAttendanceScheduleTemplateRequest, CreateAttendanceScheduleVersionRequest, DecideAttendanceScheduleExceptionRequest, SaveAttendanceRosterDraftRequest, SetAttendanceEmployeePinRequest, SetAttendanceEmployeeWeeklyAdjustmentRequest, UpdateAttendanceBranchRequest, UpdateAttendanceCompanySettingsRequest, UpdateAttendanceScheduleTemplateRequest } from '@baseer-erp/contracts';
+import { AttendanceEventType, AttendanceRosterApprovalMode, AttendanceRosterPlanStatus, AttendanceScheduleExceptionStatus, AttendanceScheduleTemplateStatus, AttendanceWeeklyAdjustmentKind, AttendanceWorkSessionStatus, CompanyStatus, FileMetadataStatus, HrEmployeeLeaveStatus, HrEmployeeStatus, Prisma } from '../generated/prisma/client.js';
 import type { TrustedCompanyActorContext } from '../core-controls/trusted-context.js';
 import { IdempotencyService } from '../core-controls/idempotency.service.js';
 import { DatabaseService } from '../database/database.service.js';
@@ -960,6 +962,36 @@ export class AttendanceService {
     });
   }
 
+  /** The employee link may identify the establishment, but never expose its
+   * settings, contacts, staff, or raw storage references. */
+  async employeePortalPresentation(input: AttendanceEmployeePortalPresentationQuery) {
+    return this.database.inTenantTransaction(input.tenantId, async (tx) => {
+      const company = await tx.company.findFirst({
+        where: { id: input.companyId, tenantId: input.tenantId, status: CompanyStatus.ACTIVE },
+        select: { id: true, nameAr: true, nameEn: true, branding: { select: { logoFileMetadataId: true } } },
+      });
+      if (!company) throw new NotFoundException('Employee portal company was not found.');
+      const hasCompanyLogo = company.branding?.logoFileMetadataId
+        ? Boolean(await tx.fileMetadata.findFirst({ where: { id: company.branding.logoFileMetadataId, tenantId: input.tenantId, companyId: company.id, sourceType: 'company.branding', sourceId: company.id, purpose: 'logo', status: FileMetadataStatus.RESERVED }, select: { id: true } }))
+        : false;
+      return { companyNameAr: company.nameAr, companyNameEn: company.nameEn, hasCompanyLogo };
+    });
+  }
+
+  async readEmployeePortalCompanyLogo(input: AttendanceEmployeePortalPresentationQuery) {
+    const file = await this.database.inTenantTransaction(input.tenantId, async (tx) => {
+      const company = await tx.company.findFirst({
+        where: { id: input.companyId, tenantId: input.tenantId, status: CompanyStatus.ACTIVE },
+        select: { id: true, branding: { select: { logoFileMetadataId: true } } },
+      });
+      if (!company?.branding?.logoFileMetadataId) return null;
+      return tx.fileMetadata.findFirst({ where: { id: company.branding.logoFileMetadataId, tenantId: input.tenantId, companyId: company.id, sourceType: 'company.branding', sourceId: company.id, purpose: 'logo', status: FileMetadataStatus.RESERVED }, select: { declaredMimeType: true, storageReference: true } });
+    });
+    if (!file) throw new NotFoundException('Employee portal company logo was not found.');
+    try { return { mimeType: file.declaredMimeType, bytes: await readFile(this.companyLogoStoragePath(file.storageReference)) }; }
+    catch { throw new NotFoundException('Employee portal company logo was not found.'); }
+  }
+
   async employeePortalProfile(accessToken: string) {
     const access = this.verifyEmployeePortalToken(accessToken);
     const company = { id: access.companyId, tenantId: access.tenantId };
@@ -1101,6 +1133,14 @@ export class AttendanceService {
   private createEmployeePortalToken(companyId: string, tenantId: string, employeeId: string, expiresAt: number) {
     const body = Buffer.from(JSON.stringify({ companyId, tenantId, employeeId, expiresAt, nonce: randomUUID() })).toString('base64url');
     return `v1.${body}.${this.signEmployeePortal(body)}`;
+  }
+
+  private companyLogoStoragePath(storageReference: string): string {
+    if (!/^company-branding\/[0-9a-f-]+\/[0-9a-f-]+\/[0-9a-f-]+\.(png|jpg|webp)$/.test(storageReference)) throw new ForbiddenException('Company logo storage reference is not permitted.');
+    const root = resolve(process.env.BASEER_COMPANY_LOGO_STORAGE_ROOT ?? join(process.cwd(), 'storage'));
+    const target = resolve(root, storageReference);
+    if (!target.startsWith(`${root}${sep}`)) throw new ForbiddenException('Company logo storage path is not permitted.');
+    return target;
   }
 
   private verifyEmployeePortalToken(value: string) {
