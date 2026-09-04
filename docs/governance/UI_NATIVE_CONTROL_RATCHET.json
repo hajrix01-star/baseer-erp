@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "title": "Baseer native interactive control ratchet",
   "authority": "docs/governance/BASEER_UI_SYSTEM_STANDARD.md",
-  "updatedAt": "2026-09-03",
+  "updatedAt": "2026-09-04",
   "controls": ["button", "select", "input", "textarea"],
   "policy": "Each source cap is a migration ceiling, not an exception. A new raw native interactive control is rejected; reducing a cap is always allowed. Raising or relocating a cap requires a UI-ADR, an updated component/exception record where applicable, and UI Platform review.",
   "sourceCaps": {
@@ -14,7 +14,7 @@
     "apps/web/src/attendance-employee-portal.tsx": [1, 0, 0, 0],
     "apps/web/src/baseer-app-shell.tsx": [2, 0, 0, 0],
     "apps/web/src/baseer-button.tsx": [1, 0, 0, 0],
-    "apps/web/src/baseer-calendar-picker.tsx": [7, 0, 1, 0],
+    "apps/web/src/baseer-calendar-picker.tsx": [8, 0, 1, 0],
     "apps/web/src/baseer-chart.tsx": [6, 0, 0, 0],
     "apps/web/src/baseer-combobox-field.tsx": [0, 0, 1, 0],
     "apps/web/src/baseer-combobox.tsx": [2, 0, 1, 0],

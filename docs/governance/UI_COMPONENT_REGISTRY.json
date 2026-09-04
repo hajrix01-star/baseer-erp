@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "title": "Baseer UI component registry",
   "authority": "docs/governance/BASEER_UI_SYSTEM_STANDARD.md",
-  "updatedAt": "2026-08-25",
+  "updatedAt": "2026-09-04",
   "components": [
     {
       "id": "foundation-tokens",
@@ -239,7 +239,7 @@
       "consumers": [
         "apps/web/src"
       ],
-      "notes": "The runtime implementation is a Baseer-owned calendar popover over a text field. It keeps the fixed Gregorian ISO contract without opening the browser-native calendar."
+      "notes": "The runtime implementation is a Baseer-owned calendar popover over a text field. It keeps the fixed Gregorian ISO contract without opening the browser-native calendar. Its clear action is part of the registered clearable state and its owned native-control ceiling is reviewed in ADR-UI-006."
     },
     {
       "id": "baseer-aria-date-picker",
