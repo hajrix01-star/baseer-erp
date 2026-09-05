@@ -26,7 +26,8 @@
 مدخل النشر هو commit كامل وmanifest من CI. الصور الثلاث يجب أن تكون digest-only
 ومن أسماء GHCR الخاصة بـBaseer. ملف البيئة الحقيقي لا يغادر Hostinger؛ ينسخ
 محلياً إلى release جديد ثم تعدّل صور API/Migrate/Web فقط. يظل PostgreSQL وCaddy
-مثبتين كما هما. SSH forced command هو الحد بين GitHub وإدارة الخادم.
+مثبتين كما هما؛ منافذ `80/443` ملك للـedge proxy المشترك وCaddy الخاص بـBaseer
+يبقى على `127.0.0.1:18080`. SSH forced command هو الحد بين GitHub وإدارة الخادم.
 
 ## G3 — المسار التقني
 

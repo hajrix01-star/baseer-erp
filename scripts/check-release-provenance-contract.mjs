@@ -37,6 +37,11 @@ if (compose.includes("BASEER_RELEASE_TAG") || /image:\s+(?:baseer-erp-|postgres:
   throw new Error("Production compose must not accept moving image tags.");
 }
 
+const caddyBlock = serviceBlock("caddy");
+if (!caddyBlock.includes('"127.0.0.1:18080:80"') || /\n\s*-\s*"(?:80|443):/.test(caddyBlock)) {
+  throw new Error("Production Caddy must use the existing private loopback listener, never claim public edge ports.");
+}
+
 for (const variable of new Set(Object.values(requiredImages))) {
   const match = environmentTemplate.match(new RegExp(`^${variable}=([^\\r\\n]+)$`, "m"));
   if (!match || !/@sha256:[a-f0-9]{64}$/i.test(match[1])) {
