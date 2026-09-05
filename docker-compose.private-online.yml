@@ -191,8 +191,10 @@ services:
     environment:
       BASEER_PUBLIC_DOMAIN: ${BASEER_PUBLIC_DOMAIN:?BASEER_PUBLIC_DOMAIN is required}
     ports:
-      - "80:80"
-      - "443:443"
+      # The Hostinger edge proxy owns the public 80/443 listeners for all
+      # applications on this VPS. Baseer stays on its existing private
+      # loopback listener so a release cannot contend with the shared edge.
+      - "127.0.0.1:18080:80"
     volumes:
       - ./docker/Caddyfile.private-online:/etc/caddy/Caddyfile:ro
       - baseer_private_caddy_data:/data

@@ -13,6 +13,13 @@ die() {
   exit 1
 }
 
+cleanup_release_staging() {
+  [[ -n "${bundle:-}" ]] && rm -f -- "$bundle"
+  [[ -n "${staging_directory:-}" ]] && rm -rf -- "$staging_directory"
+}
+
+trap cleanup_release_staging EXIT
+
 require_root() {
   [[ "$EUID" -eq 0 ]] || die 'The deployer must run as root through sudo.'
 }
@@ -116,7 +123,6 @@ main() {
 
   bundle="$(mktemp "${deployment_root}/.release-bundle.XXXXXX")"
   staging_directory="$(mktemp -d "${deployment_root}/.release-staging.XXXXXX")"
-  trap 'rm -f "$bundle"; rm -rf "$staging_directory"' EXIT
   (ulimit -f "$max_bundle_blocks"; cat >"$bundle") || die 'Release bundle is too large or unreadable.'
   [[ -s "$bundle" ]] || die 'Release bundle is empty.'
   validate_bundle "$bundle"
