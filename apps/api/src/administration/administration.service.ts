@@ -58,8 +58,10 @@ export class AdministrationService {
       await this.ensureSystemRoles(tx, context.tenantId);
       const id = randomUUID();
       const code = this.generatedRoleCode(request.nameEn);
-      await tx.role.create({ data: { id, tenantId: context.tenantId, code, nameAr: request.nameAr, nameEn: request.nameEn, isSystem: false, grants: { createMany: { data: [...new Set(request.permissionCodes)].map((permissionCode) => ({ tenantId: context.tenantId, permissionCode })) } } } });
-      await this.audit(tx, context, "administration.role.created", "Role", id, null, { code, permissionCodes: [...new Set(request.permissionCodes)] });
+      const permissionCodes = [...new Set(request.permissionCodes)];
+      await tx.role.create({ data: { id, tenantId: context.tenantId, code, nameAr: request.nameAr, nameEn: request.nameEn, isSystem: false } });
+      await tx.rolePermission.createMany({ data: permissionCodes.map((permissionCode) => ({ tenantId: context.tenantId, roleId: id, permissionCode })) });
+      await this.audit(tx, context, "administration.role.created", "Role", id, null, { code, permissionCodes });
       return { id };
     });
   }
