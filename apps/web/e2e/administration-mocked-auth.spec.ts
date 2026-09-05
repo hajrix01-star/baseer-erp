@@ -40,10 +40,10 @@ async function fulfill(route: Route, json: unknown, status = 200) {
   await route.fulfill({ status, contentType: "application/json", body: JSON.stringify(json) });
 }
 
-function overview(owner = true) {
+function overview(owner = true, logoFileMetadataId: string | null = null) {
   return {
     owner,
-    companies: [{ id: companyId, nameAr: "شركة الاختبار", nameEn: "Test company", businessTimezone: "Asia/Riyadh", status: "ACTIVE", logoFileMetadataId: null, contextLocationCode: null, contextLocationLabelAr: null, contextLatitude: null, contextLongitude: null }],
+    companies: [{ id: companyId, nameAr: "شركة الاختبار", nameEn: "Test company", businessTimezone: "Asia/Riyadh", status: "ACTIVE", logoFileMetadataId, contextLocationCode: null, contextLocationLabelAr: null, contextLatitude: null, contextLongitude: null }],
     users: [{ id: userId, login: "user@test.local", nameAr: "مستخدم الاختبار", nameEn: "Test user", preferredLanguage: "ar", avatarKind: "INITIALS", status: "ACTIVE", isOwner: false, memberships: [{ companyId, companyNameAr: "شركة الاختبار", companyNameEn: "Test company", roleId, roleNameAr: "مدير الاختبار", roleNameEn: "Test manager" }] }],
     roles: [{ id: roleId, code: "TEST_MANAGER", nameAr: "مدير الاختبار", nameEn: "Test manager", isSystem: false, permissionCodes: ["administration.users.read"] }],
     permissions: [
@@ -53,7 +53,7 @@ function overview(owner = true) {
   };
 }
 
-async function mockAdministration(page: Page, language: "ar" | "en", requests: string[] = [], owner = true) {
+async function mockAdministration(page: Page, language: "ar" | "en", requests: string[] = [], owner = true, logoFileMetadataId: string | null = null) {
   await page.addInitScript(({ locale, company }) => {
     sessionStorage.setItem("baseer.erp.access-token", "administration-e2e-token");
     sessionStorage.setItem("baseer.erp.refresh-token", "administration-e2e-refresh-token");
@@ -65,7 +65,7 @@ async function mockAdministration(page: Page, language: "ar" | "en", requests: s
     const url = new URL(route.request().url());
     requests.push(`${route.request().method()} ${url.pathname}`);
     if (url.pathname === "/v1/companies/available") return fulfill(route, { companies: [{ id: companyId, nameAr: "شركة الاختبار", nameEn: "Test company", permissionCodes: permissions }] });
-    if (url.pathname === "/v1/administration/overview") return fulfill(route, overview(owner));
+    if (url.pathname === "/v1/administration/overview") return fulfill(route, overview(owner, logoFileMetadataId));
     if (url.pathname === "/v1/finance/configuration") return fulfill(route, { profile: { vatRateBasisPoints: 1500 } });
     if (url.pathname === "/v1/administration/ai/configuration") return fulfill(route, { companyId, providerCapabilities: [openAiCapability], activeProvider: null, providerConfigurations: [], latestProviderConnectionCheck: null, activeSystemIdentity: null, activeIdentity: null });
     if (url.pathname === "/v1/administration/ai/governance") return fulfill(route, basiraGovernance);
@@ -280,6 +280,16 @@ test("company logo rejects an invalid browser file before requesting administrat
   expect(requests.filter((request) => request === `POST /v1/administration/companies/${companyId}/logo`)).toHaveLength(0);
 });
 
+test("company card renders the authenticated configured company logo", async ({ page }) => {
+  await mockAdministration(page, "ar", [], true, "logo-metadata-1");
+  await page.route(`**/v1/administration/companies/${companyId}/logo`, async (route) => {
+    await route.fulfill({ status: 200, contentType: "image/png", body: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScL0xQAAAABJRU5ErkJggg==", "base64") });
+  });
+  await page.goto("/#module=administration&section=1");
+
+  await expect(page.locator(".administration-company-card img.administration-company-card__mark")).toBeVisible();
+});
+
 test("company archive is a direct audited action without a reason field", async ({ page }) => {
   const requests: string[] = [];
   let archiveBody: Record<string, unknown> | null = null;
@@ -292,6 +302,9 @@ test("company archive is a direct audited action without a reason field", async 
   await page.locator(".administration-company-card", { hasText: "شركة الاختبار" }).click();
   const dialog = page.getByRole("dialog", { name: /تعديل: شركة الاختبار/ });
   await expect(dialog.getByLabel(/سبب التغيير/)).toHaveCount(0);
+  await expect(dialog.locator(".administration-company-danger-actions")).toBeVisible();
+  await expect(dialog.locator("fieldset.administration-company-status-action")).toHaveCount(0);
+  await expect(dialog.getByRole("button", { name: "تفعيل قفل المراجعة" })).toBeVisible();
   await dialog.getByRole("button", { name: "أرشفة الشركة" }).click();
   await expect.poll(() => archiveBody).not.toBeNull();
   expect(archiveBody).toEqual({ status: "ARCHIVED" });

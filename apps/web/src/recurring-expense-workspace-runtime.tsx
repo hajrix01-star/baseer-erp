@@ -21,7 +21,7 @@ import {
   sumMoneyDecimals,
   tryMoneyDecimal,
 } from "./decimal-string";
-import { formatNumber, formatPercent } from "./number-format";
+import { formatMoney, formatNumber, formatPercent } from "./number-format";
 import { displayName } from "./baseer-localization";
 import { financeText } from "./finance-copy";
 import { useDialogFocusTrap } from "./use-dialog-focus-trap";
@@ -302,55 +302,21 @@ export function RecurringExpenseWorkspaceRuntime({
           onSubmit={saveProfile}
         />
       </Suspense>
-      <div className="recurring-profile-list">
-        {activeProfiles.map((profile) => (
-            <BaseerCard key={profile.id}>
-              <article className="recurring-profile">
-                <div>
-                  <span className="eyebrow">
-                    {profile.intervalMonths === 1
-                      ? text.monthly
-                      : text.everyMonths(profile.intervalMonths)}
-                  </span>
-                  <h4>{displayName(language, profile)}</h4>
-                  <p>
-                    {displayName(language, {
-                      nameAr: profile.categoryNameAr,
-                      nameEn: profile.categoryNameEn,
-                    })}
-                    {profile.supplierNameAr
-                      ? ` · ${displayName(language, { nameAr: profile.supplierNameAr, nameEn: profile.supplierNameEn })}`
-                      : ""}
-                    {profile.serviceNumber ? ` · ${profile.serviceNumber}` : ""}
-                  </p>
-                </div>
-                <div className="recurring-profile__amount">
-                  <span>{text.expected}</span>
-                  <strong>SAR {money(profile.expectedAmount)}</strong>
-                  <small>
-                    {text.dueDate} {profile.nextReminderDate}
-                  </small>
-                </div>
-                <div className="recurring-profile__actions">
-                  <BaseerButton
-                    type="button"
-                    variant="secondary"
-                    onClick={() => setEditing(profile)}
-                  >
-                    {language === "ar" ? "تعديل" : "Edit"}
-                  </BaseerButton>
-                  <BaseerButton
-                    type="button"
-                    variant="primary"
-                    onClick={() => setArchiveTarget(profile)}
-                  >
-                    {text.archive}
-                  </BaseerButton>
-                </div>
-              </article>
-            </BaseerCard>
-          ))}
-      </div>
+      {activeProfiles.length ? <DataTable
+        ariaLabel={text.recurringObligations}
+        caption={text.recurringObligations}
+        className="recurring-profile-table"
+        rowKey={(profile) => profile.id}
+        rows={activeProfiles}
+        columns={[
+          { id: "obligation", header: text.recurringProfile, cell: (profile) => <strong>{displayName(language, profile)}</strong>, width: "22%" },
+          { id: "cycle", header: text.paymentCycle, cell: (profile) => profile.intervalMonths === 1 ? text.monthly : text.everyMonths(profile.intervalMonths), width: "12%" },
+          { id: "classification", header: text.financialCategory, cell: (profile) => <span>{displayName(language, { nameAr: profile.categoryNameAr, nameEn: profile.categoryNameEn })}{profile.supplierNameAr ? ` · ${displayName(language, { nameAr: profile.supplierNameAr, nameEn: profile.supplierNameEn })}` : ""}{profile.serviceNumber ? ` · ${profile.serviceNumber}` : ""}</span> },
+          { id: "amount", header: text.expectedAmount, numeric: true, align: "end", cell: (profile) => formatMoney(profile.expectedAmount, "SAR", language), width: "13%" },
+          { id: "due", header: text.nextDueDate, align: "center", cell: (profile) => <bdi dir="ltr">{profile.nextReminderDate}</bdi>, width: "13%" },
+          { id: "actions", header: text.operations, align: "end", cell: (profile) => <span className="recurring-profile-table__actions"><BaseerButton type="button" size="compact" variant="secondary" onClick={() => setEditing(profile)}>{language === "ar" ? "تعديل" : "Edit"}</BaseerButton><BaseerButton type="button" size="compact" variant="danger" onClick={() => setArchiveTarget(profile)}>{text.archive}</BaseerButton></span>, width: "13%" },
+        ]}
+      /> : null}
       {!activeProfiles.length && (
         <BaseerCard>
           <p className="empty-results">{text.noRecurringDescription}</p>
@@ -358,7 +324,7 @@ export function RecurringExpenseWorkspaceRuntime({
       )}
       {showArchived ? <section className="recurring-expense-archive" aria-label={language === "ar" ? "أرشيف المصاريف الدورية" : "Archived recurring expenses"}>
         <header><h4>{language === "ar" ? "أرشيف المصاريف الدورية" : "Recurring expense archive"}</h4><span>{archivedProfiles.length}</span></header>
-        {archivedProfiles.length ? <div className="recurring-profile-list">{archivedProfiles.map((profile) => <BaseerCard key={profile.id} tone="muted"><article className="recurring-profile"><div><span className="eyebrow">{language === "ar" ? "مؤرشف" : "Archived"}</span><h4>{displayName(language, profile)}</h4><p>{displayName(language, { nameAr: profile.categoryNameAr, nameEn: profile.categoryNameEn })}{profile.supplierNameAr ? ` · ${displayName(language, { nameAr: profile.supplierNameAr, nameEn: profile.supplierNameEn })}` : ""}</p></div><div className="recurring-profile__amount"><span>{text.expected}</span><strong>SAR {money(profile.expectedAmount)}</strong></div><div className="recurring-profile__actions"><BaseerButton type="button" variant="secondary" disabled={saving} onClick={() => void restore(profile)}>{language === "ar" ? "استعادة من الأرشيف" : "Restore"}</BaseerButton></div></article></BaseerCard>)}</div> : <BaseerCard tone="muted"><p className="empty-results">{language === "ar" ? "لا توجد مصاريف دورية مؤرشفة." : "There are no archived recurring expenses."}</p></BaseerCard>}
+        {archivedProfiles.length ? <DataTable ariaLabel={language === "ar" ? "أرشيف الالتزامات الدورية" : "Archived recurring obligations"} caption={language === "ar" ? "أرشيف الالتزامات الدورية" : "Archived recurring obligations"} className="recurring-profile-table" rowKey={(profile) => profile.id} rows={archivedProfiles} columns={[{ id: "obligation", header: text.recurringProfile, cell: (profile) => <strong>{displayName(language, profile)}</strong> }, { id: "amount", header: text.expectedAmount, numeric: true, align: "end", cell: (profile) => formatMoney(profile.expectedAmount, "SAR", language) }, { id: "action", header: text.operations, align: "end", cell: (profile) => <BaseerButton type="button" size="compact" variant="secondary" disabled={saving} onClick={() => void restore(profile)}>{language === "ar" ? "استعادة" : "Restore"}</BaseerButton> }]} /> : <BaseerCard tone="muted"><p className="empty-results">{language === "ar" ? "لا توجد مصاريف دورية مؤرشفة." : "There are no archived recurring expenses."}</p></BaseerCard>}
       </section> : null}
       <BaseerConfirmDialog
         open={archiveTarget !== null}

@@ -78,17 +78,33 @@ export function AdministrationCompaniesPanel({ language, session, companies, own
     </header>
     <BaseerFilterBar controlsPresentation="menu" language={language} search={search} searchLabel={text.companies} searchPlaceholder={language === "ar" ? "ابحث باسم الشركة" : "Search company"} onSearchChange={setSearch} appliedFilters={appliedFilters} onClear={clearFilters} controls={archivedCount > 0 ? <BaseerFilterToggle label={text.showArchived} checked={showArchived} onChange={setShowArchived} /> : undefined} />
     <div className="administration-company-cards">
-      {visibleCompanies.map((company, index) => <button className="baseer-card baseer-card--default baseer-card--compact baseer-card--interactive administration-company-card" key={company.id} type="button" onClick={() => { setSelectedCompanyId(company.id); setMode("manage"); }}>
-        <span className="administration-company-card__mark" aria-hidden="true">{company.nameAr.trim().slice(0, 1)}</span>
-        <span className="administration-company-card__body"><strong>{displayName(language, company)}</strong><small>{language === "ar" ? company.nameEn : company.nameAr}</small><span>{company.contextLocationLabelAr ?? company.businessTimezone}</span></span>
-        <span className={company.status === "ACTIVE" ? "administration-company-card__status is-active" : "administration-company-card__status is-disabled"}>{company.status === "ACTIVE" ? (company.migrationReviewLocked ? `${text.active} · مراجعة مقفلة` : text.active) : text.archived}</span>
-        <span className="administration-company-card__footer">{text.companyNumber(index + 1)}<b>{text.viewEdit} ←</b></span>
-      </button>)}
+      {visibleCompanies.map((company, index) => <CompanyCard key={company.id} company={company} index={index} language={language} session={session} onOpen={() => { setSelectedCompanyId(company.id); setMode("manage"); }} />)}
     </div>
     {visibleCompanies.length === 0 && <div className="administration-company-empty">{text.noCompanies}</div>}
     {mode === "create" && <CompanyDialog language={language} session={session} owner={owner} onDone={onDone} onError={onError} onClose={close} />}
     {mode === "manage" && selectedCompany && <CompanyDialog company={selectedCompany} language={language} session={session} owner={owner} onDone={onDone} onError={onError} onClose={close} />}
   </section>;
+}
+
+function CompanyCard({ company, index, language, session, onOpen }: { company: Company; index: number; language: "ar" | "en"; session: ActiveSession; onOpen: () => void }) {
+  const text = administrationText(language);
+  const [logoUrl, setLogoUrl] = useState<string | null>(null);
+  useEffect(() => {
+    if (!company.logoFileMetadataId) { setLogoUrl(null); return; }
+    let active = true;
+    let receivedUrl: string | null = null;
+    void loadAdministrationCompanyLogo(session, company.id).then((url) => {
+      receivedUrl = url;
+      if (active) setLogoUrl(url); else if (url) URL.revokeObjectURL(url);
+    }).catch(() => { if (active) setLogoUrl(null); });
+    return () => { active = false; if (receivedUrl) URL.revokeObjectURL(receivedUrl); };
+  }, [company.id, company.logoFileMetadataId, session]);
+  return <button className="baseer-card baseer-card--default baseer-card--compact baseer-card--interactive administration-company-card" type="button" onClick={onOpen}>
+    {logoUrl ? <img className="administration-company-card__mark" src={logoUrl} alt="" onError={() => setLogoUrl(null)} /> : <span className="administration-company-card__mark" aria-hidden="true">{company.nameAr.trim().slice(0, 1)}</span>}
+    <span className="administration-company-card__body"><strong>{displayName(language, company)}</strong><small>{language === "ar" ? company.nameEn : company.nameAr}</small><span>{company.contextLocationLabelAr ?? company.businessTimezone}</span></span>
+    <span className={company.status === "ACTIVE" ? "administration-company-card__status is-active" : "administration-company-card__status is-disabled"}>{company.status === "ACTIVE" ? (company.migrationReviewLocked ? `${text.active} · مراجعة مقفلة` : text.active) : text.archived}</span>
+    <span className="administration-company-card__footer">{text.companyNumber(index + 1)}<b>{text.viewEdit} ←</b></span>
+  </button>;
 }
 
 function CompanyDialog({ language, session, company, owner, onDone, onError, onClose }: { language: "ar" | "en"; session: ActiveSession; company?: Company; owner: boolean; onDone: () => Promise<void>; onError: (error: unknown) => void; onClose: () => void }) {
@@ -220,14 +236,10 @@ function CompanyDialog({ language, session, company, owner, onDone, onError, onC
           <legend>{language === "ar" ? "الإعدادات الضريبية" : "Tax settings"}</legend>
           <label>{language === "ar" ? "نسبة ضريبة القيمة المضافة" : "VAT rate"}<input aria-invalid={Boolean(vatError)} disabled={!owner || busy || vatLoadState !== "ready"} inputMode="decimal" dir="ltr" min="0" max="100" step="0.01" value={vatRate} onChange={(event) => { setVatRate(normalizeBaseerAmount(event.target.value)); setVatError(""); }} />{vatError ? <small role="alert">{vatError}</small> : null}</label>
         </fieldset>}
-        {!isCreate && owner && <fieldset className="administration-company-status-action">
-          <legend>{company.status === "ACTIVE" ? text.archiveCompany : text.reactivateCompany}</legend>
-          <BaseerButton variant={company.status === "ACTIVE" ? "danger" : "secondary"} disabled={busy} type="button" onClick={() => void changeStatus()}>{company.status === "ACTIVE" ? text.archiveCompanyAction : text.reactivateCompanyAction}</BaseerButton>
-        </fieldset>}
-        {!isCreate && company && owner && <fieldset className="administration-company-status-action">
-          <legend>{company.migrationReviewLocked ? "قفل مراجعة الترحيل مفعل" : "قفل مراجعة الترحيل"}</legend>
-          <BaseerButton variant={company.migrationReviewLocked ? "secondary" : "danger"} disabled={busy} type="button" onClick={() => void changeMigrationReviewLock()}>{company.migrationReviewLocked ? "رفع قفل المراجعة" : "تفعيل قفل المراجعة"}</BaseerButton>
-        </fieldset>}
+        {!isCreate && company && owner && <div className="administration-company-danger-actions" aria-label={language === "ar" ? "إجراءات الشركة الحساسة" : "Sensitive company actions"}>
+          <BaseerButton size="compact" variant={company.status === "ACTIVE" ? "danger" : "secondary"} disabled={busy} type="button" onClick={() => void changeStatus()}>{company.status === "ACTIVE" ? text.archiveCompanyAction : text.reactivateCompanyAction}</BaseerButton>
+          <BaseerButton size="compact" variant={company.migrationReviewLocked ? "secondary" : "danger"} disabled={busy} type="button" onClick={() => void changeMigrationReviewLock()}>{company.migrationReviewLocked ? "رفع قفل المراجعة" : "تفعيل قفل المراجعة"}</BaseerButton>
+        </div>}
         {owner ? <footer className="administration-company-dialog__save"><BaseerButton disabled={busy || (!isCreate && vatLoadState !== "ready")}>{busy ? text.saving : isCreate ? text.createCompany : text.saveChanges}</BaseerButton></footer> : <p className="daily-sales-message error">{text.ownerOnly}</p>}
         </>}
       </BaseerValidatedFormField>
