@@ -10,6 +10,7 @@ test("public privacy page is bilingual and never starts an ERP API request", asy
   await page.goto("/privacy");
   await expect(page.getByRole("heading", { name: "سياسة الخصوصية" })).toBeVisible();
   await expect(page.locator("main")).toHaveAttribute("dir", "rtl");
+  await expect(page.getByRole("link", { name: "الدعم: arz1.restaurant@gmail.com" })).toHaveAttribute("href", "mailto:arz1.restaurant@gmail.com");
   await expect(page.getByRole("link", { name: "شروط الاستخدام" })).toHaveAttribute("href", "/terms");
   await expect.poll(() => apiRequests).toEqual([]);
 
