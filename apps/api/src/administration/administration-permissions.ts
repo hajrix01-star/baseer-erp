@@ -128,6 +128,7 @@ export const ADMINISTRATION_PERMISSION_CATALOG: readonly AdministrationPermissio
   { code: "operations.assets.manage", module: "operations", nameAr: "إدارة الأصول والضمانات", nameEn: "Manage assets and warranties", risk: "sensitive" },
   { code: "operations.whatsapp_invoice_monitoring.read", module: "operations", nameAr: "عرض وارد فواتير واتساب", nameEn: "View WhatsApp invoice monitoring", risk: "standard" },
   { code: "operations.whatsapp_invoice_monitoring.review", module: "operations", nameAr: "مراجعة وتصحيح وارد فواتير واتساب", nameEn: "Review and correct WhatsApp invoice monitoring", risk: "sensitive" },
+  { code: "operations.whatsapp_invoice_monitoring.connection.manage", module: "operations", nameAr: "إدارة ربط واتساب الشخصي", nameEn: "Manage personal WhatsApp connection", risk: "sensitive" },
   // Compatibility only for roles created before the narrower daily-sales split.
   { code: "finance.daily_sales.write", module: "operations", nameAr: "إدخال وتقفيل مبيعات قديم", nameEn: "Legacy sales-closing write", risk: "sensitive" },
 

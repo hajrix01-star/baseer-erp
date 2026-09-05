@@ -44,6 +44,9 @@ type SupplierOption = Readonly<{ id: string; nameAr: string; nameEn: string | nu
 type AssetState = "PENDING" | "READY" | "QUARANTINED" | "FAILED";
 type ScanStatus = "NOT_REQUESTED" | "PENDING" | "CLEAN" | "MALICIOUS" | "UNAVAILABLE" | "FAILED";
 type PilotConnectionStatus = "NOT_CONFIGURED" | "DISCONNECTED" | "CONNECTED" | "GAP_DETECTED" | "BLOCKED";
+const QR_INITIAL_WAIT_MS = 20_000;
+const QR_POLL_INTERVAL_MS = 500;
+const CONNECTION_STATUS_POLL_MS = 2_000;
 type DetailResponse = Readonly<{
   record: InvoiceRecord;
   assets: readonly Readonly<{ id: string; displayName: string; receivedAt: string; mediaKind: "IMAGE" | "PDF"; invoiceRecordCount: number; extractionStatus: InvoiceRow["extractionStatus"]; storageState: AssetState; scanStatus: ScanStatus }>[];
@@ -396,6 +399,24 @@ function ConnectionPanelV2({ language, session, onChanged }: { language: Languag
   };
   const refresh = async () => { setLoading(true); setError(null); try { await load(); onChanged(); } catch (cause) { setError(settingsError(cause, language, ar ? "تعذر تحديث إعدادات ربط واتساب." : "Unable to refresh WhatsApp connection settings.")); } finally { setLoading(false); } };
   useEffect(() => { const controller = new AbortController(); void load(controller.signal).catch((cause: unknown) => { if (!controller.signal.aborted) setError(settingsError(cause, language, ar ? "تعذر قراءة إعدادات ربط واتساب." : "Unable to read WhatsApp connection settings.")); }).finally(() => { if (!controller.signal.aborted) setLoading(false); }); return () => controller.abort(); }, [language, session]);
+  useEffect(() => {
+    const expiresAt = qr?.expiresAt;
+    if (!qr?.qr || !expiresAt) return;
+    let cancelled = false;
+    let timer: number | undefined;
+    const poll = async () => {
+      if (cancelled || Date.now() > new Date(expiresAt).valueOf() + CONNECTION_STATUS_POLL_MS) return;
+      try {
+        const value = await api<LiveSettingsResponse>(session, "/whatsapp-invoice-monitoring/settings");
+        if (cancelled) return;
+        setSettings(value);
+        if (value.connection.status === "CONNECTED") { setQr(null); return; }
+      } catch { /* The explicit refresh action retains the localized error path. */ }
+      if (!cancelled) timer = window.setTimeout(poll, CONNECTION_STATUS_POLL_MS);
+    };
+    timer = window.setTimeout(poll, CONNECTION_STATUS_POLL_MS);
+    return () => { cancelled = true; if (timer !== undefined) window.clearTimeout(timer); };
+  }, [qr?.expiresAt, qr?.qr, session]);
   const configure = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!key.trim()) { setError(ar ? "أدخل اسماً داخلياً آمناً للربط." : "Enter a safe internal connection name."); return; }
@@ -406,7 +427,21 @@ function ConnectionPanelV2({ language, session, onChanged }: { language: Languag
   };
   const control = async (operation: "start" | "stop") => {
     setBusy(true); setError(null);
-    try { await api(session, `/whatsapp-invoice-monitoring/settings/connection/${operation}`, { method: "POST" }); setPilotOpen(false); if (operation === "stop") setQr(null); await refresh(); }
+    try {
+      await api(session, `/whatsapp-invoice-monitoring/settings/connection/${operation}`, { method: "POST" });
+      setPilotOpen(false);
+      if (operation === "stop") { setQr(null); await refresh(); return; }
+      const deadline = Date.now() + QR_INITIAL_WAIT_MS;
+      let nextQr: LiveQrReceipt | null = null;
+      while (!nextQr && Date.now() < deadline) {
+        const value = await api<LiveQrReceipt>(session, "/whatsapp-invoice-monitoring/settings/connection/qr");
+        nextQr = value.qr && value.expiresAt ? value : null;
+        if (!nextQr) await new Promise<void>((resolve) => window.setTimeout(resolve, QR_POLL_INTERVAL_MS));
+      }
+      setQr(nextQr);
+      await refresh();
+      if (!nextQr) setError(ar ? "لم يصدر QR خلال المهلة. تأكد من حالة الربط ثم أعد البدء مرة واحدة." : "QR was not issued within the time limit. Check connection status, then start once again.");
+    }
     catch (cause) { setError(settingsError(cause, language, operation === "start" ? (ar ? "تعذر بدء جلسة الربط التجريبية." : "Unable to start the pilot connection.") : (ar ? "تعذر إيقاف جلسة الربط التجريبية." : "Unable to stop the pilot connection."))); }
     finally { setBusy(false); }
   };
