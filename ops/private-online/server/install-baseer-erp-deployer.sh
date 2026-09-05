@@ -16,7 +16,11 @@ readonly source_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 [[ -f "$source_directory/baseer-erp-deploy-release" ]] || die 'Root deployer script is missing.'
 bash -n "$source_directory/baseer-erp-deploy-ssh" "$source_directory/baseer-erp-deploy-release"
 
-id -u "$deploy_user" >/dev/null 2>&1 || useradd --create-home --home-dir "/home/${deploy_user}" --shell /usr/sbin/nologin "$deploy_user"
+# `nologin` runs before an authorized_keys forced command on Ubuntu, so it
+# would reject the only permitted deploy command as well.  The account stays
+# non-interactive through its locked password and the one forced SSH command.
+id -u "$deploy_user" >/dev/null 2>&1 || useradd --create-home --home-dir "/home/${deploy_user}" --shell /bin/bash --password '!' "$deploy_user"
+usermod --shell /bin/bash --password '!' "$deploy_user"
 install -d -o "$deploy_user" -g "$deploy_user" -m 0700 "/home/${deploy_user}/.ssh"
 {
   printf 'restrict,command="/usr/local/sbin/baseer-erp-deploy-ssh" '

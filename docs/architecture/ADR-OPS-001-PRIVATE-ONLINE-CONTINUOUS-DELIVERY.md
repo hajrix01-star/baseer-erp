@@ -26,7 +26,9 @@
   أسرار قاعدة البيانات وJWT والتخزين تبقى حصراً في ملف environment محلي root-owned.
 - المفتاح المقيد لا يمنح terminal أو forwarding أو نقل ملفات عام؛ يقبل
   `deploy-release <40-char-sha>` فقط، ويستقبل bundle مكوناً من Compose وCaddy
-  من checkout الناجح على stdin.
+  من checkout الناجح على stdin. حسابه كلمة مروره مقفلة، ويكون `/bin/bash`
+  ضرورياً فقط لأن Ubuntu يشغّل `nologin` قبل الـforced command؛ التحكم الفعلي
+  في الوصول هو `restrict` و`command=` في المفتاح، لا shell تفاعلي.
 - النص البرمجي root-owned على الخادم لا يقبل tags أو مراجع خارج
   `ghcr.io/hajrix01-star/baseer-erp-{api,migrate,web}@sha256:<digest>`، وينسخ
   ملف البيئة الحالي إلى مجلد الإصدار الجديد ثم يبدل متغيرات صور التطبيق فقط.
