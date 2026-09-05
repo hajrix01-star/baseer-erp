@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { BaseerBrand } from "./baseer-brand";
+import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
 
 export type PublicLegalDocument = "privacy" | "terms";
@@ -134,8 +135,8 @@ export function BaseerPublicLegalPage({ document }: Readonly<{ document: PublicL
     <header className="baseer-public-legal__header">
       <a className="baseer-public-legal__brand" href="/" aria-label="Baseer ERP"><BaseerBrand /></a>
       <div className="baseer-public-legal__language" aria-label={copy.languageLabel}>
-        <button type="button" aria-pressed={language === "ar"} onClick={() => setLanguage("ar")}>{copy.arabicLabel}</button>
-        <button type="button" aria-pressed={language === "en"} onClick={() => setLanguage("en")}>{copy.englishLabel}</button>
+        <BaseerButton type="button" size="compact" variant="quiet" aria-pressed={language === "ar"} onClick={() => setLanguage("ar")}>{copy.arabicLabel}</BaseerButton>
+        <BaseerButton type="button" size="compact" variant="quiet" aria-pressed={language === "en"} onClick={() => setLanguage("en")}>{copy.englishLabel}</BaseerButton>
       </div>
     </header>
 
@@ -160,7 +161,7 @@ export function BaseerPublicLegalPage({ document }: Readonly<{ document: PublicL
       <footer className="baseer-public-legal__footer">
         <a href="mailto:arz1.restaurant@gmail.com">{copy.supportLabel}</a>
         <a href={copy.otherDocumentHref}>{copy.otherDocumentLabel}</a>
-        <button type="button" onClick={() => setLanguage(language === "ar" ? "en" : "ar")}>{copy.switchLanguage}</button>
+        <BaseerButton type="button" size="compact" variant="secondary" onClick={() => setLanguage(language === "ar" ? "en" : "ar")}>{copy.switchLanguage}</BaseerButton>
       </footer>
     </div>
   </main>;
