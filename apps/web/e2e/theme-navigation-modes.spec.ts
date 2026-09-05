@@ -201,8 +201,14 @@ test("finance and report representative surfaces preserve their central-card rol
   expect(financeRecordRadius).not.toBe("0px");
 
   await page.goto("/#module=reports&page=reports-financial&stage=cash-performance");
+  // Reports are split into a lazy workspace.  Wait for the route's own
+  // selected tab before asserting its canvas so a busy CI worker cannot test
+  // the previously rendered Finance page during the module transition.
+  const reportTabs = page.getByRole("tablist", { name: "التقارير المالية" });
+  await expect(reportTabs).toBeVisible({ timeout: 15_000 });
+  await expect(reportTabs.getByRole("tab", { name: "حركة النقد" })).toHaveAttribute("aria-selected", "true");
   const canvas = page.locator(".reports-prototype__canvas");
-  await expect(canvas).toBeVisible();
+  await expect(canvas).toBeVisible({ timeout: 15_000 });
   await expect(page.locator(".reports-prototype__canvas.baseer-card")).toHaveCount(0);
   await expect(page.locator(".reports-prototype .baseer-filter-bar")).toBeVisible();
 
