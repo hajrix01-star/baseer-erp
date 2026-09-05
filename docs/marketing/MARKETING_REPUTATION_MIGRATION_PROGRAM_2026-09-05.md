@@ -393,6 +393,7 @@ kill switch/config ثانية قبل exchange، callbackان متزامنان (�
 
 حُدد نطاق الشركتين، احتفاظ foundation، ومالكو key/incident/kill switch لشريحة
 MKT-01B غير المتصلة. تبقى قيم التفعيل الحي فقط مفتوحة: الحسابات والمواقع المختارة
-بعد discovery، cadence وSLO الفعليان، مدة parallel run، redirect URI/callback،
-وأي secret أو consent. لا تستنتج هذه القيم من الكود أو الإنترنت، ولا يفعل موصل
+بعد discovery، cadence وSLO الفعليان، مدة parallel run، وSecret Manager/deployment
+للعميل التجريبي. أنشئ redirect URI/callback لـBaseer ERP في مشروع Google المعتمد،
+لكن لا تُستنتج أو تنسخ قيمة secret. لا تستنتج هذه القيم من الكود أو الإنترنت، ولا يفعل موصل
 أو يغلق المصدر قبل قرار المالك والـpilot.
