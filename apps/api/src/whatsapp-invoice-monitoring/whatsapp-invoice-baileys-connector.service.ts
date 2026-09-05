@@ -51,6 +51,7 @@ type ActiveConnection = {
   qrExpiresAt: Date | null;
   stopped: boolean;
   processing: boolean;
+  authRowVersion: number;
   heartbeatTimer: ReturnType<typeof setInterval> | null;
   workTimer: ReturnType<typeof setInterval> | null;
   saveChain: Promise<void>;
@@ -86,7 +87,7 @@ export class WhatsappInvoiceBaileysPilotConnectorService implements OnModuleInit
     await Promise.all([...this.active.values()].map((connection) => this.stop(connection.scope)));
   }
 
-  async start(scope: WhatsappInvoiceConnectionScope): Promise<void> {
+  async start(scope: WhatsappInvoiceConnectionScope, resumeOnly = false): Promise<void> {
     this.assertEnabled();
     this.assetStorage.assertIngestionReady();
     const key = this.connectionKey(scope);
@@ -98,8 +99,11 @@ export class WhatsappInvoiceBaileysPilotConnectorService implements OnModuleInit
     if (this.active.has(key)) return;
 
     const ownerToken = randomUUID();
-    const acquired = await this.foundation.acquireConnectionLease({ ...scope, ownerToken, ttlMs: CONNECTION_LEASE_MS });
-    if (!acquired.acquired || acquired.fence === undefined) throw new ServiceUnavailableException("The WhatsApp connection is active on another worker.");
+    const acquired = await this.foundation.acquireConnectionLease({ ...scope, ownerToken, ttlMs: CONNECTION_LEASE_MS, resumeOnly });
+    if (!acquired.acquired || acquired.fence === undefined) {
+      if (resumeOnly) return;
+      throw new ServiceUnavailableException("The WhatsApp connection is active on another worker.");
+    }
 
     try {
       const active = await this.createActiveConnection(scope, ownerToken, acquired.fence);
@@ -114,9 +118,9 @@ export class WhatsappInvoiceBaileysPilotConnectorService implements OnModuleInit
   }
 
   async stop(scope: WhatsappInvoiceConnectionScope): Promise<void> {
+    await this.foundation.requestConnectionStop(scope);
     const connection = this.active.get(this.connectionKey(scope));
     if (!connection) return;
-    await this.foundation.setConnectionStatus({ ...connection.scope, ownerToken: connection.ownerToken, fence: connection.fence, status: "DISCONNECTED" }).catch(() => undefined);
     await this.dispose(connection);
   }
 
@@ -144,13 +148,13 @@ export class WhatsappInvoiceBaileysPilotConnectorService implements OnModuleInit
     const restored = persisted ? revive(persisted.state) : { creds: initAuthCreds(), keys: {} };
     const active: ActiveConnection = {
       scope, ownerToken, fence, socket: undefined as unknown as WASocket, qr: null, qrExpiresAt: null,
-      stopped: false, processing: false, heartbeatTimer: null, workTimer: null, saveChain: Promise.resolve(),
+      stopped: false, processing: false, authRowVersion: persisted?.rowVersion ?? 0, heartbeatTimer: null, workTimer: null, saveChain: Promise.resolve(),
     };
     const auth = this.authenticationState(restored, () => this.persistAuthentication(active, restored));
     const socket = makeWASocket({ auth, markOnlineOnConnect: false, syncFullHistory: false, shouldIgnoreJid: (jid) => !jid.endsWith("@g.us") });
     active.socket = socket;
 
-    socket.ev.on("creds.update", () => { void this.persistAuthentication(active, restored); });
+    socket.ev.on("creds.update", () => { void this.persistAuthentication(active, restored).catch(() => this.dispose(active)); });
     socket.ev.on("connection.update", (update) => {
       if (active.stopped) return;
       if (update.qr) {
@@ -198,8 +202,15 @@ export class WhatsappInvoiceBaileysPilotConnectorService implements OnModuleInit
   private async persistAuthentication(active: ActiveConnection, state: PersistedAuthenticationState): Promise<void> {
     if (active.stopped) return;
     active.saveChain = active.saveChain.catch(() => undefined).then(async () => {
-      if (active.stopped) return;
-      await this.foundation.saveAuthState(active.scope, serialize(state));
+      // `creds.update` can be queued immediately before a pairing socket emits
+      // `close`.  Once queued, it is a durability barrier: dispose waits for it
+      // before releasing the fenced lease and starting a replacement socket.
+      // Do not discard that update merely because disposal has stopped new work.
+      const saved = await this.foundation.saveAuthStateOwned({
+        ...active.scope, ownerToken: active.ownerToken, fence: active.fence,
+        expectedRowVersion: active.authRowVersion, state: serialize(state),
+      });
+      active.authRowVersion = saved.rowVersion;
     });
     return active.saveChain;
   }
@@ -310,7 +321,7 @@ export class WhatsappInvoiceBaileysPilotConnectorService implements OnModuleInit
     this.reconnectAttempts.set(key, attempt);
     const timer = setTimeout(() => {
       this.reconnectTimers.delete(key);
-      void this.start(scope).catch(() => this.scheduleReconnect(scope));
+      void this.start(scope, true).catch(() => this.scheduleReconnect(scope));
     }, Math.min(60_000, 2_000 * (2 ** (attempt - 1))) + randomInt(0, MAX_RECONNECT_JITTER_MS + 1));
     this.reconnectTimers.set(key, timer);
   }
