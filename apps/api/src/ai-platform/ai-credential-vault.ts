@@ -1,6 +1,6 @@
 import { createCipheriv, createDecipheriv, randomBytes } from "node:crypto";
 
-import { Injectable } from "@nestjs/common";
+import { Injectable, ServiceUnavailableException } from "@nestjs/common";
 
 export type EncryptedAiCredentialEnvelope = Readonly<{
   encryptedCredential: string;
@@ -85,13 +85,13 @@ export class AiCredentialVault {
   private key(): Buffer {
     const encoded = process.env.AI_CREDENTIAL_ENCRYPTION_KEY;
     if (!encoded) {
-      throw new Error(
+      throw new ServiceUnavailableException(
         "AI_CREDENTIAL_ENCRYPTION_KEY must be configured before storing an AI credential.",
       );
     }
     const key = Buffer.from(encoded, "base64");
-    if (key.length !== 32) {
-      throw new Error(
+    if (key.length !== 32 || key.toString("base64") !== encoded) {
+      throw new ServiceUnavailableException(
         "AI_CREDENTIAL_ENCRYPTION_KEY must be a base64-encoded 32-byte value.",
       );
     }

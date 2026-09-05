@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState, type KeyboardEvent } from "react";
 import { api, requestId, type ActiveSession } from "./daily-sales-client";
 import { BaseerCard } from "./baseer-card";
 import { BaseerButton } from "./baseer-button";
-import { presentBaseerApiError } from "./baseer-api-error";
+import { BaseerApiError, presentBaseerApiError } from "./baseer-api-error";
 import { BaseerCompanyReadQuery } from "./baseer-company-read-query";
 import { BaseerAsyncState } from "./baseer-async-state";
 import { BaseerFormDialog } from "./baseer-form-dialog";
@@ -187,7 +187,9 @@ function AiSettingsContent({ language, session, owner, configuration, loading, l
       await refetch();
       setMessage(ar ? "تم حفظ الإعداد مشفراً كمسودة. افحص الاتصال ثم فعّل الملف صراحةً." : "The encrypted configuration was saved as a draft. Verify the connection, then activate it explicitly.");
   } catch (reason) {
-      setError(presentBaseerApiError(reason, language, ar ? "تعذر حفظ إعداد بصيرة." : "The Basira configuration could not be saved."));
+      setError(reason instanceof BaseerApiError && reason.code === "DEPENDENCY_UNAVAILABLE"
+        ? (ar ? "خدمة التشفير اللازمة لحفظ مفتاح الذكاء غير مهيأة على الخادم. تواصل مع مسؤول النظام ثم أعد المحاولة." : "The server encryption service required to save the AI key is not configured. Contact the system administrator, then try again.")
+        : presentBaseerApiError(reason, language, ar ? "تعذر حفظ إعداد بصيرة." : "The Basira configuration could not be saved."));
     } finally { setBusy(false); }
   };
   const submitSystemIdentity = async (next: IdentityValues) => {

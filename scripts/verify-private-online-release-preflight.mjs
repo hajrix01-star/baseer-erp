@@ -7,6 +7,12 @@ const applicationImages = {
 };
 const requiredImages = [...Object.keys(applicationImages), "BASEER_POSTGRES_IMAGE", "BASEER_CADDY_IMAGE"];
 
+function isCanonicalBase64Key(value) {
+  if (!/^[A-Za-z0-9+/]{43}=$/.test(value)) return false;
+  const key = Buffer.from(value, "base64");
+  return key.length === 32 && key.toString("base64") === value;
+}
+
 export function parseEnvironment(text) {
   const values = {};
 
@@ -54,6 +60,10 @@ export function verifyPrivateOnlineReleasePreflight({ environment, manifest }) {
     if (!isImmutableDigestReference(value ?? "")) {
       throw new Error(`${variable} must be an image@sha256:<64-hex-digest> reference with no tag.`);
     }
+  }
+
+  if (!isCanonicalBase64Key(environment.AI_CREDENTIAL_ENCRYPTION_KEY ?? "")) {
+    throw new Error("AI_CREDENTIAL_ENCRYPTION_KEY must be a canonical base64-encoded 32-byte key.");
   }
 
   for (const [variable, manifestImage] of Object.entries(applicationImages)) {
