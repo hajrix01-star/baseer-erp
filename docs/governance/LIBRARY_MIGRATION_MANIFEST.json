@@ -172,6 +172,11 @@
       "file": "treasury-workspace-runtime.tsx",
       "decision": "migrated-finance-central-date-picker"
     },
+    "editable-date:whatsapp-invoice-monitoring-workspace.tsx": {
+      "kind": "editable-date",
+      "file": "whatsapp-invoice-monitoring-workspace.tsx",
+      "decision": "migrated-operations-whatsapp-baseer-date-picker"
+    },
     "form:administration-ai-settings-panel.tsx": {
       "kind": "form",
       "file": "administration-ai-settings-panel.tsx",
@@ -462,6 +467,11 @@
       "file": "treasury-workspace-runtime.tsx",
       "decision": "migrated-finance-central-form-decimal-safe"
     },
+    "form:whatsapp-invoice-monitoring-workspace.tsx": {
+      "kind": "form",
+      "file": "whatsapp-invoice-monitoring-workspace.tsx",
+      "decision": "migrated-operations-whatsapp-baseer-form-controls"
+    },
     "query:accrual-profit-loss-workspace.tsx": {
       "kind": "query",
       "file": "accrual-profit-loss-workspace.tsx",
@@ -581,6 +591,11 @@
       "kind": "query",
       "file": "reports-workspace-runtime.tsx",
       "decision": "migrated-reports-snapshot-company-session-query"
+    },
+    "query:whatsapp-invoice-monitoring-workspace.tsx": {
+      "kind": "query",
+      "file": "whatsapp-invoice-monitoring-workspace.tsx",
+      "decision": "migrated-operations-whatsapp-company-query"
     },
     "searchable-selector:baseer-combobox-field.tsx": {
       "kind": "searchable-selector",
@@ -792,15 +807,15 @@
       "file": "daily-sales-history.tsx",
       "decision": "migrated-finance-central-data-grid"
     },
-    "table:expenses-obligations-workspace-runtime.tsx": {
-      "kind": "table",
-      "file": "expenses-obligations-workspace-runtime.tsx",
-      "decision": "migrated-finance-central-data-grid"
-    },
     "table:data-table.tsx": {
       "kind": "table",
       "file": "data-table.tsx",
       "decision": "central-intentional-lightweight-bounded-table"
+    },
+    "table:expenses-obligations-workspace-runtime.tsx": {
+      "kind": "table",
+      "file": "expenses-obligations-workspace-runtime.tsx",
+      "decision": "migrated-finance-central-data-grid"
     },
     "table:finance-accounts-workspace-runtime.tsx": {
       "kind": "table",
@@ -946,6 +961,11 @@
       "kind": "table",
       "file": "treasury-workspace-runtime.tsx",
       "decision": "migrated-finance-central-data-grid"
+    },
+    "table:whatsapp-invoice-monitoring-workspace.tsx": {
+      "kind": "table",
+      "file": "whatsapp-invoice-monitoring-workspace.tsx",
+      "decision": "migrated-operations-whatsapp-baseer-data-grid"
     }
   }
 }
