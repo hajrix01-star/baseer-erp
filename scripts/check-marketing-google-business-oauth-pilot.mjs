@@ -6,6 +6,9 @@ const files = {
   controller: "apps/api/src/marketing/marketing.controller.ts",
   pilot: "apps/api/src/marketing/marketing-google-business-oauth-pilot.service.ts",
   generic: "apps/api/src/marketing/marketing-google-oauth.service.ts",
+  connectionService: "apps/api/src/marketing/marketing.service.ts",
+  platform: "apps/api/src/marketing/marketing-google-platform.service.ts",
+  workspace: "apps/web/src/marketing-policies-workspace.tsx",
 };
 const text = Object.fromEntries(await Promise.all(Object.entries(files).map(async ([key, file]) => [key, await readFile(file, "utf8")])));
 const requireText = (value, expectation) => { if (!value.includes(expectation)) throw new Error(`MKT-02A guard: missing ${expectation}`); };
@@ -25,6 +28,10 @@ requireText(text.pilot, "this.requirePilotCompany(claimed.companyId);");
 requireText(text.pilot, "this.platform.googleBusinessPilotConfiguration();");
 requireText(text.pilot, 'status: "AUTHORIZED_AWAITING_SELECTION"');
 requireText(text.pilot, 'data: { status: "REVOKED", revokedAt: new Date() }');
+requireText(text.connectionService, "this.googlePlatform.googleBusinessPilotAuthorizationAvailable(context.companyId)");
+requireText(text.platform, "googleBusinessPilotAuthorizationAvailable(companyId: string): boolean");
+requireText(text.workspace, 'connection.provider === "GOOGLE_BUSINESS" && connection.pilotAuthorizationAvailable && canManage');
+requireText(text.workspace, '"/marketing/provider-connections/google-business/pilot/authorization"');
 requireText(text.schema, "model MarketingGoogleBusinessOAuthState");
 requireText(text.migration, 'CHECK ("provider" = \'GOOGLE_BUSINESS\')');
 requireText(text.migration, 'FOREIGN KEY ("tenantId", "initiatedByUserId", "companyId")');

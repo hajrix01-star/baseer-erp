@@ -79,6 +79,9 @@ export const marketingProviderConnectionSchema = z.object({
   status: marketingProviderConnectionStatusSchema,
   setupRequestedAt: z.string().datetime().nullable(),
   platformReadiness: marketingProviderPlatformReadinessSchema,
+  /** Server-computed availability for the tightly scoped ARZ Google Business pilot.
+   * It exposes no credential, account, location, or OAuth state. */
+  pilotAuthorizationAvailable: z.boolean(),
   allowedOperation: z.enum(["ADS_READ_ONLY", "BUSINESS_READ_AND_GOVERNED_PUBLISH"]),
   messageAr: z.string().min(1).max(600),
   messageEn: z.string().min(1).max(600),

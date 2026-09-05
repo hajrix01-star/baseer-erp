@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 
 import { MarketingGoogleBusinessOAuthPilotService } from "./marketing-google-business-oauth-pilot.service.js";
+import { MarketingGooglePlatformService } from "./marketing-google-platform.service.js";
 
 const tenantId = "11111111-1111-4111-8111-111111111111";
 const companyId = "22222222-2222-4222-8222-222222222222";
@@ -60,6 +61,17 @@ const originalFetch = globalThis.fetch;
 let fetchCalls = 0;
 globalThis.fetch = (async () => { fetchCalls += 1; return new Response(JSON.stringify({ refresh_token: "verification-only-refresh-token" }), { status: 200, headers: { "content-type": "application/json" } }); }) as typeof fetch;
 
+const platformEnvironmentNames = [
+  "BASEER_MARKETING_GOOGLE_BUSINESS_PILOT_COMPANY_ID",
+  "BASEER_MARKETING_GOOGLE_BUSINESS_PILOT_ENABLED",
+  "BASEER_GOOGLE_OAUTH_ENABLED",
+  "BASEER_GOOGLE_OAUTH_CLIENT_ID",
+  "BASEER_GOOGLE_OAUTH_CLIENT_SECRET",
+  "BASEER_GOOGLE_OAUTH_REDIRECT_URI",
+  "BASEER_PROVIDER_CREDENTIAL_ENCRYPTION_KEY",
+] as const;
+const originalPlatformEnvironment = new Map(platformEnvironmentNames.map((name) => [name, process.env[name]]));
+
 try {
   const started = await service.begin(context);
   const state = new URL(started.authorizationUrl).searchParams.get("state");
@@ -83,7 +95,25 @@ try {
   assert.equal(fetchCalls, beforeDisabledCallback, "The second kill-switch check must prevent egress.");
   assert.equal(database.connection.status, "BLOCKED");
   assert.equal(database.envelope?.status, "REVOKED", "A failed re-authorization must not leave an older credential active.");
+  Object.assign(process.env, {
+    BASEER_MARKETING_GOOGLE_BUSINESS_PILOT_COMPANY_ID: companyId,
+    BASEER_MARKETING_GOOGLE_BUSINESS_PILOT_ENABLED: "true",
+    BASEER_GOOGLE_OAUTH_ENABLED: "true",
+    BASEER_GOOGLE_OAUTH_CLIENT_ID: "verification-client",
+    BASEER_GOOGLE_OAUTH_CLIENT_SECRET: "verification-secret",
+    BASEER_GOOGLE_OAUTH_REDIRECT_URI: "https://baseer.test/marketing/provider-connections/google-business/pilot/callback",
+    BASEER_PROVIDER_CREDENTIAL_ENCRYPTION_KEY: Buffer.alloc(32, 7).toString("base64"),
+  });
+  const platformReadiness = new MarketingGooglePlatformService();
+  assert.equal(platformReadiness.googleBusinessPilotAuthorizationAvailable(companyId), true, "Only a completely configured allowlisted company may see the pilot action.");
+  assert.equal(platformReadiness.googleBusinessPilotAuthorizationAvailable("55555555-5555-4555-8555-555555555555"), false, "A different company must not see the pilot action.");
+  process.env.BASEER_MARKETING_GOOGLE_BUSINESS_PILOT_ENABLED = "false";
+  assert.equal(platformReadiness.googleBusinessPilotAuthorizationAvailable(companyId), false, "The pilot action must fail closed when disabled.");
   console.log("Marketing Google Business OAuth pilot policy verification passed: atomic callback claim, encrypted-envelope-only success path, and pre-exchange kill switch.");
 } finally {
   globalThis.fetch = originalFetch;
+  for (const [name, value] of originalPlatformEnvironment) {
+    if (value === undefined) delete process.env[name];
+    else process.env[name] = value;
+  }
 }
