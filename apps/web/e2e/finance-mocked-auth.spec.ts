@@ -56,8 +56,8 @@ async function mockFinanceSetup(page: Page, language: "ar" | "en", permissionCod
 async function mockTreasury(page: Page) {
   await mockAuthenticatedSession(page, "ar", treasuryPermissions);
   const vaults = [
-    { id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa", nameAr: "الصندوق", nameEn: "Cash", type: "CASH", paymentMethods: ["CASH"], status: "ACTIVE", isSalesChannel: true, isPaymentDestination: true, sortOrder: 1, openingBalance: "100.0000", balanceAsOf: "100.0000", inflow: "0.0000", outflow: "0.0000" },
-    { id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb", nameAr: "البنك", nameEn: "Bank", type: "BANK", paymentMethods: ["BANK_TRANSFER"], status: "ACTIVE", isSalesChannel: false, isPaymentDestination: true, sortOrder: 2, openingBalance: "100.0000", balanceAsOf: "100.0000", inflow: "0.0000", outflow: "0.0000" },
+    { id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa", nameAr: "الصندوق", nameEn: "Cash", type: "CASH", paymentMethods: ["CASH"], status: "ACTIVE", isSalesChannel: true, isPaymentDestination: true, sortOrder: 1, openingBalance: "100.0000", balanceAsOf: "115.0000", inflow: "20.0000", outflow: "5.0000", net: "15.0000" },
+    { id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb", nameAr: "البنك", nameEn: "Bank", type: "BANK", paymentMethods: ["BANK_TRANSFER"], status: "ACTIVE", isSalesChannel: false, isPaymentDestination: true, sortOrder: 2, openingBalance: "100.0000", balanceAsOf: "115.0000", inflow: "20.0000", outflow: "5.0000", net: "15.0000" },
   ];
   await page.route("**/v1/**", async (route) => {
     const url = new URL(route.request().url());
@@ -191,8 +191,11 @@ test("treasury summary presents the server-owned period net rather than an openi
 
   const summary = page.locator(".treasury-summary-cards");
   await expect(summary.getByText("رصيد إقفال المدة", { exact: true })).toBeVisible();
-  await expect(page.locator(".treasury-summary-period-formula")).toHaveText("الوارد − الصادر");
+  await expect(page.getByText("الوارد − الصادر", { exact: true })).toHaveCount(0);
   await expect(summary.getByText("رصيد الافتتاح", { exact: true })).toHaveCount(0);
+  const vaultCard = page.locator(".treasury-vault-cards .baseer-card").filter({ hasText: "الصندوق" });
+  await expect(vaultCard.getByText("رصيد إقفال المدة", { exact: true })).toBeVisible();
+  await expect(vaultCard.getByText("رصيد الافتتاح", { exact: true })).toHaveCount(0);
 });
 
 test("accounts and invoice register retain server cursor pagination", async ({ page }) => {

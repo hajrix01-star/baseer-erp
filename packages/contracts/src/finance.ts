@@ -1444,6 +1444,9 @@ const treasuryVaultSchema = z.object({
   openingBalance: financeSignedAmountSchema,
   inflow: financeAmountSchema,
   outflow: financeAmountSchema,
+  // Period net is server-owned so every treasury surface applies the same
+  // selected-period meaning without client-side arithmetic.
+  net: financeSignedAmountSchema,
 }).strict();
 const treasuryGroupSchema = z.object({
   key: z.enum(["COLLECTION_CHANNELS", "OTHER_VAULTS", "ARCHIVED"]),
