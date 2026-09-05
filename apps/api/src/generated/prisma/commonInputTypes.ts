@@ -1316,6 +1316,193 @@ export type EnumAiProviderKindWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumAiProviderKindFilter<$PrismaModel>
 }
 
+export type EnumWhatsappInvoiceConnectionStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceConnectionStatus | Prisma.EnumWhatsappInvoiceConnectionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceConnectionStatus[] | Prisma.ListEnumWhatsappInvoiceConnectionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceConnectionStatus[] | Prisma.ListEnumWhatsappInvoiceConnectionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceConnectionStatusFilter<$PrismaModel> | $Enums.WhatsappInvoiceConnectionStatus
+}
+
+export type EnumWhatsappInvoiceConnectionStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceConnectionStatus | Prisma.EnumWhatsappInvoiceConnectionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceConnectionStatus[] | Prisma.ListEnumWhatsappInvoiceConnectionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceConnectionStatus[] | Prisma.ListEnumWhatsappInvoiceConnectionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceConnectionStatusWithAggregatesFilter<$PrismaModel> | $Enums.WhatsappInvoiceConnectionStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWhatsappInvoiceConnectionStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWhatsappInvoiceConnectionStatusFilter<$PrismaModel>
+}
+
+export type EnumWhatsappInvoiceAssetStorageStateFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceAssetStorageState | Prisma.EnumWhatsappInvoiceAssetStorageStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceAssetStorageState[] | Prisma.ListEnumWhatsappInvoiceAssetStorageStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceAssetStorageState[] | Prisma.ListEnumWhatsappInvoiceAssetStorageStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceAssetStorageStateFilter<$PrismaModel> | $Enums.WhatsappInvoiceAssetStorageState
+}
+
+export type EnumWhatsappInvoiceAssetScanStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceAssetScanStatus | Prisma.EnumWhatsappInvoiceAssetScanStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceAssetScanStatus[] | Prisma.ListEnumWhatsappInvoiceAssetScanStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceAssetScanStatus[] | Prisma.ListEnumWhatsappInvoiceAssetScanStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceAssetScanStatusFilter<$PrismaModel> | $Enums.WhatsappInvoiceAssetScanStatus
+}
+
+export type EnumWhatsappInvoiceAssetStorageStateWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceAssetStorageState | Prisma.EnumWhatsappInvoiceAssetStorageStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceAssetStorageState[] | Prisma.ListEnumWhatsappInvoiceAssetStorageStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceAssetStorageState[] | Prisma.ListEnumWhatsappInvoiceAssetStorageStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceAssetStorageStateWithAggregatesFilter<$PrismaModel> | $Enums.WhatsappInvoiceAssetStorageState
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWhatsappInvoiceAssetStorageStateFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWhatsappInvoiceAssetStorageStateFilter<$PrismaModel>
+}
+
+export type EnumWhatsappInvoiceAssetScanStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceAssetScanStatus | Prisma.EnumWhatsappInvoiceAssetScanStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceAssetScanStatus[] | Prisma.ListEnumWhatsappInvoiceAssetScanStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceAssetScanStatus[] | Prisma.ListEnumWhatsappInvoiceAssetScanStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceAssetScanStatusWithAggregatesFilter<$PrismaModel> | $Enums.WhatsappInvoiceAssetScanStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWhatsappInvoiceAssetScanStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWhatsappInvoiceAssetScanStatusFilter<$PrismaModel>
+}
+
+export type EnumWhatsappInvoiceMediaWorkItemStateFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceMediaWorkItemState | Prisma.EnumWhatsappInvoiceMediaWorkItemStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceMediaWorkItemState[] | Prisma.ListEnumWhatsappInvoiceMediaWorkItemStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceMediaWorkItemState[] | Prisma.ListEnumWhatsappInvoiceMediaWorkItemStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceMediaWorkItemStateFilter<$PrismaModel> | $Enums.WhatsappInvoiceMediaWorkItemState
+}
+
+export type EnumWhatsappInvoiceMediaWorkItemStateWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceMediaWorkItemState | Prisma.EnumWhatsappInvoiceMediaWorkItemStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceMediaWorkItemState[] | Prisma.ListEnumWhatsappInvoiceMediaWorkItemStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceMediaWorkItemState[] | Prisma.ListEnumWhatsappInvoiceMediaWorkItemStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceMediaWorkItemStateWithAggregatesFilter<$PrismaModel> | $Enums.WhatsappInvoiceMediaWorkItemState
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWhatsappInvoiceMediaWorkItemStateFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWhatsappInvoiceMediaWorkItemStateFilter<$PrismaModel>
+}
+
+export type EnumWhatsappInvoiceExtractionStateFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceExtractionState | Prisma.EnumWhatsappInvoiceExtractionStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceExtractionState[] | Prisma.ListEnumWhatsappInvoiceExtractionStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceExtractionState[] | Prisma.ListEnumWhatsappInvoiceExtractionStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceExtractionStateFilter<$PrismaModel> | $Enums.WhatsappInvoiceExtractionState
+}
+
+export type EnumWhatsappInvoiceQualityStateFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceQualityState | Prisma.EnumWhatsappInvoiceQualityStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceQualityState[] | Prisma.ListEnumWhatsappInvoiceQualityStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceQualityState[] | Prisma.ListEnumWhatsappInvoiceQualityStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceQualityStateFilter<$PrismaModel> | $Enums.WhatsappInvoiceQualityState
+}
+
+export type EnumWhatsappInvoiceApprovalStateFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceApprovalState | Prisma.EnumWhatsappInvoiceApprovalStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceApprovalState[] | Prisma.ListEnumWhatsappInvoiceApprovalStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceApprovalState[] | Prisma.ListEnumWhatsappInvoiceApprovalStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceApprovalStateFilter<$PrismaModel> | $Enums.WhatsappInvoiceApprovalState
+}
+
+export type EnumWhatsappInvoiceDuplicateStateFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceDuplicateState | Prisma.EnumWhatsappInvoiceDuplicateStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceDuplicateState[] | Prisma.ListEnumWhatsappInvoiceDuplicateStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceDuplicateState[] | Prisma.ListEnumWhatsappInvoiceDuplicateStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceDuplicateStateFilter<$PrismaModel> | $Enums.WhatsappInvoiceDuplicateState
+}
+
+export type EnumWhatsappInvoiceArchiveStateFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceArchiveState | Prisma.EnumWhatsappInvoiceArchiveStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceArchiveState[] | Prisma.ListEnumWhatsappInvoiceArchiveStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceArchiveState[] | Prisma.ListEnumWhatsappInvoiceArchiveStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceArchiveStateFilter<$PrismaModel> | $Enums.WhatsappInvoiceArchiveState
+}
+
+export type EnumWhatsappInvoicePurchaseStateFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoicePurchaseState | Prisma.EnumWhatsappInvoicePurchaseStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoicePurchaseState[] | Prisma.ListEnumWhatsappInvoicePurchaseStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoicePurchaseState[] | Prisma.ListEnumWhatsappInvoicePurchaseStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoicePurchaseStateFilter<$PrismaModel> | $Enums.WhatsappInvoicePurchaseState
+}
+
+export type EnumWhatsappInvoiceExtractionStateWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceExtractionState | Prisma.EnumWhatsappInvoiceExtractionStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceExtractionState[] | Prisma.ListEnumWhatsappInvoiceExtractionStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceExtractionState[] | Prisma.ListEnumWhatsappInvoiceExtractionStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceExtractionStateWithAggregatesFilter<$PrismaModel> | $Enums.WhatsappInvoiceExtractionState
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWhatsappInvoiceExtractionStateFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWhatsappInvoiceExtractionStateFilter<$PrismaModel>
+}
+
+export type EnumWhatsappInvoiceQualityStateWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceQualityState | Prisma.EnumWhatsappInvoiceQualityStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceQualityState[] | Prisma.ListEnumWhatsappInvoiceQualityStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceQualityState[] | Prisma.ListEnumWhatsappInvoiceQualityStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceQualityStateWithAggregatesFilter<$PrismaModel> | $Enums.WhatsappInvoiceQualityState
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWhatsappInvoiceQualityStateFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWhatsappInvoiceQualityStateFilter<$PrismaModel>
+}
+
+export type EnumWhatsappInvoiceApprovalStateWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceApprovalState | Prisma.EnumWhatsappInvoiceApprovalStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceApprovalState[] | Prisma.ListEnumWhatsappInvoiceApprovalStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceApprovalState[] | Prisma.ListEnumWhatsappInvoiceApprovalStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceApprovalStateWithAggregatesFilter<$PrismaModel> | $Enums.WhatsappInvoiceApprovalState
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWhatsappInvoiceApprovalStateFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWhatsappInvoiceApprovalStateFilter<$PrismaModel>
+}
+
+export type EnumWhatsappInvoiceDuplicateStateWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceDuplicateState | Prisma.EnumWhatsappInvoiceDuplicateStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceDuplicateState[] | Prisma.ListEnumWhatsappInvoiceDuplicateStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceDuplicateState[] | Prisma.ListEnumWhatsappInvoiceDuplicateStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceDuplicateStateWithAggregatesFilter<$PrismaModel> | $Enums.WhatsappInvoiceDuplicateState
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWhatsappInvoiceDuplicateStateFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWhatsappInvoiceDuplicateStateFilter<$PrismaModel>
+}
+
+export type EnumWhatsappInvoiceArchiveStateWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceArchiveState | Prisma.EnumWhatsappInvoiceArchiveStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceArchiveState[] | Prisma.ListEnumWhatsappInvoiceArchiveStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceArchiveState[] | Prisma.ListEnumWhatsappInvoiceArchiveStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceArchiveStateWithAggregatesFilter<$PrismaModel> | $Enums.WhatsappInvoiceArchiveState
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWhatsappInvoiceArchiveStateFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWhatsappInvoiceArchiveStateFilter<$PrismaModel>
+}
+
+export type EnumWhatsappInvoicePurchaseStateWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoicePurchaseState | Prisma.EnumWhatsappInvoicePurchaseStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoicePurchaseState[] | Prisma.ListEnumWhatsappInvoicePurchaseStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoicePurchaseState[] | Prisma.ListEnumWhatsappInvoicePurchaseStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoicePurchaseStateWithAggregatesFilter<$PrismaModel> | $Enums.WhatsappInvoicePurchaseState
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWhatsappInvoicePurchaseStateFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWhatsappInvoicePurchaseStateFilter<$PrismaModel>
+}
+
+export type EnumWhatsappInvoiceRevisionSourceFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceRevisionSource | Prisma.EnumWhatsappInvoiceRevisionSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceRevisionSource[] | Prisma.ListEnumWhatsappInvoiceRevisionSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceRevisionSource[] | Prisma.ListEnumWhatsappInvoiceRevisionSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceRevisionSourceFilter<$PrismaModel> | $Enums.WhatsappInvoiceRevisionSource
+}
+
+export type EnumWhatsappInvoiceRevisionSourceWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceRevisionSource | Prisma.EnumWhatsappInvoiceRevisionSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceRevisionSource[] | Prisma.ListEnumWhatsappInvoiceRevisionSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceRevisionSource[] | Prisma.ListEnumWhatsappInvoiceRevisionSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceRevisionSourceWithAggregatesFilter<$PrismaModel> | $Enums.WhatsappInvoiceRevisionSource
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWhatsappInvoiceRevisionSourceFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWhatsappInvoiceRevisionSourceFilter<$PrismaModel>
+}
+
 export type EnumMarketingCampaignPlatformFilter<$PrismaModel = never> = {
   equals?: $Enums.MarketingCampaignPlatform | Prisma.EnumMarketingCampaignPlatformFieldRefInput<$PrismaModel>
   in?: $Enums.MarketingCampaignPlatform[] | Prisma.ListEnumMarketingCampaignPlatformFieldRefInput<$PrismaModel>
@@ -4288,6 +4475,193 @@ export type NestedEnumAiProviderKindWithAggregatesFilter<$PrismaModel = never> =
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumAiProviderKindFilter<$PrismaModel>
   _max?: Prisma.NestedEnumAiProviderKindFilter<$PrismaModel>
+}
+
+export type NestedEnumWhatsappInvoiceConnectionStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceConnectionStatus | Prisma.EnumWhatsappInvoiceConnectionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceConnectionStatus[] | Prisma.ListEnumWhatsappInvoiceConnectionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceConnectionStatus[] | Prisma.ListEnumWhatsappInvoiceConnectionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceConnectionStatusFilter<$PrismaModel> | $Enums.WhatsappInvoiceConnectionStatus
+}
+
+export type NestedEnumWhatsappInvoiceConnectionStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceConnectionStatus | Prisma.EnumWhatsappInvoiceConnectionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceConnectionStatus[] | Prisma.ListEnumWhatsappInvoiceConnectionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceConnectionStatus[] | Prisma.ListEnumWhatsappInvoiceConnectionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceConnectionStatusWithAggregatesFilter<$PrismaModel> | $Enums.WhatsappInvoiceConnectionStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWhatsappInvoiceConnectionStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWhatsappInvoiceConnectionStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumWhatsappInvoiceAssetStorageStateFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceAssetStorageState | Prisma.EnumWhatsappInvoiceAssetStorageStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceAssetStorageState[] | Prisma.ListEnumWhatsappInvoiceAssetStorageStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceAssetStorageState[] | Prisma.ListEnumWhatsappInvoiceAssetStorageStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceAssetStorageStateFilter<$PrismaModel> | $Enums.WhatsappInvoiceAssetStorageState
+}
+
+export type NestedEnumWhatsappInvoiceAssetScanStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceAssetScanStatus | Prisma.EnumWhatsappInvoiceAssetScanStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceAssetScanStatus[] | Prisma.ListEnumWhatsappInvoiceAssetScanStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceAssetScanStatus[] | Prisma.ListEnumWhatsappInvoiceAssetScanStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceAssetScanStatusFilter<$PrismaModel> | $Enums.WhatsappInvoiceAssetScanStatus
+}
+
+export type NestedEnumWhatsappInvoiceAssetStorageStateWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceAssetStorageState | Prisma.EnumWhatsappInvoiceAssetStorageStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceAssetStorageState[] | Prisma.ListEnumWhatsappInvoiceAssetStorageStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceAssetStorageState[] | Prisma.ListEnumWhatsappInvoiceAssetStorageStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceAssetStorageStateWithAggregatesFilter<$PrismaModel> | $Enums.WhatsappInvoiceAssetStorageState
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWhatsappInvoiceAssetStorageStateFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWhatsappInvoiceAssetStorageStateFilter<$PrismaModel>
+}
+
+export type NestedEnumWhatsappInvoiceAssetScanStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceAssetScanStatus | Prisma.EnumWhatsappInvoiceAssetScanStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceAssetScanStatus[] | Prisma.ListEnumWhatsappInvoiceAssetScanStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceAssetScanStatus[] | Prisma.ListEnumWhatsappInvoiceAssetScanStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceAssetScanStatusWithAggregatesFilter<$PrismaModel> | $Enums.WhatsappInvoiceAssetScanStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWhatsappInvoiceAssetScanStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWhatsappInvoiceAssetScanStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumWhatsappInvoiceMediaWorkItemStateFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceMediaWorkItemState | Prisma.EnumWhatsappInvoiceMediaWorkItemStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceMediaWorkItemState[] | Prisma.ListEnumWhatsappInvoiceMediaWorkItemStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceMediaWorkItemState[] | Prisma.ListEnumWhatsappInvoiceMediaWorkItemStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceMediaWorkItemStateFilter<$PrismaModel> | $Enums.WhatsappInvoiceMediaWorkItemState
+}
+
+export type NestedEnumWhatsappInvoiceMediaWorkItemStateWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceMediaWorkItemState | Prisma.EnumWhatsappInvoiceMediaWorkItemStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceMediaWorkItemState[] | Prisma.ListEnumWhatsappInvoiceMediaWorkItemStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceMediaWorkItemState[] | Prisma.ListEnumWhatsappInvoiceMediaWorkItemStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceMediaWorkItemStateWithAggregatesFilter<$PrismaModel> | $Enums.WhatsappInvoiceMediaWorkItemState
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWhatsappInvoiceMediaWorkItemStateFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWhatsappInvoiceMediaWorkItemStateFilter<$PrismaModel>
+}
+
+export type NestedEnumWhatsappInvoiceExtractionStateFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceExtractionState | Prisma.EnumWhatsappInvoiceExtractionStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceExtractionState[] | Prisma.ListEnumWhatsappInvoiceExtractionStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceExtractionState[] | Prisma.ListEnumWhatsappInvoiceExtractionStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceExtractionStateFilter<$PrismaModel> | $Enums.WhatsappInvoiceExtractionState
+}
+
+export type NestedEnumWhatsappInvoiceQualityStateFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceQualityState | Prisma.EnumWhatsappInvoiceQualityStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceQualityState[] | Prisma.ListEnumWhatsappInvoiceQualityStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceQualityState[] | Prisma.ListEnumWhatsappInvoiceQualityStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceQualityStateFilter<$PrismaModel> | $Enums.WhatsappInvoiceQualityState
+}
+
+export type NestedEnumWhatsappInvoiceApprovalStateFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceApprovalState | Prisma.EnumWhatsappInvoiceApprovalStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceApprovalState[] | Prisma.ListEnumWhatsappInvoiceApprovalStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceApprovalState[] | Prisma.ListEnumWhatsappInvoiceApprovalStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceApprovalStateFilter<$PrismaModel> | $Enums.WhatsappInvoiceApprovalState
+}
+
+export type NestedEnumWhatsappInvoiceDuplicateStateFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceDuplicateState | Prisma.EnumWhatsappInvoiceDuplicateStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceDuplicateState[] | Prisma.ListEnumWhatsappInvoiceDuplicateStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceDuplicateState[] | Prisma.ListEnumWhatsappInvoiceDuplicateStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceDuplicateStateFilter<$PrismaModel> | $Enums.WhatsappInvoiceDuplicateState
+}
+
+export type NestedEnumWhatsappInvoiceArchiveStateFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceArchiveState | Prisma.EnumWhatsappInvoiceArchiveStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceArchiveState[] | Prisma.ListEnumWhatsappInvoiceArchiveStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceArchiveState[] | Prisma.ListEnumWhatsappInvoiceArchiveStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceArchiveStateFilter<$PrismaModel> | $Enums.WhatsappInvoiceArchiveState
+}
+
+export type NestedEnumWhatsappInvoicePurchaseStateFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoicePurchaseState | Prisma.EnumWhatsappInvoicePurchaseStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoicePurchaseState[] | Prisma.ListEnumWhatsappInvoicePurchaseStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoicePurchaseState[] | Prisma.ListEnumWhatsappInvoicePurchaseStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoicePurchaseStateFilter<$PrismaModel> | $Enums.WhatsappInvoicePurchaseState
+}
+
+export type NestedEnumWhatsappInvoiceExtractionStateWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceExtractionState | Prisma.EnumWhatsappInvoiceExtractionStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceExtractionState[] | Prisma.ListEnumWhatsappInvoiceExtractionStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceExtractionState[] | Prisma.ListEnumWhatsappInvoiceExtractionStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceExtractionStateWithAggregatesFilter<$PrismaModel> | $Enums.WhatsappInvoiceExtractionState
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWhatsappInvoiceExtractionStateFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWhatsappInvoiceExtractionStateFilter<$PrismaModel>
+}
+
+export type NestedEnumWhatsappInvoiceQualityStateWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceQualityState | Prisma.EnumWhatsappInvoiceQualityStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceQualityState[] | Prisma.ListEnumWhatsappInvoiceQualityStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceQualityState[] | Prisma.ListEnumWhatsappInvoiceQualityStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceQualityStateWithAggregatesFilter<$PrismaModel> | $Enums.WhatsappInvoiceQualityState
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWhatsappInvoiceQualityStateFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWhatsappInvoiceQualityStateFilter<$PrismaModel>
+}
+
+export type NestedEnumWhatsappInvoiceApprovalStateWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceApprovalState | Prisma.EnumWhatsappInvoiceApprovalStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceApprovalState[] | Prisma.ListEnumWhatsappInvoiceApprovalStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceApprovalState[] | Prisma.ListEnumWhatsappInvoiceApprovalStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceApprovalStateWithAggregatesFilter<$PrismaModel> | $Enums.WhatsappInvoiceApprovalState
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWhatsappInvoiceApprovalStateFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWhatsappInvoiceApprovalStateFilter<$PrismaModel>
+}
+
+export type NestedEnumWhatsappInvoiceDuplicateStateWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceDuplicateState | Prisma.EnumWhatsappInvoiceDuplicateStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceDuplicateState[] | Prisma.ListEnumWhatsappInvoiceDuplicateStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceDuplicateState[] | Prisma.ListEnumWhatsappInvoiceDuplicateStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceDuplicateStateWithAggregatesFilter<$PrismaModel> | $Enums.WhatsappInvoiceDuplicateState
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWhatsappInvoiceDuplicateStateFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWhatsappInvoiceDuplicateStateFilter<$PrismaModel>
+}
+
+export type NestedEnumWhatsappInvoiceArchiveStateWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceArchiveState | Prisma.EnumWhatsappInvoiceArchiveStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceArchiveState[] | Prisma.ListEnumWhatsappInvoiceArchiveStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceArchiveState[] | Prisma.ListEnumWhatsappInvoiceArchiveStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceArchiveStateWithAggregatesFilter<$PrismaModel> | $Enums.WhatsappInvoiceArchiveState
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWhatsappInvoiceArchiveStateFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWhatsappInvoiceArchiveStateFilter<$PrismaModel>
+}
+
+export type NestedEnumWhatsappInvoicePurchaseStateWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoicePurchaseState | Prisma.EnumWhatsappInvoicePurchaseStateFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoicePurchaseState[] | Prisma.ListEnumWhatsappInvoicePurchaseStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoicePurchaseState[] | Prisma.ListEnumWhatsappInvoicePurchaseStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoicePurchaseStateWithAggregatesFilter<$PrismaModel> | $Enums.WhatsappInvoicePurchaseState
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWhatsappInvoicePurchaseStateFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWhatsappInvoicePurchaseStateFilter<$PrismaModel>
+}
+
+export type NestedEnumWhatsappInvoiceRevisionSourceFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceRevisionSource | Prisma.EnumWhatsappInvoiceRevisionSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceRevisionSource[] | Prisma.ListEnumWhatsappInvoiceRevisionSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceRevisionSource[] | Prisma.ListEnumWhatsappInvoiceRevisionSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceRevisionSourceFilter<$PrismaModel> | $Enums.WhatsappInvoiceRevisionSource
+}
+
+export type NestedEnumWhatsappInvoiceRevisionSourceWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.WhatsappInvoiceRevisionSource | Prisma.EnumWhatsappInvoiceRevisionSourceFieldRefInput<$PrismaModel>
+  in?: $Enums.WhatsappInvoiceRevisionSource[] | Prisma.ListEnumWhatsappInvoiceRevisionSourceFieldRefInput<$PrismaModel>
+  notIn?: $Enums.WhatsappInvoiceRevisionSource[] | Prisma.ListEnumWhatsappInvoiceRevisionSourceFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumWhatsappInvoiceRevisionSourceWithAggregatesFilter<$PrismaModel> | $Enums.WhatsappInvoiceRevisionSource
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumWhatsappInvoiceRevisionSourceFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumWhatsappInvoiceRevisionSourceFilter<$PrismaModel>
 }
 
 export type NestedEnumMarketingCampaignPlatformFilter<$PrismaModel = never> = {

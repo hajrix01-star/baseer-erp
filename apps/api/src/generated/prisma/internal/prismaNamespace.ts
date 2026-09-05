@@ -469,6 +469,19 @@ export const ModelName = {
   InboundEvidenceAttachment: 'InboundEvidenceAttachment',
   InboundEvidenceDocumentAnalysis: 'InboundEvidenceDocumentAnalysis',
   InboundEvidenceMessageLabel: 'InboundEvidenceMessageLabel',
+  WhatsappInvoiceConnection: 'WhatsappInvoiceConnection',
+  WhatsappInvoiceConnectionSession: 'WhatsappInvoiceConnectionSession',
+  WhatsappInvoiceConnectionLease: 'WhatsappInvoiceConnectionLease',
+  WhatsappInvoiceGroupBinding: 'WhatsappInvoiceGroupBinding',
+  WhatsappInboundMessage: 'WhatsappInboundMessage',
+  WhatsappInvoiceAsset: 'WhatsappInvoiceAsset',
+  WhatsappInvoiceMediaWorkItem: 'WhatsappInvoiceMediaWorkItem',
+  WhatsappInvoiceAssetPage: 'WhatsappInvoiceAssetPage',
+  WhatsappInvoiceRecord: 'WhatsappInvoiceRecord',
+  WhatsappInvoicePageAssignment: 'WhatsappInvoicePageAssignment',
+  WhatsappInvoiceExtractionRevision: 'WhatsappInvoiceExtractionRevision',
+  WhatsappInvoiceReview: 'WhatsappInvoiceReview',
+  WhatsappInvoiceDuplicateAssessment: 'WhatsappInvoiceDuplicateAssessment',
   MarketingCampaign: 'MarketingCampaign',
   MarketingCampaignAnalysisFeedback: 'MarketingCampaignAnalysisFeedback',
   MarketingCampaignFinancialLink: 'MarketingCampaignFinancialLink',
@@ -612,7 +625,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "backupPolicy" | "backupJob" | "backupArtifact" | "backupAuditEvent" | "legacyMigrationRun" | "legacyMigrationCompanyMap" | "legacyMigrationRecordMap" | "noorixSourceAnnotation" | "nurixExcelStagingPackage" | "nurixExcelStagingBatch" | "nurixExcelStagingRow" | "nurixExcelMasterDataExecution" | "nurixExcelMasterDataItem" | "nurixExcelFinancialExecution" | "nurixExcelFinancialWave" | "nurixExcelFinancialItem" | "nurixExcelFinancialSourceMap" | "nurixExcelFinancialReceipt" | "nurixHistoricalPayrollEvidence" | "nurixHistoricalPayrollLineEvidence" | "nurixHistoricalPayrollAccountingEvidence" | "legacyMigrationException" | "legacyMigrationReviewAction" | "ownerDailyBriefSnapshot" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "marketingProviderCredentialEnvelope" | "marketingGoogleBusinessLocationMapping" | "marketingProviderSyncRun" | "financeAccount" | "financePnlMappingVersion" | "financePnlStatementLine" | "financePnlAccountMapping" | "financeLedgerRevision" | "reportRun" | "decisionMetricDefinition" | "decisionSalesChangePolicy" | "decisionRuleDefinition" | "decisionContextSource" | "decisionContextImportRun" | "decisionContextResearchRun" | "decisionContextCandidate" | "decisionGlobalContextEvent" | "decisionGlobalContextEventRevision" | "decisionGlobalContextReviewAction" | "decisionCompanyContextEvent" | "decisionEvaluationRun" | "decisionEvidenceSnapshot" | "decisionAlert" | "decisionAlertAction" | "decisionFeedback" | "inboundEvidenceLabel" | "inboundEvidenceRule" | "inboundEvidenceCommandReceipt" | "inboundEvidenceGmailConnection" | "inboundEvidenceGmailOAuthState" | "inboundEvidenceMessage" | "inboundEvidenceAttachment" | "inboundEvidenceDocumentAnalysis" | "inboundEvidenceMessageLabel" | "marketingCampaign" | "marketingCampaignAnalysisFeedback" | "marketingCampaignFinancialLink" | "marketingCampaignContextLink" | "marketingSalesTarget" | "marketingProviderConnection" | "marketingGoogleBusinessOAuthState" | "marketingProviderOAuthState" | "marketingReputationReplyPolicy" | "reportDocument" | "vatSimulation" | "financeCashPerformanceEvent" | "financeCashPerformanceCoverage" | "financeCashPerformanceHistoricalImport" | "financeVatSettlement" | "financeCategory" | "financeSupplier" | "financeCounterpartyIdentity" | "financeCounterpartyAlias" | "legacyMigrationCounterpartyResolution" | "legacyMigrationCounterpartyCandidate" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowDocumentRevision" | "operationsAssetWarrantyAsset" | "operationsAssetWarrantyLine" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "attendanceEmployeeCredential" | "attendanceBranch" | "attendanceRosterPlan" | "attendanceRosterPeakPeriod" | "attendanceRosterEntry" | "attendanceRosterEntryPeriod" | "attendanceScheduleTemplate" | "attendanceScheduleTemplateVersion" | "attendanceSchedulePeriod" | "attendanceEmployeeScheduleAssignment" | "attendanceEmployeeWeeklyAdjustment" | "attendanceEmployeeWeeklyAdjustmentPeriod" | "attendanceScheduleException" | "attendanceScheduleExceptionPeriod" | "attendanceEvent" | "attendanceQrScanUse" | "attendanceWorkSession" | "hrEmployeeWorkTerms" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiCompanyContext" | "aiSkillActivation" | "aiExecutionReceipt" | "aiInterpretation" | "aiInterpretationRun" | "aiModelPriceRevision" | "aiBudgetReservation" | "aiUsageLedger" | "aiInterpretationPlacement" | "aiHumanInsight" | "aiEvaluationFeedback" | "aiSkillEvaluationRun" | "aiSystemIdentity" | "operationsSection" | "operationsUnit" | "operationsCatalogCategory" | "operationsItem" | "operationsItemUnit" | "operationsItemConversionVersion" | "operationsItemConversionEdge" | "operationsInternalRegistration" | "operationsInternalRegistrationLine" | "operationsInternalRegistrationConsumption" | "operationsRecipeVersion" | "operationsRecipeLine" | "operationsPurchaseRequest" | "operationsPurchaseRequestLine" | "operationsPurchaseReceipt" | "operationsPurchaseReceiptLine" | "operationsCustodyProfile" | "operationsCustodyEvent" | "operationsInventoryBalance" | "operationsInventoryMovement"
+    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "backupPolicy" | "backupJob" | "backupArtifact" | "backupAuditEvent" | "legacyMigrationRun" | "legacyMigrationCompanyMap" | "legacyMigrationRecordMap" | "noorixSourceAnnotation" | "nurixExcelStagingPackage" | "nurixExcelStagingBatch" | "nurixExcelStagingRow" | "nurixExcelMasterDataExecution" | "nurixExcelMasterDataItem" | "nurixExcelFinancialExecution" | "nurixExcelFinancialWave" | "nurixExcelFinancialItem" | "nurixExcelFinancialSourceMap" | "nurixExcelFinancialReceipt" | "nurixHistoricalPayrollEvidence" | "nurixHistoricalPayrollLineEvidence" | "nurixHistoricalPayrollAccountingEvidence" | "legacyMigrationException" | "legacyMigrationReviewAction" | "ownerDailyBriefSnapshot" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "marketingProviderCredentialEnvelope" | "marketingGoogleBusinessLocationMapping" | "marketingProviderSyncRun" | "financeAccount" | "financePnlMappingVersion" | "financePnlStatementLine" | "financePnlAccountMapping" | "financeLedgerRevision" | "reportRun" | "decisionMetricDefinition" | "decisionSalesChangePolicy" | "decisionRuleDefinition" | "decisionContextSource" | "decisionContextImportRun" | "decisionContextResearchRun" | "decisionContextCandidate" | "decisionGlobalContextEvent" | "decisionGlobalContextEventRevision" | "decisionGlobalContextReviewAction" | "decisionCompanyContextEvent" | "decisionEvaluationRun" | "decisionEvidenceSnapshot" | "decisionAlert" | "decisionAlertAction" | "decisionFeedback" | "inboundEvidenceLabel" | "inboundEvidenceRule" | "inboundEvidenceCommandReceipt" | "inboundEvidenceGmailConnection" | "inboundEvidenceGmailOAuthState" | "inboundEvidenceMessage" | "inboundEvidenceAttachment" | "inboundEvidenceDocumentAnalysis" | "inboundEvidenceMessageLabel" | "whatsappInvoiceConnection" | "whatsappInvoiceConnectionSession" | "whatsappInvoiceConnectionLease" | "whatsappInvoiceGroupBinding" | "whatsappInboundMessage" | "whatsappInvoiceAsset" | "whatsappInvoiceMediaWorkItem" | "whatsappInvoiceAssetPage" | "whatsappInvoiceRecord" | "whatsappInvoicePageAssignment" | "whatsappInvoiceExtractionRevision" | "whatsappInvoiceReview" | "whatsappInvoiceDuplicateAssessment" | "marketingCampaign" | "marketingCampaignAnalysisFeedback" | "marketingCampaignFinancialLink" | "marketingCampaignContextLink" | "marketingSalesTarget" | "marketingProviderConnection" | "marketingGoogleBusinessOAuthState" | "marketingProviderOAuthState" | "marketingReputationReplyPolicy" | "reportDocument" | "vatSimulation" | "financeCashPerformanceEvent" | "financeCashPerformanceCoverage" | "financeCashPerformanceHistoricalImport" | "financeVatSettlement" | "financeCategory" | "financeSupplier" | "financeCounterpartyIdentity" | "financeCounterpartyAlias" | "legacyMigrationCounterpartyResolution" | "legacyMigrationCounterpartyCandidate" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowDocumentRevision" | "operationsAssetWarrantyAsset" | "operationsAssetWarrantyLine" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "attendanceEmployeeCredential" | "attendanceBranch" | "attendanceRosterPlan" | "attendanceRosterPeakPeriod" | "attendanceRosterEntry" | "attendanceRosterEntryPeriod" | "attendanceScheduleTemplate" | "attendanceScheduleTemplateVersion" | "attendanceSchedulePeriod" | "attendanceEmployeeScheduleAssignment" | "attendanceEmployeeWeeklyAdjustment" | "attendanceEmployeeWeeklyAdjustmentPeriod" | "attendanceScheduleException" | "attendanceScheduleExceptionPeriod" | "attendanceEvent" | "attendanceQrScanUse" | "attendanceWorkSession" | "hrEmployeeWorkTerms" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiCompanyContext" | "aiSkillActivation" | "aiExecutionReceipt" | "aiInterpretation" | "aiInterpretationRun" | "aiModelPriceRevision" | "aiBudgetReservation" | "aiUsageLedger" | "aiInterpretationPlacement" | "aiHumanInsight" | "aiEvaluationFeedback" | "aiSkillEvaluationRun" | "aiSystemIdentity" | "operationsSection" | "operationsUnit" | "operationsCatalogCategory" | "operationsItem" | "operationsItemUnit" | "operationsItemConversionVersion" | "operationsItemConversionEdge" | "operationsInternalRegistration" | "operationsInternalRegistrationLine" | "operationsInternalRegistrationConsumption" | "operationsRecipeVersion" | "operationsRecipeLine" | "operationsPurchaseRequest" | "operationsPurchaseRequestLine" | "operationsPurchaseReceipt" | "operationsPurchaseReceiptLine" | "operationsCustodyProfile" | "operationsCustodyEvent" | "operationsInventoryBalance" | "operationsInventoryMovement"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -5941,6 +5954,968 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.InboundEvidenceMessageLabelCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.InboundEvidenceMessageLabelCountAggregateOutputType> | number
+        }
+      }
+    }
+    WhatsappInvoiceConnection: {
+      payload: Prisma.$WhatsappInvoiceConnectionPayload<ExtArgs>
+      fields: Prisma.WhatsappInvoiceConnectionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WhatsappInvoiceConnectionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WhatsappInvoiceConnectionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionPayload>
+        }
+        findFirst: {
+          args: Prisma.WhatsappInvoiceConnectionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WhatsappInvoiceConnectionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionPayload>
+        }
+        findMany: {
+          args: Prisma.WhatsappInvoiceConnectionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionPayload>[]
+        }
+        create: {
+          args: Prisma.WhatsappInvoiceConnectionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionPayload>
+        }
+        createMany: {
+          args: Prisma.WhatsappInvoiceConnectionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WhatsappInvoiceConnectionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionPayload>[]
+        }
+        delete: {
+          args: Prisma.WhatsappInvoiceConnectionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionPayload>
+        }
+        update: {
+          args: Prisma.WhatsappInvoiceConnectionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionPayload>
+        }
+        deleteMany: {
+          args: Prisma.WhatsappInvoiceConnectionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WhatsappInvoiceConnectionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WhatsappInvoiceConnectionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionPayload>[]
+        }
+        upsert: {
+          args: Prisma.WhatsappInvoiceConnectionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionPayload>
+        }
+        aggregate: {
+          args: Prisma.WhatsappInvoiceConnectionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWhatsappInvoiceConnection>
+        }
+        groupBy: {
+          args: Prisma.WhatsappInvoiceConnectionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappInvoiceConnectionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WhatsappInvoiceConnectionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappInvoiceConnectionCountAggregateOutputType> | number
+        }
+      }
+    }
+    WhatsappInvoiceConnectionSession: {
+      payload: Prisma.$WhatsappInvoiceConnectionSessionPayload<ExtArgs>
+      fields: Prisma.WhatsappInvoiceConnectionSessionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WhatsappInvoiceConnectionSessionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionSessionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WhatsappInvoiceConnectionSessionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionSessionPayload>
+        }
+        findFirst: {
+          args: Prisma.WhatsappInvoiceConnectionSessionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionSessionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WhatsappInvoiceConnectionSessionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionSessionPayload>
+        }
+        findMany: {
+          args: Prisma.WhatsappInvoiceConnectionSessionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionSessionPayload>[]
+        }
+        create: {
+          args: Prisma.WhatsappInvoiceConnectionSessionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionSessionPayload>
+        }
+        createMany: {
+          args: Prisma.WhatsappInvoiceConnectionSessionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WhatsappInvoiceConnectionSessionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionSessionPayload>[]
+        }
+        delete: {
+          args: Prisma.WhatsappInvoiceConnectionSessionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionSessionPayload>
+        }
+        update: {
+          args: Prisma.WhatsappInvoiceConnectionSessionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionSessionPayload>
+        }
+        deleteMany: {
+          args: Prisma.WhatsappInvoiceConnectionSessionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WhatsappInvoiceConnectionSessionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WhatsappInvoiceConnectionSessionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionSessionPayload>[]
+        }
+        upsert: {
+          args: Prisma.WhatsappInvoiceConnectionSessionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionSessionPayload>
+        }
+        aggregate: {
+          args: Prisma.WhatsappInvoiceConnectionSessionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWhatsappInvoiceConnectionSession>
+        }
+        groupBy: {
+          args: Prisma.WhatsappInvoiceConnectionSessionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappInvoiceConnectionSessionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WhatsappInvoiceConnectionSessionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappInvoiceConnectionSessionCountAggregateOutputType> | number
+        }
+      }
+    }
+    WhatsappInvoiceConnectionLease: {
+      payload: Prisma.$WhatsappInvoiceConnectionLeasePayload<ExtArgs>
+      fields: Prisma.WhatsappInvoiceConnectionLeaseFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WhatsappInvoiceConnectionLeaseFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionLeasePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WhatsappInvoiceConnectionLeaseFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionLeasePayload>
+        }
+        findFirst: {
+          args: Prisma.WhatsappInvoiceConnectionLeaseFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionLeasePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WhatsappInvoiceConnectionLeaseFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionLeasePayload>
+        }
+        findMany: {
+          args: Prisma.WhatsappInvoiceConnectionLeaseFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionLeasePayload>[]
+        }
+        create: {
+          args: Prisma.WhatsappInvoiceConnectionLeaseCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionLeasePayload>
+        }
+        createMany: {
+          args: Prisma.WhatsappInvoiceConnectionLeaseCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WhatsappInvoiceConnectionLeaseCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionLeasePayload>[]
+        }
+        delete: {
+          args: Prisma.WhatsappInvoiceConnectionLeaseDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionLeasePayload>
+        }
+        update: {
+          args: Prisma.WhatsappInvoiceConnectionLeaseUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionLeasePayload>
+        }
+        deleteMany: {
+          args: Prisma.WhatsappInvoiceConnectionLeaseDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WhatsappInvoiceConnectionLeaseUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WhatsappInvoiceConnectionLeaseUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionLeasePayload>[]
+        }
+        upsert: {
+          args: Prisma.WhatsappInvoiceConnectionLeaseUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceConnectionLeasePayload>
+        }
+        aggregate: {
+          args: Prisma.WhatsappInvoiceConnectionLeaseAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWhatsappInvoiceConnectionLease>
+        }
+        groupBy: {
+          args: Prisma.WhatsappInvoiceConnectionLeaseGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappInvoiceConnectionLeaseGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WhatsappInvoiceConnectionLeaseCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappInvoiceConnectionLeaseCountAggregateOutputType> | number
+        }
+      }
+    }
+    WhatsappInvoiceGroupBinding: {
+      payload: Prisma.$WhatsappInvoiceGroupBindingPayload<ExtArgs>
+      fields: Prisma.WhatsappInvoiceGroupBindingFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WhatsappInvoiceGroupBindingFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceGroupBindingPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WhatsappInvoiceGroupBindingFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceGroupBindingPayload>
+        }
+        findFirst: {
+          args: Prisma.WhatsappInvoiceGroupBindingFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceGroupBindingPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WhatsappInvoiceGroupBindingFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceGroupBindingPayload>
+        }
+        findMany: {
+          args: Prisma.WhatsappInvoiceGroupBindingFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceGroupBindingPayload>[]
+        }
+        create: {
+          args: Prisma.WhatsappInvoiceGroupBindingCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceGroupBindingPayload>
+        }
+        createMany: {
+          args: Prisma.WhatsappInvoiceGroupBindingCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WhatsappInvoiceGroupBindingCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceGroupBindingPayload>[]
+        }
+        delete: {
+          args: Prisma.WhatsappInvoiceGroupBindingDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceGroupBindingPayload>
+        }
+        update: {
+          args: Prisma.WhatsappInvoiceGroupBindingUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceGroupBindingPayload>
+        }
+        deleteMany: {
+          args: Prisma.WhatsappInvoiceGroupBindingDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WhatsappInvoiceGroupBindingUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WhatsappInvoiceGroupBindingUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceGroupBindingPayload>[]
+        }
+        upsert: {
+          args: Prisma.WhatsappInvoiceGroupBindingUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceGroupBindingPayload>
+        }
+        aggregate: {
+          args: Prisma.WhatsappInvoiceGroupBindingAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWhatsappInvoiceGroupBinding>
+        }
+        groupBy: {
+          args: Prisma.WhatsappInvoiceGroupBindingGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappInvoiceGroupBindingGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WhatsappInvoiceGroupBindingCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappInvoiceGroupBindingCountAggregateOutputType> | number
+        }
+      }
+    }
+    WhatsappInboundMessage: {
+      payload: Prisma.$WhatsappInboundMessagePayload<ExtArgs>
+      fields: Prisma.WhatsappInboundMessageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WhatsappInboundMessageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInboundMessagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WhatsappInboundMessageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInboundMessagePayload>
+        }
+        findFirst: {
+          args: Prisma.WhatsappInboundMessageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInboundMessagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WhatsappInboundMessageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInboundMessagePayload>
+        }
+        findMany: {
+          args: Prisma.WhatsappInboundMessageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInboundMessagePayload>[]
+        }
+        create: {
+          args: Prisma.WhatsappInboundMessageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInboundMessagePayload>
+        }
+        createMany: {
+          args: Prisma.WhatsappInboundMessageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WhatsappInboundMessageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInboundMessagePayload>[]
+        }
+        delete: {
+          args: Prisma.WhatsappInboundMessageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInboundMessagePayload>
+        }
+        update: {
+          args: Prisma.WhatsappInboundMessageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInboundMessagePayload>
+        }
+        deleteMany: {
+          args: Prisma.WhatsappInboundMessageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WhatsappInboundMessageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WhatsappInboundMessageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInboundMessagePayload>[]
+        }
+        upsert: {
+          args: Prisma.WhatsappInboundMessageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInboundMessagePayload>
+        }
+        aggregate: {
+          args: Prisma.WhatsappInboundMessageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWhatsappInboundMessage>
+        }
+        groupBy: {
+          args: Prisma.WhatsappInboundMessageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappInboundMessageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WhatsappInboundMessageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappInboundMessageCountAggregateOutputType> | number
+        }
+      }
+    }
+    WhatsappInvoiceAsset: {
+      payload: Prisma.$WhatsappInvoiceAssetPayload<ExtArgs>
+      fields: Prisma.WhatsappInvoiceAssetFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WhatsappInvoiceAssetFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceAssetPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WhatsappInvoiceAssetFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceAssetPayload>
+        }
+        findFirst: {
+          args: Prisma.WhatsappInvoiceAssetFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceAssetPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WhatsappInvoiceAssetFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceAssetPayload>
+        }
+        findMany: {
+          args: Prisma.WhatsappInvoiceAssetFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceAssetPayload>[]
+        }
+        create: {
+          args: Prisma.WhatsappInvoiceAssetCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceAssetPayload>
+        }
+        createMany: {
+          args: Prisma.WhatsappInvoiceAssetCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WhatsappInvoiceAssetCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceAssetPayload>[]
+        }
+        delete: {
+          args: Prisma.WhatsappInvoiceAssetDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceAssetPayload>
+        }
+        update: {
+          args: Prisma.WhatsappInvoiceAssetUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceAssetPayload>
+        }
+        deleteMany: {
+          args: Prisma.WhatsappInvoiceAssetDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WhatsappInvoiceAssetUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WhatsappInvoiceAssetUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceAssetPayload>[]
+        }
+        upsert: {
+          args: Prisma.WhatsappInvoiceAssetUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceAssetPayload>
+        }
+        aggregate: {
+          args: Prisma.WhatsappInvoiceAssetAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWhatsappInvoiceAsset>
+        }
+        groupBy: {
+          args: Prisma.WhatsappInvoiceAssetGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappInvoiceAssetGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WhatsappInvoiceAssetCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappInvoiceAssetCountAggregateOutputType> | number
+        }
+      }
+    }
+    WhatsappInvoiceMediaWorkItem: {
+      payload: Prisma.$WhatsappInvoiceMediaWorkItemPayload<ExtArgs>
+      fields: Prisma.WhatsappInvoiceMediaWorkItemFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WhatsappInvoiceMediaWorkItemFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceMediaWorkItemPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WhatsappInvoiceMediaWorkItemFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceMediaWorkItemPayload>
+        }
+        findFirst: {
+          args: Prisma.WhatsappInvoiceMediaWorkItemFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceMediaWorkItemPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WhatsappInvoiceMediaWorkItemFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceMediaWorkItemPayload>
+        }
+        findMany: {
+          args: Prisma.WhatsappInvoiceMediaWorkItemFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceMediaWorkItemPayload>[]
+        }
+        create: {
+          args: Prisma.WhatsappInvoiceMediaWorkItemCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceMediaWorkItemPayload>
+        }
+        createMany: {
+          args: Prisma.WhatsappInvoiceMediaWorkItemCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WhatsappInvoiceMediaWorkItemCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceMediaWorkItemPayload>[]
+        }
+        delete: {
+          args: Prisma.WhatsappInvoiceMediaWorkItemDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceMediaWorkItemPayload>
+        }
+        update: {
+          args: Prisma.WhatsappInvoiceMediaWorkItemUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceMediaWorkItemPayload>
+        }
+        deleteMany: {
+          args: Prisma.WhatsappInvoiceMediaWorkItemDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WhatsappInvoiceMediaWorkItemUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WhatsappInvoiceMediaWorkItemUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceMediaWorkItemPayload>[]
+        }
+        upsert: {
+          args: Prisma.WhatsappInvoiceMediaWorkItemUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceMediaWorkItemPayload>
+        }
+        aggregate: {
+          args: Prisma.WhatsappInvoiceMediaWorkItemAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWhatsappInvoiceMediaWorkItem>
+        }
+        groupBy: {
+          args: Prisma.WhatsappInvoiceMediaWorkItemGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappInvoiceMediaWorkItemGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WhatsappInvoiceMediaWorkItemCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappInvoiceMediaWorkItemCountAggregateOutputType> | number
+        }
+      }
+    }
+    WhatsappInvoiceAssetPage: {
+      payload: Prisma.$WhatsappInvoiceAssetPagePayload<ExtArgs>
+      fields: Prisma.WhatsappInvoiceAssetPageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WhatsappInvoiceAssetPageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceAssetPagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WhatsappInvoiceAssetPageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceAssetPagePayload>
+        }
+        findFirst: {
+          args: Prisma.WhatsappInvoiceAssetPageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceAssetPagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WhatsappInvoiceAssetPageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceAssetPagePayload>
+        }
+        findMany: {
+          args: Prisma.WhatsappInvoiceAssetPageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceAssetPagePayload>[]
+        }
+        create: {
+          args: Prisma.WhatsappInvoiceAssetPageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceAssetPagePayload>
+        }
+        createMany: {
+          args: Prisma.WhatsappInvoiceAssetPageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WhatsappInvoiceAssetPageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceAssetPagePayload>[]
+        }
+        delete: {
+          args: Prisma.WhatsappInvoiceAssetPageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceAssetPagePayload>
+        }
+        update: {
+          args: Prisma.WhatsappInvoiceAssetPageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceAssetPagePayload>
+        }
+        deleteMany: {
+          args: Prisma.WhatsappInvoiceAssetPageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WhatsappInvoiceAssetPageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WhatsappInvoiceAssetPageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceAssetPagePayload>[]
+        }
+        upsert: {
+          args: Prisma.WhatsappInvoiceAssetPageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceAssetPagePayload>
+        }
+        aggregate: {
+          args: Prisma.WhatsappInvoiceAssetPageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWhatsappInvoiceAssetPage>
+        }
+        groupBy: {
+          args: Prisma.WhatsappInvoiceAssetPageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappInvoiceAssetPageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WhatsappInvoiceAssetPageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappInvoiceAssetPageCountAggregateOutputType> | number
+        }
+      }
+    }
+    WhatsappInvoiceRecord: {
+      payload: Prisma.$WhatsappInvoiceRecordPayload<ExtArgs>
+      fields: Prisma.WhatsappInvoiceRecordFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WhatsappInvoiceRecordFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceRecordPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WhatsappInvoiceRecordFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceRecordPayload>
+        }
+        findFirst: {
+          args: Prisma.WhatsappInvoiceRecordFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceRecordPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WhatsappInvoiceRecordFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceRecordPayload>
+        }
+        findMany: {
+          args: Prisma.WhatsappInvoiceRecordFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceRecordPayload>[]
+        }
+        create: {
+          args: Prisma.WhatsappInvoiceRecordCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceRecordPayload>
+        }
+        createMany: {
+          args: Prisma.WhatsappInvoiceRecordCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WhatsappInvoiceRecordCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceRecordPayload>[]
+        }
+        delete: {
+          args: Prisma.WhatsappInvoiceRecordDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceRecordPayload>
+        }
+        update: {
+          args: Prisma.WhatsappInvoiceRecordUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceRecordPayload>
+        }
+        deleteMany: {
+          args: Prisma.WhatsappInvoiceRecordDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WhatsappInvoiceRecordUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WhatsappInvoiceRecordUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceRecordPayload>[]
+        }
+        upsert: {
+          args: Prisma.WhatsappInvoiceRecordUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceRecordPayload>
+        }
+        aggregate: {
+          args: Prisma.WhatsappInvoiceRecordAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWhatsappInvoiceRecord>
+        }
+        groupBy: {
+          args: Prisma.WhatsappInvoiceRecordGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappInvoiceRecordGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WhatsappInvoiceRecordCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappInvoiceRecordCountAggregateOutputType> | number
+        }
+      }
+    }
+    WhatsappInvoicePageAssignment: {
+      payload: Prisma.$WhatsappInvoicePageAssignmentPayload<ExtArgs>
+      fields: Prisma.WhatsappInvoicePageAssignmentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WhatsappInvoicePageAssignmentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoicePageAssignmentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WhatsappInvoicePageAssignmentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoicePageAssignmentPayload>
+        }
+        findFirst: {
+          args: Prisma.WhatsappInvoicePageAssignmentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoicePageAssignmentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WhatsappInvoicePageAssignmentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoicePageAssignmentPayload>
+        }
+        findMany: {
+          args: Prisma.WhatsappInvoicePageAssignmentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoicePageAssignmentPayload>[]
+        }
+        create: {
+          args: Prisma.WhatsappInvoicePageAssignmentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoicePageAssignmentPayload>
+        }
+        createMany: {
+          args: Prisma.WhatsappInvoicePageAssignmentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WhatsappInvoicePageAssignmentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoicePageAssignmentPayload>[]
+        }
+        delete: {
+          args: Prisma.WhatsappInvoicePageAssignmentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoicePageAssignmentPayload>
+        }
+        update: {
+          args: Prisma.WhatsappInvoicePageAssignmentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoicePageAssignmentPayload>
+        }
+        deleteMany: {
+          args: Prisma.WhatsappInvoicePageAssignmentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WhatsappInvoicePageAssignmentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WhatsappInvoicePageAssignmentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoicePageAssignmentPayload>[]
+        }
+        upsert: {
+          args: Prisma.WhatsappInvoicePageAssignmentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoicePageAssignmentPayload>
+        }
+        aggregate: {
+          args: Prisma.WhatsappInvoicePageAssignmentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWhatsappInvoicePageAssignment>
+        }
+        groupBy: {
+          args: Prisma.WhatsappInvoicePageAssignmentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappInvoicePageAssignmentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WhatsappInvoicePageAssignmentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappInvoicePageAssignmentCountAggregateOutputType> | number
+        }
+      }
+    }
+    WhatsappInvoiceExtractionRevision: {
+      payload: Prisma.$WhatsappInvoiceExtractionRevisionPayload<ExtArgs>
+      fields: Prisma.WhatsappInvoiceExtractionRevisionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WhatsappInvoiceExtractionRevisionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceExtractionRevisionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WhatsappInvoiceExtractionRevisionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceExtractionRevisionPayload>
+        }
+        findFirst: {
+          args: Prisma.WhatsappInvoiceExtractionRevisionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceExtractionRevisionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WhatsappInvoiceExtractionRevisionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceExtractionRevisionPayload>
+        }
+        findMany: {
+          args: Prisma.WhatsappInvoiceExtractionRevisionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceExtractionRevisionPayload>[]
+        }
+        create: {
+          args: Prisma.WhatsappInvoiceExtractionRevisionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceExtractionRevisionPayload>
+        }
+        createMany: {
+          args: Prisma.WhatsappInvoiceExtractionRevisionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WhatsappInvoiceExtractionRevisionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceExtractionRevisionPayload>[]
+        }
+        delete: {
+          args: Prisma.WhatsappInvoiceExtractionRevisionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceExtractionRevisionPayload>
+        }
+        update: {
+          args: Prisma.WhatsappInvoiceExtractionRevisionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceExtractionRevisionPayload>
+        }
+        deleteMany: {
+          args: Prisma.WhatsappInvoiceExtractionRevisionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WhatsappInvoiceExtractionRevisionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WhatsappInvoiceExtractionRevisionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceExtractionRevisionPayload>[]
+        }
+        upsert: {
+          args: Prisma.WhatsappInvoiceExtractionRevisionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceExtractionRevisionPayload>
+        }
+        aggregate: {
+          args: Prisma.WhatsappInvoiceExtractionRevisionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWhatsappInvoiceExtractionRevision>
+        }
+        groupBy: {
+          args: Prisma.WhatsappInvoiceExtractionRevisionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappInvoiceExtractionRevisionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WhatsappInvoiceExtractionRevisionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappInvoiceExtractionRevisionCountAggregateOutputType> | number
+        }
+      }
+    }
+    WhatsappInvoiceReview: {
+      payload: Prisma.$WhatsappInvoiceReviewPayload<ExtArgs>
+      fields: Prisma.WhatsappInvoiceReviewFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WhatsappInvoiceReviewFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceReviewPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WhatsappInvoiceReviewFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceReviewPayload>
+        }
+        findFirst: {
+          args: Prisma.WhatsappInvoiceReviewFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceReviewPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WhatsappInvoiceReviewFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceReviewPayload>
+        }
+        findMany: {
+          args: Prisma.WhatsappInvoiceReviewFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceReviewPayload>[]
+        }
+        create: {
+          args: Prisma.WhatsappInvoiceReviewCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceReviewPayload>
+        }
+        createMany: {
+          args: Prisma.WhatsappInvoiceReviewCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WhatsappInvoiceReviewCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceReviewPayload>[]
+        }
+        delete: {
+          args: Prisma.WhatsappInvoiceReviewDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceReviewPayload>
+        }
+        update: {
+          args: Prisma.WhatsappInvoiceReviewUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceReviewPayload>
+        }
+        deleteMany: {
+          args: Prisma.WhatsappInvoiceReviewDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WhatsappInvoiceReviewUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WhatsappInvoiceReviewUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceReviewPayload>[]
+        }
+        upsert: {
+          args: Prisma.WhatsappInvoiceReviewUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceReviewPayload>
+        }
+        aggregate: {
+          args: Prisma.WhatsappInvoiceReviewAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWhatsappInvoiceReview>
+        }
+        groupBy: {
+          args: Prisma.WhatsappInvoiceReviewGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappInvoiceReviewGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WhatsappInvoiceReviewCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappInvoiceReviewCountAggregateOutputType> | number
+        }
+      }
+    }
+    WhatsappInvoiceDuplicateAssessment: {
+      payload: Prisma.$WhatsappInvoiceDuplicateAssessmentPayload<ExtArgs>
+      fields: Prisma.WhatsappInvoiceDuplicateAssessmentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WhatsappInvoiceDuplicateAssessmentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceDuplicateAssessmentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WhatsappInvoiceDuplicateAssessmentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceDuplicateAssessmentPayload>
+        }
+        findFirst: {
+          args: Prisma.WhatsappInvoiceDuplicateAssessmentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceDuplicateAssessmentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WhatsappInvoiceDuplicateAssessmentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceDuplicateAssessmentPayload>
+        }
+        findMany: {
+          args: Prisma.WhatsappInvoiceDuplicateAssessmentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceDuplicateAssessmentPayload>[]
+        }
+        create: {
+          args: Prisma.WhatsappInvoiceDuplicateAssessmentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceDuplicateAssessmentPayload>
+        }
+        createMany: {
+          args: Prisma.WhatsappInvoiceDuplicateAssessmentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WhatsappInvoiceDuplicateAssessmentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceDuplicateAssessmentPayload>[]
+        }
+        delete: {
+          args: Prisma.WhatsappInvoiceDuplicateAssessmentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceDuplicateAssessmentPayload>
+        }
+        update: {
+          args: Prisma.WhatsappInvoiceDuplicateAssessmentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceDuplicateAssessmentPayload>
+        }
+        deleteMany: {
+          args: Prisma.WhatsappInvoiceDuplicateAssessmentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WhatsappInvoiceDuplicateAssessmentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WhatsappInvoiceDuplicateAssessmentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceDuplicateAssessmentPayload>[]
+        }
+        upsert: {
+          args: Prisma.WhatsappInvoiceDuplicateAssessmentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WhatsappInvoiceDuplicateAssessmentPayload>
+        }
+        aggregate: {
+          args: Prisma.WhatsappInvoiceDuplicateAssessmentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWhatsappInvoiceDuplicateAssessment>
+        }
+        groupBy: {
+          args: Prisma.WhatsappInvoiceDuplicateAssessmentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappInvoiceDuplicateAssessmentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WhatsappInvoiceDuplicateAssessmentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WhatsappInvoiceDuplicateAssessmentCountAggregateOutputType> | number
         }
       }
     }
@@ -16744,6 +17719,237 @@ export const InboundEvidenceMessageLabelScalarFieldEnum = {
 export type InboundEvidenceMessageLabelScalarFieldEnum = (typeof InboundEvidenceMessageLabelScalarFieldEnum)[keyof typeof InboundEvidenceMessageLabelScalarFieldEnum]
 
 
+export const WhatsappInvoiceConnectionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  connectionKey: 'connectionKey',
+  status: 'status',
+  phoneNumberHint: 'phoneNumberHint',
+  lastSyncedAt: 'lastSyncedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WhatsappInvoiceConnectionScalarFieldEnum = (typeof WhatsappInvoiceConnectionScalarFieldEnum)[keyof typeof WhatsappInvoiceConnectionScalarFieldEnum]
+
+
+export const WhatsappInvoiceConnectionSessionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  connectionId: 'connectionId',
+  ciphertext: 'ciphertext',
+  iv: 'iv',
+  keyVersion: 'keyVersion',
+  rowVersion: 'rowVersion',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WhatsappInvoiceConnectionSessionScalarFieldEnum = (typeof WhatsappInvoiceConnectionSessionScalarFieldEnum)[keyof typeof WhatsappInvoiceConnectionSessionScalarFieldEnum]
+
+
+export const WhatsappInvoiceConnectionLeaseScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  connectionId: 'connectionId',
+  ownerToken: 'ownerToken',
+  fence: 'fence',
+  expiresAt: 'expiresAt',
+  heartbeatAt: 'heartbeatAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WhatsappInvoiceConnectionLeaseScalarFieldEnum = (typeof WhatsappInvoiceConnectionLeaseScalarFieldEnum)[keyof typeof WhatsappInvoiceConnectionLeaseScalarFieldEnum]
+
+
+export const WhatsappInvoiceGroupBindingScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  connectionId: 'connectionId',
+  groupJid: 'groupJid',
+  displayName: 'displayName',
+  active: 'active',
+  bindingRevision: 'bindingRevision',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WhatsappInvoiceGroupBindingScalarFieldEnum = (typeof WhatsappInvoiceGroupBindingScalarFieldEnum)[keyof typeof WhatsappInvoiceGroupBindingScalarFieldEnum]
+
+
+export const WhatsappInboundMessageScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  connectionId: 'connectionId',
+  groupBindingId: 'groupBindingId',
+  groupBindingRevision: 'groupBindingRevision',
+  whatsappMessageId: 'whatsappMessageId',
+  groupJidSnapshot: 'groupJidSnapshot',
+  receivedAt: 'receivedAt',
+  importedAt: 'importedAt'
+} as const
+
+export type WhatsappInboundMessageScalarFieldEnum = (typeof WhatsappInboundMessageScalarFieldEnum)[keyof typeof WhatsappInboundMessageScalarFieldEnum]
+
+
+export const WhatsappInvoiceAssetScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  inboundMessageId: 'inboundMessageId',
+  attachmentIndex: 'attachmentIndex',
+  originalFileName: 'originalFileName',
+  mimeType: 'mimeType',
+  byteSize: 'byteSize',
+  sha256: 'sha256',
+  storageState: 'storageState',
+  storageReference: 'storageReference',
+  encryptionIv: 'encryptionIv',
+  encryptionKeyVersion: 'encryptionKeyVersion',
+  storedByteSize: 'storedByteSize',
+  actualMimeType: 'actualMimeType',
+  scanStatus: 'scanStatus',
+  scannedAt: 'scannedAt',
+  storageFailureReason: 'storageFailureReason',
+  pageCount: 'pageCount',
+  receivedAt: 'receivedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type WhatsappInvoiceAssetScalarFieldEnum = (typeof WhatsappInvoiceAssetScalarFieldEnum)[keyof typeof WhatsappInvoiceAssetScalarFieldEnum]
+
+
+export const WhatsappInvoiceMediaWorkItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  assetId: 'assetId',
+  state: 'state',
+  metadataCiphertext: 'metadataCiphertext',
+  metadataIv: 'metadataIv',
+  metadataKeyVersion: 'metadataKeyVersion',
+  metadataRowVersion: 'metadataRowVersion',
+  attempts: 'attempts',
+  nextAttemptAt: 'nextAttemptAt',
+  jobOwnerToken: 'jobOwnerToken',
+  jobFence: 'jobFence',
+  jobLeaseExpiresAt: 'jobLeaseExpiresAt',
+  jobHeartbeatAt: 'jobHeartbeatAt',
+  lastErrorCode: 'lastErrorCode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WhatsappInvoiceMediaWorkItemScalarFieldEnum = (typeof WhatsappInvoiceMediaWorkItemScalarFieldEnum)[keyof typeof WhatsappInvoiceMediaWorkItemScalarFieldEnum]
+
+
+export const WhatsappInvoiceAssetPageScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  assetId: 'assetId',
+  pageNumber: 'pageNumber',
+  createdAt: 'createdAt'
+} as const
+
+export type WhatsappInvoiceAssetPageScalarFieldEnum = (typeof WhatsappInvoiceAssetPageScalarFieldEnum)[keyof typeof WhatsappInvoiceAssetPageScalarFieldEnum]
+
+
+export const WhatsappInvoiceRecordScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  groupBindingId: 'groupBindingId',
+  supplierId: 'supplierId',
+  supplierName: 'supplierName',
+  supplierNameKey: 'supplierNameKey',
+  supplierTaxNumber: 'supplierTaxNumber',
+  invoiceNumber: 'invoiceNumber',
+  invoiceNumberKey: 'invoiceNumberKey',
+  invoiceDate: 'invoiceDate',
+  receivedAt: 'receivedAt',
+  currencyCode: 'currencyCode',
+  netAmount: 'netAmount',
+  vatAmount: 'vatAmount',
+  grossAmount: 'grossAmount',
+  extractionState: 'extractionState',
+  qualityState: 'qualityState',
+  approvalState: 'approvalState',
+  duplicateState: 'duplicateState',
+  archiveState: 'archiveState',
+  archivedAt: 'archivedAt',
+  purchaseState: 'purchaseState',
+  rowVersion: 'rowVersion',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WhatsappInvoiceRecordScalarFieldEnum = (typeof WhatsappInvoiceRecordScalarFieldEnum)[keyof typeof WhatsappInvoiceRecordScalarFieldEnum]
+
+
+export const WhatsappInvoicePageAssignmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  recordId: 'recordId',
+  assetPageId: 'assetPageId',
+  sourceRevision: 'sourceRevision',
+  sortOrder: 'sortOrder',
+  active: 'active',
+  createdAt: 'createdAt'
+} as const
+
+export type WhatsappInvoicePageAssignmentScalarFieldEnum = (typeof WhatsappInvoicePageAssignmentScalarFieldEnum)[keyof typeof WhatsappInvoicePageAssignmentScalarFieldEnum]
+
+
+export const WhatsappInvoiceExtractionRevisionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  recordId: 'recordId',
+  revision: 'revision',
+  source: 'source',
+  valuesJson: 'valuesJson',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type WhatsappInvoiceExtractionRevisionScalarFieldEnum = (typeof WhatsappInvoiceExtractionRevisionScalarFieldEnum)[keyof typeof WhatsappInvoiceExtractionRevisionScalarFieldEnum]
+
+
+export const WhatsappInvoiceReviewScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  recordId: 'recordId',
+  reason: 'reason',
+  beforeJson: 'beforeJson',
+  afterJson: 'afterJson',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type WhatsappInvoiceReviewScalarFieldEnum = (typeof WhatsappInvoiceReviewScalarFieldEnum)[keyof typeof WhatsappInvoiceReviewScalarFieldEnum]
+
+
+export const WhatsappInvoiceDuplicateAssessmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  recordId: 'recordId',
+  candidateRecordId: 'candidateRecordId',
+  state: 'state',
+  evidenceJson: 'evidenceJson',
+  createdAt: 'createdAt'
+} as const
+
+export type WhatsappInvoiceDuplicateAssessmentScalarFieldEnum = (typeof WhatsappInvoiceDuplicateAssessmentScalarFieldEnum)[keyof typeof WhatsappInvoiceDuplicateAssessmentScalarFieldEnum]
+
+
 export const MarketingCampaignScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -20019,6 +21225,160 @@ export type ListEnumAiProviderKindFieldRefInput<$PrismaModel> = FieldRefInputTyp
 
 
 /**
+ * Reference to a field of type 'WhatsappInvoiceConnectionStatus'
+ */
+export type EnumWhatsappInvoiceConnectionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsappInvoiceConnectionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'WhatsappInvoiceConnectionStatus[]'
+ */
+export type ListEnumWhatsappInvoiceConnectionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsappInvoiceConnectionStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'WhatsappInvoiceAssetStorageState'
+ */
+export type EnumWhatsappInvoiceAssetStorageStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsappInvoiceAssetStorageState'>
+    
+
+
+/**
+ * Reference to a field of type 'WhatsappInvoiceAssetStorageState[]'
+ */
+export type ListEnumWhatsappInvoiceAssetStorageStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsappInvoiceAssetStorageState[]'>
+    
+
+
+/**
+ * Reference to a field of type 'WhatsappInvoiceAssetScanStatus'
+ */
+export type EnumWhatsappInvoiceAssetScanStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsappInvoiceAssetScanStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'WhatsappInvoiceAssetScanStatus[]'
+ */
+export type ListEnumWhatsappInvoiceAssetScanStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsappInvoiceAssetScanStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'WhatsappInvoiceMediaWorkItemState'
+ */
+export type EnumWhatsappInvoiceMediaWorkItemStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsappInvoiceMediaWorkItemState'>
+    
+
+
+/**
+ * Reference to a field of type 'WhatsappInvoiceMediaWorkItemState[]'
+ */
+export type ListEnumWhatsappInvoiceMediaWorkItemStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsappInvoiceMediaWorkItemState[]'>
+    
+
+
+/**
+ * Reference to a field of type 'WhatsappInvoiceExtractionState'
+ */
+export type EnumWhatsappInvoiceExtractionStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsappInvoiceExtractionState'>
+    
+
+
+/**
+ * Reference to a field of type 'WhatsappInvoiceExtractionState[]'
+ */
+export type ListEnumWhatsappInvoiceExtractionStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsappInvoiceExtractionState[]'>
+    
+
+
+/**
+ * Reference to a field of type 'WhatsappInvoiceQualityState'
+ */
+export type EnumWhatsappInvoiceQualityStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsappInvoiceQualityState'>
+    
+
+
+/**
+ * Reference to a field of type 'WhatsappInvoiceQualityState[]'
+ */
+export type ListEnumWhatsappInvoiceQualityStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsappInvoiceQualityState[]'>
+    
+
+
+/**
+ * Reference to a field of type 'WhatsappInvoiceApprovalState'
+ */
+export type EnumWhatsappInvoiceApprovalStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsappInvoiceApprovalState'>
+    
+
+
+/**
+ * Reference to a field of type 'WhatsappInvoiceApprovalState[]'
+ */
+export type ListEnumWhatsappInvoiceApprovalStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsappInvoiceApprovalState[]'>
+    
+
+
+/**
+ * Reference to a field of type 'WhatsappInvoiceDuplicateState'
+ */
+export type EnumWhatsappInvoiceDuplicateStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsappInvoiceDuplicateState'>
+    
+
+
+/**
+ * Reference to a field of type 'WhatsappInvoiceDuplicateState[]'
+ */
+export type ListEnumWhatsappInvoiceDuplicateStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsappInvoiceDuplicateState[]'>
+    
+
+
+/**
+ * Reference to a field of type 'WhatsappInvoiceArchiveState'
+ */
+export type EnumWhatsappInvoiceArchiveStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsappInvoiceArchiveState'>
+    
+
+
+/**
+ * Reference to a field of type 'WhatsappInvoiceArchiveState[]'
+ */
+export type ListEnumWhatsappInvoiceArchiveStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsappInvoiceArchiveState[]'>
+    
+
+
+/**
+ * Reference to a field of type 'WhatsappInvoicePurchaseState'
+ */
+export type EnumWhatsappInvoicePurchaseStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsappInvoicePurchaseState'>
+    
+
+
+/**
+ * Reference to a field of type 'WhatsappInvoicePurchaseState[]'
+ */
+export type ListEnumWhatsappInvoicePurchaseStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsappInvoicePurchaseState[]'>
+    
+
+
+/**
+ * Reference to a field of type 'WhatsappInvoiceRevisionSource'
+ */
+export type EnumWhatsappInvoiceRevisionSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsappInvoiceRevisionSource'>
+    
+
+
+/**
+ * Reference to a field of type 'WhatsappInvoiceRevisionSource[]'
+ */
+export type ListEnumWhatsappInvoiceRevisionSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WhatsappInvoiceRevisionSource[]'>
+    
+
+
+/**
  * Reference to a field of type 'MarketingCampaignPlatform'
  */
 export type EnumMarketingCampaignPlatformFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MarketingCampaignPlatform'>
@@ -21640,6 +23000,19 @@ export type GlobalOmitConfig = {
   inboundEvidenceAttachment?: Prisma.InboundEvidenceAttachmentOmit
   inboundEvidenceDocumentAnalysis?: Prisma.InboundEvidenceDocumentAnalysisOmit
   inboundEvidenceMessageLabel?: Prisma.InboundEvidenceMessageLabelOmit
+  whatsappInvoiceConnection?: Prisma.WhatsappInvoiceConnectionOmit
+  whatsappInvoiceConnectionSession?: Prisma.WhatsappInvoiceConnectionSessionOmit
+  whatsappInvoiceConnectionLease?: Prisma.WhatsappInvoiceConnectionLeaseOmit
+  whatsappInvoiceGroupBinding?: Prisma.WhatsappInvoiceGroupBindingOmit
+  whatsappInboundMessage?: Prisma.WhatsappInboundMessageOmit
+  whatsappInvoiceAsset?: Prisma.WhatsappInvoiceAssetOmit
+  whatsappInvoiceMediaWorkItem?: Prisma.WhatsappInvoiceMediaWorkItemOmit
+  whatsappInvoiceAssetPage?: Prisma.WhatsappInvoiceAssetPageOmit
+  whatsappInvoiceRecord?: Prisma.WhatsappInvoiceRecordOmit
+  whatsappInvoicePageAssignment?: Prisma.WhatsappInvoicePageAssignmentOmit
+  whatsappInvoiceExtractionRevision?: Prisma.WhatsappInvoiceExtractionRevisionOmit
+  whatsappInvoiceReview?: Prisma.WhatsappInvoiceReviewOmit
+  whatsappInvoiceDuplicateAssessment?: Prisma.WhatsappInvoiceDuplicateAssessmentOmit
   marketingCampaign?: Prisma.MarketingCampaignOmit
   marketingCampaignAnalysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackOmit
   marketingCampaignFinancialLink?: Prisma.MarketingCampaignFinancialLinkOmit

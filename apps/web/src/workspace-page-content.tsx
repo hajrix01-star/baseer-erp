@@ -10,6 +10,7 @@ const OwnerDashboardWorkspace = lazy(async () => ({ default: (await import("./ow
 const DecisionIntelligenceWorkspace = lazy(async () => ({ default: (await import("./decision-intelligence-workspace")).DecisionIntelligenceWorkspace }));
 const MarketingWorkspace = lazy(async () => ({ default: (await import("./marketing-workspace")).MarketingWorkspace }));
 const OperationsOverviewWorkspace = lazy(async () => ({ default: (await import("./operations-overview-workspace")).OperationsOverviewWorkspace }));
+const WhatsappInvoiceMonitoringWorkspace = lazy(async () => ({ default: (await import("./whatsapp-invoice-monitoring-workspace")).WhatsappInvoiceMonitoringWorkspace }));
 const DailySalesWorkspace = lazy(async () => ({ default: (await import("./daily-sales-workspace")).DailySalesWorkspace }));
 const OperationsRequestsWorkspace = lazy(async () => ({ default: (await import("./operations-requests-workspace")).OperationsRequestsWorkspace }));
 const OperationsAssetsWarrantyWorkspace = lazy(async () => ({ default: (await import("./operations-assets-warranty-workspace")).OperationsAssetsWarrantyWorkspace }));
@@ -55,6 +56,7 @@ export function WorkspacePageContent({ route, language, permissionCodes, migrati
     : route.moduleId === "command" && route.section === 3 ? <OwnerDashboardWorkspace language={language} />
     : route.moduleId === "decision" ? <DecisionIntelligenceWorkspace language={language} section={route.section} permissionCodes={permissionCodes} migrationReviewLocked={migrationReviewLocked} />
     : route.moduleId === "marketing" ? <MarketingWorkspace language={language} section={route.section} permissionCodes={permissionCodes} />
+    : route.moduleId === "operations" && route.pageId === "operations-whatsapp-invoice-monitoring" ? <WhatsappInvoiceMonitoringWorkspace language={language} permissionCodes={permissionCodes} />
     : route.moduleId === "operations" && route.section === 9 ? <OperationsAssetsWarrantyWorkspace language={language} />
     : route.moduleId === "reports" && route.section === 0 ? <ReportsOverviewWorkspace language={language} />
     : route.moduleId === "reports" && route.section === 1 ? <ReportsWorkspace language={language} initialReport={route.stage === "cash-performance" ? "cash-performance" : route.stage === "accrual-profit-loss" ? "accrual-profit-loss" : "trial-balance"} onReportChange={onStage} />

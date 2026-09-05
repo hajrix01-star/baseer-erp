@@ -126,6 +126,8 @@ export const ADMINISTRATION_PERMISSION_CATALOG: readonly AdministrationPermissio
   { code: "operations.internal_registration.read", module: "operations", nameAr: "عرض تقارير التسجيل الداخلي", nameEn: "View internal registration reports", risk: "standard" },
   { code: "operations.assets.read", module: "operations", nameAr: "عرض الأصول والضمانات", nameEn: "View assets and warranties", risk: "standard" },
   { code: "operations.assets.manage", module: "operations", nameAr: "إدارة الأصول والضمانات", nameEn: "Manage assets and warranties", risk: "sensitive" },
+  { code: "operations.whatsapp_invoice_monitoring.read", module: "operations", nameAr: "عرض وارد فواتير واتساب", nameEn: "View WhatsApp invoice monitoring", risk: "standard" },
+  { code: "operations.whatsapp_invoice_monitoring.review", module: "operations", nameAr: "مراجعة وتصحيح وارد فواتير واتساب", nameEn: "Review and correct WhatsApp invoice monitoring", risk: "sensitive" },
   // Compatibility only for roles created before the narrower daily-sales split.
   { code: "finance.daily_sales.write", module: "operations", nameAr: "إدخال وتقفيل مبيعات قديم", nameEn: "Legacy sales-closing write", risk: "sensitive" },
 
@@ -264,6 +266,8 @@ const COMPANY_MANAGER_PERMISSIONS = [
   "operations.internal_registration.read",
   "operations.assets.read",
   "operations.assets.manage",
+  "operations.whatsapp_invoice_monitoring.read",
+  "operations.whatsapp_invoice_monitoring.review",
   "platform.files.read",
   "platform.files.write",
   "platform.business-date.read",
@@ -274,11 +278,11 @@ const COMPANY_MANAGER_PERMISSIONS = [
 export const SYSTEM_ROLE_TEMPLATES = [
   { code: "BASEER_COMPANY_MANAGER", nameAr: "مدير الشركة", nameEn: "Company manager", permissions: COMPANY_MANAGER_PERMISSIONS },
   { code: "BASEER_BACKUP_AUDITOR", nameAr: "مراجع النسخ والاستعادة", nameEn: "Backup and recovery auditor", permissions: ["backup.read", "backup.audit.view"] },
-  { code: "BASEER_FINANCE_ACCOUNTANT", nameAr: "محاسب", nameEn: "Accountant", permissions: ["platform.ai.use", "finance.configuration.read", "reports.read", "finance.vaults.read", "finance.vaults.transfer", "finance.vaults.cancel", "finance.vaults.reconcile", "finance.suppliers.read", "finance.supplier_dues.read", "finance.supplier_dues.write", "finance.loans.read", "finance.loans.write", "finance.purchase_expense.read", "finance.purchase_expense.create", "finance.purchase_expense.correct", "finance.purchase_expense.cancel", "finance.daily_sales.read", "finance.daily_sales.history.read_all", ...DAILY_SALES_MANAGE, "platform.files.read", "platform.files.write", "platform.business-date.read", "platform.output.preview", "platform.output.export"] },
+  { code: "BASEER_FINANCE_ACCOUNTANT", nameAr: "محاسب", nameEn: "Accountant", permissions: ["platform.ai.use", "finance.configuration.read", "reports.read", "finance.vaults.read", "finance.vaults.transfer", "finance.vaults.cancel", "finance.vaults.reconcile", "finance.suppliers.read", "finance.supplier_dues.read", "finance.supplier_dues.write", "finance.loans.read", "finance.loans.write", "finance.purchase_expense.read", "finance.purchase_expense.create", "finance.purchase_expense.correct", "finance.purchase_expense.cancel", "finance.daily_sales.read", "finance.daily_sales.history.read_all", "operations.whatsapp_invoice_monitoring.read", "operations.whatsapp_invoice_monitoring.review", ...DAILY_SALES_MANAGE, "platform.files.read", "platform.files.write", "platform.business-date.read", "platform.output.preview", "platform.output.export"] },
   { code: "BASEER_SALES_SUPERVISOR", nameAr: "مشرف مبيعات", nameEn: "Sales supervisor", permissions: ["platform.ai.use", "finance.daily_sales.read", "finance.daily_sales.history.read_all", ...DAILY_SALES_MANAGE, "platform.business-date.read", "platform.output.preview"] },
   { code: "BASEER_CASHIER", nameAr: "كاشير", nameEn: "Cashier", permissions: ["platform.ai.use", "finance.daily_sales.read", "finance.daily_sales.create", "platform.business-date.read"] },
   { code: "BASEER_OPERATIONS_ENTRY", nameAr: "موظف تسجيل داخلي", nameEn: "Internal registration employee", permissions: ["operations.internal_registration.create"] },
-  { code: "BASEER_READER", nameAr: "قارئ", nameEn: "Reader", permissions: ["platform.ai.use", "finance.daily_sales.read", "finance.configuration.read", "reports.read", "finance.suppliers.read", "finance.supplier_dues.read", "finance.loans.read", "finance.purchase_expense.read", "platform.business-date.read"] },
+  { code: "BASEER_READER", nameAr: "قارئ", nameEn: "Reader", permissions: ["platform.ai.use", "finance.daily_sales.read", "finance.configuration.read", "reports.read", "finance.suppliers.read", "finance.supplier_dues.read", "finance.loans.read", "finance.purchase_expense.read", "operations.whatsapp_invoice_monitoring.read", "platform.business-date.read"] },
 ] as const;
 
 export function permissionCodesAreKnown(codes: readonly string[]): boolean {

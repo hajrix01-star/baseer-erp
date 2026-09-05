@@ -672,6 +672,119 @@ export const InboundEvidenceAnalysisStatus = {
 export type InboundEvidenceAnalysisStatus = (typeof InboundEvidenceAnalysisStatus)[keyof typeof InboundEvidenceAnalysisStatus]
 
 
+export const WhatsappInvoiceConnectionStatus = {
+  NOT_CONFIGURED: 'NOT_CONFIGURED',
+  PLANNED: 'PLANNED',
+  DISCONNECTED: 'DISCONNECTED',
+  CONNECTED: 'CONNECTED',
+  GAP_DETECTED: 'GAP_DETECTED',
+  REAUTH_REQUIRED: 'REAUTH_REQUIRED',
+  BLOCKED: 'BLOCKED'
+} as const
+
+export type WhatsappInvoiceConnectionStatus = (typeof WhatsappInvoiceConnectionStatus)[keyof typeof WhatsappInvoiceConnectionStatus]
+
+
+export const WhatsappInvoiceExtractionState = {
+  NOT_REQUESTED: 'NOT_REQUESTED',
+  QUEUED: 'QUEUED',
+  RUNNING: 'RUNNING',
+  SUCCEEDED: 'SUCCEEDED',
+  FAILED: 'FAILED'
+} as const
+
+export type WhatsappInvoiceExtractionState = (typeof WhatsappInvoiceExtractionState)[keyof typeof WhatsappInvoiceExtractionState]
+
+
+export const WhatsappInvoiceQualityState = {
+  VALID: 'VALID',
+  INCOMPLETE: 'INCOMPLETE',
+  CONFLICT: 'CONFLICT'
+} as const
+
+export type WhatsappInvoiceQualityState = (typeof WhatsappInvoiceQualityState)[keyof typeof WhatsappInvoiceQualityState]
+
+
+export const WhatsappInvoiceApprovalState = {
+  APPROVED_MONITORING: 'APPROVED_MONITORING',
+  INCOMPLETE: 'INCOMPLETE'
+} as const
+
+export type WhatsappInvoiceApprovalState = (typeof WhatsappInvoiceApprovalState)[keyof typeof WhatsappInvoiceApprovalState]
+
+
+export const WhatsappInvoiceDuplicateState = {
+  UNCHECKED: 'UNCHECKED',
+  CLEAR: 'CLEAR',
+  SUSPECTED: 'SUSPECTED',
+  CONFIRMED: 'CONFIRMED',
+  DISMISSED: 'DISMISSED'
+} as const
+
+export type WhatsappInvoiceDuplicateState = (typeof WhatsappInvoiceDuplicateState)[keyof typeof WhatsappInvoiceDuplicateState]
+
+
+export const WhatsappInvoiceArchiveState = {
+  ACTIVE: 'ACTIVE',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type WhatsappInvoiceArchiveState = (typeof WhatsappInvoiceArchiveState)[keyof typeof WhatsappInvoiceArchiveState]
+
+
+export const WhatsappInvoicePurchaseState = {
+  NOT_LINKED: 'NOT_LINKED',
+  PREPARING: 'PREPARING',
+  DRAFT_LINKED: 'DRAFT_LINKED',
+  DOCUMENT_LINKED: 'DOCUMENT_LINKED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type WhatsappInvoicePurchaseState = (typeof WhatsappInvoicePurchaseState)[keyof typeof WhatsappInvoicePurchaseState]
+
+
+export const WhatsappInvoiceRevisionSource = {
+  INITIAL: 'INITIAL',
+  MANUAL_CORRECTION: 'MANUAL_CORRECTION',
+  AI_REEXTRACTION: 'AI_REEXTRACTION'
+} as const
+
+export type WhatsappInvoiceRevisionSource = (typeof WhatsappInvoiceRevisionSource)[keyof typeof WhatsappInvoiceRevisionSource]
+
+
+export const WhatsappInvoiceAssetStorageState = {
+  PENDING: 'PENDING',
+  READY: 'READY',
+  QUARANTINED: 'QUARANTINED',
+  FAILED: 'FAILED'
+} as const
+
+export type WhatsappInvoiceAssetStorageState = (typeof WhatsappInvoiceAssetStorageState)[keyof typeof WhatsappInvoiceAssetStorageState]
+
+
+export const WhatsappInvoiceAssetScanStatus = {
+  NOT_REQUESTED: 'NOT_REQUESTED',
+  PENDING: 'PENDING',
+  CLEAN: 'CLEAN',
+  MALICIOUS: 'MALICIOUS',
+  UNAVAILABLE: 'UNAVAILABLE',
+  FAILED: 'FAILED'
+} as const
+
+export type WhatsappInvoiceAssetScanStatus = (typeof WhatsappInvoiceAssetScanStatus)[keyof typeof WhatsappInvoiceAssetScanStatus]
+
+
+export const WhatsappInvoiceMediaWorkItemState = {
+  QUEUED: 'QUEUED',
+  RUNNING: 'RUNNING',
+  STORED: 'STORED',
+  QUARANTINED: 'QUARANTINED',
+  FAILED: 'FAILED'
+} as const
+
+export type WhatsappInvoiceMediaWorkItemState = (typeof WhatsappInvoiceMediaWorkItemState)[keyof typeof WhatsappInvoiceMediaWorkItemState]
+
+
 export const MarketingReputationReplyAutomationStatus = {
   DISABLED: 'DISABLED',
   ENABLED: 'ENABLED',

@@ -1,0 +1,351 @@
+.whatsapp-invoice-monitoring {
+  display: grid;
+  gap: 16px;
+}
+
+.whatsapp-invoice-monitoring__connection,
+.whatsapp-invoice-monitoring__connection-detail {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.whatsapp-invoice-monitoring__connection p,
+.whatsapp-invoice-monitoring__connection-detail p {
+  margin: 8px 0 0;
+}
+
+.whatsapp-invoice-monitoring__connection small {
+  color: var(--baseer-muted, #68716c);
+  white-space: nowrap;
+}
+
+.whatsapp-invoice-monitoring__date {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--baseer-muted, #68716c);
+  font-size: .82rem;
+}
+
+.whatsapp-invoice-monitoring__date input {
+  max-inline-size: 10.75rem;
+}
+
+.whatsapp-invoice-monitoring__filter-note {
+  margin: -8px 0 0;
+  color: var(--baseer-muted, #68716c);
+  font-size: .84rem;
+}
+
+.whatsapp-invoice-monitoring__tabs {
+  display: flex;
+  overflow-x: auto;
+  border-block-end: 1px solid var(--baseer-border, #d9dfda);
+  scrollbar-width: thin;
+}
+
+.whatsapp-invoice-monitoring__tabs button {
+  position: relative;
+  flex: 0 0 auto;
+  padding: 10px 14px;
+  border: 0;
+  background: transparent;
+  color: var(--baseer-muted, #68716c);
+  font: inherit;
+  cursor: pointer;
+}
+
+.whatsapp-invoice-monitoring__tabs button[aria-selected="true"] {
+  color: var(--baseer-text, #1f2e27);
+  font-weight: 700;
+}
+
+.whatsapp-invoice-monitoring__tabs button[aria-selected="true"]::after {
+  position: absolute;
+  inset-inline: 10px;
+  inset-block-end: -1px;
+  block-size: 2px;
+  background: var(--baseer-brand, #167550);
+  content: "";
+}
+
+.whatsapp-invoice-monitoring__tabs button:focus-visible,
+.whatsapp-invoice-monitoring__load-more button:focus-visible {
+  outline: 2px solid var(--baseer-focus, #0f7c55);
+  outline-offset: -2px;
+}
+
+.whatsapp-invoice-monitoring__panel {
+  min-inline-size: 0;
+}
+
+.whatsapp-invoice-monitoring__asset-grid,
+.whatsapp-invoice-monitoring__notes {
+  display: grid;
+  gap: 12px;
+}
+
+.whatsapp-invoice-monitoring__asset-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.whatsapp-invoice-monitoring__asset {
+  display: grid;
+  gap: 14px;
+}
+
+.whatsapp-invoice-monitoring__asset dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+}
+
+.whatsapp-invoice-monitoring__asset dt {
+  color: var(--baseer-muted, #68716c);
+  font-size: .78rem;
+}
+
+.whatsapp-invoice-monitoring__asset dd {
+  margin: 3px 0 0;
+  font-size: .9rem;
+}
+
+.whatsapp-invoice-monitoring__statuses {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.whatsapp-invoice-monitoring__load-more {
+  display: flex;
+  justify-content: center;
+  margin-block: 14px 0;
+}
+
+.whatsapp-invoice-monitoring__connection-detail {
+  display: grid;
+  align-items: start;
+}
+
+.whatsapp-invoice-monitoring__settings,
+.whatsapp-invoice-monitoring__binding-section,
+.whatsapp-invoice-monitoring__binding-list,
+.whatsapp-invoice-monitoring__binding-form {
+  display: grid;
+  gap: 16px;
+}
+
+.whatsapp-invoice-monitoring__settings-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.whatsapp-invoice-monitoring__binding-section > header,
+.whatsapp-invoice-monitoring__binding {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.whatsapp-invoice-monitoring__binding-section h3,
+.whatsapp-invoice-monitoring__pilot-qr h3 {
+  margin: 0;
+}
+
+.whatsapp-invoice-monitoring__binding-section header p,
+.whatsapp-invoice-monitoring__pilot-qr p {
+  margin: 5px 0 0;
+  color: var(--baseer-muted, #68716c);
+}
+
+.whatsapp-invoice-monitoring__binding > div:first-child {
+  display: grid;
+  gap: 4px;
+  min-inline-size: 0;
+}
+
+.whatsapp-invoice-monitoring__binding > div:first-child small {
+  overflow-wrap: anywhere;
+  color: var(--baseer-muted, #68716c);
+}
+
+.whatsapp-invoice-monitoring__binding > div:last-child {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.whatsapp-invoice-monitoring__binding-form {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.whatsapp-invoice-monitoring__binding-form > .baseer-card {
+  grid-column: 1 / -1;
+}
+
+.whatsapp-invoice-monitoring__binding-form label {
+  display: grid;
+  gap: 6px;
+  color: var(--baseer-text, #1f2e27);
+  font-size: .86rem;
+  font-weight: 600;
+}
+
+.whatsapp-invoice-monitoring__binding-form select {
+  inline-size: 100%;
+}
+
+.whatsapp-invoice-monitoring__pilot-qr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.whatsapp-invoice-monitoring__pilot-qr > div:first-child {
+  display: grid;
+  gap: 8px;
+}
+
+.whatsapp-invoice-monitoring__pilot-qr img,
+.whatsapp-invoice-monitoring__pilot-qr-loading {
+  flex: 0 0 auto;
+  inline-size: min(100%, 220px);
+  aspect-ratio: 1;
+  border: 1px solid var(--baseer-border, #d9dfda);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.whatsapp-invoice-monitoring__pilot-qr img {
+  object-fit: contain;
+}
+
+.whatsapp-invoice-monitoring__pilot-qr-loading {
+  display: grid;
+  place-items: center;
+  color: var(--baseer-muted, #68716c);
+  text-align: center;
+}
+
+.whatsapp-invoice-monitoring__record-trigger {
+  justify-content: flex-start;
+  min-block-size: 2rem;
+  padding-inline: 0;
+  text-align: start;
+}
+
+.whatsapp-invoice-monitoring__detail,
+.whatsapp-invoice-monitoring__edit-form,
+.whatsapp-invoice-monitoring__source-assets {
+  display: grid;
+  gap: 16px;
+}
+
+.whatsapp-invoice-monitoring__detail-fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+.whatsapp-invoice-monitoring__detail-fields > div {
+  min-inline-size: 0;
+  padding: 10px;
+  border: 1px solid var(--baseer-border, #d9dfda);
+  border-radius: 8px;
+}
+
+.whatsapp-invoice-monitoring__detail-fields dt {
+  color: var(--baseer-muted, #68716c);
+  font-size: .78rem;
+}
+
+.whatsapp-invoice-monitoring__detail-fields dd {
+  margin: 4px 0 0;
+  overflow-wrap: anywhere;
+}
+
+.whatsapp-invoice-monitoring__source-assets h4 {
+  margin: 0;
+}
+
+.whatsapp-invoice-monitoring__source-assets > .baseer-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.whatsapp-invoice-monitoring__source-assets > .baseer-card strong {
+  flex: 1 1 12rem;
+  overflow-wrap: anywhere;
+}
+
+.whatsapp-invoice-monitoring__edit-form {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.whatsapp-invoice-monitoring__edit-form label {
+  display: grid;
+  gap: 6px;
+  color: var(--baseer-text, #1f2e27);
+  font-size: .86rem;
+  font-weight: 600;
+}
+
+.whatsapp-invoice-monitoring__edit-form select,
+.whatsapp-invoice-monitoring__edit-form textarea {
+  inline-size: 100%;
+}
+
+.whatsapp-invoice-monitoring__edit-reason {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 680px) {
+  .whatsapp-invoice-monitoring__connection {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .whatsapp-invoice-monitoring__date {
+    justify-content: space-between;
+    inline-size: 100%;
+  }
+
+  .whatsapp-invoice-monitoring__date input {
+    max-inline-size: none;
+  }
+
+  .whatsapp-invoice-monitoring__detail-fields,
+  .whatsapp-invoice-monitoring__edit-form,
+  .whatsapp-invoice-monitoring__binding-form {
+    grid-template-columns: 1fr;
+  }
+
+  .whatsapp-invoice-monitoring__binding-section > header,
+  .whatsapp-invoice-monitoring__binding,
+  .whatsapp-invoice-monitoring__pilot-qr {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .whatsapp-invoice-monitoring__binding > div:last-child,
+  .whatsapp-invoice-monitoring__settings-actions {
+    justify-content: flex-start;
+  }
+
+  .whatsapp-invoice-monitoring__pilot-qr img,
+  .whatsapp-invoice-monitoring__pilot-qr-loading {
+    inline-size: min(100%, 260px);
+  }
+}

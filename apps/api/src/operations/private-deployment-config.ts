@@ -101,6 +101,29 @@ function validatePersistentFileStorage(environment: NodeJS.ProcessEnv, domain: s
   requireBase64Key("BASEER_EMPLOYEE_DOCUMENT_ENCRYPTION_KEY", environment.BASEER_EMPLOYEE_DOCUMENT_ENCRYPTION_KEY);
   requireHttpUrl("BASEER_DOCUMENT_SCANNER_ENDPOINT", environment.BASEER_DOCUMENT_SCANNER_ENDPOINT);
 
+  const waiStorageEnabled = environment.BASEER_WAI_ASSET_STORAGE_ENABLED ?? "false";
+  if (waiStorageEnabled !== "true" && waiStorageEnabled !== "false") {
+    throw new Error("BASEER_WAI_ASSET_STORAGE_ENABLED must be true or false.");
+  }
+  if (waiStorageEnabled === "true") {
+    requireWritableStorageDirectory(
+      "BASEER_WAI_ASSET_STORAGE_ROOT",
+      environment.BASEER_WAI_ASSET_STORAGE_ROOT,
+      storageRoot,
+    );
+    requireBase64Key("BASEER_WAI_ASSET_ENCRYPTION_KEY", environment.BASEER_WAI_ASSET_ENCRYPTION_KEY);
+  }
+  const waiBaileysPilotEnabled = environment.BASEER_WAI_BAILEYS_PILOT_ENABLED ?? "false";
+  if (waiBaileysPilotEnabled !== "true" && waiBaileysPilotEnabled !== "false") {
+    throw new Error("BASEER_WAI_BAILEYS_PILOT_ENABLED must be true or false.");
+  }
+  if (waiBaileysPilotEnabled === "true") {
+    if (waiStorageEnabled !== "true") {
+      throw new Error("BASEER_WAI_ASSET_STORAGE_ENABLED must be true before the Baileys pilot can start.");
+    }
+    requireBase64Key("BASEER_WAI_SESSION_ENCRYPTION_KEY", environment.BASEER_WAI_SESSION_ENCRYPTION_KEY);
+  }
+
   if (environment.BASEER_GMAIL_OAUTH_ENABLED !== "true") return;
 
   requireWritableStorageDirectory(
