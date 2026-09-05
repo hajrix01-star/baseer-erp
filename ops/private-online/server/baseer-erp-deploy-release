@@ -16,6 +16,7 @@ die() {
 cleanup_release_staging() {
   [[ -n "${bundle:-}" ]] && rm -f -- "$bundle"
   [[ -n "${staging_directory:-}" ]] && rm -rf -- "$staging_directory"
+  return 0
 }
 
 trap cleanup_release_staging EXIT
