@@ -142,7 +142,7 @@ test("role editor validates its fields and permission selection", async ({ page 
   const form = page.locator("[data-baseer-rhf-form]");
   await expect(form).toBeVisible();
   await form.getByRole("button", { name: "Add role" }).click();
-  await expect(form.getByRole("alert")).toHaveCount(5);
+  await expect(form.getByRole("alert")).toHaveCount(4);
   expect(requests.filter((request) => request === "POST /v1/administration/roles")).toHaveLength(0);
   const accessibility = await new AxeBuilder({ page }).include("[data-baseer-rhf-form]").analyze();
   expect(accessibility.violations).toEqual([]);

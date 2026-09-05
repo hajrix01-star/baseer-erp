@@ -49,6 +49,13 @@ try {
   const overview = await server.inject({ method: "GET", url: "/v1/administration/overview", headers });
   assert.equal(overview.statusCode, 200, overview.body);
 
+  const createRole = await server.inject({ method: "POST", url: "/v1/administration/roles", headers, payload: { nameAr: "كاشير اختبار", nameEn: "Test cashier", permissionCodes: ["administration.roles.read", "administration.users.read"] } });
+  assert.equal(createRole.statusCode, 201, createRole.body);
+  const createdRoleBody = JSON.parse(createRole.body);
+  const createdRole = await database.inTenantTransaction(fixture.tenantId, (tx) => tx.role.findFirstOrThrow({ where: { id: createdRoleBody.id }, include: { grants: { orderBy: { permissionCode: "asc" } } } }));
+  assert.match(createdRole.code, /^CUSTOM_TEST_CASHIER_[A-F0-9]{8}$/);
+  assert.deepEqual(createdRole.grants.map((grant) => grant.permissionCode), ["administration.roles.read", "administration.users.read"]);
+
   const logoPng = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00, 0x0d]);
   const uploadedLogo = await server.inject({ method: "POST", url: `/v1/administration/companies/${fixture.companyId}/logo`, headers, payload: { fileName: "company.png", contentBase64: logoPng.toString("base64") } });
   assert.equal(uploadedLogo.statusCode, 201, uploadedLogo.body);
