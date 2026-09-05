@@ -622,6 +622,24 @@ export const MarketingProviderConnectionStatus = {
 export type MarketingProviderConnectionStatus = (typeof MarketingProviderConnectionStatus)[keyof typeof MarketingProviderConnectionStatus]
 
 
+export const MarketingProviderCredentialStatus = {
+  ACTIVE: 'ACTIVE',
+  REVOKED: 'REVOKED'
+} as const
+
+export type MarketingProviderCredentialStatus = (typeof MarketingProviderCredentialStatus)[keyof typeof MarketingProviderCredentialStatus]
+
+
+export const MarketingProviderSyncRunStatus = {
+  QUEUED: 'QUEUED',
+  RUNNING: 'RUNNING',
+  FAILED: 'FAILED',
+  BLOCKED: 'BLOCKED'
+} as const
+
+export type MarketingProviderSyncRunStatus = (typeof MarketingProviderSyncRunStatus)[keyof typeof MarketingProviderSyncRunStatus]
+
+
 export const InboundEvidenceGmailConnectionStatus = {
   NOT_CONNECTED: 'NOT_CONNECTED',
   AUTHORIZING: 'AUTHORIZING',

@@ -3,6 +3,7 @@ import { randomUUID } from "node:crypto";
 
 import dotenv from "dotenv";
 import { NestFactory } from "@nestjs/core";
+import { FastifyAdapter } from "./api-workspace-dependencies.mjs";
 import pg from "pg";
 
 dotenv.config({ path: "apps/api/.env.baseer-test" });
@@ -15,15 +16,46 @@ let app;
 
 try {
   await seed();
-  const [{ AppModule }, { DatabaseService }, { MarketingService }, { marketingCalendarReadSchema }] = await Promise.all([
+  const [{ AppModule }, { DatabaseService }, { MarketingService }, { MarketingController }, { MarketingGoogleOAuthService }, { marketingCalendarReadSchema }] = await Promise.all([
     import("../apps/api/dist/app.module.js"),
     import("../apps/api/dist/database/database.service.js"),
     import("../apps/api/dist/marketing/marketing.service.js"),
+    import("../apps/api/dist/marketing/marketing.controller.js"),
+    import("../apps/api/dist/marketing/marketing-google-oauth.service.js"),
     import("../packages/contracts/dist/marketing.js"),
   ]);
-  app = await NestFactory.createApplicationContext(AppModule, { logger: false });
+  app = await NestFactory.create(AppModule, new FastifyAdapter({ logger: false }));
+  app.setGlobalPrefix("v1");
+  await app.init();
   const database = app.get(DatabaseService);
   const marketing = app.get(MarketingService);
+  const controller = app.get(MarketingController);
+  const googleOAuth = app.get(MarketingGoogleOAuthService);
+  const server = app.getHttpAdapter().getInstance();
+  const oauthStateAndConnectionCountBefore = await database.inTenantTransaction(fixture.tenantId, async (tx) => Promise.all([
+    tx.marketingProviderOAuthState.count({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId } }),
+    tx.marketingProviderConnection.count({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId } }),
+  ]));
+  const previousOauthExperiment = process.env.BASEER_MARKETING_OAUTH_EXPERIMENT_ENABLED;
+  try {
+    for (const oauthExperimentEnabled of ["false", "true"]) {
+      process.env.BASEER_MARKETING_OAUTH_EXPERIMENT_ENABLED = oauthExperimentEnabled;
+      await assert.rejects(() => controller.beginGoogleAuthorization("GOOGLE_BUSINESS"), /Google authorization is not available in this Baseer release\./, "The controller must reject authorization whether the legacy experiment flag is disabled or enabled.");
+      const transportResponse = await server.inject({ method: "POST", url: "/v1/marketing/provider-connections/GOOGLE_BUSINESS/authorization" });
+      assert.equal(transportResponse.statusCode, 403, "The transport route must return 403 whether the legacy experiment flag is disabled or enabled.");
+      assert.equal(transportResponse.headers.location, undefined, "A blocked authorization route must not emit a redirect.");
+      assert.equal("authorizationUrl" in JSON.parse(transportResponse.body), false, "A blocked authorization route must not emit a consent URL.");
+    }
+    await assert.rejects(() => googleOAuth.begin(context, "GOOGLE_BUSINESS"), /Google authorization is not available in this Baseer release\./, "The service must reject direct authorization calls as a second release boundary.");
+  } finally {
+    if (previousOauthExperiment === undefined) delete process.env.BASEER_MARKETING_OAUTH_EXPERIMENT_ENABLED;
+    else process.env.BASEER_MARKETING_OAUTH_EXPERIMENT_ENABLED = previousOauthExperiment;
+  }
+  const oauthStateAndConnectionCountAfter = await database.inTenantTransaction(fixture.tenantId, async (tx) => Promise.all([
+    tx.marketingProviderOAuthState.count({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId } }),
+    tx.marketingProviderConnection.count({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId } }),
+  ]));
+  assert.deepEqual(oauthStateAndConnectionCountAfter, oauthStateAndConnectionCountBefore, "A blocked authorization attempt must not create OAuth state or change a provider connection.");
   const request = { titleAr: "حملة تحقق", titleEn: "Verification campaign", platform: "MANUAL", status: "PLANNED", startsOn: "2026-08-01", endsOn: "2026-08-31", objective: "اختبار العزل", idempotencyKey: randomUUID() };
   const created = await marketing.createCampaign(context, request);
   const replayed = await marketing.createCampaign(context, request);
@@ -116,7 +148,7 @@ try {
     WHERE n.nspname = 'public' AND c.relname IN ('MarketingCampaignFinancialLink', 'MarketingCampaignContextLink', 'MarketingProviderConnection')`);
   assert.equal(rls.rows.length, 3, "P2 links and the provider connection control-plane table must exist in PostgreSQL.");
   assert.equal(rls.rows.every((row) => row.relrowsecurity && row.relforcerowsecurity), true, "Marketing connection metadata must enforce RLS.");
-  console.log(JSON.stringify({ ok: true, verified: ["company_scope", "idempotency_replay", "idempotency_mismatch", "archive_history", "reply_policy", "reply_policy_replay", "provider_setup_request", "provider_request_is_not_connection", "context_link", "daily_calendar_timeline", "missing_is_not_zero", "descriptive_spend_result", "finance_reference_rejection", "rls_force", "audit", "no_finance_posting", "honest_provider_readiness"] }));
+  console.log(JSON.stringify({ ok: true, verified: ["company_scope", "idempotency_replay", "idempotency_mismatch", "archive_history", "reply_policy", "reply_policy_replay", "provider_setup_request", "provider_request_is_not_connection", "oauth_hard_off_env_false_true", "oauth_hard_off_transport_403_no_redirect", "oauth_hard_off_direct_service", "oauth_hard_off_no_state_or_connection_write", "context_link", "daily_calendar_timeline", "missing_is_not_zero", "descriptive_spend_result", "finance_reference_rejection", "rls_force", "audit", "no_finance_posting", "honest_provider_readiness"] }));
 } finally {
   await app?.close();
   await pool.end();

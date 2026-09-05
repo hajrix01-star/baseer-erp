@@ -478,6 +478,18 @@ enum MarketingProviderConnectionStatus {
   BLOCKED
 }
 
+enum MarketingProviderCredentialStatus {
+  ACTIVE
+  REVOKED
+}
+
+enum MarketingProviderSyncRunStatus {
+  QUEUED
+  RUNNING
+  FAILED
+  BLOCKED
+}
+
 enum InboundEvidenceGmailConnectionStatus {
   NOT_CONNECTED
   AUTHORIZING
@@ -1060,34 +1072,34 @@ model User {
   createdAt         DateTime   @default(now()) @db.Timestamptz(6)
   updatedAt         DateTime   @updatedAt @db.Timestamptz(6)
 
-  tenant                             Tenant                                   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  memberships                        CompanyMembership[]
-  sessions                           AppSession[]
-  auditEvents                        AuditEvent[]
-  idempotencyReceipts                IdempotencyReceipt[]
-  createdFileMetadata                FileMetadata[]                           @relation("FileMetadataCreator")
-  createdJournalEntries              FinanceJournalEntry[]
-  outflowDocumentRevisions           FinanceOutflowDocumentRevision[]
-  createdReportRuns                  ReportRun[]
-  createdReportDocuments             ReportDocument[]                         @relation("ReportDocumentCreator")
-  createdVatSimulations              VatSimulation[]                          @relation("VatSimulationCreator")
-  updatedVatSimulations              VatSimulation[]                          @relation("VatSimulationUpdater")
-  cashPerformanceCoverageActivations FinanceCashPerformanceCoverage[]         @relation("FinanceCashPerformanceCoverageActivator")
-  cashPerformanceHistoricalImports   FinanceCashPerformanceHistoricalImport[] @relation("FinanceCashPerformanceHistoricalImportCreator")
-  tenantAdministrationAssignments    TenantAdministrationAssignment[]
-  approvedAiCompanyContexts          AiCompanyContext[]                       @relation("AiCompanyContextApprover")
-  approvedAiSkillActivations         AiSkillActivation[]                      @relation("AiSkillActivationApprover")
-  suspendedAiSkillActivations        AiSkillActivation[]                      @relation("AiSkillActivationSuspender")
-  aiEvaluationFeedback               AiEvaluationFeedback[]
-  aiSkillEvaluationRuns              AiSkillEvaluationRun[]
-  requestedBackupJobs                BackupJob[]                              @relation("BackupJobRequester")
-  createdBackupPolicies              BackupPolicy[]                           @relation("BackupPolicyCreator")
-  backupAuditEvents                  BackupAuditEvent[]
-  initiatedLegacyMigrationRuns       LegacyMigrationRun[]                     @relation("LegacyMigrationRunCreator")
-  legacyMigrationReviewActions       LegacyMigrationReviewAction[]            @relation("LegacyMigrationReviewActionCreator")
-  requestedNurixExcelFinancialExecutions NurixExcelFinancialExecution[]       @relation("NurixExcelFinancialExecutionRequester")
-  approvedNurixExcelFinancialExecutions  NurixExcelFinancialExecution[]       @relation("NurixExcelFinancialExecutionApprover")
-  createdNurixExcelFinancialReceipts     NurixExcelFinancialReceipt[]         @relation("NurixExcelFinancialReceiptCreator")
+  tenant                                 Tenant                                   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  memberships                            CompanyMembership[]
+  sessions                               AppSession[]
+  auditEvents                            AuditEvent[]
+  idempotencyReceipts                    IdempotencyReceipt[]
+  createdFileMetadata                    FileMetadata[]                           @relation("FileMetadataCreator")
+  createdJournalEntries                  FinanceJournalEntry[]
+  outflowDocumentRevisions               FinanceOutflowDocumentRevision[]
+  createdReportRuns                      ReportRun[]
+  createdReportDocuments                 ReportDocument[]                         @relation("ReportDocumentCreator")
+  createdVatSimulations                  VatSimulation[]                          @relation("VatSimulationCreator")
+  updatedVatSimulations                  VatSimulation[]                          @relation("VatSimulationUpdater")
+  cashPerformanceCoverageActivations     FinanceCashPerformanceCoverage[]         @relation("FinanceCashPerformanceCoverageActivator")
+  cashPerformanceHistoricalImports       FinanceCashPerformanceHistoricalImport[] @relation("FinanceCashPerformanceHistoricalImportCreator")
+  tenantAdministrationAssignments        TenantAdministrationAssignment[]
+  approvedAiCompanyContexts              AiCompanyContext[]                       @relation("AiCompanyContextApprover")
+  approvedAiSkillActivations             AiSkillActivation[]                      @relation("AiSkillActivationApprover")
+  suspendedAiSkillActivations            AiSkillActivation[]                      @relation("AiSkillActivationSuspender")
+  aiEvaluationFeedback                   AiEvaluationFeedback[]
+  aiSkillEvaluationRuns                  AiSkillEvaluationRun[]
+  requestedBackupJobs                    BackupJob[]                              @relation("BackupJobRequester")
+  createdBackupPolicies                  BackupPolicy[]                           @relation("BackupPolicyCreator")
+  backupAuditEvents                      BackupAuditEvent[]
+  initiatedLegacyMigrationRuns           LegacyMigrationRun[]                     @relation("LegacyMigrationRunCreator")
+  legacyMigrationReviewActions           LegacyMigrationReviewAction[]            @relation("LegacyMigrationReviewActionCreator")
+  requestedNurixExcelFinancialExecutions NurixExcelFinancialExecution[]           @relation("NurixExcelFinancialExecutionRequester")
+  approvedNurixExcelFinancialExecutions  NurixExcelFinancialExecution[]           @relation("NurixExcelFinancialExecutionApprover")
+  createdNurixExcelFinancialReceipts     NurixExcelFinancialReceipt[]             @relation("NurixExcelFinancialReceiptCreator")
 
   @@unique([tenantId, loginNormalized])
   @@unique([id, tenantId])
@@ -1095,24 +1107,24 @@ model User {
 }
 
 model Company {
-  id                     String        @id @default(uuid()) @db.Uuid
-  tenantId               String        @db.Uuid
-  nameAr                 String        @db.VarChar(160)
-  nameEn                 String        @db.VarChar(160)
-  businessTimezone       String        @default("Asia/Riyadh") @db.VarChar(64)
-  contextLocationCode    String?       @db.VarChar(80)
-  contextLocationLabelAr String?       @db.VarChar(160)
-  contextLatitude        Decimal?      @db.Decimal(9, 6)
-  contextLongitude       Decimal?      @db.Decimal(9, 6)
-  status                 CompanyStatus @default(ACTIVE)
+  id                        String        @id @default(uuid()) @db.Uuid
+  tenantId                  String        @db.Uuid
+  nameAr                    String        @db.VarChar(160)
+  nameEn                    String        @db.VarChar(160)
+  businessTimezone          String        @default("Asia/Riyadh") @db.VarChar(64)
+  contextLocationCode       String?       @db.VarChar(80)
+  contextLocationLabelAr    String?       @db.VarChar(160)
+  contextLatitude           Decimal?      @db.Decimal(9, 6)
+  contextLongitude          Decimal?      @db.Decimal(9, 6)
+  status                    CompanyStatus @default(ACTIVE)
   /// An owner-controlled staging safeguard. Active review companies remain
   /// readable, but CompanyContext rejects every non-read capability.
-  migrationReviewLocked  Boolean       @default(false)
+  migrationReviewLocked     Boolean       @default(false)
   /// Location evidence is opt-in per company. When disabled, employee
   /// attendance records neither require nor retain device coordinates.
-  attendanceLocationEnabled Boolean    @default(false)
-  createdAt              DateTime      @default(now()) @db.Timestamptz(6)
-  updatedAt              DateTime      @updatedAt @db.Timestamptz(6)
+  attendanceLocationEnabled Boolean       @default(false)
+  createdAt                 DateTime      @default(now()) @db.Timestamptz(6)
+  updatedAt                 DateTime      @updatedAt @db.Timestamptz(6)
 
   tenant                                     Tenant                                        @relation(fields: [tenantId], references: [id], onDelete: Restrict)
   memberships                                CompanyMembership[]
@@ -1224,6 +1236,9 @@ model Company {
   marketingCampaignFinancialLinks            MarketingCampaignFinancialLink[]
   marketingCampaignContextLinks              MarketingCampaignContextLink[]
   marketingProviderConnections               MarketingProviderConnection[]
+  marketingProviderCredentialEnvelopes       MarketingProviderCredentialEnvelope[]
+  marketingGoogleBusinessLocationMappings    MarketingGoogleBusinessLocationMapping[]
+  marketingProviderSyncRuns                  MarketingProviderSyncRun[]
   marketingReputationReplyPolicy             MarketingReputationReplyPolicy?
   operationsSections                         OperationsSection[]
   operationsCatalogCategories                OperationsCatalogCategory[]
@@ -1332,11 +1347,13 @@ model CompanyMembership {
   roleId    String   @db.Uuid
   createdAt DateTime @default(now()) @db.Timestamptz(6)
 
-  user    User    @relation(fields: [userId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  role    Role    @relation(fields: [roleId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  user                                      User                                     @relation(fields: [userId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  company                                   Company                                  @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  role                                      Role                                     @relation(fields: [roleId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  marketingGoogleBusinessLocationSelections MarketingGoogleBusinessLocationMapping[]
 
   @@id([userId, companyId])
+  @@unique([tenantId, userId, companyId])
   @@index([tenantId, companyId])
   @@index([tenantId, roleId])
 }
@@ -1756,32 +1773,32 @@ model NurixExcelMasterDataItem {
 /// It cannot store invoice cells or create postings by itself; it supplies the
 /// durable, tenant-scoped approval and resume boundary for a future writer.
 model NurixExcelFinancialExecution {
-  id                   String                            @id @default(uuid()) @db.Uuid
-  packageId            String                            @db.Uuid
-  tenantId             String                            @db.Uuid
-  targetCompanyId      String                            @db.Uuid
-  transformVersion     String                            @db.VarChar(80)
-  financialPlanSha256  String                            @db.Char(64)
-  status               NurixExcelFinancialExecutionStatus @default(PENDING)
-  reason               String?                           @db.VarChar(500)
-  requestedByUserId    String                            @db.Uuid
-  approvedByUserId     String?                           @db.Uuid
-  approvedAt           DateTime?                         @db.Timestamptz(6)
-  leaseToken           String?                           @db.Uuid
-  leaseExpiresAt       DateTime?                         @db.Timestamptz(6)
-  waveSequence         Int                               @default(0)
-  createdAt            DateTime                          @default(now()) @db.Timestamptz(6)
-  updatedAt            DateTime                          @updatedAt @db.Timestamptz(6)
+  id                  String                             @id @default(uuid()) @db.Uuid
+  packageId           String                             @db.Uuid
+  tenantId            String                             @db.Uuid
+  targetCompanyId     String                             @db.Uuid
+  transformVersion    String                             @db.VarChar(80)
+  financialPlanSha256 String                             @db.Char(64)
+  status              NurixExcelFinancialExecutionStatus @default(PENDING)
+  reason              String?                            @db.VarChar(500)
+  requestedByUserId   String                             @db.Uuid
+  approvedByUserId    String?                            @db.Uuid
+  approvedAt          DateTime?                          @db.Timestamptz(6)
+  leaseToken          String?                            @db.Uuid
+  leaseExpiresAt      DateTime?                          @db.Timestamptz(6)
+  waveSequence        Int                                @default(0)
+  createdAt           DateTime                           @default(now()) @db.Timestamptz(6)
+  updatedAt           DateTime                           @updatedAt @db.Timestamptz(6)
 
-  package     NurixExcelStagingPackage @relation(fields: [packageId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  tenant      Tenant                   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
-  company     Company                  @relation(fields: [targetCompanyId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  requester   User                     @relation("NurixExcelFinancialExecutionRequester", fields: [requestedByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  approver    User?                    @relation("NurixExcelFinancialExecutionApprover", fields: [approvedByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
-  waves       NurixExcelFinancialWave[]
-  items       NurixExcelFinancialItem[]
-  sourceMaps  NurixExcelFinancialSourceMap[]
-  receipts    NurixExcelFinancialReceipt[]
+  package    NurixExcelStagingPackage       @relation(fields: [packageId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  tenant     Tenant                         @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  company    Company                        @relation(fields: [targetCompanyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  requester  User                           @relation("NurixExcelFinancialExecutionRequester", fields: [requestedByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  approver   User?                          @relation("NurixExcelFinancialExecutionApprover", fields: [approvedByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  waves      NurixExcelFinancialWave[]
+  items      NurixExcelFinancialItem[]
+  sourceMaps NurixExcelFinancialSourceMap[]
+  receipts   NurixExcelFinancialReceipt[]
 
   @@unique([id, tenantId])
   @@unique([id, tenantId, targetCompanyId])
@@ -1827,22 +1844,22 @@ model NurixExcelFinancialWave {
 /// One item per exact source record and transform. The operation key is a
 /// deterministic writer idempotency key; it never contains source payload.
 model NurixExcelFinancialItem {
-  id              String                      @id @default(uuid()) @db.Uuid
-  executionId     String                      @db.Uuid
-  waveId          String                      @db.Uuid
-  tenantId        String                      @db.Uuid
-  targetCompanyId String                      @db.Uuid
-  sourceSheet     String                      @db.VarChar(80)
-  sourceEntity    String                      @db.VarChar(120)
-  sourceId        String                      @db.VarChar(160)
-  sourceChecksum  String                      @db.Char(64)
-  operationKey    String                      @db.Char(64)
+  id              String                        @id @default(uuid()) @db.Uuid
+  executionId     String                        @db.Uuid
+  waveId          String                        @db.Uuid
+  tenantId        String                        @db.Uuid
+  targetCompanyId String                        @db.Uuid
+  sourceSheet     String                        @db.VarChar(80)
+  sourceEntity    String                        @db.VarChar(120)
+  sourceId        String                        @db.VarChar(160)
+  sourceChecksum  String                        @db.Char(64)
+  operationKey    String                        @db.Char(64)
   status          NurixExcelFinancialItemStatus @default(PENDING)
-  targetEntity    String?                     @db.VarChar(120)
-  targetId        String?                     @db.VarChar(160)
-  resultCode      String?                     @db.VarChar(120)
-  createdAt       DateTime                    @default(now()) @db.Timestamptz(6)
-  updatedAt       DateTime                    @updatedAt @db.Timestamptz(6)
+  targetEntity    String?                       @db.VarChar(120)
+  targetId        String?                       @db.VarChar(160)
+  resultCode      String?                       @db.VarChar(120)
+  createdAt       DateTime                      @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime                      @updatedAt @db.Timestamptz(6)
 
   execution NurixExcelFinancialExecution @relation(fields: [executionId, tenantId, targetCompanyId], references: [id, tenantId, targetCompanyId], onDelete: Restrict)
   wave      NurixExcelFinancialWave      @relation(fields: [waveId, tenantId, targetCompanyId], references: [id, tenantId, targetCompanyId], onDelete: Restrict)
@@ -1859,17 +1876,17 @@ model NurixExcelFinancialItem {
 /// Immutable source-to-target lineage. A source identity can map once per
 /// execution, which prevents a resumed writer from creating it twice.
 model NurixExcelFinancialSourceMap {
-  id              String                           @id @default(uuid()) @db.Uuid
-  executionId     String                           @db.Uuid
-  tenantId        String                           @db.Uuid
-  targetCompanyId String                           @db.Uuid
-  sourceEntity    String                           @db.VarChar(120)
-  sourceId        String                           @db.VarChar(160)
-  sourceChecksum  String                           @db.Char(64)
-  targetEntity    String                           @db.VarChar(120)
-  targetId        String                           @db.VarChar(160)
+  id              String                            @id @default(uuid()) @db.Uuid
+  executionId     String                            @db.Uuid
+  tenantId        String                            @db.Uuid
+  targetCompanyId String                            @db.Uuid
+  sourceEntity    String                            @db.VarChar(120)
+  sourceId        String                            @db.VarChar(160)
+  sourceChecksum  String                            @db.Char(64)
+  targetEntity    String                            @db.VarChar(120)
+  targetId        String                            @db.VarChar(160)
   state           NurixExcelFinancialSourceMapState @default(PLANNED)
-  createdAt       DateTime                         @default(now()) @db.Timestamptz(6)
+  createdAt       DateTime                          @default(now()) @db.Timestamptz(6)
 
   execution NurixExcelFinancialExecution @relation(fields: [executionId, tenantId, targetCompanyId], references: [id, tenantId, targetCompanyId], onDelete: Restrict)
   tenant    Tenant                       @relation(fields: [tenantId], references: [id], onDelete: Restrict)
@@ -1912,33 +1929,33 @@ model NurixExcelFinancialReceipt {
 /// HrPayrollRun, journals, payments, and employee financial movements: Noorix
 /// approval evidence must not become a current Baseer financial obligation.
 model NurixHistoricalPayrollEvidence {
-  id                              String                               @id @default(uuid()) @db.Uuid
-  tenantId                        String                               @db.Uuid
-  companyId                       String                               @db.Uuid
-  executionId                     String                               @db.Uuid
-  sourceCompanyId                 String                               @db.VarChar(120)
-  sourceRunId                     String                               @db.VarChar(160)
-  sourceChecksum                  String                               @db.Char(64)
-  sourceRunNumber                 String                               @db.VarChar(80)
-  payrollMonth                    DateTime                             @db.Date
-  sourceAccruedAt                 DateTime                             @db.Timestamptz(6)
-  sourceStatus                    String                               @db.VarChar(40)
-  employeeCount                   Int
-  grossAmount                     Decimal                              @db.Decimal(18, 4)
-  deductionsAmount                Decimal                              @db.Decimal(18, 4)
-  appliedAdvancesAmount           Decimal                              @db.Decimal(18, 4)
-  sourceAdvancesAmount            Decimal                              @db.Decimal(18, 4)
-  advanceCarryoverEvidenceAmount  Decimal                              @db.Decimal(18, 4)
-  netAmount                       Decimal                              @db.Decimal(18, 4)
-  paymentEvidenceKind             NurixHistoricalPayrollPaymentEvidenceKind @default(NONE)
-  paymentEvidenceAmount           Decimal?                             @db.Decimal(18, 4)
-  paymentEvidenceAt               DateTime?                            @db.Timestamptz(6)
-  sourceInvoiceEvidence           NurixHistoricalPayrollAccountingEvidenceAvailability @default(NONE)
-  sourceJournalEvidence           NurixHistoricalPayrollAccountingEvidenceAvailability @default(NONE)
-  status                          NurixHistoricalPayrollEvidenceStatus @default(EVIDENCE_ONLY)
-  notes                           String?                              @db.VarChar(1000)
-  createdByUserId                 String                               @db.Uuid
-  createdAt                       DateTime                             @default(now()) @db.Timestamptz(6)
+  id                             String                                               @id @default(uuid()) @db.Uuid
+  tenantId                       String                                               @db.Uuid
+  companyId                      String                                               @db.Uuid
+  executionId                    String                                               @db.Uuid
+  sourceCompanyId                String                                               @db.VarChar(120)
+  sourceRunId                    String                                               @db.VarChar(160)
+  sourceChecksum                 String                                               @db.Char(64)
+  sourceRunNumber                String                                               @db.VarChar(80)
+  payrollMonth                   DateTime                                             @db.Date
+  sourceAccruedAt                DateTime                                             @db.Timestamptz(6)
+  sourceStatus                   String                                               @db.VarChar(40)
+  employeeCount                  Int
+  grossAmount                    Decimal                                              @db.Decimal(18, 4)
+  deductionsAmount               Decimal                                              @db.Decimal(18, 4)
+  appliedAdvancesAmount          Decimal                                              @db.Decimal(18, 4)
+  sourceAdvancesAmount           Decimal                                              @db.Decimal(18, 4)
+  advanceCarryoverEvidenceAmount Decimal                                              @db.Decimal(18, 4)
+  netAmount                      Decimal                                              @db.Decimal(18, 4)
+  paymentEvidenceKind            NurixHistoricalPayrollPaymentEvidenceKind            @default(NONE)
+  paymentEvidenceAmount          Decimal?                                             @db.Decimal(18, 4)
+  paymentEvidenceAt              DateTime?                                            @db.Timestamptz(6)
+  sourceInvoiceEvidence          NurixHistoricalPayrollAccountingEvidenceAvailability @default(NONE)
+  sourceJournalEvidence          NurixHistoricalPayrollAccountingEvidenceAvailability @default(NONE)
+  status                         NurixHistoricalPayrollEvidenceStatus                 @default(EVIDENCE_ONLY)
+  notes                          String?                                              @db.VarChar(1000)
+  createdByUserId                String                                               @db.Uuid
+  createdAt                      DateTime                                             @default(now()) @db.Timestamptz(6)
 
   lines              NurixHistoricalPayrollLineEvidence[]
   accountingEvidence NurixHistoricalPayrollAccountingEvidence[]
@@ -1953,23 +1970,23 @@ model NurixHistoricalPayrollEvidence {
 /// Immutable historical payroll source line. employeeId is optional because
 /// it is a lineage reference only; it never licenses a payroll or debt write.
 model NurixHistoricalPayrollLineEvidence {
-  id                         String                          @id @default(uuid()) @db.Uuid
-  tenantId                   String                          @db.Uuid
-  companyId                  String                          @db.Uuid
-  executionId                String                          @db.Uuid
-  runEvidenceId              String                          @db.Uuid
-  sourceItemId               String                          @db.VarChar(160)
-  sourceChecksum             String                          @db.Char(64)
-  employeeSourceId           String                          @db.VarChar(160)
-  employeeId                 String?                         @db.Uuid
-  grossSalary                Decimal                         @db.Decimal(18, 4)
-  allowancesAdd              Decimal                         @db.Decimal(18, 4)
-  deductionsAmount           Decimal                         @db.Decimal(18, 4)
-  sourceAdvancesAmount       Decimal                         @db.Decimal(18, 4)
-  appliedAdvancesAmount      Decimal                         @db.Decimal(18, 4)
-  advanceCarryoverEvidence   Decimal                         @db.Decimal(18, 4)
-  netSalary                  Decimal                         @db.Decimal(18, 4)
-  createdAt                  DateTime                        @default(now()) @db.Timestamptz(6)
+  id                       String   @id @default(uuid()) @db.Uuid
+  tenantId                 String   @db.Uuid
+  companyId                String   @db.Uuid
+  executionId              String   @db.Uuid
+  runEvidenceId            String   @db.Uuid
+  sourceItemId             String   @db.VarChar(160)
+  sourceChecksum           String   @db.Char(64)
+  employeeSourceId         String   @db.VarChar(160)
+  employeeId               String?  @db.Uuid
+  grossSalary              Decimal  @db.Decimal(18, 4)
+  allowancesAdd            Decimal  @db.Decimal(18, 4)
+  deductionsAmount         Decimal  @db.Decimal(18, 4)
+  sourceAdvancesAmount     Decimal  @db.Decimal(18, 4)
+  appliedAdvancesAmount    Decimal  @db.Decimal(18, 4)
+  advanceCarryoverEvidence Decimal  @db.Decimal(18, 4)
+  netSalary                Decimal  @db.Decimal(18, 4)
+  createdAt                DateTime @default(now()) @db.Timestamptz(6)
 
   run NurixHistoricalPayrollEvidence @relation(fields: [runEvidenceId, tenantId, companyId, executionId], references: [id, tenantId, companyId, executionId], onDelete: Restrict)
 
@@ -1982,19 +1999,19 @@ model NurixHistoricalPayrollLineEvidence {
 /// Source-only invoice/journal/vault-allocation proof for a historical payroll
 /// header. It has no relation to Baseer operational finance documents.
 model NurixHistoricalPayrollAccountingEvidence {
-  id              String                                      @id @db.Uuid
-  tenantId        String                                      @db.Uuid
-  companyId       String                                      @db.Uuid
-  executionId     String                                      @db.Uuid
-  runEvidenceId   String                                      @db.Uuid
-  evidenceKind    NurixHistoricalPayrollAccountingEvidenceKind
-  sourceRecordId  String                                      @db.VarChar(160)
-  sourceChecksum  String                                      @db.Char(64)
-  sourceNumber    String?                                     @db.VarChar(160)
-  sourceDate      DateTime?                                   @db.Timestamptz(6)
-  vaultSourceId   String?                                     @db.VarChar(160)
-  amount          Decimal?                                    @db.Decimal(18, 4)
-  createdAt       DateTime                                    @default(now()) @db.Timestamptz(6)
+  id             String                                       @id @db.Uuid
+  tenantId       String                                       @db.Uuid
+  companyId      String                                       @db.Uuid
+  executionId    String                                       @db.Uuid
+  runEvidenceId  String                                       @db.Uuid
+  evidenceKind   NurixHistoricalPayrollAccountingEvidenceKind
+  sourceRecordId String                                       @db.VarChar(160)
+  sourceChecksum String                                       @db.Char(64)
+  sourceNumber   String?                                      @db.VarChar(160)
+  sourceDate     DateTime?                                    @db.Timestamptz(6)
+  vaultSourceId  String?                                      @db.VarChar(160)
+  amount         Decimal?                                     @db.Decimal(18, 4)
+  createdAt      DateTime                                     @default(now()) @db.Timestamptz(6)
 
   run NurixHistoricalPayrollEvidence @relation(fields: [runEvidenceId, tenantId, companyId, executionId], references: [id, tenantId, companyId, executionId], onDelete: Restrict)
 
@@ -2135,6 +2152,82 @@ model CompanyFinanceProfile {
   @@unique([id, tenantId, companyId])
   @@unique([companyId, tenantId])
   @@index([tenantId, companyId])
+}
+
+/// Server-only sealed credential envelope. No public API may serialize these fields.
+model MarketingProviderCredentialEnvelope {
+  id           String                            @id @default(uuid()) @db.Uuid
+  tenantId     String                            @db.Uuid
+  companyId    String                            @db.Uuid
+  connectionId String                            @db.Uuid
+  provider     MarketingProvider
+  ciphertext   String                            @db.Text
+  iv           String                            @db.VarChar(64)
+  tag          String                            @db.VarChar(64)
+  keyVersion   Int                               @default(1)
+  status       MarketingProviderCredentialStatus @default(ACTIVE)
+  revokedAt    DateTime?                         @db.Timestamptz(6)
+  createdAt    DateTime                          @default(now()) @db.Timestamptz(6)
+  updatedAt    DateTime                          @updatedAt @db.Timestamptz(6)
+
+  company    Company                     @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  connection MarketingProviderConnection @relation(fields: [connectionId, tenantId, companyId, provider], references: [id, tenantId, companyId, provider], onDelete: Restrict)
+
+  @@unique([connectionId, tenantId, companyId, provider])
+  @@index([tenantId, companyId, status])
+}
+
+/// Explicitly selected GBP resource only. This foundation cannot create a row.
+model MarketingGoogleBusinessLocationMapping {
+  id                         String            @id @default(uuid()) @db.Uuid
+  tenantId                   String            @db.Uuid
+  companyId                  String            @db.Uuid
+  connectionId               String            @db.Uuid
+  provider                   MarketingProvider @default(GOOGLE_BUSINESS)
+  googleAccountResourceName  String            @db.VarChar(512)
+  googleLocationResourceName String            @db.VarChar(512)
+  selectedAt                 DateTime          @db.Timestamptz(6)
+  selectedByUserId           String            @db.Uuid
+  createdAt                  DateTime          @default(now()) @db.Timestamptz(6)
+  updatedAt                  DateTime          @updatedAt @db.Timestamptz(6)
+
+  company              Company                     @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  connection           MarketingProviderConnection @relation(fields: [connectionId, tenantId, companyId, provider], references: [id, tenantId, companyId, provider], onDelete: Restrict)
+  selectedByMembership CompanyMembership           @relation(fields: [tenantId, selectedByUserId, companyId], references: [tenantId, userId, companyId], onDelete: Restrict)
+  syncRuns             MarketingProviderSyncRun[]
+
+  @@unique([id, tenantId, companyId])
+  @@unique([id, tenantId, companyId, provider], map: "MktGbpMapping_id_tenant_company_provider_uq")
+  @@unique([tenantId, companyId, connectionId, googleAccountResourceName, googleLocationResourceName])
+  @@index([tenantId, companyId, provider, selectedAt])
+}
+
+/// Immutable-safe operational metadata. A foundation run can never claim success.
+model MarketingProviderSyncRun {
+  id                String                         @id @default(uuid()) @db.Uuid
+  tenantId          String                         @db.Uuid
+  companyId         String                         @db.Uuid
+  locationMappingId String                         @db.Uuid
+  provider          MarketingProvider
+  status            MarketingProviderSyncRunStatus @default(QUEUED)
+  correlationId     String                         @db.Uuid
+  attempt           Int                            @default(1)
+  sourceWindowFrom  DateTime?                      @db.Timestamptz(6)
+  sourceWindowTo    DateTime?                      @db.Timestamptz(6)
+  rowsRead          Int                            @default(0)
+  rowsWritten       Int                            @default(0)
+  sourceChecksum    String?                        @db.Char(64)
+  sourceFreshAt     DateTime?                      @db.Timestamptz(6)
+  safeErrorCode     String?                        @db.VarChar(80)
+  adapterVersion    String                         @db.VarChar(80)
+  createdAt         DateTime                       @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime                       @updatedAt @db.Timestamptz(6)
+
+  company         Company                                @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  locationMapping MarketingGoogleBusinessLocationMapping @relation(fields: [locationMappingId, tenantId, companyId, provider], references: [id, tenantId, companyId, provider], onDelete: Restrict)
+
+  @@index([tenantId, companyId, provider, status, createdAt])
+  @@index([tenantId, companyId, locationMappingId, createdAt])
 }
 
 model FinanceAccount {
@@ -3002,8 +3095,8 @@ model MarketingSalesTarget {
 }
 
 /// Company-scoped, audited readiness state for a future Google connection.
-/// The later OAuth gate adds a separate encrypted credential vault and account
-/// mapping; those sensitive concepts deliberately do not exist in this model.
+/// Credentials and selected resources are held in separate company-scoped
+/// records; this row never contains secret material.
 model MarketingProviderConnection {
   id                     String                            @id @default(uuid()) @db.Uuid
   tenantId               String                            @db.Uuid
@@ -3015,9 +3108,12 @@ model MarketingProviderConnection {
   createdAt              DateTime                          @default(now()) @db.Timestamptz(6)
   updatedAt              DateTime                          @updatedAt @db.Timestamptz(6)
 
-  company Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  company                        Company                                  @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  credentialEnvelope             MarketingProviderCredentialEnvelope?
+  googleBusinessLocationMappings MarketingGoogleBusinessLocationMapping[]
 
   @@unique([id, tenantId, companyId])
+  @@unique([id, tenantId, companyId, provider])
   @@unique([tenantId, companyId, provider])
   @@index([tenantId, companyId, status])
 }
@@ -3806,25 +3902,25 @@ model FinanceOutflowAllocation {
 /// Employee master data is company-scoped and intentionally separate from a
 /// sign-in user. An employee never receives platform access by being created.
 model HrEmployee {
-  id             String           @id @default(uuid()) @db.Uuid
-  tenantId       String           @db.Uuid
-  companyId      String           @db.Uuid
-  employeeNumber String           @db.VarChar(80)
-  nameAr         String           @db.VarChar(160)
-  nameEn         String?          @db.VarChar(160)
-  jobTitle       String?          @db.VarChar(160)
-  phone          String?          @db.VarChar(30)
-  email          String?          @db.VarChar(254)
-  iqamaNumber    String?          @db.VarChar(160)
-  workSchedule   String?          @db.VarChar(160)
-  hireDate       DateTime         @db.Date
-  status         HrEmployeeStatus @default(ACTIVE)
-  terminatedAt   DateTime?        @db.Date
-  statusEffectiveAt DateTime?     @db.Date
-  statusReason   String?          @db.VarChar(240)
-  notes          String?          @db.VarChar(2000)
-  createdAt      DateTime         @default(now()) @db.Timestamptz(6)
-  updatedAt      DateTime         @updatedAt @db.Timestamptz(6)
+  id                String           @id @default(uuid()) @db.Uuid
+  tenantId          String           @db.Uuid
+  companyId         String           @db.Uuid
+  employeeNumber    String           @db.VarChar(80)
+  nameAr            String           @db.VarChar(160)
+  nameEn            String?          @db.VarChar(160)
+  jobTitle          String?          @db.VarChar(160)
+  phone             String?          @db.VarChar(30)
+  email             String?          @db.VarChar(254)
+  iqamaNumber       String?          @db.VarChar(160)
+  workSchedule      String?          @db.VarChar(160)
+  hireDate          DateTime         @db.Date
+  status            HrEmployeeStatus @default(ACTIVE)
+  terminatedAt      DateTime?        @db.Date
+  statusEffectiveAt DateTime?        @db.Date
+  statusReason      String?          @db.VarChar(240)
+  notes             String?          @db.VarChar(2000)
+  createdAt         DateTime         @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime         @updatedAt @db.Timestamptz(6)
 
   company                       Company                                @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   services                      HrEmployeeService[]
@@ -4246,22 +4342,22 @@ model AttendanceQrScanUse {
 }
 
 model AttendanceWorkSession {
-  id           String                      @id @default(uuid()) @db.Uuid
-  tenantId     String                      @db.Uuid
-  companyId    String                      @db.Uuid
-  branchId     String                      @db.Uuid
-  employeeId   String                      @db.Uuid
-  status       AttendanceWorkSessionStatus @default(OPEN)
-  businessDate DateTime                    @db.Date
-  checkInAt    DateTime                    @db.Timestamptz(6)
-  checkOutAt   DateTime?                   @db.Timestamptz(6)
+  id                  String                      @id @default(uuid()) @db.Uuid
+  tenantId            String                      @db.Uuid
+  companyId           String                      @db.Uuid
+  branchId            String                      @db.Uuid
+  employeeId          String                      @db.Uuid
+  status              AttendanceWorkSessionStatus @default(OPEN)
+  businessDate        DateTime                    @db.Date
+  checkInAt           DateTime                    @db.Timestamptz(6)
+  checkOutAt          DateTime?                   @db.Timestamptz(6)
   /// Administrative checkout preserves the employee's original check-in and
   /// records the responsible actor, reason, and server-recorded action time.
-  adminClosedByUserId String?              @db.Uuid
-  adminCloseReason   String?               @db.VarChar(2000)
-  adminClosedAt      DateTime?             @db.Timestamptz(6)
-  createdAt    DateTime                    @default(now()) @db.Timestamptz(6)
-  updatedAt    DateTime                    @updatedAt @db.Timestamptz(6)
+  adminClosedByUserId String?                     @db.Uuid
+  adminCloseReason    String?                     @db.VarChar(2000)
+  adminClosedAt       DateTime?                   @db.Timestamptz(6)
+  createdAt           DateTime                    @default(now()) @db.Timestamptz(6)
+  updatedAt           DateTime                    @updatedAt @db.Timestamptz(6)
 
   company  Company           @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   branch   AttendanceBranch  @relation(fields: [branchId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
@@ -4941,7 +5037,7 @@ model HrPayrollLine {
   payrollRun                HrPayrollRun                                  @relation(fields: [payrollRunId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   employee                  HrEmployee                                    @relation(fields: [employeeId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   compensationPolicyVersion HrCompensationPolicyVersion?                  @relation("HrPayrollLinePolicyVersion", fields: [compensationPolicyVersionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
-  contractWorkTerms         HrEmployeeWorkTerms?                           @relation(fields: [contractWorkTermsId, tenantId, companyId, employeeId], references: [id, tenantId, companyId, employeeId], onDelete: Restrict)
+  contractWorkTerms         HrEmployeeWorkTerms?                          @relation(fields: [contractWorkTermsId, tenantId, companyId, employeeId], references: [id, tenantId, companyId, employeeId], onDelete: Restrict)
   advanceApplications       HrPayrollAdvanceApplication[]
   deductionApplications     HrPayrollAdministrativeDeductionApplication[]
 

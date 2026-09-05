@@ -3,12 +3,11 @@ import { analysisReadinessReceiptSchema, archiveMarketingCampaignRequestSchema, 
 
 import { CompanyContextService } from "../company-context/company-context.service.js";
 import { MarketingService } from "./marketing.service.js";
-import { MarketingGoogleOAuthService } from "./marketing-google-oauth.service.js";
 import { AnalysisReadinessService } from "../ai-platform/analysis-readiness.service.js";
 
 @Controller("marketing")
 export class MarketingController {
-  constructor(private readonly companyContext: CompanyContextService, private readonly marketing: MarketingService, private readonly googleOAuth: MarketingGoogleOAuthService, private readonly analysisReadiness: AnalysisReadinessService) {}
+  constructor(private readonly companyContext: CompanyContextService, private readonly marketing: MarketingService, private readonly analysisReadiness: AnalysisReadinessService) {}
 
   @Get()
   async workspace(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
@@ -106,17 +105,10 @@ export class MarketingController {
   }
 
   @Post("provider-connections/:provider/authorization")
-  async beginGoogleAuthorization(@Param("provider") provider: string, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
-    // This incomplete pre-connector route must never make a Google consent URL
-    // reachable just because platform variables happen to be present. A later
-    // Provider Decision Record enables the separate, named release gate after
-    // callback, vault, selection, revocation and pilot controls exist.
-    if (process.env.BASEER_MARKETING_OAUTH_EXPERIMENT_ENABLED !== "true") {
-      throw new ForbiddenException("Google authorization is not enabled for this Baseer release.");
-    }
-    const parsedProvider = marketingProviderSchema.safeParse(provider);
-    if (!parsedProvider.success) throw new BadRequestException("Invalid provider connection request.");
-    return this.googleOAuth.begin(await this.context(authorization, companyId, "marketing.google-connection.manage"), parsedProvider.data);
+  async beginGoogleAuthorization(@Param("provider") _provider: string, @Headers("authorization") _authorization?: string, @Headers("x-baseer-company-id") _companyId?: string) {
+    // MKT-01A is a two-layer, hard-off boundary. It must stay false even when
+    // a deployment accidentally retains an old experimental environment flag.
+    throw new ForbiddenException("Google authorization is not available in this Baseer release.");
   }
 
   @Put("reputation/reply-policy")

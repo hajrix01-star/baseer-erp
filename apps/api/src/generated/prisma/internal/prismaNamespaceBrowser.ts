@@ -89,6 +89,9 @@ export const ModelName = {
   DocumentSerialCounter: 'DocumentSerialCounter',
   FileMetadata: 'FileMetadata',
   CompanyFinanceProfile: 'CompanyFinanceProfile',
+  MarketingProviderCredentialEnvelope: 'MarketingProviderCredentialEnvelope',
+  MarketingGoogleBusinessLocationMapping: 'MarketingGoogleBusinessLocationMapping',
+  MarketingProviderSyncRun: 'MarketingProviderSyncRun',
   FinanceAccount: 'FinanceAccount',
   FinancePnlMappingVersion: 'FinancePnlMappingVersion',
   FinancePnlStatementLine: 'FinancePnlStatementLine',
@@ -938,6 +941,66 @@ export const CompanyFinanceProfileScalarFieldEnum = {
 } as const
 
 export type CompanyFinanceProfileScalarFieldEnum = (typeof CompanyFinanceProfileScalarFieldEnum)[keyof typeof CompanyFinanceProfileScalarFieldEnum]
+
+
+export const MarketingProviderCredentialEnvelopeScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  connectionId: 'connectionId',
+  provider: 'provider',
+  ciphertext: 'ciphertext',
+  iv: 'iv',
+  tag: 'tag',
+  keyVersion: 'keyVersion',
+  status: 'status',
+  revokedAt: 'revokedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MarketingProviderCredentialEnvelopeScalarFieldEnum = (typeof MarketingProviderCredentialEnvelopeScalarFieldEnum)[keyof typeof MarketingProviderCredentialEnvelopeScalarFieldEnum]
+
+
+export const MarketingGoogleBusinessLocationMappingScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  connectionId: 'connectionId',
+  provider: 'provider',
+  googleAccountResourceName: 'googleAccountResourceName',
+  googleLocationResourceName: 'googleLocationResourceName',
+  selectedAt: 'selectedAt',
+  selectedByUserId: 'selectedByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MarketingGoogleBusinessLocationMappingScalarFieldEnum = (typeof MarketingGoogleBusinessLocationMappingScalarFieldEnum)[keyof typeof MarketingGoogleBusinessLocationMappingScalarFieldEnum]
+
+
+export const MarketingProviderSyncRunScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  locationMappingId: 'locationMappingId',
+  provider: 'provider',
+  status: 'status',
+  correlationId: 'correlationId',
+  attempt: 'attempt',
+  sourceWindowFrom: 'sourceWindowFrom',
+  sourceWindowTo: 'sourceWindowTo',
+  rowsRead: 'rowsRead',
+  rowsWritten: 'rowsWritten',
+  sourceChecksum: 'sourceChecksum',
+  sourceFreshAt: 'sourceFreshAt',
+  safeErrorCode: 'safeErrorCode',
+  adapterVersion: 'adapterVersion',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MarketingProviderSyncRunScalarFieldEnum = (typeof MarketingProviderSyncRunScalarFieldEnum)[keyof typeof MarketingProviderSyncRunScalarFieldEnum]
 
 
 export const FinanceAccountScalarFieldEnum = {

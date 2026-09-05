@@ -15,8 +15,8 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 /**
  * Model MarketingProviderConnection
  * Company-scoped, audited readiness state for a future Google connection.
- * The later OAuth gate adds a separate encrypted credential vault and account
- * mapping; those sensitive concepts deliberately do not exist in this model.
+ * Credentials and selected resources are held in separate company-scoped
+ * records; this row never contains secret material.
  */
 export type MarketingProviderConnectionModel = runtime.Types.Result.DefaultSelection<Prisma.$MarketingProviderConnectionPayload>
 
@@ -217,6 +217,8 @@ export type MarketingProviderConnectionWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"MarketingProviderConnection"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"MarketingProviderConnection"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
+  credentialEnvelope?: Prisma.XOR<Prisma.MarketingProviderCredentialEnvelopeNullableScalarRelationFilter, Prisma.MarketingProviderCredentialEnvelopeWhereInput> | null
+  googleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingListRelationFilter
 }
 
 export type MarketingProviderConnectionOrderByWithRelationInput = {
@@ -230,11 +232,14 @@ export type MarketingProviderConnectionOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   company?: Prisma.CompanyOrderByWithRelationInput
+  credentialEnvelope?: Prisma.MarketingProviderCredentialEnvelopeOrderByWithRelationInput
+  googleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingOrderByRelationAggregateInput
 }
 
 export type MarketingProviderConnectionWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   id_tenantId_companyId?: Prisma.MarketingProviderConnectionIdTenantIdCompanyIdCompoundUniqueInput
+  id_tenantId_companyId_provider?: Prisma.MarketingProviderConnectionIdTenantIdCompanyIdProviderCompoundUniqueInput
   tenantId_companyId_provider?: Prisma.MarketingProviderConnectionTenantIdCompanyIdProviderCompoundUniqueInput
   AND?: Prisma.MarketingProviderConnectionWhereInput | Prisma.MarketingProviderConnectionWhereInput[]
   OR?: Prisma.MarketingProviderConnectionWhereInput[]
@@ -248,7 +253,9 @@ export type MarketingProviderConnectionWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"MarketingProviderConnection"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"MarketingProviderConnection"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
-}, "id" | "id_tenantId_companyId" | "tenantId_companyId_provider">
+  credentialEnvelope?: Prisma.XOR<Prisma.MarketingProviderCredentialEnvelopeNullableScalarRelationFilter, Prisma.MarketingProviderCredentialEnvelopeWhereInput> | null
+  googleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingListRelationFilter
+}, "id" | "id_tenantId_companyId" | "id_tenantId_companyId_provider" | "tenantId_companyId_provider">
 
 export type MarketingProviderConnectionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -289,6 +296,8 @@ export type MarketingProviderConnectionCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutMarketingProviderConnectionsInput
+  credentialEnvelope?: Prisma.MarketingProviderCredentialEnvelopeCreateNestedOneWithoutConnectionInput
+  googleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingCreateNestedManyWithoutConnectionInput
 }
 
 export type MarketingProviderConnectionUncheckedCreateInput = {
@@ -301,6 +310,8 @@ export type MarketingProviderConnectionUncheckedCreateInput = {
   setupRequestedByUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  credentialEnvelope?: Prisma.MarketingProviderCredentialEnvelopeUncheckedCreateNestedOneWithoutConnectionInput
+  googleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingUncheckedCreateNestedManyWithoutConnectionInput
 }
 
 export type MarketingProviderConnectionUpdateInput = {
@@ -312,6 +323,8 @@ export type MarketingProviderConnectionUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutMarketingProviderConnectionsNestedInput
+  credentialEnvelope?: Prisma.MarketingProviderCredentialEnvelopeUpdateOneWithoutConnectionNestedInput
+  googleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingUpdateManyWithoutConnectionNestedInput
 }
 
 export type MarketingProviderConnectionUncheckedUpdateInput = {
@@ -324,6 +337,8 @@ export type MarketingProviderConnectionUncheckedUpdateInput = {
   setupRequestedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  credentialEnvelope?: Prisma.MarketingProviderCredentialEnvelopeUncheckedUpdateOneWithoutConnectionNestedInput
+  googleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingUncheckedUpdateManyWithoutConnectionNestedInput
 }
 
 export type MarketingProviderConnectionCreateManyInput = {
@@ -370,10 +385,22 @@ export type MarketingProviderConnectionOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type MarketingProviderConnectionScalarRelationFilter = {
+  is?: Prisma.MarketingProviderConnectionWhereInput
+  isNot?: Prisma.MarketingProviderConnectionWhereInput
+}
+
 export type MarketingProviderConnectionIdTenantIdCompanyIdCompoundUniqueInput = {
   id: string
   tenantId: string
   companyId: string
+}
+
+export type MarketingProviderConnectionIdTenantIdCompanyIdProviderCompoundUniqueInput = {
+  id: string
+  tenantId: string
+  companyId: string
+  provider: $Enums.MarketingProvider
 }
 
 export type MarketingProviderConnectionTenantIdCompanyIdProviderCompoundUniqueInput = {
@@ -460,8 +487,32 @@ export type MarketingProviderConnectionUncheckedUpdateManyWithoutCompanyNestedIn
   deleteMany?: Prisma.MarketingProviderConnectionScalarWhereInput | Prisma.MarketingProviderConnectionScalarWhereInput[]
 }
 
-export type EnumMarketingProviderFieldUpdateOperationsInput = {
-  set?: $Enums.MarketingProvider
+export type MarketingProviderConnectionCreateNestedOneWithoutCredentialEnvelopeInput = {
+  create?: Prisma.XOR<Prisma.MarketingProviderConnectionCreateWithoutCredentialEnvelopeInput, Prisma.MarketingProviderConnectionUncheckedCreateWithoutCredentialEnvelopeInput>
+  connectOrCreate?: Prisma.MarketingProviderConnectionCreateOrConnectWithoutCredentialEnvelopeInput
+  connect?: Prisma.MarketingProviderConnectionWhereUniqueInput
+}
+
+export type MarketingProviderConnectionUpdateOneRequiredWithoutCredentialEnvelopeNestedInput = {
+  create?: Prisma.XOR<Prisma.MarketingProviderConnectionCreateWithoutCredentialEnvelopeInput, Prisma.MarketingProviderConnectionUncheckedCreateWithoutCredentialEnvelopeInput>
+  connectOrCreate?: Prisma.MarketingProviderConnectionCreateOrConnectWithoutCredentialEnvelopeInput
+  upsert?: Prisma.MarketingProviderConnectionUpsertWithoutCredentialEnvelopeInput
+  connect?: Prisma.MarketingProviderConnectionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketingProviderConnectionUpdateToOneWithWhereWithoutCredentialEnvelopeInput, Prisma.MarketingProviderConnectionUpdateWithoutCredentialEnvelopeInput>, Prisma.MarketingProviderConnectionUncheckedUpdateWithoutCredentialEnvelopeInput>
+}
+
+export type MarketingProviderConnectionCreateNestedOneWithoutGoogleBusinessLocationMappingsInput = {
+  create?: Prisma.XOR<Prisma.MarketingProviderConnectionCreateWithoutGoogleBusinessLocationMappingsInput, Prisma.MarketingProviderConnectionUncheckedCreateWithoutGoogleBusinessLocationMappingsInput>
+  connectOrCreate?: Prisma.MarketingProviderConnectionCreateOrConnectWithoutGoogleBusinessLocationMappingsInput
+  connect?: Prisma.MarketingProviderConnectionWhereUniqueInput
+}
+
+export type MarketingProviderConnectionUpdateOneRequiredWithoutGoogleBusinessLocationMappingsNestedInput = {
+  create?: Prisma.XOR<Prisma.MarketingProviderConnectionCreateWithoutGoogleBusinessLocationMappingsInput, Prisma.MarketingProviderConnectionUncheckedCreateWithoutGoogleBusinessLocationMappingsInput>
+  connectOrCreate?: Prisma.MarketingProviderConnectionCreateOrConnectWithoutGoogleBusinessLocationMappingsInput
+  upsert?: Prisma.MarketingProviderConnectionUpsertWithoutGoogleBusinessLocationMappingsInput
+  connect?: Prisma.MarketingProviderConnectionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketingProviderConnectionUpdateToOneWithWhereWithoutGoogleBusinessLocationMappingsInput, Prisma.MarketingProviderConnectionUpdateWithoutGoogleBusinessLocationMappingsInput>, Prisma.MarketingProviderConnectionUncheckedUpdateWithoutGoogleBusinessLocationMappingsInput>
 }
 
 export type EnumMarketingProviderConnectionStatusFieldUpdateOperationsInput = {
@@ -476,6 +527,8 @@ export type MarketingProviderConnectionCreateWithoutCompanyInput = {
   setupRequestedByUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  credentialEnvelope?: Prisma.MarketingProviderCredentialEnvelopeCreateNestedOneWithoutConnectionInput
+  googleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingCreateNestedManyWithoutConnectionInput
 }
 
 export type MarketingProviderConnectionUncheckedCreateWithoutCompanyInput = {
@@ -486,6 +539,8 @@ export type MarketingProviderConnectionUncheckedCreateWithoutCompanyInput = {
   setupRequestedByUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  credentialEnvelope?: Prisma.MarketingProviderCredentialEnvelopeUncheckedCreateNestedOneWithoutConnectionInput
+  googleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingUncheckedCreateNestedManyWithoutConnectionInput
 }
 
 export type MarketingProviderConnectionCreateOrConnectWithoutCompanyInput = {
@@ -529,6 +584,138 @@ export type MarketingProviderConnectionScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"MarketingProviderConnection"> | Date | string
 }
 
+export type MarketingProviderConnectionCreateWithoutCredentialEnvelopeInput = {
+  id?: string
+  provider: $Enums.MarketingProvider
+  status?: $Enums.MarketingProviderConnectionStatus
+  setupRequestedAt?: Date | string | null
+  setupRequestedByUserId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutMarketingProviderConnectionsInput
+  googleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingCreateNestedManyWithoutConnectionInput
+}
+
+export type MarketingProviderConnectionUncheckedCreateWithoutCredentialEnvelopeInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  provider: $Enums.MarketingProvider
+  status?: $Enums.MarketingProviderConnectionStatus
+  setupRequestedAt?: Date | string | null
+  setupRequestedByUserId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  googleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingUncheckedCreateNestedManyWithoutConnectionInput
+}
+
+export type MarketingProviderConnectionCreateOrConnectWithoutCredentialEnvelopeInput = {
+  where: Prisma.MarketingProviderConnectionWhereUniqueInput
+  create: Prisma.XOR<Prisma.MarketingProviderConnectionCreateWithoutCredentialEnvelopeInput, Prisma.MarketingProviderConnectionUncheckedCreateWithoutCredentialEnvelopeInput>
+}
+
+export type MarketingProviderConnectionUpsertWithoutCredentialEnvelopeInput = {
+  update: Prisma.XOR<Prisma.MarketingProviderConnectionUpdateWithoutCredentialEnvelopeInput, Prisma.MarketingProviderConnectionUncheckedUpdateWithoutCredentialEnvelopeInput>
+  create: Prisma.XOR<Prisma.MarketingProviderConnectionCreateWithoutCredentialEnvelopeInput, Prisma.MarketingProviderConnectionUncheckedCreateWithoutCredentialEnvelopeInput>
+  where?: Prisma.MarketingProviderConnectionWhereInput
+}
+
+export type MarketingProviderConnectionUpdateToOneWithWhereWithoutCredentialEnvelopeInput = {
+  where?: Prisma.MarketingProviderConnectionWhereInput
+  data: Prisma.XOR<Prisma.MarketingProviderConnectionUpdateWithoutCredentialEnvelopeInput, Prisma.MarketingProviderConnectionUncheckedUpdateWithoutCredentialEnvelopeInput>
+}
+
+export type MarketingProviderConnectionUpdateWithoutCredentialEnvelopeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumMarketingProviderFieldUpdateOperationsInput | $Enums.MarketingProvider
+  status?: Prisma.EnumMarketingProviderConnectionStatusFieldUpdateOperationsInput | $Enums.MarketingProviderConnectionStatus
+  setupRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  setupRequestedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutMarketingProviderConnectionsNestedInput
+  googleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingUpdateManyWithoutConnectionNestedInput
+}
+
+export type MarketingProviderConnectionUncheckedUpdateWithoutCredentialEnvelopeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumMarketingProviderFieldUpdateOperationsInput | $Enums.MarketingProvider
+  status?: Prisma.EnumMarketingProviderConnectionStatusFieldUpdateOperationsInput | $Enums.MarketingProviderConnectionStatus
+  setupRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  setupRequestedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  googleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingUncheckedUpdateManyWithoutConnectionNestedInput
+}
+
+export type MarketingProviderConnectionCreateWithoutGoogleBusinessLocationMappingsInput = {
+  id?: string
+  provider: $Enums.MarketingProvider
+  status?: $Enums.MarketingProviderConnectionStatus
+  setupRequestedAt?: Date | string | null
+  setupRequestedByUserId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutMarketingProviderConnectionsInput
+  credentialEnvelope?: Prisma.MarketingProviderCredentialEnvelopeCreateNestedOneWithoutConnectionInput
+}
+
+export type MarketingProviderConnectionUncheckedCreateWithoutGoogleBusinessLocationMappingsInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  provider: $Enums.MarketingProvider
+  status?: $Enums.MarketingProviderConnectionStatus
+  setupRequestedAt?: Date | string | null
+  setupRequestedByUserId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  credentialEnvelope?: Prisma.MarketingProviderCredentialEnvelopeUncheckedCreateNestedOneWithoutConnectionInput
+}
+
+export type MarketingProviderConnectionCreateOrConnectWithoutGoogleBusinessLocationMappingsInput = {
+  where: Prisma.MarketingProviderConnectionWhereUniqueInput
+  create: Prisma.XOR<Prisma.MarketingProviderConnectionCreateWithoutGoogleBusinessLocationMappingsInput, Prisma.MarketingProviderConnectionUncheckedCreateWithoutGoogleBusinessLocationMappingsInput>
+}
+
+export type MarketingProviderConnectionUpsertWithoutGoogleBusinessLocationMappingsInput = {
+  update: Prisma.XOR<Prisma.MarketingProviderConnectionUpdateWithoutGoogleBusinessLocationMappingsInput, Prisma.MarketingProviderConnectionUncheckedUpdateWithoutGoogleBusinessLocationMappingsInput>
+  create: Prisma.XOR<Prisma.MarketingProviderConnectionCreateWithoutGoogleBusinessLocationMappingsInput, Prisma.MarketingProviderConnectionUncheckedCreateWithoutGoogleBusinessLocationMappingsInput>
+  where?: Prisma.MarketingProviderConnectionWhereInput
+}
+
+export type MarketingProviderConnectionUpdateToOneWithWhereWithoutGoogleBusinessLocationMappingsInput = {
+  where?: Prisma.MarketingProviderConnectionWhereInput
+  data: Prisma.XOR<Prisma.MarketingProviderConnectionUpdateWithoutGoogleBusinessLocationMappingsInput, Prisma.MarketingProviderConnectionUncheckedUpdateWithoutGoogleBusinessLocationMappingsInput>
+}
+
+export type MarketingProviderConnectionUpdateWithoutGoogleBusinessLocationMappingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumMarketingProviderFieldUpdateOperationsInput | $Enums.MarketingProvider
+  status?: Prisma.EnumMarketingProviderConnectionStatusFieldUpdateOperationsInput | $Enums.MarketingProviderConnectionStatus
+  setupRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  setupRequestedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutMarketingProviderConnectionsNestedInput
+  credentialEnvelope?: Prisma.MarketingProviderCredentialEnvelopeUpdateOneWithoutConnectionNestedInput
+}
+
+export type MarketingProviderConnectionUncheckedUpdateWithoutGoogleBusinessLocationMappingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumMarketingProviderFieldUpdateOperationsInput | $Enums.MarketingProvider
+  status?: Prisma.EnumMarketingProviderConnectionStatusFieldUpdateOperationsInput | $Enums.MarketingProviderConnectionStatus
+  setupRequestedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  setupRequestedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  credentialEnvelope?: Prisma.MarketingProviderCredentialEnvelopeUncheckedUpdateOneWithoutConnectionNestedInput
+}
+
 export type MarketingProviderConnectionCreateManyCompanyInput = {
   id?: string
   provider: $Enums.MarketingProvider
@@ -547,6 +734,8 @@ export type MarketingProviderConnectionUpdateWithoutCompanyInput = {
   setupRequestedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  credentialEnvelope?: Prisma.MarketingProviderCredentialEnvelopeUpdateOneWithoutConnectionNestedInput
+  googleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingUpdateManyWithoutConnectionNestedInput
 }
 
 export type MarketingProviderConnectionUncheckedUpdateWithoutCompanyInput = {
@@ -557,6 +746,8 @@ export type MarketingProviderConnectionUncheckedUpdateWithoutCompanyInput = {
   setupRequestedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  credentialEnvelope?: Prisma.MarketingProviderCredentialEnvelopeUncheckedUpdateOneWithoutConnectionNestedInput
+  googleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingUncheckedUpdateManyWithoutConnectionNestedInput
 }
 
 export type MarketingProviderConnectionUncheckedUpdateManyWithoutCompanyInput = {
@@ -570,6 +761,35 @@ export type MarketingProviderConnectionUncheckedUpdateManyWithoutCompanyInput = 
 }
 
 
+/**
+ * Count Type MarketingProviderConnectionCountOutputType
+ */
+
+export type MarketingProviderConnectionCountOutputType = {
+  googleBusinessLocationMappings: number
+}
+
+export type MarketingProviderConnectionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  googleBusinessLocationMappings?: boolean | MarketingProviderConnectionCountOutputTypeCountGoogleBusinessLocationMappingsArgs
+}
+
+/**
+ * MarketingProviderConnectionCountOutputType without action
+ */
+export type MarketingProviderConnectionCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MarketingProviderConnectionCountOutputType
+   */
+  select?: Prisma.MarketingProviderConnectionCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * MarketingProviderConnectionCountOutputType without action
+ */
+export type MarketingProviderConnectionCountOutputTypeCountGoogleBusinessLocationMappingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MarketingGoogleBusinessLocationMappingWhereInput
+}
+
 
 export type MarketingProviderConnectionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -582,6 +802,9 @@ export type MarketingProviderConnectionSelect<ExtArgs extends runtime.Types.Exte
   createdAt?: boolean
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
+  credentialEnvelope?: boolean | Prisma.MarketingProviderConnection$credentialEnvelopeArgs<ExtArgs>
+  googleBusinessLocationMappings?: boolean | Prisma.MarketingProviderConnection$googleBusinessLocationMappingsArgs<ExtArgs>
+  _count?: boolean | Prisma.MarketingProviderConnectionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["marketingProviderConnection"]>
 
 export type MarketingProviderConnectionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -625,6 +848,9 @@ export type MarketingProviderConnectionSelectScalar = {
 export type MarketingProviderConnectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "provider" | "status" | "setupRequestedAt" | "setupRequestedByUserId" | "createdAt" | "updatedAt", ExtArgs["result"]["marketingProviderConnection"]>
 export type MarketingProviderConnectionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
+  credentialEnvelope?: boolean | Prisma.MarketingProviderConnection$credentialEnvelopeArgs<ExtArgs>
+  googleBusinessLocationMappings?: boolean | Prisma.MarketingProviderConnection$googleBusinessLocationMappingsArgs<ExtArgs>
+  _count?: boolean | Prisma.MarketingProviderConnectionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type MarketingProviderConnectionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
@@ -637,6 +863,8 @@ export type $MarketingProviderConnectionPayload<ExtArgs extends runtime.Types.Ex
   name: "MarketingProviderConnection"
   objects: {
     company: Prisma.$CompanyPayload<ExtArgs>
+    credentialEnvelope: Prisma.$MarketingProviderCredentialEnvelopePayload<ExtArgs> | null
+    googleBusinessLocationMappings: Prisma.$MarketingGoogleBusinessLocationMappingPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1043,6 +1271,8 @@ readonly fields: MarketingProviderConnectionFieldRefs;
 export interface Prisma__MarketingProviderConnectionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  credentialEnvelope<T extends Prisma.MarketingProviderConnection$credentialEnvelopeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketingProviderConnection$credentialEnvelopeArgs<ExtArgs>>): Prisma.Prisma__MarketingProviderCredentialEnvelopeClient<runtime.Types.Result.GetResult<Prisma.$MarketingProviderCredentialEnvelopePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  googleBusinessLocationMappings<T extends Prisma.MarketingProviderConnection$googleBusinessLocationMappingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketingProviderConnection$googleBusinessLocationMappingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarketingGoogleBusinessLocationMappingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1479,6 +1709,49 @@ export type MarketingProviderConnectionDeleteManyArgs<ExtArgs extends runtime.Ty
    * Limit how many MarketingProviderConnections to delete.
    */
   limit?: number
+}
+
+/**
+ * MarketingProviderConnection.credentialEnvelope
+ */
+export type MarketingProviderConnection$credentialEnvelopeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MarketingProviderCredentialEnvelope
+   */
+  select?: Prisma.MarketingProviderCredentialEnvelopeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MarketingProviderCredentialEnvelope
+   */
+  omit?: Prisma.MarketingProviderCredentialEnvelopeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MarketingProviderCredentialEnvelopeInclude<ExtArgs> | null
+  where?: Prisma.MarketingProviderCredentialEnvelopeWhereInput
+}
+
+/**
+ * MarketingProviderConnection.googleBusinessLocationMappings
+ */
+export type MarketingProviderConnection$googleBusinessLocationMappingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MarketingGoogleBusinessLocationMapping
+   */
+  select?: Prisma.MarketingGoogleBusinessLocationMappingSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MarketingGoogleBusinessLocationMapping
+   */
+  omit?: Prisma.MarketingGoogleBusinessLocationMappingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MarketingGoogleBusinessLocationMappingInclude<ExtArgs> | null
+  where?: Prisma.MarketingGoogleBusinessLocationMappingWhereInput
+  orderBy?: Prisma.MarketingGoogleBusinessLocationMappingOrderByWithRelationInput | Prisma.MarketingGoogleBusinessLocationMappingOrderByWithRelationInput[]
+  cursor?: Prisma.MarketingGoogleBusinessLocationMappingWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MarketingGoogleBusinessLocationMappingScalarFieldEnum | Prisma.MarketingGoogleBusinessLocationMappingScalarFieldEnum[]
 }
 
 /**

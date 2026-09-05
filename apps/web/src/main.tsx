@@ -9,6 +9,7 @@ import './baseer-modern-entry-themes.css';
 import './baseer-modern-chart-themes.css';
 import './baseer-modern-admin-theme.css';
 import './baseer-modern-admin-palettes.css';
+import './baseer-info-hint.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
