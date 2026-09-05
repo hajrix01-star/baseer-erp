@@ -43,6 +43,21 @@ export class MarketingGooglePlatformService {
     };
   }
 
+  /**
+   * Safe, read-only capability signal for the company control plane.  The
+   * actual authorization endpoint repeats its allowlist and configuration
+   * checks; this method must never expose configuration values to a client.
+   */
+  googleBusinessPilotAuthorizationAvailable(companyId: string): boolean {
+    try {
+      if (this.googleBusinessPilotCompanyId() !== companyId) return false;
+      this.googleBusinessPilotConfiguration();
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
   readiness(provider: "GOOGLE_ADS" | "GOOGLE_BUSINESS"): GooglePlatformReadiness {
     const required = [
       "BASEER_GOOGLE_OAUTH_CLIENT_ID",

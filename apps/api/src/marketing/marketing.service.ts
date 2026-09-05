@@ -436,7 +436,12 @@ export class MarketingService {
       const readiness = new Map((["GOOGLE_ADS", "GOOGLE_BUSINESS"] as const).map((provider) => [provider, this.googlePlatform.readiness(provider)]));
       return {
         liveOauthEnabled: false as const,
-        connections: (["GOOGLE_ADS", "GOOGLE_BUSINESS"] as const).map((provider) => publicProviderConnection(provider, byProvider.get(provider), readiness.get(provider)!)),
+        connections: (["GOOGLE_ADS", "GOOGLE_BUSINESS"] as const).map((provider) => publicProviderConnection(
+          provider,
+          byProvider.get(provider),
+          readiness.get(provider)!,
+          provider === "GOOGLE_BUSINESS" && this.googlePlatform.googleBusinessPilotAuthorizationAvailable(context.companyId),
+        )),
       };
     });
   }
@@ -528,6 +533,7 @@ function publicProviderConnection(
   provider: "GOOGLE_ADS" | "GOOGLE_BUSINESS",
   connection: Readonly<{ status: "NOT_CONNECTED" | "SETUP_REQUESTED" | "AUTHORIZING" | "AUTHORIZED_AWAITING_SELECTION" | "BLOCKED"; setupRequestedAt: Date | null }> | undefined,
   readiness = { ready: false, missing: [] as readonly string[] },
+  pilotAuthorizationAvailable = false,
 ) {
   const requested = connection?.status === "SETUP_REQUESTED";
   const authorizing = connection?.status === "AUTHORIZING";
@@ -538,6 +544,7 @@ function publicProviderConnection(
     status: connection?.status ?? "NOT_CONNECTED",
     setupRequestedAt: connection?.setupRequestedAt?.toISOString() ?? null,
     platformReadiness: readiness.ready ? "PLATFORM_READY_AWAITING_OAUTH_IMPLEMENTATION" as const : "PLATFORM_SETUP_REQUIRED" as const,
+    pilotAuthorizationAvailable,
     allowedOperation: business ? "BUSINESS_READ_AND_GOVERNED_PUBLISH" as const : "ADS_READ_ONLY" as const,
     messageAr: authorizing
       ? "بدأت رحلة موافقة Google لهذه الشركة. أكملها في نافذة Google خلال عشر دقائق؛ لا يوجد حساب مختار أو مزامنة قبل التحقق اللاحق."
