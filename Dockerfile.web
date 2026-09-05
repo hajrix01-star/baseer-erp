@@ -13,6 +13,8 @@ COPY . .
 # The web workspace imports the contracts package through its published
 # workspace exports, so its declaration and runtime files must exist before
 # TypeScript resolves the application build in a clean container.
+ARG BASEER_RELEASE_ID=development
+ENV BASEER_RELEASE_ID=$BASEER_RELEASE_ID
 RUN npm run build --workspace @baseer-erp/contracts \
   && npm run build --workspace @baseer-erp/web
 

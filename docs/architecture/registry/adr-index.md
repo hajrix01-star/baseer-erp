@@ -10,5 +10,6 @@
 | ADR-UI-006 | Active | زر مسح التقويم المركزي وسقف عناصره الأصلية | `../../governance/ADR-UI-006-CENTRAL-CALENDAR-CLEAR-CONTROL.md` |
 | ADR-OPS-001 | Active | نشر Baseer ERP الخاص تلقائياً عبر SSH مقيد وimmutable manifests | `../ADR-OPS-001-PRIVATE-ONLINE-CONTINUOUS-DELIVERY.md` |
 | ADR-OPS-002 | Active | بوابة قبول PR كاملة ثم نشر main سريع مع preflight وcache | `../ADR-OPS-002-FAST-PRIVATE-ONLINE-RELEASES.md` |
+| ADR-OPS-003 | Active | اكتشاف إصدار واجهة منشور ومطالبة تحديث مركزية بلا Service Worker | `../ADR-OPS-003-CENTRAL-WEB-RELEASE-UPDATE-PROMPT.md` |
 
 لا يحذف قرار قديم. عند استبدال قرار، يضاف صف جديد يذكر القرار الذي حل محله وتاريخه. أي تغيير `ARCHITECTURAL` يراجع هذا الفهرس قبل البناء.

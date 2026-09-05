@@ -19,9 +19,11 @@ import {
   dailySalesClosingReversalReceiptSchema,
   dailySalesClosingPreviewReceiptSchema,
   operationalDayReceiptSchema,
+  operationalDayRangeReceiptSchema,
   previewDailySalesClosingRequestSchema,
   reverseDailySalesClosingRequestSchema,
   setOperationalDayRequestSchema,
+  setOperationalDayRangeRequestSchema,
 } from "@baseer-erp/contracts";
 import {
   BadRequestException,
@@ -468,6 +470,35 @@ export class DailySalesController {
         },
       }),
     );
+  }
+
+  @Post("operational-calendar/day-ranges")
+  @HttpCode(200)
+  async setOperationalDayRange(
+    @Body() body: unknown,
+    @Headers("authorization") authorization?: string,
+    @Headers("x-baseer-company-id") companyId?: string,
+  ) {
+    const request = setOperationalDayRangeRequestSchema.safeParse(body);
+    if (!request.success)
+      throw new BadRequestException("Invalid operational-calendar range request.");
+    const context = await this.authorize(authorization, companyId, [
+      OPERATIONAL_CALENDAR_MANAGE_CAPABILITY,
+      DAILY_SALES_LEGACY_WRITE_CAPABILITY,
+    ]);
+    return operationalDayRangeReceiptSchema.parse({
+      days: await this.calendar.setDayRange({
+        context,
+        idempotencyKey: request.data.idempotencyKey,
+        request: {
+          fromBusinessDate: request.data.fromBusinessDate,
+          toBusinessDate: request.data.toBusinessDate,
+          status: request.data.status,
+          ...(request.data.source === undefined ? {} : { source: request.data.source }),
+          ...(request.data.note === undefined ? {} : { note: request.data.note }),
+        },
+      }),
+    });
   }
 
   @Get("operational-calendar")

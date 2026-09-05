@@ -742,6 +742,18 @@ export const setOperationalDayRequestSchema = z
   })
   .strict();
 
+/** A bounded, atomic range for one operational-calendar decision. */
+export const setOperationalDayRangeRequestSchema = z
+  .object({
+    fromBusinessDate: financeDateSchema,
+    toBusinessDate: financeDateSchema,
+    status: operationalDayStatusSchema,
+    source: operationalDaySourceSchema.optional(),
+    note: z.string().trim().max(1_000).optional(),
+    idempotencyKey: idempotencyKeySchema,
+  })
+  .strict();
+
 /** A comma-separated, explicitly selected set of calendar months.  Consumers
  * must treat this as a union of months, never as the enclosing date range. */
 export const businessMonthsQuerySchema = z
@@ -827,6 +839,9 @@ export const operationalDayReceiptSchema = z
     source: operationalDaySourceSchema,
     dataStatus: dailySalesDataStatusSchema,
   })
+  .strict();
+export const operationalDayRangeReceiptSchema = z
+  .object({ days: z.array(operationalDayReceiptSchema).min(1).max(31) })
   .strict();
 
 export const dailySalesCalendarItemSchema = z
@@ -1054,6 +1069,9 @@ export type ReverseDailySalesClosingRequest = z.infer<
 >;
 export type SetOperationalDayRequest = z.infer<
   typeof setOperationalDayRequestSchema
+>;
+export type SetOperationalDayRangeRequest = z.infer<
+  typeof setOperationalDayRangeRequestSchema
 >;
 
 const financeOutflowKindSchema = z.enum(["PURCHASE", "EXPENSE"]);
@@ -1423,6 +1441,7 @@ const treasuryVaultSchema = z.object({
   // A cash or bank account can legitimately be overdrawn. Its position is
   // therefore signed, while movement legs remain non-negative.
   balanceAsOf: financeSignedAmountSchema,
+  openingBalance: financeSignedAmountSchema,
   inflow: financeAmountSchema,
   outflow: financeAmountSchema,
 }).strict();
@@ -1430,6 +1449,7 @@ const treasuryGroupSchema = z.object({
   key: z.enum(["COLLECTION_CHANNELS", "OTHER_VAULTS", "ARCHIVED"]),
   count: z.number().int().min(0).max(500),
   balanceAsOf: financeSignedAmountSchema,
+  openingBalance: financeSignedAmountSchema,
   inflow: financeAmountSchema,
   outflow: financeAmountSchema,
 }).strict();
@@ -1439,7 +1459,7 @@ export const treasuryWorkspaceReceiptSchema = z.object({
   asOfBusinessDate: businessDateSchema,
   fromBusinessDate: businessDateSchema.nullable(),
   toBusinessDate: businessDateSchema.nullable(),
-  summary: z.object({ balanceAsOf: financeSignedAmountSchema, inflow: financeAmountSchema, outflow: financeAmountSchema, net: financeSignedAmountSchema }).strict(),
+  summary: z.object({ balanceAsOf: financeSignedAmountSchema, openingBalance: financeSignedAmountSchema, inflow: financeAmountSchema, outflow: financeAmountSchema, net: financeSignedAmountSchema }).strict(),
   groups: z.array(treasuryGroupSchema).length(3),
   vaults: z.array(treasuryVaultSchema).max(500),
 }).strict();
@@ -1455,7 +1475,7 @@ export const treasuryVaultActivityReceiptSchema = z.object({
   asOfBusinessDate: businessDateSchema,
   fromBusinessDate: businessDateSchema.nullable(),
   toBusinessDate: businessDateSchema.nullable(),
-  summary: z.object({ balanceAsOf: financeSignedAmountSchema, inflow: financeAmountSchema, outflow: financeAmountSchema, net: financeSignedAmountSchema }).strict(),
+  summary: z.object({ balanceAsOf: financeSignedAmountSchema, openingBalance: financeSignedAmountSchema, inflow: financeAmountSchema, outflow: financeAmountSchema, net: financeSignedAmountSchema }).strict(),
   items: z.array(z.object({
     id: z.string().uuid(),
     journalEntryId: z.string().uuid(),

@@ -1,7 +1,7 @@
 import { dailySalesText, type DailySalesLanguage } from "./daily-sales-copy";
 import { BaseerDatePicker } from "./baseer-date-picker";
 import { BaseerButton } from "./baseer-button";
-import { BaseerStaticSelect } from "./baseer-static-select";
+import { BaseerComboboxField as BaseerCombobox } from "./baseer-combobox-field";
 import {
   divideMoneyDecimalByInteger,
   isPositiveMoneyDecimal,
@@ -36,6 +36,7 @@ type Props = {
   mode: DailySalesEntryMode;
   dayOffReason: DayOffReason;
   dayOffNote: string;
+  dayOffEndDate: string;
   saving: boolean;
   maxBusinessDate?: string;
   allowDayOff: boolean;
@@ -46,6 +47,7 @@ type Props = {
   onModeChange: (mode: DailySalesEntryMode) => void;
   onDayOffReasonChange: (reason: DayOffReason) => void;
   onDayOffNoteChange: (note: string) => void;
+  onDayOffEndDateChange: (value: string) => void;
 };
 
 const scopeOrder: DailySalesScope[] = ["MORNING", "EVENING", "ALL"];
@@ -212,6 +214,7 @@ export function DailySalesClosingDialog({
   mode,
   dayOffReason,
   dayOffNote,
+  dayOffEndDate,
   saving,
   maxBusinessDate,
   allowDayOff,
@@ -222,6 +225,7 @@ export function DailySalesClosingDialog({
   onModeChange,
   onDayOffReasonChange,
   onDayOffNoteChange,
+  onDayOffEndDateChange,
 }: Props) {
   const copy = dailySalesText[language];
   const dialogRef = useDialogFocusTrap({ open, saving, onClose });
@@ -232,13 +236,15 @@ export function DailySalesClosingDialog({
   const today = riyadhToday();
   const maximumEntryDate =
     maxBusinessDate ?? iso(today.year, today.month, today.day);
-  const setDate = (value: string) =>
+  const setDate = (value: string) => {
     onFormsChange({
       ...forms,
       MORNING: { ...forms.MORNING, businessDate: value },
       EVENING: { ...forms.EVENING, businessDate: value },
       ALL: { ...forms.ALL, businessDate: value },
     });
+    if (isDayOff && (!dayOffEndDate || dayOffEndDate < value)) onDayOffEndDateChange(value);
+  };
   const setScope = (scope: DailySalesScope) => {
     if (scope === "ALL") return onSelectedScopesChange(["ALL"]);
     const next = selectedScopes.includes(scope)
@@ -252,8 +258,8 @@ export function DailySalesClosingDialog({
     if (!saving) onClose();
   };
   const validationMessage = language === "ar" ? "أكمل بيانات الإغلاق بقيم صحيحة." : "Complete the closing with valid values.";
-  const closingValues = { businessDate, mode, dayOffReason, dayOffNote, forms: activeScopes.map((scope) => forms[scope]) };
-  const closingSchemaFactory = ({ z }: Parameters<NonNullable<React.ComponentProps<typeof BaseerValidatedForm>["schemaFactory"]>>[0]) => z.object({ businessDate: z.string().date(validationMessage), mode: z.enum(["CLOSING", "DAY_OFF"]), dayOffReason: z.enum(["WEEKLY_CLOSURE", "HOLIDAY", "MAINTENANCE", "OTHER"]), dayOffNote: z.string().max(2000), forms: z.array(z.custom<FormState>()).min(1).max(2) }).strict().superRefine((value, context) => { if (value.mode === "DAY_OFF") { if (value.dayOffReason === "OTHER" && !value.dayOffNote.trim()) context.addIssue({ code: "custom", path: ["dayOffNote"], message: validationMessage }); return; } if (value.forms.some((draft) => !/^\d+$/.test(draft.customerCount) || !draft.allocations.some((allocation) => isPositiveMoneyDecimal(allocation.grossAmount)) || draft.allocations.some((allocation) => allocation.grossAmount.trim() && !isPositiveMoneyDecimal(allocation.grossAmount)) || (draft.cashHandoverAmount.trim() && !isPositiveMoneyDecimal(draft.cashHandoverAmount)))) context.addIssue({ code: "custom", path: ["forms"], message: validationMessage }); });
+  const closingValues = { businessDate, mode, dayOffReason, dayOffNote, dayOffEndDate, forms: activeScopes.map((scope) => forms[scope]) };
+  const closingSchemaFactory = ({ z }: Parameters<NonNullable<React.ComponentProps<typeof BaseerValidatedForm>["schemaFactory"]>>[0]) => z.object({ businessDate: z.string().date(validationMessage), mode: z.enum(["CLOSING", "DAY_OFF"]), dayOffReason: z.enum(["WEEKLY_CLOSURE", "EID", "HOLIDAY", "MAINTENANCE", "EMERGENCY", "OTHER"]), dayOffNote: z.string().max(2000), dayOffEndDate: z.string().max(10), forms: z.array(z.custom<FormState>()).min(1).max(2) }).strict().superRefine((value, context) => { if (value.mode === "DAY_OFF") { if (!/^\d{4}-\d{2}-\d{2}$/.test(value.dayOffEndDate) || value.dayOffEndDate < value.businessDate) context.addIssue({ code: "custom", path: ["dayOffEndDate"], message: validationMessage }); if (value.dayOffReason === "OTHER" && !value.dayOffNote.trim()) context.addIssue({ code: "custom", path: ["dayOffNote"], message: validationMessage }); return; } if (value.forms.some((draft) => !/^\d+$/.test(draft.customerCount) || !draft.allocations.some((allocation) => isPositiveMoneyDecimal(allocation.grossAmount)) || draft.allocations.some((allocation) => allocation.grossAmount.trim() && !isPositiveMoneyDecimal(allocation.grossAmount)) || (draft.cashHandoverAmount.trim() && !isPositiveMoneyDecimal(draft.cashHandoverAmount)))) context.addIssue({ code: "custom", path: ["forms"], message: validationMessage }); });
 
   return (
     <div
@@ -312,12 +318,21 @@ export function DailySalesClosingDialog({
               <div className="daily-sales-dialog__date">
                 <BaseerDatePicker
                   language={language}
-                  label={copy.date}
+                  label={isDayOff ? copy.dayOffFromDate : copy.date}
                   max={maximumEntryDate}
                   value={businessDate}
                   onChange={setDate}
                   disabled={saving}
                 />
+                {isDayOff ? <BaseerDatePicker
+                  language={language}
+                  label={copy.dayOffToDate}
+                  min={businessDate || undefined}
+                  max={maximumEntryDate}
+                  value={dayOffEndDate}
+                  onChange={onDayOffEndDateChange}
+                  disabled={saving}
+                /> : null}
               </div>
               {!isDayOff && (
                 <fieldset
@@ -362,21 +377,23 @@ export function DailySalesClosingDialog({
             <section className="daily-sales-dialog__day-off">
               <strong>{copy.dayOffNoMoney}</strong>
               <small>{copy.dayOffNoMoneyHint}</small>
-              <label>
-                <span>{copy.dayOffReason}</span>
-                <BaseerStaticSelect label={copy.dayOffReason}
-                  value={dayOffReason}
-                  onChange={(event) =>
-                    onDayOffReasonChange(event.target.value as DayOffReason)
-                  }
-                >
-                  <option value="WEEKLY_CLOSURE">{copy.WEEKLY_CLOSURE}</option>
-                  <option value="HOLIDAY">{copy.HOLIDAY}</option>
-                  <option value="MAINTENANCE">{copy.MAINTENANCE}</option>
-                  <option value="EMERGENCY">{copy.EMERGENCY}</option>
-                  <option value="OTHER">{copy.OTHER}</option>
-                </BaseerStaticSelect>
-              </label>
+              <p className="daily-sales-dialog__day-off-hint">{copy.dayOffRangeHint}</p>
+              <BaseerCombobox
+                label={copy.dayOffReason}
+                value={dayOffReason}
+                options={[
+                  { id: "WEEKLY_CLOSURE", label: copy.WEEKLY_CLOSURE },
+                  { id: "EID", label: copy.EID },
+                  { id: "HOLIDAY", label: copy.HOLIDAY },
+                  { id: "MAINTENANCE", label: copy.MAINTENANCE },
+                  { id: "EMERGENCY", label: copy.EMERGENCY },
+                  { id: "OTHER", label: copy.OTHER },
+                ]}
+                placeholder={copy.dayOffReason}
+                searchable={false}
+                disabled={saving}
+                onChange={(value) => onDayOffReasonChange(value as DayOffReason)}
+              />
               <label>
                 <span>{copy.dayOffNote}</span>
                 <BaseerTextArea

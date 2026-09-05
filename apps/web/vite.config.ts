@@ -2,9 +2,18 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 const apiProxyTarget = process.env.BASEER_API_PROXY_TARGET?.trim() || "http://127.0.0.1:5200";
+const releaseId = process.env.BASEER_RELEASE_ID?.trim() || process.env.GITHUB_SHA?.trim() || "development";
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    {
+      name: "baseer-release-marker",
+      transformIndexHtml(html) {
+        return html.replace("</head>", `    <meta name="baseer-release-id" content="${releaseId}" />\n  </head>`);
+      },
+    },
+  ],
   build: { target: "esnext", manifest: true, minify: "terser", terserOptions: { compress: { passes: 3 }, format: { comments: false } } },
   server: {
     // Tailscale Serve is authenticated at the network edge and forwards its

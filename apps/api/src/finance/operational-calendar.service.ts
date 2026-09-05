@@ -20,7 +20,9 @@ import { RequestContext } from '../observability/request-context.js';
 import { DailySalesProjectionService } from './daily-sales-projection.service.js';
 
 const SET_OPERATIONAL_DAY_OPERATION = 'finance.operational_day.set';
+const SET_OPERATIONAL_DAY_RANGE_OPERATION = 'finance.operational_day.set_range';
 const MAX_CALENDAR_RANGE_DAYS = 400;
+const MAX_OPERATIONAL_DAY_RANGE_DAYS = 31;
 
 export type SetOperationalDayCommand = Readonly<{
   context: TrustedCompanyActorContext;
@@ -38,6 +40,17 @@ export type OperationalDayReceipt = Readonly<{
   status: FinanceOperationalDayStatus;
   source: FinanceOperationalDaySource;
   dataStatus: FinanceDailySalesDataStatus;
+}>;
+export type SetOperationalDayRangeCommand = Readonly<{
+  context: TrustedCompanyActorContext;
+  idempotencyKey: string;
+  request: Readonly<{
+    fromBusinessDate: Date;
+    toBusinessDate: Date;
+    status: FinanceOperationalDayStatus;
+    source?: FinanceOperationalDaySource;
+    note?: string;
+  }>;
 }>;
 
 export type DailySalesCalendarItem = Readonly<{
@@ -149,6 +162,75 @@ export class OperationalCalendarService {
     });
   }
 
+  /** Applies one operational decision to a small contiguous range. Validation,
+   * locking, projections and audit rows all run in one tenant transaction, so
+   * a conflicting date never leaves a partially closed holiday range. */
+  async setDayRange(command: SetOperationalDayRangeCommand): Promise<readonly OperationalDayReceipt[]> {
+    const from = this.requiredDate(command.request.fromBusinessDate);
+    const to = this.requiredDate(command.request.toBusinessDate);
+    if (from > to) throw new BadRequestException('The calendar start date cannot be after the end date.');
+    const dates = datesInclusive(from, to);
+    if (dates.length > MAX_OPERATIONAL_DAY_RANGE_DAYS) {
+      throw new BadRequestException(`The operational-day range cannot exceed ${MAX_OPERATIONAL_DAY_RANGE_DAYS} days.`);
+    }
+    const source = command.request.source ?? FinanceOperationalDaySource.MANUAL;
+    const note = this.optionalText(command.request.note, 1_000);
+    if (command.request.status === FinanceOperationalDayStatus.CLOSED && !note) {
+      throw new BadRequestException('A scheduled closed day requires a recorded reason.');
+    }
+    return this.database.inTenantTransaction(command.context.tenantId, async (transaction) => {
+      const begun = await this.begin(transaction, command.context, command.idempotencyKey, {
+        fromBusinessDate: from.toISOString().slice(0, 10),
+        toBusinessDate: to.toISOString().slice(0, 10),
+        status: command.request.status,
+        source,
+        note,
+      }, SET_OPERATIONAL_DAY_RANGE_OPERATION);
+      if (begun.kind === 'replay') return this.hydrateRangeReceipt(begun.response.body);
+      if (begun.kind === 'in-progress') throw new ConflictException('The operational-calendar request is still in progress.');
+
+      // Lock and validate all dates before writing any of them; locks follow
+      // chronological order so concurrent ranges cannot deadlock each other.
+      for (const businessDate of dates) {
+        await transaction.$executeRaw`
+          SELECT pg_advisory_xact_lock(hashtextextended(${`${command.context.tenantId}:${command.context.companyId}:operational-day:${businessDate.toISOString().slice(0, 10)}`}, 0))
+        `;
+        if (command.request.status !== FinanceOperationalDayStatus.CLOSED) continue;
+        const activeClosings = await transaction.financeDailySalesClosing.count({
+          where: { tenantId: command.context.tenantId, companyId: command.context.companyId, businessDate, status: FinanceDailySalesClosingStatus.POSTED },
+        });
+        if (activeClosings > 0) {
+          throw new ConflictException('A day with active sales closings cannot be marked closed. Reverse the closings first.');
+        }
+      }
+      const requestId = RequestContext.correlationId() ?? randomUUID();
+      const receipts: OperationalDayReceipt[] = [];
+      for (const businessDate of dates) {
+        const before = await transaction.financeOperationalDay.findFirst({
+          where: { tenantId: command.context.tenantId, companyId: command.context.companyId, businessDate },
+          select: { id: true, status: true, source: true, note: true },
+        });
+        const day = await transaction.financeOperationalDay.upsert({
+          where: { companyId_businessDate: { companyId: command.context.companyId, businessDate } },
+          create: { id: randomUUID(), tenantId: command.context.tenantId, companyId: command.context.companyId, businessDate, status: command.request.status, source, note, createdByUserId: command.context.actorUserId, updatedByUserId: command.context.actorUserId },
+          update: { status: command.request.status, source, note, updatedByUserId: command.context.actorUserId },
+          select: { status: true, source: true },
+        });
+        const summary = await this.projections.rebuildInTransaction(transaction, command.context, { businessDate, requestId });
+        const receipt: OperationalDayReceipt = { businessDate, status: day.status, source: day.source, dataStatus: summary.dataStatus };
+        receipts.push(receipt);
+        await transaction.auditEvent.create({
+          data: { id: randomUUID(), tenantId: command.context.tenantId, companyId: command.context.companyId, actorUserId: command.context.actorUserId, action: 'finance.operational_day.set_range', entityType: 'FinanceOperationalDay', entityId: before?.id ?? `${command.context.companyId}:${businessDate.toISOString().slice(0, 10)}`, requestId, beforeJson: (before ?? Prisma.JsonNull) as Prisma.InputJsonValue, afterJson: this.serialiseReceipt(receipt) as Prisma.InputJsonValue },
+        });
+      }
+      await this.idempotency.completeInTransaction(transaction, command.context, {
+        receiptId: begun.receiptId,
+        response: { status: 200, headers: null, body: this.serialiseRangeReceipt(receipts) },
+      });
+      return receipts;
+    });
+  }
+
   async listCalendar(
     context: TrustedCompanyActorContext,
     input: { fromBusinessDate: Date; toBusinessDate: Date; businessMonths?: readonly string[] },
@@ -228,15 +310,25 @@ export class OperationalCalendarService {
       dataStatus: item.dataStatus as FinanceDailySalesDataStatus,
     };
   }
+  private serialiseRangeReceipt(receipts: readonly OperationalDayReceipt[]): CanonicalJsonValue {
+    return { days: receipts.map((receipt) => this.serialiseReceipt(receipt)) };
+  }
+  private hydrateRangeReceipt(value: CanonicalJsonValue | null): readonly OperationalDayReceipt[] {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) throw new ConflictException('The saved operational-calendar idempotency receipt is invalid.');
+    const days = (value as Record<string, CanonicalJsonValue>).days;
+    if (!Array.isArray(days) || !days.length || days.length > MAX_OPERATIONAL_DAY_RANGE_DAYS) throw new ConflictException('The saved operational-calendar idempotency receipt is invalid.');
+    return days.map((item) => this.hydrateReceipt(item));
+  }
   private async begin(
     transaction: Prisma.TransactionClient,
     context: TrustedCompanyActorContext,
     key: string,
     request: Record<string, string | null>,
+    operation = SET_OPERATIONAL_DAY_OPERATION,
   ) {
     try {
       return await this.idempotency.beginInTransaction(transaction, context, {
-        operation: SET_OPERATIONAL_DAY_OPERATION,
+        operation,
         key,
         request,
         expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1_000),

@@ -56,16 +56,16 @@ async function mockFinanceSetup(page: Page, language: "ar" | "en", permissionCod
 async function mockTreasury(page: Page) {
   await mockAuthenticatedSession(page, "ar", treasuryPermissions);
   const vaults = [
-    { id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa", nameAr: "الصندوق", nameEn: "Cash", type: "CASH", paymentMethods: ["CASH"], status: "ACTIVE", isSalesChannel: true, isPaymentDestination: true, sortOrder: 1, balanceAsOf: "100.0000", inflow: "0.0000", outflow: "0.0000" },
-    { id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb", nameAr: "البنك", nameEn: "Bank", type: "BANK", paymentMethods: ["BANK_TRANSFER"], status: "ACTIVE", isSalesChannel: false, isPaymentDestination: true, sortOrder: 2, balanceAsOf: "100.0000", inflow: "0.0000", outflow: "0.0000" },
+    { id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa", nameAr: "الصندوق", nameEn: "Cash", type: "CASH", paymentMethods: ["CASH"], status: "ACTIVE", isSalesChannel: true, isPaymentDestination: true, sortOrder: 1, openingBalance: "100.0000", balanceAsOf: "100.0000", inflow: "0.0000", outflow: "0.0000" },
+    { id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb", nameAr: "البنك", nameEn: "Bank", type: "BANK", paymentMethods: ["BANK_TRANSFER"], status: "ACTIVE", isSalesChannel: false, isPaymentDestination: true, sortOrder: 2, openingBalance: "100.0000", balanceAsOf: "100.0000", inflow: "0.0000", outflow: "0.0000" },
   ];
   await page.route("**/v1/**", async (route) => {
     const url = new URL(route.request().url());
     if (url.pathname === "/v1/companies/available") return fulfill(route, availableCompanies(treasuryPermissions));
     if (url.pathname === "/v1/finance/treasury") return fulfill(route, {
       companyId, businessDate: "2026-08-20", asOfBusinessDate: "2026-08-20", fromBusinessDate: null, toBusinessDate: null,
-      summary: { balanceAsOf: "200.0000", inflow: "0.0000", outflow: "0.0000", net: "0.0000" },
-      groups: [{ key: "OTHER_VAULTS", count: 2, balanceAsOf: "200.0000", inflow: "0.0000", outflow: "0.0000", net: "0.0000" }], vaults,
+      summary: { openingBalance: "200.0000", balanceAsOf: "200.0000", inflow: "0.0000", outflow: "0.0000", net: "0.0000" },
+      groups: [{ key: "OTHER_VAULTS", count: 2, openingBalance: "200.0000", balanceAsOf: "200.0000", inflow: "0.0000", outflow: "0.0000", net: "0.0000" }], vaults,
     });
     if (url.pathname === "/v1/finance/treasury/reconciliations") return fulfill(route, { companyId, items: [], nextCursor: null });
     return fulfill(route, {});

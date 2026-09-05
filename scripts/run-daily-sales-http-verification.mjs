@@ -285,6 +285,26 @@ try {
   assert.equal(calendar.json().days[0].dataAuthority, "BACKEND_DAILY_FINANCIAL_SUMMARY");
   assert.equal(calendar.json().days[1].salesGrossAmount, null, "A closed day must not be represented as a zero-sales day.");
   assert.equal(calendar.json().days[1].customerCount, null, "A closed day must not be represented as a zero-customer day.");
+  const eidRange = await server.inject({
+    method: "POST",
+    url: "/v1/finance/operational-calendar/day-ranges",
+    headers,
+    payload: {
+      fromBusinessDate: "2026-08-22",
+      toBusinessDate: "2026-08-23",
+      status: "CLOSED",
+      source: "HOLIDAY",
+      note: "DAY_OFF: EID",
+      idempotencyKey: randomUUID(),
+    },
+  });
+  assert.equal(eidRange.statusCode, 200, eidRange.body);
+  assert.deepEqual(eidRange.json().days.map((day) => day.businessDate.slice(0, 10)), ["2026-08-22", "2026-08-23"]);
+  const journalCountAfterEidRange = await database.inTenantTransaction(
+    fixture.tenantId,
+    (transaction) => transaction.financeJournalEntry.count({ where: { tenantId: fixture.tenantId, companyId: fixture.companyId } }),
+  );
+  assert.equal(journalCountAfterEidRange, journalCountAfterDayOff, "An Eid day range must not create a journal.");
   const channelVaults = await server.inject({
     method: "GET",
     url: "/v1/finance/daily-sales/channel-vaults",
@@ -493,7 +513,7 @@ try {
     "A foreign company identifier must be denied.",
   );
   console.log(
-    "Daily Sales HTTP verification passed: authentication, company capability scope, cashier server history limit, idempotent create, VAT receipt, server-owned preview, shift summary, cumulative cash handovers, documented Day Off without journal creation, calendar, channel vaults, company-authorized bounded sales and expenses workspaces, and closing history.",
+    "Daily Sales HTTP verification passed: authentication, company capability scope, cashier server history limit, idempotent create, VAT receipt, server-owned preview, shift summary, cumulative cash handovers, documented single and atomic Eid-range Day Off without journal creation, calendar, channel vaults, company-authorized bounded sales and expenses workspaces, and closing history.",
   );
 } finally {
   if (app) await app.close();

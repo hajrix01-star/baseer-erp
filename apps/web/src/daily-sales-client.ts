@@ -124,7 +124,7 @@ export type FormState = {
 };
 export type DailySalesEntryMode = "CLOSING" | "DAY_OFF";
 export type DayOffReason =
-  "WEEKLY_CLOSURE" | "HOLIDAY" | "MAINTENANCE" | "EMERGENCY" | "OTHER";
+  "WEEKLY_CLOSURE" | "EID" | "HOLIDAY" | "MAINTENANCE" | "EMERGENCY" | "OTHER";
 
 const tokenStorageKey = "baseer.erp.access-token";
 const refreshTokenStorageKey = "baseer.erp.refresh-token";
