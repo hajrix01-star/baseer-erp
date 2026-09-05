@@ -106,7 +106,7 @@ export class WhatsappInvoiceBaileysPilotConnectorService implements OnModuleInit
     }
 
     try {
-      const active = await this.createActiveConnection(scope, ownerToken, acquired.fence);
+      const active = await this.createActiveConnection(scope, ownerToken, acquired.fence, acquired.requiresFreshPairing === true);
       this.active.set(key, active);
       active.heartbeatTimer = setInterval(() => { void this.heartbeat(active); }, Math.floor(CONNECTION_LEASE_MS / 3));
       active.workTimer = setInterval(() => { void this.processNextWorkItem(active); }, 2_000);
@@ -143,9 +143,14 @@ export class WhatsappInvoiceBaileysPilotConnectorService implements OnModuleInit
       .sort((left, right) => left.displayName.localeCompare(right.displayName, "ar"));
   }
 
-  private async createActiveConnection(scope: WhatsappInvoiceConnectionScope, ownerToken: string, fence: bigint): Promise<ActiveConnection> {
+  private async createActiveConnection(scope: WhatsappInvoiceConnectionScope, ownerToken: string, fence: bigint, freshPairing = false): Promise<ActiveConnection> {
     const persisted = await this.foundation.loadAuthState<PersistedAuthenticationState>(scope);
-    const restored = persisted ? revive(persisted.state) : { creds: initAuthCreds(), keys: {} };
+    // `REAUTH_REQUIRED` is a durable signal from WhatsApp, not a transient
+    // network gap.  The authorized, explicit QR action starts fresh creds in
+    // memory so Baileys can issue a new QR.  The old encrypted row remains
+    // intact until a fenced `creds.update` from the successful scan replaces
+    // it.  Automatic reconnects cannot opt into this path.
+    const restored = freshPairing ? { creds: initAuthCreds(), keys: {} } : persisted ? revive(persisted.state) : { creds: initAuthCreds(), keys: {} };
     const active: ActiveConnection = {
       scope, ownerToken, fence, socket: undefined as unknown as WASocket, qr: null, qrExpiresAt: null,
       stopped: false, processing: false, authRowVersion: persisted?.rowVersion ?? 0, heartbeatTimer: null, workTimer: null, saveChain: Promise.resolve(),

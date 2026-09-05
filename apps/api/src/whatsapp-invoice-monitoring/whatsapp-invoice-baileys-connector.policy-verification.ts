@@ -73,6 +73,45 @@ try {
 assert.equal(attemptedSessionWrite, false, "A lease-failed save must not reach the encrypted session row.");
 assert.equal(leaseQueries.length, 1, "The owned save must query exactly one current lease fence.");
 
+const reauthorizationFoundation = new WhatsappInvoiceBaileysPilotFoundationService({
+  inTenantTransaction: async (_tenantId: string, operation: (tx: unknown) => Promise<unknown>) => operation({
+    whatsappInvoiceConnection: { findFirst: async () => ({ id: "connection", status: "REAUTH_REQUIRED" }) },
+    whatsappInvoiceConnectionLease: { findFirst: async () => null, create: async () => ({ fence: 1n, expiresAt: new Date() }) },
+  }),
+} as never);
+const reauthorizationStart = await reauthorizationFoundation.acquireConnectionLease({ tenantId: "tenant", connectionId: "connection", ownerToken: "owner-token-123456", ttlMs: 5_000 });
+assert.equal(reauthorizationStart.requiresFreshPairing, true, "An explicit start after WhatsApp logout must request fresh in-memory pairing credentials.");
+
+type StartConnector = {
+  start(scope: { tenantId: string; connectionId: string }, resumeOnly?: boolean): Promise<void>;
+  createActiveConnection(scope: unknown, ownerToken: unknown, fence: unknown, freshPairing: unknown): Promise<unknown>;
+  processNextWorkItem(active: unknown): Promise<void>;
+  active: Map<string, { heartbeatTimer: ReturnType<typeof setInterval> | null; workTimer: ReturnType<typeof setInterval> | null }>;
+};
+const previousPilotEnabled = process.env.BASEER_WAI_BAILEYS_PILOT_ENABLED;
+process.env.BASEER_WAI_BAILEYS_PILOT_ENABLED = "true";
+const freshPairingArguments: unknown[] = [];
+const startConnector = new WhatsappInvoiceBaileysPilotConnectorService(
+  { acquireConnectionLease: async (_input: unknown) => ({ acquired: true, fence: 1n, requiresFreshPairing: true }) } as never,
+  { assertIngestionReady: () => undefined } as never,
+) as unknown as StartConnector;
+startConnector.createActiveConnection = async (scope, _ownerToken, _fence, freshPairing) => {
+  freshPairingArguments.push(freshPairing);
+  return { scope, heartbeatTimer: null, workTimer: null };
+};
+startConnector.processNextWorkItem = async () => undefined;
+try {
+  await startConnector.start({ tenantId: "tenant", connectionId: "connection" });
+  assert.deepEqual(freshPairingArguments, [true], "The connector must forward fresh pairing only from the manually acquired reauthorization lease.");
+} finally {
+  for (const active of startConnector.active.values()) {
+    if (active.heartbeatTimer) clearInterval(active.heartbeatTimer);
+    if (active.workTimer) clearInterval(active.workTimer);
+  }
+  startConnector.active.clear();
+  if (previousPilotEnabled === undefined) delete process.env.BASEER_WAI_BAILEYS_PILOT_ENABLED; else process.env.BASEER_WAI_BAILEYS_PILOT_ENABLED = previousPilotEnabled;
+}
+
 let stoppedClaimWhere: unknown;
 const stoppedConnectionFoundation = new WhatsappInvoiceBaileysPilotFoundationService({
   inTenantTransaction: async (_tenantId: string, operation: (tx: unknown) => Promise<unknown>) => operation({
@@ -87,4 +126,4 @@ const stoppedReconnect = await stoppedConnectionFoundation.acquireConnectionLeas
 assert.equal(stoppedReconnect.acquired, false, "Reconnect must refuse a durable stop intent in the same lease-acquisition transaction.");
 assert.equal((stoppedClaimWhere as { connection?: { is?: { status?: string } } }).connection?.is?.status, "GAP_DETECTED", "The lease claim itself must be conditional on the durable reconnect state.");
 
-console.log(JSON.stringify({ ok: true, verified: ["transient-pairing-close-reconnects", "logout-does-not-reconnect", "queued-pairing-credentials-survive-dispose", "stale-owner-cannot-persist-session", "stopped-connection-cannot-reconnect"] }));
+console.log(JSON.stringify({ ok: true, verified: ["transient-pairing-close-reconnects", "logout-does-not-reconnect", "queued-pairing-credentials-survive-dispose", "stale-owner-cannot-persist-session", "reauthentication-starts-fresh-qr", "stopped-connection-cannot-reconnect"] }));

@@ -22,6 +22,8 @@ export type WhatsappInvoiceConnectionLease = Readonly<{
   acquired: boolean;
   fence?: bigint;
   expiresAt?: Date;
+  /** Only a deliberate user start may replace a confirmed logged-out session. */
+  requiresFreshPairing?: boolean;
 }>;
 
 export type WhatsappInvoiceMediaReceipt = Readonly<{
@@ -116,7 +118,16 @@ export class WhatsappInvoiceBaileysPilotFoundationService {
     this.assertOwnerToken(input.ownerToken);
     const ttlMs = this.leaseDuration(input.ttlMs);
     return this.database.inTenantTransaction(input.tenantId, async (tx) => {
-      await this.assertConnection(tx, input);
+      // Read the reauthorization intent in the same transaction that gives a
+      // caller the lease.  A manual start after an explicit WhatsApp logout
+      // must not boot the known-invalid encrypted credentials again; a
+      // reconnect or a user stop must never take this path.
+      const connection = await tx.whatsappInvoiceConnection.findFirst({
+        where: { id: input.connectionId, tenantId: input.tenantId },
+        select: { id: true, status: true },
+      });
+      if (!connection) throw new NotFoundException("The WhatsApp connection was not found.");
+      const requiresFreshPairing = !input.resumeOnly && connection.status === WhatsappInvoiceConnectionStatus.REAUTH_REQUIRED;
       const now = new Date();
       const expiresAt = new Date(now.valueOf() + ttlMs);
       const current = await tx.whatsappInvoiceConnectionLease.findFirst({
@@ -133,7 +144,7 @@ export class WhatsappInvoiceBaileysPilotFoundationService {
             data: { tenantId: input.tenantId, connectionId: input.connectionId, ownerToken: input.ownerToken, fence: 1n, heartbeatAt: now, expiresAt },
             select: { fence: true, expiresAt: true },
           });
-          return { acquired: true, fence: created.fence, expiresAt: created.expiresAt };
+          return { acquired: true, fence: created.fence, expiresAt: created.expiresAt, requiresFreshPairing };
         } catch (error) {
           if (isUniqueConstraint(error)) return { acquired: false };
           throw error;
@@ -150,14 +161,14 @@ export class WhatsappInvoiceBaileysPilotFoundationService {
         if (claimed.count !== 1) return { acquired: false };
         const lease = await tx.whatsappInvoiceConnectionLease.findFirst({ where: { id: current.id, tenantId: input.tenantId, connectionId: input.connectionId }, select: { fence: true, expiresAt: true } });
         if (!lease) throw new ConflictException("The WhatsApp connection lease was released during acquisition.");
-        return { acquired: true, fence: lease.fence, expiresAt: lease.expiresAt };
+        return { acquired: true, fence: lease.fence, expiresAt: lease.expiresAt, requiresFreshPairing };
       }
       if (current.ownerToken !== input.ownerToken) return { acquired: false };
       const renewed = await tx.whatsappInvoiceConnectionLease.updateMany({
         where: { id: current.id, tenantId: input.tenantId, connectionId: input.connectionId, ownerToken: input.ownerToken, fence: current.fence, expiresAt: { gt: now } },
         data: { heartbeatAt: now, expiresAt },
       });
-      return renewed.count === 1 ? { acquired: true, fence: current.fence, expiresAt } : { acquired: false };
+      return renewed.count === 1 ? { acquired: true, fence: current.fence, expiresAt, requiresFreshPairing } : { acquired: false };
     });
   }
 
