@@ -1,4 +1,7 @@
-{$BASEER_PUBLIC_DOMAIN} {
+# TLS terminates at the shared Hostinger edge. This private listener receives
+# its already-routed HTTP traffic on 127.0.0.1:18080; enabling Caddy's automatic
+# HTTPS here would redirect back to the same public edge and create a 308 loop.
+http://{$BASEER_PUBLIC_DOMAIN} {
   encode zstd gzip
 
   header {
