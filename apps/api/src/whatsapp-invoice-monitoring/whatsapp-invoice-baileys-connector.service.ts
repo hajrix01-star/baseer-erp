@@ -281,7 +281,10 @@ export class WhatsappInvoiceBaileysPilotConnectorService implements OnModuleInit
   private async handleClosedConnection(active: ActiveConnection, error: unknown): Promise<void> {
     const status = connectionStatusAfterClose(error);
     await this.foundation.setConnectionStatus({ ...active.scope, ownerToken: active.ownerToken, fence: active.fence, status }).catch(() => undefined);
-    await this.dispose(active, status === "GAP_DETECTED");
+    // A QR pairing can close the bootstrap socket before the freshly persisted
+    // credentials are reopened. Treat each non-logout close as a bounded
+    // recovery gap; `start` builds a new socket from that saved state.
+    await this.dispose(active, shouldReconnectAfterClose(error));
   }
 
   private async dispose(active: ActiveConnection, reconnect = false): Promise<void> {
@@ -322,11 +325,16 @@ function revive(value: PersistedAuthenticationState): PersistedAuthenticationSta
 function safePdfName(value: string | null | undefined): string { const name = value?.replace(/[\\/:*?"<>|\u0000-\u001f]/g, "_").trim().slice(0, 180) || "invoice.pdf"; return name.toLowerCase().endsWith(".pdf") ? name : `${name}.pdf`; }
 function internalCompanyContext(tenantId: string, companyId: string): TrustedCompanyActorContext { return { tenantId, companyId, actorUserId: "00000000-0000-0000-0000-000000000000" }; }
 function isTerminalMediaError(error: unknown): boolean { return error instanceof Error && /size limit|empty media|invalid media transport/i.test(error.message); }
-function connectionStatusAfterClose(error: unknown): "GAP_DETECTED" | "REAUTH_REQUIRED" | "DISCONNECTED" {
+function connectionStatusAfterClose(error: unknown): "GAP_DETECTED" | "REAUTH_REQUIRED" {
+  if (disconnectStatusCode(error) === DisconnectReason.loggedOut) return "REAUTH_REQUIRED";
+  return "GAP_DETECTED";
+}
+function shouldReconnectAfterClose(error: unknown): boolean {
+  return disconnectStatusCode(error) !== DisconnectReason.loggedOut;
+}
+function disconnectStatusCode(error: unknown): number {
   const statusCode = typeof error === "object" && error !== null && "output" in error
     ? Number((error as { output?: { statusCode?: unknown } }).output?.statusCode)
     : Number.NaN;
-  if (statusCode === DisconnectReason.loggedOut) return "REAUTH_REQUIRED";
-  if (statusCode === DisconnectReason.connectionLost || statusCode === DisconnectReason.connectionClosed || statusCode === DisconnectReason.unavailableService) return "GAP_DETECTED";
-  return "DISCONNECTED";
+  return statusCode;
 }
