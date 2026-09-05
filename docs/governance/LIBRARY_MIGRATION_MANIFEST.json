@@ -602,6 +602,11 @@
       "file": "baseer-select.tsx",
       "decision": "central-adapter"
     },
+    "searchable-selector:daily-sales-closing-dialog.tsx": {
+      "kind": "searchable-selector",
+      "file": "daily-sales-closing-dialog.tsx",
+      "decision": "uses-central-combobox-field-2026-09-05"
+    },
     "searchable-selector:expenses-obligations-workspace-runtime.tsx": {
       "kind": "searchable-selector",
       "file": "expenses-obligations-workspace-runtime.tsx",
@@ -622,15 +627,15 @@
       "file": "hr-attendance-workspace.tsx",
       "decision": "verified-central-library-boundary-2026-09-02"
     },
-    "searchable-selector:hr-employee-attendance-compliance-card.tsx": {
-      "kind": "searchable-selector",
-      "file": "hr-employee-attendance-compliance-card.tsx",
-      "decision": "uses-central-combobox-field-2026-09-03"
-    },
     "searchable-selector:hr-compensation-agreement-dialog.tsx": {
       "kind": "searchable-selector",
       "file": "hr-compensation-agreement-dialog.tsx",
       "decision": "migrated-hr-lazy-central-combobox"
+    },
+    "searchable-selector:hr-employee-attendance-compliance-card.tsx": {
+      "kind": "searchable-selector",
+      "file": "hr-employee-attendance-compliance-card.tsx",
+      "decision": "uses-central-combobox-field-2026-09-03"
     },
     "searchable-selector:hr-employee-profile-dialog.tsx": {
       "kind": "searchable-selector",
@@ -912,15 +917,15 @@
       "file": "purchase-expense-credit-panel.tsx",
       "decision": "migrated-finance-central-data-grid"
     },
-    "table:purchase-expense-workspace-runtime.tsx": {
-      "kind": "table",
-      "file": "purchase-expense-workspace-runtime.tsx",
-      "decision": "migrated-finance-server-page-central-data-grid"
-    },
     "table:purchase-expense-workspace-content.tsx": {
       "kind": "table",
       "file": "purchase-expense-workspace-content.tsx",
       "decision": "verified-central-library-boundary-2026-09-02"
+    },
+    "table:purchase-expense-workspace-runtime.tsx": {
+      "kind": "table",
+      "file": "purchase-expense-workspace-runtime.tsx",
+      "decision": "migrated-finance-server-page-central-data-grid"
     },
     "table:recurring-expense-workspace-runtime.tsx": {
       "kind": "table",

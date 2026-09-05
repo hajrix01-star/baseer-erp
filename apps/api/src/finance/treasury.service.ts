@@ -16,7 +16,7 @@ type ActivityInput = { from?: Date; to?: Date; businessMonths?: readonly string[
 type ReconciliationInput = { vaultId: string; kind: FinanceVaultReconciliationKind; asOfBusinessDate: Date; observedBalance: string; referenceNumber?: string; notes?: string; idempotencyKey: string };
 type ReconciliationsInput = { vaultId?: string; kind?: FinanceVaultReconciliationKind; cursor?: string; pageSize: number };
 type VaultRecord = { id: string; nameAr: string; nameEn: string; type: "CASH" | "BANK" | "APP"; paymentMethod: "CASH" | "BANK_TRANSFER" | "BANK_CARD" | "BANK_PAYMENT" | "APP"; paymentMethods: ("CASH" | "BANK_TRANSFER" | "BANK_CARD" | "BANK_PAYMENT" | "APP")[]; status: FinanceVaultStatus; isSalesChannel: boolean; isPaymentDestination: boolean; sortOrder: number; accountId: string };
-type Amounts = { balanceAsOf: Prisma.Decimal; inflow: Prisma.Decimal; outflow: Prisma.Decimal };
+type Amounts = { openingBalance: Prisma.Decimal; balanceAsOf: Prisma.Decimal; inflow: Prisma.Decimal; outflow: Prisma.Decimal };
 
 @Injectable()
 export class TreasuryService {
@@ -54,11 +54,13 @@ export class TreasuryService {
       const groups = (Object.entries(groupVaults) as Array<["COLLECTION_CHANNELS" | "OTHER_VAULTS" | "ARCHIVED", typeof mapped]>).map(([key, items]) => ({
         key,
         count: items.length,
+        openingBalance: sum(items, "openingBalance"),
         balanceAsOf: sum(items, "balanceAsOf"),
         inflow: sum(items, "inflow"),
         outflow: sum(items, "outflow"),
       }));
       const summary = {
+        openingBalance: sum(mapped, "openingBalance"),
         balanceAsOf: sum(mapped, "balanceAsOf"),
         inflow: sum(mapped, "inflow"),
         outflow: sum(mapped, "outflow"),
@@ -181,7 +183,7 @@ export class TreasuryService {
         asOfBusinessDate: businessDateValue(asOf),
         fromBusinessDate: input.from ? businessDateValue(input.from) : null,
         toBusinessDate: input.to ? businessDateValue(input.to) : null,
-        summary: { balanceAsOf: amount.balanceAsOf.toFixed(4), inflow: amount.inflow.toFixed(4), outflow: amount.outflow.toFixed(4), net: amount.inflow.minus(amount.outflow).toFixed(4) },
+        summary: { openingBalance: amount.openingBalance.toFixed(4), balanceAsOf: amount.balanceAsOf.toFixed(4), inflow: amount.inflow.toFixed(4), outflow: amount.outflow.toFixed(4), net: amount.inflow.minus(amount.outflow).toFixed(4) },
         items,
         nextCursor: hasMore ? items.at(-1)?.id ?? null : null,
       };
@@ -205,7 +207,10 @@ export class TreasuryService {
     const common = { tenantId: context.tenantId, companyId: context.companyId, accountId: { in: accountIds } };
     const currentMonth = monthStart(asOf);
     const period = dailyPeriodWhere(from, to, businessMonths);
-    const [monthlyBalanceGroups, currentMonthBalanceGroups, periodGroups] = await Promise.all([
+    const periodStart = earliestPeriodStart(from, businessMonths);
+    const openingMonth = periodStart ? monthStart(periodStart) : null;
+    const openingDate = periodStart ? previousDay(periodStart) : null;
+    const [monthlyBalanceGroups, currentMonthBalanceGroups, periodGroups, openingMonthlyGroups, openingDailyGroups] = await Promise.all([
       tx.financeAccountMonthlyBalance.groupBy({
         by: ["accountId"],
         where: { ...common, monthStart: { lt: currentMonth } },
@@ -221,6 +226,20 @@ export class TreasuryService {
         where: { ...common, ...(period ? { AND: [period] } : {}) },
         _sum: { debitAmount: true, creditAmount: true },
       }),
+      openingMonth
+        ? tx.financeAccountMonthlyBalance.groupBy({
+            by: ["accountId"],
+            where: { ...common, monthStart: { lt: openingMonth } },
+            _sum: { debitAmount: true, creditAmount: true },
+          })
+        : Promise.resolve([]),
+      openingMonth && openingDate
+        ? tx.financeAccountDailyBalance.groupBy({
+            by: ["accountId"],
+            where: { ...common, businessDate: { gte: openingMonth, lte: openingDate } },
+            _sum: { debitAmount: true, creditAmount: true },
+          })
+        : Promise.resolve([]),
     ]);
     for (const group of [...monthlyBalanceGroups, ...currentMonthBalanceGroups]) {
       const vaultId = accountToVault.get(group.accountId);
@@ -233,6 +252,13 @@ export class TreasuryService {
       const target = results.get(vaultId)!;
       target.inflow = decimal(group._sum.debitAmount);
       target.outflow = decimal(group._sum.creditAmount);
+    }
+    for (const group of [...openingMonthlyGroups, ...openingDailyGroups]) {
+      const vaultId = accountToVault.get(group.accountId);
+      if (!vaultId) continue;
+      results.get(vaultId)!.openingBalance = results.get(vaultId)!.openingBalance
+        .plus(decimal(group._sum.debitAmount))
+        .minus(decimal(group._sum.creditAmount));
     }
     return results;
   }
@@ -249,6 +275,7 @@ export class TreasuryService {
       isSalesChannel: vault.isSalesChannel,
       isPaymentDestination: vault.isPaymentDestination,
       sortOrder: vault.sortOrder,
+      openingBalance: amounts.openingBalance.toFixed(4),
       balanceAsOf: amounts.balanceAsOf.toFixed(4),
       inflow: amounts.inflow.toFixed(4),
       outflow: amounts.outflow.toFixed(4),
@@ -432,5 +459,11 @@ function dateForBusinessDate(value: string) { return new Date(value + "T00:00:00
 function capAsOfDate(requested: Date | undefined, businessDate: Date) { return requested && requested < businessDate ? requested : businessDate; }
 function businessDateValue(value: Date) { return value.toISOString().slice(0, 10); }
 function monthStart(value: Date) { return new Date(Date.UTC(value.getUTCFullYear(), value.getUTCMonth(), 1)); }
-function zeroAmounts(): Amounts { return { balanceAsOf: new Prisma.Decimal(0), inflow: new Prisma.Decimal(0), outflow: new Prisma.Decimal(0) }; }
-function sum(items: Array<{ balanceAsOf: string; inflow: string; outflow: string }>, key: "balanceAsOf" | "inflow" | "outflow") { return items.reduce((total, item) => total.plus(item[key]), new Prisma.Decimal(0)).toFixed(4); }
+function zeroAmounts(): Amounts { return { openingBalance: new Prisma.Decimal(0), balanceAsOf: new Prisma.Decimal(0), inflow: new Prisma.Decimal(0), outflow: new Prisma.Decimal(0) }; }
+function sum(items: Array<{ openingBalance: string; balanceAsOf: string; inflow: string; outflow: string }>, key: "openingBalance" | "balanceAsOf" | "inflow" | "outflow") { return items.reduce((total, item) => total.plus(item[key]), new Prisma.Decimal(0)).toFixed(4); }
+function earliestPeriodStart(from: Date | undefined, months: readonly string[] | undefined) {
+  if (from) return from;
+  const first = months?.[0];
+  return first ? new Date(`${first}-01T00:00:00.000Z`) : undefined;
+}
+function previousDay(value: Date) { return new Date(Date.UTC(value.getUTCFullYear(), value.getUTCMonth(), value.getUTCDate() - 1)); }

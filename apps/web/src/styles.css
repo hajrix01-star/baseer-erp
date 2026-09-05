@@ -1472,19 +1472,22 @@ html[dir="ltr"] .mobile-drawer__panel {
 }
 /* Recurring expenses: a profile is an obligation; payment remains an explicit financial command. */
 .recurring-expense-workspace { display: grid; gap: 14px; margin-block: 18px; }
-.recurring-expense-heading, .recurring-profile { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.recurring-expense-heading { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
 .recurring-expense-heading h3, .recurring-profile h4 { margin: 2px 0; font-size: var(--font-title-sm); }
 .recurring-expense-heading span, .recurring-profile p, .recurring-profile small { color: var(--muted); font-size: var(--font-label); }
 .recurring-profile-list { display: grid; gap: 10px; }
-.recurring-profile { min-height: 86px; }
+/* Recurring obligations are operational records: align their identity, due
+   amount and actions in a stable register rather than letting each card pick
+   its own flex width. */
+.recurring-profile { display: grid; grid-template-columns: minmax(0, 1fr) minmax(10rem, .72fr) auto; align-items: center; gap: 18px; min-height: 86px; }
 .recurring-profile > div:first-child { min-width: 0; }
 .recurring-profile h4 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .recurring-profile p { margin: 0; }
 .recurring-profile__amount { display: grid; text-align: center; min-width: 154px; }
 .recurring-profile__amount span { color: var(--muted); font-size: var(--font-label); }
 .recurring-profile__amount strong { font-variant-numeric: tabular-nums; }
-.recurring-profile__actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
-@media (max-width: 620px) { .recurring-expense-heading, .recurring-profile { align-items: stretch; flex-direction: column; } .recurring-profile__amount, .recurring-profile__actions { text-align: start; justify-content: flex-start; } }
+.recurring-profile__actions { display: flex; gap: 8px; flex-wrap: nowrap; justify-content: flex-end; }
+@media (max-width: 620px) { .recurring-expense-heading { align-items: stretch; flex-direction: column; } .recurring-profile { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "identity amount" "actions actions"; align-items: start; gap: 12px; } .recurring-profile > div:first-child { grid-area: identity; } .recurring-profile__amount { grid-area: amount; min-width: 0; text-align: end; } .recurring-profile__actions { grid-area: actions; justify-content: stretch; } .recurring-profile__actions > .baseer-button { flex: 1; } }
 
 /* Financial metric card: shared visual anatomy for ledger-backed cards. */
 .treasury-vault-cards { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }

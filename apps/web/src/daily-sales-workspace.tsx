@@ -67,6 +67,7 @@ export function DailySalesWorkspace({
   const [dayOffReason, setDayOffReason] =
     useState<DayOffReason>("WEEKLY_CLOSURE");
   const [dayOffNote, setDayOffNote] = useState("");
+  const [dayOffEndDate, setDayOffEndDate] = useState("");
   const [status, setStatus] = useState<{
     kind: "success" | "error" | "idle";
     message: string;
@@ -119,6 +120,7 @@ export function DailySalesWorkspace({
     setEntryMode("CLOSING");
     setDayOffReason("WEEKLY_CLOSURE");
     setDayOffNote("");
+    setDayOffEndDate("");
     setShiftForms(initialShiftFormsForVaults(vaults));
     setSelectedScopes(["ALL"]);
   };
@@ -149,14 +151,21 @@ export function DailySalesWorkspace({
     setStatus({ kind: "idle", message: "" });
     try {
       if (entryMode === "DAY_OFF") {
+        const fromBusinessDate = form.businessDate;
+        const toBusinessDate = dayOffEndDate || fromBusinessDate;
+        if (!fromBusinessDate || !toBusinessDate || fromBusinessDate > toBusinessDate) {
+          setStatus({ kind: "error", message: copy.error });
+          return;
+        }
         const note = `DAY_OFF: ${dayOffReason}${dayOffNote.trim() ? ` \u2014 ${dayOffNote.trim()}` : ""}`;
-        await api(session, "/finance/operational-calendar/days", {
+        await api(session, "/finance/operational-calendar/day-ranges", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            businessDate: form.businessDate,
+            fromBusinessDate,
+            toBusinessDate,
             status: "CLOSED",
-            source: dayOffReason === "HOLIDAY" ? "HOLIDAY" : "MANUAL",
+            source: dayOffReason === "HOLIDAY" || dayOffReason === "EID" ? "HOLIDAY" : "MANUAL",
             note,
             idempotencyKey: requestId(),
           }),
@@ -339,6 +348,7 @@ export function DailySalesWorkspace({
     setEntryMode(mode);
     setDayOffReason("WEEKLY_CLOSURE");
     setDayOffNote("");
+    setDayOffEndDate(businessDate ?? "");
     setShiftForms(initialShiftFormsForVaults(vaults, businessDate ?? ""));
     setSelectedScopes(["ALL"]);
     setEntryOpen(true);
@@ -375,6 +385,7 @@ export function DailySalesWorkspace({
         mode={entryMode}
         dayOffReason={dayOffReason}
         dayOffNote={dayOffNote}
+        dayOffEndDate={dayOffEndDate}
         saving={saving}
         maxBusinessDate={entryDate ?? undefined}
         allowDayOff={canManageOperationalDay}
@@ -388,6 +399,7 @@ export function DailySalesWorkspace({
         onModeChange={setEntryMode}
         onDayOffReasonChange={setDayOffReason}
         onDayOffNoteChange={setDayOffNote}
+        onDayOffEndDateChange={setDayOffEndDate}
       />
       <DailySalesRecordDialog
         language={language}

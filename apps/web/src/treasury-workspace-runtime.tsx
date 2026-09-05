@@ -62,6 +62,7 @@ type Vault = {
   isPaymentDestination: boolean;
   sortOrder: number;
   balanceAsOf: string;
+  openingBalance: string;
   inflow: string;
   outflow: string;
 };
@@ -81,6 +82,7 @@ type TreasuryReceipt = {
   vaults: Vault[];
 };
 type AmountSummary = {
+  openingBalance: string;
   balanceAsOf: string;
   inflow: string;
   outflow: string;
@@ -847,6 +849,7 @@ export function TreasuryWorkspaceRuntime({ language }: { language: Language }) {
               language={language}
               value={period}
               onChange={setPeriod}
+              allowNonContiguousMonths={false}
             />
             <BaseerFilterToggle
               label={text.showArchived}
@@ -890,8 +893,8 @@ export function TreasuryWorkspaceRuntime({ language }: { language: Language }) {
           <BaseerSummaryMetricGrid className="treasury-summary-cards">
             <BaseerSummaryMetric
               tone="muted"
-              label={text.currentBalance}
-              value={formatMoney(workspace.summary.balanceAsOf)}
+              label={text.openingBalance}
+              value={formatMoney(workspace.summary.openingBalance)}
             />
             <BaseerSummaryMetric
               tone="muted"
@@ -902,6 +905,11 @@ export function TreasuryWorkspaceRuntime({ language }: { language: Language }) {
               tone="muted"
               label={text.outgoing}
               value={formatMoney(workspace.summary.outflow)}
+            />
+            <BaseerSummaryMetric
+              tone="muted"
+              label={text.closingBalance}
+              value={formatMoney(workspace.summary.balanceAsOf)}
             />
           </BaseerSummaryMetricGrid>
           <BaseerCard variant="joined-ledger">
@@ -1560,7 +1568,7 @@ function VaultCards({
             </details>
           </header>
           <div className="baseer-metric-card__balance">
-            <small>{text.currentBalance}</small>
+            <small>{text.closingBalance}</small>
             <strong
               className={
                 vault.balanceAsOf.startsWith("-") ? "is-negative" : undefined
@@ -1570,6 +1578,10 @@ function VaultCards({
             </strong>
           </div>
           <div className="baseer-metric-card__flows">
+            <span>
+              <small>{text.openingBalance}</small>
+              <strong>{formatMoney(vault.openingBalance)}</strong>
+            </span>
             <span>
               <small>↑ {text.incoming}</small>
               <strong className="is-inflow">{formatMoney(vault.inflow)}</strong>
@@ -1738,8 +1750,13 @@ function ActivityPanel({
       <div className="baseer-card-grid">
         <BaseerSummaryMetric
           tone="muted"
-          label={text.currentBalance}
+          label={text.closingBalance}
           value={formatMoney(activity.summary.balanceAsOf)}
+        />
+        <BaseerSummaryMetric
+          tone="muted"
+          label={text.openingBalance}
+          value={formatMoney(activity.summary.openingBalance)}
         />
         <BaseerSummaryMetric
           tone="muted"

@@ -318,6 +318,8 @@ jobs:
         with:
           context: .
           file: Dockerfile.web
+          build-args: |
+            BASEER_RELEASE_ID=${{ github.sha }}
           push: true
           tags: ${{ env.IMAGE_NAME }}:${{ github.sha }}
           provenance: mode=max
