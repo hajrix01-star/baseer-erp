@@ -44,6 +44,8 @@ export type BaseerValidatedFormProps<Values extends FieldValues> = Omit<FormHTML
   /** Builds Zod and Decimal validation only after this lazy form chunk loads. */
   schemaFactory?: BaseerValidatedFormSchemaFactory;
   onValid: (values: Values) => void | Promise<void>;
+  /** Lets controlled legacy fields provide a useful invalid-submit response. */
+  onInvalid?: (errors: FieldErrors<Values>) => void;
   children?: ReactNode | ((props: BaseerValidatedFormRenderProps<Values>) => ReactNode);
   errorSummaryLabel: string;
 };
@@ -53,12 +55,12 @@ export type BaseerValidatedFormProps<Values extends FieldValues> = Omit<FormHTML
  * boundary without changing their API payloads; new forms should register
  * individual fields through useBaseerForm for field-level focus and errors.
  */
-export function BaseerValidatedForm<Values extends FieldValues>({ values, schema, schemaFactory, onValid, children, errorSummaryLabel, ...props }: BaseerValidatedFormProps<Values>) {
+export function BaseerValidatedForm<Values extends FieldValues>({ values, schema, schemaFactory, onValid, onInvalid, children, errorSummaryLabel, ...props }: BaseerValidatedFormProps<Values>) {
   const resolvedSchema = useMemo(() => schema ?? schemaFactory?.({ z: schemaLibrary, baseerDecimalString: validatedDecimalString }), [schema, schemaFactory]);
   if (!resolvedSchema) throw new Error("BaseerValidatedForm requires schema or schemaFactory.");
   const form = useBaseerForm<Values>({ values, schema: resolvedSchema, shouldFocusError: true });
   const invalid = Object.keys(form.formState.errors).length > 0;
-  return <form {...props} data-baseer-rhf-form noValidate onSubmit={form.handleSubmit((next) => onValid(next))}>
+  return <form {...props} data-baseer-rhf-form noValidate onSubmit={form.handleSubmit((next) => onValid(next), onInvalid)}>
     {typeof children === "function" ? children({ errors: form.formState.errors }) : children}
     {invalid ? <p className="daily-sales-message error" role="alert">{errorSummaryLabel}</p> : null}
   </form>;
