@@ -1487,7 +1487,11 @@ html[dir="ltr"] .mobile-drawer__panel {
 .recurring-profile__amount span { color: var(--muted); font-size: var(--font-label); }
 .recurring-profile__amount strong { font-variant-numeric: tabular-nums; }
 .recurring-profile__actions { display: flex; gap: 8px; flex-wrap: nowrap; justify-content: flex-end; }
+.recurring-profile-table__actions { display: inline-flex; flex-wrap: wrap; justify-content: flex-end; gap: .4rem; }
+.recurring-profile-table strong { color: var(--ink); }
 @media (max-width: 620px) { .recurring-expense-heading { align-items: stretch; flex-direction: column; } .recurring-profile { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "identity amount" "actions actions"; align-items: start; gap: 12px; } .recurring-profile > div:first-child { grid-area: identity; } .recurring-profile__amount { grid-area: amount; min-width: 0; text-align: end; } .recurring-profile__actions { grid-area: actions; justify-content: stretch; } .recurring-profile__actions > .baseer-button { flex: 1; } }
+
+.treasury-summary-period-formula { margin: calc(var(--space-2) * -1) 0 0; color: var(--muted); font-size: var(--font-caption); font-weight: 700; text-align: center; }
 
 /* Financial metric card: shared visual anatomy for ledger-backed cards. */
 .treasury-vault-cards { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }

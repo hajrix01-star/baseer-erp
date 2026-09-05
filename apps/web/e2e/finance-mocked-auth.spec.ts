@@ -185,6 +185,16 @@ test("treasury control uses the central form and reports inline validation error
   expect(accessibility.violations).toEqual([]);
 });
 
+test("treasury summary presents the server-owned period net rather than an opening-balance card", async ({ page }) => {
+  await mockTreasury(page);
+  await page.goto("/#module=finance&section=2");
+
+  const summary = page.locator(".treasury-summary-cards");
+  await expect(summary.getByText("رصيد إقفال المدة", { exact: true })).toBeVisible();
+  await expect(page.locator(".treasury-summary-period-formula")).toHaveText("الوارد − الصادر");
+  await expect(summary.getByText("رصيد الافتتاح", { exact: true })).toHaveCount(0);
+});
+
 test("accounts and invoice register retain server cursor pagination", async ({ page }) => {
   const requests: string[] = [];
   await mockFinancialReads(page, requests);

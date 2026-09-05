@@ -792,6 +792,11 @@
       "file": "daily-sales-history.tsx",
       "decision": "migrated-finance-central-data-grid"
     },
+    "table:expenses-obligations-workspace-runtime.tsx": {
+      "kind": "table",
+      "file": "expenses-obligations-workspace-runtime.tsx",
+      "decision": "migrated-finance-central-data-grid"
+    },
     "table:data-table.tsx": {
       "kind": "table",
       "file": "data-table.tsx",

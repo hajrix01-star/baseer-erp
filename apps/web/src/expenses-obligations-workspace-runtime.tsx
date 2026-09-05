@@ -11,6 +11,7 @@ import { presentBaseerApiError } from "./baseer-api-error";
 import { BaseerButton } from "./baseer-button";
 import { BaseerBatchPanel, BaseerWorkspaceTabs } from "./baseer-batch-layout";
 import { BaseerCard } from "./baseer-card";
+import { BaseerDataGridField as DataTable } from "./baseer-data-grid-field";
 import { BaseerComboboxField as BaseerCombobox } from "./baseer-combobox-field";
 import { BaseerDatePicker } from "./baseer-date-picker";
 import { BaseerIntegerInput, BaseerMoneyInput, BaseerTextInput } from "./baseer-form-fields";
@@ -680,6 +681,26 @@ function SettlementHistory({
     window.sessionStorage.setItem("baseer-open-outflow-document", document.id);
     window.location.hash = pageRouteHash("operations-purchases", "history");
   };
+  const rows = [
+    ...documents.map((document) => ({
+      id: `document-${document.id}`,
+      date: document.businessDate,
+      kind: language === "ar" ? "سداد التزام" : "Obligation payment",
+      description: `${displayName(language, { nameAr: document.categoryNameAr, nameEn: document.categoryNameEn })}${document.supplierNameAr ? ` · ${displayName(language, { nameAr: document.supplierNameAr, nameEn: document.supplierNameEn })}` : ""}`,
+      status: document.settlementKind === "PAID" ? text.paid : text.payable,
+      amount: document.grossAmount,
+      document,
+    })),
+    ...loans.map((loan) => ({
+      id: `loan-${loan.id}`,
+      date: loan.firstInstallmentDueDate,
+      kind: language === "ar" ? "قرض" : "Loan",
+      description: loanDisplayName(loan, language),
+      status: loan.status === "SETTLED" ? text.settled : text.active,
+      amount: loan.remainingAmount,
+      document: null as Document | null,
+    })),
+  ];
   return (
     <BaseerCard>
       <div className="administration-section-heading">
@@ -687,39 +708,15 @@ function SettlementHistory({
           <h4>{text.settlementHistory}</h4>
         </div>
       </div>
-      <div className="administration-list">
-        {documents.map((document) => (
-          <article key={document.id}>
-            <BaseerButton type="button" variant="quiet" onClick={() => openOperation(document)}>
-              {language === "ar" ? `فتح العملية ${document.documentNumber}` : `Open ${document.documentNumber}`}
-            </BaseerButton>
-            <span><bdi dir="ltr">{formatDate(document.businessDate, language)}</bdi></span>
-            <span>
-              {displayName(language, {
-                nameAr: document.categoryNameAr,
-                nameEn: document.categoryNameEn,
-              })}
-              {document.supplierNameAr
-                ? ` · ${displayName(language, { nameAr: document.supplierNameAr, nameEn: document.supplierNameEn })}`
-                : ""}
-            </span>
-            <strong dir="ltr">{formatMoney(document.grossAmount, "SAR", language)}</strong>
-          </article>
-        ))}
-        {loans.map((loan) => (
-          <article key={`loan-${loan.id}`}>
-            <strong>
-              {text.loan} · {loanDisplayName(loan, language)}
-            </strong>
-            <span>{text.remainingLoan}</span>
-            <span>
-              {loan.status === "SETTLED" ? text.settled : text.active}
-            </span>
-            <strong>SAR {money(loan.remainingAmount)}</strong>
-          </article>
-        ))}
-      </div>
-      {!documents.length && !loans.length ? (
+      {rows.length ? <DataTable ariaLabel={text.settlementHistory} caption={text.settlementHistory} className="settlement-history-table" rowKey={(row) => row.id} rows={rows} columns={[
+        { id: "date", header: text.paymentDate, align: "center", cell: (row) => <bdi dir="ltr">{formatDate(row.date, language)}</bdi>, width: "14%" },
+        { id: "kind", header: text.operation, cell: (row) => row.kind, width: "16%" },
+        { id: "description", header: text.recurringProfile, cell: (row) => <strong>{row.description}</strong> },
+        { id: "status", header: text.status, align: "center", cell: (row) => row.status, width: "12%" },
+        { id: "amount", header: text.amount, numeric: true, align: "end", cell: (row) => formatMoney(row.amount, "SAR", language), width: "14%" },
+        { id: "action", header: text.operations, align: "end", cell: (row) => row.document ? <BaseerButton type="button" size="compact" variant="secondary" onClick={() => openOperation(row.document!)}>{language === "ar" ? "عرض" : "View"}</BaseerButton> : "—", width: "9%" },
+      ]} /> : null}
+      {!rows.length ? (
         <p className="empty-results">{text.noResults}</p>
       ) : null}
     </BaseerCard>

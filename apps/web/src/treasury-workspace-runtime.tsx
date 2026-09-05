@@ -86,7 +86,8 @@ type AmountSummary = {
   balanceAsOf: string;
   inflow: string;
   outflow: string;
-  net?: string;
+  /** Server-owned net movement for the selected period; never calculated in React. */
+  net: string;
 };
 type ActivityItem = {
   id: string;
@@ -893,11 +894,6 @@ export function TreasuryWorkspaceRuntime({ language }: { language: Language }) {
           <BaseerSummaryMetricGrid className="treasury-summary-cards">
             <BaseerSummaryMetric
               tone="muted"
-              label={text.openingBalance}
-              value={formatMoney(workspace.summary.openingBalance)}
-            />
-            <BaseerSummaryMetric
-              tone="muted"
               label={text.incoming}
               value={formatMoney(workspace.summary.inflow)}
             />
@@ -908,10 +904,11 @@ export function TreasuryWorkspaceRuntime({ language }: { language: Language }) {
             />
             <BaseerSummaryMetric
               tone="muted"
-              label={text.closingBalance}
-              value={formatMoney(workspace.summary.balanceAsOf)}
+              label={text.periodNetClosing}
+              value={formatMoney(workspace.summary.net)}
             />
           </BaseerSummaryMetricGrid>
+          <p className="treasury-summary-period-formula">{text.periodNetFormula}</p>
           <BaseerCard variant="joined-ledger">
             <header className="administration-section-heading">
               <div>
