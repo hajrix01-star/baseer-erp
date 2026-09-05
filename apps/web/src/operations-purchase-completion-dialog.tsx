@@ -8,6 +8,7 @@ import { BaseerFormDialog } from "./baseer-form-dialog";
 import { BaseerTextInput } from "./baseer-form-fields";
 import { formatMoney } from "./number-format";
 import type { OperationsPurchasePosLine } from "./operations-purchase-pos-composer";
+import "./operations-purchase-dialog.css";
 
 const LazyOperationsPurchasePosComposer = lazy(async () => ({ default: (await import("./operations-purchase-pos-composer")).OperationsPurchasePosComposer }));
 const OperationsPurchasePosComposer = LazyOperationsPurchasePosComposer as unknown as typeof import("./operations-purchase-pos-composer").OperationsPurchasePosComposer;

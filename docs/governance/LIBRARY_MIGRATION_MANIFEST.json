@@ -912,6 +912,11 @@
       "file": "purchase-expense-credit-panel.tsx",
       "decision": "migrated-finance-central-data-grid"
     },
+    "table:purchase-expense-workspace-runtime.tsx": {
+      "kind": "table",
+      "file": "purchase-expense-workspace-runtime.tsx",
+      "decision": "migrated-finance-server-page-central-data-grid"
+    },
     "table:purchase-expense-workspace-content.tsx": {
       "kind": "table",
       "file": "purchase-expense-workspace-content.tsx",

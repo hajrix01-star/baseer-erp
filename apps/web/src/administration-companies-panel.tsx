@@ -205,7 +205,6 @@ function CompanyDialog({ language, session, company, owner, onDone, onError, onC
   return <BaseerDialog open title={title} eyebrow={text.companyManagement} language={language} busy={busy} onClose={onClose} className="administration-company-dialog">
       <BaseerValidatedFormField<CompanyForm> id="administration-company" className="administration-dialog-form" values={values} schemaFactory={companySchemaFactory} onValid={(next) => void save(next)} errorSummaryLabel={text.checkRequiredFields}>
         {({ errors }) => <>
-        {owner ? <footer className="administration-company-dialog__save"><BaseerButton disabled={busy || (!isCreate && vatLoadState !== "ready")}>{busy ? text.saving : isCreate ? text.createCompany : text.saveChanges}</BaseerButton></footer> : <p className="daily-sales-message error">{text.ownerOnly}</p>}
         <div className="administration-company-editor-profile">
           {logoUrl ? <img alt={`${text.companyLogo}: ${values.nameAr || text.companies}`} src={logoUrl} /> : <span>{values.nameAr.trim().slice(0, 1) || "ش"}</span>}
           <div><strong>{values.nameAr || text.companies}</strong><small>{isCreate ? text.newCompany : company.status === "ACTIVE" ? text.activeCompany : text.archivedCompany}</small></div>
@@ -229,6 +228,7 @@ function CompanyDialog({ language, session, company, owner, onDone, onError, onC
           <legend>{company.migrationReviewLocked ? "قفل مراجعة الترحيل مفعل" : "قفل مراجعة الترحيل"}</legend>
           <BaseerButton variant={company.migrationReviewLocked ? "secondary" : "danger"} disabled={busy} type="button" onClick={() => void changeMigrationReviewLock()}>{company.migrationReviewLocked ? "رفع قفل المراجعة" : "تفعيل قفل المراجعة"}</BaseerButton>
         </fieldset>}
+        {owner ? <footer className="administration-company-dialog__save"><BaseerButton disabled={busy || (!isCreate && vatLoadState !== "ready")}>{busy ? text.saving : isCreate ? text.createCompany : text.saveChanges}</BaseerButton></footer> : <p className="daily-sales-message error">{text.ownerOnly}</p>}
         </>}
       </BaseerValidatedFormField>
   </BaseerDialog>;
