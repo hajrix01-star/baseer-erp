@@ -130,6 +130,12 @@ services:
       # Remains false until the callback, account-selection and pilot gates are
       # delivered and the platform owner explicitly enables OAuth.
       BASEER_GOOGLE_OAUTH_ENABLED: ${BASEER_GOOGLE_OAUTH_ENABLED:-false}
+      # A narrower, independently revocable switch for the Google Business
+      # pilot.  Keep it false until the dedicated client secret and ARZ UUID
+      # are present in the host-only environment file and the live gate is
+      # explicitly approved.
+      BASEER_MARKETING_GOOGLE_BUSINESS_PILOT_ENABLED: ${BASEER_MARKETING_GOOGLE_BUSINESS_PILOT_ENABLED:-false}
+      BASEER_MARKETING_GOOGLE_BUSINESS_PILOT_COMPANY_ID: ${BASEER_MARKETING_GOOGLE_BUSINESS_PILOT_COMPANY_ID:-}
       BASEER_GMAIL_OAUTH_ENABLED: ${BASEER_GMAIL_OAUTH_ENABLED:-false}
       BASEER_GMAIL_OAUTH_CLIENT_ID: ${BASEER_GMAIL_OAUTH_CLIENT_ID:-}
       BASEER_GMAIL_OAUTH_CLIENT_SECRET: ${BASEER_GMAIL_OAUTH_CLIENT_SECRET:-}

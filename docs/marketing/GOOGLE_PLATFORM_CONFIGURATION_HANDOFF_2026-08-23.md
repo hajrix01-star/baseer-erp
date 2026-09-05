@@ -12,13 +12,19 @@
 | `BASEER_GOOGLE_OAUTH_REDIRECT_URI` | Authorized redirect URI جديد | عنوان callback الخاص بـERP |
 | `BASEER_GOOGLE_ADS_DEVELOPER_TOKEN` | Google Ads API Center | مطلوب لقراءة Ads فقط |
 | `BASEER_PROVIDER_CREDENTIAL_ENCRYPTION_KEY` | مفتاح جديد 32-byte Base64 | تشفير تفويض كل شركة لاحقاً |
+| `BASEER_MARKETING_GOOGLE_BUSINESS_PILOT_ENABLED` | قرار تشغيل محلي | يبقى `false` حتى قبول البوابة الحية |
+| `BASEER_MARKETING_GOOGLE_BUSINESS_PILOT_COMPANY_ID` | UUID شركة ARZ في Baseer | allowlist خادمي للتجربة؛ ليس Google account/location ID |
 
 تضاف قيم الأسرار إلى بيئة النشر فقط، ولا تدخل Git أو واجهة الويب أو جدول
 اتصال الشركة. بعد نقلها يظهر في ERP أن المنصة جاهزة، لكنه لا يبدأ اتصالاً
 خارجياً بنفسه.
 
-يبقى `BASEER_GOOGLE_OAUTH_ENABLED=false` حتى تسليم callback واختيار الحساب
-وتجربة محدودة؛ هذا مفتاح إيقاف مركزي يمنع أي تفويض حي مبكر.
+يبقى `BASEER_GOOGLE_OAUTH_ENABLED=false` و
+`BASEER_MARKETING_GOOGLE_BUSINESS_PILOT_ENABLED=false` حتى تسليم السر إلى ملف
+بيئة الخادم المحمي، واختيار الحساب، وقبول تجربة محدودة؛ هذان مفتاحا إيقاف
+متلازمان يمنعان أي تفويض حي مبكر. لا يقرأ خادم Baseer الخاص Google Secret
+Manager مباشرة؛ مصدر التشغيل هو `.env.private-online` خارج المستودع وبصلاحيات
+الخادم فقط.
 
 ## ما لا ينقل
 

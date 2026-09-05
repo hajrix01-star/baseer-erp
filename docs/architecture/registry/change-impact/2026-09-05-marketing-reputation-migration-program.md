@@ -86,6 +86,19 @@ lineage، صلاحيات النشر الآلي، تشغيل worker وقطع تط
 - **المرجع:** عقد MKT-02A في برنامج الانتقال؛ اعتمدت مراجعة مستقلة G0–G3 ثم
   التنفيذ بلا P0/P1. اجتازت اختبارات callback mock وRLS قبل أي تفعيل خارجي.
 
+### قرار MKT-02A-OPS: تسليم إعداد النشر الخاص
+
+- **التصنيف:** `CONTROLLED`؛ يمرر متغيري تجربة Google Business من ملف بيئة
+  الخادم إلى حاوية API ولا يغير عقد OAuth أو البيانات أو الصلاحيات.
+- **الحدود:** يبقى كل من `BASEER_GOOGLE_OAUTH_ENABLED` و
+  `BASEER_MARKETING_GOOGLE_BUSINESS_PILOT_ENABLED` بقيمة `false` في القالب.
+  `BASEER_MARKETING_GOOGLE_BUSINESS_PILOT_COMPANY_ID` يقبل UUID شركة ARZ فقط؛
+  لا يُكتب secret أو UUID في Git. لا يستهلك النشر الخاص Google Secret Manager
+  مباشرة؛ مصدر القيم الحي هو `.env.private-online` المحمي على الخادم.
+- **دليل الإقفال:** يمرر Compose المتغيرين بلا قيم افتراضية مفعلة، ويثبت فحص
+  config أن صورة API تبقى صحيحة مع ملف المثال. لا deploy أو OAuth حي ضمن هذه
+  الشريحة.
+
 ### قرار شريحة G0–G4: الشرح عند الطلب
 
 - **G0:** الشريحة تخدم المدير غير المختص: علامة `؟` مجاورة لمصطلح تسويقي تشرح
