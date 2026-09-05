@@ -100,7 +100,7 @@ const copy = {
   ar: {
     eyebrow: "العمليات · رقابة مستقلة", title: "وارد فواتير واتساب", refresh: "تحديث", connected: "متصل للقراءة فقط", disconnected: "غير متصل", gap: "فجوة مزامنة تحتاج متابعة", blocked: "الربط محجوب", unconfigured: "الربط غير مهيأ",
     counted: "الفواتير المحتسبة", duplicates: "فواتير مكررة مستلمة", attention: "تحتاج تدخلاً", gross: "الإجمالي شامل الضريبة", filters: "الفلاتر تنطبق على الصور والجدول والملاحظات والأرشيف. إعدادات الربط لا تتغير بها.",
-    dateBasis: "أساس التاريخ", received: "تاريخ الاستلام", invoiceDate: "تاريخ الفاتورة", from: "من", to: "إلى", search: "ابحث بالمورد أو رقم الفاتورة", clear: "مسح", asOf: "آخر قراءة", loadMore: "تحميل المزيد", loading: "جارٍ تحميل وارد الفواتير…", retry: "إعادة المحاولة",
+    dateBasis: "أساس التاريخ", received: "تاريخ الاستلام", invoiceDate: "تاريخ الفاتورة", from: "من", to: "إلى", search: "ابحث بالمورد أو رقم الفاتورة", clear: "مسح", asOf: "آخر اتصال", loadMore: "تحميل المزيد", loading: "جارٍ تحميل وارد الفواتير…", retry: "إعادة المحاولة",
     assets: "الصور والملفات", invoices: "جدول الفواتير", notes: "الملاحظات", archive: "الأرشيف", connection: "إعدادات الربط",
     noAssets: "لا توجد ملفات ضمن هذا النطاق", noInvoices: "لا توجد فواتير ضمن هذا النطاق", noNotes: "لا توجد ملاحظات ضمن هذا النطاق", noArchive: "لا توجد فواتير مؤرشفة ضمن هذا النطاق", noConnection: "لم تصل حالة الربط من الخادم بعد",
     file: "الملف", receivedAt: "الاستلام", registered: "سجل الفاتورة", extraction: "الاستخراج", supplier: "المورد", invoiceNo: "رقم الفاتورة", net: "قبل الضريبة", vat: "الضريبة", total: "الإجمالي", status: "الحالة", archivedAt: "تاريخ الأرشفة",
@@ -109,7 +109,7 @@ const copy = {
   en: {
     eyebrow: "Operations · independent monitoring", title: "WhatsApp invoice inbox", refresh: "Refresh", connected: "Connected read-only", disconnected: "Disconnected", gap: "Sync gap needs follow-up", blocked: "Connection blocked", unconfigured: "Connection not configured",
     counted: "Counted invoices", duplicates: "Duplicate invoices received", attention: "Needs attention", gross: "Gross total (VAT inclusive)", filters: "Filters apply to files, invoices, notes, and archive. Connection settings are not filtered.",
-    dateBasis: "Date basis", received: "Received date", invoiceDate: "Invoice date", from: "From", to: "To", search: "Search supplier or invoice number", clear: "Clear", asOf: "As of", loadMore: "Load more", loading: "Loading invoice inbox…", retry: "Try again",
+    dateBasis: "Date basis", received: "Received date", invoiceDate: "Invoice date", from: "From", to: "To", search: "Search supplier or invoice number", clear: "Clear", asOf: "Last connection", loadMore: "Load more", loading: "Loading invoice inbox…", retry: "Try again",
     assets: "Images & files", invoices: "Invoice register", notes: "Notes", archive: "Archive", connection: "Connection settings",
     noAssets: "No files in this scope", noInvoices: "No invoices in this scope", noNotes: "No notes in this scope", noArchive: "No archived invoices in this scope", noConnection: "The server has not returned a connection status yet",
     file: "File", receivedAt: "Received", registered: "Invoice record", extraction: "Extraction", supplier: "Supplier", invoiceNo: "Invoice no.", net: "Before VAT", vat: "VAT", total: "Total", status: "Status", archivedAt: "Archived at",
