@@ -272,6 +272,7 @@ export type FinanceSupplierWhereInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingListRelationFilter
   outflowDocuments?: Prisma.FinanceOutflowDocumentListRelationFilter
   hrEmployeeServices?: Prisma.HrEmployeeServiceListRelationFilter
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordListRelationFilter
 }
 
 export type FinanceSupplierOrderByWithRelationInput = {
@@ -300,6 +301,7 @@ export type FinanceSupplierOrderByWithRelationInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingOrderByRelationAggregateInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentOrderByRelationAggregateInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceOrderByRelationAggregateInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordOrderByRelationAggregateInput
 }
 
 export type FinanceSupplierWhereUniqueInput = Prisma.AtLeast<{
@@ -332,6 +334,7 @@ export type FinanceSupplierWhereUniqueInput = Prisma.AtLeast<{
   dailySalesClosings?: Prisma.FinanceDailySalesClosingListRelationFilter
   outflowDocuments?: Prisma.FinanceOutflowDocumentListRelationFilter
   hrEmployeeServices?: Prisma.HrEmployeeServiceListRelationFilter
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordListRelationFilter
 }, "id" | "id_tenantId_companyId">
 
 export type FinanceSupplierOrderByWithAggregationInput = {
@@ -398,6 +401,7 @@ export type FinanceSupplierCreateInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutFinanceSupplierInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutSupplierInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutSupplierInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordCreateNestedManyWithoutSupplierInput
 }
 
 export type FinanceSupplierUncheckedCreateInput = {
@@ -423,6 +427,7 @@ export type FinanceSupplierUncheckedCreateInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutFinanceSupplierInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutSupplierInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutSupplierInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedCreateNestedManyWithoutSupplierInput
 }
 
 export type FinanceSupplierUpdateInput = {
@@ -447,6 +452,7 @@ export type FinanceSupplierUpdateInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutFinanceSupplierNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutSupplierNestedInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutSupplierNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUpdateManyWithoutSupplierNestedInput
 }
 
 export type FinanceSupplierUncheckedUpdateInput = {
@@ -472,6 +478,7 @@ export type FinanceSupplierUncheckedUpdateInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutFinanceSupplierNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutSupplierNestedInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutSupplierNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedUpdateManyWithoutSupplierNestedInput
 }
 
 export type FinanceSupplierCreateManyInput = {
@@ -644,6 +651,22 @@ export type FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput = {
   update?: Prisma.FinanceSupplierUpdateWithWhereUniqueWithoutCompanyInput | Prisma.FinanceSupplierUpdateWithWhereUniqueWithoutCompanyInput[]
   updateMany?: Prisma.FinanceSupplierUpdateManyWithWhereWithoutCompanyInput | Prisma.FinanceSupplierUpdateManyWithWhereWithoutCompanyInput[]
   deleteMany?: Prisma.FinanceSupplierScalarWhereInput | Prisma.FinanceSupplierScalarWhereInput[]
+}
+
+export type FinanceSupplierCreateNestedOneWithoutWhatsappInvoiceRecordsInput = {
+  create?: Prisma.XOR<Prisma.FinanceSupplierCreateWithoutWhatsappInvoiceRecordsInput, Prisma.FinanceSupplierUncheckedCreateWithoutWhatsappInvoiceRecordsInput>
+  connectOrCreate?: Prisma.FinanceSupplierCreateOrConnectWithoutWhatsappInvoiceRecordsInput
+  connect?: Prisma.FinanceSupplierWhereUniqueInput
+}
+
+export type FinanceSupplierUpdateOneWithoutWhatsappInvoiceRecordsNestedInput = {
+  create?: Prisma.XOR<Prisma.FinanceSupplierCreateWithoutWhatsappInvoiceRecordsInput, Prisma.FinanceSupplierUncheckedCreateWithoutWhatsappInvoiceRecordsInput>
+  connectOrCreate?: Prisma.FinanceSupplierCreateOrConnectWithoutWhatsappInvoiceRecordsInput
+  upsert?: Prisma.FinanceSupplierUpsertWithoutWhatsappInvoiceRecordsInput
+  disconnect?: Prisma.FinanceSupplierWhereInput | boolean
+  delete?: Prisma.FinanceSupplierWhereInput | boolean
+  connect?: Prisma.FinanceSupplierWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FinanceSupplierUpdateToOneWithWhereWithoutWhatsappInvoiceRecordsInput, Prisma.FinanceSupplierUpdateWithoutWhatsappInvoiceRecordsInput>, Prisma.FinanceSupplierUncheckedUpdateWithoutWhatsappInvoiceRecordsInput>
 }
 
 export type FinanceSupplierCreateNestedOneWithoutSuggestedForCategoriesInput = {
@@ -867,6 +890,7 @@ export type FinanceSupplierCreateWithoutCompanyInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutFinanceSupplierInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutSupplierInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutSupplierInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordCreateNestedManyWithoutSupplierInput
 }
 
 export type FinanceSupplierUncheckedCreateWithoutCompanyInput = {
@@ -890,6 +914,7 @@ export type FinanceSupplierUncheckedCreateWithoutCompanyInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutFinanceSupplierInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutSupplierInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutSupplierInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedCreateNestedManyWithoutSupplierInput
 }
 
 export type FinanceSupplierCreateOrConnectWithoutCompanyInput = {
@@ -939,6 +964,120 @@ export type FinanceSupplierScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"FinanceSupplier"> | Date | string
 }
 
+export type FinanceSupplierCreateWithoutWhatsappInvoiceRecordsInput = {
+  id?: string
+  supplierType: $Enums.FinanceSupplierType
+  nameAr: string
+  nameEn?: string | null
+  phone?: string | null
+  taxNumber?: string | null
+  isTaxRegistered?: boolean
+  isFavorite?: boolean
+  status?: $Enums.FinanceSupplierStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutFinanceSuppliersInput
+  counterpartyIdentity?: Prisma.FinanceCounterpartyIdentityCreateNestedOneWithoutSuppliersInput
+  category?: Prisma.FinanceCategoryCreateNestedOneWithoutSuppliersInput
+  suggestedForCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutSuggestedSupplierInput
+  provenance?: Prisma.SupplierCopyProvenanceCreateNestedOneWithoutTargetSupplierInput
+  dues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutSupplierInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutSupplierInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutFinanceSupplierInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutSupplierInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutSupplierInput
+}
+
+export type FinanceSupplierUncheckedCreateWithoutWhatsappInvoiceRecordsInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  counterpartyIdentityId?: string | null
+  categoryId?: string | null
+  supplierType: $Enums.FinanceSupplierType
+  nameAr: string
+  nameEn?: string | null
+  phone?: string | null
+  taxNumber?: string | null
+  isTaxRegistered?: boolean
+  isFavorite?: boolean
+  status?: $Enums.FinanceSupplierStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  suggestedForCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutSuggestedSupplierInput
+  provenance?: Prisma.SupplierCopyProvenanceUncheckedCreateNestedOneWithoutTargetSupplierInput
+  dues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutSupplierInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutSupplierInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutFinanceSupplierInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutSupplierInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutSupplierInput
+}
+
+export type FinanceSupplierCreateOrConnectWithoutWhatsappInvoiceRecordsInput = {
+  where: Prisma.FinanceSupplierWhereUniqueInput
+  create: Prisma.XOR<Prisma.FinanceSupplierCreateWithoutWhatsappInvoiceRecordsInput, Prisma.FinanceSupplierUncheckedCreateWithoutWhatsappInvoiceRecordsInput>
+}
+
+export type FinanceSupplierUpsertWithoutWhatsappInvoiceRecordsInput = {
+  update: Prisma.XOR<Prisma.FinanceSupplierUpdateWithoutWhatsappInvoiceRecordsInput, Prisma.FinanceSupplierUncheckedUpdateWithoutWhatsappInvoiceRecordsInput>
+  create: Prisma.XOR<Prisma.FinanceSupplierCreateWithoutWhatsappInvoiceRecordsInput, Prisma.FinanceSupplierUncheckedCreateWithoutWhatsappInvoiceRecordsInput>
+  where?: Prisma.FinanceSupplierWhereInput
+}
+
+export type FinanceSupplierUpdateToOneWithWhereWithoutWhatsappInvoiceRecordsInput = {
+  where?: Prisma.FinanceSupplierWhereInput
+  data: Prisma.XOR<Prisma.FinanceSupplierUpdateWithoutWhatsappInvoiceRecordsInput, Prisma.FinanceSupplierUncheckedUpdateWithoutWhatsappInvoiceRecordsInput>
+}
+
+export type FinanceSupplierUpdateWithoutWhatsappInvoiceRecordsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierType?: Prisma.EnumFinanceSupplierTypeFieldUpdateOperationsInput | $Enums.FinanceSupplierType
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTaxRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutFinanceSuppliersNestedInput
+  counterpartyIdentity?: Prisma.FinanceCounterpartyIdentityUpdateOneWithoutSuppliersNestedInput
+  category?: Prisma.FinanceCategoryUpdateOneWithoutSuppliersNestedInput
+  suggestedForCategories?: Prisma.FinanceCategoryUpdateManyWithoutSuggestedSupplierNestedInput
+  provenance?: Prisma.SupplierCopyProvenanceUpdateOneWithoutTargetSupplierNestedInput
+  dues?: Prisma.FinanceSupplierDueUpdateManyWithoutSupplierNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutSupplierNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutFinanceSupplierNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutSupplierNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutSupplierNestedInput
+}
+
+export type FinanceSupplierUncheckedUpdateWithoutWhatsappInvoiceRecordsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  counterpartyIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierType?: Prisma.EnumFinanceSupplierTypeFieldUpdateOperationsInput | $Enums.FinanceSupplierType
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isTaxRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumFinanceSupplierStatusFieldUpdateOperationsInput | $Enums.FinanceSupplierStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  suggestedForCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutSuggestedSupplierNestedInput
+  provenance?: Prisma.SupplierCopyProvenanceUncheckedUpdateOneWithoutTargetSupplierNestedInput
+  dues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutSupplierNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutSupplierNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutFinanceSupplierNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutSupplierNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutSupplierNestedInput
+}
+
 export type FinanceSupplierCreateWithoutSuggestedForCategoriesInput = {
   id?: string
   supplierType: $Enums.FinanceSupplierType
@@ -960,6 +1099,7 @@ export type FinanceSupplierCreateWithoutSuggestedForCategoriesInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutFinanceSupplierInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutSupplierInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutSupplierInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordCreateNestedManyWithoutSupplierInput
 }
 
 export type FinanceSupplierUncheckedCreateWithoutSuggestedForCategoriesInput = {
@@ -984,6 +1124,7 @@ export type FinanceSupplierUncheckedCreateWithoutSuggestedForCategoriesInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutFinanceSupplierInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutSupplierInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutSupplierInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedCreateNestedManyWithoutSupplierInput
 }
 
 export type FinanceSupplierCreateOrConnectWithoutSuggestedForCategoriesInput = {
@@ -1012,6 +1153,7 @@ export type FinanceSupplierCreateWithoutCategoryInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutFinanceSupplierInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutSupplierInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutSupplierInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordCreateNestedManyWithoutSupplierInput
 }
 
 export type FinanceSupplierUncheckedCreateWithoutCategoryInput = {
@@ -1034,6 +1176,7 @@ export type FinanceSupplierUncheckedCreateWithoutCategoryInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutFinanceSupplierInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutSupplierInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutSupplierInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedCreateNestedManyWithoutSupplierInput
 }
 
 export type FinanceSupplierCreateOrConnectWithoutCategoryInput = {
@@ -1078,6 +1221,7 @@ export type FinanceSupplierUpdateWithoutSuggestedForCategoriesInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutFinanceSupplierNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutSupplierNestedInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutSupplierNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUpdateManyWithoutSupplierNestedInput
 }
 
 export type FinanceSupplierUncheckedUpdateWithoutSuggestedForCategoriesInput = {
@@ -1102,6 +1246,7 @@ export type FinanceSupplierUncheckedUpdateWithoutSuggestedForCategoriesInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutFinanceSupplierNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutSupplierNestedInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutSupplierNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedUpdateManyWithoutSupplierNestedInput
 }
 
 export type FinanceSupplierUpsertWithWhereUniqueWithoutCategoryInput = {
@@ -1141,6 +1286,7 @@ export type FinanceSupplierCreateWithoutCounterpartyIdentityInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutFinanceSupplierInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutSupplierInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutSupplierInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordCreateNestedManyWithoutSupplierInput
 }
 
 export type FinanceSupplierUncheckedCreateWithoutCounterpartyIdentityInput = {
@@ -1164,6 +1310,7 @@ export type FinanceSupplierUncheckedCreateWithoutCounterpartyIdentityInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutFinanceSupplierInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutSupplierInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutSupplierInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedCreateNestedManyWithoutSupplierInput
 }
 
 export type FinanceSupplierCreateOrConnectWithoutCounterpartyIdentityInput = {
@@ -1213,6 +1360,7 @@ export type FinanceSupplierCreateWithoutProvenanceInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutFinanceSupplierInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutSupplierInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutSupplierInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordCreateNestedManyWithoutSupplierInput
 }
 
 export type FinanceSupplierUncheckedCreateWithoutProvenanceInput = {
@@ -1237,6 +1385,7 @@ export type FinanceSupplierUncheckedCreateWithoutProvenanceInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutFinanceSupplierInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutSupplierInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutSupplierInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedCreateNestedManyWithoutSupplierInput
 }
 
 export type FinanceSupplierCreateOrConnectWithoutProvenanceInput = {
@@ -1276,6 +1425,7 @@ export type FinanceSupplierUpdateWithoutProvenanceInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutFinanceSupplierNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutSupplierNestedInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutSupplierNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUpdateManyWithoutSupplierNestedInput
 }
 
 export type FinanceSupplierUncheckedUpdateWithoutProvenanceInput = {
@@ -1300,6 +1450,7 @@ export type FinanceSupplierUncheckedUpdateWithoutProvenanceInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutFinanceSupplierNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutSupplierNestedInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutSupplierNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedUpdateManyWithoutSupplierNestedInput
 }
 
 export type FinanceSupplierCreateWithoutDuesInput = {
@@ -1323,6 +1474,7 @@ export type FinanceSupplierCreateWithoutDuesInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutFinanceSupplierInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutSupplierInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutSupplierInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordCreateNestedManyWithoutSupplierInput
 }
 
 export type FinanceSupplierUncheckedCreateWithoutDuesInput = {
@@ -1347,6 +1499,7 @@ export type FinanceSupplierUncheckedCreateWithoutDuesInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutFinanceSupplierInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutSupplierInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutSupplierInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedCreateNestedManyWithoutSupplierInput
 }
 
 export type FinanceSupplierCreateOrConnectWithoutDuesInput = {
@@ -1386,6 +1539,7 @@ export type FinanceSupplierUpdateWithoutDuesInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutFinanceSupplierNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutSupplierNestedInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutSupplierNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUpdateManyWithoutSupplierNestedInput
 }
 
 export type FinanceSupplierUncheckedUpdateWithoutDuesInput = {
@@ -1410,6 +1564,7 @@ export type FinanceSupplierUncheckedUpdateWithoutDuesInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutFinanceSupplierNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutSupplierNestedInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutSupplierNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedUpdateManyWithoutSupplierNestedInput
 }
 
 export type FinanceSupplierCreateWithoutOutflowDocumentsInput = {
@@ -1433,6 +1588,7 @@ export type FinanceSupplierCreateWithoutOutflowDocumentsInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutSupplierInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutFinanceSupplierInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutSupplierInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordCreateNestedManyWithoutSupplierInput
 }
 
 export type FinanceSupplierUncheckedCreateWithoutOutflowDocumentsInput = {
@@ -1457,6 +1613,7 @@ export type FinanceSupplierUncheckedCreateWithoutOutflowDocumentsInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutSupplierInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutFinanceSupplierInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutSupplierInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedCreateNestedManyWithoutSupplierInput
 }
 
 export type FinanceSupplierCreateOrConnectWithoutOutflowDocumentsInput = {
@@ -1496,6 +1653,7 @@ export type FinanceSupplierUpdateWithoutOutflowDocumentsInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutSupplierNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutFinanceSupplierNestedInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutSupplierNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUpdateManyWithoutSupplierNestedInput
 }
 
 export type FinanceSupplierUncheckedUpdateWithoutOutflowDocumentsInput = {
@@ -1520,6 +1678,7 @@ export type FinanceSupplierUncheckedUpdateWithoutOutflowDocumentsInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutSupplierNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutFinanceSupplierNestedInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutSupplierNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedUpdateManyWithoutSupplierNestedInput
 }
 
 export type FinanceSupplierCreateWithoutHrEmployeeServicesInput = {
@@ -1543,6 +1702,7 @@ export type FinanceSupplierCreateWithoutHrEmployeeServicesInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutSupplierInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutFinanceSupplierInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutSupplierInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordCreateNestedManyWithoutSupplierInput
 }
 
 export type FinanceSupplierUncheckedCreateWithoutHrEmployeeServicesInput = {
@@ -1567,6 +1727,7 @@ export type FinanceSupplierUncheckedCreateWithoutHrEmployeeServicesInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutSupplierInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutFinanceSupplierInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutSupplierInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedCreateNestedManyWithoutSupplierInput
 }
 
 export type FinanceSupplierCreateOrConnectWithoutHrEmployeeServicesInput = {
@@ -1606,6 +1767,7 @@ export type FinanceSupplierUpdateWithoutHrEmployeeServicesInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutSupplierNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutFinanceSupplierNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutSupplierNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUpdateManyWithoutSupplierNestedInput
 }
 
 export type FinanceSupplierUncheckedUpdateWithoutHrEmployeeServicesInput = {
@@ -1630,6 +1792,7 @@ export type FinanceSupplierUncheckedUpdateWithoutHrEmployeeServicesInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutSupplierNestedInput
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutFinanceSupplierNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutSupplierNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedUpdateManyWithoutSupplierNestedInput
 }
 
 export type FinanceSupplierCreateWithoutDailySalesClosingsInput = {
@@ -1653,6 +1816,7 @@ export type FinanceSupplierCreateWithoutDailySalesClosingsInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutSupplierInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutSupplierInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutSupplierInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordCreateNestedManyWithoutSupplierInput
 }
 
 export type FinanceSupplierUncheckedCreateWithoutDailySalesClosingsInput = {
@@ -1677,6 +1841,7 @@ export type FinanceSupplierUncheckedCreateWithoutDailySalesClosingsInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutSupplierInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutSupplierInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutSupplierInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedCreateNestedManyWithoutSupplierInput
 }
 
 export type FinanceSupplierCreateOrConnectWithoutDailySalesClosingsInput = {
@@ -1716,6 +1881,7 @@ export type FinanceSupplierUpdateWithoutDailySalesClosingsInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutSupplierNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutSupplierNestedInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutSupplierNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUpdateManyWithoutSupplierNestedInput
 }
 
 export type FinanceSupplierUncheckedUpdateWithoutDailySalesClosingsInput = {
@@ -1740,6 +1906,7 @@ export type FinanceSupplierUncheckedUpdateWithoutDailySalesClosingsInput = {
   recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutSupplierNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutSupplierNestedInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutSupplierNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedUpdateManyWithoutSupplierNestedInput
 }
 
 export type FinanceSupplierCreateWithoutRecurringExpenseProfilesInput = {
@@ -1763,6 +1930,7 @@ export type FinanceSupplierCreateWithoutRecurringExpenseProfilesInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutFinanceSupplierInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutSupplierInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutSupplierInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordCreateNestedManyWithoutSupplierInput
 }
 
 export type FinanceSupplierUncheckedCreateWithoutRecurringExpenseProfilesInput = {
@@ -1787,6 +1955,7 @@ export type FinanceSupplierUncheckedCreateWithoutRecurringExpenseProfilesInput =
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutFinanceSupplierInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutSupplierInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutSupplierInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedCreateNestedManyWithoutSupplierInput
 }
 
 export type FinanceSupplierCreateOrConnectWithoutRecurringExpenseProfilesInput = {
@@ -1826,6 +1995,7 @@ export type FinanceSupplierUpdateWithoutRecurringExpenseProfilesInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutFinanceSupplierNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutSupplierNestedInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutSupplierNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUpdateManyWithoutSupplierNestedInput
 }
 
 export type FinanceSupplierUncheckedUpdateWithoutRecurringExpenseProfilesInput = {
@@ -1850,6 +2020,7 @@ export type FinanceSupplierUncheckedUpdateWithoutRecurringExpenseProfilesInput =
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutFinanceSupplierNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutSupplierNestedInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutSupplierNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedUpdateManyWithoutSupplierNestedInput
 }
 
 export type FinanceSupplierCreateManyCompanyInput = {
@@ -1889,6 +2060,7 @@ export type FinanceSupplierUpdateWithoutCompanyInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutFinanceSupplierNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutSupplierNestedInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutSupplierNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUpdateManyWithoutSupplierNestedInput
 }
 
 export type FinanceSupplierUncheckedUpdateWithoutCompanyInput = {
@@ -1912,6 +2084,7 @@ export type FinanceSupplierUncheckedUpdateWithoutCompanyInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutFinanceSupplierNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutSupplierNestedInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutSupplierNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedUpdateManyWithoutSupplierNestedInput
 }
 
 export type FinanceSupplierUncheckedUpdateManyWithoutCompanyInput = {
@@ -1966,6 +2139,7 @@ export type FinanceSupplierUpdateWithoutCategoryInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutFinanceSupplierNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutSupplierNestedInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutSupplierNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUpdateManyWithoutSupplierNestedInput
 }
 
 export type FinanceSupplierUncheckedUpdateWithoutCategoryInput = {
@@ -1988,6 +2162,7 @@ export type FinanceSupplierUncheckedUpdateWithoutCategoryInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutFinanceSupplierNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutSupplierNestedInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutSupplierNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedUpdateManyWithoutSupplierNestedInput
 }
 
 export type FinanceSupplierUncheckedUpdateManyWithoutCategoryInput = {
@@ -2042,6 +2217,7 @@ export type FinanceSupplierUpdateWithoutCounterpartyIdentityInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutFinanceSupplierNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutSupplierNestedInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutSupplierNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUpdateManyWithoutSupplierNestedInput
 }
 
 export type FinanceSupplierUncheckedUpdateWithoutCounterpartyIdentityInput = {
@@ -2065,6 +2241,7 @@ export type FinanceSupplierUncheckedUpdateWithoutCounterpartyIdentityInput = {
   dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutFinanceSupplierNestedInput
   outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutSupplierNestedInput
   hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutSupplierNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedUpdateManyWithoutSupplierNestedInput
 }
 
 export type FinanceSupplierUncheckedUpdateManyWithoutCounterpartyIdentityInput = {
@@ -2095,6 +2272,7 @@ export type FinanceSupplierCountOutputType = {
   dailySalesClosings: number
   outflowDocuments: number
   hrEmployeeServices: number
+  whatsappInvoiceRecords: number
 }
 
 export type FinanceSupplierCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2104,6 +2282,7 @@ export type FinanceSupplierCountOutputTypeSelect<ExtArgs extends runtime.Types.E
   dailySalesClosings?: boolean | FinanceSupplierCountOutputTypeCountDailySalesClosingsArgs
   outflowDocuments?: boolean | FinanceSupplierCountOutputTypeCountOutflowDocumentsArgs
   hrEmployeeServices?: boolean | FinanceSupplierCountOutputTypeCountHrEmployeeServicesArgs
+  whatsappInvoiceRecords?: boolean | FinanceSupplierCountOutputTypeCountWhatsappInvoiceRecordsArgs
 }
 
 /**
@@ -2158,6 +2337,13 @@ export type FinanceSupplierCountOutputTypeCountHrEmployeeServicesArgs<ExtArgs ex
   where?: Prisma.HrEmployeeServiceWhereInput
 }
 
+/**
+ * FinanceSupplierCountOutputType without action
+ */
+export type FinanceSupplierCountOutputTypeCountWhatsappInvoiceRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WhatsappInvoiceRecordWhereInput
+}
+
 
 export type FinanceSupplierSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2185,6 +2371,7 @@ export type FinanceSupplierSelect<ExtArgs extends runtime.Types.Extensions.Inter
   dailySalesClosings?: boolean | Prisma.FinanceSupplier$dailySalesClosingsArgs<ExtArgs>
   outflowDocuments?: boolean | Prisma.FinanceSupplier$outflowDocumentsArgs<ExtArgs>
   hrEmployeeServices?: boolean | Prisma.FinanceSupplier$hrEmployeeServicesArgs<ExtArgs>
+  whatsappInvoiceRecords?: boolean | Prisma.FinanceSupplier$whatsappInvoiceRecordsArgs<ExtArgs>
   _count?: boolean | Prisma.FinanceSupplierCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["financeSupplier"]>
 
@@ -2260,6 +2447,7 @@ export type FinanceSupplierInclude<ExtArgs extends runtime.Types.Extensions.Inte
   dailySalesClosings?: boolean | Prisma.FinanceSupplier$dailySalesClosingsArgs<ExtArgs>
   outflowDocuments?: boolean | Prisma.FinanceSupplier$outflowDocumentsArgs<ExtArgs>
   hrEmployeeServices?: boolean | Prisma.FinanceSupplier$hrEmployeeServicesArgs<ExtArgs>
+  whatsappInvoiceRecords?: boolean | Prisma.FinanceSupplier$whatsappInvoiceRecordsArgs<ExtArgs>
   _count?: boolean | Prisma.FinanceSupplierCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FinanceSupplierIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2286,6 +2474,7 @@ export type $FinanceSupplierPayload<ExtArgs extends runtime.Types.Extensions.Int
     dailySalesClosings: Prisma.$FinanceDailySalesClosingPayload<ExtArgs>[]
     outflowDocuments: Prisma.$FinanceOutflowDocumentPayload<ExtArgs>[]
     hrEmployeeServices: Prisma.$HrEmployeeServicePayload<ExtArgs>[]
+    whatsappInvoiceRecords: Prisma.$WhatsappInvoiceRecordPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2707,6 +2896,7 @@ export interface Prisma__FinanceSupplierClient<T, Null = never, ExtArgs extends 
   dailySalesClosings<T extends Prisma.FinanceSupplier$dailySalesClosingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceSupplier$dailySalesClosingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceDailySalesClosingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   outflowDocuments<T extends Prisma.FinanceSupplier$outflowDocumentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceSupplier$outflowDocumentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FinanceOutflowDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   hrEmployeeServices<T extends Prisma.FinanceSupplier$hrEmployeeServicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceSupplier$hrEmployeeServicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeServicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  whatsappInvoiceRecords<T extends Prisma.FinanceSupplier$whatsappInvoiceRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FinanceSupplier$whatsappInvoiceRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WhatsappInvoiceRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3350,6 +3540,30 @@ export type FinanceSupplier$hrEmployeeServicesArgs<ExtArgs extends runtime.Types
   take?: number
   skip?: number
   distinct?: Prisma.HrEmployeeServiceScalarFieldEnum | Prisma.HrEmployeeServiceScalarFieldEnum[]
+}
+
+/**
+ * FinanceSupplier.whatsappInvoiceRecords
+ */
+export type FinanceSupplier$whatsappInvoiceRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WhatsappInvoiceRecord
+   */
+  select?: Prisma.WhatsappInvoiceRecordSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WhatsappInvoiceRecord
+   */
+  omit?: Prisma.WhatsappInvoiceRecordOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WhatsappInvoiceRecordInclude<ExtArgs> | null
+  where?: Prisma.WhatsappInvoiceRecordWhereInput
+  orderBy?: Prisma.WhatsappInvoiceRecordOrderByWithRelationInput | Prisma.WhatsappInvoiceRecordOrderByWithRelationInput[]
+  cursor?: Prisma.WhatsappInvoiceRecordWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WhatsappInvoiceRecordScalarFieldEnum | Prisma.WhatsappInvoiceRecordScalarFieldEnum[]
 }
 
 /**

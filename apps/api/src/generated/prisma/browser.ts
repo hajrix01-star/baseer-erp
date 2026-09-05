@@ -435,6 +435,84 @@ export type InboundEvidenceDocumentAnalysis = Prisma.InboundEvidenceDocumentAnal
  */
 export type InboundEvidenceMessageLabel = Prisma.InboundEvidenceMessageLabelModel
 /**
+ * Model WhatsappInvoiceConnection
+ * Tenant-level WhatsApp transport configuration. The real connector is a
+ * later gate; no credential or QR data belongs in this schema slice.
+ */
+export type WhatsappInvoiceConnection = Prisma.WhatsappInvoiceConnectionModel
+/**
+ * Model WhatsappInvoiceConnectionSession
+ * The Baileys authentication state is a single encrypted envelope for one
+ * tenant connection. It never stores QR data or plaintext credentials.
+ */
+export type WhatsappInvoiceConnectionSession = Prisma.WhatsappInvoiceConnectionSessionModel
+/**
+ * Model WhatsappInvoiceConnectionLease
+ * A fenced, expiring ownership record prevents two replicas from keeping the
+ * same WhatsApp connection alive after a restart or delayed callback.
+ */
+export type WhatsappInvoiceConnectionLease = Prisma.WhatsappInvoiceConnectionLeaseModel
+/**
+ * Model WhatsappInvoiceGroupBinding
+ * A stable group JID is the identity. A human display name may change, but a
+ * historical inbound message retains the binding revision that received it.
+ */
+export type WhatsappInvoiceGroupBinding = Prisma.WhatsappInvoiceGroupBindingModel
+/**
+ * Model WhatsappInboundMessage
+ * One received WhatsApp message maps at most once to a company binding. It
+ * stores source identity only; media bytes are intentionally out of scope.
+ */
+export type WhatsappInboundMessage = Prisma.WhatsappInboundMessageModel
+/**
+ * Model WhatsappInvoiceAsset
+ * Immutable original-file metadata. Storage and byte transfer are a later
+ * gate, but immutable hash/name/mime lineage is ready for that integration.
+ */
+export type WhatsappInvoiceAsset = Prisma.WhatsappInvoiceAssetModel
+/**
+ * Model WhatsappInvoiceMediaWorkItem
+ * A single encrypted work item per asset. The encrypted metadata is the
+ * worker-only transport context; it must not be copied to user-facing rows.
+ */
+export type WhatsappInvoiceMediaWorkItem = Prisma.WhatsappInvoiceMediaWorkItemModel
+/**
+ * Model WhatsappInvoiceAssetPage
+ * P1 supports whole pages only. A later segmentation gate may add regions;
+ * it must not redefine this page-assignment boundary in place.
+ */
+export type WhatsappInvoiceAssetPage = Prisma.WhatsappInvoiceAssetPageModel
+/**
+ * Model WhatsappInvoiceRecord
+ * Monitoring row, not a purchase, payable, journal, or financial document.
+ * All independent state dimensions are retained to avoid a lossy mega-status.
+ */
+export type WhatsappInvoiceRecord = Prisma.WhatsappInvoiceRecordModel
+/**
+ * Model WhatsappInvoicePageAssignment
+ * Assigns one complete asset page to a monitoring row. A page cannot be in
+ * two rows, while a row may receive many pages/assets.
+ */
+export type WhatsappInvoicePageAssignment = Prisma.WhatsappInvoicePageAssignmentModel
+/**
+ * Model WhatsappInvoiceExtractionRevision
+ * Immutable extraction/correction snapshots. P1 writes only INITIAL and
+ * MANUAL_CORRECTION; AI_REEXTRACTION is reserved for the governed AI gate.
+ */
+export type WhatsappInvoiceExtractionRevision = Prisma.WhatsappInvoiceExtractionRevisionModel
+/**
+ * Model WhatsappInvoiceReview
+ * Append-only human decision log. Before/after values and reason make a
+ * correction explainable without treating the monitoring row as immutable.
+ */
+export type WhatsappInvoiceReview = Prisma.WhatsappInvoiceReviewModel
+/**
+ * Model WhatsappInvoiceDuplicateAssessment
+ * Durable duplicate evidence. The assessment is separate from both review
+ * state and archive state so later evaluations remain auditable.
+ */
+export type WhatsappInvoiceDuplicateAssessment = Prisma.WhatsappInvoiceDuplicateAssessmentModel
+/**
  * Model MarketingCampaign
  * P1 owns only an internal campaign register. Provider facts, OAuth tokens,
  * Google locations and external publishing belong to later, separate gates.

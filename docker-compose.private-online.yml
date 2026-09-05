@@ -119,6 +119,17 @@ services:
       BASEER_INBOUND_EVIDENCE_STORAGE_ROOT: /var/lib/baseer/storage/inbound
       BASEER_EMPLOYEE_DOCUMENT_ENCRYPTION_KEY: ${BASEER_EMPLOYEE_DOCUMENT_ENCRYPTION_KEY:?BASEER_EMPLOYEE_DOCUMENT_ENCRYPTION_KEY is required}
       BASEER_DOCUMENT_SCANNER_ENDPOINT: ${BASEER_DOCUMENT_SCANNER_ENDPOINT:?BASEER_DOCUMENT_SCANNER_ENDPOINT is required}
+      # WhatsApp invoices use the existing private document scanner. Their
+      # storage stays disabled until the operator creates this private child
+      # directory and supplies an independent 32-byte encryption key.
+      BASEER_WAI_ASSET_STORAGE_ENABLED: ${BASEER_WAI_ASSET_STORAGE_ENABLED:-false}
+      BASEER_WAI_ASSET_STORAGE_ROOT: /var/lib/baseer/storage/whatsapp-invoices
+      BASEER_WAI_ASSET_ENCRYPTION_KEY: ${BASEER_WAI_ASSET_ENCRYPTION_KEY:-}
+      BASEER_WAI_ASSET_ENCRYPTION_KEY_VERSION: ${BASEER_WAI_ASSET_ENCRYPTION_KEY_VERSION:-1}
+      # The personal Baileys pilot is off until the host has independent
+      # session encryption, WAI storage, and an approved linked number.
+      BASEER_WAI_BAILEYS_PILOT_ENABLED: ${BASEER_WAI_BAILEYS_PILOT_ENABLED:-false}
+      BASEER_WAI_SESSION_ENCRYPTION_KEY: ${BASEER_WAI_SESSION_ENCRYPTION_KEY:-}
       # Central Google application configuration.  It is empty until the owner
       # moves approved values from the existing Google Cloud project.  Never
       # put a company OAuth grant, refresh token, or account ID here.

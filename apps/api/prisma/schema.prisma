@@ -515,6 +515,97 @@ enum InboundEvidenceAnalysisStatus {
   FAILED
 }
 
+/// WhatsApp connection state is deliberately separate from document states.
+/// This first slice stores configuration and received metadata only; it never
+/// authenticates a WhatsApp session or invokes a provider.
+enum WhatsappInvoiceConnectionStatus {
+  NOT_CONFIGURED
+  PLANNED
+  DISCONNECTED
+  CONNECTED
+  GAP_DETECTED
+  REAUTH_REQUIRED
+  BLOCKED
+}
+
+enum WhatsappInvoiceExtractionState {
+  NOT_REQUESTED
+  QUEUED
+  RUNNING
+  SUCCEEDED
+  FAILED
+}
+
+enum WhatsappInvoiceQualityState {
+  VALID
+  INCOMPLETE
+  CONFLICT
+}
+
+enum WhatsappInvoiceApprovalState {
+  APPROVED_MONITORING
+  INCOMPLETE
+}
+
+enum WhatsappInvoiceDuplicateState {
+  UNCHECKED
+  CLEAR
+  SUSPECTED
+  CONFIRMED
+  DISMISSED
+}
+
+enum WhatsappInvoiceArchiveState {
+  ACTIVE
+  ARCHIVED
+}
+
+/// This is a non-financial pointer-state only. A later, separately approved
+/// purchase bridge owns every transition beyond NOT_LINKED.
+enum WhatsappInvoicePurchaseState {
+  NOT_LINKED
+  PREPARING
+  DRAFT_LINKED
+  DOCUMENT_LINKED
+  CANCELLED
+}
+
+enum WhatsappInvoiceRevisionSource {
+  INITIAL
+  MANUAL_CORRECTION
+  AI_REEXTRACTION
+}
+
+/// Original receipt-byte lifecycle. An asset is never readable merely because
+/// it has been encrypted to disk: a trusted scanner must explicitly clear it.
+enum WhatsappInvoiceAssetStorageState {
+  PENDING
+  READY
+  QUARANTINED
+  FAILED
+}
+
+/// Scanner evidence is separate from storage lifecycle so a missing scanner
+/// fails closed rather than quietly making a newly stored original readable.
+enum WhatsappInvoiceAssetScanStatus {
+  NOT_REQUESTED
+  PENDING
+  CLEAN
+  MALICIOUS
+  UNAVAILABLE
+  FAILED
+}
+
+/// A durable, per-asset media pipeline state. Receipt creation and original
+/// storage stay separate so retries cannot create a second receipt or asset.
+enum WhatsappInvoiceMediaWorkItemState {
+  QUEUED
+  RUNNING
+  STORED
+  QUARANTINED
+  FAILED
+}
+
 /// Company-owned reply behaviour. It is configuration only until the separate
 /// Google Business provider gate, consent and publisher controls are active.
 enum MarketingReputationReplyAutomationStatus {
@@ -1032,6 +1123,19 @@ model Tenant {
   inboundEvidenceMessages                InboundEvidenceMessage[]
   inboundEvidenceAttachments             InboundEvidenceAttachment[]
   inboundEvidenceDocumentAnalyses        InboundEvidenceDocumentAnalysis[]
+  whatsappInvoiceConnections              WhatsappInvoiceConnection[]
+  whatsappInvoiceGroupBindings            WhatsappInvoiceGroupBinding[]
+  whatsappInboundMessages                 WhatsappInboundMessage[]
+  whatsappInvoiceAssets                   WhatsappInvoiceAsset[]
+  whatsappInvoiceAssetPages               WhatsappInvoiceAssetPage[]
+  whatsappInvoiceRecords                  WhatsappInvoiceRecord[]
+  whatsappInvoicePageAssignments          WhatsappInvoicePageAssignment[]
+  whatsappInvoiceExtractionRevisions      WhatsappInvoiceExtractionRevision[]
+  whatsappInvoiceReviews                  WhatsappInvoiceReview[]
+  whatsappInvoiceDuplicateAssessments     WhatsappInvoiceDuplicateAssessment[]
+  whatsappInvoiceConnectionSessions       WhatsappInvoiceConnectionSession[]
+  whatsappInvoiceConnectionLeases         WhatsappInvoiceConnectionLease[]
+  whatsappInvoiceMediaWorkItems           WhatsappInvoiceMediaWorkItem[]
   ownerDailyBriefSnapshots               OwnerDailyBriefSnapshot[]
   backupPolicies                         BackupPolicy[]
   backupJobs                             BackupJob[]
@@ -1269,6 +1373,16 @@ model Company {
   backupJobs                                 BackupJob[]
   backupArtifacts                            BackupArtifact[]
   backupAuditEvents                          BackupAuditEvent[]
+  whatsappInvoiceGroupBindings                WhatsappInvoiceGroupBinding[]
+  whatsappInboundMessages                     WhatsappInboundMessage[]
+  whatsappInvoiceAssets                       WhatsappInvoiceAsset[]
+  whatsappInvoiceAssetPages                   WhatsappInvoiceAssetPage[]
+  whatsappInvoiceRecords                      WhatsappInvoiceRecord[]
+  whatsappInvoicePageAssignments              WhatsappInvoicePageAssignment[]
+  whatsappInvoiceExtractionRevisions          WhatsappInvoiceExtractionRevision[]
+  whatsappInvoiceReviews                      WhatsappInvoiceReview[]
+  whatsappInvoiceDuplicateAssessments         WhatsappInvoiceDuplicateAssessment[]
+  whatsappInvoiceMediaWorkItems               WhatsappInvoiceMediaWorkItem[]
   legacyMigrationCompanyMaps                 LegacyMigrationCompanyMap[]
   legacyMigrationRecordMaps                  LegacyMigrationRecordMap[]
   nurixExcelStagingPackages                  NurixExcelStagingPackage[]
@@ -2979,6 +3093,348 @@ model InboundEvidenceMessageLabel {
   @@index([tenantId, labelId])
 }
 
+/// Tenant-level WhatsApp transport configuration. The real connector is a
+/// later gate; no credential or QR data belongs in this schema slice.
+model WhatsappInvoiceConnection {
+  id              String                          @id @default(uuid()) @db.Uuid
+  tenantId        String                          @db.Uuid
+  connectionKey   String                          @db.VarChar(80)
+  status          WhatsappInvoiceConnectionStatus @default(NOT_CONFIGURED)
+  phoneNumberHint String?                         @db.VarChar(80)
+  lastSyncedAt    DateTime?                       @db.Timestamptz(6)
+  createdAt       DateTime                        @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime                        @updatedAt @db.Timestamptz(6)
+
+  tenant        Tenant                       @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  groupBindings WhatsappInvoiceGroupBinding[]
+  messages      WhatsappInboundMessage[]
+  sessions      WhatsappInvoiceConnectionSession[]
+  leases        WhatsappInvoiceConnectionLease[]
+
+  @@unique([tenantId, connectionKey])
+  @@unique([id, tenantId])
+  @@index([tenantId, status])
+}
+
+/// The Baileys authentication state is a single encrypted envelope for one
+/// tenant connection. It never stores QR data or plaintext credentials.
+model WhatsappInvoiceConnectionSession {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantId   String   @db.Uuid
+  connectionId String @db.Uuid
+  ciphertext String   @db.Text
+  iv         String   @db.VarChar(64)
+  keyVersion Int      @db.SmallInt
+  rowVersion Int      @default(0)
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt  DateTime @updatedAt @db.Timestamptz(6)
+
+  tenant     Tenant                    @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  connection WhatsappInvoiceConnection @relation(fields: [connectionId, tenantId], references: [id, tenantId], onDelete: Restrict)
+
+  @@unique([id, tenantId])
+  @@unique([tenantId, connectionId])
+}
+
+/// A fenced, expiring ownership record prevents two replicas from keeping the
+/// same WhatsApp connection alive after a restart or delayed callback.
+model WhatsappInvoiceConnectionLease {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @db.Uuid
+  connectionId String  @db.Uuid
+  ownerToken  String   @db.VarChar(128)
+  fence       BigInt   @db.BigInt
+  expiresAt   DateTime @db.Timestamptz(6)
+  heartbeatAt DateTime @db.Timestamptz(6)
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(6)
+
+  tenant     Tenant                    @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  connection WhatsappInvoiceConnection @relation(fields: [connectionId, tenantId], references: [id, tenantId], onDelete: Restrict)
+
+  @@unique([id, tenantId])
+  @@unique([tenantId, connectionId])
+  @@index([tenantId, expiresAt])
+}
+
+/// A stable group JID is the identity. A human display name may change, but a
+/// historical inbound message retains the binding revision that received it.
+model WhatsappInvoiceGroupBinding {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @db.Uuid
+  companyId       String   @db.Uuid
+  connectionId    String   @db.Uuid
+  groupJid        String   @db.VarChar(240)
+  displayName     String   @db.VarChar(240)
+  active          Boolean  @default(true)
+  bindingRevision Int      @default(1)
+  createdByUserId String?  @db.Uuid
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime @updatedAt @db.Timestamptz(6)
+
+  tenant     Tenant                     @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  company    Company                    @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  connection WhatsappInvoiceConnection  @relation(fields: [connectionId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  messages   WhatsappInboundMessage[]
+  records    WhatsappInvoiceRecord[]
+
+  @@unique([id, tenantId, companyId])
+  @@index([tenantId, companyId, active])
+  @@index([tenantId, connectionId, groupJid])
+}
+
+/// One received WhatsApp message maps at most once to a company binding. It
+/// stores source identity only; media bytes are intentionally out of scope.
+model WhatsappInboundMessage {
+  id                   String   @id @default(uuid()) @db.Uuid
+  tenantId             String   @db.Uuid
+  companyId            String   @db.Uuid
+  connectionId         String   @db.Uuid
+  groupBindingId       String?  @db.Uuid
+  groupBindingRevision Int?
+  whatsappMessageId    String   @db.VarChar(240)
+  groupJidSnapshot     String   @db.VarChar(240)
+  receivedAt           DateTime @db.Timestamptz(6)
+  importedAt           DateTime @default(now()) @db.Timestamptz(6)
+
+  tenant       Tenant                       @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  company      Company                      @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  connection   WhatsappInvoiceConnection    @relation(fields: [connectionId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  groupBinding WhatsappInvoiceGroupBinding? @relation(fields: [groupBindingId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  assets       WhatsappInvoiceAsset[]
+
+  @@unique([tenantId, connectionId, groupJidSnapshot, whatsappMessageId])
+  @@unique([id, tenantId, companyId])
+  @@index([tenantId, companyId, receivedAt])
+  @@index([tenantId, companyId, groupBindingId, receivedAt])
+}
+
+/// Immutable original-file metadata. Storage and byte transfer are a later
+/// gate, but immutable hash/name/mime lineage is ready for that integration.
+model WhatsappInvoiceAsset {
+  id               String   @id @default(uuid()) @db.Uuid
+  tenantId         String   @db.Uuid
+  companyId        String   @db.Uuid
+  inboundMessageId String   @db.Uuid
+  attachmentIndex  Int
+  originalFileName String   @db.VarChar(500)
+  mimeType         String   @db.VarChar(160)
+  byteSize         BigInt?
+  sha256           String?  @db.Char(64)
+  storageState     WhatsappInvoiceAssetStorageState @default(PENDING)
+  storageReference String?  @unique @db.VarChar(700)
+  encryptionIv     String?  @db.VarChar(64)
+  encryptionKeyVersion Int? @db.SmallInt
+  storedByteSize   BigInt?
+  actualMimeType   String?  @db.VarChar(160)
+  scanStatus       WhatsappInvoiceAssetScanStatus @default(NOT_REQUESTED)
+  scannedAt        DateTime? @db.Timestamptz(6)
+  storageFailureReason String? @db.VarChar(500)
+  pageCount        Int      @default(1)
+  receivedAt       DateTime @db.Timestamptz(6)
+  createdAt        DateTime @default(now()) @db.Timestamptz(6)
+
+  tenant         Tenant                  @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  company        Company                 @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  inboundMessage WhatsappInboundMessage  @relation(fields: [inboundMessageId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  pages          WhatsappInvoiceAssetPage[]
+  mediaWorkItems WhatsappInvoiceMediaWorkItem[]
+
+  @@unique([id, tenantId, companyId])
+  @@unique([tenantId, companyId, inboundMessageId, attachmentIndex])
+  @@index([tenantId, companyId, receivedAt])
+  @@index([tenantId, companyId, inboundMessageId])
+  @@index([tenantId, companyId, storageState, scanStatus])
+}
+
+/// A single encrypted work item per asset. The encrypted metadata is the
+/// worker-only transport context; it must not be copied to user-facing rows.
+model WhatsappInvoiceMediaWorkItem {
+  id                 String                            @id @default(uuid()) @db.Uuid
+  tenantId           String                            @db.Uuid
+  companyId          String                            @db.Uuid
+  assetId            String                            @db.Uuid
+  state              WhatsappInvoiceMediaWorkItemState @default(QUEUED)
+  metadataCiphertext String                            @db.Text
+  metadataIv         String                            @db.VarChar(64)
+  metadataKeyVersion Int                               @db.SmallInt
+  metadataRowVersion Int                               @default(0)
+  attempts           Int                               @default(0)
+  nextAttemptAt      DateTime?                         @db.Timestamptz(6)
+  jobOwnerToken      String?                           @db.VarChar(128)
+  jobFence           BigInt?                           @db.BigInt
+  jobLeaseExpiresAt  DateTime?                         @db.Timestamptz(6)
+  jobHeartbeatAt     DateTime?                         @db.Timestamptz(6)
+  lastErrorCode      String?                           @db.VarChar(80)
+  createdAt          DateTime                          @default(now()) @db.Timestamptz(6)
+  updatedAt          DateTime                          @updatedAt @db.Timestamptz(6)
+
+  tenant  Tenant               @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  company Company              @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  asset   WhatsappInvoiceAsset @relation(fields: [assetId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@unique([tenantId, companyId, assetId])
+  @@index([tenantId, companyId, state, nextAttemptAt])
+  @@index([tenantId, companyId, jobLeaseExpiresAt])
+}
+
+/// P1 supports whole pages only. A later segmentation gate may add regions;
+/// it must not redefine this page-assignment boundary in place.
+model WhatsappInvoiceAssetPage {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantId   String   @db.Uuid
+  companyId  String   @db.Uuid
+  assetId    String   @db.Uuid
+  pageNumber Int
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+
+  tenant     Tenant                          @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  company    Company                         @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  asset      WhatsappInvoiceAsset            @relation(fields: [assetId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  assignments WhatsappInvoicePageAssignment[]
+
+  @@unique([id, tenantId, companyId])
+  @@unique([tenantId, companyId, assetId, pageNumber])
+  @@index([tenantId, companyId, assetId])
+}
+
+/// Monitoring row, not a purchase, payable, journal, or financial document.
+/// All independent state dimensions are retained to avoid a lossy mega-status.
+model WhatsappInvoiceRecord {
+  id               String                         @id @default(uuid()) @db.Uuid
+  tenantId         String                         @db.Uuid
+  companyId        String                         @db.Uuid
+  groupBindingId   String?                        @db.Uuid
+  supplierId       String?                        @db.Uuid
+  supplierName     String?                        @db.VarChar(240)
+  supplierNameKey  String?                        @db.VarChar(300)
+  supplierTaxNumber String?                       @db.VarChar(80)
+  invoiceNumber    String?                        @db.VarChar(160)
+  invoiceNumberKey String?                        @db.VarChar(200)
+  invoiceDate      DateTime?                      @db.Date
+  receivedAt       DateTime                       @db.Timestamptz(6)
+  currencyCode     String?                        @db.Char(3)
+  netAmount        Decimal?                       @db.Decimal(18, 2)
+  vatAmount        Decimal?                       @db.Decimal(18, 2)
+  grossAmount      Decimal?                       @db.Decimal(18, 2)
+  extractionState  WhatsappInvoiceExtractionState @default(NOT_REQUESTED)
+  qualityState     WhatsappInvoiceQualityState    @default(INCOMPLETE)
+  approvalState    WhatsappInvoiceApprovalState   @default(INCOMPLETE)
+  duplicateState   WhatsappInvoiceDuplicateState  @default(UNCHECKED)
+  archiveState     WhatsappInvoiceArchiveState    @default(ACTIVE)
+  archivedAt       DateTime?                      @db.Timestamptz(6)
+  purchaseState    WhatsappInvoicePurchaseState   @default(NOT_LINKED)
+  rowVersion       Int                            @default(0)
+  createdAt        DateTime                       @default(now()) @db.Timestamptz(6)
+  updatedAt        DateTime                       @updatedAt @db.Timestamptz(6)
+
+  tenant                Tenant                               @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  company               Company                              @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  groupBinding          WhatsappInvoiceGroupBinding?         @relation(fields: [groupBindingId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  supplier              FinanceSupplier?                     @relation(fields: [supplierId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  pageAssignments       WhatsappInvoicePageAssignment[]
+  revisions             WhatsappInvoiceExtractionRevision[]
+  reviews               WhatsappInvoiceReview[]
+  duplicateAssessments  WhatsappInvoiceDuplicateAssessment[] @relation("WhatsappInvoiceDuplicateSubject")
+  duplicateCandidates   WhatsappInvoiceDuplicateAssessment[] @relation("WhatsappInvoiceDuplicateCandidate")
+
+  @@unique([id, tenantId, companyId])
+  @@index([tenantId, companyId, receivedAt, id])
+  @@index([tenantId, companyId, invoiceDate, id])
+  @@index([tenantId, companyId, archiveState, duplicateState])
+  @@index([tenantId, companyId, supplierNameKey, invoiceNumberKey])
+}
+
+/// Assigns one complete asset page to a monitoring row. A page cannot be in
+/// two rows, while a row may receive many pages/assets.
+model WhatsappInvoicePageAssignment {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @db.Uuid
+  companyId   String   @db.Uuid
+  recordId    String   @db.Uuid
+  assetPageId String   @db.Uuid
+  sourceRevision Int   @default(1)
+  sortOrder   Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
+
+  tenant    Tenant                   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  company   Company                  @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  record    WhatsappInvoiceRecord    @relation(fields: [recordId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  assetPage WhatsappInvoiceAssetPage @relation(fields: [assetPageId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@unique([tenantId, companyId, recordId, assetPageId, sourceRevision])
+  @@index([tenantId, companyId, assetPageId, active])
+  @@index([tenantId, companyId, recordId])
+}
+
+/// Immutable extraction/correction snapshots. P1 writes only INITIAL and
+/// MANUAL_CORRECTION; AI_REEXTRACTION is reserved for the governed AI gate.
+model WhatsappInvoiceExtractionRevision {
+  id              String                        @id @default(uuid()) @db.Uuid
+  tenantId        String                        @db.Uuid
+  companyId       String                        @db.Uuid
+  recordId        String                        @db.Uuid
+  revision        Int
+  source          WhatsappInvoiceRevisionSource
+  valuesJson      Json
+  createdByUserId String?                       @db.Uuid
+  createdAt       DateTime                      @default(now()) @db.Timestamptz(6)
+
+  tenant  Tenant                @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  company Company               @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  record  WhatsappInvoiceRecord @relation(fields: [recordId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@unique([tenantId, companyId, recordId, revision])
+  @@index([tenantId, companyId, recordId, createdAt])
+}
+
+/// Append-only human decision log. Before/after values and reason make a
+/// correction explainable without treating the monitoring row as immutable.
+model WhatsappInvoiceReview {
+  id              String   @id @default(uuid()) @db.Uuid
+  tenantId        String   @db.Uuid
+  companyId       String   @db.Uuid
+  recordId        String   @db.Uuid
+  reason          String   @db.VarChar(500)
+  beforeJson      Json
+  afterJson       Json
+  createdByUserId String   @db.Uuid
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+
+  tenant  Tenant                @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  company Company               @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  record  WhatsappInvoiceRecord @relation(fields: [recordId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@index([tenantId, companyId, recordId, createdAt])
+}
+
+/// Durable duplicate evidence. The assessment is separate from both review
+/// state and archive state so later evaluations remain auditable.
+model WhatsappInvoiceDuplicateAssessment {
+  id                String                        @id @default(uuid()) @db.Uuid
+  tenantId          String                        @db.Uuid
+  companyId         String                        @db.Uuid
+  recordId          String                        @db.Uuid
+  candidateRecordId String?                       @db.Uuid
+  state             WhatsappInvoiceDuplicateState
+  evidenceJson      Json
+  createdAt         DateTime                      @default(now()) @db.Timestamptz(6)
+
+  tenant    Tenant                 @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  company   Company                @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  record    WhatsappInvoiceRecord  @relation("WhatsappInvoiceDuplicateSubject", fields: [recordId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  candidate WhatsappInvoiceRecord? @relation("WhatsappInvoiceDuplicateCandidate", fields: [candidateRecordId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([id, tenantId, companyId])
+  @@index([tenantId, companyId, recordId, createdAt])
+  @@index([tenantId, companyId, candidateRecordId, createdAt])
+}
+
 /// P1 owns only an internal campaign register. Provider facts, OAuth tokens,
 /// Google locations and external publishing belong to later, separate gates.
 model MarketingCampaign {
@@ -3433,6 +3889,7 @@ model FinanceSupplier {
   dailySalesClosings       FinanceDailySalesClosing[]
   outflowDocuments         FinanceOutflowDocument[]
   hrEmployeeServices       HrEmployeeService[]
+  whatsappInvoiceRecords   WhatsappInvoiceRecord[]
 
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, status])

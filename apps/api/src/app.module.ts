@@ -173,6 +173,12 @@ import { AttendanceLocationRetentionSchedulerService } from './attendance/attend
 import { OwnerDashboardController } from './owner-dashboard/owner-dashboard.controller.js';
 import { OwnerDashboardService } from './owner-dashboard/owner-dashboard.service.js';
 import { OfficialReportRunsController } from './reports/official-report-runs.controller.js';
+import { WhatsappInvoiceMonitoringController } from './whatsapp-invoice-monitoring/whatsapp-invoice-monitoring.controller.js';
+import { WhatsappInvoiceMonitoringService } from './whatsapp-invoice-monitoring/whatsapp-invoice-monitoring.service.js';
+import { WhatsappInvoiceAssetStorageService } from './whatsapp-invoice-monitoring/whatsapp-invoice-asset-storage.service.js';
+import { WhatsappInvoiceBaileysPilotFoundationService } from './whatsapp-invoice-monitoring/whatsapp-invoice-baileys-pilot-foundation.service.js';
+import { WhatsappInvoiceBaileysPilotConnectorService } from './whatsapp-invoice-monitoring/whatsapp-invoice-baileys-connector.service.js';
+import { WhatsappInvoiceMonitoringSettingsService } from './whatsapp-invoice-monitoring/whatsapp-invoice-monitoring-settings.service.js';
 
 @Module({
   imports: [
@@ -191,7 +197,7 @@ import { OfficialReportRunsController } from './reports/official-report-runs.con
       ],
     }),
   ],
-  controllers: [AdministrationController, BackupController, NurixMigrationReviewController, NurixExcelImportController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinanceAccountsController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController, HrOverviewController, AttendanceController, ReportCatalogController, ReportsController, AccrualProfitLossController, LedgerTrialBalanceController, InternalVatReportController, VatSimulationController, ReportDocumentController, OfficialReportRunsController, OperationsCatalogController, OperationsExecutionController, OperationsInternalRegistrationController, OperationsInventoryReportingController, OperationsAssetsWarrantyController, OperationsOverviewController, DecisionIntelligenceController, MarketingController, InboundEvidenceController, OwnerDailyBriefController, OwnerDashboardController],
+  controllers: [AdministrationController, BackupController, NurixMigrationReviewController, NurixExcelImportController, HealthController, CompanyAccessController, AiPlatformController, AiRuntimeController, AuthController, OutputController, BusinessDateController, FileMetadataController, ObservabilityController, SupplierCopyController, SupplierDuesController, PurchaseExpenseController, CompanyFinanceSetupController, InclusiveLoansController, FinanceConfigurationController, ExpensesObligationsReadController, FinanceMasterDataController, VaultManagementController, TreasuryController, InvoiceRegisterController, FinanceAccountsController, FinancePeriodCommandController, SupplierDueReportsController, DailySalesController, RecurringExpenseController, HrController, HrEmployeeDocumentController, HrEmployeeLetterController, HrFinalSettlementController, HrOverviewController, AttendanceController, ReportCatalogController, ReportsController, AccrualProfitLossController, LedgerTrialBalanceController, InternalVatReportController, VatSimulationController, ReportDocumentController, OfficialReportRunsController, OperationsCatalogController, OperationsExecutionController, OperationsInternalRegistrationController, OperationsInventoryReportingController, OperationsAssetsWarrantyController, OperationsOverviewController, WhatsappInvoiceMonitoringController, DecisionIntelligenceController, MarketingController, InboundEvidenceController, OwnerDailyBriefController, OwnerDashboardController],
   providers: [
     DatabaseService,
     BackupService,
@@ -300,6 +306,11 @@ import { OfficialReportRunsController } from './reports/official-report-runs.con
     OperationsInventoryReportingService,
     OperationsAssetsWarrantyService,
     OperationsOverviewService,
+    WhatsappInvoiceMonitoringService,
+    WhatsappInvoiceAssetStorageService,
+    WhatsappInvoiceBaileysPilotFoundationService,
+    WhatsappInvoiceBaileysPilotConnectorService,
+    WhatsappInvoiceMonitoringSettingsService,
     DecisionIntelligenceService,
     DecisionContextImportService,
     DecisionContextResearchService,

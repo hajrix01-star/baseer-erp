@@ -123,6 +123,19 @@ export const ModelName = {
   InboundEvidenceAttachment: 'InboundEvidenceAttachment',
   InboundEvidenceDocumentAnalysis: 'InboundEvidenceDocumentAnalysis',
   InboundEvidenceMessageLabel: 'InboundEvidenceMessageLabel',
+  WhatsappInvoiceConnection: 'WhatsappInvoiceConnection',
+  WhatsappInvoiceConnectionSession: 'WhatsappInvoiceConnectionSession',
+  WhatsappInvoiceConnectionLease: 'WhatsappInvoiceConnectionLease',
+  WhatsappInvoiceGroupBinding: 'WhatsappInvoiceGroupBinding',
+  WhatsappInboundMessage: 'WhatsappInboundMessage',
+  WhatsappInvoiceAsset: 'WhatsappInvoiceAsset',
+  WhatsappInvoiceMediaWorkItem: 'WhatsappInvoiceMediaWorkItem',
+  WhatsappInvoiceAssetPage: 'WhatsappInvoiceAssetPage',
+  WhatsappInvoiceRecord: 'WhatsappInvoiceRecord',
+  WhatsappInvoicePageAssignment: 'WhatsappInvoicePageAssignment',
+  WhatsappInvoiceExtractionRevision: 'WhatsappInvoiceExtractionRevision',
+  WhatsappInvoiceReview: 'WhatsappInvoiceReview',
+  WhatsappInvoiceDuplicateAssessment: 'WhatsappInvoiceDuplicateAssessment',
   MarketingCampaign: 'MarketingCampaign',
   MarketingCampaignAnalysisFeedback: 'MarketingCampaignAnalysisFeedback',
   MarketingCampaignFinancialLink: 'MarketingCampaignFinancialLink',
@@ -1556,6 +1569,237 @@ export const InboundEvidenceMessageLabelScalarFieldEnum = {
 } as const
 
 export type InboundEvidenceMessageLabelScalarFieldEnum = (typeof InboundEvidenceMessageLabelScalarFieldEnum)[keyof typeof InboundEvidenceMessageLabelScalarFieldEnum]
+
+
+export const WhatsappInvoiceConnectionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  connectionKey: 'connectionKey',
+  status: 'status',
+  phoneNumberHint: 'phoneNumberHint',
+  lastSyncedAt: 'lastSyncedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WhatsappInvoiceConnectionScalarFieldEnum = (typeof WhatsappInvoiceConnectionScalarFieldEnum)[keyof typeof WhatsappInvoiceConnectionScalarFieldEnum]
+
+
+export const WhatsappInvoiceConnectionSessionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  connectionId: 'connectionId',
+  ciphertext: 'ciphertext',
+  iv: 'iv',
+  keyVersion: 'keyVersion',
+  rowVersion: 'rowVersion',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WhatsappInvoiceConnectionSessionScalarFieldEnum = (typeof WhatsappInvoiceConnectionSessionScalarFieldEnum)[keyof typeof WhatsappInvoiceConnectionSessionScalarFieldEnum]
+
+
+export const WhatsappInvoiceConnectionLeaseScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  connectionId: 'connectionId',
+  ownerToken: 'ownerToken',
+  fence: 'fence',
+  expiresAt: 'expiresAt',
+  heartbeatAt: 'heartbeatAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WhatsappInvoiceConnectionLeaseScalarFieldEnum = (typeof WhatsappInvoiceConnectionLeaseScalarFieldEnum)[keyof typeof WhatsappInvoiceConnectionLeaseScalarFieldEnum]
+
+
+export const WhatsappInvoiceGroupBindingScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  connectionId: 'connectionId',
+  groupJid: 'groupJid',
+  displayName: 'displayName',
+  active: 'active',
+  bindingRevision: 'bindingRevision',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WhatsappInvoiceGroupBindingScalarFieldEnum = (typeof WhatsappInvoiceGroupBindingScalarFieldEnum)[keyof typeof WhatsappInvoiceGroupBindingScalarFieldEnum]
+
+
+export const WhatsappInboundMessageScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  connectionId: 'connectionId',
+  groupBindingId: 'groupBindingId',
+  groupBindingRevision: 'groupBindingRevision',
+  whatsappMessageId: 'whatsappMessageId',
+  groupJidSnapshot: 'groupJidSnapshot',
+  receivedAt: 'receivedAt',
+  importedAt: 'importedAt'
+} as const
+
+export type WhatsappInboundMessageScalarFieldEnum = (typeof WhatsappInboundMessageScalarFieldEnum)[keyof typeof WhatsappInboundMessageScalarFieldEnum]
+
+
+export const WhatsappInvoiceAssetScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  inboundMessageId: 'inboundMessageId',
+  attachmentIndex: 'attachmentIndex',
+  originalFileName: 'originalFileName',
+  mimeType: 'mimeType',
+  byteSize: 'byteSize',
+  sha256: 'sha256',
+  storageState: 'storageState',
+  storageReference: 'storageReference',
+  encryptionIv: 'encryptionIv',
+  encryptionKeyVersion: 'encryptionKeyVersion',
+  storedByteSize: 'storedByteSize',
+  actualMimeType: 'actualMimeType',
+  scanStatus: 'scanStatus',
+  scannedAt: 'scannedAt',
+  storageFailureReason: 'storageFailureReason',
+  pageCount: 'pageCount',
+  receivedAt: 'receivedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type WhatsappInvoiceAssetScalarFieldEnum = (typeof WhatsappInvoiceAssetScalarFieldEnum)[keyof typeof WhatsappInvoiceAssetScalarFieldEnum]
+
+
+export const WhatsappInvoiceMediaWorkItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  assetId: 'assetId',
+  state: 'state',
+  metadataCiphertext: 'metadataCiphertext',
+  metadataIv: 'metadataIv',
+  metadataKeyVersion: 'metadataKeyVersion',
+  metadataRowVersion: 'metadataRowVersion',
+  attempts: 'attempts',
+  nextAttemptAt: 'nextAttemptAt',
+  jobOwnerToken: 'jobOwnerToken',
+  jobFence: 'jobFence',
+  jobLeaseExpiresAt: 'jobLeaseExpiresAt',
+  jobHeartbeatAt: 'jobHeartbeatAt',
+  lastErrorCode: 'lastErrorCode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WhatsappInvoiceMediaWorkItemScalarFieldEnum = (typeof WhatsappInvoiceMediaWorkItemScalarFieldEnum)[keyof typeof WhatsappInvoiceMediaWorkItemScalarFieldEnum]
+
+
+export const WhatsappInvoiceAssetPageScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  assetId: 'assetId',
+  pageNumber: 'pageNumber',
+  createdAt: 'createdAt'
+} as const
+
+export type WhatsappInvoiceAssetPageScalarFieldEnum = (typeof WhatsappInvoiceAssetPageScalarFieldEnum)[keyof typeof WhatsappInvoiceAssetPageScalarFieldEnum]
+
+
+export const WhatsappInvoiceRecordScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  groupBindingId: 'groupBindingId',
+  supplierId: 'supplierId',
+  supplierName: 'supplierName',
+  supplierNameKey: 'supplierNameKey',
+  supplierTaxNumber: 'supplierTaxNumber',
+  invoiceNumber: 'invoiceNumber',
+  invoiceNumberKey: 'invoiceNumberKey',
+  invoiceDate: 'invoiceDate',
+  receivedAt: 'receivedAt',
+  currencyCode: 'currencyCode',
+  netAmount: 'netAmount',
+  vatAmount: 'vatAmount',
+  grossAmount: 'grossAmount',
+  extractionState: 'extractionState',
+  qualityState: 'qualityState',
+  approvalState: 'approvalState',
+  duplicateState: 'duplicateState',
+  archiveState: 'archiveState',
+  archivedAt: 'archivedAt',
+  purchaseState: 'purchaseState',
+  rowVersion: 'rowVersion',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WhatsappInvoiceRecordScalarFieldEnum = (typeof WhatsappInvoiceRecordScalarFieldEnum)[keyof typeof WhatsappInvoiceRecordScalarFieldEnum]
+
+
+export const WhatsappInvoicePageAssignmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  recordId: 'recordId',
+  assetPageId: 'assetPageId',
+  sourceRevision: 'sourceRevision',
+  sortOrder: 'sortOrder',
+  active: 'active',
+  createdAt: 'createdAt'
+} as const
+
+export type WhatsappInvoicePageAssignmentScalarFieldEnum = (typeof WhatsappInvoicePageAssignmentScalarFieldEnum)[keyof typeof WhatsappInvoicePageAssignmentScalarFieldEnum]
+
+
+export const WhatsappInvoiceExtractionRevisionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  recordId: 'recordId',
+  revision: 'revision',
+  source: 'source',
+  valuesJson: 'valuesJson',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type WhatsappInvoiceExtractionRevisionScalarFieldEnum = (typeof WhatsappInvoiceExtractionRevisionScalarFieldEnum)[keyof typeof WhatsappInvoiceExtractionRevisionScalarFieldEnum]
+
+
+export const WhatsappInvoiceReviewScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  recordId: 'recordId',
+  reason: 'reason',
+  beforeJson: 'beforeJson',
+  afterJson: 'afterJson',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type WhatsappInvoiceReviewScalarFieldEnum = (typeof WhatsappInvoiceReviewScalarFieldEnum)[keyof typeof WhatsappInvoiceReviewScalarFieldEnum]
+
+
+export const WhatsappInvoiceDuplicateAssessmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  recordId: 'recordId',
+  candidateRecordId: 'candidateRecordId',
+  state: 'state',
+  evidenceJson: 'evidenceJson',
+  createdAt: 'createdAt'
+} as const
+
+export type WhatsappInvoiceDuplicateAssessmentScalarFieldEnum = (typeof WhatsappInvoiceDuplicateAssessmentScalarFieldEnum)[keyof typeof WhatsappInvoiceDuplicateAssessmentScalarFieldEnum]
 
 
 export const MarketingCampaignScalarFieldEnum = {
