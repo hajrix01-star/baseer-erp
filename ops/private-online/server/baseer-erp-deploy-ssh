@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Forced-command SSH entry point.  It intentionally accepts one verb and one
+# immutable commit only; the root-owned deployer reads the release bundle from
+# stdin and never exposes a general remote shell.
+set -Eeuo pipefail
+
+readonly original_command="${SSH_ORIGINAL_COMMAND:-}"
+IFS=' ' read -r action release_sha extra <<<"${original_command}"
+
+if [[ "$action" != "deploy-release" || -n "${extra:-}" || ! "$release_sha" =~ ^[a-f0-9]{40}$ ]]; then
+  printf 'Only deploy-release <40-character-lowercase-sha> is allowed.\n' >&2
+  exit 64
+fi
+
+exec sudo -n /usr/local/sbin/baseer-erp-deploy-release "$release_sha"

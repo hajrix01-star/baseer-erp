@@ -113,7 +113,12 @@ jobs:
       - name: Monitor isolated Prisma toolchain advisory
         run: npm run check:prisma-advisory-status
       - name: Verify immutable private-online release contract
-        run: node scripts/check-release-provenance-contract.mjs
+        run: |
+          bash -n \
+            ops/private-online/server/baseer-erp-deploy-ssh \
+            ops/private-online/server/baseer-erp-deploy-release \
+            ops/private-online/server/install-baseer-erp-deployer.sh
+          node scripts/check-release-provenance-contract.mjs
 
   web-acceptance:
     runs-on: ubuntu-latest
@@ -264,3 +269,85 @@ jobs:
           name: baseer-release-manifest-${{ github.sha }}
           path: baseer-release-manifest.json
           retention-days: 90
+
+  deploy-private-online:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [release-manifest]
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+    concurrency:
+      group: baseer-erp-private-online-production
+      cancel-in-progress: false
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: baseer-release-manifest-${{ github.sha }}
+          path: .release-manifest
+      - name: Validate the manifest and prepare the secret-free server bundle
+        env:
+          RELEASE_SHA: ${{ github.sha }}
+        run: |
+          node <<'NODE'
+          const { readFileSync, writeFileSync } = require('node:fs');
+
+          const manifest = JSON.parse(readFileSync('.release-manifest/baseer-release-manifest.json', 'utf8'));
+          const expected = {
+            api: 'ghcr.io/hajrix01-star/baseer-erp-api',
+            migrate: 'ghcr.io/hajrix01-star/baseer-erp-migrate',
+            web: 'ghcr.io/hajrix01-star/baseer-erp-web',
+          };
+          const digest = /^.+@sha256:[a-f0-9]{64}$/;
+          if (manifest.schemaVersion !== 1 || manifest.source?.commit !== process.env.RELEASE_SHA) {
+            throw new Error('Release manifest does not identify this workflow commit.');
+          }
+          for (const [key, repository] of Object.entries(expected)) {
+            const image = manifest.images?.[key];
+            if (typeof image !== 'string' || !digest.test(image) || !image.startsWith(`${repository}@sha256:`)) {
+              throw new Error(`Release manifest has an invalid ${key} image.`);
+            }
+          }
+          writeFileSync('.baseer-release-images', [
+            `BASEER_API_IMAGE=${manifest.images.api}`,
+            `BASEER_MIGRATE_IMAGE=${manifest.images.migrate}`,
+            `BASEER_WEB_IMAGE=${manifest.images.web}`,
+            '',
+          ].join('\n'));
+          NODE
+          tar -czf baseer-private-online-release.tgz \
+            docker-compose.private-online.yml docker .baseer-release-images
+      - name: Configure the restricted deployment identity
+        env:
+          DEPLOY_KEY: ${{ secrets.BASEER_DEPLOY_SSH_KEY }}
+          DEPLOY_HOST: ${{ secrets.BASEER_DEPLOY_HOST }}
+          DEPLOY_PORT: ${{ secrets.BASEER_DEPLOY_PORT }}
+          KNOWN_HOSTS: ${{ secrets.BASEER_DEPLOY_KNOWN_HOSTS }}
+        run: |
+          test -n "$DEPLOY_KEY"
+          test -n "$DEPLOY_HOST"
+          test -n "$KNOWN_HOSTS"
+          install -d -m 0700 "$HOME/.ssh"
+          printf '%s\n' "$DEPLOY_KEY" >"$HOME/.ssh/baseer_erp_deploy"
+          printf '%s\n' "$KNOWN_HOSTS" >"$HOME/.ssh/known_hosts"
+          chmod 0600 "$HOME/.ssh/baseer_erp_deploy" "$HOME/.ssh/known_hosts"
+          ssh-keygen -y -f "$HOME/.ssh/baseer_erp_deploy" >/dev/null
+          known_host="$DEPLOY_HOST"
+          if [[ "${DEPLOY_PORT:-22}" != '22' ]]; then known_host="[${DEPLOY_HOST}]:${DEPLOY_PORT}"; fi
+          ssh-keygen -F "$known_host" -f "$HOME/.ssh/known_hosts" >/dev/null
+      - name: Deploy the immutable release through the forced command
+        env:
+          DEPLOY_HOST: ${{ secrets.BASEER_DEPLOY_HOST }}
+          DEPLOY_PORT: ${{ secrets.BASEER_DEPLOY_PORT }}
+        run: |
+          set -o pipefail
+          cat baseer-private-online-release.tgz | ssh \
+            -i "$HOME/.ssh/baseer_erp_deploy" \
+            -p "${DEPLOY_PORT:-22}" \
+            -o BatchMode=yes \
+            -o StrictHostKeyChecking=yes \
+            -o UserKnownHostsFile="$HOME/.ssh/known_hosts" \
+            "baseer-erp-deploy@${DEPLOY_HOST}" \
+            "deploy-release ${GITHUB_SHA}"

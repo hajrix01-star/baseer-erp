@@ -1,0 +1,172 @@
+#!/usr/bin/env bash
+# Root-owned private-online deployer.  The only mutable inputs are the three
+# immutable Baseer image digests in a tar bundle produced by successful CI.
+set -Eeuo pipefail
+
+readonly deployment_root='/srv/baseer'
+readonly releases_root="${deployment_root}/release"
+readonly api_container='baseer-erp-private-online-api-1'
+readonly max_bundle_blocks=32768 # 16 MiB in 512-byte blocks
+
+die() {
+  printf 'BASEER DEPLOY FAILED: %s\n' "$*" >&2
+  exit 1
+}
+
+require_root() {
+  [[ "$EUID" -eq 0 ]] || die 'The deployer must run as root through sudo.'
+}
+
+current_release_directory() {
+  local working_directory
+  working_directory="$(docker inspect "$api_container" --format '{{ index .Config.Labels "com.docker.compose.project.working_dir" }}')"
+  [[ "$working_directory" == "${releases_root}/"* ]] || die 'The running API is not owned by the expected Baseer releases root.'
+  [[ -f "$working_directory/docker-compose.private-online.yml" ]] || die 'The running release Compose file is missing.'
+  [[ -f "$working_directory/.env.private-online" ]] || die 'The running release environment file is missing.'
+  printf '%s\n' "$working_directory"
+}
+
+validate_image() {
+  local image="$1"
+  local service="$2"
+  [[ "$image" =~ ^ghcr\.io/hajrix01-star/baseer-erp-"$service"@sha256:[a-f0-9]{64}$ ]] || die "Invalid immutable ${service} image reference."
+}
+
+environment_value() {
+  local environment_file="$1"
+  local key="$2"
+  awk -F= -v key="$key" '$1 == key { value = substr($0, length(key) + 2) } END { if (value == "") exit 1; print value }' "$environment_file"
+}
+
+replace_environment_value() {
+  local environment_file="$1"
+  local key="$2"
+  local value="$3"
+  local temporary_file
+  temporary_file="$(mktemp "${environment_file}.next.XXXXXX")"
+
+  if ! awk -v key="$key" -v value="$value" '
+    BEGIN { found = 0 }
+    index($0, key "=") == 1 { print key "=" value; found = 1; next }
+    { print }
+    END { if (!found) exit 1 }
+  ' "$environment_file" >"$temporary_file"; then
+    rm -f "$temporary_file"
+    die "Missing required environment variable ${key}."
+  fi
+
+  chmod 0600 "$temporary_file"
+  chown root:root "$temporary_file"
+  mv -f "$temporary_file" "$environment_file"
+}
+
+validate_bundle() {
+  local bundle="$1"
+  local entry
+  while IFS= read -r entry; do
+    case "$entry" in
+      docker-compose.private-online.yml|.baseer-release-images|docker/|docker/*) ;;
+      *) die "Release bundle contains a forbidden path: ${entry}" ;;
+    esac
+  done < <(tar -tzf "$bundle")
+
+  tar -tvzf "$bundle" | while IFS= read -r entry; do
+    case "${entry:0:1}" in
+      -|d) ;;
+      *) die 'Release bundle may contain regular files and directories only.' ;;
+    esac
+  done
+}
+
+wait_for_health() {
+  local release_directory="$1"
+  local environment_file="$2"
+  local compose_file="$3"
+  local api_id web_id domain attempt api_status web_status
+
+  api_id="$(docker compose --env-file "$environment_file" -f "$compose_file" ps -q api)"
+  web_id="$(docker compose --env-file "$environment_file" -f "$compose_file" ps -q web)"
+  [[ -n "$api_id" && -n "$web_id" ]] || die 'Compose did not create the API and Web containers.'
+  domain="$(environment_value "$environment_file" BASEER_PUBLIC_DOMAIN)" || die 'BASEER_PUBLIC_DOMAIN is missing.'
+
+  for attempt in $(seq 1 30); do
+    api_status="$(docker inspect "$api_id" --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}')"
+    web_status="$(docker inspect "$web_id" --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}')"
+    if [[ "$api_status" == 'healthy' && "$web_status" == 'healthy' ]] && curl --fail --silent --show-error --max-time 20 "https://${domain}/v1/health" >/dev/null; then
+      printf 'BASEER DEPLOY PASSED: %s is healthy.\n' "$(basename "$release_directory")"
+      return 0
+    fi
+    sleep 10
+  done
+
+  die 'Candidate containers or public health did not become healthy. The previous release directory is retained; do not roll back automatically after migration.'
+}
+
+main() {
+  require_root
+  [[ $# -eq 1 && "$1" =~ ^[a-f0-9]{40}$ ]] || die 'Usage: baseer-erp-deploy-release <40-character-lowercase-sha>'
+  local release_sha="$1"
+  local current_release current_environment current_compose release_directory environment_file compose_file bundle staging_directory
+
+  current_release="$(current_release_directory)"
+  current_environment="${current_release}/.env.private-online"
+  current_compose="${current_release}/docker-compose.private-online.yml"
+  release_directory="${releases_root}/${release_sha}"
+  [[ ! -e "$release_directory" ]] || die 'Refusing to overwrite an existing release directory.'
+
+  bundle="$(mktemp "${deployment_root}/.release-bundle.XXXXXX")"
+  staging_directory="$(mktemp -d "${deployment_root}/.release-staging.XXXXXX")"
+  trap 'rm -f "$bundle"; rm -rf "$staging_directory"' EXIT
+  (ulimit -f "$max_bundle_blocks"; cat >"$bundle") || die 'Release bundle is too large or unreadable.'
+  [[ -s "$bundle" ]] || die 'Release bundle is empty.'
+  validate_bundle "$bundle"
+  tar -xzf "$bundle" -C "$staging_directory" --no-same-owner --no-same-permissions
+  [[ -f "$staging_directory/docker-compose.private-online.yml" ]] || die 'Release bundle has no Compose file.'
+  [[ -f "$staging_directory/docker/Caddyfile.private-online" ]] || die 'Release bundle has no Caddy configuration.'
+  [[ -d "$staging_directory/docker/baseer-private-init" ]] || die 'Release bundle has no database init scripts.'
+
+  install -d -o root -g root -m 0700 "$release_directory"
+  cp -a "$staging_directory/." "$release_directory/"
+  cp "$current_environment" "$release_directory/.env.private-online"
+  chmod 0600 "$release_directory/.env.private-online"
+  chown -R root:root "$release_directory"
+
+  environment_file="${release_directory}/.env.private-online"
+  compose_file="${release_directory}/docker-compose.private-online.yml"
+  local api_image migrate_image web_image
+  api_image="$(environment_value "$environment_file" BASEER_API_IMAGE)" || die 'BASEER_API_IMAGE is missing.'
+  migrate_image="$(environment_value "$environment_file" BASEER_MIGRATE_IMAGE)" || die 'BASEER_MIGRATE_IMAGE is missing.'
+  web_image="$(environment_value "$environment_file" BASEER_WEB_IMAGE)" || die 'BASEER_WEB_IMAGE is missing.'
+  validate_image "$api_image" api
+  validate_image "$migrate_image" migrate
+  validate_image "$web_image" web
+
+  # CI writes these three exact immutable values into a small overlay file in
+  # the release bundle.  Keeping it separate prevents any application secret
+  # from crossing the GitHub/Hostinger boundary.
+  local images_file="$staging_directory/.baseer-release-images"
+  [[ -f "$images_file" ]] || die 'Release bundle has no immutable image overlay.'
+  local candidate_api candidate_migrate candidate_web
+  candidate_api="$(awk -F= '$1 == "BASEER_API_IMAGE" { print substr($0, length($1) + 2) }' "$images_file")"
+  candidate_migrate="$(awk -F= '$1 == "BASEER_MIGRATE_IMAGE" { print substr($0, length($1) + 2) }' "$images_file")"
+  candidate_web="$(awk -F= '$1 == "BASEER_WEB_IMAGE" { print substr($0, length($1) + 2) }' "$images_file")"
+  validate_image "$candidate_api" api
+  validate_image "$candidate_migrate" migrate
+  validate_image "$candidate_web" web
+  replace_environment_value "$environment_file" BASEER_API_IMAGE "$candidate_api"
+  replace_environment_value "$environment_file" BASEER_MIGRATE_IMAGE "$candidate_migrate"
+  replace_environment_value "$environment_file" BASEER_WEB_IMAGE "$candidate_web"
+
+  docker compose --env-file "$environment_file" -f "$compose_file" config -q
+  docker compose --env-file "$environment_file" -f "$compose_file" pull api migrate web
+  cp "$current_compose" "${deployment_root}/docker-compose.private-online.last-known-good.yml"
+  cp "$current_environment" "${deployment_root}/.env.private-online.last-known-good"
+  printf '%s\n' "$(basename "$current_release")" >"${deployment_root}/last-known-good-release"
+
+  docker compose --env-file "$environment_file" -f "$compose_file" up -d
+  wait_for_health "$release_directory" "$environment_file" "$compose_file"
+  ln -sfn "$release_directory" "${deployment_root}/current"
+  printf '%s\n' "$release_sha" >"${deployment_root}/current-release"
+}
+
+main "$@"
