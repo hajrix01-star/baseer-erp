@@ -1,10 +1,6 @@
 .operations-purchase-summary { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
 .operations-purchase-summary h3, .operations-purchase-summary p { margin: 0; }
 .operations-purchase-request-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: .75rem; }
-.operations-payment-channel { min-inline-size: 0; margin: 0; padding: 0; border: 0; }
-.operations-payment-channel legend { margin-bottom: .35rem; color: var(--muted); font-size: .82rem; font-weight: 800; }
-.operations-payment-channel > div { display: flex; flex-wrap: wrap; gap: .35rem; }
-.operations-payment-channel .baseer-button { min-block-size: 2.15rem; padding-inline: .65rem; font-size: .8rem; }
 .operations-row-link { display: grid; gap: .15rem; width: 100%; padding: 0; border: 0; background: transparent; color: inherit; cursor: pointer; font: inherit; text-align: inherit; }
 .operations-row-link:hover strong { color: var(--brand); text-decoration: underline; text-underline-offset: .18rem; }
 .operations-row-link:focus-visible { outline: 2px solid var(--brand); outline-offset: .25rem; border-radius: .25rem; }
@@ -12,4 +8,3 @@
 /* Execution forms share the standard compact control rhythm. */
 .operations-purchase-summary { gap: var(--space-4); }
 .operations-purchase-request-meta { gap: var(--space-3); }
-.operations-payment-channel > div { gap: var(--space-2); }

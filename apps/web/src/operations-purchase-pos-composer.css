@@ -28,6 +28,8 @@
 .administration-form:has(.operations-purchase-pos) > div:first-child { grid-column: 1 / -1; padding: .85rem; border: 1px solid var(--line); border-radius: .9rem; background: color-mix(in srgb, var(--canvas) 48%, var(--surface)); }
 .administration-form:has(.operations-purchase-pos) .operations-purchase-request-meta { grid-template-columns: minmax(11rem, .65fr) minmax(20rem, 1.35fr); align-items: end; padding-block: .6rem; }
 .administration-form:has(.operations-purchase-pos) .operations-payment-channel { grid-column: auto; align-self: end; }
+.administration-form:has(.operations-purchase-pos) .operations-payment-channel > div { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-2); }
+.administration-form:has(.operations-purchase-pos) .operations-payment-channel .baseer-button { grid-column: auto; min-inline-size: 0; padding-inline: .45rem; white-space: nowrap; }
 .administration-form:has(.operations-purchase-pos) .operations-purchase-pos__product { grid-column: auto; }
 .administration-form:has(.operations-purchase-pos) .operations-purchase-pos__cart-table button { grid-column: auto; }
 .administration-form:has(.operations-purchase-pos) > label { grid-column: 1 / -1; }

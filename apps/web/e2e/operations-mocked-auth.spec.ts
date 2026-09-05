@@ -299,13 +299,19 @@ test("custody return keeps decimal text and Gregorian business date through its 
   });
 });
 
-test("purchase request starts with no date and requires the shared Gregorian date adapter", async ({ page }) => {
+test("purchase request starts with no date, keeps payment channels in one row, and requires the shared Gregorian date adapter", async ({ page }) => {
   await mockInternalRegistration(page);
   await page.goto("/#module=operations&section=6");
 
   await page.getByRole("button", { name: "إنشاء طلب شراء" }).click();
   let dialog = page.getByRole("dialog");
   await expect(dialog.getByRole("textbox", { name: "التاريخ" })).toHaveValue("");
+  const paymentChannels = await Promise.all(["نقدي محلي", "تحويل بنكي", "عهدة المندوب"].map(async (name) => {
+    const box = await dialog.getByRole("button", { name }).boundingBox();
+    expect(box).not.toBeNull();
+    return box!;
+  }));
+  expect(new Set(paymentChannels.map((box) => Math.round(box.y))).size).toBe(1);
   await dialog.getByRole("button", { name: "فتح التقويم" }).click();
   await expect(page.getByRole("dialog", { name: "التاريخ" })).toBeVisible();
   await page.keyboard.press("Escape");

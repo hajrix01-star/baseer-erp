@@ -219,12 +219,19 @@ test("company editor saves company and VAT atomically from one action", async ({
   await page.goto("/#module=administration&section=1");
   await page.locator(".administration-company-card", { hasText: "شركة الاختبار" }).click();
   const dialog = page.getByRole("dialog", { name: /تعديل: شركة الاختبار/ });
-  await expect(dialog.getByRole("button", { name: "حفظ التغييرات" })).toBeEnabled();
+  const saveButton = dialog.getByRole("button", { name: "حفظ التغييرات" });
+  await expect(saveButton).toBeEnabled();
+  const saveAfterVat = await dialog.locator(".administration-company-dialog__save").evaluate((footer) => {
+    const form = footer.closest("form");
+    const vatInput = form?.querySelector('input[inputmode="decimal"]');
+    return Boolean(vatInput && vatInput.compareDocumentPosition(footer) & Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+  expect(saveAfterVat).toBe(true);
   await dialog.getByLabel("نسبة ضريبة القيمة المضافة").fill("12.5");
   await expect(dialog.getByRole("button", { name: "حفظ النسبة" })).toHaveCount(0);
   await expect(dialog.getByLabel(/سبب التغيير/)).toHaveCount(0);
   await expect(dialog.getByText(/تطبّق على الفواتير الجديدة/)).toHaveCount(0);
-  await dialog.getByRole("button", { name: "حفظ التغييرات" }).click();
+  await saveButton.click();
   await expect.poll(() => savedBody).not.toBeNull();
   expect(savedBody).toMatchObject({ vatRateBasisPoints: 1250, nameAr: "شركة الاختبار" });
   expect(requests.filter((request) => request === "POST /v1/finance/configuration/vat-rate")).toHaveLength(0);

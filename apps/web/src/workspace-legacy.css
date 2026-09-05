@@ -1032,7 +1032,7 @@
 .administration-company-dialog .daily-sales-dialog__header { flex: 0 0 auto; padding: 1rem 1.25rem .75rem; }
 .administration-company-dialog .daily-sales-dialog__body { min-block-size: 0; flex: 1 1 auto; overflow: auto; padding: .75rem 1.25rem 1.25rem; }
 .administration-company-dialog .administration-dialog-form { min-block-size: 0; }
-.administration-company-dialog__save { position: sticky; inset-block-start: 0; z-index: 1; margin: -.75rem -1.25rem 0; padding: .7rem 1.25rem; border-bottom: 1px solid var(--line); background: var(--surface); }
+.administration-company-dialog__save { grid-column: 1 / -1; display: flex; justify-content: flex-end; margin-top: .25rem; padding-top: .85rem; border-top: 1px solid var(--line); background: var(--surface); }
 .administration-company-location { gap: .65rem; padding: .8rem .9rem; background: color-mix(in srgb, var(--surface) 97%, var(--brand) 3%); }
 .administration-company-location__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem .8rem; }
 .administration-company-location__grid label,

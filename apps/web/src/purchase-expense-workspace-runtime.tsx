@@ -41,6 +41,8 @@ import { takeMarketingFinanceHandoff, type MarketingFinanceHandoff } from "./mar
 import { hasActivePermission } from "./module-access";
 import type { PurchaseCreditWorkspace } from "./purchase-expense-credit-panel";
 import { BaseerValidatedFormField as BaseerValidatedForm } from "./baseer-validated-form-field";
+import type { BaseerDataGridColumn } from "./baseer-data-grid";
+import { BaseerDataGridField as BaseerDataGrid } from "./baseer-data-grid-field";
 
 // The entry grid contains the search controls and mobile presentation. It is
 // deferred until company configuration has arrived, avoiding a second large
@@ -397,14 +399,6 @@ export function PurchaseExpenseWorkspaceRuntime({
   // The API owns filtering and cursor paging. Rendering a local subset as a
   // complete register was the cause of historical invoices appearing absent.
   const visibleHistory = documents;
-  const historyByDay = useMemo(() => {
-    const days = new Map<string, Document[]>();
-    for (const document of visibleHistory) {
-      const day = document.businessDate.slice(0, 10);
-      days.set(day, [...(days.get(day) ?? []), document]);
-    }
-    return [...days.entries()];
-  }, [visibleHistory]);
   const historyFilters = [
     ...(historySearch
       ? [
@@ -735,6 +729,14 @@ export function PurchaseExpenseWorkspaceRuntime({
     setReversalReason("");
   };
   const openView = (document: Document) => setViewTarget(document);
+  const historyColumns: readonly BaseerDataGridColumn<Document>[] = [
+    { id: "date", header: text.documentDate, width: "8rem", cell: (document) => <bdi dir="ltr">{document.businessDate.slice(0, 10)}</bdi> },
+    { id: "number", header: text.invoiceNumber, width: "11rem", cell: (document) => <div className="purchase-history-table__number"><strong dir="ltr">{document.documentNumber}</strong>{document.postingVersion > 1 ? <small>v{document.postingVersion}</small> : null}</div> },
+    { id: "type", header: text.invoiceType, width: "8rem", cell: (document) => <span>{document.kind === "PURCHASE" ? text.purchaseInvoice : text.expenseInvoice} · {document.status === "POSTED" ? text.posted : text.cancelled}</span> },
+    { id: "party", header: language === "ar" ? "البند والمورد" : "Category & supplier", cell: (document) => <div className="purchase-history-table__party"><strong>{displayName(language, { nameAr: document.categoryNameAr, nameEn: document.categoryNameEn })}</strong>{document.supplierNameAr ? <small>{displayName(language, { nameAr: document.supplierNameAr, nameEn: document.supplierNameEn })}</small> : null}</div> },
+    { id: "amount", header: text.totalAmount, width: "8rem", numeric: true, cell: (document) => <bdi dir="ltr">{formatMoney(document.grossAmount)}</bdi> },
+    { id: "actions", header: language === "ar" ? "الإجراء" : "Action", width: "5.5rem", align: "end", cell: (document) => <BaseerButton type="button" variant="secondary" onClick={() => openView(document)}>{language === "ar" ? "عرض" : "View"}</BaseerButton> },
+  ];
   const openAmendment = (document: Document) => {
     setAmendTarget(document);
     setAmendmentRow(rowForDocument(document));
@@ -1093,69 +1095,9 @@ export function PurchaseExpenseWorkspaceRuntime({
                       </>
                     }
                   />
-                  {historyByDay.length ? (
+                  {visibleHistory.length ? (
                     <>
-                      <div className="purchase-history-by-day">
-                        {historyByDay.map(([day, dayDocuments]) => (
-                          <section key={day} className="purchase-history-day">
-                            <header>
-                              <time dateTime={day} dir="ltr">
-                                {day}
-                              </time>
-                              <span>
-                                {dayDocuments.length}{" "}
-                                {language === "ar"
-                                  ? "فاتورة"
-                                  : dayDocuments.length === 1
-                                    ? "invoice"
-                                    : "invoices"}
-                              </span>
-                            </header>
-                            <div className="purchase-history-day__documents">
-                              {dayDocuments.map((document) => (
-                                <article key={document.id}>
-                                <div className="purchase-history-document__number">
-                                  <strong dir="ltr">
-                                    {document.documentNumber}
-                                  </strong>
-                                  {document.postingVersion > 1 ? (
-                                    <small>v{document.postingVersion}</small>
-                                  ) : null}
-                                </div>
-                                <span>
-                                  {document.kind === "PURCHASE"
-                                    ? text.purchaseInvoice
-                                    : text.expenseInvoice}{" "}
-                                  ·{" "}
-                                  {document.status === "POSTED"
-                                    ? text.posted
-                                    : text.cancelled}
-                                </span>
-                                <span>
-                                  {displayName(language, {
-                                    nameAr: document.categoryNameAr,
-                                    nameEn: document.categoryNameEn,
-                                  })}
-                                  {document.supplierNameAr
-                                    ? ` · ${displayName(language, { nameAr: document.supplierNameAr, nameEn: document.supplierNameEn })}`
-                                    : ""}
-                                </span>
-                                <strong>
-                                  {formatMoney(document.grossAmount)}
-                                </strong>
-                                <BaseerButton
-                                  type="button"
-                                  variant="secondary"
-                                  onClick={() => openView(document)}
-                                >
-                                  {language === "ar" ? "عرض" : "View"}
-                                </BaseerButton>
-                                </article>
-                              ))}
-                            </div>
-                          </section>
-                        ))}
-                      </div>
+                      <BaseerDataGrid ariaLabel={text.invoiceHistory} caption={text.invoiceHistory} className="purchase-history-table" rows={visibleHistory} columns={historyColumns} rowKey={(document) => document.id} />
                       {historyHasMore ? (
                         <BaseerButton
                           type="button"

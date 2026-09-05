@@ -242,6 +242,32 @@ test("purchase-entry clerk sees and loads only the entry surface", async ({ page
   expect(requests.some((request) => request.includes("/v1/finance/purchase-expense-documents/credit-workspace"))).toBeFalsy();
 });
 
+test("purchase invoice history renders its server page as a data table, not grouped cards", async ({ page, isMobile }) => {
+  const historyPermissions = ["finance.purchase_expense.read"];
+  await mockAuthenticatedSession(page, "ar", historyPermissions);
+  await page.route("**/v1/**", async (route) => {
+    const url = new URL(route.request().url());
+    if (url.pathname === "/v1/companies/available") return fulfill(route, availableCompanies(historyPermissions));
+    if (url.pathname === "/v1/finance/purchase-expense-documents") return fulfill(route, {
+      documents: [{ id: "purchase-history-1", documentNumber: "NXR-20260901", kind: "PURCHASE", settlementKind: "PAID", status: "POSTED", businessDate: "2026-09-01", grossAmount: "80.0000", batchNumber: null, supplierNameAr: "مورد الاختبار", supplierNameEn: "Test supplier", supplierId: "supplier-1", categoryId: "category-1", categoryNameAr: "مواد تشغيل", categoryNameEn: "Operating materials", supplierInvoiceNumber: "SUP-001", supplierInvoiceMissingReason: null, supplierInvoiceDate: "2026-09-01", vatRateBasisPoints: 1500, assetWarrantyFollowUp: false, notes: null, postingVersion: 1, allocations: [] }],
+      ownerCanAmend: false, hasMore: false, nextCursor: null,
+    });
+    return fulfill(route, {});
+  });
+
+  await page.goto("/#module=operations&section=2");
+  if (isMobile) await page.getByRole("button", { name: /الأقسام/ }).click();
+  const navigation = isMobile ? page.locator(".mobile-drawer .theme-navigation") : page.locator(".module-sidebar .theme-navigation");
+  await navigation.getByText("المشتريات", { exact: true }).click();
+  if (isMobile) await page.getByRole("button", { name: "إغلاق" }).click();
+
+  const register = page.getByRole("region", { name: "سجل الفواتير" });
+  await expect(register).toBeVisible();
+  await expect(register.getByText("NXR-20260901")).toBeVisible();
+  await expect(register.locator("table")).toHaveCount(1);
+  await expect(page.locator(".purchase-history-day, .purchase-history-day__documents")).toHaveCount(0);
+});
+
 test("purchase date calendar escapes the data table and keeps its action clear of the ISO value", async ({ page, isMobile }) => {
   const requests: string[] = [];
   await mockPurchaseEntryClerk(page, requests);
