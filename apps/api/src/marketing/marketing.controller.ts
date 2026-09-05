@@ -1,14 +1,15 @@
 import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Param, Post, Put, Query, UnauthorizedException } from "@nestjs/common";
-import { analysisReadinessReceiptSchema, archiveMarketingCampaignRequestSchema, createMarketingCampaignAnalysisFeedbackRequestSchema, createMarketingCampaignRequestSchema, linkMarketingCampaignContextRequestSchema, linkMarketingCampaignFinancialDocumentRequestSchema, marketingCalendarQuerySchema, marketingCalendarReadSchema, marketingCampaignAnalysisSchema, marketingEntityReceiptSchema, marketingLinkableFinancialDocumentsSchema, marketingProviderConnectionsReadSchema, marketingProviderSchema, marketingTargetMonthSchema, marketingWorkspaceSchema, requestMarketingProviderConnectionSetupSchema, stopMarketingCampaignRequestSchema, updateMarketingCampaignRequestSchema, updateMarketingReputationReplyPolicyRequestSchema, upsertMarketingSalesTargetRequestSchema } from "@baseer-erp/contracts";
+import { analysisReadinessReceiptSchema, archiveMarketingCampaignRequestSchema, createMarketingCampaignAnalysisFeedbackRequestSchema, createMarketingCampaignRequestSchema, linkMarketingCampaignContextRequestSchema, linkMarketingCampaignFinancialDocumentRequestSchema, marketingCalendarQuerySchema, marketingCalendarReadSchema, marketingCampaignAnalysisSchema, marketingEntityReceiptSchema, marketingGoogleBusinessPilotLocationsReadSchema, marketingGoogleBusinessPilotResourcesReadSchema, marketingGoogleBusinessPilotSelectionReceiptSchema, marketingLinkableFinancialDocumentsSchema, marketingProviderConnectionsReadSchema, marketingProviderSchema, marketingTargetMonthSchema, marketingWorkspaceSchema, requestMarketingProviderConnectionSetupSchema, selectMarketingGoogleBusinessPilotLocationRequestSchema, stopMarketingCampaignRequestSchema, updateMarketingCampaignRequestSchema, updateMarketingReputationReplyPolicyRequestSchema, upsertMarketingSalesTargetRequestSchema } from "@baseer-erp/contracts";
 
 import { CompanyContextService } from "../company-context/company-context.service.js";
 import { MarketingGoogleBusinessOAuthPilotService } from "./marketing-google-business-oauth-pilot.service.js";
+import { MarketingGoogleBusinessResourceSelectionService } from "./marketing-google-business-resource-selection.service.js";
 import { MarketingService } from "./marketing.service.js";
 import { AnalysisReadinessService } from "../ai-platform/analysis-readiness.service.js";
 
 @Controller("marketing")
 export class MarketingController {
-  constructor(private readonly companyContext: CompanyContextService, private readonly marketing: MarketingService, private readonly analysisReadiness: AnalysisReadinessService, private readonly googleBusinessPilot: MarketingGoogleBusinessOAuthPilotService) {}
+  constructor(private readonly companyContext: CompanyContextService, private readonly marketing: MarketingService, private readonly analysisReadiness: AnalysisReadinessService, private readonly googleBusinessPilot: MarketingGoogleBusinessOAuthPilotService, private readonly googleBusinessSelection: MarketingGoogleBusinessResourceSelectionService) {}
 
   @Get()
   async workspace(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
@@ -122,6 +123,25 @@ export class MarketingController {
   @Get("provider-connections/google-business/pilot/callback")
   async completeGoogleBusinessPilot(@Query("state") state: string | undefined, @Query("code") code: string | undefined, @Query("error") error: string | undefined) {
     return { outcome: await this.googleBusinessPilot.complete({ state, code, error }) };
+  }
+
+  /** MKT-02B: read-only resource discovery after the ARZ-only pilot consent. */
+  @Get("provider-connections/google-business/pilot/resources")
+  async googleBusinessPilotResources(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    return marketingGoogleBusinessPilotResourcesReadSchema.parse(await this.googleBusinessSelection.resources(await this.context(authorization, companyId, "marketing.google-connection.manage")));
+  }
+
+  @Get("provider-connections/google-business/pilot/resources/locations")
+  async googleBusinessPilotLocations(@Query("accountResourceName") accountResourceName: string | undefined, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    if (!accountResourceName) throw new BadRequestException("Google Business account is required.");
+    return marketingGoogleBusinessPilotLocationsReadSchema.parse(await this.googleBusinessSelection.locations(await this.context(authorization, companyId, "marketing.google-connection.manage"), accountResourceName));
+  }
+
+  @Put("provider-connections/google-business/pilot/selection")
+  async selectGoogleBusinessPilotLocation(@Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const parsed = selectMarketingGoogleBusinessPilotLocationRequestSchema.safeParse(body);
+    if (!parsed.success) throw new BadRequestException("Google Business location selection is invalid.");
+    return marketingGoogleBusinessPilotSelectionReceiptSchema.parse(await this.googleBusinessSelection.select(await this.context(authorization, companyId, "marketing.google-connection.manage"), parsed.data));
   }
 
   @Put("reputation/reply-policy")

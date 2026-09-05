@@ -114,6 +114,18 @@ lineage، صلاحيات النشر الآلي، تشغيل worker وقطع تط
 - **دليل الإقفال:** اختبار عقد الخادم يثبت flag أهلية مشتقاً من allowlist
   الخادم، واختبار الواجهة يثبت غياب الزر للشركات أو الموصلات غير المؤهلة.
 
+### قرار MKT-02B: اكتشاف واختيار مورد ARZ
+
+- **التصنيف:** `ARCHITECTURAL`؛ يعيد فتح egress Google read-only وaccess token
+  المؤقت وعقد اختيار المورد وكتابة mapping المقيد. لا يفتح sync أو publisher.
+- **الحدود:** ARZ فقط بعد `AUTHORIZED_AWAITING_SELECTION`. الخادم وحده يبدل
+  refresh token ويقرأ الحسابات والمواقع من hosts Google الثابتة؛ لا cache أو raw
+  payload أو اختيار بالاسم أو مراجعات/Performance أو رد/Ads أو المعلم الشامي.
+- **العقد:** `docs/marketing/GOOGLE_BUSINESS_ARZ_SELECTION_PILOT_2026-09-06.md`؛
+  vault وmapping والعزل موجودة، ولا migration أو مكتبة.
+- **البوابات:** G0–G4 معتمدة للتنفيذ المحلي. G5–G7 تتطلب mock egress وعزل company
+  وidempotency وواجهة. G8 والتجربة الحية تتطلب مراجعة تسليم مستقلة؛ لا حذف للمصدر السابق.
+
 ### قرار شريحة G0–G4: الشرح عند الطلب
 
 - **G0:** الشريحة تخدم المدير غير المختص: علامة `؟` مجاورة لمصطلح تسويقي تشرح

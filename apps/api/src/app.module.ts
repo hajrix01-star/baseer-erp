@@ -160,6 +160,7 @@ import { MarketingController } from './marketing/marketing.controller.js';
 import { MarketingGooglePlatformService } from './marketing/marketing-google-platform.service.js';
 import { MarketingGoogleOAuthService } from './marketing/marketing-google-oauth.service.js';
 import { MarketingGoogleBusinessOAuthPilotService } from './marketing/marketing-google-business-oauth-pilot.service.js';
+import { MarketingGoogleBusinessResourceSelectionService } from './marketing/marketing-google-business-resource-selection.service.js';
 import { MarketingGoogleCredentialVault } from './marketing/marketing-google-credential-vault.js';
 import { MarketingService } from './marketing/marketing.service.js';
 import { InboundEvidenceController } from './inbound-evidence/inbound-evidence.controller.js';
@@ -318,6 +319,7 @@ import { WhatsappInvoiceMonitoringSettingsService } from './whatsapp-invoice-mon
     MarketingGoogleOAuthService,
     MarketingGoogleCredentialVault,
     MarketingGoogleBusinessOAuthPilotService,
+    MarketingGoogleBusinessResourceSelectionService,
     MarketingService,
     InboundEvidenceService,
     InboundEvidenceGmailService,
