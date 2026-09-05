@@ -58,6 +58,10 @@
 - **G2:** `main.tsx` يبقى حد الاختيار قبل `App` وservice worker. لا عقد أو
   API أو schema أو صلاحية. رابط علامة Google يصبح `/about` فقط بعد نشر الصفحة
   وفحصها الحي؛ ملكية `hajrix.com` في Search Console خارج الكود.
+- **G2.2:** ملف تحقق Search Console الذي تصدره Google أصل عام ثابت في
+  `apps/web/public/`، لا يحمل سراً أو JavaScript أو بيانات مستخدم، ويخدم من
+  جذر نفس أصل Baseer. لا يغير جلسة ERP أو عقدها؛ إزالته بعد التحقق غير مسموحة
+  ما دامت Google تطلب بقاء التحقق.
 - **G3:** React/Vite/CSS و`BaseerBrand`/`BaseerCard`/`BaseerButton` القائمة
   فقط؛ لا مكتبة أو خط أو خدمة خارجية. رُفضت صفحة مستقلة أو إطار UI جديد لأنها
   تزيد النشر والسطح العام بلا حاجة.
