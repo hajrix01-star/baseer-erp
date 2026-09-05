@@ -235,6 +235,21 @@ export type FileMetadata = Prisma.FileMetadataModel
  */
 export type CompanyFinanceProfile = Prisma.CompanyFinanceProfileModel
 /**
+ * Model MarketingProviderCredentialEnvelope
+ * Server-only sealed credential envelope. No public API may serialize these fields.
+ */
+export type MarketingProviderCredentialEnvelope = Prisma.MarketingProviderCredentialEnvelopeModel
+/**
+ * Model MarketingGoogleBusinessLocationMapping
+ * Explicitly selected GBP resource only. This foundation cannot create a row.
+ */
+export type MarketingGoogleBusinessLocationMapping = Prisma.MarketingGoogleBusinessLocationMappingModel
+/**
+ * Model MarketingProviderSyncRun
+ * Immutable-safe operational metadata. A foundation run can never claim success.
+ */
+export type MarketingProviderSyncRun = Prisma.MarketingProviderSyncRunModel
+/**
  * Model FinanceAccount
  * 
  */
@@ -453,10 +468,17 @@ export type MarketingSalesTarget = Prisma.MarketingSalesTargetModel
 /**
  * Model MarketingProviderConnection
  * Company-scoped, audited readiness state for a future Google connection.
- * The later OAuth gate adds a separate encrypted credential vault and account
- * mapping; those sensitive concepts deliberately do not exist in this model.
+ * Credentials and selected resources are held in separate company-scoped
+ * records; this row never contains secret material.
  */
 export type MarketingProviderConnection = Prisma.MarketingProviderConnectionModel
+/**
+ * Model MarketingGoogleBusinessOAuthState
+ * Pilot-only OAuth state. It binds the callback to its company, initiating
+ * membership and exact Google Business connection; provider credentials never
+ * live here.
+ */
+export type MarketingGoogleBusinessOAuthState = Prisma.MarketingGoogleBusinessOAuthStateModel
 /**
  * Model MarketingProviderOAuthState
  * One short-lived, single-use OAuth attempt. It is company-scoped and stores

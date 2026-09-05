@@ -526,11 +526,12 @@ function targetStatus(sales: string | null, target: Prisma.Decimal | null) {
 
 function publicProviderConnection(
   provider: "GOOGLE_ADS" | "GOOGLE_BUSINESS",
-  connection: Readonly<{ status: "NOT_CONNECTED" | "SETUP_REQUESTED" | "AUTHORIZING" | "BLOCKED"; setupRequestedAt: Date | null }> | undefined,
+  connection: Readonly<{ status: "NOT_CONNECTED" | "SETUP_REQUESTED" | "AUTHORIZING" | "AUTHORIZED_AWAITING_SELECTION" | "BLOCKED"; setupRequestedAt: Date | null }> | undefined,
   readiness = { ready: false, missing: [] as readonly string[] },
 ) {
   const requested = connection?.status === "SETUP_REQUESTED";
   const authorizing = connection?.status === "AUTHORIZING";
+  const awaitingSelection = connection?.status === "AUTHORIZED_AWAITING_SELECTION";
   const business = provider === "GOOGLE_BUSINESS";
   return {
     provider,
@@ -540,6 +541,8 @@ function publicProviderConnection(
     allowedOperation: business ? "BUSINESS_READ_AND_GOVERNED_PUBLISH" as const : "ADS_READ_ONLY" as const,
     messageAr: authorizing
       ? "بدأت رحلة موافقة Google لهذه الشركة. أكملها في نافذة Google خلال عشر دقائق؛ لا يوجد حساب مختار أو مزامنة قبل التحقق اللاحق."
+      : awaitingSelection
+      ? "اكتملت موافقة Google Business للتجربة، لكن لا يزال اختيار الحساب والموقع والمزامنة والنشر غير متاحين في هذه المرحلة."
       : readiness.ready
       ? "إعداد Google المركزي موجود على الخادم. رحلة التفويض واختيار الحساب/الموقع لم تُفعّل بعد؛ لا يوجد اتصال أو مزامنة حتى تكتمل بوابة OAuth المراجعة."
       : requested
@@ -549,6 +552,8 @@ function publicProviderConnection(
         : "يتطلب Google Ads إعداداً مركزياً معتمداً (مشروع Google وdeveloper token وسياسة قراءة فقط) قبل بدء الربط الذاتي. لا توجد بيانات أو صلاحية إنفاق حالياً.",
     messageEn: authorizing
       ? "This company has started Google consent. Complete it in the Google window within ten minutes; no account is selected and no sync occurs before later verification."
+      : awaitingSelection
+      ? "Google Business pilot consent is complete, but account/location selection, synchronization and publishing remain unavailable in this stage."
       : readiness.ready
       ? "Central Google configuration is present on the server. The authorization and explicit account/location-selection journey is not enabled yet; there is no connection or sync until the reviewed OAuth gate is completed."
       : requested

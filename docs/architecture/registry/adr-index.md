@@ -11,5 +11,8 @@
 | ADR-OPS-001 | Active | نشر Baseer ERP الخاص تلقائياً عبر SSH مقيد وimmutable manifests | `../ADR-OPS-001-PRIVATE-ONLINE-CONTINUOUS-DELIVERY.md` |
 | ADR-OPS-002 | Active | بوابة قبول PR كاملة ثم نشر main سريع مع preflight وcache | `../ADR-OPS-002-FAST-PRIVATE-ONLINE-RELEASES.md` |
 | ADR-OPS-003 | Active | اكتشاف إصدار واجهة منشور ومطالبة تحديث مركزية بلا Service Worker | `../ADR-OPS-003-CENTRAL-WEB-RELEASE-UPDATE-PROMPT.md` |
+| ADR-MKT-001 | Active | حد موصلات Google: خلفية خادمية، أسرار منفصلة، اختيار صريح وfail-closed | `../ADR-MKT-001-GOOGLE-PROVIDER-BOUNDARY.md` |
+| ADR-MKT-002 | Active for public legal-page slice | صفحات خصوصية/شروط عامة ثابتة قبل OAuth، بلا جلسة أو API أو أسرار | `../ADR-MKT-002-GOOGLE-OAUTH-PUBLIC-LEGAL-PAGES.md` |
+| ADR-WAI-001 | Proposed | مراقبة فواتير WhatsApp: Baileys غير رسمي، mapping مجموعة/شركة، فصل رقابي بلا أثر مالي | `../ADR-WAI-001-WHATSAPP-INVOICE-MONITORING-BOUNDARY.md` |
 
 لا يحذف قرار قديم. عند استبدال قرار، يضاف صف جديد يذكر القرار الذي حل محله وتاريخه. أي تغيير `ARCHITECTURAL` يراجع هذا الفهرس قبل البناء.

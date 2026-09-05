@@ -1,0 +1,52 @@
+.baseer-public-legal {
+  min-block-size: 100dvh;
+  padding: clamp(1rem, 3vw, 3rem);
+  color: var(--ink);
+  background: radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--brand) 12%, transparent), transparent 34rem), var(--canvas);
+}
+.baseer-public-legal__header,
+.baseer-public-legal__content {
+  width: min(100%, 58rem);
+  margin-inline: auto;
+}
+.baseer-public-legal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-block-size: 3.5rem;
+  margin-block-end: clamp(1.75rem, 5vw, 4rem);
+}
+.baseer-public-legal__brand { display: inline-flex; border-radius: var(--radius-sm); }
+.baseer-public-legal__brand:focus-visible,
+.baseer-public-legal__footer :is(a, .baseer-button):focus-visible,
+.baseer-public-legal__language .baseer-button:focus-visible { outline: 3px solid color-mix(in srgb, var(--brand) 42%, transparent); outline-offset: 3px; }
+.baseer-public-legal__language { display: inline-flex; padding: 0.1875rem; border: 1px solid var(--border-subtle); border-radius: 999px; background: var(--surface-raised); }
+.baseer-public-legal__language .baseer-button,
+.baseer-public-legal__footer .baseer-button { min-block-size: 2.25rem; padding-inline: 0.875rem; font-weight: 750; }
+.baseer-public-legal__language .baseer-button[aria-pressed="true"] { color: var(--on-brand); background: var(--brand); }
+.baseer-public-legal__content { display: grid; gap: var(--space-5); padding-block-end: clamp(2rem, 6vw, 5rem); }
+.baseer-public-legal__hero { padding: clamp(1.5rem, 4vw, 3rem); }
+.baseer-public-legal__eyebrow { margin: 0 0 var(--space-3); color: var(--brand); font-size: var(--font-caption); font-weight: 850; letter-spacing: 0.06em; text-transform: uppercase; }
+.baseer-public-legal__hero h1 { margin: 0; font-size: var(--font-display); line-height: 1.1; letter-spacing: -0.03em; }
+.baseer-public-legal__description { max-inline-size: 44rem; margin: var(--space-4) 0 0; color: var(--muted); font-size: clamp(1rem, 1.7vw, 1.125rem); line-height: 1.75; }
+.baseer-public-legal__updated { margin: var(--space-5) 0 0; color: var(--muted); font-size: var(--font-caption); font-weight: 700; }
+.baseer-public-legal__notice { padding: var(--space-4) var(--space-5); border-inline-start: 4px solid var(--status-warning); border-radius: var(--radius-sm); color: color-mix(in srgb, var(--ink) 84%, var(--status-warning)); background: var(--status-warning-surface); font-size: var(--font-label); line-height: 1.65; }
+.baseer-public-legal__document { display: grid; gap: clamp(1.5rem, 3vw, 2.5rem); padding: clamp(1.5rem, 4vw, 3rem); border: 1px solid var(--border-subtle); border-radius: var(--card-radius); background: var(--surface-raised); box-shadow: 0 12px 32px rgb(11 36 26 / 6%); }
+.baseer-public-legal__document section { display: grid; gap: var(--space-3); }
+.baseer-public-legal__document h2 { margin: 0; font-size: var(--font-title-sm); line-height: 1.3; }
+.baseer-public-legal__document p,
+.baseer-public-legal__document ul { margin: 0; color: color-mix(in srgb, var(--ink) 84%, var(--muted)); line-height: 1.8; }
+.baseer-public-legal__document ul { display: grid; gap: var(--space-2); padding-inline-start: 1.4rem; }
+.baseer-public-legal__footer { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); padding-block: var(--space-3); }
+.baseer-public-legal__footer a { color: var(--brand-deep); font-weight: 800; text-underline-offset: 0.2em; }
+.baseer-public-legal__footer .baseer-button { border: 1px solid var(--border-subtle); background: var(--surface-raised); }
+.baseer-public-legal__footer .baseer-button:active { transform: scale(0.97); }
+@media (max-width: 38rem) {
+  .baseer-public-legal { padding: var(--space-4); }
+  .baseer-public-legal__header { align-items: flex-start; flex-direction: column; margin-block-end: var(--space-6); }
+  .baseer-public-legal__document,
+  .baseer-public-legal__hero { padding: var(--space-5); }
+  .baseer-public-legal__footer { align-items: stretch; flex-direction: column; }
+  .baseer-public-legal__footer .baseer-button { inline-size: 100%; }
+}
