@@ -42,6 +42,11 @@ if (!caddyBlock.includes('"127.0.0.1:18080:80"') || /\n\s*-\s*"(?:80|443):/.test
   throw new Error("Production Caddy must use the existing private loopback listener, never claim public edge ports.");
 }
 
+const caddyfile = readFileSync("docker/Caddyfile.private-online", "utf8");
+if (!caddyfile.includes("http://{$BASEER_PUBLIC_DOMAIN}")) {
+  throw new Error("Private Caddy must not re-terminate shared-edge TLS or redirect the public domain.");
+}
+
 for (const variable of new Set(Object.values(requiredImages))) {
   const match = environmentTemplate.match(new RegExp(`^${variable}=([^\\r\\n]+)$`, "m"));
   if (!match || !/@sha256:[a-f0-9]{64}$/i.test(match[1])) {
