@@ -279,6 +279,7 @@ export class TreasuryService {
       balanceAsOf: amounts.balanceAsOf.toFixed(4),
       inflow: amounts.inflow.toFixed(4),
       outflow: amounts.outflow.toFixed(4),
+      net: amounts.inflow.minus(amounts.outflow).toFixed(4),
     };
   }
 

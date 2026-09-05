@@ -65,6 +65,8 @@ type Vault = {
   openingBalance: string;
   inflow: string;
   outflow: string;
+  /** Server-owned net movement for the selected period. */
+  net: string;
 };
 type TreasuryReceipt = {
   companyId: string;
@@ -908,7 +910,6 @@ export function TreasuryWorkspaceRuntime({ language }: { language: Language }) {
               value={formatMoney(workspace.summary.net)}
             />
           </BaseerSummaryMetricGrid>
-          <p className="treasury-summary-period-formula">{text.periodNetFormula}</p>
           <BaseerCard variant="joined-ledger">
             <header className="administration-section-heading">
               <div>
@@ -1565,20 +1566,16 @@ function VaultCards({
             </details>
           </header>
           <div className="baseer-metric-card__balance">
-            <small>{text.closingBalance}</small>
+            <small>{text.periodNetClosing}</small>
             <strong
               className={
-                vault.balanceAsOf.startsWith("-") ? "is-negative" : undefined
+                vault.net.startsWith("-") ? "is-negative" : undefined
               }
             >
-              {formatMoney(vault.balanceAsOf)}
+              {formatMoney(vault.net)}
             </strong>
           </div>
           <div className="baseer-metric-card__flows">
-            <span>
-              <small>{text.openingBalance}</small>
-              <strong>{formatMoney(vault.openingBalance)}</strong>
-            </span>
             <span>
               <small>↑ {text.incoming}</small>
               <strong className="is-inflow">{formatMoney(vault.inflow)}</strong>
