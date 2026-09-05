@@ -9,13 +9,13 @@ const rootDeployer = readFileSync("ops/private-online/server/baseer-erp-deploy-r
 const installer = readFileSync("ops/private-online/server/install-baseer-erp-deployer.sh", "utf8");
 
 function serviceBlock(name) {
-  const match = compose.match(new RegExp(`^  ${name}:\\n([\\s\\S]*?)(?=^  [A-Za-z][A-Za-z0-9-]*:|\\Z)`, "m"));
+  const match = compose.match(new RegExp(`^  ${name}:\\r?\\n([\\s\\S]*?)(?=^  [A-Za-z][A-Za-z0-9-]*:\\r?$|(?![\\s\\S]))`, "m"));
   if (!match) throw new Error(`Production compose is missing the ${name} service.`);
   return match[0];
 }
 
 function workflowJobBlock(name) {
-  const match = workflow.match(new RegExp(`^  ${name}:\\n([\\s\\S]*?)(?=^  [A-Za-z][A-Za-z0-9-]*:\\n|(?![\\s\\S]))`, "m"));
+  const match = workflow.match(new RegExp(`^  ${name}:\\r?\\n([\\s\\S]*?)(?=^  [A-Za-z][A-Za-z0-9-]*:\\r?$|(?![\\s\\S]))`, "m"));
   if (!match) throw new Error(`Release workflow is missing the ${name} job.`);
   return match[0];
 }
@@ -179,6 +179,7 @@ const releaseEnvironment = parseEnvironment([
   `BASEER_WEB_IMAGE=${manifest.images.web}`,
   `BASEER_POSTGRES_IMAGE=postgres@${testDigest("d")}`,
   `BASEER_CADDY_IMAGE=caddy@${testDigest("e")}`,
+  "AI_CREDENTIAL_ENCRYPTION_KEY=MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=",
 ].join("\n"));
 
 verifyPrivateOnlineReleasePreflight({ environment: releaseEnvironment, manifest });
