@@ -44,12 +44,12 @@ export class WhatsappInvoiceMonitoringController {
   async configureConnection(@Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
     const request = configureWhatsappInvoiceConnectionRequestSchema.safeParse(body);
     if (!request.success) throw new BadRequestException("Invalid WhatsApp personal connection configuration.");
-    return whatsappInvoiceMonitoringSettingsSchema.shape.connection.parse(await this.settingsService.configureConnection(await this.authorize(authorization, companyId, "operations.whatsapp_invoice_monitoring.review"), request.data));
+    return whatsappInvoiceMonitoringSettingsSchema.shape.connection.parse(await this.settingsService.configureConnection(await this.authorizeConnectionControl(authorization, companyId), request.data));
   }
 
   @Post("settings/connection/start")
   async startConnection(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
-    const context = await this.authorize(authorization, companyId, "operations.whatsapp_invoice_monitoring.review");
+    const context = await this.authorizeConnectionControl(authorization, companyId);
     const scope = await this.settingsService.connectionControlScope(context);
     await this.connector.start(scope);
     await this.settingsService.auditConnectionControl(context, scope, "start_requested");
@@ -59,7 +59,7 @@ export class WhatsappInvoiceMonitoringController {
 
   @Post("settings/connection/stop")
   async stopConnection(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
-    const context = await this.authorize(authorization, companyId, "operations.whatsapp_invoice_monitoring.review");
+    const context = await this.authorizeConnectionControl(authorization, companyId);
     const scope = await this.settingsService.connectionControlScope(context);
     await this.connector.stop(scope);
     await this.settingsService.auditConnectionControl(context, scope, "stop_requested");
@@ -69,7 +69,7 @@ export class WhatsappInvoiceMonitoringController {
 
   @Get("settings/connection/qr")
   async connectionQr(@Headers("authorization") authorization: string | undefined, @Headers("x-baseer-company-id") companyId: string | undefined, @Res() reply: FastifyReply) {
-    const scope = await this.settingsService.connectionControlScope(await this.authorize(authorization, companyId, "operations.whatsapp_invoice_monitoring.review"));
+    const scope = await this.settingsService.connectionControlScope(await this.authorizeConnectionControl(authorization, companyId));
     const result = this.connector.qr(scope);
     const qr = whatsappInvoiceConnectionQrReceiptSchema.parse({ qr: result.qr, expiresAt: result.expiresAt?.toISOString() ?? null });
     return reply.header("Cache-Control", "private, no-store").header("Pragma", "no-cache").send(qr);
@@ -77,7 +77,7 @@ export class WhatsappInvoiceMonitoringController {
 
   @Get("settings/pilot/groups")
   async pilotGroups(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
-    const scope = await this.settingsService.connectionControlScope(await this.authorize(authorization, companyId, "operations.whatsapp_invoice_monitoring.review"));
+    const scope = await this.settingsService.connectionControlScope(await this.authorizeConnectionControl(authorization, companyId));
     return this.connector.groups(scope);
   }
 
@@ -137,5 +137,9 @@ export class WhatsappInvoiceMonitoringController {
     const parsedCompanyId = companyIdSchema.safeParse(companyId); if (!parsedCompanyId.success) throw new ForbiddenException("Company WhatsApp invoice monitoring scope is not permitted.");
     const authorized = await this.companyContext.authorize({ accessToken, companyId: parsedCompanyId.data, requiredCapabilities: [capability] });
     return { tenantId: authorized.principal.tenantId, companyId: authorized.company.id, actorUserId: authorized.principal.userId };
+  }
+
+  private async authorizeConnectionControl(authorization: string | undefined, companyId: string | undefined) {
+    return this.authorize(authorization, companyId, "operations.whatsapp_invoice_monitoring.connection.manage");
   }
 }

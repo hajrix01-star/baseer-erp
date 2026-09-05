@@ -73,30 +73,26 @@ export class WhatsappInvoiceBaileysPilotFoundationService {
 
     return this.database.inTenantTransaction(scope.tenantId, async (tx) => {
       await this.assertConnection(tx, scope);
-      const current = await tx.whatsappInvoiceConnectionSession.findFirst({
-        where: { tenantId: scope.tenantId, connectionId: scope.connectionId },
-        select: { id: true, rowVersion: true },
+      return this.saveEncryptedAuthState(tx, scope, encrypted, configuration.keyVersion, expectedRowVersion);
+    });
+  }
+
+  /** A live connector may write credentials only while it owns the current lease fence. */
+  async saveAuthStateOwned(input: Readonly<WhatsappInvoiceConnectionScope & { ownerToken: string; fence: bigint; state: JsonObject; expectedRowVersion: number }>): Promise<Readonly<{ rowVersion: number }>> {
+    this.assertScope(input);
+    this.assertOwnerToken(input.ownerToken);
+    if (input.fence < 1n || !Number.isSafeInteger(input.expectedRowVersion) || input.expectedRowVersion < 0) throw new ConflictException("The WhatsApp session write fence is invalid.");
+    const configuration = this.configuration();
+    const encrypted = this.encryptJson(input.state, this.sessionAad(input, configuration.keyVersion), configuration.key);
+    return this.database.inTenantTransaction(input.tenantId, async (tx) => {
+      await this.assertConnection(tx, input);
+      const now = new Date();
+      const lease = await tx.whatsappInvoiceConnectionLease.findFirst({
+        where: { tenantId: input.tenantId, connectionId: input.connectionId, ownerToken: input.ownerToken, fence: input.fence, expiresAt: { gt: now } },
+        select: { id: true },
       });
-      if (!current) {
-        if (expectedRowVersion !== undefined && expectedRowVersion !== 0) throw new ConflictException("The WhatsApp session has changed.");
-        try {
-          const created = await tx.whatsappInvoiceConnectionSession.create({
-            data: { tenantId: scope.tenantId, connectionId: scope.connectionId, ciphertext: encrypted.ciphertext, iv: encrypted.iv, keyVersion: configuration.keyVersion },
-            select: { rowVersion: true },
-          });
-          return { rowVersion: created.rowVersion };
-        } catch (error) {
-          if (isUniqueConstraint(error)) throw new ConflictException("The WhatsApp session has changed.");
-          throw error;
-        }
-      }
-      if (expectedRowVersion !== undefined && current.rowVersion !== expectedRowVersion) throw new ConflictException("The WhatsApp session has changed.");
-      const updated = await tx.whatsappInvoiceConnectionSession.updateMany({
-        where: { id: current.id, tenantId: scope.tenantId, connectionId: scope.connectionId, rowVersion: current.rowVersion },
-        data: { ciphertext: encrypted.ciphertext, iv: encrypted.iv, keyVersion: configuration.keyVersion, rowVersion: { increment: 1 } },
-      });
-      if (updated.count !== 1) throw new ConflictException("The WhatsApp session has changed.");
-      return { rowVersion: current.rowVersion + 1 };
+      if (!lease) throw new ConflictException("The WhatsApp connection lease was lost before session persistence.");
+      return this.saveEncryptedAuthState(tx, input, encrypted, configuration.keyVersion, input.expectedRowVersion);
     });
   }
 
@@ -115,7 +111,7 @@ export class WhatsappInvoiceBaileysPilotFoundationService {
     });
   }
 
-  async acquireConnectionLease(input: Readonly<WhatsappInvoiceConnectionScope & { ownerToken: string; ttlMs: number }>): Promise<WhatsappInvoiceConnectionLease> {
+  async acquireConnectionLease(input: Readonly<WhatsappInvoiceConnectionScope & { ownerToken: string; ttlMs: number; resumeOnly?: boolean }>): Promise<WhatsappInvoiceConnectionLease> {
     this.assertScope(input);
     this.assertOwnerToken(input.ownerToken);
     const ttlMs = this.leaseDuration(input.ttlMs);
@@ -128,6 +124,10 @@ export class WhatsappInvoiceBaileysPilotFoundationService {
         select: { id: true, ownerToken: true, fence: true, expiresAt: true },
       });
       if (!current) {
+        // An automatic recovery must never create a lease. A successful manual
+        // start always creates the durable row first; retaining it lets the
+        // conditional claim below bind recovery to the current stop intent.
+        if (input.resumeOnly) return { acquired: false };
         try {
           const created = await tx.whatsappInvoiceConnectionLease.create({
             data: { tenantId: input.tenantId, connectionId: input.connectionId, ownerToken: input.ownerToken, fence: 1n, heartbeatAt: now, expiresAt },
@@ -141,7 +141,10 @@ export class WhatsappInvoiceBaileysPilotFoundationService {
       }
       if (current.expiresAt <= now) {
         const claimed = await tx.whatsappInvoiceConnectionLease.updateMany({
-          where: { id: current.id, tenantId: input.tenantId, connectionId: input.connectionId, expiresAt: { lte: now } },
+          where: {
+            id: current.id, tenantId: input.tenantId, connectionId: input.connectionId, expiresAt: { lte: now },
+            ...(input.resumeOnly ? { connection: { is: { status: WhatsappInvoiceConnectionStatus.GAP_DETECTED } } } : {}),
+          },
           data: { ownerToken: input.ownerToken, fence: { increment: 1 }, heartbeatAt: now, expiresAt },
         });
         if (claimed.count !== 1) return { acquired: false };
@@ -184,6 +187,17 @@ export class WhatsappInvoiceBaileysPilotFoundationService {
       data: { expiresAt: releasedAt, heartbeatAt: new Date(releasedAt.valueOf() - 1) },
     }));
     return result.count === 1;
+  }
+
+  /** Durable stop intent is visible to the current owner on every API worker. */
+  async requestConnectionStop(scope: WhatsappInvoiceConnectionScope): Promise<void> {
+    this.assertScope(scope);
+    await this.database.inTenantTransaction(scope.tenantId, async (tx) => {
+      await this.assertConnection(tx, scope);
+      const now = new Date();
+      await tx.whatsappInvoiceConnection.updateMany({ where: { id: scope.connectionId, tenantId: scope.tenantId }, data: { status: WhatsappInvoiceConnectionStatus.DISCONNECTED } });
+      await tx.whatsappInvoiceConnectionLease.updateMany({ where: { tenantId: scope.tenantId, connectionId: scope.connectionId }, data: { expiresAt: now, heartbeatAt: new Date(now.valueOf() - 1) } });
+    });
   }
 
   /**
@@ -384,6 +398,33 @@ export class WhatsappInvoiceBaileysPilotFoundationService {
       }
       return { accepted: true, inboundMessageId: message.id, assetId: asset.id, mediaWorkItemId: workItem.id };
     });
+  }
+
+  private async saveEncryptedAuthState(tx: Prisma.TransactionClient, scope: WhatsappInvoiceConnectionScope, encrypted: Readonly<{ ciphertext: string; iv: string }>, keyVersion: number, expectedRowVersion: number | undefined): Promise<Readonly<{ rowVersion: number }>> {
+    const current = await tx.whatsappInvoiceConnectionSession.findFirst({
+      where: { tenantId: scope.tenantId, connectionId: scope.connectionId },
+      select: { id: true, rowVersion: true },
+    });
+    if (!current) {
+      if (expectedRowVersion !== undefined && expectedRowVersion !== 0) throw new ConflictException("The WhatsApp session has changed.");
+      try {
+        const created = await tx.whatsappInvoiceConnectionSession.create({
+          data: { tenantId: scope.tenantId, connectionId: scope.connectionId, ciphertext: encrypted.ciphertext, iv: encrypted.iv, keyVersion },
+          select: { rowVersion: true },
+        });
+        return { rowVersion: created.rowVersion };
+      } catch (error) {
+        if (isUniqueConstraint(error)) throw new ConflictException("The WhatsApp session has changed.");
+        throw error;
+      }
+    }
+    if (expectedRowVersion !== undefined && current.rowVersion !== expectedRowVersion) throw new ConflictException("The WhatsApp session has changed.");
+    const updated = await tx.whatsappInvoiceConnectionSession.updateMany({
+      where: { id: current.id, tenantId: scope.tenantId, connectionId: scope.connectionId, rowVersion: current.rowVersion },
+      data: { ciphertext: encrypted.ciphertext, iv: encrypted.iv, keyVersion, rowVersion: { increment: 1 } },
+    });
+    if (updated.count !== 1) throw new ConflictException("The WhatsApp session has changed.");
+    return { rowVersion: current.rowVersion + 1 };
   }
 
   private async assertConnection(tx: Prisma.TransactionClient, scope: WhatsappInvoiceConnectionScope): Promise<void> {
