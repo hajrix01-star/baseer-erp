@@ -3,8 +3,10 @@
 **المعرف:** `BASEER-IMPACT-2026-09-05-GOOGLE-OAUTH-PUBLIC-LEGAL-PAGES`
 **المرجع:** `BASEER-ARCH v1.0`
 **التصنيف:** `ARCHITECTURAL`
-**الحالة:** G0–G7 مقفلة لشريحة صفحات ثابتة محلية. اعتمد المالك قناة الدعم
-العامة؛ يبقى G8 والنشر الخارجي وطلب Google رهناً بمرشح نشر مطابق وفحص الرابطين الحيين.
+**الحالة:** G0–G7 مقفلة لشريحة الخصوصية والشروط المنشورة. تعاد G0–G4 إلى
+المراجعة لشريحة `/about` العامة بعد فشل تحقق علامة Google: لا تمس جلسة ERP أو
+بياناتها، لكنها تصحح نقطة الدخول العامة وتشرح غرض التطبيق. يبقى G8 وطلب
+التحقق النهائي رهناً بمرشح نشر مطابق وفحص الروابط الحية وملكية النطاق.
 
 ## السبب والحدود
 
@@ -18,7 +20,7 @@
 | المالك | المسار | الأثر |
 | --- | --- | --- |
 | Web shell | `apps/web/src/main.tsx` | اختيار صفحة عامة قبل تشغيل shell والجلسة. |
-| Web public content | `apps/web/src/baseer-public-legal.tsx` | نصوص الخصوصية والشروط ثنائية اللغة فقط. |
+| Web public content | `apps/web/src/baseer-public-legal.tsx` | نصوص الخصوصية والشروط والتعريف ثنائية اللغة فقط. |
 | Web styles | `apps/web/src/baseer-public-legal.css` | نمط محلي مستعمل مع tokens و`BaseerBrand`/`BaseerCard` القائمة. |
 | Architecture | `ADR-MKT-002` وregistry والحكومة | قرار الحد العام ومرحلة النشر اللاحقة. |
 
@@ -36,17 +38,37 @@
   الحالي.
 - **G2.1:** لا يلزم تغيير في طبقة النشر: إعداد Nginx الحالي يعيد أي مسار
   مباشر غير ملف إلى `index.html` عبر `try_files`، لذلك يعالج تطبيق Vite
-  `/privacy` و`/terms` بعد النشر كما يعالجهما محلياً.
+  `/about` و`/privacy` و`/terms` بعد النشر كما يعالجهما محلياً.
 - **G3:** React/Vite/CSS ومكونات Baseer القائمة فقط. رفض موقع خارجي أو مكتبة
   UI أو i18n أو analytics جديدة؛ لا تغيير رصة أو اعتماد.
 - **G4:** `BaseerBrand` و`BaseerCard` المركزيان، تبديل لغة محلي، عناوين
   semantic، روابط قابلة للتركيز، RTL/LTR، وعرض عمود واحد على الجوال. لا حركة
   لازمة؛ التفاعل الوحيد تبديل لغة ورابط الوثيقة الأخرى.
 
+## شريحة `/about` المطلوبة من Google (G0–G4)
+
+- **G0:** تظهر صفحة تعريفية عامة على `/about` بالعربية والإنجليزية، تشرح أن
+  Baseer ERP نظام لإدارة العمليات والتشغيل، وتبين أن تكاملات Google اختيارية
+  ومقيدة، وتربط الخصوصية والشروط والدعم. القبول: لا صفحة دخول ولا جلسة ولا
+  `/v1/*` أو analytics أو تخزين محلي. خارج النطاق: أي ادعاء قانوني جديد أو
+  تعديل OAuth/Ads/Business أو نقل أسرار.
+- **G1:** صفحة ثابتة ضمن CDN والنشر القائم؛ لا بيانات أو عمليات أو مستخدمون
+  متزامنون أو SLA جديد. المسار المباشر هو توسيع سطح الوثائق المنشور بدلاً من
+  تبديل صفحة الدخول أو بناء موقع مستقل.
+- **G2:** `main.tsx` يبقى حد الاختيار قبل `App` وservice worker. لا عقد أو
+  API أو schema أو صلاحية. رابط علامة Google يصبح `/about` فقط بعد نشر الصفحة
+  وفحصها الحي؛ ملكية `hajrix.com` في Search Console خارج الكود.
+- **G3:** React/Vite/CSS و`BaseerBrand`/`BaseerCard`/`BaseerButton` القائمة
+  فقط؛ لا مكتبة أو خط أو خدمة خارجية. رُفضت صفحة مستقلة أو إطار UI جديد لأنها
+  تزيد النشر والسطح العام بلا حاجة.
+- **G4:** يعاد استخدام التخطيط المتجاوب وRTL/LTR نفسه، بعناوين دلالية وروابط
+  قابلة للتركيز. لا حركة لازمة؛ تبديل اللغة وروابط الوثائق فقط.
+
 ## مخاطر النشر والحواجز
 
-- لا يصح إرسال طلب Google ما لم تكن روابط النطاق الحي تؤدي فعلاً إلى الصفحتين
-  ونصا الخصوصية/الشروط معتمدان من المالك وقناة الدعم الظاهرة فيهما متاحة.
+- لا يصح إرسال طلب Google ما لم تكن روابط النطاق الحي تؤدي فعلاً إلى `/about`
+  و`/privacy` و`/terms`، وتشرح `/about` غرض Baseer بلا تسجيل دخول، وتكون
+  ملكية `hajrix.com` مثبتة في Search Console، وقناة الدعم الظاهرة متاحة.
 - اعتمد المالك `arz1.restaurant@gmail.com` قناة دعم عامة لهذه الصفحات؛ لا
   تضاف قناة أخرى أو وعد قانوني جديد بلا اعتماد صريح.
 - لا يُفعّل OAuth أو Google Business أو Google Ads أو التطبيق القديم في هذه
@@ -55,12 +77,13 @@
 ## دليل التنفيذ والتحقق
 
 - نفذ `apps/web/src/main.tsx` حد المسار قبل `App` و`BaseerReleaseUpdatePrompt`
-  وservice worker؛ لذلك لا يبدأ زائر `/privacy` أو `/terms` جلسة أو polling أو
-  API من shell.
-- يملك `baseer-public-legal.tsx` النص الثابت العربي/الإنجليزي و`baseer-public-legal.css`
-  النمط المحلي المبني على tokens و`BaseerBrand` و`BaseerCard` القائمتين.
+  وservice worker؛ لذلك لا يبدأ زائر `/about` أو `/privacy` أو `/terms` جلسة
+  أو polling أو API من shell.
+- يملك `baseer-public-legal.tsx` النص الثابت العربي/الإنجليزي للوثائق
+  والتعريف، و`baseer-public-legal.css` النمط المحلي المبني على tokens و`BaseerBrand`
+  و`BaseerCard` القائمتين.
 - اجتاز `npm run check --workspace @baseer-erp/web`، واختبار Playwright
-  `public-legal-pages.spec.ts` أربع حالات (desktop/mobile × privacy/terms)،
+  `public-legal-pages.spec.ts` ست حالات (desktop/mobile × about/privacy/terms)،
   بما فيها إثبات عدم طلب `/v1/*` وتبديل RTL/LTR. نجح prebuild numeric policy
   ووصل بناء Vite الإنتاجي إلى artifacts `apps/web/dist`.
 - فحص بصري محلي لمسار `/privacy` أكد هرمية عربية واضحة، link للوثيقة الأخرى،

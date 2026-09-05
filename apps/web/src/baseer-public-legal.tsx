@@ -3,7 +3,7 @@ import { BaseerBrand } from "./baseer-brand";
 import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
 
-export type PublicLegalDocument = "privacy" | "terms";
+export type PublicLegalDocument = "about" | "privacy" | "terms";
 type Language = "ar" | "en";
 
 type LegalSection = Readonly<{
@@ -25,10 +25,58 @@ type LegalCopy = Readonly<{
   supportLabel: string;
   otherDocumentLabel: string;
   otherDocumentHref: string;
+  secondaryDocumentLabel?: string;
+  secondaryDocumentHref?: string;
   sections: readonly LegalSection[];
 }>;
 
 const legalCopy: Readonly<Record<PublicLegalDocument, Readonly<Record<Language, LegalCopy>>>> = {
+  about: {
+    ar: {
+      eyebrow: "Baseer ERP · نظرة عامة",
+      title: "إدارة عمليات الشركة بوضوح وموثوقية",
+      description: "Baseer ERP منصة لإدارة العمليات والمالية والتشغيل، تمنح الفرق المصرح لها سياقاً واضحاً لاتخاذ القرار داخل شركتها.",
+      updated: "معلومات عامة عن المنتج",
+      draftNotice: "هذه صفحة تعريف عامة. استخدام النظام وإتاحة أي تكامل يتمان فقط للمستخدمين المخولين داخل Baseer ERP.",
+      languageLabel: "اللغة",
+      arabicLabel: "العربية",
+      englishLabel: "English",
+      switchLanguage: "English",
+      supportLabel: "الدعم: arz1.restaurant@gmail.com",
+      otherDocumentLabel: "سياسة الخصوصية",
+      otherDocumentHref: "/privacy",
+      secondaryDocumentLabel: "شروط الاستخدام",
+      secondaryDocumentHref: "/terms",
+      sections: [
+        { title: "غرض Baseer ERP", paragraphs: ["يساعد Baseer ERP الشركات على تنظيم عملياتها ومتابعة سياقها التشغيلي والمالي ضمن صلاحيات واضحة وسجل قابل للمراجعة. لا تُنفذ القرارات أو القيود التجارية تلقائياً من هذه الصفحة العامة."] },
+        { title: "تكاملات Google اختيارية", paragraphs: ["قد يفعّل مالك مخول تكاملاً اختيارياً مثل Google Business لعرض مؤشرات السمعة والمراجعات بوضوح. يختار المستخدم الحساب أو الموقع صراحةً، ولا يبدأ التكامل من هذه الصفحة أو من دون موافقة."] },
+        { title: "حدود الاستخدام", paragraphs: ["يبقى Google Ads للقراءة فقط داخل Baseer ERP؛ لا ينشئ النظام حملات ولا يغيّر الإنفاق أو الميزانيات أو عروض الأسعار. كما لا ينشر رداً آلياً على تقييم إلا ضمن سياسة معتمدة وموافقة صريحة خاصة بالموقع."] },
+        { title: "الشفافية والدعم", paragraphs: ["توضح سياسة الخصوصية وشروط الاستخدام حدود معالجة البيانات والتكاملات. لأسئلة الدعم أو الخصوصية، تواصل عبر البريد الموضح أدناه."] },
+      ],
+    },
+    en: {
+      eyebrow: "Baseer ERP · Overview",
+      title: "Clear, dependable company operations",
+      description: "Baseer ERP is a platform for operational, financial, and business management, giving authorized teams clear context for decisions within their company.",
+      updated: "General product information",
+      draftNotice: "This is a public information page. System access and optional integrations are available only to authorized users inside Baseer ERP.",
+      languageLabel: "Language",
+      arabicLabel: "العربية",
+      englishLabel: "English",
+      switchLanguage: "العربية",
+      supportLabel: "Support: arz1.restaurant@gmail.com",
+      otherDocumentLabel: "Privacy Policy",
+      otherDocumentHref: "/privacy",
+      secondaryDocumentLabel: "Terms of Use",
+      secondaryDocumentHref: "/terms",
+      sections: [
+        { title: "What Baseer ERP is for", paragraphs: ["Baseer ERP helps companies organize operations and review financial and operational context under clear permissions and an auditable record. This public page does not perform commercial decisions or financial postings."] },
+        { title: "Optional Google integrations", paragraphs: ["An authorized owner may enable an optional integration such as Google Business to present reputation and review indicators clearly. The user explicitly chooses the account or location; no integration starts from this page or without consent."] },
+        { title: "Usage boundaries", paragraphs: ["Google Ads remains read-only in Baseer ERP; the system does not create campaigns or change spend, budgets, or bids. It also never publishes an automated review reply without an approved policy and explicit, location-specific consent."] },
+        { title: "Transparency and support", paragraphs: ["The privacy policy and terms explain the boundaries for data processing and integrations. Use the support email below for privacy or product questions."] },
+      ],
+    },
+  },
   privacy: {
     ar: {
       eyebrow: "Baseer ERP · الخصوصية",
@@ -121,6 +169,7 @@ const legalCopy: Readonly<Record<PublicLegalDocument, Readonly<Record<Language, 
 
 export function publicLegalDocumentForPathname(pathname: string): PublicLegalDocument | null {
   const normalised = pathname.replace(/\/+$/, "") || "/";
+  if (normalised === "/about") return "about";
   if (normalised === "/privacy") return "privacy";
   if (normalised === "/terms") return "terms";
   return null;
@@ -133,7 +182,7 @@ export function BaseerPublicLegalPage({ document }: Readonly<{ document: PublicL
 
   return <main className="baseer-public-legal" dir={direction} lang={language}>
     <header className="baseer-public-legal__header">
-      <a className="baseer-public-legal__brand" href="/" aria-label="Baseer ERP"><BaseerBrand /></a>
+      <a className="baseer-public-legal__brand" href="/about" aria-label="Baseer ERP"><BaseerBrand /></a>
       <div className="baseer-public-legal__language" aria-label={copy.languageLabel}>
         <BaseerButton type="button" size="compact" variant="quiet" aria-pressed={language === "ar"} onClick={() => setLanguage("ar")}>{copy.arabicLabel}</BaseerButton>
         <BaseerButton type="button" size="compact" variant="quiet" aria-pressed={language === "en"} onClick={() => setLanguage("en")}>{copy.englishLabel}</BaseerButton>
@@ -161,6 +210,7 @@ export function BaseerPublicLegalPage({ document }: Readonly<{ document: PublicL
       <footer className="baseer-public-legal__footer">
         <a href="mailto:arz1.restaurant@gmail.com">{copy.supportLabel}</a>
         <a href={copy.otherDocumentHref}>{copy.otherDocumentLabel}</a>
+        {copy.secondaryDocumentLabel && copy.secondaryDocumentHref ? <a href={copy.secondaryDocumentHref}>{copy.secondaryDocumentLabel}</a> : null}
         <BaseerButton type="button" size="compact" variant="secondary" onClick={() => setLanguage(language === "ar" ? "en" : "ar")}>{copy.switchLanguage}</BaseerButton>
       </footer>
     </div>
