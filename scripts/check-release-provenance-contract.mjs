@@ -14,6 +14,12 @@ function serviceBlock(name) {
   return match[0];
 }
 
+function workflowJobBlock(name) {
+  const match = workflow.match(new RegExp(`^  ${name}:\\n([\\s\\S]*?)(?=^  [A-Za-z][A-Za-z0-9-]*:\\n|(?![\\s\\S]))`, "m"));
+  if (!match) throw new Error(`Release workflow is missing the ${name} job.`);
+  return match[0];
+}
+
 const requiredImages = {
   postgres: "BASEER_POSTGRES_IMAGE",
   migrate: "BASEER_MIGRATE_IMAGE",
@@ -73,6 +79,11 @@ for (const requiredWorkflowControl of [
 }
 
 for (const requiredContinuousDeliveryControl of [
+  "release-preflight:",
+  "Require a successful pull-request merge gate",
+  "listPullRequestsAssociatedWithCommit",
+  "listWorkflowRuns",
+  "needs: [release-preflight]",
   "deploy-private-online:",
   "needs: [release-manifest]",
   "name: production",
@@ -85,6 +96,52 @@ for (const requiredContinuousDeliveryControl of [
 ]) {
   if (!workflow.includes(requiredContinuousDeliveryControl)) {
     throw new Error(`Continuous deployment workflow is missing required control: ${requiredContinuousDeliveryControl}`);
+  }
+}
+
+for (const name of ["quality", "web-acceptance"]) {
+  if (!workflowJobBlock(name).includes("if: github.event_name == 'pull_request'")) {
+    throw new Error(`Full ${name} must remain a pull-request merge gate.`);
+  }
+}
+
+for (const name of ["release-api", "release-migrate", "release-web"]) {
+  if (!workflowJobBlock(name).includes("needs: [release-preflight]")) {
+    throw new Error(`${name} must wait for the exact-main release preflight.`);
+  }
+}
+
+if (!workflowJobBlock("release-preflight").includes("node scripts/check-release-provenance-contract.mjs")) {
+  throw new Error("The main release preflight must verify the release provenance contract.");
+}
+
+if (!workflowJobBlock("release-preflight").includes("Refusing release: this main commit is not associated with a merged pull request.")) {
+  throw new Error("The main release preflight must reject direct main pushes.");
+}
+
+if (!workflowJobBlock("deploy-private-online").includes("needs: [release-manifest]")) {
+  throw new Error("Production deployment must wait for the immutable release manifest.");
+}
+
+if (!workflowJobBlock("quality").includes("cancel-in-progress: true")
+  || !workflowJobBlock("web-acceptance").includes("cancel-in-progress: true")) {
+  throw new Error("Superseded pull-request validations must be cancelled independently.");
+}
+
+if (!workflowJobBlock("quality").includes("baseer-erp-pr-quality-")
+  || !workflowJobBlock("web-acceptance").includes("baseer-erp-pr-web-acceptance-")) {
+  throw new Error("Quality and web acceptance need separate pull-request concurrency groups.");
+}
+
+for (const [name, cacheScope] of [
+  ["release-api", "baseer-erp-api"],
+  ["release-migrate", "baseer-erp-migrate"],
+  ["release-web", "baseer-erp-web"],
+]) {
+  const job = workflowJobBlock(name);
+  if (!job.includes(`cache-from: type=gha,scope=${cacheScope}`)
+    || !job.includes(`cache-to: type=gha,mode=max,scope=${cacheScope}`)) {
+    throw new Error(`${name} must use its isolated GitHub Actions build cache (${cacheScope}).`);
   }
 }
 

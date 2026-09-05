@@ -6,10 +6,18 @@ on:
   pull_request:
 
 permissions:
+  actions: read
   contents: read
+  pull-requests: read
 
 jobs:
   quality:
+    # The complete quality suite is the merge gate.  It runs for every pull
+    # request, not a second time for the already accepted main release.
+    if: github.event_name == 'pull_request'
+    concurrency:
+      group: baseer-erp-pr-quality-${{ github.event.pull_request.number || github.ref }}
+      cancel-in-progress: true
     runs-on: ubuntu-latest
     # Allows the bounded runtime-audit recovery window without making quality unbounded.
     timeout-minutes: 30
@@ -121,6 +129,12 @@ jobs:
           node scripts/check-release-provenance-contract.mjs
 
   web-acceptance:
+    # Keep browser acceptance on the proposed merge, then avoid re-running its
+    # expensive Playwright setup after main receives that accepted change.
+    if: github.event_name == 'pull_request'
+    concurrency:
+      group: baseer-erp-pr-web-acceptance-${{ github.event.pull_request.number || github.ref }}
+      cancel-in-progress: true
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
@@ -155,9 +169,64 @@ jobs:
           if-no-files-found: ignore
           retention-days: 14
 
+  # Main still proves the release contract from the exact commit that will be
+  # deployed.  This is intentionally lightweight: full quality and browser
+  # acceptance are required on the pull request before it can be merged.
+  release-preflight:
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Require a successful pull-request merge gate
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const baseRef = context.ref.replace("refs/heads/", "");
+            const associated = await github.paginate(
+              github.rest.repos.listPullRequestsAssociatedWithCommit,
+              { owner, repo, commit_sha: context.sha, per_page: 100 },
+            );
+            const pullRequest = associated.find((candidate) =>
+              candidate.merged_at && candidate.base?.ref === baseRef,
+            );
+            if (!pullRequest) {
+              core.setFailed("Refusing release: this main commit is not associated with a merged pull request.");
+              return;
+            }
+            const runs = await github.paginate(
+              github.rest.actions.listWorkflowRuns,
+              {
+                owner,
+                repo,
+                workflow_id: "verify.yml",
+                event: "pull_request",
+                head_sha: pullRequest.head.sha,
+                per_page: 100,
+              },
+            );
+            const latest = runs.sort((left, right) =>
+              Date.parse(right.created_at) - Date.parse(left.created_at),
+            )[0];
+            if (!latest || latest.status !== "completed" || latest.conclusion !== "success") {
+              core.setFailed(`Refusing release: pull request #${pullRequest.number} has no successful full verification run for ${pullRequest.head.sha}.`);
+              return;
+            }
+            core.info(`Accepted pull request #${pullRequest.number}; full verification run ${latest.id} succeeded.`);
+      - name: Verify immutable private-online release contract
+        run: |
+          bash -n \
+            ops/private-online/server/baseer-erp-deploy-ssh \
+            ops/private-online/server/baseer-erp-deploy-release \
+            ops/private-online/server/install-baseer-erp-deployer.sh
+          node scripts/check-release-provenance-contract.mjs
+
   release-api:
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
-    needs: [quality, web-acceptance]
+    needs: [release-preflight]
     runs-on: ubuntu-latest
     outputs:
       digest: ${{ steps.build.outputs.digest }}
@@ -186,10 +255,12 @@ jobs:
           tags: ${{ env.IMAGE_NAME }}:${{ github.sha }}
           provenance: mode=max
           sbom: true
+          cache-from: type=gha,scope=baseer-erp-api
+          cache-to: type=gha,mode=max,scope=baseer-erp-api
 
   release-migrate:
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
-    needs: [quality, web-acceptance]
+    needs: [release-preflight]
     runs-on: ubuntu-latest
     outputs:
       digest: ${{ steps.build.outputs.digest }}
@@ -218,10 +289,12 @@ jobs:
           tags: ${{ env.IMAGE_NAME }}:${{ github.sha }}
           provenance: mode=max
           sbom: true
+          cache-from: type=gha,scope=baseer-erp-migrate
+          cache-to: type=gha,mode=max,scope=baseer-erp-migrate
 
   release-web:
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
-    needs: [quality, web-acceptance]
+    needs: [release-preflight]
     runs-on: ubuntu-latest
     outputs:
       digest: ${{ steps.build.outputs.digest }}
@@ -249,6 +322,8 @@ jobs:
           tags: ${{ env.IMAGE_NAME }}:${{ github.sha }}
           provenance: mode=max
           sbom: true
+          cache-from: type=gha,scope=baseer-erp-web
+          cache-to: type=gha,mode=max,scope=baseer-erp-web
 
   release-manifest:
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
