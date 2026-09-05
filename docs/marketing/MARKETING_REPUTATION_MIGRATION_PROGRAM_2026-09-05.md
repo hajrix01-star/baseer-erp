@@ -112,7 +112,7 @@ Profile Help](https://support.google.com/business/answer/9918094). ويعرّف 
 | MKT-00 | 0 | مكتمل | طلب المالك والمرجع المعماري | منهجية، مصادر، أثر وchecklist | قائد ألفا للبناء |
 | MKT-01 | 1 | MKT-01A مكتمل؛ MKT-01B محجوب | MKT-01A: منع OAuth تجريبي. MKT-01B: قيم تشغيل وG0–G4 جديدة | OAuth/vault/mapping/read pilot ومطابقة | المنصة + Google Business |
 | MKT-02 | 2 | غير مبدوء | MKT-01 وموافقة آلية محددة للموقع | outbox/pilot/kill-switch/dedupe/reconcile | السمعة + التشغيل |
-| MKT-03 | 3 | غير مبدوء | قرار Ads ومالك MCC/CID/token | read-only daily facts وquota/reconciliation | بيانات التسويق |
+| MKT-03 | 3 | العقد موثق؛ البناء محجوب | اعتماد G0–G3 ومالك MCC/CID/token | read-only daily facts وquota/reconciliation | بيانات التسويق |
 | MKT-04 | 4 | غير مبدوء | MKT-01–03 وcontracts للقراءة | تجربة مبسطة RTL/LTR وE2E/إتاحة | الواجهة + الجودة |
 | MKT-05 | 5 | غير مبدوء | اكتمال كل الموجات وparallel run | تسليم مستقل وقرار قطع/archive قابل للاسترداد | الترحيل + التسليم |
 
@@ -356,6 +356,13 @@ kill switch/config ثانية قبل exchange، callbackان متزامنان (�
 - [ ] حدود القراءة والحصص والـbackoff وDLQ ومراقبة freshness مثبتة.
 - [ ] Ads: inventory آلي يثبت عدم وجود mutation أو budget/bid/spend endpoint.
 - [ ] Business: سياسة الحارس والموافقة والموقع وkill switch وإعادة المزامنة مثبتة.
+
+## عقد MKT-03 — Google Ads للقراءة فقط
+
+العقد التفصيلي في `docs/marketing/GOOGLE_ADS_READ_ONLY_PILOT_CONTRACT_2026-09-05.md`.
+يوثق pilot ARZ، وحواجز المعلم الشامي، واستعلامات GAQL الثابتة، والحقائق اليومية
+والعملة والحداثة والمطابقة. لا يقفل هذا التوثيق G0–G3 ولا يسمح بنقل token قديم أو
+كتابة schema أو تفعيل Google Ads؛ يلزم قبول مستقل قبل البناء.
 
 ### قبل إغلاق التطبيق السابق
 

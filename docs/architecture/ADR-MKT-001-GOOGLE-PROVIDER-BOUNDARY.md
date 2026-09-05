@@ -31,6 +31,10 @@ vault دائماً أو اختياراً صريحاً للحساب/الموقع 
 7. البداية fail-closed: egress وOAuth الفعلي والكتابة على Google تظل معطلة حتى
    تكتمل بوابات الموصل وpilot وموافقة المالك. لا يستورد رمزاً مشفراً من التطبيق
    السابق؛ يعاد التفويض أو ينفذ مسار re-encryption مدقق ومصرح به لاحقاً.
+8. لـGoogle Ads، يختار كل company-admin Customer ID وسياق MCC صراحةً بعد
+   discovery خادمي. لا يقبل الخادم GAQL من المتصفح؛ يسمح فقط باستعلامات daily
+   read-only مثبتة. يحمل كل fact العملة والمنطقة الزمنية و`sourceFreshAt` وحالة
+   التغطية؛ ويبقى `cost_micros` وقيم التحويل حقائق Ads، لا مبالغ أو إيرادات ERP.
 
 ## البدائل المستبعدة
 
@@ -55,3 +59,5 @@ vault دائماً أو اختياراً صريحاً للحساب/الموقع 
 - لا secret في API response أو logs أو audit أو browser bundle.
 - اختيار صريح للموارد، disconnect/revoke وglobal/company kill switch مثبتة.
 - pilot محدود ومطابقة موثقة قبل التوسع أو القطع.
+- مسار Ads يثبت بالمخزون والاختبارات غياب عمليات mutate، ويحترم quota وrate limit
+  ويعرض قيمة التحويل وحدود attribution/lag للمستخدم.

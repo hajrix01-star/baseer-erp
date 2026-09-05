@@ -19,6 +19,7 @@ lineage، صلاحيات النشر الآلي، تشغيل worker وقطع تط
 - `docs/marketing/GOOGLE_PLATFORM_CONFIGURATION_HANDOFF_2026-08-23.md`
 - `docs/marketing/MARKETING_METRIC_CATALOG_V1_2026-08-15.md`
 - `docs/marketing/MARKETING_REPUTATION_MIGRATION_PROGRAM_2026-09-05.md`
+- `docs/marketing/GOOGLE_ADS_READ_ONLY_PILOT_CONTRACT_2026-09-05.md`
 
 ## الحدود التي لا تتغير
 
@@ -114,3 +115,16 @@ lineage، صلاحيات النشر الآلي، تشغيل worker وقطع تط
 حارس البوابات يعتمد هذه الشريحة المحلية فقط بعد مراجعة الكود وفحص الويب. تبقى
 G0–G4 للموصلات والترحيل مانعة لأي OAuth أو schema أو secret أو نقل بيانات إلى أن
 تعتمد القيم التشغيلية وقرار الموصل.
+
+### قرار MKT-03: Google Ads read-only pilot
+
+- **التصنيف:** `ARCHITECTURAL`؛ سيضيف لاحقاً OAuth وcredential lifecycle وMCC/CID
+  mapping وحقائق يومية وruns ومراقبة quota، وكلها company-scoped.
+- **النطاق:** ARZ فقط في pilot واحد. المعلم الشامي لا يحصل على discovery أو
+  Customer ID أو facts تلقائياً؛ له تفويض واختيار وموافقة توسعة مستقلون.
+- **الحدود:** Google Ads قراءة فقط. لا mutate أو ميزانية أو bid أو إنفاق. لا تدخل
+  `cost_micros` أو conversion value في Finance/ERP sales، ولا ينقل token أو secret
+  من `arz_observatory_prod`.
+- **حالة البوابات:** راجع مختص Google Ads العقد المصحح واعتمد G0–G3 للكود المحلي
+  فقط، بلا P0. يبقى إعداد Google وOAuth/discovery/sync الحي ونقل أي اعتماد محجوباً؛
+  وقبل خدمة sync يثبت GAQL customer/day وhash allowlist وتعريف coverage.
