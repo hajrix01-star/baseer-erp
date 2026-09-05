@@ -18,6 +18,8 @@ type LegalCopy = Readonly<{
   updated: string;
   draftNotice: string;
   languageLabel: string;
+  arabicLabel: string;
+  englishLabel: string;
   switchLanguage: string;
   supportLabel: string;
   otherDocumentLabel: string;
@@ -34,6 +36,8 @@ const legalCopy: Readonly<Record<PublicLegalDocument, Readonly<Record<Language, 
       updated: "آخر تحديث: 5 سبتمبر 2026",
       draftNotice: "هذه الصفحة توضح حدود معالجة بيانات التكاملات الاختيارية في Baseer ERP.",
       languageLabel: "اللغة",
+      arabicLabel: "العربية",
+      englishLabel: "English",
       switchLanguage: "English",
       supportLabel: "الدعم: arz1.restaurant@gmail.com",
       otherDocumentLabel: "شروط الاستخدام",
@@ -53,6 +57,8 @@ const legalCopy: Readonly<Record<PublicLegalDocument, Readonly<Record<Language, 
       updated: "Last updated: 5 September 2026",
       draftNotice: "This page explains the boundaries for processing optional integration data in Baseer ERP.",
       languageLabel: "Language",
+      arabicLabel: "العربية",
+      englishLabel: "English",
       switchLanguage: "العربية",
       supportLabel: "Support: arz1.restaurant@gmail.com",
       otherDocumentLabel: "Terms of Use",
@@ -74,6 +80,8 @@ const legalCopy: Readonly<Record<PublicLegalDocument, Readonly<Record<Language, 
       updated: "آخر تحديث: 5 سبتمبر 2026",
       draftNotice: "توضح هذه الصفحة حدود استخدام التكاملات الاختيارية في Baseer ERP.",
       languageLabel: "اللغة",
+      arabicLabel: "العربية",
+      englishLabel: "English",
       switchLanguage: "English",
       supportLabel: "الدعم: arz1.restaurant@gmail.com",
       otherDocumentLabel: "سياسة الخصوصية",
@@ -93,6 +101,8 @@ const legalCopy: Readonly<Record<PublicLegalDocument, Readonly<Record<Language, 
       updated: "Last updated: 5 September 2026",
       draftNotice: "This page explains the boundaries for using optional integrations in Baseer ERP.",
       languageLabel: "Language",
+      arabicLabel: "العربية",
+      englishLabel: "English",
       switchLanguage: "العربية",
       supportLabel: "Support: arz1.restaurant@gmail.com",
       otherDocumentLabel: "Privacy Policy",
@@ -124,8 +134,8 @@ export function BaseerPublicLegalPage({ document }: Readonly<{ document: PublicL
     <header className="baseer-public-legal__header">
       <a className="baseer-public-legal__brand" href="/" aria-label="Baseer ERP"><BaseerBrand /></a>
       <div className="baseer-public-legal__language" aria-label={copy.languageLabel}>
-        <button type="button" aria-pressed={language === "ar"} onClick={() => setLanguage("ar")}>العربية</button>
-        <button type="button" aria-pressed={language === "en"} onClick={() => setLanguage("en")}>English</button>
+        <button type="button" aria-pressed={language === "ar"} onClick={() => setLanguage("ar")}>{copy.arabicLabel}</button>
+        <button type="button" aria-pressed={language === "en"} onClick={() => setLanguage("en")}>{copy.englishLabel}</button>
       </div>
     </header>
 

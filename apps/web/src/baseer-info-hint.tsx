@@ -5,6 +5,8 @@ type BaseerInfoHintProps = Readonly<{
   children: ReactNode;
 }>;
 
+const infoHintGlyph = "\u061f";
+
 /**
  * A concise, keyboard-accessible explanation for a term—not a place to hide
  * material status, a warning, or the number itself. Native disclosure keeps
@@ -13,7 +15,7 @@ type BaseerInfoHintProps = Readonly<{
 export function BaseerInfoHint({ label, children }: BaseerInfoHintProps) {
   return (
     <details className="baseer-info-hint">
-      <summary aria-label={label}>؟</summary>
+      <summary aria-label={label}>{infoHintGlyph}</summary>
       <span className="baseer-info-hint__panel" role="note">{children}</span>
     </details>
   );
