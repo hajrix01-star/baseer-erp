@@ -56,10 +56,10 @@ export class AdministrationService {
     this.ownerOnly(context); if (!permissionCodesAreKnown(request.permissionCodes)) throw new ForbiddenException("Unknown permission selection.");
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       await this.ensureSystemRoles(tx, context.tenantId);
-      const existing = await tx.role.findFirst({ where: { tenantId: context.tenantId, code: request.code } }); if (existing) throw new ConflictException("Role code already exists.");
       const id = randomUUID();
-      await tx.role.create({ data: { id, tenantId: context.tenantId, code: request.code, nameAr: request.nameAr, nameEn: request.nameEn, isSystem: false, grants: { createMany: { data: [...new Set(request.permissionCodes)].map((permissionCode) => ({ tenantId: context.tenantId, permissionCode })) } } } });
-      await this.audit(tx, context, "administration.role.created", "Role", id, null, { code: request.code, permissionCodes: [...new Set(request.permissionCodes)] });
+      const code = this.generatedRoleCode(request.nameEn);
+      await tx.role.create({ data: { id, tenantId: context.tenantId, code, nameAr: request.nameAr, nameEn: request.nameEn, isSystem: false, grants: { createMany: { data: [...new Set(request.permissionCodes)].map((permissionCode) => ({ tenantId: context.tenantId, permissionCode })) } } } });
+      await this.audit(tx, context, "administration.role.created", "Role", id, null, { code, permissionCodes: [...new Set(request.permissionCodes)] });
       return { id };
     });
   }
@@ -356,6 +356,11 @@ export class AdministrationService {
       const role = await tx.role.create({ data: { id: randomUUID(), tenantId, code: template.code, nameAr: template.nameAr, nameEn: template.nameEn, isSystem: true } });
       await tx.rolePermission.createMany({ data: [...template.permissions].map((permissionCode) => ({ tenantId, roleId: role.id, permissionCode })) });
     }
+  }
+  private generatedRoleCode(nameEn: string): string {
+    const normalized = nameEn.normalize("NFKD").replace(/[^A-Za-z0-9]+/g, "_").replace(/^_+|_+$/g, "").toUpperCase();
+    const stem = (normalized || "ROLE").slice(0, 56);
+    return `CUSTOM_${stem}_${randomUUID().replaceAll("-", "").slice(0, 8).toUpperCase()}`;
   }
   private ownerOnly(context: TrustedTenantAdministratorContext): void { if (!context.isOwner) throw new ForbiddenException("Tenant-owner access is required."); }
   private async audit(tx: Prisma.TransactionClient, context: TrustedTenantAdministratorContext, action: string, entityType: string, entityId: string, beforeJson: unknown, afterJson: unknown): Promise<void> { await tx.auditEvent.create({ data: { id: randomUUID(), tenantId: context.tenantId, actorUserId: context.actorUserId, action, entityType, entityId, requestId: RequestContext.correlationId() ?? randomUUID(), beforeJson: beforeJson === null ? Prisma.JsonNull : beforeJson as Prisma.InputJsonValue, afterJson: afterJson as Prisma.InputJsonValue } }); }
