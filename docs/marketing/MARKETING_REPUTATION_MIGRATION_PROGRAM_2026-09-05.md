@@ -265,6 +265,71 @@ Node crypto وNest/Prisma/PostgreSQL الموجودة فقط؛ لا dependency �
 وترحيل/RLS حي على قاعدة الاختبار. لا يدخل
 redirect URI أو callback أو egress في MKT-01B؛ له بوابة لاحقة مستقلة.
 
+## عقد MKT-02A — تفويض Google Business وCallback التجريبي
+
+### G0 — النطاق والقبول
+
+هذه شريحة تفويض خادمي لـ`GOOGLE_BUSINESS` و`ARZ` فقط. يبدأ الخادم من allowlist
+إلزامي `BASEER_MARKETING_GOOGLE_BUSINESS_PILOT_COMPANY_ID` (UUID لشركة ARZ)،
+ويرفض غيابه أو عدم تطابقه أو أي provider غير Google Business قبل قراءة config
+أو إنشاء state. تبدأ من مسؤول شركة
+مخوّل، وتنتهي بعد callback ناجح بحالة `AUTHORIZED_AWAITING_SELECTION`؛ لا
+تكتشف الحسابات/المواقع، ولا تنشئ mapping، ولا تقرأ مراجعات أو أداء، ولا تنشر
+رداً، ولا تمس Google Ads أو `المعلم الشامي`. لا ينقل token أو secret من التطبيق
+القديم، ولا يُظهر المتصفح refresh token أو client secret أو التفصيل الداخلي
+للشركة.
+
+القبول: authorization-code مع PKCE S256 وسر state عشوائي 32-byte؛ يسبقه tenant
+routing prefix غير مخوّل لا يحمل company أو user، ثم يعاد التحقق من hash في قاعدة
+البيانات. صالح عشر دقائق ويستهلك مرة واحدة. callback عام لا يثق بـcompany أو user
+من query؛ يستعيدهما من state المقيد، ويعيد نتيجة عامة فقط. عند نجاح token exchange، يخزن refresh token
+الموجود حصراً داخل `MarketingProviderCredentialEnvelope` المشفر؛ لا يخزن access
+token. فشل أو غياب refresh token ينتهي مغلقاً إلى `BLOCKED` بلا envelope نشط.
+
+### G1 — السعة والتشغيل
+
+pilot واحد لشركة ARZ واتصال Google Business واحد؛ محاولة OAuth غير مستهلكة واحدة
+كحد أقصى لكل شركة/مزود، TTL عشر دقائق، وcallback واحد لكل state. لا retry تلقائي
+لتبادل code أو طلبات Google؛ يعيد المستخدم بدء التفويض بعد خطأ واضح. يبقى global
+kill switch `BASEER_MARKETING_GOOGLE_BUSINESS_PILOT_ENABLED` false افتراضياً، ولا
+يصبح true قبل إعداد secret manager وredirect URI وموافقة المالك في Google.
+
+### G2 — البيانات والعقود والعزل
+
+يضاف status `AUTHORIZED_AWAITING_SELECTION` إلى connection، وجدول جديد
+`MarketingGoogleBusinessOAuthState` بدلاً من إعادة استعمال جدول OAuth العام.
+يحمل `connectionId/tenantId/companyId/provider/initiatedByUserId` وPKCE المشفر
+وhash/expiry/consumed. له FK مركب إلى Company وCompanyMembership وConnection،
+وقيد SQL `provider='GOOGLE_BUSINESS'`، وRLS/`FORCE RLS`. يفرض partial unique index
+لـ`tenant/company/provider WHERE consumedAt IS NULL`؛ داخل transaction مقفلة تستهلك
+الخدمة المحاولة السابقة ثم تنشئ الجديدة، فيمنع السباق.
+
+يرتبط PKCE verifier بتشفير AEAD وAAD للشركة/Google Business، ويستبدل credential
+envelope في معاملة واحدة بعد token exchange. لا يحمل audit أو API contract أو
+response محتوى token/code/state أو client secret. callback يقبل فقط `state` و`code`
+أو `error`، ويتحقق من hash/expiry/عدم الاستهلاك، ثم يفحص kill switch/config مجدداً
+**مباشرة قبل أي exchange**. claim الـcallback ذري داخل transaction/locking: تحديث مشروط
+بـ`stateHash` و`consumedAt IS NULL` و`expiresAt > now()`؛ الفائز وحده يعالج `code`
+أو `error`، وأي callback لاحق يعاد إليه رد آمن من دون طلب Google.
+
+### G3 — التقنية والمسار المباشر
+
+Nest/Prisma وNode crypto و`fetch` الموجودة فقط؛ لا SDK ولا حزمة جديدة. تستخدم
+Google OAuth token endpoint حصراً بعد بوابة environment الدقيقة، وبمهلة زمنية
+قصيرة وخطأ آمن بلا logs حساسة. عميل OAuth مخصص لـBaseer Google Business يُنشأ
+لاحقاً في مشروع `n8n hajrix` بدلاً من توسيع عميل Ads قائم؛ ولا تُفعّل API أو scope
+أو callback في Google ضمن MKT-02A. الاختبارات المحلية تثبت: رفض ARZ allowlist
+الغائب أو شركة/مزود خارج النطاق قبل state أو egress، وعدم توليد URL عندما kill
+switch/config ناقص، PKCE/state، رفض state من شركة أو callback مكرر/منتهي، فحص
+kill switch/config ثانية قبل exchange، callbackان متزامنان (ومن ذلك مسار `error`)
+لا يطالبان state إلا مرة واحدة، وحفظ refresh token المشفر فقط عند نجاح exchange mock.
+
+**حالة البوابات:** اعتمدت مراجعة مستقلة G0–G3 ثم قبلت تنفيذ MKT-02A بلا P0/P1.
+أضيف callback تجريبي منفصل عن المسار العام المغلق، وschema/RLS وقيود state
+والاختبارات السلوكية والمحلية. يبقى kill switch false افتراضياً، ولا تفعيل حي أو
+إضافة `business.manage` أو client/redirect في Google قبل قرار لحظي من المالك بعد
+نشر callback.
+
 ## قائمة تحقق احترافية
 
 ### قبل البناء

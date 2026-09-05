@@ -71,6 +71,21 @@ lineage، صلاحيات النشر الآلي، تشغيل worker وقطع تط
   المستقلة التصميم والكود بلا P0/P1، واجتاز الترحيل وRLS على قاعدة الاختبار.
   التنفيذ يبقى غير متصل؛ أي تفعيل يحتاج بوابة مستقلة.
 
+### قرار MKT-02A: تفويض Google Business التجريبي
+
+- **التصنيف:** ARCHITECTURAL؛ يعيد فتح OAuth/callback وcredential lifecycle
+  والحالة التشغيلية، لكنه لا يفتح discovery أو sync أو publisher.
+- **النطاق:** ARZ وGoogle Business فقط عبر allowlist خادمي UUID؛ PKCE/state قصير
+  العمر في جدول مخصص مقيد بـCompany/Membership/Connection، callback خادمي
+  يطالب state atomically قبل exchange، وتخزين refresh token المشفر فقط بعد exchange
+  ناجح. لا Google Ads أو المعلم
+  الشامي أو mapping/location/review/publish أو نقل token قديم.
+- **الحدود:** يبقى `BASEER_MARKETING_GOOGLE_BUSINESS_PILOT_ENABLED` false
+  افتراضياً؛ إنشاء client مخصص أو تفعيل API/scope/redirect في Google ليس ضمن
+  هذا البناء ويحتاج تأكيد المالك عند لحظة الحفظ.
+- **المرجع:** عقد MKT-02A في برنامج الانتقال؛ اعتمدت مراجعة مستقلة G0–G3 ثم
+  التنفيذ بلا P0/P1. اجتازت اختبارات callback mock وRLS قبل أي تفعيل خارجي.
+
 ### قرار شريحة G0–G4: الشرح عند الطلب
 
 - **G0:** الشريحة تخدم المدير غير المختص: علامة `؟` مجاورة لمصطلح تسويقي تشرح

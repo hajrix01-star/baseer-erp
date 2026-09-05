@@ -473,6 +473,13 @@ export type MarketingSalesTarget = Prisma.MarketingSalesTargetModel
  */
 export type MarketingProviderConnection = Prisma.MarketingProviderConnectionModel
 /**
+ * Model MarketingGoogleBusinessOAuthState
+ * Pilot-only OAuth state. It binds the callback to its company, initiating
+ * membership and exact Google Business connection; provider credentials never
+ * live here.
+ */
+export type MarketingGoogleBusinessOAuthState = Prisma.MarketingGoogleBusinessOAuthStateModel
+/**
  * Model MarketingProviderOAuthState
  * One short-lived, single-use OAuth attempt. It is company-scoped and stores
  * only an encrypted PKCE verifier; no Google access or refresh token belongs

@@ -1,5 +1,5 @@
 import { createCipheriv, createHash, randomBytes } from "node:crypto";
-import { Injectable, ServiceUnavailableException } from "@nestjs/common";
+import { ForbiddenException, Injectable, ServiceUnavailableException } from "@nestjs/common";
 
 export type GooglePlatformReadiness = Readonly<{
   ready: boolean;
@@ -13,6 +13,36 @@ export type GooglePlatformReadiness = Readonly<{
  */
 @Injectable()
 export class MarketingGooglePlatformService {
+  /** A fail-closed server allowlist used before any OAuth configuration or state is read. */
+  googleBusinessPilotCompanyId(): string {
+    const companyId = process.env.BASEER_MARKETING_GOOGLE_BUSINESS_PILOT_COMPANY_ID?.trim() ?? "";
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(companyId)) {
+      throw new ForbiddenException("Google Business pilot is not available for this company.");
+    }
+    return companyId;
+  }
+
+  googleBusinessPilotConfiguration() {
+    const required = [
+      "BASEER_MARKETING_GOOGLE_BUSINESS_PILOT_ENABLED",
+      "BASEER_GOOGLE_OAUTH_ENABLED",
+      "BASEER_GOOGLE_OAUTH_CLIENT_ID",
+      "BASEER_GOOGLE_OAUTH_CLIENT_SECRET",
+      "BASEER_GOOGLE_OAUTH_REDIRECT_URI",
+      "BASEER_PROVIDER_CREDENTIAL_ENCRYPTION_KEY",
+    ];
+    const missing = required.filter((name) => name.endsWith("_ENABLED") ? process.env[name] !== "true" : !process.env[name]?.trim());
+    if (missing.length) throw new ServiceUnavailableException("Google Business pilot configuration is incomplete.");
+    const redirectUri = process.env.BASEER_GOOGLE_OAUTH_REDIRECT_URI!.trim();
+    try { const parsed = new URL(redirectUri); if (parsed.protocol !== "https:") throw new Error("not https"); }
+    catch { throw new ServiceUnavailableException("Google Business pilot redirect configuration is invalid."); }
+    return {
+      clientId: process.env.BASEER_GOOGLE_OAUTH_CLIENT_ID!.trim(),
+      clientSecret: process.env.BASEER_GOOGLE_OAUTH_CLIENT_SECRET!.trim(),
+      redirectUri,
+    };
+  }
+
   readiness(provider: "GOOGLE_ADS" | "GOOGLE_BUSINESS"): GooglePlatformReadiness {
     const required = [
       "BASEER_GOOGLE_OAUTH_CLIENT_ID",

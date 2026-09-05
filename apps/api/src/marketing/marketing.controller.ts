@@ -2,12 +2,13 @@ import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers
 import { analysisReadinessReceiptSchema, archiveMarketingCampaignRequestSchema, createMarketingCampaignAnalysisFeedbackRequestSchema, createMarketingCampaignRequestSchema, linkMarketingCampaignContextRequestSchema, linkMarketingCampaignFinancialDocumentRequestSchema, marketingCalendarQuerySchema, marketingCalendarReadSchema, marketingCampaignAnalysisSchema, marketingEntityReceiptSchema, marketingLinkableFinancialDocumentsSchema, marketingProviderConnectionsReadSchema, marketingProviderSchema, marketingTargetMonthSchema, marketingWorkspaceSchema, requestMarketingProviderConnectionSetupSchema, stopMarketingCampaignRequestSchema, updateMarketingCampaignRequestSchema, updateMarketingReputationReplyPolicyRequestSchema, upsertMarketingSalesTargetRequestSchema } from "@baseer-erp/contracts";
 
 import { CompanyContextService } from "../company-context/company-context.service.js";
+import { MarketingGoogleBusinessOAuthPilotService } from "./marketing-google-business-oauth-pilot.service.js";
 import { MarketingService } from "./marketing.service.js";
 import { AnalysisReadinessService } from "../ai-platform/analysis-readiness.service.js";
 
 @Controller("marketing")
 export class MarketingController {
-  constructor(private readonly companyContext: CompanyContextService, private readonly marketing: MarketingService, private readonly analysisReadiness: AnalysisReadinessService) {}
+  constructor(private readonly companyContext: CompanyContextService, private readonly marketing: MarketingService, private readonly analysisReadiness: AnalysisReadinessService, private readonly googleBusinessPilot: MarketingGoogleBusinessOAuthPilotService) {}
 
   @Get()
   async workspace(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
@@ -109,6 +110,18 @@ export class MarketingController {
     // MKT-01A is a two-layer, hard-off boundary. It must stay false even when
     // a deployment accidentally retains an old experimental environment flag.
     throw new ForbiddenException("Google authorization is not available in this Baseer release.");
+  }
+
+  /** MKT-02A is intentionally separate from the generic hard-off route above. */
+  @Post("provider-connections/google-business/pilot/authorization")
+  async beginGoogleBusinessPilot(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    return this.googleBusinessPilot.begin(await this.context(authorization, companyId, "marketing.google-connection.manage"));
+  }
+
+  /** OAuth callbacks have no Baseer session; the single-use state restores context. */
+  @Get("provider-connections/google-business/pilot/callback")
+  async completeGoogleBusinessPilot(@Query("state") state: string | undefined, @Query("code") code: string | undefined, @Query("error") error: string | undefined) {
+    return { outcome: await this.googleBusinessPilot.complete({ state, code, error }) };
   }
 
   @Put("reputation/reply-policy")

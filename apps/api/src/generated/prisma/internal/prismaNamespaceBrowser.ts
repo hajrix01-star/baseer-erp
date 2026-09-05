@@ -129,6 +129,7 @@ export const ModelName = {
   MarketingCampaignContextLink: 'MarketingCampaignContextLink',
   MarketingSalesTarget: 'MarketingSalesTarget',
   MarketingProviderConnection: 'MarketingProviderConnection',
+  MarketingGoogleBusinessOAuthState: 'MarketingGoogleBusinessOAuthState',
   MarketingProviderOAuthState: 'MarketingProviderOAuthState',
   MarketingReputationReplyPolicy: 'MarketingReputationReplyPolicy',
   ReportDocument: 'ReportDocument',
@@ -1652,6 +1653,25 @@ export const MarketingProviderConnectionScalarFieldEnum = {
 } as const
 
 export type MarketingProviderConnectionScalarFieldEnum = (typeof MarketingProviderConnectionScalarFieldEnum)[keyof typeof MarketingProviderConnectionScalarFieldEnum]
+
+
+export const MarketingGoogleBusinessOAuthStateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  connectionId: 'connectionId',
+  provider: 'provider',
+  initiatedByUserId: 'initiatedByUserId',
+  stateHash: 'stateHash',
+  verifierEncrypted: 'verifierEncrypted',
+  verifierIv: 'verifierIv',
+  verifierTag: 'verifierTag',
+  expiresAt: 'expiresAt',
+  consumedAt: 'consumedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type MarketingGoogleBusinessOAuthStateScalarFieldEnum = (typeof MarketingGoogleBusinessOAuthStateScalarFieldEnum)[keyof typeof MarketingGoogleBusinessOAuthStateScalarFieldEnum]
 
 
 export const MarketingProviderOAuthStateScalarFieldEnum = {

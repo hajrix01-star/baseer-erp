@@ -475,6 +475,7 @@ enum MarketingProviderConnectionStatus {
   NOT_CONNECTED
   SETUP_REQUESTED
   AUTHORIZING
+  AUTHORIZED_AWAITING_SELECTION
   BLOCKED
 }
 
@@ -1238,6 +1239,7 @@ model Company {
   marketingProviderConnections               MarketingProviderConnection[]
   marketingProviderCredentialEnvelopes       MarketingProviderCredentialEnvelope[]
   marketingGoogleBusinessLocationMappings    MarketingGoogleBusinessLocationMapping[]
+  marketingGoogleBusinessOAuthStates         MarketingGoogleBusinessOAuthState[]
   marketingProviderSyncRuns                  MarketingProviderSyncRun[]
   marketingReputationReplyPolicy             MarketingReputationReplyPolicy?
   operationsSections                         OperationsSection[]
@@ -1351,6 +1353,7 @@ model CompanyMembership {
   company                                   Company                                  @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   role                                      Role                                     @relation(fields: [roleId, tenantId], references: [id, tenantId], onDelete: Restrict)
   marketingGoogleBusinessLocationSelections MarketingGoogleBusinessLocationMapping[]
+  marketingGoogleBusinessOAuthAttempts      MarketingGoogleBusinessOAuthState[]
 
   @@id([userId, companyId])
   @@unique([tenantId, userId, companyId])
@@ -3111,11 +3114,38 @@ model MarketingProviderConnection {
   company                        Company                                  @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
   credentialEnvelope             MarketingProviderCredentialEnvelope?
   googleBusinessLocationMappings MarketingGoogleBusinessLocationMapping[]
+  googleBusinessOAuthStates      MarketingGoogleBusinessOAuthState[]
 
   @@unique([id, tenantId, companyId])
   @@unique([id, tenantId, companyId, provider])
   @@unique([tenantId, companyId, provider])
   @@index([tenantId, companyId, status])
+}
+
+/// Pilot-only OAuth state. It binds the callback to its company, initiating
+/// membership and exact Google Business connection; provider credentials never
+/// live here.
+model MarketingGoogleBusinessOAuthState {
+  id                String            @id @default(uuid()) @db.Uuid
+  tenantId          String            @db.Uuid
+  companyId         String            @db.Uuid
+  connectionId      String            @db.Uuid
+  provider          MarketingProvider @default(GOOGLE_BUSINESS)
+  initiatedByUserId String            @db.Uuid
+  stateHash         String            @unique @db.VarChar(64)
+  verifierEncrypted String            @db.Text
+  verifierIv        String            @db.VarChar(64)
+  verifierTag       String            @db.VarChar(64)
+  expiresAt         DateTime          @db.Timestamptz(6)
+  consumedAt        DateTime?         @db.Timestamptz(6)
+  createdAt         DateTime          @default(now()) @db.Timestamptz(6)
+
+  company               Company                     @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  connection            MarketingProviderConnection @relation(fields: [connectionId, tenantId, companyId, provider], references: [id, tenantId, companyId, provider], onDelete: Restrict)
+  initiatedByMembership CompanyMembership           @relation(fields: [tenantId, initiatedByUserId, companyId], references: [tenantId, userId, companyId], onDelete: Restrict)
+
+  @@index([tenantId, companyId, provider, expiresAt])
+  @@index([connectionId, tenantId, companyId, provider])
 }
 
 /// One short-lived, single-use OAuth attempt. It is company-scoped and stores

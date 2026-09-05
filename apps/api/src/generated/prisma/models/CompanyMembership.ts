@@ -186,6 +186,7 @@ export type CompanyMembershipWhereInput = {
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
   marketingGoogleBusinessLocationSelections?: Prisma.MarketingGoogleBusinessLocationMappingListRelationFilter
+  marketingGoogleBusinessOAuthAttempts?: Prisma.MarketingGoogleBusinessOAuthStateListRelationFilter
 }
 
 export type CompanyMembershipOrderByWithRelationInput = {
@@ -198,6 +199,7 @@ export type CompanyMembershipOrderByWithRelationInput = {
   company?: Prisma.CompanyOrderByWithRelationInput
   role?: Prisma.RoleOrderByWithRelationInput
   marketingGoogleBusinessLocationSelections?: Prisma.MarketingGoogleBusinessLocationMappingOrderByRelationAggregateInput
+  marketingGoogleBusinessOAuthAttempts?: Prisma.MarketingGoogleBusinessOAuthStateOrderByRelationAggregateInput
 }
 
 export type CompanyMembershipWhereUniqueInput = Prisma.AtLeast<{
@@ -215,6 +217,7 @@ export type CompanyMembershipWhereUniqueInput = Prisma.AtLeast<{
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.RoleWhereInput>
   marketingGoogleBusinessLocationSelections?: Prisma.MarketingGoogleBusinessLocationMappingListRelationFilter
+  marketingGoogleBusinessOAuthAttempts?: Prisma.MarketingGoogleBusinessOAuthStateListRelationFilter
 }, "userId_companyId" | "tenantId_userId_companyId">
 
 export type CompanyMembershipOrderByWithAggregationInput = {
@@ -245,6 +248,7 @@ export type CompanyMembershipCreateInput = {
   company: Prisma.CompanyCreateNestedOneWithoutMembershipsInput
   role: Prisma.RoleCreateNestedOneWithoutMembershipsInput
   marketingGoogleBusinessLocationSelections?: Prisma.MarketingGoogleBusinessLocationMappingCreateNestedManyWithoutSelectedByMembershipInput
+  marketingGoogleBusinessOAuthAttempts?: Prisma.MarketingGoogleBusinessOAuthStateCreateNestedManyWithoutInitiatedByMembershipInput
 }
 
 export type CompanyMembershipUncheckedCreateInput = {
@@ -254,6 +258,7 @@ export type CompanyMembershipUncheckedCreateInput = {
   roleId: string
   createdAt?: Date | string
   marketingGoogleBusinessLocationSelections?: Prisma.MarketingGoogleBusinessLocationMappingUncheckedCreateNestedManyWithoutSelectedByMembershipInput
+  marketingGoogleBusinessOAuthAttempts?: Prisma.MarketingGoogleBusinessOAuthStateUncheckedCreateNestedManyWithoutInitiatedByMembershipInput
 }
 
 export type CompanyMembershipUpdateInput = {
@@ -262,6 +267,7 @@ export type CompanyMembershipUpdateInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutMembershipsNestedInput
   role?: Prisma.RoleUpdateOneRequiredWithoutMembershipsNestedInput
   marketingGoogleBusinessLocationSelections?: Prisma.MarketingGoogleBusinessLocationMappingUpdateManyWithoutSelectedByMembershipNestedInput
+  marketingGoogleBusinessOAuthAttempts?: Prisma.MarketingGoogleBusinessOAuthStateUpdateManyWithoutInitiatedByMembershipNestedInput
 }
 
 export type CompanyMembershipUncheckedUpdateInput = {
@@ -271,6 +277,7 @@ export type CompanyMembershipUncheckedUpdateInput = {
   roleId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   marketingGoogleBusinessLocationSelections?: Prisma.MarketingGoogleBusinessLocationMappingUncheckedUpdateManyWithoutSelectedByMembershipNestedInput
+  marketingGoogleBusinessOAuthAttempts?: Prisma.MarketingGoogleBusinessOAuthStateUncheckedUpdateManyWithoutInitiatedByMembershipNestedInput
 }
 
 export type CompanyMembershipCreateManyInput = {
@@ -483,11 +490,26 @@ export type CompanyMembershipUpdateOneRequiredWithoutMarketingGoogleBusinessLoca
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyMembershipUpdateToOneWithWhereWithoutMarketingGoogleBusinessLocationSelectionsInput, Prisma.CompanyMembershipUpdateWithoutMarketingGoogleBusinessLocationSelectionsInput>, Prisma.CompanyMembershipUncheckedUpdateWithoutMarketingGoogleBusinessLocationSelectionsInput>
 }
 
+export type CompanyMembershipCreateNestedOneWithoutMarketingGoogleBusinessOAuthAttemptsInput = {
+  create?: Prisma.XOR<Prisma.CompanyMembershipCreateWithoutMarketingGoogleBusinessOAuthAttemptsInput, Prisma.CompanyMembershipUncheckedCreateWithoutMarketingGoogleBusinessOAuthAttemptsInput>
+  connectOrCreate?: Prisma.CompanyMembershipCreateOrConnectWithoutMarketingGoogleBusinessOAuthAttemptsInput
+  connect?: Prisma.CompanyMembershipWhereUniqueInput
+}
+
+export type CompanyMembershipUpdateOneRequiredWithoutMarketingGoogleBusinessOAuthAttemptsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyMembershipCreateWithoutMarketingGoogleBusinessOAuthAttemptsInput, Prisma.CompanyMembershipUncheckedCreateWithoutMarketingGoogleBusinessOAuthAttemptsInput>
+  connectOrCreate?: Prisma.CompanyMembershipCreateOrConnectWithoutMarketingGoogleBusinessOAuthAttemptsInput
+  upsert?: Prisma.CompanyMembershipUpsertWithoutMarketingGoogleBusinessOAuthAttemptsInput
+  connect?: Prisma.CompanyMembershipWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyMembershipUpdateToOneWithWhereWithoutMarketingGoogleBusinessOAuthAttemptsInput, Prisma.CompanyMembershipUpdateWithoutMarketingGoogleBusinessOAuthAttemptsInput>, Prisma.CompanyMembershipUncheckedUpdateWithoutMarketingGoogleBusinessOAuthAttemptsInput>
+}
+
 export type CompanyMembershipCreateWithoutUserInput = {
   createdAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutMembershipsInput
   role: Prisma.RoleCreateNestedOneWithoutMembershipsInput
   marketingGoogleBusinessLocationSelections?: Prisma.MarketingGoogleBusinessLocationMappingCreateNestedManyWithoutSelectedByMembershipInput
+  marketingGoogleBusinessOAuthAttempts?: Prisma.MarketingGoogleBusinessOAuthStateCreateNestedManyWithoutInitiatedByMembershipInput
 }
 
 export type CompanyMembershipUncheckedCreateWithoutUserInput = {
@@ -495,6 +517,7 @@ export type CompanyMembershipUncheckedCreateWithoutUserInput = {
   roleId: string
   createdAt?: Date | string
   marketingGoogleBusinessLocationSelections?: Prisma.MarketingGoogleBusinessLocationMappingUncheckedCreateNestedManyWithoutSelectedByMembershipInput
+  marketingGoogleBusinessOAuthAttempts?: Prisma.MarketingGoogleBusinessOAuthStateUncheckedCreateNestedManyWithoutInitiatedByMembershipInput
 }
 
 export type CompanyMembershipCreateOrConnectWithoutUserInput = {
@@ -539,6 +562,7 @@ export type CompanyMembershipCreateWithoutCompanyInput = {
   user: Prisma.UserCreateNestedOneWithoutMembershipsInput
   role: Prisma.RoleCreateNestedOneWithoutMembershipsInput
   marketingGoogleBusinessLocationSelections?: Prisma.MarketingGoogleBusinessLocationMappingCreateNestedManyWithoutSelectedByMembershipInput
+  marketingGoogleBusinessOAuthAttempts?: Prisma.MarketingGoogleBusinessOAuthStateCreateNestedManyWithoutInitiatedByMembershipInput
 }
 
 export type CompanyMembershipUncheckedCreateWithoutCompanyInput = {
@@ -546,6 +570,7 @@ export type CompanyMembershipUncheckedCreateWithoutCompanyInput = {
   roleId: string
   createdAt?: Date | string
   marketingGoogleBusinessLocationSelections?: Prisma.MarketingGoogleBusinessLocationMappingUncheckedCreateNestedManyWithoutSelectedByMembershipInput
+  marketingGoogleBusinessOAuthAttempts?: Prisma.MarketingGoogleBusinessOAuthStateUncheckedCreateNestedManyWithoutInitiatedByMembershipInput
 }
 
 export type CompanyMembershipCreateOrConnectWithoutCompanyInput = {
@@ -579,6 +604,7 @@ export type CompanyMembershipCreateWithoutRoleInput = {
   user: Prisma.UserCreateNestedOneWithoutMembershipsInput
   company: Prisma.CompanyCreateNestedOneWithoutMembershipsInput
   marketingGoogleBusinessLocationSelections?: Prisma.MarketingGoogleBusinessLocationMappingCreateNestedManyWithoutSelectedByMembershipInput
+  marketingGoogleBusinessOAuthAttempts?: Prisma.MarketingGoogleBusinessOAuthStateCreateNestedManyWithoutInitiatedByMembershipInput
 }
 
 export type CompanyMembershipUncheckedCreateWithoutRoleInput = {
@@ -586,6 +612,7 @@ export type CompanyMembershipUncheckedCreateWithoutRoleInput = {
   companyId: string
   createdAt?: Date | string
   marketingGoogleBusinessLocationSelections?: Prisma.MarketingGoogleBusinessLocationMappingUncheckedCreateNestedManyWithoutSelectedByMembershipInput
+  marketingGoogleBusinessOAuthAttempts?: Prisma.MarketingGoogleBusinessOAuthStateUncheckedCreateNestedManyWithoutInitiatedByMembershipInput
 }
 
 export type CompanyMembershipCreateOrConnectWithoutRoleInput = {
@@ -619,6 +646,7 @@ export type CompanyMembershipCreateWithoutMarketingGoogleBusinessLocationSelecti
   user: Prisma.UserCreateNestedOneWithoutMembershipsInput
   company: Prisma.CompanyCreateNestedOneWithoutMembershipsInput
   role: Prisma.RoleCreateNestedOneWithoutMembershipsInput
+  marketingGoogleBusinessOAuthAttempts?: Prisma.MarketingGoogleBusinessOAuthStateCreateNestedManyWithoutInitiatedByMembershipInput
 }
 
 export type CompanyMembershipUncheckedCreateWithoutMarketingGoogleBusinessLocationSelectionsInput = {
@@ -627,6 +655,7 @@ export type CompanyMembershipUncheckedCreateWithoutMarketingGoogleBusinessLocati
   companyId: string
   roleId: string
   createdAt?: Date | string
+  marketingGoogleBusinessOAuthAttempts?: Prisma.MarketingGoogleBusinessOAuthStateUncheckedCreateNestedManyWithoutInitiatedByMembershipInput
 }
 
 export type CompanyMembershipCreateOrConnectWithoutMarketingGoogleBusinessLocationSelectionsInput = {
@@ -650,6 +679,7 @@ export type CompanyMembershipUpdateWithoutMarketingGoogleBusinessLocationSelecti
   user?: Prisma.UserUpdateOneRequiredWithoutMembershipsNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutMembershipsNestedInput
   role?: Prisma.RoleUpdateOneRequiredWithoutMembershipsNestedInput
+  marketingGoogleBusinessOAuthAttempts?: Prisma.MarketingGoogleBusinessOAuthStateUpdateManyWithoutInitiatedByMembershipNestedInput
 }
 
 export type CompanyMembershipUncheckedUpdateWithoutMarketingGoogleBusinessLocationSelectionsInput = {
@@ -658,6 +688,57 @@ export type CompanyMembershipUncheckedUpdateWithoutMarketingGoogleBusinessLocati
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   roleId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  marketingGoogleBusinessOAuthAttempts?: Prisma.MarketingGoogleBusinessOAuthStateUncheckedUpdateManyWithoutInitiatedByMembershipNestedInput
+}
+
+export type CompanyMembershipCreateWithoutMarketingGoogleBusinessOAuthAttemptsInput = {
+  createdAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutMembershipsInput
+  company: Prisma.CompanyCreateNestedOneWithoutMembershipsInput
+  role: Prisma.RoleCreateNestedOneWithoutMembershipsInput
+  marketingGoogleBusinessLocationSelections?: Prisma.MarketingGoogleBusinessLocationMappingCreateNestedManyWithoutSelectedByMembershipInput
+}
+
+export type CompanyMembershipUncheckedCreateWithoutMarketingGoogleBusinessOAuthAttemptsInput = {
+  tenantId: string
+  userId: string
+  companyId: string
+  roleId: string
+  createdAt?: Date | string
+  marketingGoogleBusinessLocationSelections?: Prisma.MarketingGoogleBusinessLocationMappingUncheckedCreateNestedManyWithoutSelectedByMembershipInput
+}
+
+export type CompanyMembershipCreateOrConnectWithoutMarketingGoogleBusinessOAuthAttemptsInput = {
+  where: Prisma.CompanyMembershipWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyMembershipCreateWithoutMarketingGoogleBusinessOAuthAttemptsInput, Prisma.CompanyMembershipUncheckedCreateWithoutMarketingGoogleBusinessOAuthAttemptsInput>
+}
+
+export type CompanyMembershipUpsertWithoutMarketingGoogleBusinessOAuthAttemptsInput = {
+  update: Prisma.XOR<Prisma.CompanyMembershipUpdateWithoutMarketingGoogleBusinessOAuthAttemptsInput, Prisma.CompanyMembershipUncheckedUpdateWithoutMarketingGoogleBusinessOAuthAttemptsInput>
+  create: Prisma.XOR<Prisma.CompanyMembershipCreateWithoutMarketingGoogleBusinessOAuthAttemptsInput, Prisma.CompanyMembershipUncheckedCreateWithoutMarketingGoogleBusinessOAuthAttemptsInput>
+  where?: Prisma.CompanyMembershipWhereInput
+}
+
+export type CompanyMembershipUpdateToOneWithWhereWithoutMarketingGoogleBusinessOAuthAttemptsInput = {
+  where?: Prisma.CompanyMembershipWhereInput
+  data: Prisma.XOR<Prisma.CompanyMembershipUpdateWithoutMarketingGoogleBusinessOAuthAttemptsInput, Prisma.CompanyMembershipUncheckedUpdateWithoutMarketingGoogleBusinessOAuthAttemptsInput>
+}
+
+export type CompanyMembershipUpdateWithoutMarketingGoogleBusinessOAuthAttemptsInput = {
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutMembershipsNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutMembershipsNestedInput
+  role?: Prisma.RoleUpdateOneRequiredWithoutMembershipsNestedInput
+  marketingGoogleBusinessLocationSelections?: Prisma.MarketingGoogleBusinessLocationMappingUpdateManyWithoutSelectedByMembershipNestedInput
+}
+
+export type CompanyMembershipUncheckedUpdateWithoutMarketingGoogleBusinessOAuthAttemptsInput = {
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  roleId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  marketingGoogleBusinessLocationSelections?: Prisma.MarketingGoogleBusinessLocationMappingUncheckedUpdateManyWithoutSelectedByMembershipNestedInput
 }
 
 export type CompanyMembershipCreateManyUserInput = {
@@ -671,6 +752,7 @@ export type CompanyMembershipUpdateWithoutUserInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutMembershipsNestedInput
   role?: Prisma.RoleUpdateOneRequiredWithoutMembershipsNestedInput
   marketingGoogleBusinessLocationSelections?: Prisma.MarketingGoogleBusinessLocationMappingUpdateManyWithoutSelectedByMembershipNestedInput
+  marketingGoogleBusinessOAuthAttempts?: Prisma.MarketingGoogleBusinessOAuthStateUpdateManyWithoutInitiatedByMembershipNestedInput
 }
 
 export type CompanyMembershipUncheckedUpdateWithoutUserInput = {
@@ -678,6 +760,7 @@ export type CompanyMembershipUncheckedUpdateWithoutUserInput = {
   roleId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   marketingGoogleBusinessLocationSelections?: Prisma.MarketingGoogleBusinessLocationMappingUncheckedUpdateManyWithoutSelectedByMembershipNestedInput
+  marketingGoogleBusinessOAuthAttempts?: Prisma.MarketingGoogleBusinessOAuthStateUncheckedUpdateManyWithoutInitiatedByMembershipNestedInput
 }
 
 export type CompanyMembershipUncheckedUpdateManyWithoutUserInput = {
@@ -697,6 +780,7 @@ export type CompanyMembershipUpdateWithoutCompanyInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutMembershipsNestedInput
   role?: Prisma.RoleUpdateOneRequiredWithoutMembershipsNestedInput
   marketingGoogleBusinessLocationSelections?: Prisma.MarketingGoogleBusinessLocationMappingUpdateManyWithoutSelectedByMembershipNestedInput
+  marketingGoogleBusinessOAuthAttempts?: Prisma.MarketingGoogleBusinessOAuthStateUpdateManyWithoutInitiatedByMembershipNestedInput
 }
 
 export type CompanyMembershipUncheckedUpdateWithoutCompanyInput = {
@@ -704,6 +788,7 @@ export type CompanyMembershipUncheckedUpdateWithoutCompanyInput = {
   roleId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   marketingGoogleBusinessLocationSelections?: Prisma.MarketingGoogleBusinessLocationMappingUncheckedUpdateManyWithoutSelectedByMembershipNestedInput
+  marketingGoogleBusinessOAuthAttempts?: Prisma.MarketingGoogleBusinessOAuthStateUncheckedUpdateManyWithoutInitiatedByMembershipNestedInput
 }
 
 export type CompanyMembershipUncheckedUpdateManyWithoutCompanyInput = {
@@ -723,6 +808,7 @@ export type CompanyMembershipUpdateWithoutRoleInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutMembershipsNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutMembershipsNestedInput
   marketingGoogleBusinessLocationSelections?: Prisma.MarketingGoogleBusinessLocationMappingUpdateManyWithoutSelectedByMembershipNestedInput
+  marketingGoogleBusinessOAuthAttempts?: Prisma.MarketingGoogleBusinessOAuthStateUpdateManyWithoutInitiatedByMembershipNestedInput
 }
 
 export type CompanyMembershipUncheckedUpdateWithoutRoleInput = {
@@ -730,6 +816,7 @@ export type CompanyMembershipUncheckedUpdateWithoutRoleInput = {
   companyId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   marketingGoogleBusinessLocationSelections?: Prisma.MarketingGoogleBusinessLocationMappingUncheckedUpdateManyWithoutSelectedByMembershipNestedInput
+  marketingGoogleBusinessOAuthAttempts?: Prisma.MarketingGoogleBusinessOAuthStateUncheckedUpdateManyWithoutInitiatedByMembershipNestedInput
 }
 
 export type CompanyMembershipUncheckedUpdateManyWithoutRoleInput = {
@@ -745,10 +832,12 @@ export type CompanyMembershipUncheckedUpdateManyWithoutRoleInput = {
 
 export type CompanyMembershipCountOutputType = {
   marketingGoogleBusinessLocationSelections: number
+  marketingGoogleBusinessOAuthAttempts: number
 }
 
 export type CompanyMembershipCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   marketingGoogleBusinessLocationSelections?: boolean | CompanyMembershipCountOutputTypeCountMarketingGoogleBusinessLocationSelectionsArgs
+  marketingGoogleBusinessOAuthAttempts?: boolean | CompanyMembershipCountOutputTypeCountMarketingGoogleBusinessOAuthAttemptsArgs
 }
 
 /**
@@ -768,6 +857,13 @@ export type CompanyMembershipCountOutputTypeCountMarketingGoogleBusinessLocation
   where?: Prisma.MarketingGoogleBusinessLocationMappingWhereInput
 }
 
+/**
+ * CompanyMembershipCountOutputType without action
+ */
+export type CompanyMembershipCountOutputTypeCountMarketingGoogleBusinessOAuthAttemptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MarketingGoogleBusinessOAuthStateWhereInput
+}
+
 
 export type CompanyMembershipSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   tenantId?: boolean
@@ -779,6 +875,7 @@ export type CompanyMembershipSelect<ExtArgs extends runtime.Types.Extensions.Int
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
   marketingGoogleBusinessLocationSelections?: boolean | Prisma.CompanyMembership$marketingGoogleBusinessLocationSelectionsArgs<ExtArgs>
+  marketingGoogleBusinessOAuthAttempts?: boolean | Prisma.CompanyMembership$marketingGoogleBusinessOAuthAttemptsArgs<ExtArgs>
   _count?: boolean | Prisma.CompanyMembershipCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["companyMembership"]>
 
@@ -818,6 +915,7 @@ export type CompanyMembershipInclude<ExtArgs extends runtime.Types.Extensions.In
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   role?: boolean | Prisma.RoleDefaultArgs<ExtArgs>
   marketingGoogleBusinessLocationSelections?: boolean | Prisma.CompanyMembership$marketingGoogleBusinessLocationSelectionsArgs<ExtArgs>
+  marketingGoogleBusinessOAuthAttempts?: boolean | Prisma.CompanyMembership$marketingGoogleBusinessOAuthAttemptsArgs<ExtArgs>
   _count?: boolean | Prisma.CompanyMembershipCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CompanyMembershipIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -838,6 +936,7 @@ export type $CompanyMembershipPayload<ExtArgs extends runtime.Types.Extensions.I
     company: Prisma.$CompanyPayload<ExtArgs>
     role: Prisma.$RolePayload<ExtArgs>
     marketingGoogleBusinessLocationSelections: Prisma.$MarketingGoogleBusinessLocationMappingPayload<ExtArgs>[]
+    marketingGoogleBusinessOAuthAttempts: Prisma.$MarketingGoogleBusinessOAuthStatePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     tenantId: string
@@ -1243,6 +1342,7 @@ export interface Prisma__CompanyMembershipClient<T, Null = never, ExtArgs extend
   company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   role<T extends Prisma.RoleDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RoleDefaultArgs<ExtArgs>>): Prisma.Prisma__RoleClient<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   marketingGoogleBusinessLocationSelections<T extends Prisma.CompanyMembership$marketingGoogleBusinessLocationSelectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyMembership$marketingGoogleBusinessLocationSelectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarketingGoogleBusinessLocationMappingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  marketingGoogleBusinessOAuthAttempts<T extends Prisma.CompanyMembership$marketingGoogleBusinessOAuthAttemptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyMembership$marketingGoogleBusinessOAuthAttemptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarketingGoogleBusinessOAuthStatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1699,6 +1799,30 @@ export type CompanyMembership$marketingGoogleBusinessLocationSelectionsArgs<ExtA
   take?: number
   skip?: number
   distinct?: Prisma.MarketingGoogleBusinessLocationMappingScalarFieldEnum | Prisma.MarketingGoogleBusinessLocationMappingScalarFieldEnum[]
+}
+
+/**
+ * CompanyMembership.marketingGoogleBusinessOAuthAttempts
+ */
+export type CompanyMembership$marketingGoogleBusinessOAuthAttemptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MarketingGoogleBusinessOAuthState
+   */
+  select?: Prisma.MarketingGoogleBusinessOAuthStateSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MarketingGoogleBusinessOAuthState
+   */
+  omit?: Prisma.MarketingGoogleBusinessOAuthStateOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MarketingGoogleBusinessOAuthStateInclude<ExtArgs> | null
+  where?: Prisma.MarketingGoogleBusinessOAuthStateWhereInput
+  orderBy?: Prisma.MarketingGoogleBusinessOAuthStateOrderByWithRelationInput | Prisma.MarketingGoogleBusinessOAuthStateOrderByWithRelationInput[]
+  cursor?: Prisma.MarketingGoogleBusinessOAuthStateWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MarketingGoogleBusinessOAuthStateScalarFieldEnum | Prisma.MarketingGoogleBusinessOAuthStateScalarFieldEnum[]
 }
 
 /**
