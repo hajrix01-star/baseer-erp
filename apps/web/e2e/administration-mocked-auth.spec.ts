@@ -53,7 +53,7 @@ function overview(owner = true, logoFileMetadataId: string | null = null) {
   };
 }
 
-async function mockAdministration(page: Page, language: "ar" | "en", requests: string[] = [], owner = true, logoFileMetadataId: string | null = null) {
+async function mockAdministration(page: Page, language: "ar" | "en", requests: string[] = [], owner = true, logoFileMetadataId: string | null = null, aiConfiguration: unknown = { companyId, providerCapabilities: [openAiCapability], activeProvider: null, providerConfigurations: [], latestProviderConnectionCheck: null, activeSystemIdentity: null, activeIdentity: null }) {
   await page.addInitScript(({ locale, company }) => {
     sessionStorage.setItem("baseer.erp.access-token", "administration-e2e-token");
     sessionStorage.setItem("baseer.erp.refresh-token", "administration-e2e-refresh-token");
@@ -67,7 +67,7 @@ async function mockAdministration(page: Page, language: "ar" | "en", requests: s
     if (url.pathname === "/v1/companies/available") return fulfill(route, { companies: [{ id: companyId, nameAr: "شركة الاختبار", nameEn: "Test company", permissionCodes: permissions }] });
     if (url.pathname === "/v1/administration/overview") return fulfill(route, overview(owner, logoFileMetadataId));
     if (url.pathname === "/v1/finance/configuration") return fulfill(route, { profile: { vatRateBasisPoints: 1500 } });
-    if (url.pathname === "/v1/administration/ai/configuration") return fulfill(route, { companyId, providerCapabilities: [openAiCapability], activeProvider: null, providerConfigurations: [], latestProviderConnectionCheck: null, activeSystemIdentity: null, activeIdentity: null });
+    if (url.pathname === "/v1/administration/ai/configuration") return fulfill(route, aiConfiguration);
     if (url.pathname === "/v1/administration/ai/governance") return fulfill(route, basiraGovernance);
     if (url.pathname === "/v1/administration/ai/provider-connection" && route.request().method() === "POST") return fulfill(route, { state: "READY", reason: null, provider: "OPENAI_COMPATIBLE", model: "gpt-5-mini", checkedAt: "2026-08-23T12:00:00.000Z" });
     if (url.pathname === "/v1/administration/ai/provider-configurations" && route.request().method() === "POST") return fulfill(route, { id: "44444444-4444-4444-8444-444444444444", provider: "OPENAI_COMPATIBLE", model: "gpt-5-mini", status: "ACTIVE", isDefault: true, dailyRequestLimit: 10, dailyCostLimit: null, configurationVersion: 1, createdAt: "2026-08-23T12:00:00.000Z", updatedAt: "2026-08-23T12:00:00.000Z" }, 201);
@@ -181,6 +181,21 @@ test("Basira settings store the OpenAI key once and never display it", async ({ 
   await expect(page.getByLabel("AI provider API key")).toHaveValue("");
   const accessibility = await new AxeBuilder({ page }).include(".administration-ai-settings").analyze();
   expect(accessibility.violations).toEqual([]);
+});
+
+test("Basira draft profile exposes a working verification action", async ({ page }) => {
+  const requests: string[] = [];
+  const draft = { id: "44444444-4444-4444-8444-444444444444", provider: "OPENAI_COMPATIBLE", model: "gpt-5-mini", status: "DRAFT", isDefault: false, dailyRequestLimit: 10, dailyCostLimit: "0.25", configurationVersion: 1, createdAt: "2026-09-05T12:00:00.000Z", updatedAt: "2026-09-05T12:00:00.000Z" };
+  await mockAdministration(page, "ar", requests, true, null, { companyId, providerCapabilities: [openAiCapability], activeProvider: null, providerConfigurations: [draft], latestProviderConnectionCheck: null, activeSystemIdentity: null, activeIdentity: null });
+  await page.goto("/#module=administration&section=4");
+  if (test.info().project.name === "mobile-chromium") await page.getByLabel("انتقل إلى قسم").selectOption("settings");
+  else await page.getByRole("tab", { name: "إعدادات متقدمة" }).click();
+
+  const profile = page.locator(".administration-ai-profile-switcher__list article", { hasText: "gpt-5-mini" });
+  const verify = profile.getByRole("button", { name: "فحص الاتصال" });
+  await expect(verify).toBeEnabled();
+  await verify.click();
+  await expect.poll(() => requests.filter((request) => request === "POST /v1/administration/ai/provider-connection").length).toBe(1);
 });
 
 for (const language of ["ar", "en"] as const) {
