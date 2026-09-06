@@ -8,7 +8,7 @@ import { DatabaseService } from "../database/database.service.js";
 import { hashPassword } from "../identity/password.util.js";
 import { displayLoginIdentifier, normalizeLoginIdentifier } from "../identity/login-identifier.js";
 import { RequestContext } from "../observability/request-context.js";
-import { ADMINISTRATION_PERMISSION_CATALOG, permissionCodesAreKnown, SYSTEM_ROLE_TEMPLATES } from "./administration-permissions.js";
+import { ADMINISTRATION_PERMISSION_CATALOG, normalizePermissionCodes, permissionCodesAreKnown, permissionPresentation, SYSTEM_ROLE_TEMPLATES } from "./administration-permissions.js";
 import type { TrustedTenantAdministratorContext } from "./tenant-administration-context.service.js";
 
 @Injectable()
@@ -30,7 +30,7 @@ export class AdministrationService {
       ]);
       return {
         owner: context.isOwner,
-        permissions: ADMINISTRATION_PERMISSION_CATALOG,
+        permissions: ADMINISTRATION_PERMISSION_CATALOG.map(permissionPresentation),
         companies: companies.map((company) => ({ id: company.id, nameAr: company.nameAr, nameEn: company.nameEn, businessTimezone: company.businessTimezone, status: company.status, migrationReviewLocked: company.migrationReviewLocked, logoFileMetadataId: company.branding?.logoFileMetadataId ?? null, contextLocationCode: company.contextLocationCode, contextLocationLabelAr: company.contextLocationLabelAr, contextLatitude: company.contextLatitude?.toString() ? Number(company.contextLatitude.toString()) : null, contextLongitude: company.contextLongitude?.toString() ? Number(company.contextLongitude.toString()) : null })),
         users: users.map((user) => ({ id: user.id, login: displayLoginIdentifier(user.loginNormalized, tenant.code), nameAr: user.nameAr, nameEn: user.nameEn, preferredLanguage: user.preferredLanguage, avatarKind: user.avatarKind as "INITIALS" | "MALE" | "FEMALE", status: user.status, isOwner: user.tenantAdministrationAssignments.some((assignment) => assignment.isOwner), memberships: user.memberships.map((membership) => ({ companyId: membership.companyId, companyNameAr: membership.company.nameAr, companyNameEn: membership.company.nameEn, roleId: membership.roleId, roleNameAr: membership.role.nameAr, roleNameEn: membership.role.nameEn })) })),
         roles: roles.map((role) => ({ id: role.id, code: role.code, nameAr: role.nameAr, nameEn: role.nameEn, isSystem: role.isSystem, permissionCodes: role.grants.map((grant) => grant.permissionCode) })),
@@ -58,7 +58,7 @@ export class AdministrationService {
       await this.ensureSystemRoles(tx, context.tenantId);
       const id = randomUUID();
       const code = this.generatedRoleCode(request.nameEn);
-      const permissionCodes = [...new Set(request.permissionCodes)];
+      const permissionCodes = normalizePermissionCodes(request.permissionCodes);
       await tx.role.create({ data: { id, tenantId: context.tenantId, code, nameAr: request.nameAr, nameEn: request.nameEn, isSystem: false } });
       await tx.rolePermission.createMany({ data: permissionCodes.map((permissionCode) => ({ tenantId: context.tenantId, roleId: id, permissionCode })) });
       await this.audit(tx, context, "administration.role.created", "Role", id, null, { code, permissionCodes });
@@ -73,7 +73,7 @@ export class AdministrationService {
       const role = await tx.role.findFirst({ where: { id: roleId, tenantId: context.tenantId }, include: { grants: true } });
       if (!role) throw new NotFoundException("Role was not found.");
       if (role.isSystem) throw new ForbiddenException("System roles are immutable.");
-      const permissionCodes: string[] = [...new Set(request.permissionCodes)];
+      const permissionCodes = normalizePermissionCodes(request.permissionCodes);
       await tx.role.update({ where: { id: role.id }, data: { nameAr: request.nameAr, nameEn: request.nameEn } });
       await tx.rolePermission.deleteMany({ where: { roleId: role.id } });
       await tx.rolePermission.createMany({ data: permissionCodes.map((permissionCode) => ({ tenantId: context.tenantId, roleId: role.id, permissionCode })) });
@@ -356,7 +356,7 @@ export class AdministrationService {
     if (await tx.role.count({ where: { tenantId } })) return;
     for (const template of SYSTEM_ROLE_TEMPLATES) {
       const role = await tx.role.create({ data: { id: randomUUID(), tenantId, code: template.code, nameAr: template.nameAr, nameEn: template.nameEn, isSystem: true } });
-      await tx.rolePermission.createMany({ data: [...template.permissions].map((permissionCode) => ({ tenantId, roleId: role.id, permissionCode })) });
+      await tx.rolePermission.createMany({ data: normalizePermissionCodes(template.permissions).map((permissionCode) => ({ tenantId, roleId: role.id, permissionCode })) });
     }
   }
   private generatedRoleCode(nameEn: string): string {

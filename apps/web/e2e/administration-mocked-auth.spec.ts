@@ -47,8 +47,8 @@ function overview(owner = true, logoFileMetadataId: string | null = null) {
     users: [{ id: userId, login: "user@test.local", nameAr: "مستخدم الاختبار", nameEn: "Test user", preferredLanguage: "ar", avatarKind: "INITIALS", status: "ACTIVE", isOwner: false, memberships: [{ companyId, companyNameAr: "شركة الاختبار", companyNameEn: "Test company", roleId, roleNameAr: "مدير الاختبار", roleNameEn: "Test manager" }] }],
     roles: [{ id: roleId, code: "TEST_MANAGER", nameAr: "مدير الاختبار", nameEn: "Test manager", isSystem: false, permissionCodes: ["administration.users.read"] }],
     permissions: [
-      { code: "administration.users.read", module: "administration", nameAr: "عرض المستخدمين", nameEn: "View users", risk: "standard" },
-      { code: "administration.users.manage", module: "administration", nameAr: "إدارة المستخدمين", nameEn: "Manage users", risk: "sensitive" },
+      { code: "administration.users.read", module: "administration", moduleAr: "الإدارة", moduleEn: "Administration", sectionAr: "المستخدمون", sectionEn: "Users", nameAr: "عرض المستخدمين", nameEn: "View users", risk: "standard", requires: [] },
+      { code: "administration.users.manage", module: "administration", moduleAr: "الإدارة", moduleEn: "Administration", sectionAr: "المستخدمون", sectionEn: "Users", nameAr: "إدارة المستخدمين", nameEn: "Manage users", risk: "sensitive", requires: ["administration.users.read"] },
     ],
   };
 }
