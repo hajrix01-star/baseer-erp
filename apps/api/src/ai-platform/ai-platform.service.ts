@@ -687,6 +687,10 @@ export class AiPlatformService {
 
   async suspendSkillActivation(context: TrustedCompanyActorContext, activationId: string, input: SuspendAiSkillActivationRequest) {
     const suspendedId = await this.database.inTenantTransaction(context.tenantId, async (transaction) => {
+      // This is a provider-egress kill switch. It shares the reservation lock
+      // so a request that began before suspension must re-check under the same
+      // lock before it can reserve a cost or call the provider.
+      await this.lockCompanyPolicyInTransaction(transaction, context);
       const activation = await transaction.aiSkillActivation.findFirst({ where: { id: activationId, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true, skillKey: true, status: true } });
       if (!activation) throw new NotFoundException("The Basira skill activation was not found.");
       if (activation.status === AiSkillActivationStatus.SUSPENDED) throw new ConflictException("The Basira skill is already suspended.");
@@ -1293,6 +1297,13 @@ export class AiPlatformService {
     context: TrustedCompanyActorContext,
   ) {
     await transaction.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${`ai-company-identity:${context.tenantId}:${context.companyId}`}))`;
+  }
+
+  private async lockCompanyPolicyInTransaction(
+    transaction: Prisma.TransactionClient,
+    context: Pick<TrustedCompanyActorContext, "tenantId" | "companyId">,
+  ) {
+    await transaction.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${`ai-company-policy:${context.tenantId}:${context.companyId}`}))`;
   }
 
   private async audit(

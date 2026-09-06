@@ -7,6 +7,8 @@ import { DatabaseService } from "../database/database.service.js";
 import {
   AiBudgetReservationStatus,
   AiCompanyPolicyMode,
+  AiCompanySkillOverrideState,
+  AiSkillActivationStatus,
   AiUsageLedgerKind,
   Prisma,
   type AiProviderKind,
@@ -96,14 +98,18 @@ export class AiConsumptionGuardService {
 
     return this.database.inTenantTransaction(input.context.tenantId, async (transaction) => {
       await this.lockBudgetInTransaction(transaction, input.context, now);
+      // Every live reservation shares this lock with policy and skill-pause
+      // writes. A request that passed an earlier eligibility read must verify
+      // the current kill-switch state immediately before provider egress.
+      await this.lockCompanyPolicyInTransaction(transaction, input.context);
       if (input.companyPolicy) {
         // Policy writes and live-cost reservations share this lock.  A policy
         // pause or allowlist change therefore cannot land between the runtime
         // eligibility check and the outbound provider call.
-        await this.lockCompanyPolicyInTransaction(transaction, input.context);
         await this.assertCompanyPolicySnapshotIsCurrent(transaction, input.context, input.companyPolicy);
         await this.lockCompanyMonthInTransaction(transaction, input.context, now);
       }
+      await this.assertActivationIsStillLive(transaction, input.context, input.activation, now);
       await this.expireStaleReservationsInTransaction(transaction, input.context, now);
 
       const price = await transaction.aiModelPriceRevision.findFirst({
@@ -408,6 +414,39 @@ export class AiConsumptionGuardService {
       : null;
     if (!revision) {
       throw new ConflictException("The Basira company policy changed before this request could reserve cost. Review the current policy and try again.");
+    }
+  }
+
+  private async assertActivationIsStillLive(
+    transaction: Prisma.TransactionClient,
+    context: Pick<TrustedCompanyActorContext, "tenantId" | "companyId">,
+    activation: AiConsumptionActivation,
+    now: Date,
+  ): Promise<void> {
+    const currentActivation = await transaction.aiSkillActivation.findFirst({
+      where: {
+        id: activation.id,
+        tenantId: context.tenantId,
+        companyId: context.companyId,
+        status: { in: [AiSkillActivationStatus.ACTIVE, AiSkillActivationStatus.PILOT] },
+        validFrom: { lte: now },
+        OR: [{ validUntil: null }, { validUntil: { gt: now } }],
+      },
+      select: { id: true, skillKey: true },
+    });
+    const blockedOverride = currentActivation
+      ? await transaction.aiCompanySkillOverride.findFirst({
+        where: {
+          tenantId: context.tenantId,
+          companyId: context.companyId,
+          skillKey: currentActivation.skillKey,
+          state: AiCompanySkillOverrideState.BLOCKED,
+        },
+        select: { id: true },
+      })
+      : null;
+    if (!currentActivation || blockedOverride) {
+      throw new ConflictException("This Basira skill was paused or is no longer active before provider egress.");
     }
   }
 

@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 
 import type { TrustedCompanyActorContext } from "../core-controls/trusted-context.js";
 import { DatabaseService } from "../database/database.service.js";
-import { AiBudgetReservationStatus, Prisma } from "../generated/prisma/client.js";
+import { AiBudgetReservationStatus, AiCompanySkillOverrideState, Prisma } from "../generated/prisma/client.js";
 import { AiConsumptionGuardService } from "./ai-consumption-guard.service.js";
 import { BASIRA_S2_TOKENIZER_MODEL, countBasiraS2InputTokens } from "./ai-token-counter.js";
 
@@ -113,7 +113,25 @@ async function verify(): Promise<void> {
       (error: unknown) => error instanceof HttpException && error.getStatus() === 409,
       "A reservation must reject a policy snapshot that is no longer the current enabled revision.",
     );
-    console.log("Basira consumption guard verification passed: concurrent reservation, hard pre-egress cap, scheduled conservative unknown-outcome reconciliation, and current-policy reservation gating are active.");
+    const resumedRevisionId = randomUUID();
+    await database.inTenantTransaction(tenantId, async (transaction) => {
+      await transaction.aiCompanyPolicyRevision.create({ data: {
+        id: resumedRevisionId, tenantId, companyId, policyId, version: 3, mode: "ENABLED",
+        monthlyBudgetUsdCents: new Prisma.Decimal(100), billingTimeZone: "Asia/Riyadh",
+        changedByUserId: userId, changeReason: "Verification resume", policyDigest: "2".repeat(64),
+      } });
+      await transaction.aiCompanyPolicy.update({ where: { tenantId_companyId: { tenantId, companyId } }, data: { currentVersion: 3 } });
+      await transaction.aiCompanySkillOverride.create({ data: {
+        id: randomUUID(), tenantId, companyId, skillKey: "verification.cost_skill",
+        state: AiCompanySkillOverrideState.BLOCKED, reason: "Verification kill switch", changedByUserId: userId,
+      } });
+    });
+    await assert.rejects(
+      () => guard.reserve({ context, provider, activation, interpretationRunId: requiredRunId(runIds, 23), profile, inputText: "طلب بعد تعليق المهارة", companyPolicy: { policyRevisionId: resumedRevisionId, monthlyBudgetUsdCents: new Prisma.Decimal(100) } }),
+      (error: unknown) => error instanceof HttpException && error.getStatus() === 409,
+      "A suspended skill or company kill switch must reject before provider egress.",
+    );
+    console.log("Basira consumption guard verification passed: concurrent reservation, hard pre-egress cap, scheduled conservative unknown-outcome reconciliation, current-policy gating, and the skill kill switch are active.");
   } finally {
     await database.onModuleDestroy();
   }
