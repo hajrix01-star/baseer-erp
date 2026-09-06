@@ -14,7 +14,8 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model MarketingProviderSyncRun
- * Immutable-safe operational metadata. A foundation run can never claim success.
+ * Bounded operational metadata for a server-side provider read. It never stores
+ * tokens, raw provider responses, or review content.
  */
 export type MarketingProviderSyncRunModel = runtime.Types.Result.DefaultSelection<Prisma.$MarketingProviderSyncRunPayload>
 
@@ -30,12 +31,16 @@ export type MarketingProviderSyncRunAvgAggregateOutputType = {
   attempt: number | null
   rowsRead: number | null
   rowsWritten: number | null
+  providerAverageRating: runtime.Decimal | null
+  providerTotalReviewCount: number | null
 }
 
 export type MarketingProviderSyncRunSumAggregateOutputType = {
   attempt: number | null
   rowsRead: number | null
   rowsWritten: number | null
+  providerAverageRating: runtime.Decimal | null
+  providerTotalReviewCount: number | null
 }
 
 export type MarketingProviderSyncRunMinAggregateOutputType = {
@@ -53,6 +58,8 @@ export type MarketingProviderSyncRunMinAggregateOutputType = {
   rowsWritten: number | null
   sourceChecksum: string | null
   sourceFreshAt: Date | null
+  providerAverageRating: runtime.Decimal | null
+  providerTotalReviewCount: number | null
   safeErrorCode: string | null
   adapterVersion: string | null
   createdAt: Date | null
@@ -74,6 +81,8 @@ export type MarketingProviderSyncRunMaxAggregateOutputType = {
   rowsWritten: number | null
   sourceChecksum: string | null
   sourceFreshAt: Date | null
+  providerAverageRating: runtime.Decimal | null
+  providerTotalReviewCount: number | null
   safeErrorCode: string | null
   adapterVersion: string | null
   createdAt: Date | null
@@ -95,6 +104,8 @@ export type MarketingProviderSyncRunCountAggregateOutputType = {
   rowsWritten: number
   sourceChecksum: number
   sourceFreshAt: number
+  providerAverageRating: number
+  providerTotalReviewCount: number
   safeErrorCode: number
   adapterVersion: number
   createdAt: number
@@ -107,12 +118,16 @@ export type MarketingProviderSyncRunAvgAggregateInputType = {
   attempt?: true
   rowsRead?: true
   rowsWritten?: true
+  providerAverageRating?: true
+  providerTotalReviewCount?: true
 }
 
 export type MarketingProviderSyncRunSumAggregateInputType = {
   attempt?: true
   rowsRead?: true
   rowsWritten?: true
+  providerAverageRating?: true
+  providerTotalReviewCount?: true
 }
 
 export type MarketingProviderSyncRunMinAggregateInputType = {
@@ -130,6 +145,8 @@ export type MarketingProviderSyncRunMinAggregateInputType = {
   rowsWritten?: true
   sourceChecksum?: true
   sourceFreshAt?: true
+  providerAverageRating?: true
+  providerTotalReviewCount?: true
   safeErrorCode?: true
   adapterVersion?: true
   createdAt?: true
@@ -151,6 +168,8 @@ export type MarketingProviderSyncRunMaxAggregateInputType = {
   rowsWritten?: true
   sourceChecksum?: true
   sourceFreshAt?: true
+  providerAverageRating?: true
+  providerTotalReviewCount?: true
   safeErrorCode?: true
   adapterVersion?: true
   createdAt?: true
@@ -172,6 +191,8 @@ export type MarketingProviderSyncRunCountAggregateInputType = {
   rowsWritten?: true
   sourceChecksum?: true
   sourceFreshAt?: true
+  providerAverageRating?: true
+  providerTotalReviewCount?: true
   safeErrorCode?: true
   adapterVersion?: true
   createdAt?: true
@@ -280,6 +301,8 @@ export type MarketingProviderSyncRunGroupByOutputType = {
   rowsWritten: number
   sourceChecksum: string | null
   sourceFreshAt: Date | null
+  providerAverageRating: runtime.Decimal | null
+  providerTotalReviewCount: number | null
   safeErrorCode: string | null
   adapterVersion: string
   createdAt: Date
@@ -324,6 +347,8 @@ export type MarketingProviderSyncRunWhereInput = {
   rowsWritten?: Prisma.IntFilter<"MarketingProviderSyncRun"> | number
   sourceChecksum?: Prisma.StringNullableFilter<"MarketingProviderSyncRun"> | string | null
   sourceFreshAt?: Prisma.DateTimeNullableFilter<"MarketingProviderSyncRun"> | Date | string | null
+  providerAverageRating?: Prisma.DecimalNullableFilter<"MarketingProviderSyncRun"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerTotalReviewCount?: Prisma.IntNullableFilter<"MarketingProviderSyncRun"> | number | null
   safeErrorCode?: Prisma.StringNullableFilter<"MarketingProviderSyncRun"> | string | null
   adapterVersion?: Prisma.StringFilter<"MarketingProviderSyncRun"> | string
   createdAt?: Prisma.DateTimeFilter<"MarketingProviderSyncRun"> | Date | string
@@ -347,6 +372,8 @@ export type MarketingProviderSyncRunOrderByWithRelationInput = {
   rowsWritten?: Prisma.SortOrder
   sourceChecksum?: Prisma.SortOrderInput | Prisma.SortOrder
   sourceFreshAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  providerAverageRating?: Prisma.SortOrderInput | Prisma.SortOrder
+  providerTotalReviewCount?: Prisma.SortOrderInput | Prisma.SortOrder
   safeErrorCode?: Prisma.SortOrderInput | Prisma.SortOrder
   adapterVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -373,6 +400,8 @@ export type MarketingProviderSyncRunWhereUniqueInput = Prisma.AtLeast<{
   rowsWritten?: Prisma.IntFilter<"MarketingProviderSyncRun"> | number
   sourceChecksum?: Prisma.StringNullableFilter<"MarketingProviderSyncRun"> | string | null
   sourceFreshAt?: Prisma.DateTimeNullableFilter<"MarketingProviderSyncRun"> | Date | string | null
+  providerAverageRating?: Prisma.DecimalNullableFilter<"MarketingProviderSyncRun"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerTotalReviewCount?: Prisma.IntNullableFilter<"MarketingProviderSyncRun"> | number | null
   safeErrorCode?: Prisma.StringNullableFilter<"MarketingProviderSyncRun"> | string | null
   adapterVersion?: Prisma.StringFilter<"MarketingProviderSyncRun"> | string
   createdAt?: Prisma.DateTimeFilter<"MarketingProviderSyncRun"> | Date | string
@@ -396,6 +425,8 @@ export type MarketingProviderSyncRunOrderByWithAggregationInput = {
   rowsWritten?: Prisma.SortOrder
   sourceChecksum?: Prisma.SortOrderInput | Prisma.SortOrder
   sourceFreshAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  providerAverageRating?: Prisma.SortOrderInput | Prisma.SortOrder
+  providerTotalReviewCount?: Prisma.SortOrderInput | Prisma.SortOrder
   safeErrorCode?: Prisma.SortOrderInput | Prisma.SortOrder
   adapterVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -425,6 +456,8 @@ export type MarketingProviderSyncRunScalarWhereWithAggregatesInput = {
   rowsWritten?: Prisma.IntWithAggregatesFilter<"MarketingProviderSyncRun"> | number
   sourceChecksum?: Prisma.StringNullableWithAggregatesFilter<"MarketingProviderSyncRun"> | string | null
   sourceFreshAt?: Prisma.DateTimeNullableWithAggregatesFilter<"MarketingProviderSyncRun"> | Date | string | null
+  providerAverageRating?: Prisma.DecimalNullableWithAggregatesFilter<"MarketingProviderSyncRun"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerTotalReviewCount?: Prisma.IntNullableWithAggregatesFilter<"MarketingProviderSyncRun"> | number | null
   safeErrorCode?: Prisma.StringNullableWithAggregatesFilter<"MarketingProviderSyncRun"> | string | null
   adapterVersion?: Prisma.StringWithAggregatesFilter<"MarketingProviderSyncRun"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"MarketingProviderSyncRun"> | Date | string
@@ -442,6 +475,8 @@ export type MarketingProviderSyncRunCreateInput = {
   rowsWritten?: number
   sourceChecksum?: string | null
   sourceFreshAt?: Date | string | null
+  providerAverageRating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerTotalReviewCount?: number | null
   safeErrorCode?: string | null
   adapterVersion: string
   createdAt?: Date | string
@@ -465,6 +500,8 @@ export type MarketingProviderSyncRunUncheckedCreateInput = {
   rowsWritten?: number
   sourceChecksum?: string | null
   sourceFreshAt?: Date | string | null
+  providerAverageRating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerTotalReviewCount?: number | null
   safeErrorCode?: string | null
   adapterVersion: string
   createdAt?: Date | string
@@ -482,6 +519,8 @@ export type MarketingProviderSyncRunUpdateInput = {
   rowsWritten?: Prisma.IntFieldUpdateOperationsInput | number
   sourceChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceFreshAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  providerAverageRating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerTotalReviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   adapterVersion?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -505,6 +544,8 @@ export type MarketingProviderSyncRunUncheckedUpdateInput = {
   rowsWritten?: Prisma.IntFieldUpdateOperationsInput | number
   sourceChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceFreshAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  providerAverageRating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerTotalReviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   adapterVersion?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -526,6 +567,8 @@ export type MarketingProviderSyncRunCreateManyInput = {
   rowsWritten?: number
   sourceChecksum?: string | null
   sourceFreshAt?: Date | string | null
+  providerAverageRating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerTotalReviewCount?: number | null
   safeErrorCode?: string | null
   adapterVersion: string
   createdAt?: Date | string
@@ -543,6 +586,8 @@ export type MarketingProviderSyncRunUpdateManyMutationInput = {
   rowsWritten?: Prisma.IntFieldUpdateOperationsInput | number
   sourceChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceFreshAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  providerAverageRating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerTotalReviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   adapterVersion?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -564,6 +609,8 @@ export type MarketingProviderSyncRunUncheckedUpdateManyInput = {
   rowsWritten?: Prisma.IntFieldUpdateOperationsInput | number
   sourceChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceFreshAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  providerAverageRating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerTotalReviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   adapterVersion?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -595,6 +642,8 @@ export type MarketingProviderSyncRunCountOrderByAggregateInput = {
   rowsWritten?: Prisma.SortOrder
   sourceChecksum?: Prisma.SortOrder
   sourceFreshAt?: Prisma.SortOrder
+  providerAverageRating?: Prisma.SortOrder
+  providerTotalReviewCount?: Prisma.SortOrder
   safeErrorCode?: Prisma.SortOrder
   adapterVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -605,6 +654,8 @@ export type MarketingProviderSyncRunAvgOrderByAggregateInput = {
   attempt?: Prisma.SortOrder
   rowsRead?: Prisma.SortOrder
   rowsWritten?: Prisma.SortOrder
+  providerAverageRating?: Prisma.SortOrder
+  providerTotalReviewCount?: Prisma.SortOrder
 }
 
 export type MarketingProviderSyncRunMaxOrderByAggregateInput = {
@@ -622,6 +673,8 @@ export type MarketingProviderSyncRunMaxOrderByAggregateInput = {
   rowsWritten?: Prisma.SortOrder
   sourceChecksum?: Prisma.SortOrder
   sourceFreshAt?: Prisma.SortOrder
+  providerAverageRating?: Prisma.SortOrder
+  providerTotalReviewCount?: Prisma.SortOrder
   safeErrorCode?: Prisma.SortOrder
   adapterVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -643,6 +696,8 @@ export type MarketingProviderSyncRunMinOrderByAggregateInput = {
   rowsWritten?: Prisma.SortOrder
   sourceChecksum?: Prisma.SortOrder
   sourceFreshAt?: Prisma.SortOrder
+  providerAverageRating?: Prisma.SortOrder
+  providerTotalReviewCount?: Prisma.SortOrder
   safeErrorCode?: Prisma.SortOrder
   adapterVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -653,6 +708,8 @@ export type MarketingProviderSyncRunSumOrderByAggregateInput = {
   attempt?: Prisma.SortOrder
   rowsRead?: Prisma.SortOrder
   rowsWritten?: Prisma.SortOrder
+  providerAverageRating?: Prisma.SortOrder
+  providerTotalReviewCount?: Prisma.SortOrder
 }
 
 export type MarketingProviderSyncRunCreateNestedManyWithoutCompanyInput = {
@@ -754,6 +811,8 @@ export type MarketingProviderSyncRunCreateWithoutCompanyInput = {
   rowsWritten?: number
   sourceChecksum?: string | null
   sourceFreshAt?: Date | string | null
+  providerAverageRating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerTotalReviewCount?: number | null
   safeErrorCode?: string | null
   adapterVersion: string
   createdAt?: Date | string
@@ -774,6 +833,8 @@ export type MarketingProviderSyncRunUncheckedCreateWithoutCompanyInput = {
   rowsWritten?: number
   sourceChecksum?: string | null
   sourceFreshAt?: Date | string | null
+  providerAverageRating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerTotalReviewCount?: number | null
   safeErrorCode?: string | null
   adapterVersion: string
   createdAt?: Date | string
@@ -824,6 +885,8 @@ export type MarketingProviderSyncRunScalarWhereInput = {
   rowsWritten?: Prisma.IntFilter<"MarketingProviderSyncRun"> | number
   sourceChecksum?: Prisma.StringNullableFilter<"MarketingProviderSyncRun"> | string | null
   sourceFreshAt?: Prisma.DateTimeNullableFilter<"MarketingProviderSyncRun"> | Date | string | null
+  providerAverageRating?: Prisma.DecimalNullableFilter<"MarketingProviderSyncRun"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerTotalReviewCount?: Prisma.IntNullableFilter<"MarketingProviderSyncRun"> | number | null
   safeErrorCode?: Prisma.StringNullableFilter<"MarketingProviderSyncRun"> | string | null
   adapterVersion?: Prisma.StringFilter<"MarketingProviderSyncRun"> | string
   createdAt?: Prisma.DateTimeFilter<"MarketingProviderSyncRun"> | Date | string
@@ -841,6 +904,8 @@ export type MarketingProviderSyncRunCreateWithoutLocationMappingInput = {
   rowsWritten?: number
   sourceChecksum?: string | null
   sourceFreshAt?: Date | string | null
+  providerAverageRating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerTotalReviewCount?: number | null
   safeErrorCode?: string | null
   adapterVersion: string
   createdAt?: Date | string
@@ -859,6 +924,8 @@ export type MarketingProviderSyncRunUncheckedCreateWithoutLocationMappingInput =
   rowsWritten?: number
   sourceChecksum?: string | null
   sourceFreshAt?: Date | string | null
+  providerAverageRating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerTotalReviewCount?: number | null
   safeErrorCode?: string | null
   adapterVersion: string
   createdAt?: Date | string
@@ -904,6 +971,8 @@ export type MarketingProviderSyncRunCreateManyCompanyInput = {
   rowsWritten?: number
   sourceChecksum?: string | null
   sourceFreshAt?: Date | string | null
+  providerAverageRating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerTotalReviewCount?: number | null
   safeErrorCode?: string | null
   adapterVersion: string
   createdAt?: Date | string
@@ -921,6 +990,8 @@ export type MarketingProviderSyncRunUpdateWithoutCompanyInput = {
   rowsWritten?: Prisma.IntFieldUpdateOperationsInput | number
   sourceChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceFreshAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  providerAverageRating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerTotalReviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   adapterVersion?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -941,6 +1012,8 @@ export type MarketingProviderSyncRunUncheckedUpdateWithoutCompanyInput = {
   rowsWritten?: Prisma.IntFieldUpdateOperationsInput | number
   sourceChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceFreshAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  providerAverageRating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerTotalReviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   adapterVersion?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -960,6 +1033,8 @@ export type MarketingProviderSyncRunUncheckedUpdateManyWithoutCompanyInput = {
   rowsWritten?: Prisma.IntFieldUpdateOperationsInput | number
   sourceChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceFreshAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  providerAverageRating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerTotalReviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   adapterVersion?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -977,6 +1052,8 @@ export type MarketingProviderSyncRunCreateManyLocationMappingInput = {
   rowsWritten?: number
   sourceChecksum?: string | null
   sourceFreshAt?: Date | string | null
+  providerAverageRating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerTotalReviewCount?: number | null
   safeErrorCode?: string | null
   adapterVersion: string
   createdAt?: Date | string
@@ -994,6 +1071,8 @@ export type MarketingProviderSyncRunUpdateWithoutLocationMappingInput = {
   rowsWritten?: Prisma.IntFieldUpdateOperationsInput | number
   sourceChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceFreshAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  providerAverageRating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerTotalReviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   adapterVersion?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1012,6 +1091,8 @@ export type MarketingProviderSyncRunUncheckedUpdateWithoutLocationMappingInput =
   rowsWritten?: Prisma.IntFieldUpdateOperationsInput | number
   sourceChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceFreshAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  providerAverageRating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerTotalReviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   adapterVersion?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1029,6 +1110,8 @@ export type MarketingProviderSyncRunUncheckedUpdateManyWithoutLocationMappingInp
   rowsWritten?: Prisma.IntFieldUpdateOperationsInput | number
   sourceChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceFreshAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  providerAverageRating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerTotalReviewCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   adapterVersion?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1052,6 +1135,8 @@ export type MarketingProviderSyncRunSelect<ExtArgs extends runtime.Types.Extensi
   rowsWritten?: boolean
   sourceChecksum?: boolean
   sourceFreshAt?: boolean
+  providerAverageRating?: boolean
+  providerTotalReviewCount?: boolean
   safeErrorCode?: boolean
   adapterVersion?: boolean
   createdAt?: boolean
@@ -1075,6 +1160,8 @@ export type MarketingProviderSyncRunSelectCreateManyAndReturn<ExtArgs extends ru
   rowsWritten?: boolean
   sourceChecksum?: boolean
   sourceFreshAt?: boolean
+  providerAverageRating?: boolean
+  providerTotalReviewCount?: boolean
   safeErrorCode?: boolean
   adapterVersion?: boolean
   createdAt?: boolean
@@ -1098,6 +1185,8 @@ export type MarketingProviderSyncRunSelectUpdateManyAndReturn<ExtArgs extends ru
   rowsWritten?: boolean
   sourceChecksum?: boolean
   sourceFreshAt?: boolean
+  providerAverageRating?: boolean
+  providerTotalReviewCount?: boolean
   safeErrorCode?: boolean
   adapterVersion?: boolean
   createdAt?: boolean
@@ -1121,13 +1210,15 @@ export type MarketingProviderSyncRunSelectScalar = {
   rowsWritten?: boolean
   sourceChecksum?: boolean
   sourceFreshAt?: boolean
+  providerAverageRating?: boolean
+  providerTotalReviewCount?: boolean
   safeErrorCode?: boolean
   adapterVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type MarketingProviderSyncRunOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "locationMappingId" | "provider" | "status" | "correlationId" | "attempt" | "sourceWindowFrom" | "sourceWindowTo" | "rowsRead" | "rowsWritten" | "sourceChecksum" | "sourceFreshAt" | "safeErrorCode" | "adapterVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["marketingProviderSyncRun"]>
+export type MarketingProviderSyncRunOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "locationMappingId" | "provider" | "status" | "correlationId" | "attempt" | "sourceWindowFrom" | "sourceWindowTo" | "rowsRead" | "rowsWritten" | "sourceChecksum" | "sourceFreshAt" | "providerAverageRating" | "providerTotalReviewCount" | "safeErrorCode" | "adapterVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["marketingProviderSyncRun"]>
 export type MarketingProviderSyncRunInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   locationMapping?: boolean | Prisma.MarketingGoogleBusinessLocationMappingDefaultArgs<ExtArgs>
@@ -1162,6 +1253,8 @@ export type $MarketingProviderSyncRunPayload<ExtArgs extends runtime.Types.Exten
     rowsWritten: number
     sourceChecksum: string | null
     sourceFreshAt: Date | null
+    providerAverageRating: runtime.Decimal | null
+    providerTotalReviewCount: number | null
     safeErrorCode: string | null
     adapterVersion: string
     createdAt: Date
@@ -1605,6 +1698,8 @@ export interface MarketingProviderSyncRunFieldRefs {
   readonly rowsWritten: Prisma.FieldRef<"MarketingProviderSyncRun", 'Int'>
   readonly sourceChecksum: Prisma.FieldRef<"MarketingProviderSyncRun", 'String'>
   readonly sourceFreshAt: Prisma.FieldRef<"MarketingProviderSyncRun", 'DateTime'>
+  readonly providerAverageRating: Prisma.FieldRef<"MarketingProviderSyncRun", 'Decimal'>
+  readonly providerTotalReviewCount: Prisma.FieldRef<"MarketingProviderSyncRun", 'Int'>
   readonly safeErrorCode: Prisma.FieldRef<"MarketingProviderSyncRun", 'String'>
   readonly adapterVersion: Prisma.FieldRef<"MarketingProviderSyncRun", 'String'>
   readonly createdAt: Prisma.FieldRef<"MarketingProviderSyncRun", 'DateTime'>

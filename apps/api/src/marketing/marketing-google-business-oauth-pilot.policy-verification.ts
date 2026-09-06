@@ -48,6 +48,8 @@ class PilotDatabase {
       deleteMany: async () => { const count = this.envelope ? 1 : 0; this.envelope = null; return { count }; },
     },
     marketingGoogleBusinessLocationMapping: { deleteMany: async () => { const count = this.locationMapping ? 1 : 0; this.locationMapping = false; return { count }; } },
+    marketingGoogleBusinessReviewFact: { deleteMany: async () => ({ count: 0 }) },
+    marketingProviderSyncRun: { deleteMany: async () => ({ count: 0 }) },
     auditEvent: { create: async () => ({}) },
   };
   async inTenantTransaction<T>(_tenant: string, operation: (tx: any) => Promise<T>) { this.transactionCount += 1; return operation(this.tx); }

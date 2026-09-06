@@ -635,6 +635,7 @@ export type MarketingProviderCredentialStatus = (typeof MarketingProviderCredent
 export const MarketingProviderSyncRunStatus = {
   QUEUED: 'QUEUED',
   RUNNING: 'RUNNING',
+  COMPLETED: 'COMPLETED',
   FAILED: 'FAILED',
   BLOCKED: 'BLOCKED'
 } as const

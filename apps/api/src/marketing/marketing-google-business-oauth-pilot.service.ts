@@ -99,6 +99,15 @@ export class MarketingGoogleBusinessOAuthPilotService {
         where: { tenantId: context.tenantId, companyId: context.companyId, provider: "GOOGLE_BUSINESS", consumedAt: null },
         data: { consumedAt: now },
       });
+      // Provider facts and sync receipts belong to the selected resource. They
+      // must leave Baseer together with a local disconnect, before its mapping
+      // can be removed. No Google delete or reply operation is performed.
+      const reviewFacts = await tx.marketingGoogleBusinessReviewFact.deleteMany({
+        where: { tenantId: context.tenantId, companyId: context.companyId },
+      });
+      const syncRuns = await tx.marketingProviderSyncRun.deleteMany({
+        where: { tenantId: context.tenantId, companyId: context.companyId, provider: "GOOGLE_BUSINESS" },
+      });
       const mappings = await tx.marketingGoogleBusinessLocationMapping.deleteMany({
         where: { tenantId: context.tenantId, companyId: context.companyId, connectionId: connection.id, provider: "GOOGLE_BUSINESS" },
       });
@@ -110,7 +119,7 @@ export class MarketingGoogleBusinessOAuthPilotService {
         data: { status: "NOT_CONNECTED", setupRequestedAt: null, setupRequestedByUserId: null },
       });
       await this.audit(tx, context, "marketing.google_business_pilot.disconnected", connection.id, {
-        status: "NOT_CONNECTED", credentialDeleted: String(credentials.count > 0), locationMappingDeleted: String(mappings.count > 0),
+        status: "NOT_CONNECTED", credentialDeleted: String(credentials.count > 0), locationMappingDeleted: String(mappings.count > 0), reviewFactsDeleted: String(reviewFacts.count), syncRunsDeleted: String(syncRuns.count),
       });
       return { status: "NOT_CONNECTED" as const };
     });

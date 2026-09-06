@@ -59,7 +59,7 @@ export class MarketingService {
         })),
         readiness: [
           { provider: "GOOGLE_ADS" as const, status: "NOT_CONNECTED" as const, messageAr: "Google Ads غير متصل في هذه المرحلة؛ لا تُعرض أي تكلفة أو تحويلات أو قرارات إنفاق." },
-          { provider: "GOOGLE_BUSINESS" as const, status: googleBusinessSelected ? "AUTHORIZED_READ_ONLY_SELECTED" as const : "NOT_CONNECTED" as const, messageAr: googleBusinessSelected ? "تم ربط Google Business واختيار الموقع للقراءة فقط. لم تبدأ مزامنة التقييمات أو الرد الآلي أو النشر." : "ملف Google Business غير متصل؛ لا توجد تقييمات أو منشورات أو صلاحية نشر في هذه المرحلة." },
+          { provider: "GOOGLE_BUSINESS" as const, status: googleBusinessSelected ? "AUTHORIZED_READ_ONLY_SELECTED" as const : "NOT_CONNECTED" as const, messageAr: googleBusinessSelected ? "تم ربط Google Business واختيار الموقع. يمكنك الآن مزامنة التقييمات وقراءة الردود الموجودة؛ لا يوجد نشر تلقائي." : "ملف Google Business غير متصل؛ اربطه أولاً قبل مزامنة التقييمات." },
         ],
         replyPolicy: publicReplyPolicy(replyPolicy),
       };

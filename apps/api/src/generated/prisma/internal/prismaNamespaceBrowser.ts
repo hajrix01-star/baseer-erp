@@ -92,6 +92,7 @@ export const ModelName = {
   MarketingProviderCredentialEnvelope: 'MarketingProviderCredentialEnvelope',
   MarketingGoogleBusinessLocationMapping: 'MarketingGoogleBusinessLocationMapping',
   MarketingProviderSyncRun: 'MarketingProviderSyncRun',
+  MarketingGoogleBusinessReviewFact: 'MarketingGoogleBusinessReviewFact',
   FinanceAccount: 'FinanceAccount',
   FinancePnlMappingVersion: 'FinancePnlMappingVersion',
   FinancePnlStatementLine: 'FinancePnlStatementLine',
@@ -1008,6 +1009,8 @@ export const MarketingProviderSyncRunScalarFieldEnum = {
   rowsWritten: 'rowsWritten',
   sourceChecksum: 'sourceChecksum',
   sourceFreshAt: 'sourceFreshAt',
+  providerAverageRating: 'providerAverageRating',
+  providerTotalReviewCount: 'providerTotalReviewCount',
   safeErrorCode: 'safeErrorCode',
   adapterVersion: 'adapterVersion',
   createdAt: 'createdAt',
@@ -1015,6 +1018,29 @@ export const MarketingProviderSyncRunScalarFieldEnum = {
 } as const
 
 export type MarketingProviderSyncRunScalarFieldEnum = (typeof MarketingProviderSyncRunScalarFieldEnum)[keyof typeof MarketingProviderSyncRunScalarFieldEnum]
+
+
+export const MarketingGoogleBusinessReviewFactScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  locationMappingId: 'locationMappingId',
+  provider: 'provider',
+  providerReviewResourceName: 'providerReviewResourceName',
+  rating: 'rating',
+  reviewerDisplayName: 'reviewerDisplayName',
+  reviewComment: 'reviewComment',
+  reviewCreatedAt: 'reviewCreatedAt',
+  reviewUpdatedAt: 'reviewUpdatedAt',
+  replyComment: 'replyComment',
+  replyUpdatedAt: 'replyUpdatedAt',
+  fetchedAt: 'fetchedAt',
+  contentHash: 'contentHash',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MarketingGoogleBusinessReviewFactScalarFieldEnum = (typeof MarketingGoogleBusinessReviewFactScalarFieldEnum)[keyof typeof MarketingGoogleBusinessReviewFactScalarFieldEnum]
 
 
 export const FinanceAccountScalarFieldEnum = {

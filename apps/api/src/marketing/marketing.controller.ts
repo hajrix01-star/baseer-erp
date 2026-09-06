@@ -1,15 +1,16 @@
 import { BadRequestException, Body, Controller, Delete, ForbiddenException, Get, Headers, HttpCode, Param, Post, Put, Query, Res, UnauthorizedException } from "@nestjs/common";
-import { analysisReadinessReceiptSchema, archiveMarketingCampaignRequestSchema, createMarketingCampaignAnalysisFeedbackRequestSchema, createMarketingCampaignRequestSchema, linkMarketingCampaignContextRequestSchema, linkMarketingCampaignFinancialDocumentRequestSchema, marketingCalendarQuerySchema, marketingCalendarReadSchema, marketingCampaignAnalysisSchema, marketingEntityReceiptSchema, marketingGoogleBusinessPilotDisconnectReceiptSchema, marketingLinkableFinancialDocumentsSchema, marketingProviderConnectionsReadSchema, marketingProviderSchema, marketingTargetMonthSchema, marketingWorkspaceSchema, requestMarketingProviderConnectionSetupSchema, stopMarketingCampaignRequestSchema, updateMarketingCampaignRequestSchema, updateMarketingReputationReplyPolicyRequestSchema, upsertMarketingSalesTargetRequestSchema } from "@baseer-erp/contracts";
+import { analysisReadinessReceiptSchema, archiveMarketingCampaignRequestSchema, createMarketingCampaignAnalysisFeedbackRequestSchema, createMarketingCampaignRequestSchema, linkMarketingCampaignContextRequestSchema, linkMarketingCampaignFinancialDocumentRequestSchema, marketingCalendarQuerySchema, marketingCalendarReadSchema, marketingCampaignAnalysisSchema, marketingEntityReceiptSchema, marketingGoogleBusinessPilotDisconnectReceiptSchema, marketingGoogleBusinessReviewsReadSchema, marketingGoogleBusinessReviewSyncReceiptSchema, marketingLinkableFinancialDocumentsSchema, marketingProviderConnectionsReadSchema, marketingProviderSchema, marketingTargetMonthSchema, marketingWorkspaceSchema, requestMarketingProviderConnectionSetupSchema, stopMarketingCampaignRequestSchema, updateMarketingCampaignRequestSchema, updateMarketingReputationReplyPolicyRequestSchema, upsertMarketingSalesTargetRequestSchema } from "@baseer-erp/contracts";
 import type { FastifyReply } from "fastify";
 
 import { CompanyContextService } from "../company-context/company-context.service.js";
 import { MarketingGoogleBusinessOAuthPilotService } from "./marketing-google-business-oauth-pilot.service.js";
+import { MarketingGoogleBusinessReviewsService } from "./marketing-google-business-reviews.service.js";
 import { MarketingService } from "./marketing.service.js";
 import { AnalysisReadinessService } from "../ai-platform/analysis-readiness.service.js";
 
 @Controller("marketing")
 export class MarketingController {
-  constructor(private readonly companyContext: CompanyContextService, private readonly marketing: MarketingService, private readonly analysisReadiness: AnalysisReadinessService, private readonly googleBusinessPilot: MarketingGoogleBusinessOAuthPilotService) {}
+  constructor(private readonly companyContext: CompanyContextService, private readonly marketing: MarketingService, private readonly analysisReadiness: AnalysisReadinessService, private readonly googleBusinessPilot: MarketingGoogleBusinessOAuthPilotService, private readonly googleBusinessReviews: MarketingGoogleBusinessReviewsService) {}
 
   @Get()
   async workspace(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
@@ -138,6 +139,16 @@ export class MarketingController {
   async updateReplyPolicy(@Body() body: unknown, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
     const parsed = updateMarketingReputationReplyPolicyRequestSchema.safeParse(body); if (!parsed.success) throw new BadRequestException("Invalid marketing reputation reply policy request.");
     return marketingEntityReceiptSchema.parse(await this.marketing.updateReputationReplyPolicy(await this.context(authorization, companyId, "marketing.reputation.policy.manage"), parsed.data));
+  }
+
+  @Get("reputation/reviews")
+  async reputationReviews(@Query("cursor") cursor: string | undefined, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    return marketingGoogleBusinessReviewsReadSchema.parse(await this.googleBusinessReviews.read(await this.context(authorization, companyId, "marketing.insights.read"), cursor));
+  }
+
+  @Post("reputation/reviews/sync")
+  async synchronizeReputationReviews(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    return marketingGoogleBusinessReviewSyncReceiptSchema.parse(await this.googleBusinessReviews.sync(await this.context(authorization, companyId, "marketing.google-connection.manage")));
   }
 
   private async context(authorization: string | undefined, companyId: string | undefined, capability: string | readonly string[]) {

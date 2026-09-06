@@ -912,6 +912,11 @@
       "file": "ledger-trial-balance-workspace-runtime.tsx",
       "decision": "intentional-bounded-report-snapshot-detail"
     },
+    "table:marketing-reputation-workspace.tsx": {
+      "kind": "table",
+      "file": "marketing-reputation-workspace.tsx",
+      "decision": "central-adapter"
+    },
     "table:operations-catalog-workspace.tsx": {
       "kind": "table",
       "file": "operations-catalog-workspace.tsx",
