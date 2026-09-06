@@ -576,6 +576,13 @@ async function seedFixture() {
         "finance.daily_sales.history.read_all",
       ],
     );
+    // The same manager fixture reads the unified financial register below.
+    // Keep the HTTP verification aligned with that route's authorization
+    // boundary without changing any production role or permission.
+    await client.query(
+      'INSERT INTO "RolePermission" ("tenantId", "roleId", "permissionCode") VALUES ($1::uuid, $2::uuid, $3)',
+      [fixture.tenantId, roleId, "finance.ledger.read"],
+    );
     await client.query(
       'INSERT INTO "RolePermission" ("tenantId", "roleId", "permissionCode") VALUES ($1::uuid, $2::uuid, $3), ($1::uuid, $2::uuid, $4), ($1::uuid, $2::uuid, $5), ($1::uuid, $2::uuid, $6)',
       [fixture.tenantId, roleId, "finance.configuration.read", "finance.loans.read", "finance.purchase_expense.read", "finance.supplier_dues.read"],
