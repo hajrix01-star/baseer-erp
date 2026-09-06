@@ -1058,7 +1058,7 @@ for (const language of ["ar", "en"] as const) {
     await expect(net).toContainText("4,824.75");
     await second.uncheck();
     const create = dialog.getByRole("button", { name: ar ? "إنشاء المسودة" : "Create draft", exact: true });
-    await expect(create).toBeDisabled();
+    // Pending-save blocking is verified with a held response below; immediate responses may already be current.
     await expect(gross).toContainText("3,000");
     await expect(net).toContainText("2,824.75");
     await dialog.getByRole("button", { name: ar ? "السابق" : "Previous", exact: true }).click();
@@ -1132,7 +1132,8 @@ test("payroll late selection preview cannot overwrite newer totals or enable sta
   await dialog.getByRole("checkbox", { name: "إدراج موظف الاختبار", exact: true }).uncheck();
   await expect.poll(() => held).toBe(true);
   await expect(create).toBeDisabled();
-  await expect(net).not.toContainText("5,000");
+  await expect(net).toContainText("5,000");
+  await expect(dialog.locator(".hr-payroll-create__summary-region")).toHaveAttribute("aria-busy", "true");
   await dialog.getByRole("button", { name: "تحديد الكل", exact: true }).click();
   await expect(net).toContainText("5,000");
   releaseOld?.();
@@ -1181,5 +1182,86 @@ for (const language of ["ar", "en"] as const) {
     await create.click();
     expect((await saved).postDataJSON()).toMatchObject({ lines: [{ employeeId: employee.id, advances: [{ id: advance.id, amount: "1000" }, { id: "second-advance", amount: "800" }] }] });
     await expect(dialog).toBeHidden();
+  });
+}
+
+for (const language of ["ar", "en"] as const) {
+  test(`payroll summary stays stable while selection requests start immediately (${language})`, async ({ page }, testInfo) => {
+    const requested: string[] = [];
+    await page.clock.install({ time: new Date("2026-09-06T09:00:00Z") });
+    await mockHr(page, requested, { language, payrollSelectionFixture: true });
+    let release: (() => void) | undefined;
+    let held = false;
+    const responseGate = new Promise<void>((resolve) => { release = resolve; });
+    await page.route("**/v1/hr/payroll-runs/preview", async (route) => {
+      if (route.request().postDataJSON().lines?.[0]?.advances?.[0]?.amount === "500") { held = true; await responseGate; }
+      await route.fallback();
+    });
+    const ar = language === "ar";
+    await page.goto("/#module=hr&section=3");
+    await page.getByRole("button", { name: ar ? "إنشاء مسير" : "Create payroll", exact: true }).click();
+    const dialog = page.getByRole("dialog", { name: ar ? "إنشاء مسير راتب" : "Create payroll run" });
+    const summary = dialog.locator(".hr-payroll-create__summary-region");
+    const net = dialog.getByRole("listitem").filter({ hasText: ar ? "صافي الرواتب" : "Net salaries" });
+    const footer = dialog.locator(".hr-payroll-create__total");
+    const create = dialog.getByRole("button", { name: ar ? "إنشاء المسودة" : "Create draft", exact: true });
+    await expect(create).toBeEnabled();
+    await expect(net).toContainText("5,000");
+    const geometry = () => dialog.locator(".hr-payroll-create__summary-region, .hr-payroll-create__table-heading, .hr-payroll-create__total").evaluateAll((elements) => elements.map((element) => { const rect = element.getBoundingClientRect(); return { width: rect.width, height: rect.height, top: rect.top }; }));
+    await dialog.locator(".hr-payroll-create__controls").scrollIntoViewIfNeeded();
+    const before = await geometry();
+    await page.clock.pauseAt(new Date("2026-09-06T09:10:00Z"));
+    await dialog.locator('.hr-payroll-create__application-list label').filter({ hasText: "ADV-001" }).getByRole("checkbox").check({ force: true });
+    await page.clock.runFor(1);
+    await expect.poll(() => held).toBe(true);
+    await expect(summary).toHaveAttribute("aria-busy", "true");
+    await expect(create).toBeDisabled();
+    await expect(net).toContainText("5,000");
+    await expect(footer).toContainText("5,000");
+    await expect(dialog.locator(".hr-payroll-create__update-status")).toContainText(ar ? "آخر حساب مكتمل" : "last completed calculation");
+    await expect(dialog.getByRole("row").filter({ hasText: "ADV-001" }).locator(".baseer-money").last()).toContainText("3,000");
+    await page.clock.resume();
+    await dialog.locator(".hr-payroll-create__controls").scrollIntoViewIfNeeded();
+    const pending = await geometry();
+    for (let i = 0; i < before.length; i++) for (const dimension of ["width", "height", "top"] as const) expect(Math.abs(pending[i][dimension] - before[i][dimension])).toBeLessThanOrEqual(1);
+    await page.screenshot({ path: testInfo.outputPath("payroll-pending-stable.png") });
+    release?.();
+    await expect(net).toContainText("4,500");
+    await expect(create).toBeEnabled();
+    await expect(summary).toHaveAttribute("aria-busy", "false");
+    // Coalesce a burst of typing; a checkbox above did not wait for this timer.
+    await page.clock.pauseAt(new Date("2026-09-06T09:20:00Z"));
+    const count = requested.filter((request) => request === "POST /v1/hr/payroll-runs/preview").length;
+    const amount = dialog.getByRole("textbox", { name: ar ? "سلفة ADV-001" : "Advance ADV-001", exact: true });
+    await amount.fill("12");
+    await amount.fill("125.25");
+    await page.clock.runFor(149);
+    expect(requested.filter((request) => request === "POST /v1/hr/payroll-runs/preview")).toHaveLength(count);
+    await expect(net).toContainText("4,500");
+    await expect(create).toBeDisabled();
+    await page.clock.runFor(1);
+    await expect(net).toContainText("4,874.75");
+    expect(requested.filter((request) => request === "POST /v1/hr/payroll-runs/preview")).toHaveLength(count + 1);
+    await page.clock.resume();
+    await expect(create).toBeEnabled();
+    // A new month must never display the previous month's receipt.
+    let releaseMonth: (() => void) | undefined;
+    let monthHeld = false;
+    const monthGate = new Promise<void>((resolve) => { releaseMonth = resolve; });
+    await page.route("**/v1/hr/payroll-runs/preview", async (route) => {
+      if (route.request().postDataJSON().payrollMonth === "2026-07-01") { monthHeld = true; await monthGate; }
+      await route.fallback();
+    });
+    await dialog.getByRole("textbox", { name: ar ? "الشهر" : "Month", exact: true }).fill("2026-07");
+    await dialog.getByLabel(ar ? "ملاحظات" : "Notes", { exact: true }).click();
+    await expect.poll(() => monthHeld).toBe(true);
+    await expect(summary.locator(".baseer-money")).toHaveCount(0);
+    await expect(footer.locator(".baseer-money")).toHaveCount(0);
+    await expect(dialog.locator(".hr-payroll-create__table-wrap")).toHaveCount(0);
+    await expect(create).toBeDisabled();
+    releaseMonth?.();
+    await expect(net).toContainText("5,000");
+    await expect(create).toBeEnabled();
+    await expectViewportContained(page);
   });
 }
