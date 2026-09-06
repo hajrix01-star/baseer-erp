@@ -121,13 +121,33 @@ async function verify(): Promise<void> {
         changedByUserId: userId, changeReason: "Verification resume", policyDigest: "2".repeat(64),
       } });
       await transaction.aiCompanyPolicy.update({ where: { tenantId_companyId: { tenantId, companyId } }, data: { currentVersion: 3 } });
+    });
+    let providerDispatchStarted = false;
+    let providerDispatchFinished = false;
+    const resumedPolicy = { policyRevisionId: resumedRevisionId, monthlyBudgetUsdCents: new Prisma.Decimal(100) };
+    const dispatched = guard.dispatchProviderCall({
+      context,
+      activation,
+      companyPolicy: resumedPolicy,
+      dispatch: async () => {
+        providerDispatchStarted = true;
+        await delay(80);
+        providerDispatchFinished = true;
+        return "provider-call-started";
+      },
+    });
+    while (!providerDispatchStarted) await delay(5);
+    const suspension = database.inTenantTransaction(tenantId, async (transaction) => {
+      await transaction.$executeRaw(Prisma.sql`SELECT pg_advisory_xact_lock(hashtext(${`ai-company-policy:${tenantId}:${companyId}`}))`);
+      assert.equal(providerDispatchFinished, true, "A successful skill suspension must wait for an already-dispatched provider call to finish.");
       await transaction.aiCompanySkillOverride.create({ data: {
         id: randomUUID(), tenantId, companyId, skillKey: "verification.cost_skill",
         state: AiCompanySkillOverrideState.BLOCKED, reason: "Verification kill switch", changedByUserId: userId,
       } });
     });
+    await Promise.all([dispatched, suspension]);
     await assert.rejects(
-      () => guard.reserve({ context, provider, activation, interpretationRunId: requiredRunId(runIds, 23), profile, inputText: "طلب بعد تعليق المهارة", companyPolicy: { policyRevisionId: resumedRevisionId, monthlyBudgetUsdCents: new Prisma.Decimal(100) } }),
+      () => guard.reserve({ context, provider, activation, interpretationRunId: requiredRunId(runIds, 23), profile, inputText: "طلب بعد تعليق المهارة", companyPolicy: resumedPolicy }),
       (error: unknown) => error instanceof HttpException && error.getStatus() === 409,
       "A suspended skill or company kill switch must reject before provider egress.",
     );
@@ -143,4 +163,8 @@ function requiredRunId(runIds: readonly string[], index: number): string {
   const runId = runIds[index];
   assert.ok(runId, `Missing verification run at index ${index}.`);
   return runId;
+}
+
+function delay(milliseconds: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }

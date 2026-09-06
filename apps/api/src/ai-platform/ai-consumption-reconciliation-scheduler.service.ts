@@ -1,6 +1,7 @@
 import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 
 import { DatabaseService } from "../database/database.service.js";
+import { AiCompanyPolicyService } from "./ai-company-policy.service.js";
 import { AiConsumptionGuardService } from "./ai-consumption-guard.service.js";
 
 /**
@@ -14,7 +15,11 @@ export class AiConsumptionReconciliationSchedulerService implements OnModuleInit
   private scheduledTimer: ReturnType<typeof setInterval> | null = null;
   private readonly logger = new Logger(AiConsumptionReconciliationSchedulerService.name);
 
-  constructor(private readonly database: DatabaseService, private readonly consumption: AiConsumptionGuardService) {}
+  constructor(
+    private readonly database: DatabaseService,
+    private readonly consumption: AiConsumptionGuardService,
+    private readonly companyPolicy: AiCompanyPolicyService,
+  ) {}
 
   onModuleInit() {
     if (process.env.BASEER_AI_CONSUMPTION_RECONCILIATION_SCHEDULER_ENABLED === "false") return;
@@ -31,8 +36,12 @@ export class AiConsumptionReconciliationSchedulerService implements OnModuleInit
     const locked = await this.database.withSystemSchedulerLock("ai-consumption-reconciliation-v1", async () => {
       const tenantIds = await this.database.listTenantIdsForSystemScheduler();
       let markedUnknown = 0;
-      for (const tenantId of tenantIds) markedUnknown += (await this.consumption.reconcileExpiredReservationsForTenant(tenantId, now)).markedUnknown;
-      return { status: "COMPLETED" as const, tenantCount: tenantIds.length, markedUnknown };
+      let reconciledPolicies = 0;
+      for (const tenantId of tenantIds) {
+        markedUnknown += (await this.consumption.reconcileExpiredReservationsForTenant(tenantId, now)).markedUnknown;
+        reconciledPolicies += (await this.companyPolicy.reconcileAutomaticEnrollmentsForTenant(tenantId)).reconciledPolicies;
+      }
+      return { status: "COMPLETED" as const, tenantCount: tenantIds.length, markedUnknown, reconciledPolicies };
     });
     return locked.acquired ? locked.result : { status: "SKIPPED_LOCKED" as const };
   }

@@ -103,7 +103,7 @@ export class AiCompanyPolicyService {
         },
       });
       await transaction.aiCompanyPolicy.update({ where: { id }, data: { currentVersion: version, updatedAt: new Date() } });
-      await this.reconcileInTransaction(transaction, context, revisionId, input.mode, input.pilotSkills);
+      await this.reconcileInTransaction(transaction, context, revisionId, input.mode, input.pilotSkills, input.autoEnrollStable);
       await this.audit(transaction, context, "platform.ai.company_policy_changed", revisionId, { version, mode: input.mode, providerConfigurationCount: allowlistedProviders.length, pilotSkillCount: input.pilotSkills.length });
       await this.idempotency.completeInTransaction(transaction, context, { receiptId: begun.receiptId, response: { status: 200, headers: null, body: { policyId: id } } });
       return { policyId: id, replayed: false };
@@ -144,17 +144,56 @@ export class AiCompanyPolicyService {
     });
   }
 
+  /** Invoked by the scheduler so newly released, READY stable catalogue skills
+   * join opted-in company policies without requiring an administrator to save
+   * the policy again. It never enrolls pilots beyond their explicit allowlist. */
+  async reconcileAutomaticEnrollmentsForTenant(tenantId: string): Promise<{ reconciledPolicies: number }> {
+    return this.database.inTenantTransaction(tenantId, async (transaction) => {
+      const policies = await transaction.aiCompanyPolicy.findMany({
+        where: { tenantId },
+        include: { revisions: { orderBy: { version: "desc" }, take: 1 } },
+      });
+      let reconciledPolicies = 0;
+      for (const candidate of policies) {
+        const revision = candidate.revisions[0];
+        if (!revision || candidate.currentVersion !== revision.version || revision.mode !== AiCompanyPolicyMode.ENABLED || !revision.autoEnrollStable) continue;
+        const context: TrustedCompanyActorContext = { tenantId, companyId: candidate.companyId, actorUserId: revision.changedByUserId };
+        await this.lockPolicy(transaction, context);
+        const current = await transaction.aiCompanyPolicy.findFirst({
+          where: { id: candidate.id, tenantId, companyId: candidate.companyId },
+          include: { revisions: { orderBy: { version: "desc" }, take: 1 } },
+        });
+        const currentRevision = current?.revisions[0];
+        if (!currentRevision || current?.currentVersion !== currentRevision.version || currentRevision.mode !== AiCompanyPolicyMode.ENABLED || !currentRevision.autoEnrollStable) continue;
+        const pilots = await transaction.aiCompanyPolicyPilotAllowlist.findMany({
+          where: { policyRevisionId: currentRevision.id, tenantId, companyId: candidate.companyId },
+          select: { skillKey: true, skillVersion: true, policyVersion: true },
+        });
+        await this.reconcileInTransaction(transaction, context, currentRevision.id, currentRevision.mode, pilots, true);
+        reconciledPolicies += 1;
+      }
+      return { reconciledPolicies };
+    });
+  }
+
   private async reconcileInTransaction(
     transaction: Prisma.TransactionClient,
     context: TrustedCompanyActorContext,
     revisionId: string,
     mode: AiCompanyPolicyMode,
     pilots: readonly { skillKey: string; skillVersion: number; policyVersion: number }[],
+    autoEnrollStable: boolean,
   ) {
     if (mode !== AiCompanyPolicyMode.ENABLED) return;
-    for (const item of pilots) {
+    const configuredSkills = [
+      ...pilots,
+      ...(autoEnrollStable
+        ? AI_SKILL_CATALOG.filter((skill) => skill.status === "ACTIVE").map((skill) => ({ skillKey: skill.key, skillVersion: skill.version, policyVersion: skill.policyVersion }))
+        : []),
+    ];
+    for (const item of configuredSkills) {
       const skill = AI_SKILL_CATALOG.find((candidate) => candidate.key === item.skillKey && candidate.version === item.skillVersion && candidate.policyVersion === item.policyVersion);
-      if (!skill || skill.status !== "PILOT" || runtimeAvailabilityForAiSkill(skill.key).state !== "READY") continue;
+      if (!skill || (skill.status !== "PILOT" && skill.status !== "ACTIVE") || runtimeAvailabilityForAiSkill(skill.key).state !== "READY") continue;
       const evaluation = runOfflineAiSkillEvaluation(skill);
       const suite = evaluationSuiteForAiSkill(skill.key, skill.version, skill.policyVersion);
       if (!suite || !evaluation.passed) continue;
@@ -177,7 +216,7 @@ export class AiCompanyPolicyService {
       if (blocked) continue;
       await transaction.aiSkillActivation.upsert({
         where: { companyId_skillKey_skillVersion_policyVersion: { companyId: context.companyId, skillKey: skill.key, skillVersion: skill.version, policyVersion: skill.policyVersion } },
-        create: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, skillKey: skill.key, skillVersion: skill.version, policyVersion: skill.policyVersion, status: AiSkillActivationStatus.PILOT, dailyRequestLimit: null, dailyCostLimit: null, approvedByUserId: context.actorUserId, origin: AiSkillActivationOrigin.COMPANY_POLICY, companyPolicyRevisionId: revisionId },
+        create: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, skillKey: skill.key, skillVersion: skill.version, policyVersion: skill.policyVersion, status: skill.status === "ACTIVE" ? AiSkillActivationStatus.ACTIVE : AiSkillActivationStatus.PILOT, dailyRequestLimit: null, dailyCostLimit: null, approvedByUserId: context.actorUserId, origin: AiSkillActivationOrigin.COMPANY_POLICY, companyPolicyRevisionId: revisionId },
         update: {},
       });
     }

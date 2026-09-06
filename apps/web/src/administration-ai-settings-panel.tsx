@@ -336,7 +336,7 @@ function BasiraCompanyPolicyCard({ language, session, governance, configuration,
       const idempotencyKey = requestId();
       await api<CompanyPolicy>(session, "/administration/ai/company-policy", {
         method: "PUT", headers: { "Content-Type": "application/json", "X-Idempotency-Key": idempotencyKey },
-        body: JSON.stringify({ expectedVersion: policy.version, mode, ...(monthlyBudgetUsdCents ? { monthlyBudgetUsdCents } : {}), providerConfigurationIds: mode === "ENABLED" && activeProvider ? [activeProvider.id] : [], pilotSkills: mode === "ENABLED" ? availablePilots : [], autoEnrollStable: false, changeReason: mode === "ENABLED" ? "Company Basira operating policy enabled" : mode === "PAUSED" ? "Company Basira operating policy paused" : "Company Basira operating policy disabled", idempotencyKey }),
+        body: JSON.stringify({ expectedVersion: policy.version, mode, ...(monthlyBudgetUsdCents ? { monthlyBudgetUsdCents } : {}), providerConfigurationIds: mode === "ENABLED" && activeProvider ? [activeProvider.id] : [], pilotSkills: mode === "ENABLED" ? availablePilots : [], autoEnrollStable: mode === "ENABLED", changeReason: mode === "ENABLED" ? "Company Basira operating policy enabled" : mode === "PAUSED" ? "Company Basira operating policy paused" : "Company Basira operating policy disabled", idempotencyKey }),
       });
       await refetch(); setDialogOpen(false);
       setMessage(mode === "ENABLED" ? (ar ? "تم تشغيل بصيرة تلقائياً ضمن السقف الشهري." : "Basira was enabled automatically within the monthly cap.") : mode === "PAUSED" ? (ar ? "تم الإيقاف فوراً. تبقى السجلات للقراءة." : "Basira was paused immediately. Records remain readable.") : (ar ? "تم إيقاف بصيرة لهذه الشركة." : "Basira was disabled for this company."));

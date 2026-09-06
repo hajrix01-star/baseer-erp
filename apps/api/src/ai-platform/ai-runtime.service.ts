@@ -415,16 +415,21 @@ export class AiRuntimeService {
         profile: modelProfile,
         inputText: promptTextForLocalTokenCount(providerPrompt),
       });
-      const generated = await this.adapters.explainDecisionAlert({
-        apiKey,
-        model: setup.provider.model,
-        brief,
-        language: input.request.language,
-        actorFingerprint: `${context.tenantId}:${context.companyId}:${context.actorUserId}`,
-        toneInstructions: setup.systemIdentity?.toneInstructions ?? "",
-        safetyInstructions: setup.systemIdentity?.safetyInstructions ?? "",
-        companyContext,
-        maxOutputTokens: modelProfile.maxOutputTokens,
+      const generated = await this.consumption.dispatchProviderCall({
+        context,
+        activation,
+        companyPolicy: companyPolicy ? { policyRevisionId: companyPolicy.policyRevisionId, monthlyBudgetUsdCents: companyPolicy.monthlyBudgetUsdCents } : null,
+        dispatch: () => this.adapters.explainDecisionAlert({
+          apiKey,
+          model: setup.provider.model,
+          brief,
+          language: input.request.language,
+          actorFingerprint: `${context.tenantId}:${context.companyId}:${context.actorUserId}`,
+          toneInstructions: setup.systemIdentity?.toneInstructions ?? "",
+          safetyInstructions: setup.systemIdentity?.safetyInstructions ?? "",
+          companyContext,
+          maxOutputTokens: modelProfile.maxOutputTokens,
+        }),
       });
       providerUsage = generated.usage;
       explanation = decisionAlertExplanationSchema.parse(generated.output);
@@ -735,14 +740,19 @@ export class AiRuntimeService {
         profile: modelProfile,
         inputText: promptTextForLocalTokenCount(providerPrompt),
       });
-      const generated = await this.adapters.explainMarketingCampaign({
-        apiKey, model: setup.provider.model,
-        brief: snapshot.payload as Record<string, unknown>, language: input.request.language,
-        actorFingerprint: `${context.tenantId}:${context.companyId}:${context.actorUserId}`,
-        toneInstructions: setup.systemIdentity?.toneInstructions ?? "",
-        safetyInstructions: setup.systemIdentity?.safetyInstructions ?? "",
-        companyContext,
-        maxOutputTokens: modelProfile.maxOutputTokens,
+      const generated = await this.consumption.dispatchProviderCall({
+        context,
+        activation,
+        companyPolicy: companyPolicy ? { policyRevisionId: companyPolicy.policyRevisionId, monthlyBudgetUsdCents: companyPolicy.monthlyBudgetUsdCents } : null,
+        dispatch: () => this.adapters.explainMarketingCampaign({
+          apiKey, model: setup.provider.model,
+          brief: snapshot.payload as Record<string, unknown>, language: input.request.language,
+          actorFingerprint: `${context.tenantId}:${context.companyId}:${context.actorUserId}`,
+          toneInstructions: setup.systemIdentity?.toneInstructions ?? "",
+          safetyInstructions: setup.systemIdentity?.safetyInstructions ?? "",
+          companyContext,
+          maxOutputTokens: modelProfile.maxOutputTokens,
+        }),
       });
       providerUsage = generated.usage;
       explanation = marketingCampaignExplanationSchema.parse(generated.output);

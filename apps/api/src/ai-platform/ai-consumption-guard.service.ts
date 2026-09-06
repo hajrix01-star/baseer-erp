@@ -64,6 +64,29 @@ export type AiCompanyMonthlyPolicy = Readonly<{
 export class AiConsumptionGuardService {
   constructor(private readonly database: DatabaseService) {}
 
+  /**
+   * Serialises the final provider dispatch with policy and skill kill-switch
+   * writes. The callback intentionally runs while the transaction advisory
+   * lock is held: a successful suspension means no provider call starts after
+   * it. A call that started before suspension may finish normally.
+   */
+  async dispatchProviderCall<T>(input: Readonly<{
+    context: TrustedCompanyActorContext;
+    activation: AiConsumptionActivation;
+    companyPolicy?: AiCompanyMonthlyPolicy | null;
+    dispatch: () => Promise<T>;
+  }>): Promise<T> {
+    const now = new Date();
+    return this.database.inTenantTransaction(input.context.tenantId, async (transaction) => {
+      await this.lockCompanyPolicyInTransaction(transaction, input.context);
+      if (input.companyPolicy) {
+        await this.assertCompanyPolicySnapshotIsCurrent(transaction, input.context, input.companyPolicy);
+      }
+      await this.assertActivationIsStillLive(transaction, input.context, input.activation, now);
+      return input.dispatch();
+    });
+  }
+
   async reserve(input: Readonly<{
     context: TrustedCompanyActorContext;
     provider: AiConsumptionProvider;
