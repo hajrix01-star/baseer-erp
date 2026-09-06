@@ -587,6 +587,12 @@ async function seedFixture() {
       'INSERT INTO "RolePermission" ("tenantId", "roleId", "permissionCode") VALUES ($1::uuid, $2::uuid, $3), ($1::uuid, $2::uuid, $4), ($1::uuid, $2::uuid, $5), ($1::uuid, $2::uuid, $6)',
       [fixture.tenantId, roleId, "finance.configuration.read", "finance.loans.read", "finance.purchase_expense.read", "finance.supplier_dues.read"],
     );
+    // The restricted test role must read the unified register. A database
+    // fixture can already have added this grant, so retain idempotency.
+    await client.query(
+      'INSERT INTO "RolePermission" ("tenantId", "roleId", "permissionCode") VALUES ($1::uuid, $2::uuid, $3) ON CONFLICT ("roleId", "permissionCode") DO NOTHING',
+      [fixture.tenantId, roleId, "finance.ledger.read"],
+    );
     await client.query(
       'INSERT INTO "RolePermission" ("tenantId", "roleId", "permissionCode") VALUES ($1::uuid, $2::uuid, $3), ($1::uuid, $2::uuid, $4), ($1::uuid, $2::uuid, $5)',
       [fixture.tenantId, roleId, "finance.purchase_expense.create", "finance.categories.write", "finance.suppliers.write"],
