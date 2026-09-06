@@ -25,6 +25,8 @@ const requiredImages = {
   migrate: "BASEER_MIGRATE_IMAGE",
   "grant-app-access": "BASEER_POSTGRES_IMAGE",
   api: "BASEER_API_IMAGE",
+  "document-scanner": "BASEER_API_IMAGE",
+  clamav: "BASEER_CLAMAV_IMAGE",
   web: "BASEER_WEB_IMAGE",
   caddy: "BASEER_CADDY_IMAGE",
 };
@@ -179,6 +181,7 @@ const releaseEnvironment = parseEnvironment([
   `BASEER_WEB_IMAGE=${manifest.images.web}`,
   `BASEER_POSTGRES_IMAGE=postgres@${testDigest("d")}`,
   `BASEER_CADDY_IMAGE=caddy@${testDigest("e")}`,
+  `BASEER_CLAMAV_IMAGE=clamav/clamav@${testDigest("f")}`,
   "AI_CREDENTIAL_ENCRYPTION_KEY=MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=",
 ].join("\n"));
 

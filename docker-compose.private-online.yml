@@ -118,7 +118,9 @@ services:
       BASEER_COMPANY_LOGO_STORAGE_ROOT: /var/lib/baseer/storage/logos
       BASEER_INBOUND_EVIDENCE_STORAGE_ROOT: /var/lib/baseer/storage/inbound
       BASEER_EMPLOYEE_DOCUMENT_ENCRYPTION_KEY: ${BASEER_EMPLOYEE_DOCUMENT_ENCRYPTION_KEY:?BASEER_EMPLOYEE_DOCUMENT_ENCRYPTION_KEY is required}
-      BASEER_DOCUMENT_SCANNER_ENDPOINT: ${BASEER_DOCUMENT_SCANNER_ENDPOINT:?BASEER_DOCUMENT_SCANNER_ENDPOINT is required}
+      # The scanner gateway is private to this Compose network. No host-side
+      # scanner URL or public port is accepted in private-online.
+      BASEER_DOCUMENT_SCANNER_ENDPOINT: http://document-scanner:5300/scan
       # WhatsApp invoices use the existing private document scanner. Their
       # storage stays disabled until the operator creates this private child
       # directory and supplies an independent 32-byte encryption key.
@@ -177,6 +179,56 @@ services:
     networks:
       - web
       - database
+      - scanner
+
+  # The gateway exposes only the repository's narrow scanner JSON contract to
+  # the API. It has no published port and is not reachable from Caddy/web.
+  document-scanner:
+    image: ${BASEER_API_IMAGE:?BASEER_API_IMAGE must be an immutable image@sha256 digest}
+    restart: unless-stopped
+    logging: *default-logging
+    command: ["node", "apps/api/dist/operations/document-scanner-gateway.js"]
+    environment:
+      NODE_ENV: production
+      BASEER_DOCUMENT_SCANNER_PORT: "5300"
+      BASEER_CLAMAV_HOST: clamav
+      BASEER_CLAMAV_PORT: "3310"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    depends_on:
+      clamav:
+        condition: service_started
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:5300/health').then((response) => { if (!response.ok) process.exit(1); }).catch(() => process.exit(1))\""]
+      interval: 30s
+      timeout: 10s
+      retries: 6
+      start_period: 90s
+    networks:
+      - scanner
+
+  # Official ClamAV image, private TCP only. The immutable digest is supplied
+  # from the host-only environment after the operator has approved it.
+  clamav:
+    image: ${BASEER_CLAMAV_IMAGE:?BASEER_CLAMAV_IMAGE must be an immutable image@sha256 digest}
+    restart: unless-stopped
+    logging: *default-logging
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /run/clamav
+    volumes:
+      - baseer_private_clamav_data:/var/lib/clamav
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - scanner
+      # Signature updates need outbound HTTPS, but this network has no
+      # published host port and is not shared with the API or web services.
+      - scanner-egress
 
   web:
     image: ${BASEER_WEB_IMAGE:?BASEER_WEB_IMAGE must be an immutable image@sha256 digest}
@@ -232,8 +284,15 @@ networks:
         - subnet: 172.30.0.0/24
   database:
     internal: true
+  scanner:
+    internal: true
+  scanner-egress:
+    # Deliberately not internal: only ClamAV joins it so it can refresh
+    # signatures. It exposes no host port and does not provide a route to the
+    # Baseer API, database, web, or Caddy networks.
 
 volumes:
   baseer_private_postgres_data:
   baseer_private_caddy_data:
   baseer_private_caddy_config:
+  baseer_private_clamav_data:
