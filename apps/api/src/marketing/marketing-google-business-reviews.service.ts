@@ -13,7 +13,6 @@ const GOOGLE_TIMEOUT_MS = 12_000;
 // This is a safety cap, not a UI pagination limit; stored facts remain pageable.
 const MAX_PROVIDER_PAGES = 100;
 const PAGE_SIZE = 50;
-const REVIEW_RETENTION_MS = 90 * 24 * 60 * 60 * 1_000;
 // The reader is capped at 100 × 12-second provider calls (20 minutes).
 // The 30-minute lease keeps a second manual request from reaching Google while
 // a valid worst-case run is still in flight; persistence also verifies RUNNING.
@@ -54,6 +53,11 @@ type ProviderReview = Readonly<{
   replyComment: string | null;
   replyUpdatedAt: Date | null;
 }>;
+type ReviewReadInput = Readonly<{
+  cursor?: string | undefined;
+  rating?: number | undefined;
+  replyState?: "ALL" | "REPLIED" | "UNREPLIED" | undefined;
+}>;
 
 /**
  * The only Google review reader. It keeps provider egress and all aggregation
@@ -88,8 +92,8 @@ export class MarketingGoogleBusinessReviewsService {
     }
   }
 
-  async read(context: TrustedCompanyActorContext, cursor: string | undefined) {
-    const parsedCursor = decodeCursor(cursor);
+  async read(context: TrustedCompanyActorContext, input: ReviewReadInput) {
+    const parsedCursor = decodeCursor(input.cursor);
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const mapping = await tx.marketingGoogleBusinessLocationMapping.findFirst({
         where: { tenantId: context.tenantId, companyId: context.companyId, provider: "GOOGLE_BUSINESS" },
@@ -102,10 +106,15 @@ export class MarketingGoogleBusinessReviewsService {
         select: { sourceFreshAt: true, providerAverageRating: true, providerTotalReviewCount: true, rowsRead: true, rowsWritten: true },
       });
       if (!latestRun?.sourceFreshAt) return emptyRead("NO_DATA");
-      const where = {
+      const factScope = {
         tenantId: context.tenantId,
         companyId: context.companyId,
         locationMappingId: mapping.id,
+      };
+      const where: Prisma.MarketingGoogleBusinessReviewFactWhereInput = {
+        ...factScope,
+        ...(input.rating ? { rating: input.rating } : {}),
+        ...(input.replyState === "REPLIED" ? { replyComment: { not: null } } : input.replyState === "UNREPLIED" ? { replyComment: null } : {}),
         ...(parsedCursor ? { OR: [{ reviewUpdatedAt: { lt: parsedCursor.updatedAt } }, { reviewUpdatedAt: parsedCursor.updatedAt, id: { lt: parsedCursor.id } }] } : {}),
       };
       const rows = await tx.marketingGoogleBusinessReviewFact.findMany({
@@ -115,8 +124,12 @@ export class MarketingGoogleBusinessReviewsService {
         select: { id: true, rating: true, reviewerDisplayName: true, reviewComment: true, reviewCreatedAt: true, reviewUpdatedAt: true, replyComment: true, replyUpdatedAt: true },
       });
       const page = rows.slice(0, PAGE_SIZE);
-      const repliedCount = await tx.marketingGoogleBusinessReviewFact.count({ where: { tenantId: context.tenantId, companyId: context.companyId, locationMappingId: mapping.id, replyComment: { not: null } } });
-      const storedCount = await tx.marketingGoogleBusinessReviewFact.count({ where: { tenantId: context.tenantId, companyId: context.companyId, locationMappingId: mapping.id } });
+      const [repliedCount, storedCount, filteredReviewCount, groupedRatings] = await Promise.all([
+        tx.marketingGoogleBusinessReviewFact.count({ where: { ...factScope, replyComment: { not: null } } }),
+        tx.marketingGoogleBusinessReviewFact.count({ where: factScope }),
+        tx.marketingGoogleBusinessReviewFact.count({ where }),
+        tx.marketingGoogleBusinessReviewFact.groupBy({ by: ["rating"], where: factScope, _count: { _all: true } }),
+      ]);
       const averageRating = latestRun.providerAverageRating?.toNumber() ?? null;
       const totalReviewCount = latestRun.providerTotalReviewCount ?? storedCount;
       const responseRatePercent = storedCount === 0 ? null : Math.round((repliedCount / storedCount) * 100);
@@ -128,10 +141,16 @@ export class MarketingGoogleBusinessReviewsService {
           totalReviewCount,
           storedReviewCount: storedCount,
           repliedReviewCount: repliedCount,
+          unrepliedReviewCount: storedCount - repliedCount,
           responseRatePercent,
           analysisAr: analysisAr(averageRating, totalReviewCount, responseRatePercent),
           analysisEn: analysisEn(averageRating, totalReviewCount, responseRatePercent),
         },
+        distribution: [5, 4, 3, 2, 1].map((rating) => {
+          const reviewCount = groupedRatings.find((item) => item.rating === rating)?._count._all ?? 0;
+          return { rating, reviewCount, sharePercent: storedCount === 0 ? 0 : Math.round((reviewCount / storedCount) * 100) };
+        }),
+        filteredReviewCount,
         sync: { rowsRead: latestRun.rowsRead, rowsWritten: latestRun.rowsWritten },
         reviews: page.map((row) => ({
           id: row.id,
@@ -232,10 +251,9 @@ export class MarketingGoogleBusinessReviewsService {
       if (!connection || !mapping) throw new ForbiddenException("Google Business connection changed before synchronization completed.");
       const activeRun = await tx.marketingProviderSyncRun.findFirst({ where: { id: active.runId, tenantId: context.tenantId, companyId: context.companyId, provider: "GOOGLE_BUSINESS", status: "RUNNING" }, select: { id: true } });
       if (!activeRun) throw new ConflictException("This Google Business review synchronization was superseded.");
-      const retentionCutoff = new Date(sourceFreshAt.valueOf() - REVIEW_RETENTION_MS);
-      const retainedReviews = reviews.filter((review) => review.reviewUpdatedAt >= retentionCutoff);
-      await tx.marketingGoogleBusinessReviewFact.deleteMany({ where: { tenantId: context.tenantId, companyId: context.companyId, reviewUpdatedAt: { lt: retentionCutoff } } });
-      for (const review of retainedReviews) {
+      // Product-approved full history: facts remain while the company's Google
+      // connection exists. Disconnect owns the explicit lifecycle deletion.
+      for (const review of reviews) {
         const contentHash = hash(JSON.stringify(review));
         await tx.marketingGoogleBusinessReviewFact.upsert({
           where: { tenantId_companyId_locationMappingId_providerReviewResourceName: { tenantId: context.tenantId, companyId: context.companyId, locationMappingId: active.mappingId, providerReviewResourceName: review.resourceName } },
@@ -243,10 +261,10 @@ export class MarketingGoogleBusinessReviewsService {
           update: { rating: review.rating, reviewerDisplayName: review.reviewerDisplayName, reviewComment: review.reviewComment, reviewCreatedAt: review.reviewCreatedAt, reviewUpdatedAt: review.reviewUpdatedAt, replyComment: review.replyComment, replyUpdatedAt: review.replyUpdatedAt, fetchedAt: sourceFreshAt, contentHash },
         });
       }
-      const checksum = hash(JSON.stringify(retainedReviews.map((review) => ({ resourceName: review.resourceName, rating: review.rating, updatedAt: review.reviewUpdatedAt.toISOString(), replyUpdatedAt: review.replyUpdatedAt?.toISOString() ?? null }))));
-      await tx.marketingProviderSyncRun.update({ where: { id: active.runId }, data: { status: "COMPLETED", rowsRead, rowsWritten: retainedReviews.length, sourceChecksum: checksum, sourceFreshAt, providerAverageRating: averageRating === null ? null : averageRating.toFixed(1), providerTotalReviewCount: totalReviewCount, safeErrorCode: null } });
-      await tx.auditEvent.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId, action: "marketing.google_business_reviews.synchronized", entityType: "MarketingProviderSyncRun", entityId: active.runId, requestId: randomUUID(), beforeJson: Prisma.JsonNull, afterJson: { status: "COMPLETED", rowsRead, rowsWritten: retainedReviews.length, sourceFreshAt: sourceFreshAt.toISOString() } } });
-      return retainedReviews.length;
+      const checksum = hash(JSON.stringify(reviews.map((review) => ({ resourceName: review.resourceName, rating: review.rating, updatedAt: review.reviewUpdatedAt.toISOString(), replyUpdatedAt: review.replyUpdatedAt?.toISOString() ?? null }))));
+      await tx.marketingProviderSyncRun.update({ where: { id: active.runId }, data: { status: "COMPLETED", rowsRead, rowsWritten: reviews.length, sourceChecksum: checksum, sourceFreshAt, providerAverageRating: averageRating === null ? null : averageRating.toFixed(1), providerTotalReviewCount: totalReviewCount, safeErrorCode: null } });
+      await tx.auditEvent.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId, action: "marketing.google_business_reviews.synchronized", entityType: "MarketingProviderSyncRun", entityId: active.runId, requestId: randomUUID(), beforeJson: Prisma.JsonNull, afterJson: { status: "COMPLETED", rowsRead, rowsWritten: reviews.length, sourceFreshAt: sourceFreshAt.toISOString() } } });
+      return reviews.length;
     });
   }
 
@@ -277,6 +295,6 @@ function safeErrorCode(error: unknown) { if (error instanceof ForbiddenException
 function isUniqueConflict(error: unknown) { return typeof error === "object" && error !== null && "code" in error && (error as { code?: unknown }).code === "P2002"; }
 function encodeCursor(updatedAt: Date, id: string) { return Buffer.from(JSON.stringify({ updatedAt: updatedAt.toISOString(), id })).toString("base64url"); }
 function decodeCursor(value: string | undefined): { updatedAt: Date; id: string } | null { if (!value) return null; try { const parsed = JSON.parse(Buffer.from(value, "base64url").toString("utf8")) as { updatedAt?: unknown; id?: unknown }; const updatedAt = date(parsed.updatedAt); return updatedAt && typeof parsed.id === "string" && /^[0-9a-f-]{36}$/i.test(parsed.id) ? { updatedAt, id: parsed.id } : null; } catch { return null; } }
-function emptyRead(sourceStatus: "NOT_CONNECTED" | "NO_DATA") { return { sourceStatus, asOf: null, summary: { averageRating: null, totalReviewCount: null, storedReviewCount: 0, repliedReviewCount: 0, responseRatePercent: null, analysisAr: sourceStatus === "NOT_CONNECTED" ? "اربط Google Business أولاً لعرض التقييمات." : "لا توجد تقييمات متزامنة بعد؛ اضغط مزامنة الآن.", analysisEn: sourceStatus === "NOT_CONNECTED" ? "Connect Google Business first to view reviews." : "No reviews have been synchronized yet. Choose Sync now." }, sync: null, reviews: [], nextCursor: null }; }
+function emptyRead(sourceStatus: "NOT_CONNECTED" | "NO_DATA") { return { sourceStatus, asOf: null, summary: { averageRating: null, totalReviewCount: null, storedReviewCount: 0, repliedReviewCount: 0, unrepliedReviewCount: 0, responseRatePercent: null, analysisAr: sourceStatus === "NOT_CONNECTED" ? "اربط Google Business أولاً لعرض التقييمات." : "No reviews have been synchronized yet. Choose Sync now." }, distribution: [5, 4, 3, 2, 1].map((rating) => ({ rating, reviewCount: 0, sharePercent: 0 })), filteredReviewCount: 0, sync: null, reviews: [], nextCursor: null }; }
 function analysisAr(average: number | null, total: number, response: number | null) { if (average === null) return "وصلت بيانات التقييمات، لكن متوسط النجوم غير متاح من Google حالياً."; const quality = average >= 4.5 ? "الانطباع العام قوي" : average >= 3.5 ? "الانطباع العام جيد ويحتاج متابعة" : "الانطباع العام يحتاج متابعة قريبة"; const reply = response === null ? "" : `، ونسبة الردود الظاهرة ${response}%`; return `${quality}: متوسط ${average.toFixed(1)} من 5 عبر ${total} تقييماً${reply}. هذا وصف لبيانات Google وليس مبيعات أو سبباً مالياً.`; }
 function analysisEn(average: number | null, total: number, response: number | null) { if (average === null) return "Review data arrived, but Google did not provide an average rating."; const quality = average >= 4.5 ? "Overall sentiment is strong" : average >= 3.5 ? "Overall sentiment is good and needs follow-up" : "Overall sentiment needs close follow-up"; const reply = response === null ? "" : `, with ${response}% showing a Google reply`; return `${quality}: ${average.toFixed(1)} out of 5 across ${total} reviews${reply}. This describes Google data, not sales or financial causation.`; }

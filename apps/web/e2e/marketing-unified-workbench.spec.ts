@@ -23,7 +23,9 @@ const connections = {
 const readyReviews = {
   sourceStatus: "READY",
   asOf: "2026-09-06T12:00:00.000Z",
-  summary: { averageRating: 4.5, totalReviewCount: 2, storedReviewCount: 2, repliedReviewCount: 1, responseRatePercent: 50, analysisAr: "الانطباع العام قوي: متوسط 4.5 من 5 عبر 2 تقييماً.", analysisEn: "Overall sentiment is strong: 4.5 out of 5 across 2 reviews." },
+  summary: { averageRating: 4.5, totalReviewCount: 2, storedReviewCount: 2, repliedReviewCount: 1, unrepliedReviewCount: 1, responseRatePercent: 50, analysisAr: "الانطباع العام قوي: متوسط 4.5 من 5 عبر 2 تقييماً.", analysisEn: "Overall sentiment is strong: 4.5 out of 5 across 2 reviews." },
+  distribution: [{ rating: 5, reviewCount: 1, sharePercent: 50 }, { rating: 4, reviewCount: 1, sharePercent: 50 }, { rating: 3, reviewCount: 0, sharePercent: 0 }, { rating: 2, reviewCount: 0, sharePercent: 0 }, { rating: 1, reviewCount: 0, sharePercent: 0 }],
+  filteredReviewCount: 2,
   sync: { rowsRead: 2, rowsWritten: 2 },
   reviews: [{ id: "44444444-4444-4444-8444-444444444444", rating: 5, reviewerDisplayName: "ضيف Google", reviewComment: "تجربة ممتازة", reviewCreatedAt: "2026-09-05T08:00:00.000Z", reviewUpdatedAt: "2026-09-05T09:00:00.000Z", replyComment: "شكراً لزيارتك", replyUpdatedAt: "2026-09-05T10:00:00.000Z" }],
   nextCursor: null,
@@ -31,7 +33,9 @@ const readyReviews = {
 const noDataReviews = {
   sourceStatus: "NO_DATA",
   asOf: null,
-  summary: { averageRating: null, totalReviewCount: null, storedReviewCount: 0, repliedReviewCount: 0, responseRatePercent: null, analysisAr: "لا توجد تقييمات متزامنة بعد؛ اضغط مزامنة الآن.", analysisEn: "No reviews have been synchronized yet. Choose Sync now." },
+  summary: { averageRating: null, totalReviewCount: null, storedReviewCount: 0, repliedReviewCount: 0, unrepliedReviewCount: 0, responseRatePercent: null, analysisAr: "لا توجد تقييمات متزامنة بعد؛ اضغط مزامنة الآن.", analysisEn: "No reviews have been synchronized yet. Choose Sync now." },
+  distribution: [{ rating: 5, reviewCount: 0, sharePercent: 0 }, { rating: 4, reviewCount: 0, sharePercent: 0 }, { rating: 3, reviewCount: 0, sharePercent: 0 }, { rating: 2, reviewCount: 0, sharePercent: 0 }, { rating: 1, reviewCount: 0, sharePercent: 0 }],
+  filteredReviewCount: 0,
   sync: null,
   reviews: [],
   nextCursor: null,
@@ -143,17 +147,22 @@ test("Google Ads is honest when no facts are connected", async ({ page }) => {
   await expect(page.getByText(/لا تتوفر تكلفة أو تحويلات أو قرارات إنفاق/)).toBeVisible();
 });
 
-test("Google Business reviews have one sync action and show the provider reply", async ({ page }) => {
+test("Google Business reviews have one sync action, complete record controls, and the provider reply", async ({ page }) => {
   await prepare(page);
   await page.goto("/#module=marketing&page=marketing-reputation");
 
-  await expect(page.getByRole("heading", { name: "تقييمات Google Business", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "لوحة التقييمات", exact: true })).toBeVisible();
+  await expect(page.getByText("توزيع النجوم", { exact: true })).toBeVisible();
+  await expect(page.getByText(/السجل المحفوظ: 2 تقييم/)).toBeVisible();
   await expect(page.getByText("ضيف Google", { exact: true })).toBeVisible();
   await expect(page.getByText("شكراً لزيارتك", { exact: true })).toBeVisible();
   const sync = page.waitForRequest((request) => request.url().includes("/v1/marketing/reputation/reviews/sync") && request.method() === "POST");
   await page.getByRole("button", { name: "مزامنة الآن", exact: true }).click();
   await sync;
   await expect(page.getByText("تمت مزامنة 2 تقييمات. لا يتم نشر أي رد من هذه العملية.", { exact: true })).toBeVisible();
+  const filtered = page.waitForRequest((request) => request.url().includes("/v1/marketing/reputation/reviews?replyState=UNREPLIED"));
+  await page.getByRole("button", { name: "تحتاج ردًا", exact: true }).click();
+  await filtered;
 });
 
 test("English reputation state stays English before the first synchronization", async ({ page }) => {

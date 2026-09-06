@@ -60,10 +60,14 @@ class ReviewsDatabase {
       },
       findMany: async ({ where, take }: any) => {
         let rows = [...this.facts].sort((left, right) => right.reviewUpdatedAt.valueOf() - left.reviewUpdatedAt.valueOf() || right.id.localeCompare(left.id));
+        if (where.rating) rows = rows.filter((fact) => fact.rating === where.rating);
+        if (where.replyComment === null) rows = rows.filter((fact) => fact.replyComment === null);
+        if (where.replyComment?.not === null) rows = rows.filter((fact) => fact.replyComment !== null);
         if (where.OR) rows = rows.filter((fact) => fact.reviewUpdatedAt < where.OR[0].reviewUpdatedAt.lt || (fact.reviewUpdatedAt.valueOf() === where.OR[1].reviewUpdatedAt.valueOf() && fact.id < where.OR[1].id.lt));
         return rows.slice(0, take);
       },
-      count: async ({ where }: any) => where.replyComment ? this.facts.filter((fact) => fact.replyComment !== null).length : this.facts.length,
+      count: async ({ where }: any) => this.facts.filter((fact) => (!where.rating || fact.rating === where.rating) && (where.replyComment === null ? fact.replyComment === null : where.replyComment?.not === null ? fact.replyComment !== null : true)).length,
+      groupBy: async () => [1, 2, 3, 4, 5].filter((rating) => this.facts.some((fact) => fact.rating === rating)).map((rating) => ({ rating, _count: { _all: this.facts.filter((fact) => fact.rating === rating).length } })),
     },
     auditEvent: { create: async () => ({}) },
   };
@@ -110,12 +114,18 @@ try {
   assert.equal(database.facts.length, 2, "The provider reviews must be stored as company-scoped facts.");
   assert.ok(!JSON.stringify(receipt).includes("verification-refresh-token"), "A sync receipt must not expose a refresh token.");
 
-  const read = await service.read(context, undefined);
+  const read = await service.read(context, {});
   assert.equal(read.sourceStatus, "READY");
   assert.equal(read.summary.averageRating, 4.5);
   assert.equal(read.summary.totalReviewCount, 2);
   assert.equal(read.summary.repliedReviewCount, 1);
+  assert.equal(read.summary.unrepliedReviewCount, 1);
+  assert.equal(read.distribution.find((item) => item.rating === 5)?.reviewCount, 1);
   assert.equal(read.reviews[0]?.replyComment, "Thank you", "Existing Google replies must be available for display.");
+
+  const unanswered = await service.read(context, { replyState: "UNREPLIED" });
+  assert.equal(unanswered.filteredReviewCount, 1, "Reply-state filtering must happen in the server read model.");
+  assert.equal(unanswered.reviews[0]?.reviewerDisplayName, "Another guest");
 
   const supersededRun = { id: "55555555-5555-4555-8555-555555555555", status: "BLOCKED", rowsRead: 0, rowsWritten: 0, sourceFreshAt: null, providerAverageRating: null, providerTotalReviewCount: null };
   database.runs.push(supersededRun);
@@ -125,13 +135,13 @@ try {
   const retentionRun = { id: "66666666-6666-4666-8666-666666666666", status: "RUNNING", rowsRead: 0, rowsWritten: 0, sourceFreshAt: null, providerAverageRating: null, providerTotalReviewCount: null };
   database.runs.push(retentionRun);
   await (service as any).persist(context, { connectionId: "connection", mappingId, runId: retentionRun.id }, [], 0, new Date(), null, null);
-  assert.equal(database.facts.length, 1, "A repeated synchronization must not extend personal-review retention beyond 90 days.");
+  assert.equal(database.facts.length, 2, "A repeated synchronization must retain the requested full review history.");
 
   database.connected = false;
   const beforeBlockedSync = fetchCalls;
   await assert.rejects(() => service.sync(context), /not ready/);
   assert.equal(fetchCalls, beforeBlockedSync, "A disconnected company must be rejected before Google egress.");
-  console.log("Marketing Google Business reviews verification passed: guarded manual sync, company-scoped facts, server analysis, and read-only existing replies.");
+  console.log("Marketing Google Business reviews verification passed: guarded manual sync, full company-scoped history, server filters and analysis, and read-only existing replies.");
 } finally {
   globalThis.fetch = originalFetch;
 }
