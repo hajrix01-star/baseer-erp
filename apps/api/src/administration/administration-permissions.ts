@@ -9,8 +9,10 @@
 export type AdministrationPermissionPresentation = AdministrationPermissionDefinition & Readonly<{
   moduleAr: string;
   moduleEn: string;
+  moduleOrder: number;
   sectionAr: string;
   sectionEn: string;
+  sectionOrder: number;
   requires: readonly string[];
 }>;
 
@@ -302,6 +304,27 @@ export function permissionCodesAreKnown(codes: readonly string[]): boolean {
 const MODULE_LABELS: Record<string, readonly [string, string]> = {
   administration: ["الإدارة", "Administration"], backup: ["النسخ والاستعادة", "Backup & recovery"], finance: ["المالية والخزائن", "Finance & vaults"], reports: ["التقارير", "Reports"], "decision-intelligence": ["مركز القرار", "Decision intelligence"], marketing: ["التسويق", "Marketing"], "inbound-evidence": ["الأدلة الواردة", "Inbound evidence"], hr: ["الموارد البشرية", "Human resources"], attendance: ["الحضور والدوام", "Attendance"], operations: ["العمليات والمخزون", "Operations & inventory"], platform: ["المنصة", "Platform"],
 };
+const MODULE_ORDERS: Record<string, number> = {
+  administration: 10, backup: 20, operations: 30, finance: 40, hr: 50,
+  attendance: 60, reports: 70, "decision-intelligence": 80, marketing: 90,
+  "inbound-evidence": 100, platform: 110,
+};
+const NAVIGATION_PRESENTATION_OVERRIDES: ReadonlyArray<Readonly<{
+  prefix: string; module: string; moduleAr: string; moduleEn: string;
+  moduleOrder: number; sectionAr: string; sectionEn: string; sectionOrder: number;
+}>> = [
+  { prefix: "finance.daily_sales", module: "operations", moduleAr: "العمليات", moduleEn: "Operations", moduleOrder: 30, sectionAr: "المبيعات", sectionEn: "Sales", sectionOrder: 20 },
+  { prefix: "finance.purchase_expense", module: "operations", moduleAr: "العمليات", moduleEn: "Operations", moduleOrder: 30, sectionAr: "المشتريات", sectionEn: "Purchasing", sectionOrder: 30 },
+  { prefix: "operations.whatsapp_invoice_monitoring", module: "operations", moduleAr: "العمليات", moduleEn: "Operations", moduleOrder: 30, sectionAr: "وارد فواتير واتساب", sectionEn: "WhatsApp invoice inbox", sectionOrder: 35 },
+  { prefix: "finance.loans", module: "operations", moduleAr: "العمليات", moduleEn: "Operations", moduleOrder: 30, sectionAr: "المصروفات والالتزامات", sectionEn: "Expenses & obligations", sectionOrder: 40 },
+  { prefix: "finance.suppliers", module: "operations", moduleAr: "العمليات", moduleEn: "Operations", moduleOrder: 30, sectionAr: "الموردون", sectionEn: "Suppliers", sectionOrder: 50 },
+  { prefix: "operations.catalog", module: "operations", moduleAr: "العمليات", moduleEn: "Operations", moduleOrder: 30, sectionAr: "الطلبات", sectionEn: "Requests", sectionOrder: 60 },
+  { prefix: "operations.purchase_request", module: "operations", moduleAr: "العمليات", moduleEn: "Operations", moduleOrder: 30, sectionAr: "الطلبات", sectionEn: "Requests", sectionOrder: 60 },
+  { prefix: "operations.purchase_receipt", module: "operations", moduleAr: "العمليات", moduleEn: "Operations", moduleOrder: 30, sectionAr: "الطلبات", sectionEn: "Requests", sectionOrder: 60 },
+  { prefix: "operations.custody", module: "operations", moduleAr: "العمليات", moduleEn: "Operations", moduleOrder: 30, sectionAr: "الطلبات", sectionEn: "Requests", sectionOrder: 60 },
+  { prefix: "operations.internal_registration", module: "operations", moduleAr: "العمليات", moduleEn: "Operations", moduleOrder: 30, sectionAr: "التسجيل الداخلي", sectionEn: "Internal registration", sectionOrder: 80 },
+  { prefix: "operations.assets", module: "operations", moduleAr: "العمليات", moduleEn: "Operations", moduleOrder: 30, sectionAr: "الأصول والضمان", sectionEn: "Assets & warranties", sectionOrder: 100 },
+];
 const SECTION_PREFIXES: ReadonlyArray<readonly [string, string, string]> = [
   ["administration.companies", "الشركات", "Companies"], ["administration.users", "المستخدمون", "Users"], ["administration.roles", "الأدوار والصلاحيات", "Roles & permissions"],
   ["backup.restore", "الاستعادة", "Recovery"], ["backup.schedule", "جدولة النسخ", "Backup schedules"], ["backup.audit", "تدقيق النسخ", "Backup audit"], ["backup", "النسخ والأرشفة", "Backup & archives"],
@@ -343,5 +366,16 @@ export function effectivePermissionCodes(codes: readonly string[]): string[] {
 export function permissionPresentation(permission: AdministrationPermissionDefinition): AdministrationPermissionPresentation {
   const [moduleAr, moduleEn] = MODULE_LABELS[permission.module] ?? [permission.module, permission.module];
   const section = SECTION_PREFIXES.find(([prefix]) => permission.code === prefix || permission.code.startsWith(`${prefix}.`));
-  return { ...permission, moduleAr, moduleEn, sectionAr: section?.[1] ?? permission.module, sectionEn: section?.[2] ?? permission.module, requires: permissionDependencies(permission.code) };
+  const override = NAVIGATION_PRESENTATION_OVERRIDES.find(({ prefix }) => permission.code === prefix || permission.code.startsWith(`${prefix}.`));
+  return {
+    ...permission,
+    module: override?.module ?? permission.module,
+    moduleAr: override?.moduleAr ?? moduleAr,
+    moduleEn: override?.moduleEn ?? moduleEn,
+    moduleOrder: override?.moduleOrder ?? MODULE_ORDERS[permission.module] ?? 999,
+    sectionAr: override?.sectionAr ?? section?.[1] ?? permission.module,
+    sectionEn: override?.sectionEn ?? section?.[2] ?? permission.module,
+    sectionOrder: override?.sectionOrder ?? 999,
+    requires: permissionDependencies(permission.code),
+  };
 }

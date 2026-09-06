@@ -34,7 +34,7 @@ const companyContextLocationFields = {
 };
 
 export const administrationPermissionSchema = z.object({
-  code: permissionCode, module: z.string().min(1).max(80), moduleAr: text160, moduleEn: text160, sectionAr: text160, sectionEn: text160, nameAr: text160, nameEn: text160, risk: z.enum(["standard", "sensitive"]), requires: z.array(permissionCode).max(120),
+  code: permissionCode, module: z.string().min(1).max(80), moduleAr: text160, moduleEn: text160, moduleOrder: z.number().int().nonnegative().max(999), sectionAr: text160, sectionEn: text160, sectionOrder: z.number().int().nonnegative().max(999), nameAr: text160, nameEn: text160, risk: z.enum(["standard", "sensitive"]), requires: z.array(permissionCode).max(120),
 }).strict();
 export const administrationRoleSchema = z.object({
   id: z.string().uuid(), code: roleCode, nameAr: text160, nameEn: text160, isSystem: z.boolean(), permissionCodes: z.array(permissionCode).max(120),
