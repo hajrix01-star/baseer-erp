@@ -8,6 +8,7 @@ const files = {
   generic: "apps/api/src/marketing/marketing-google-oauth.service.ts",
   connectionService: "apps/api/src/marketing/marketing.service.ts",
   platform: "apps/api/src/marketing/marketing-google-platform.service.ts",
+  selection: "apps/api/src/marketing/marketing-google-business-resource-selection.service.ts",
   workspace: "apps/web/src/marketing-policies-workspace.tsx",
 };
 const text = Object.fromEntries(await Promise.all(Object.entries(files).map(async ([key, file]) => [key, await readFile(file, "utf8")])));
@@ -15,6 +16,7 @@ const requireText = (value, expectation) => { if (!value.includes(expectation)) 
 
 requireText(text.generic, 'throw new ForbiddenException("Google authorization is not available in this Baseer release.")');
 requireText(text.controller, '@Post("provider-connections/google-business/pilot/authorization")');
+requireText(text.controller, '@Delete("provider-connections/google-business/pilot")');
 requireText(text.controller, '@Get("provider-connections/google-business/pilot/callback")');
 requireText(text.pilot, "this.requirePilotCompany(context.companyId);");
 if (text.pilot.indexOf("this.requirePilotCompany(context.companyId);") > text.pilot.indexOf("googleBusinessPilotConfiguration")) throw new Error("MKT-02A guard: pilot allowlist must precede configuration.");
@@ -28,11 +30,22 @@ requireText(text.pilot, "this.requirePilotCompany(claimed.companyId);");
 requireText(text.pilot, "this.platform.googleBusinessPilotConfiguration();");
 requireText(text.pilot, 'status: "AUTHORIZED_AWAITING_SELECTION"');
 requireText(text.pilot, 'data: { status: "REVOKED", revokedAt: new Date() }');
+requireText(text.pilot, 'orderBy: { createdAt: "desc" }');
+requireText(text.pilot, "if (latest?.id !== claimed.id) return false;");
+requireText(text.pilot, "if (latest?.id !== state.id) return;");
+requireText(text.pilot, "async disconnect(context: TrustedCompanyActorContext)");
+requireText(text.pilot, "marketingProviderCredentialEnvelope.deleteMany");
+requireText(text.pilot, "marketingGoogleBusinessLocationMapping.deleteMany");
+requireText(text.pilot, 'data: { status: "NOT_CONNECTED", setupRequestedAt: null, setupRequestedByUserId: null }');
+requireText(text.selection, "marketing-google-business-pilot:${tenantId}:${companyId}");
 requireText(text.connectionService, "this.googlePlatform.googleBusinessPilotAuthorizationAvailable(context.companyId)");
 requireText(text.platform, "googleBusinessPilotAuthorizationAvailable(companyId: string): boolean");
-requireText(text.workspace, 'connection.provider === "GOOGLE_BUSINESS" && connection.status !== "AUTHORIZING" && connection.pilotAuthorizationAvailable && canManage');
-requireText(text.workspace, 'connection.status === "AUTHORIZED_READ_ONLY_SELECTED"');
+requireText(text.workspace, 'const googleBusinessLifecycle =');
+requireText(text.workspace, 'case "BLOCKED"');
+requireText(text.workspace, 'تعذر الربط؛ يمكنك المحاولة من جديد');
+requireText(text.workspace, 'lifecycle.active && canManage');
 requireText(text.workspace, '"/marketing/provider-connections/google-business/pilot/authorization"');
+requireText(text.workspace, '"/marketing/provider-connections/google-business/pilot", { method: "DELETE" }');
 requireText(text.schema, "model MarketingGoogleBusinessOAuthState");
 requireText(text.migration, 'CHECK ("provider" = \'GOOGLE_BUSINESS\')');
 requireText(text.migration, 'FOREIGN KEY ("tenantId", "initiatedByUserId", "companyId")');

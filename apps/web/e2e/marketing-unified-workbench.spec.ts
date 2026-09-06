@@ -25,15 +25,15 @@ async function fulfill(route: Route, body: unknown, status = 200) {
   await route.fulfill({ status, contentType: "application/json", body: JSON.stringify(body) });
 }
 
-async function prepare(page: Page, options: { permissionCodes?: string[]; googleBusinessSelected?: boolean } = {}) {
+async function prepare(page: Page, options: { permissionCodes?: string[]; googleBusinessSelected?: boolean; googleBusinessStatus?: string } = {}) {
   const permissionCodes = options.permissionCodes ?? permissions;
-  const googleBusinessSelected = options.googleBusinessSelected ?? true;
-  const googleBusinessStatus = googleBusinessSelected ? "AUTHORIZED_READ_ONLY_SELECTED" : "NOT_CONNECTED";
+  let googleBusinessSelected = options.googleBusinessSelected ?? true;
+  const googleBusinessStatus = options.googleBusinessStatus ?? (googleBusinessSelected ? "AUTHORIZED_READ_ONLY_SELECTED" : "NOT_CONNECTED");
   const currentWorkspace = {
     ...workspace,
     readiness: workspace.readiness.map((item) => item.provider === "GOOGLE_BUSINESS" ? { ...item, status: googleBusinessStatus, messageAr: googleBusinessSelected ? item.messageAr : "Google Business غير متصل." } : item),
   };
-  const currentConnections = {
+  let currentConnections = {
     ...connections,
     connections: connections.connections.map((item) => item.provider === "GOOGLE_BUSINESS" ? { ...item, status: googleBusinessStatus, messageAr: googleBusinessSelected ? item.messageAr : "Google Business غير متصل." } : item),
   };
@@ -50,6 +50,11 @@ async function prepare(page: Page, options: { permissionCodes?: string[]; google
     if (url.pathname === "/v1/marketing") return fulfill(route, currentWorkspace);
     if (url.pathname === "/v1/marketing/provider-connections") return fulfill(route, currentConnections);
     if (url.pathname === "/v1/marketing/provider-connections/google-business/pilot/authorization") return fulfill(route, { authorizationUrl: "https://google.test/oauth", expiresAt: "2099-01-01T00:00:00.000Z" });
+    if (url.pathname === "/v1/marketing/provider-connections/google-business/pilot" && route.request().method() === "DELETE") {
+      googleBusinessSelected = false;
+      currentConnections = { ...currentConnections, connections: currentConnections.connections.map((item) => item.provider === "GOOGLE_BUSINESS" ? { ...item, status: "NOT_CONNECTED", messageAr: "Google Business غير متصل." } : item) };
+      return fulfill(route, { status: "NOT_CONNECTED" });
+    }
     if (url.pathname === "/v1/marketing/basira/analysis-readiness") return fulfill(route, { ready: false, reasons: [] });
     return fulfill(route, { error: { code: "FORBIDDEN", message: { ar: "غير متاح للاختبار", en: "Unavailable for test" } } }, 403);
   });
@@ -80,6 +85,27 @@ test("Google Business starts from one authorized action", async ({ page }) => {
   const authorization = page.waitForRequest((request) => request.url().includes("/v1/marketing/provider-connections/google-business/pilot/authorization") && request.method() === "POST");
   await connect.click();
   await authorization;
+});
+
+test("Google Business can be disconnected from the same single connection workspace", async ({ page }) => {
+  await prepare(page);
+  await page.goto("/#module=marketing&page=marketing-sources-policies");
+
+  await page.getByRole("button", { name: "فصل Google Business", exact: true }).click();
+  await expect(page.getByRole("dialog", { name: "فصل Google Business" })).toBeVisible();
+  const disconnect = page.waitForRequest((request) => request.url().includes("/v1/marketing/provider-connections/google-business/pilot") && request.method() === "DELETE");
+  await page.getByRole("button", { name: "فصل الاتصال", exact: true }).click();
+  await disconnect;
+  await expect(page.getByRole("button", { name: "ربط Google Business", exact: true })).toBeVisible();
+});
+
+test("a failed Google Business connection gives one clear retry action", async ({ page }) => {
+  await prepare(page, { googleBusinessStatus: "BLOCKED" });
+  await page.goto("/#module=marketing&page=marketing-sources-policies");
+
+  await expect(page.getByText("تعذر الربط؛ يمكنك المحاولة من جديد", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "ربط Google Business", exact: true })).toHaveCount(1);
+  await expect(page.getByRole("button", { name: "فصل Google Business", exact: true })).toHaveCount(0);
 });
 
 test("the calendar stays inside campaigns", async ({ page }) => {

@@ -92,6 +92,12 @@ export const marketingProviderConnectionsReadSchema = z.object({
   liveOauthEnabled: z.literal(false),
 }).strict();
 
+/** A local credential-lifecycle receipt. It deliberately contains neither a
+ * Google token nor a provider resource identifier. */
+export const marketingGoogleBusinessPilotDisconnectReceiptSchema = z.object({
+  status: z.literal("NOT_CONNECTED"),
+}).strict();
+
 /** Resource discovery is a transient, server-mediated read. It deliberately
  * exposes a small allowlisted display model rather than a Google payload. */
 export const requestMarketingProviderConnectionSetupSchema = z.object({
@@ -381,6 +387,7 @@ export const createMarketingCampaignAnalysisFeedbackRequestSchema = z.object({
 
 export type MarketingWorkspace = z.infer<typeof marketingWorkspaceSchema>;
 export type MarketingProviderConnectionsRead = z.infer<typeof marketingProviderConnectionsReadSchema>;
+export type MarketingGoogleBusinessPilotDisconnectReceipt = z.infer<typeof marketingGoogleBusinessPilotDisconnectReceiptSchema>;
 export type RequestMarketingProviderConnectionSetup = z.infer<typeof requestMarketingProviderConnectionSetupSchema>;
 export type CreateMarketingCampaignRequest = z.infer<typeof createMarketingCampaignRequestSchema>;
 export type UpdateMarketingCampaignRequest = z.infer<typeof updateMarketingCampaignRequestSchema>;

@@ -141,7 +141,10 @@ export class MarketingGoogleBusinessResourceSelectionService {
     if (this.platform.googleBusinessPilotCompanyId() !== companyId) throw new ForbiddenException("Google Business pilot is not available for this company.");
   }
   private async lockCompany(tx: Prisma.TransactionClient, tenantId: string, companyId: string) {
-    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${`marketing-google-business-selection:${tenantId}:${companyId}`}, 0))`;
+    // Resource selection and disconnect must share the OAuth lifecycle lock:
+    // otherwise a slow, already-authorized selection could write its mapping
+    // after a user has explicitly disconnected the company.
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${`marketing-google-business-pilot:${tenantId}:${companyId}`}, 0))`;
   }
 }
 

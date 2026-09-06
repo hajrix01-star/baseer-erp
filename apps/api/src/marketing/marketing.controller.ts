@@ -1,5 +1,5 @@
-import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Param, Post, Put, Query, Res, UnauthorizedException } from "@nestjs/common";
-import { analysisReadinessReceiptSchema, archiveMarketingCampaignRequestSchema, createMarketingCampaignAnalysisFeedbackRequestSchema, createMarketingCampaignRequestSchema, linkMarketingCampaignContextRequestSchema, linkMarketingCampaignFinancialDocumentRequestSchema, marketingCalendarQuerySchema, marketingCalendarReadSchema, marketingCampaignAnalysisSchema, marketingEntityReceiptSchema, marketingLinkableFinancialDocumentsSchema, marketingProviderConnectionsReadSchema, marketingProviderSchema, marketingTargetMonthSchema, marketingWorkspaceSchema, requestMarketingProviderConnectionSetupSchema, stopMarketingCampaignRequestSchema, updateMarketingCampaignRequestSchema, updateMarketingReputationReplyPolicyRequestSchema, upsertMarketingSalesTargetRequestSchema } from "@baseer-erp/contracts";
+import { BadRequestException, Body, Controller, Delete, ForbiddenException, Get, Headers, HttpCode, Param, Post, Put, Query, Res, UnauthorizedException } from "@nestjs/common";
+import { analysisReadinessReceiptSchema, archiveMarketingCampaignRequestSchema, createMarketingCampaignAnalysisFeedbackRequestSchema, createMarketingCampaignRequestSchema, linkMarketingCampaignContextRequestSchema, linkMarketingCampaignFinancialDocumentRequestSchema, marketingCalendarQuerySchema, marketingCalendarReadSchema, marketingCampaignAnalysisSchema, marketingEntityReceiptSchema, marketingGoogleBusinessPilotDisconnectReceiptSchema, marketingLinkableFinancialDocumentsSchema, marketingProviderConnectionsReadSchema, marketingProviderSchema, marketingTargetMonthSchema, marketingWorkspaceSchema, requestMarketingProviderConnectionSetupSchema, stopMarketingCampaignRequestSchema, updateMarketingCampaignRequestSchema, updateMarketingReputationReplyPolicyRequestSchema, upsertMarketingSalesTargetRequestSchema } from "@baseer-erp/contracts";
 import type { FastifyReply } from "fastify";
 
 import { CompanyContextService } from "../company-context/company-context.service.js";
@@ -117,6 +117,12 @@ export class MarketingController {
   @Post("provider-connections/google-business/pilot/authorization")
   async beginGoogleBusinessPilot(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
     return this.googleBusinessPilot.begin(await this.context(authorization, companyId, "marketing.google-connection.manage"));
+  }
+
+  /** Keeps the provider lifecycle in the single Sources & connection workspace. */
+  @Delete("provider-connections/google-business/pilot")
+  async disconnectGoogleBusinessPilot(@Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    return marketingGoogleBusinessPilotDisconnectReceiptSchema.parse(await this.googleBusinessPilot.disconnect(await this.context(authorization, companyId, "marketing.google-connection.manage")));
   }
 
   /** OAuth callbacks have no Baseer session; the single-use state restores context. */
