@@ -24,13 +24,23 @@ function fixture(month, current = '2026-09-06') {
     { id: randomUUID(), employeeNumber: 'E-002', nameAr: 'موظف لاحق', nameEn: 'Later hire', status: 'ACTIVE', hireDate: new Date(monthEnd.getTime() + 86400000) },
   ];
   const profile = { employeeId: employees[0].id, effectiveFrom: date('2020-01-01'), effectiveTo: null, monthlyGross: decimal(3100), compensationMethod: 'FIXED_MONTHLY', foodAllowance: decimal(0), housingAllowance: decimal(0), transportAllowance: decimal(0), otherAllowance: decimal(0), scheduledHoursPerDay: null, scheduledWorkDays: null, policyVersion: null };
+  const profiles = [profile];
+  const matchEmployee = (employee, where) => (!where.id || (typeof where.id === 'string' ? employee.id === where.id : where.id.in.includes(employee.id))) && (!where.status || (typeof where.status === 'string' ? employee.status === where.status : where.status.in.includes(employee.status)));
   const advance = { id: randomUUID(), employeeId: employees[0].id, advanceNumber: 'ADV-1', businessDate: start, remainingAmount: decimal(500), settledAmount: decimal(0), nextSettlementDate: null, status: 'ISSUED' };
   const deduction = { id: randomUUID(), employeeId: employees[0].id, deductionNumber: 'DED-1', businessDate: start, remainingAmount: decimal(200), appliedAmount: decimal(0), plannedPayrollDate: null, status: 'OPEN' };
   const tx = {
     $executeRaw: async () => 1,
     company: { findFirst: async () => ({ businessTimezone: 'Asia/Riyadh' }) },
-    hrEmployee: { findMany: async ({ where }) => employees.filter(e => !where.id?.in || where.id.in.includes(e.id)), count: async () => 0 },
-    hrEmployeeCompensationProfile: { findMany: async () => [profile] },
+    hrEmployee: {
+      findMany: async ({ where, cursor, skip = 0, take }) => {
+        let rows = employees.filter(e => matchEmployee(e, where)).sort((a, b) => a.id.localeCompare(b.id));
+        if (cursor) rows = rows.slice(rows.findIndex(e => e.id === cursor.id) + skip);
+        return take ? rows.slice(0, take) : rows;
+      },
+      count: async ({ where }) => employees.filter(e => matchEmployee(e, where)).length,
+      findFirst: async ({ where }) => employees.find(e => matchEmployee(e, where)) ?? null,
+    },
+    hrEmployeeCompensationProfile: { findMany: async ({ where }) => profiles.filter(p => where.employeeId.in.includes(p.employeeId)) },
     hrPayrollRun: {
       findFirst: async ({ where }) => {
         const run = state.runs.find(r => where.id ? r.id === where.id : ymd(r.payrollMonth) === ymd(where.payrollMonth));
@@ -73,7 +83,7 @@ function fixture(month, current = '2026-09-06') {
   } };
   const service = new HrPayrollService(database, dates, { reserveInTransaction: async () => 1 }, idempotency, {}, journals, { initializeInTransaction: async () => {} }, {});
   service.ensureDefaultCompensationPolicyVersion = async () => ({ id: randomUUID(), policyId: randomUUID(), versionNumber: 1, effectiveFrom: date('2000-01-01'), status: 'APPROVED', formulaCode: 'STANDARD_MONTHLY_V1', policy: { code: 'STANDARD', nameAr: 'قياسي', nameEn: 'Standard' } });
-  return { service, state, employees, advance, deduction, start, monthEnd };
+  return { service, state, employees, profiles, advance, deduction, start, monthEnd };
 }
 
 for (const [month, end, current] of [
@@ -148,4 +158,73 @@ assert.equal(legacy.state.journals.length, 0);
 assert.equal(createHrPayrollRunRequestSchema.safeParse({ payrollMonth: '2026-08-01', idempotencyKey: 'create' }).success, true);
 assert.equal(approveHrPayrollRunRequestSchema.safeParse({ payrollRunId: randomUUID(), idempotencyKey: 'approve' }).success, true);
 assert.equal(previewHrPayrollRunRequestSchema.safeParse({ payrollMonth: '2026-08' }).success, false, 'The API date remains YYYY-MM-DD; only the UI stores a month label.');
+// Employee selection is independent of page size and eligibility. Absent
+// selection fields preserve the original default and canonical receipt hash.
+const selection = fixture('2026-08');
+const extra = { ...selection.employees[0], id: randomUUID(), employeeNumber: 'E-003' };
+const missing = { ...extra, id: randomUUID(), employeeNumber: 'E-004' };
+const onLeave = { ...extra, id: randomUUID(), employeeNumber: 'E-005', status: 'ON_LEAVE' };
+const terminated = { ...extra, id: randomUUID(), employeeNumber: 'E-006', status: 'TERMINATED' };
+selection.employees.push(extra, missing, onLeave, terminated);
+selection.profiles.push({ ...selection.profiles[0], employeeId: extra.id, monthlyGross: decimal('4200.1234') }, { ...selection.profiles[0], employeeId: onLeave.id });
+const selectionPreview = { ...empty, payrollMonth: selection.start, pageSize: 1 };
+const selected = [selection.employees[0].id, extra.id];
+const full = await selection.service.preview(context, selectionPreview);
+assert.equal(full.totals.grossAmount, '7300.1234');
+assert.equal(full.counts.exceptions, 1, 'The default still discloses the active employee missing compensation.');
+for (const fields of [{ selectedEmployeeIds: selected }, { excludedEmployeeIds: [missing.id] }]) {
+  const page = await selection.service.preview(context, { ...selectionPreview, ...fields });
+  assert.equal(page.totals.grossAmount, '7300.1234');
+  assert.equal(page.counts.exceptions, 0, 'Unselected missing profiles cannot block valid selected employees.');
+  assert.equal(page.employees.length, 1);
+  assert.equal(page.hasMore, true);
+  const secondPage = await selection.service.preview(context, { ...selectionPreview, ...fields, cursor: page.nextCursor });
+  assert.deepEqual(secondPage.totals, page.totals, 'Global totals include unloaded selected employees and never change by page.');
+}
+const none = await selection.service.preview(context, { ...selectionPreview, pageSize: 100, selectedEmployeeIds: [] });
+assert.deepEqual(none.totals, { employeeCount: 0, grossAmount: '0.0000', advanceSettlementAmount: '0.0000', administrativeDeductionAmount: '0.0000', netPayableAmount: '0.0000' });
+assert.equal(none.counts.exceptions, 0);
+assert.equal(none.employees.every(e => !e.selected && !e.included && e.estimatedNetAmount === '0.0000'), true);
+for (const operation of ['preview', 'create']) {
+  for (const invalid of [{ selectedEmployeeIds: [], excludedEmployeeIds: [] }, { selectedEmployeeIds: [selected[0], selected[0]] }, { excludedEmployeeIds: [selected[0], selected[0]] }, { selectedEmployeeIds: [randomUUID()] }, { excludedEmployeeIds: [terminated.id] }]) {
+    await assert.rejects(() => selection.service[operation](context, { ...selectionPreview, ...invalid }, randomUUID()), /either selectedEmployeeIds|appear once|only current ACTIVE or ON_LEAVE/);
+  }
+}
+await assert.rejects(() => selection.service.create(context, { ...empty, payrollMonth: selection.start, selectedEmployeeIds: [] }, 'none'), /No active employees/);
+const leaveInput = { ...selectionPreview, pageSize: 100, selectedEmployeeIds: [onLeave.id] };
+const leaveWithoutException = await selection.service.preview(context, leaveInput);
+assert.equal(leaveWithoutException.employees.find(e => e.id === onLeave.id).selected, true);
+assert.equal(leaveWithoutException.employees.find(e => e.id === onLeave.id).included, false);
+assert.equal(leaveWithoutException.totals.grossAmount, '0.0000');
+assert.equal((await selection.service.preview(context, { ...leaveInput, includeOnLeaveEmployeeIds: [onLeave.id] })).totals.grossAmount, '3100.0000');
+const applications = [{ employeeId: selected[0], advances: [{ id: selection.advance.id, amount: '100.0123' }], administrativeDeductions: [{ id: selection.deduction.id, amount: '50.0001' }] }];
+await assert.rejects(() => selection.service.preview(context, { ...selectionPreview, selectedEmployeeIds: [extra.id], lines: applications }), /Settlement applications can only target/);
+await assert.rejects(() => selection.service.create(context, { ...selectionPreview, selectedEmployeeIds: [extra.id], lines: applications }, 'unselected-app'), /Settlement applications can only target/);
+const selectedInput = { ...empty, payrollMonth: selection.start, selectedEmployeeIds: selected, lines: applications };
+const selectedPreview = await selection.service.preview(context, { ...selectedInput, pageSize: 100 });
+assert.equal(selectedPreview.totals.netPayableAmount, '7150.1110');
+assert.equal(selectedPreview.employees.find(e => e.id === selected[0]).estimatedNetAmount, '2949.9876');
+assert.equal(selectedPreview.employees.find(e => e.id === extra.id).estimatedNetAmount, '4200.1234');
+const subset = await selection.service.create(context, selectedInput, 'subset');
+assert.deepEqual(selection.state.lines.map(l => l.employeeId).sort(), [...selected].sort());
+assert.equal(selection.state.runs[0].netPayableAmount.toFixed(4), selectedPreview.totals.netPayableAmount);
+assert.equal((await selection.service.create(context, { ...selectedInput, selectedEmployeeIds: [...selected].reverse() }, 'subset')).replayed, true, 'Explicit selected IDs are canonical regardless of order.');
+await assert.rejects(() => selection.service.create(context, { ...selectedInput, selectedEmployeeIds: [extra.id] }, 'subset'), /idempotency key/);
+await assert.rejects(() => selection.service.updateDraft(context, { ...selectedInput, payrollRunId: subset.id, selectedEmployeeIds: [], lines: [] }, 'empty-update'), /No active employees/);
+await selection.service.updateDraft(context, { ...selectedInput, payrollRunId: subset.id, selectedEmployeeIds: [extra.id], lines: [] }, 'subset-update');
+assert.deepEqual(selection.state.lines.map(l => l.employeeId), [extra.id]);
+assert.equal(selection.state.runs[0].grossAmount.toFixed(4), '4200.1234');
+assert.equal(selection.state.advances.length, 0);
+assert.equal(selection.state.deductions.length, 0);
+selection.profiles.push({ ...selection.profiles[1] });
+assert.equal((await selection.service.preview(context, { ...selectionPreview, selectedEmployeeIds: [selected[0]] })).totals.grossAmount, '3100.0000', 'An excluded overlapping agreement cannot block the selected valid employee.');
+await assert.rejects(() => selection.service.preview(context, { ...selectionPreview, selectedEmployeeIds: [extra.id] }), /agreements overlap/, 'Overlap protection remains active for selected employees.');
+selection.profiles.pop();
+const withoutSelection = createHrPayrollRunRequestSchema.parse({ payrollMonth: '2026-08-01', idempotencyKey: 'compatibility' });
+assert.equal(Object.hasOwn(withoutSelection, 'selectedEmployeeIds'), false);
+assert.equal(Object.hasOwn(withoutSelection, 'excludedEmployeeIds'), false);
+assert.equal(previewHrPayrollRunRequestSchema.safeParse({ payrollMonth: '2026-08-01', selectedEmployeeIds: [], excludedEmployeeIds: [] }).success, false);
+assert.equal(createHrPayrollRunRequestSchema.safeParse({ payrollMonth: '2026-08-01', idempotencyKey: 'duplicate', selectedEmployeeIds: [selected[0], selected[0]] }).success, false);
+console.log('Payroll employee selection verified: default/subset/none, missing profile and leave rules, UUID validation, global paged totals, Decimal row nets, persisted subset/update and canonical selection replay.');
+
 console.log('Payroll period verification passed: previous August, all month lengths/year rollover, excluded hires, month-end proration, refresh/localization contract, forged-date immunity, legacy/new replay, balanced accrual/application dates and future/fiscal guards.');

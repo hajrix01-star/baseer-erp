@@ -312,22 +312,78 @@ try {
   assert.equal(payrollEmployeePreviewWithCollections.hasMoreAdministrativeDeductions, false);
 
   const initialPayrollLine = { employeeId: payrollEmployee.id, advances: [{ id: advance.id, amount: '80.0000' }], administrativeDeductions: [] };
-  const createPayrollInput = { payrollMonth: monthStart, businessDate: monthStart, includeAllEligible: true, includeOnLeaveEmployeeIds: [], lines: [initialPayrollLine], notes: 'HR lifecycle payroll draft' };
+  const createPayrollInput = { payrollMonth: monthStart, businessDate: monthStart, includeAllEligible: true, includeOnLeaveEmployeeIds: [], selectedEmployeeIds: [payrollEmployee.id], lines: [initialPayrollLine], notes: 'HR lifecycle payroll draft' };
   const payrollCreateKey = randomUUID();
   const run = await payroll.create(creator, createPayrollInput, payrollCreateKey);
   assert.equal(run.replayed, false);
   assert.equal((await payroll.create(creator, createPayrollInput, payrollCreateKey)).replayed, true, 'Payroll-create replay must be explicit.');
 
   const initialDraftDetail = await payroll.detail(creator, run.id, { linePageSize: 500, paymentPageSize: 100 });
+  assert.equal(initialDraftDetail.payrollRun.employeeCount, 1, 'A selected payroll subset must persist only its selected employee.');
+  assert.deepEqual(initialDraftDetail.lines.map((line) => line.employeeId), [payrollEmployee.id]);
+  assert.equal(initialDraftDetail.payrollRun.netPayableAmount, '4920.0000');
   const initialDraftLine = initialDraftDetail.lines.find((line) => line.employeeId === payrollEmployee.id);
   assert.equal(initialDraftLine.advanceSettlementAmount, '80.0000');
   assert.equal(initialDraftLine.advances[0].sourceId, advance.id, 'Payroll detail must expose the source advance id separately from the application id.');
   const initialApplicationId = initialDraftLine.advances[0].id;
+  const subsetEmployeeIds = [payrollEmployee.id, employees.get('paid').id];
+  const subsetUpdateInput = { ...createPayrollInput, payrollRunId: run.id, selectedEmployeeIds: subsetEmployeeIds };
+  const subsetPreview = await payroll.preview(creator, { ...payrollPreviewInput, selectedEmployeeIds: subsetEmployeeIds, lines: [initialPayrollLine], pageSize: 1 });
+  assert.equal(subsetPreview.employees.length, 1);
+  assert.equal(subsetPreview.hasMore, true);
+  assert.equal(subsetPreview.totals.grossAmount, '10000.0000', 'Preview totals must include selected employees outside its first page.');
+  assert.equal(subsetPreview.totals.netPayableAmount, '9920.0000');
+  const subsetUpdateKey = randomUUID();
+  await payroll.updateDraft(creator, subsetUpdateInput, subsetUpdateKey);
+  assert.equal((await payroll.updateDraft(creator, { ...subsetUpdateInput, selectedEmployeeIds: [...subsetEmployeeIds].reverse() }, subsetUpdateKey)).replayed, true, 'Reordered selection IDs must replay the same subset update.');
+  const persistedSubset = await payroll.detail(creator, run.id, { linePageSize: 500, paymentPageSize: 100 });
+  assert.deepEqual(persistedSubset.lines.map((line) => line.employeeId).sort(), [...subsetEmployeeIds].sort());
+  assert.equal(persistedSubset.payrollRun.netPayableAmount, subsetPreview.totals.netPayableAmount, 'Saved subset amounts must match the server preview.');
+  await assert.rejects(() => payroll.updateDraft(creator, { ...subsetUpdateInput, selectedEmployeeIds: [], lines: [] }, randomUUID()), /No active employees/, 'Clearing selection may preview zero but cannot erase a saved draft.');
+  assert.deepEqual(await payroll.detail(creator, run.id, { linePageSize: 500, paymentPageSize: 100 }), persistedSubset, 'Rejected empty updates must preserve every persisted line and application.');
+  const leaveEmployeeId = employees.get('paid').id;
+  const originalLeaveEmployee = await database.inTenantTransaction(fixture.tenantId, (tx) => tx.hrEmployee.findFirstOrThrow({ where: { id: leaveEmployeeId, tenantId: fixture.tenantId, companyId: fixture.companyId }, select: { status: true, hireDate: true } }));
+  try {
+    // Isolated fixture state reproduces a saved new hire who is on leave;
+    // PRORATED_NEW_HIRE_V1 alone cannot encode the explicit leave selection.
+    await database.inTenantTransaction(fixture.tenantId, (tx) => tx.hrEmployee.update({ where: { id: leaveEmployeeId }, data: { status: 'ON_LEAVE', hireDate: addDays(monthStart, 15) } }));
+    await payroll.updateDraft(creator, { ...subsetUpdateInput, includeOnLeaveEmployeeIds: [leaveEmployeeId] }, randomUUID());
+    const onLeaveDraft = await payroll.detail(creator, run.id, { linePageSize: 500, paymentPageSize: 100 });
+    const onLeaveLine = onLeaveDraft.lines.find((line) => line.employeeId === leaveEmployeeId);
+    assert.equal(onLeaveLine.eligibilityCode, 'PRORATED_NEW_HIRE_V1');
+    assert.equal(onLeaveLine.employeeStatus, 'ON_LEAVE', 'Detail must expose current leave status independently of its proration snapshot.');
+    const restoredSelection = {
+      ...subsetUpdateInput,
+      selectedEmployeeIds: onLeaveDraft.lines.map((line) => line.employeeId),
+      includeOnLeaveEmployeeIds: onLeaveDraft.lines.filter((line) => line.employeeStatus === 'ON_LEAVE').map((line) => line.employeeId),
+    };
+    await payroll.updateDraft(creator, restoredSelection, randomUUID());
+    const restoredOnLeave = await payroll.detail(creator, run.id, { linePageSize: 500, paymentPageSize: 100 });
+    assert.deepEqual(restoredOnLeave.lines.map((line) => line.employeeId).sort(), [...subsetEmployeeIds].sort());
+    assert.equal(restoredOnLeave.payrollRun.netPayableAmount, onLeaveDraft.payrollRun.netPayableAmount, 'Restoring a prorated employee on leave must retain membership and calculated amounts.');
+
+    // A return to ACTIVE takes precedence over a saved full-month leave code.
+    await database.inTenantTransaction(fixture.tenantId, (tx) => tx.hrEmployee.update({ where: { id: leaveEmployeeId }, data: { hireDate: originalLeaveEmployee.hireDate } }));
+    await payroll.updateDraft(creator, restoredSelection, randomUUID());
+    await database.inTenantTransaction(fixture.tenantId, (tx) => tx.hrEmployee.update({ where: { id: leaveEmployeeId }, data: { status: 'ACTIVE' } }));
+    const returnedDraft = await payroll.detail(creator, run.id, { linePageSize: 500, paymentPageSize: 100 });
+    const returnedLine = returnedDraft.lines.find((line) => line.employeeId === leaveEmployeeId);
+    assert.equal(returnedLine.eligibilityCode, 'FULL_MONTH_ON_LEAVE_EXCEPTION_V1', 'The persisted eligibility snapshot remains immutable when current employee status changes.');
+    assert.equal(returnedLine.employeeStatus, 'ACTIVE');
+    await payroll.updateDraft(creator, { ...restoredSelection, includeOnLeaveEmployeeIds: returnedDraft.lines.filter((line) => line.employeeStatus === 'ON_LEAVE').map((line) => line.employeeId) }, randomUUID());
+    const restoredReturned = await payroll.detail(creator, run.id, { linePageSize: 500, paymentPageSize: 100 });
+    assert.deepEqual(restoredReturned.lines.map((line) => line.employeeId).sort(), [...subsetEmployeeIds].sort());
+    assert.equal(restoredReturned.lines.find((line) => line.employeeId === leaveEmployeeId).eligibilityCode, 'FULL_MONTH_V1');
+  } finally {
+    await database.inTenantTransaction(fixture.tenantId, (tx) => tx.hrEmployee.update({ where: { id: leaveEmployeeId }, data: originalLeaveEmployee }));
+  }
+  // Omitted selection fields retain the original all-active update behavior.
   const updatePayrollInput = { payrollRunId: run.id, payrollMonth: monthStart, businessDate: monthStart, includeAllEligible: true, includeOnLeaveEmployeeIds: [], lines: [payrollLine], notes: 'HR lifecycle payroll updated' };
   const payrollUpdateKey = randomUUID();
   assert.equal((await payroll.updateDraft(creator, updatePayrollInput, payrollUpdateKey)).replayed, false);
   assert.equal((await payroll.updateDraft(creator, updatePayrollInput, payrollUpdateKey)).replayed, true, 'Payroll-draft update replay must be explicit.');
   const updatedDraftDetail = await payroll.detail(creator, run.id, { linePageSize: 500, paymentPageSize: 100 });
+  assert.equal(updatedDraftDetail.payrollRun.employeeCount, employeeDefinitions.length, 'Omitting selection restores the unchanged all-active default.');
   const updatedDraftLine = updatedDraftDetail.lines.find((line) => line.employeeId === payrollEmployee.id);
   assert.equal(updatedDraftDetail.payrollRun.notes, 'HR lifecycle payroll updated');
   assert.equal(updatedDraftLine.advanceSettlementAmount, '100.0000', 'Draft update must recalculate settlement totals.');

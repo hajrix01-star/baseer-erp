@@ -90,7 +90,7 @@ async function switchToAlternateCompany(page: Page, language: "ar" | "en" = "ar"
   await expect(page.getByRole("button", { name: nextName })).toBeVisible();
 }
 
-async function mockHr(page: Page, requested: string[], options: { language?: "ar" | "en"; onboarding?: "success" | "failure"; truncatedPreview?: boolean; slowPayrollDetail?: boolean; slowEmployeeSearch?: boolean; payrollPreviewFailure?: boolean; terminatedEmployee?: boolean; permissionCodes?: string[] } = {}) {
+async function mockHr(page: Page, requested: string[], options: { language?: "ar" | "en"; onboarding?: "success" | "failure"; truncatedPreview?: boolean; slowPayrollDetail?: boolean; slowEmployeeSearch?: boolean; payrollPreviewFailure?: boolean; payrollSelectionFixture?: boolean; payrollSavedEmployeeStatus?: "ON_LEAVE" | "ACTIVE"; terminatedEmployee?: boolean; permissionCodes?: string[] } = {}) {
   const language = options.language ?? "ar";
   const grantedPermissions = options.permissionCodes ?? permissions;
   const profileEmployee = options.terminatedEmployee ? { ...employee, status: "TERMINATED", terminatedAt: "2026-08-01" } : employee;
@@ -190,15 +190,24 @@ async function mockHr(page: Page, requested: string[], options: { language?: "ar
     });
     if (url.pathname === `/v1/hr/payroll-runs/${payrollRun.id}`) {
       if (options.slowPayrollDetail) await new Promise((resolve) => setTimeout(resolve, 350));
-      return fulfill(route, { payrollRun: { ...payrollRun, notes: "ملاحظة المسودة" }, lines: [{ id: "line-1", employeeId: employee.id, employeeNumber: employee.employeeNumber, employeeNameAr: employee.nameAr, employeeNameEn: employee.nameEn, grossSalary: "3000.0000", compensationMethod: "FIXED_MONTHLY", eligibilityCode: "FULL_MONTH_V1", basicSalary: "3000.0000", foodAllowance: "0.0000", housingAllowance: "0.0000", transportAllowance: "0.0000", otherAllowance: "0.0000", overtimeAmount: "0.0000", overtimeHours: "0.0000", scheduledHoursPerDay: null, scheduledWorkDays: null, compensationPolicySnapshot: null, payrollCalculationSnapshot: null, advanceSettlementAmount: "100.0000", administrativeDeductionAmount: "0.0000", netPayableAmount: "2900.0000", paidAmount: "0.0000", advances: [{ id: "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee", sourceId: advance.id, amount: "100.0000", referenceNumber: advance.advanceNumber }], administrativeDeductions: [] }], payments: [], hasMoreLines: false, nextLineCursor: null, hasMorePayments: false, nextPaymentCursor: null });
+      return fulfill(route, { payrollRun: { ...payrollRun, notes: "ملاحظة المسودة" }, lines: [{ id: "line-1", employeeId: employee.id, employeeStatus: options.payrollSavedEmployeeStatus, employeeNumber: employee.employeeNumber, employeeNameAr: employee.nameAr, employeeNameEn: employee.nameEn, grossSalary: "3000.0000", compensationMethod: "FIXED_MONTHLY", eligibilityCode: options.payrollSavedEmployeeStatus === "ON_LEAVE" ? "PRORATED_NEW_HIRE_V1" : options.payrollSavedEmployeeStatus === "ACTIVE" ? "FULL_MONTH_ON_LEAVE_EXCEPTION_V1" : "FULL_MONTH_V1", basicSalary: "3000.0000", foodAllowance: "0.0000", housingAllowance: "0.0000", transportAllowance: "0.0000", otherAllowance: "0.0000", overtimeAmount: "0.0000", overtimeHours: "0.0000", scheduledHoursPerDay: null, scheduledWorkDays: null, compensationPolicySnapshot: null, payrollCalculationSnapshot: null, advanceSettlementAmount: "100.0000", administrativeDeductionAmount: "0.0000", netPayableAmount: "2900.0000", paidAmount: "0.0000", advances: [{ id: "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee", sourceId: advance.id, amount: "100.0000", referenceNumber: advance.advanceNumber }], administrativeDeductions: [] }], payments: [], hasMoreLines: false, nextLineCursor: null, hasMorePayments: false, nextPaymentCursor: null });
     }
     if (url.pathname === `/v1/hr/payroll-runs/${approvedPayrollRun.id}`) return fulfill(route, { payrollRun: approvedPayrollRun, lines: [], payments: [payrollPayment], hasMoreLines: false, nextLineCursor: null, hasMorePayments: false, nextPaymentCursor: null });
     if (url.pathname === "/v1/hr/payroll-runs/preview") {
       const input = route.request().postDataJSON();
       if (!/^\d{4}-(0[1-9]|1[0-2])-01$/.test(input.payrollMonth ?? "")) return fulfill(route, { error: { code: "VALIDATION_FAILED", message: { ar: "بيانات الطلب غير صالحة.", en: "Invalid payroll month." }, correlationId: "e2e-payroll-month", retry: { kind: "do-not-retry" } } }, 400);
       if (options.payrollPreviewFailure) return fulfill(route, { error: { code: "PAYROLL_PREVIEW_FAILED", message: { ar: "تعذر إعداد معاينة المسير.", en: "The payroll preview could not be prepared." }, correlationId: "e2e-payroll-preview", retry: { kind: "safe-retry" } } }, 503);
-      const previewEmployee = { id: employee.id, employeeNumber: employee.employeeNumber, nameAr: employee.nameAr, nameEn: employee.nameEn, status: "ACTIVE", included: true, reason: "ACTIVE_WITH_VALID_COMPENSATION", eligibilityCode: "FULL_MONTH_V1", calculationPeriodStart: "2026-08-01", calculationPeriodEnd: "2026-08-31", eligibleDays: 31, calendarDaysInMonth: 31, prorationRatio: "1.0000", monthlyGrossAmount: "3000.0000", estimatedGrossAmount: "3000.0000", advances: [{ id: advance.id, referenceNumber: advance.advanceNumber, remainingAmount: advance.remainingAmount }], advanceCount: options.truncatedPreview ? 101 : 1, hasMoreAdvances: Boolean(options.truncatedPreview), administrativeDeductions: [], administrativeDeductionCount: 0, hasMoreAdministrativeDeductions: false };
-      return fulfill(route, { companyId, counts: { active: 1, onLeave: 0, included: 1, excluded: 0, exceptions: 0 }, totals: { employeeCount: 1, grossAmount: "3000.0000", advanceSettlementAmount: "100.0000", administrativeDeductionAmount: "0.0000", netPayableAmount: "2900.0000" }, exceptions: [], employees: [previewEmployee], hasMore: false, nextCursor: null });
+      const selected = input.selectedEmployeeIds ? input.selectedEmployeeIds.includes(employee.id) : !(input.excludedEmployeeIds ?? []).includes(employee.id);
+      const applied = input.lines?.find((line: { employeeId: string }) => line.employeeId === employee.id);
+      const advanceTotal = selected ? (applied?.advances ?? []).reduce((sum: number, item: { amount: string }) => sum + Number(item.amount), 0) : 0;
+      const deductionTotal = selected ? (applied?.administrativeDeductions ?? []).reduce((sum: number, item: { amount: string }) => sum + Number(item.amount), 0) : 0;
+      const previewEmployee = { id: employee.id, employeeNumber: employee.employeeNumber, nameAr: employee.nameAr, nameEn: employee.nameEn, status: "ACTIVE", selected, included: selected, estimatedNetAmount: selected ? String(3000 - advanceTotal - deductionTotal) : "0.0000", reason: "ACTIVE_WITH_VALID_COMPENSATION", eligibilityCode: "FULL_MONTH_V1", calculationPeriodStart: "2026-08-01", calculationPeriodEnd: "2026-08-31", eligibleDays: 31, calendarDaysInMonth: 31, prorationRatio: "1.0000", monthlyGrossAmount: "3000.0000", estimatedGrossAmount: "3000.0000", advances: [{ id: advance.id, referenceNumber: advance.advanceNumber, remainingAmount: advance.remainingAmount }], advanceCount: options.truncatedPreview ? 101 : 1, hasMoreAdvances: Boolean(options.truncatedPreview), administrativeDeductions: options.payrollSelectionFixture ? [{ id: "ded-choice", referenceNumber: "DED-001", remainingAmount: "50.0000" }] : [], administrativeDeductionCount: options.payrollSelectionFixture ? 1 : 0, hasMoreAdministrativeDeductions: false };
+      const secondId = "33333333-3333-4333-8333-333333333333";
+      const secondSelected = Boolean(options.payrollSelectionFixture) && (input.selectedEmployeeIds ? input.selectedEmployeeIds.includes(secondId) : !(input.excludedEmployeeIds ?? []).includes(secondId));
+      const gross = (selected ? 3000 : 0) + (secondSelected ? 2000 : 0);
+      const count = Number(selected) + Number(secondSelected);
+      const second = { ...previewEmployee, id: secondId, employeeNumber: "EMP-002", nameAr: "الموظف الثاني", nameEn: "Second Employee", selected: secondSelected, included: secondSelected, monthlyGrossAmount: "2000.0000", estimatedGrossAmount: "2000.0000", estimatedNetAmount: secondSelected ? "2000.0000" : "0.0000", advances: [], advanceCount: 0, hasMoreAdvances: false, administrativeDeductions: [], administrativeDeductionCount: 0, hasMoreAdministrativeDeductions: false };
+      return fulfill(route, { companyId, counts: { active: options.payrollSelectionFixture ? 2 : 1, onLeave: 0, included: count, excluded: (options.payrollSelectionFixture ? 2 : 1) - count, exceptions: 0 }, totals: { employeeCount: count, grossAmount: String(gross), advanceSettlementAmount: String(advanceTotal), administrativeDeductionAmount: String(deductionTotal), netPayableAmount: String(gross - advanceTotal - deductionTotal) }, exceptions: [], employees: options.payrollSelectionFixture && input.cursor ? [second] : [previewEmployee], hasMore: Boolean(options.payrollSelectionFixture && !input.cursor), nextCursor: options.payrollSelectionFixture && !input.cursor ? employee.id : null });
     }
     if (url.pathname === "/v1/hr/payroll-runs/update" && route.request().method() === "POST") return fulfill(route, { id: payrollRun.id, runNumber: payrollRun.runNumber, replayed: false });
     if (url.pathname === "/v1/hr/payroll-runs" && route.request().method() === "POST") return fulfill(route, { id: payrollRun.id, runNumber: payrollRun.runNumber, replayed: false });
@@ -383,13 +392,15 @@ test("payroll create and saved draft edit keep one stable full editor", async ({
   const previewRequestsBeforeEdit = requested.filter((request) => request === "POST /v1/hr/payroll-runs/preview").length;
   await editor.locator(".hr-payroll-create__application-list .baseer-money-input").fill("125");
   await expect(editor.locator(".hr-payroll-create__total")).toContainText("2,875");
+  await expect(editor.getByRole("button", { name: "مراجعة واعتماد", exact: true })).toBeDisabled();
+  await expect.poll(() => requested.filter((request) => request === "POST /v1/hr/payroll-runs/preview").length).toBe(previewRequestsBeforeEdit + 1);
   await page.waitForTimeout(350);
-  expect(requested.filter((request) => request === "POST /v1/hr/payroll-runs/preview")).toHaveLength(previewRequestsBeforeEdit);
+  expect(requested.filter((request) => request === "POST /v1/hr/payroll-runs/preview")).toHaveLength(previewRequestsBeforeEdit + 1);
   await editor.getByLabel("ملاحظات").fill("ملاحظة معدلة");
   const updateRequestPromise = page.waitForRequest((request) => new URL(request.url()).pathname === "/v1/hr/payroll-runs/update" && request.method() === "POST");
   await editor.getByRole("button", { name: "حفظ التعديلات" }).click();
   const updateRequest = await updateRequestPromise;
-  expect(updateRequest.postDataJSON()).toMatchObject({ payrollRunId: payrollRun.id, payrollMonth: "2026-08-01", notes: "ملاحظة معدلة", lines: [{ employeeId: employee.id, advances: [{ id: advance.id, amount: "125" }] }] });
+  expect(updateRequest.postDataJSON()).toMatchObject({ payrollRunId: payrollRun.id, payrollMonth: "2026-08-01", selectedEmployeeIds: [employee.id], notes: "ملاحظة معدلة", lines: [{ employeeId: employee.id, advances: [{ id: advance.id, amount: "125" }] }] });
   expect(updateRequest.postDataJSON()).not.toHaveProperty("businessDate");
   await expect(editor).toBeHidden();
   expect(requested.filter((request) => request === "POST /v1/hr/payroll-runs/update")).toHaveLength(1);
@@ -1013,3 +1024,132 @@ test("advance deferral pagination advances and clears its own cursor", async ({ 
   await expect(advanceDetail.getByRole("button", { name: "تحميل المزيد" })).toHaveCount(0);
   expect(detailRequests.filter((request) => request === `GET /v1/hr/advances/${advance.id}?deferralCursor=deferral-cursor-2&deferralPageSize=50`)).toHaveLength(1);
 });
+for (const language of ["ar", "en"] as const) {
+  test(`payroll employee selection updates global server cards across pages (${language})`, async ({ page }, testInfo) => {
+    const requested: string[] = [];
+    await mockHr(page, requested, { language, payrollSelectionFixture: true });
+    await page.goto("/#module=hr&section=3");
+    const ar = language === "ar";
+    await page.getByRole("button", { name: ar ? "إنشاء مسير" : "Create payroll", exact: true }).click();
+    const dialog = page.getByRole("dialog", { name: ar ? "إنشاء مسير راتب" : "Create payroll run" });
+    const summary = dialog.getByRole("list", { name: ar ? "ملخص المسير" : "Payroll summary" });
+    const card = (label: string) => summary.getByRole("listitem").filter({ hasText: label });
+    const gross = card(ar ? "إجمالي الرواتب" : "Gross salaries");
+    const net = card(ar ? "صافي الرواتب" : "Net salaries");
+    const first = dialog.getByRole("checkbox", { name: ar ? "إدراج موظف الاختبار" : "Include Test Employee", exact: true });
+    await expect(first).toBeChecked();
+    await expect(dialog.getByText("EMP-001", { exact: false })).toHaveCount(0);
+    await expect(gross).toContainText("5,000");
+    await expect(net).toContainText("5,000");
+    await dialog.locator('.hr-payroll-create__application-list label').filter({ hasText: "ADV-001" }).getByRole("checkbox").check();
+    await dialog.getByRole("textbox", { name: ar ? "سلفة ADV-001" : "Advance ADV-001", exact: true }).fill("125.25");
+    await dialog.locator('.hr-payroll-create__application-list label').filter({ hasText: "DED-001" }).getByRole("checkbox").check();
+    await expect(card(ar ? "سداد السلف" : "Advance settlements")).toContainText("125.25");
+    await expect(card(ar ? "الخصومات" : "Deductions")).toContainText("50");
+    await expect(net).toContainText("4,824.75");
+    await page.screenshot({ path: testInfo.outputPath("payroll-selection-employee.png") });
+    await dialog.locator(".hr-payroll-create__controls").scrollIntoViewIfNeeded();
+    await page.screenshot({ path: testInfo.outputPath("payroll-selection-summary.png") });
+    await dialog.getByRole("button", { name: ar ? "التالي" : "Next", exact: true }).click();
+    const second = dialog.getByRole("checkbox", { name: ar ? "إدراج الموظف الثاني" : "Include Second Employee", exact: true });
+    await expect(second).toBeChecked();
+    await expect(net).toContainText("4,824.75");
+    await second.uncheck();
+    const create = dialog.getByRole("button", { name: ar ? "إنشاء المسودة" : "Create draft", exact: true });
+    await expect(create).toBeDisabled();
+    await expect(gross).toContainText("3,000");
+    await expect(net).toContainText("2,824.75");
+    await dialog.getByRole("button", { name: ar ? "السابق" : "Previous", exact: true }).click();
+    await expect(first).toBeChecked();
+    await expect(dialog.getByRole("textbox", { name: ar ? "سلفة ADV-001" : "Advance ADV-001", exact: true })).toHaveValue("125.25");
+    await expect(net).toContainText("2,824.75");
+    await dialog.getByRole("button", { name: ar ? "إلغاء التحديد" : "Clear selection", exact: true }).click();
+    await expect(first).not.toBeChecked();
+    await expect(net.locator(".baseer-money")).toHaveText("0 SAR");
+    await expect(create).toBeDisabled();
+    await dialog.getByRole("button", { name: ar ? "تحديد الكل" : "Select all", exact: true }).click();
+    await expect(net).toContainText("5,000");
+    await first.uncheck();
+    await expect(net).toContainText("2,000");
+    await expectViewportContained(page);
+    const requestPromise = page.waitForRequest((request) => new URL(request.url()).pathname === "/v1/hr/payroll-runs" && request.method() === "POST");
+    await create.click();
+    expect((await requestPromise).postDataJSON()).toMatchObject({ excludedEmployeeIds: [employee.id], lines: [] });
+    await expect(dialog).toBeHidden();
+  });
+}
+
+test("payroll saved selection does not re-add employees missing from the draft", async ({ page }) => {
+  const requested: string[] = [];
+  await mockHr(page, requested, { payrollSelectionFixture: true });
+  await page.goto("/#module=hr&section=3");
+  await page.getByRole("button", { name: payrollRun.runNumber, exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: `تعديل مسودة ${payrollRun.runNumber}` });
+  await expect(dialog.getByRole("checkbox", { name: "إدراج موظف الاختبار", exact: true })).toBeChecked();
+  await dialog.getByRole("button", { name: "التالي", exact: true }).click();
+  await expect(dialog.getByRole("checkbox", { name: "إدراج الموظف الثاني", exact: true })).not.toBeChecked();
+  await expect(dialog.getByRole("listitem").filter({ hasText: "صافي الرواتب" })).toContainText("2,900");
+  const requestPromise = page.waitForRequest((request) => new URL(request.url()).pathname === "/v1/hr/payroll-runs/update" && request.method() === "POST");
+  await dialog.getByRole("button", { name: "حفظ التعديلات", exact: true }).click();
+  expect((await requestPromise).postDataJSON()).toMatchObject({ selectedEmployeeIds: [employee.id], lines: [{ employeeId: employee.id }] });
+});
+
+test("payroll incomplete applications remain blocked across pages until employee deselection", async ({ page }) => {
+  const requested: string[] = [];
+  await mockHr(page, requested, { payrollSelectionFixture: true, truncatedPreview: true });
+  await page.goto("/#module=hr&section=3");
+  await page.getByRole("button", { name: "إنشاء مسير", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "إنشاء مسير راتب" });
+  const create = dialog.getByRole("button", { name: "إنشاء المسودة", exact: true });
+  await expect(dialog.getByText("توجد سلف أو خصومات إضافية", { exact: false })).toBeVisible();
+  await expect(create).toBeDisabled();
+  await dialog.getByRole("button", { name: "التالي", exact: true }).click();
+  await expect(dialog.getByRole("checkbox", { name: "إدراج الموظف الثاني", exact: true })).toBeChecked();
+  await expect(create).toBeDisabled();
+  await dialog.getByRole("button", { name: "السابق", exact: true }).click();
+  await dialog.getByRole("checkbox", { name: "إدراج موظف الاختبار", exact: true }).uncheck();
+  await expect(create).toBeEnabled();
+});
+
+test("payroll late selection preview cannot overwrite newer totals or enable stale creation", async ({ page }) => {
+  const requested: string[] = [];
+  await mockHr(page, requested, { payrollSelectionFixture: true });
+  let releaseOld: (() => void) | undefined;
+  let held = false;
+  const oldRequest = new Promise<void>((resolve) => { releaseOld = resolve; });
+  await page.route("**/v1/hr/payroll-runs/preview", async (route) => {
+    if (route.request().postDataJSON().excludedEmployeeIds?.includes(employee.id)) { held = true; await oldRequest; }
+    await route.fallback();
+  });
+  await page.goto("/#module=hr&section=3");
+  await page.getByRole("button", { name: "إنشاء مسير", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "إنشاء مسير راتب" });
+  const net = dialog.getByRole("listitem").filter({ hasText: "صافي الرواتب" });
+  const create = dialog.getByRole("button", { name: "إنشاء المسودة", exact: true });
+  await expect(net).toContainText("5,000");
+  await dialog.getByRole("checkbox", { name: "إدراج موظف الاختبار", exact: true }).uncheck();
+  await expect.poll(() => held).toBe(true);
+  await expect(create).toBeDisabled();
+  await expect(net).not.toContainText("5,000");
+  await dialog.getByRole("button", { name: "تحديد الكل", exact: true }).click();
+  await expect(net).toContainText("5,000");
+  releaseOld?.();
+  await expect.poll(() => requested.filter((request) => request === "POST /v1/hr/payroll-runs/preview").length).toBeGreaterThanOrEqual(2);
+  await expect(create).toBeEnabled();
+  await expect(net).toContainText("5,000");
+});
+
+for (const status of ["ON_LEAVE", "ACTIVE"] as const) {
+  test(`payroll saved employee restores current leave inclusion (${status})`, async ({ page }) => {
+    const requested: string[] = [];
+    await mockHr(page, requested, { payrollSavedEmployeeStatus: status });
+    const requestPromise = page.waitForRequest((request) => new URL(request.url()).pathname === "/v1/hr/payroll-runs/preview" && request.postDataJSON().selectedEmployeeIds?.includes(employee.id));
+    await page.goto("/#module=hr&section=3");
+    await page.getByRole("button", { name: payrollRun.runNumber, exact: true }).click();
+    expect((await requestPromise).postDataJSON().includeOnLeaveEmployeeIds).toEqual(status === "ON_LEAVE" ? [employee.id] : []);
+    const dialog = page.getByRole("dialog", { name: `تعديل مسودة ${payrollRun.runNumber}` });
+    const updatePromise = page.waitForRequest((request) => new URL(request.url()).pathname === "/v1/hr/payroll-runs/update" && request.method() === "POST");
+    await dialog.getByRole("button", { name: "حفظ التعديلات", exact: true }).click();
+    expect((await updatePromise).postDataJSON().includeOnLeaveEmployeeIds).toEqual(status === "ON_LEAVE" ? [employee.id] : []);
+  });
+}

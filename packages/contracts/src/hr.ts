@@ -377,8 +377,19 @@ const payrollLineRequestSchema = z.object({
   administrativeDeductions: z.array(payrollApplicationSchema).max(100).default([]),
 }).strict();
 
+const payrollSelectionIdsSchema = z.array(hrEmployeeIdSchema).max(10_000).refine((ids) => new Set(ids).size === ids.length, { message: 'An employee can appear once in payroll selection.' });
+const payrollSelectionFields = {
+  /** Omitted means the default population; an empty list explicitly selects nobody. */
+  selectedEmployeeIds: payrollSelectionIdsSchema.optional(),
+  /** All default employees except these IDs; mutually exclusive with selectedEmployeeIds. */
+  excludedEmployeeIds: payrollSelectionIdsSchema.optional(),
+};
+const hasExclusivePayrollSelection = (input: { selectedEmployeeIds?: string[] | undefined; excludedEmployeeIds?: string[] | undefined }) => input.selectedEmployeeIds === undefined || input.excludedEmployeeIds === undefined;
+const payrollSelectionConflict = { message: 'Choose either selectedEmployeeIds or excludedEmployeeIds, not both.', path: ['excludedEmployeeIds'] };
+
 /** The server snapshots compensation and validates every applied residual. */
-export const createHrPayrollRunRequestSchema = z.object({
+const createHrPayrollRunBaseSchema = z.object({
+  ...payrollSelectionFields,
   payrollMonth: hrDateSchema,
   /** @deprecated Accepted for legacy clients; the server derives the payroll month end. */
   businessDate: hrDateSchema.optional(),
@@ -392,13 +403,16 @@ export const createHrPayrollRunRequestSchema = z.object({
   idempotencyKey: idempotencyKeySchema,
 }).strict();
 
+export const createHrPayrollRunRequestSchema = createHrPayrollRunBaseSchema.refine(hasExclusivePayrollSelection, payrollSelectionConflict);
+
 /** Recalculates an existing draft in place; the payroll month is immutable. */
-export const updateHrPayrollDraftRequestSchema = createHrPayrollRunRequestSchema.extend({
+export const updateHrPayrollDraftRequestSchema = createHrPayrollRunBaseSchema.extend({
   payrollRunId: z.string().uuid(),
-}).strict();
+}).strict().refine(hasExclusivePayrollSelection, payrollSelectionConflict);
 
 /** Read-only, server-authored payroll population. Cursor pages are by employee id. */
 export const previewHrPayrollRunRequestSchema = z.object({
+  ...payrollSelectionFields,
   payrollMonth: hrDateSchema,
   /** @deprecated Accepted for legacy clients; the server derives the payroll month end. */
   businessDate: hrDateSchema.optional(),
@@ -407,7 +421,7 @@ export const previewHrPayrollRunRequestSchema = z.object({
   lines: z.array(payrollLineRequestSchema).max(10_000).default([]),
   cursor: z.string().uuid().optional(),
   pageSize: z.coerce.number().int().min(1).max(100).optional().default(50),
-}).strict();
+}).strict().refine(hasExclusivePayrollSelection, payrollSelectionConflict);
 
 export const approveHrPayrollRunRequestSchema = z.object({
   payrollRunId: z.string().uuid(),
@@ -647,6 +661,8 @@ export const hrPayrollPaymentSchema = z.object({
   status: hrPaymentPostingStatusSchema, reversedAt: z.string().datetime().nullable(), reversalJournalEntryId: z.string().uuid().nullable(),
 }).strict();
 export const hrPayrollLineSchema = z.object({
+  /** Current employee status supports draft restoration; historical snapshots stay unchanged. */
+  employeeStatus: hrEmployeeStatusSchema.optional(),
   id: z.string().uuid(), employeeId: hrEmployeeIdSchema, employeeNumber: z.string().max(80), employeeNameAr: z.string().max(160), employeeNameEn: z.string().max(160).nullable(),
   grossSalary: hrAmountSchema, compensationMethod: hrCompensationMethodSchema,
   eligibilityCode: hrPayrollLineEligibilityCodeSchema,
@@ -810,12 +826,12 @@ export const hrPayrollPaymentReversalReceiptSchema = z.object({ id: z.string().u
 const hrPayrollPreviewApplicationSchema = z.object({ id: z.string().uuid(), referenceNumber: z.string().max(80), remainingAmount: hrAmountSchema }).strict();
 export const hrPayrollPreviewEmployeeSchema = z.object({
   id: hrEmployeeIdSchema, employeeNumber: z.string().max(80), nameAr: z.string().max(160), nameEn: z.string().max(160).nullable(),
-  status: z.enum(["ACTIVE", "ON_LEAVE"]), included: z.boolean(),
+  status: z.enum(["ACTIVE", "ON_LEAVE"]), selected: z.boolean(), included: z.boolean(),
   reason: z.enum(["ACTIVE_WITH_VALID_COMPENSATION", "ACTIVE_NEW_HIRE_PRORATED", "ACTIVE_MISSING_COMPENSATION", "COMPENSATION_DOES_NOT_COVER_PAYROLL_PERIOD", "HIRED_AFTER_BUSINESS_DATE", "ON_LEAVE_EXPLICITLY_INCLUDED", "ON_LEAVE_REQUIRES_EXPLICIT_INCLUSION", "ON_LEAVE_MISSING_COMPENSATION"]),
   eligibilityCode: hrPayrollLineEligibilityCodeSchema.nullable(),
   calculationPeriodStart: businessDateSchema.nullable(), calculationPeriodEnd: businessDateSchema.nullable(),
   eligibleDays: z.number().int().positive().nullable(), calendarDaysInMonth: z.number().int().positive().nullable(),
-  prorationRatio: hrAmountSchema.nullable(), monthlyGrossAmount: hrAmountSchema.nullable(), estimatedGrossAmount: hrAmountSchema.nullable(),
+  prorationRatio: hrAmountSchema.nullable(), monthlyGrossAmount: hrAmountSchema.nullable(), estimatedGrossAmount: hrAmountSchema.nullable(), estimatedNetAmount: hrAmountSchema.nullable(),
   advances: z.array(hrPayrollPreviewApplicationSchema).max(100),
   advanceCount: z.number().int().nonnegative(), hasMoreAdvances: z.boolean(),
   administrativeDeductions: z.array(hrPayrollPreviewApplicationSchema).max(100),

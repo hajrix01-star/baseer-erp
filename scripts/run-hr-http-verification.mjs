@@ -16,6 +16,7 @@ const fixture = {
   tenantId: randomUUID(),
   companyId: randomUUID(),
   foreignCompanyId: randomUUID(),
+  foreignEmployeeId: randomUUID(),
   managerUserId: randomUUID(),
   readerUserId: randomUUID(),
   payrollUserId: randomUUID(),
@@ -207,9 +208,19 @@ try {
   assert.equal(activePayrollPreview.hasMoreAdministrativeDeductions, true, "Payroll preview must disclose truncated administrative deductions.");
   assert.equal(activePayrollPreview.advanceCount, 0);
   assert.equal(activePayrollPreview.hasMoreAdvances, false);
+  assert.equal(activePayrollPreview.selected, true);
+  assert.equal(activePayrollPreview.estimatedNetAmount, activePayrollPreview.estimatedGrossAmount);
+  const emptyPayrollPreview = await server.inject({ method: "POST", url: "/v1/hr/payroll-runs/preview", headers: managerHeaders, payload: { payrollMonth: "2026-08-01", selectedEmployeeIds: [] } });
+  assert.equal(emptyPayrollPreview.statusCode, 200, emptyPayrollPreview.body);
+  assert.equal(emptyPayrollPreview.json().totals.netPayableAmount, "0.0000");
+  assert.equal(emptyPayrollPreview.json().employees.every((employee) => employee.selected === false && employee.estimatedNetAmount === "0.0000"), true);
+  for (const selectionFields of [{ selectedEmployeeIds: [], excludedEmployeeIds: [] }, { selectedEmployeeIds: [fixture.activeEmployeeId, fixture.activeEmployeeId] }, { selectedEmployeeIds: [fixture.terminatedEmployeeId] }, { selectedEmployeeIds: [fixture.foreignEmployeeId] }, { excludedEmployeeIds: [fixture.foreignEmployeeId] }, { excludedEmployeeIds: [randomUUID()] }]) {
+    await expectError(server.inject({ method: "POST", url: "/v1/hr/payroll-runs/preview", headers: managerHeaders, payload: { payrollMonth: "2026-08-01", ...selectionFields } }), 400, "VALIDATION_FAILED", "Invalid or ambiguous employee selection must be rejected over HTTP.");
+  }
   const updatePayrollDraftPayload = {
     payrollRunId: fixture.payrollRunId,
     payrollMonth: "2026-08-01",
+    selectedEmployeeIds: [fixture.activeEmployeeId],
     notes: "Updated through HTTP verification",
     includeAllEligible: true,
     includeOnLeaveEmployeeIds: [],
@@ -226,6 +237,7 @@ try {
   const updatedPayrollDetail = await server.inject({ method: "GET", url: `/v1/hr/payroll-runs/${fixture.payrollRunId}`, headers: managerHeaders });
   assert.equal(updatedPayrollDetail.statusCode, 200, updatedPayrollDetail.body);
   assert.equal(updatedPayrollDetail.json().payrollRun.businessDate, "2026-08-31", "August payroll uses its own month end even when updated in September.");
+  assert.equal(updatedPayrollDetail.json().lines[0].employeeStatus, "ACTIVE", "Payroll detail carries current status for safe saved-draft restoration.");
   assert.equal(updatedPayrollDetail.json().payrollRun.notes, "Updated through HTTP verification");
   assert.equal(updatedPayrollDetail.json().lines[0].administrativeDeductions[0].sourceId, fixture.deductionId);
   await expectError(
@@ -492,6 +504,10 @@ async function seedFixture() {
        VALUES ($1::uuid, $2::uuid, $3::uuid, 'EMP-HTTP-001', 'موظف نشط', 'Active employee', 'HTTP Analyst', DATE '2026-01-01', 'ACTIVE', CURRENT_TIMESTAMP),
               ($4::uuid, $2::uuid, $3::uuid, 'EMP-HTTP-002', 'موظف منتهي', 'Terminated employee', 'Former role', DATE '2025-01-01', 'TERMINATED', CURRENT_TIMESTAMP)`,
       [fixture.activeEmployeeId, fixture.tenantId, fixture.companyId, fixture.terminatedEmployeeId],
+    );
+    await client.query(
+      `INSERT INTO "HrEmployee" ("id", "tenantId", "companyId", "employeeNumber", "nameAr", "hireDate", "status", "updatedAt") VALUES ($1::uuid, $2::uuid, $3::uuid, 'EMP-FOREIGN', 'موظف شركة أخرى', DATE '2026-01-01', 'ACTIVE', CURRENT_TIMESTAMP)`,
+      [fixture.foreignEmployeeId, fixture.tenantId, fixture.foreignCompanyId],
     );
     await client.query(
       `INSERT INTO "HrEmployeeCompensationProfile" ("id", "tenantId", "companyId", "employeeId", "effectiveFrom", "effectiveTo", "monthlyGross", "createdByUserId", "updatedAt")

@@ -1549,3 +1549,7 @@ React Query قبل المصادقة ويزيد ملف البدء. لذلك صح�
 - Scope isolated at codex/payroll-period-issuance, base 3ef2427e; no application edits before independent gate review. Existing safeguards and old-draft refresh behavior recorded in contract.
 
 - G0–G3 approved independently before implementation. G5–G7 completed: server-owned month-end, previous-month preparation, month-only UI, explicit saved-draft refresh; no payment/reversal changes. Builds, financial/HTTP/local DB tests and 24 payroll browser cases passed. See impact record for evidence and G8 review.
+
+### 2026-09-06 — Payroll selection and financial summary
+- G0–G4 contract review: reused HR registry and period-release evidence at c82c0f35. Scope and acceptance in change-impact/2026-09-06-payroll-selection-summary.md. No app edits before independent gate approval. Separate branch reuses isolated worktree; root concurrent work preserved.
+- G0–G4 independently approved; G5–G7 implemented employee selection, four server-calculated cards and saved membership/leave restoration. Final contracts/API/web builds, period verifier and actual test-database lifecycle/HTTP checks passed; full browser suite 34 passed plus eight focused final AR/EN desktop/mobile cases. Independent review conditions are satisfied: local GO, with PR CI and immutable deployment required before release. No production payroll issuance or migration; evidence and resolved findings are in the same impact record.
