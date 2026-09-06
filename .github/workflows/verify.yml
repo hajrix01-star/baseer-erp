@@ -112,6 +112,7 @@ jobs:
       - name: Verify attendance HTTP boundaries and retention
         run: node scripts/run-attendance-http-verification.mjs
       - run: npm run build --workspace @baseer-erp/web
+      - run: npm run check:web-static-route
       - run: npm run verify:web-budget
       - run: npx prisma generate --schema apps/api/prisma/schema.prisma
       - run: git diff --exit-code -- apps/api/src/generated/prisma

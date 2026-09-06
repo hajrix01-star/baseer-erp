@@ -3,7 +3,11 @@ import { join } from "node:path";
 import { gzipSync } from "node:zlib";
 
 const dist = "apps/web/dist";
-const assets = join(dist, "assets");
+// Keep the release-budget inventory aligned with Vite's production namespace.
+// `/assets/*` is reserved by the shared production edge and must never become
+// a hidden assumption in a local release check again.
+const assetDirectory = "baseer-static";
+const assets = join(dist, assetDirectory);
 const manifestPath = join(dist, ".vite", "manifest.json");
 
 if (!existsSync(manifestPath)) throw new Error("Web build manifest is missing. Run the production build before the budget check.");
@@ -14,7 +18,7 @@ const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
 // do not download the uncompressed file size. Keep the metric deterministic
 // by calculating gzip locally for every asset rather than trusting a host.
 const transferSizeFor = (file) => gzipSync(readFileSync(join(dist, file))).byteLength;
-const files = readdirSync(assets).map((name) => ({ name, size: transferSizeFor(join("assets", name)) }));
+const files = readdirSync(assets).map((name) => ({ name, size: transferSizeFor(join(assetDirectory, name)) }));
 const sizeFor = (file) => transferSizeFor(file);
 const total = (extension) => files.filter((file) => file.name.endsWith(extension)).reduce((sum, file) => sum + file.size, 0);
 const entries = Object.entries(manifest);
@@ -191,7 +195,7 @@ const comboboxLazyJs = files.filter((file) => /^baseer-combobox-.*\.js$/.test(fi
 // regression cannot look like a zero-byte interaction.
 const datePickerRuntimeKey = entryKeyForName("baseer-date-picker");
 const datePickerRuntimeFile = manifest[datePickerRuntimeKey]?.file;
-if (!datePickerRuntimeFile?.startsWith("assets/baseer-date-picker-") || !datePickerRuntimeFile.endsWith(".js")) {
+if (!datePickerRuntimeFile?.startsWith(`${assetDirectory}/baseer-date-picker-`) || !datePickerRuntimeFile.endsWith(".js")) {
   throw new Error(`DatePicker must emit a named baseer-date-picker chunk; received ${datePickerRuntimeFile ?? "no file"}.`);
 }
 const datePickerLazyJs = jsSize(new Set([...closureKeys(datePickerRuntimeKey)].filter((key) => !startupKeys.has(key))));

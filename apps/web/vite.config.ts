@@ -14,7 +14,17 @@ export default defineConfig({
       },
     },
   ],
-  build: { target: "esnext", manifest: true, minify: "terser", terserOptions: { compress: { passes: 3 }, format: { comments: false } } },
+  build: {
+    target: "esnext",
+    manifest: true,
+    // `/assets/*` belongs to the shared Hostinger edge before a request reaches
+    // Baseer's private Caddy route.  Keep every hashed Vite asset in Baseer's
+    // own public namespace so the shell and its resources always travel
+    // through the same reverse-proxy boundary.
+    assetsDir: "baseer-static",
+    minify: "terser",
+    terserOptions: { compress: { passes: 3 }, format: { comments: false } },
+  },
   server: {
     // Tailscale Serve is authenticated at the network edge and forwards its
     // tailnet host header unchanged. Permit that trusted reverse proxy.
