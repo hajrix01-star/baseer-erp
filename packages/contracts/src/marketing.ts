@@ -94,38 +94,6 @@ export const marketingProviderConnectionsReadSchema = z.object({
 
 /** Resource discovery is a transient, server-mediated read. It deliberately
  * exposes a small allowlisted display model rather than a Google payload. */
-export const marketingGoogleBusinessAccountSchema = z.object({
-  resourceName: z.string().regex(/^accounts\/[A-Za-z0-9_-]{1,128}$/),
-  accountName: z.string().trim().min(1).max(200),
-  accountType: z.string().trim().min(1).max(80),
-}).strict();
-export const marketingGoogleBusinessLocationSchema = z.object({
-  resourceName: z.string().regex(/^locations\/[A-Za-z0-9_-]{1,128}$/),
-  title: z.string().trim().min(1).max(240),
-  address: z.string().trim().max(360).nullable(),
-}).strict();
-export const marketingGoogleBusinessPilotResourcesReadSchema = z.object({
-  accounts: z.array(marketingGoogleBusinessAccountSchema).max(100),
-  selectedReadOnly: z.boolean(),
-  selectedAccountResourceName: z.string().regex(/^accounts\/[A-Za-z0-9_-]{1,128}$/).nullable(),
-  selectedLocationResourceName: z.string().regex(/^locations\/[A-Za-z0-9_-]{1,128}$/).nullable(),
-}).strict();
-export const marketingGoogleBusinessPilotLocationsReadSchema = z.object({
-  accountResourceName: z.string().regex(/^accounts\/[A-Za-z0-9_-]{1,128}$/),
-  locations: z.array(marketingGoogleBusinessLocationSchema).max(100),
-}).strict();
-export const selectMarketingGoogleBusinessPilotLocationRequestSchema = z.object({
-  accountResourceName: z.string().regex(/^accounts\/[A-Za-z0-9_-]{1,128}$/),
-  locationResourceName: z.string().regex(/^locations\/[A-Za-z0-9_-]{1,128}$/),
-  idempotencyKey: idempotencyKeySchema,
-}).strict();
-export const marketingGoogleBusinessPilotSelectionReceiptSchema = z.object({
-  id: marketingIdSchema,
-  replayed: z.boolean(),
-  selectedReadOnly: z.literal(true),
-  selectedAt: z.string().datetime(),
-}).strict();
-
 export const requestMarketingProviderConnectionSetupSchema = z.object({
   idempotencyKey: idempotencyKeySchema,
 }).strict();
@@ -414,7 +382,6 @@ export const createMarketingCampaignAnalysisFeedbackRequestSchema = z.object({
 export type MarketingWorkspace = z.infer<typeof marketingWorkspaceSchema>;
 export type MarketingProviderConnectionsRead = z.infer<typeof marketingProviderConnectionsReadSchema>;
 export type RequestMarketingProviderConnectionSetup = z.infer<typeof requestMarketingProviderConnectionSetupSchema>;
-export type SelectMarketingGoogleBusinessPilotLocationRequest = z.infer<typeof selectMarketingGoogleBusinessPilotLocationRequestSchema>;
 export type CreateMarketingCampaignRequest = z.infer<typeof createMarketingCampaignRequestSchema>;
 export type UpdateMarketingCampaignRequest = z.infer<typeof updateMarketingCampaignRequestSchema>;
 export type ArchiveMarketingCampaignRequest = z.infer<typeof archiveMarketingCampaignRequestSchema>;

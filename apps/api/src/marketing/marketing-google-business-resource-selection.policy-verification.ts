@@ -31,13 +31,8 @@ class SelectionPlatform {
   googleBusinessPilotConfiguration() { return { clientId: "verification-client", clientSecret: "verification-secret", redirectUri: "https://baseer.test/callback" }; }
 }
 class SelectionVault { decrypt() { return JSON.stringify({ kind: "google-business-refresh-token.v1", refreshToken: "verification-refresh-token" }); } }
-class SelectionIdempotency {
-  async beginInTransaction(_tx: unknown, _context: unknown, _request: unknown) { return { kind: "begun" as const, receiptId: "66666666-6666-4666-8666-666666666666" }; }
-  async completeInTransaction() { return undefined; }
-}
-
 const database = new SelectionDatabase();
-const service = new MarketingGoogleBusinessResourceSelectionService(database as any, new SelectionPlatform() as any, new SelectionVault() as any, new SelectionIdempotency() as any);
+const service = new MarketingGoogleBusinessResourceSelectionService(database as any, new SelectionPlatform() as any, new SelectionVault() as any);
 const originalFetch = globalThis.fetch;
 const calls: string[] = [];
 let discoveryMode: "SINGLE" | "AMBIGUOUS" = "SINGLE";
@@ -50,27 +45,20 @@ globalThis.fetch = (async (input: URL | RequestInfo) => {
 }) as typeof fetch;
 
 try {
-  const resources = await service.resources(context);
-  assert.deepEqual(resources.accounts, [{ resourceName: "accounts/123", accountName: "ARZ Google Account", accountType: "LOCATION_GROUP" }]);
-  assert.equal(JSON.stringify(resources).includes("verification-access-token"), false, "Access tokens must not enter API data.");
-  assert.equal(JSON.stringify(resources).includes("must-not-leak"), false, "Raw provider fields must not enter API data.");
-  const locations = await service.locations(context, "accounts/123");
-  assert.deepEqual(locations.locations, [{ resourceName: "locations/456", title: "ARZ Lounge", address: "King Road, Jeddah" }]);
-  const receipt = await service.select(context, { accountResourceName: "accounts/123", locationResourceName: "locations/456", idempotencyKey: "44444444-4444-4444-8444-444444444445" });
-  assert.equal(receipt.selectedReadOnly, true);
+  const oneStep = await service.selectOnlyAvailableResource(context);
+  assert.deepEqual(oneStep, { selected: true, reason: null }, "A single account/location pair must be saved without browser selection steps.");
   assert.equal(database.mapping?.googleAccountResourceName, "accounts/123");
   assert.equal(database.mapping?.googleLocationResourceName, "locations/456");
   assert.equal(database.connectionStatus, "AUTHORIZED_READ_ONLY_SELECTED", "A saved selection must become the canonical connection state.");
-  assert.deepEqual(database.audit?.afterJson, { selectedReadOnly: true }, "Audit metadata must not contain Google identifiers.");
+  assert.deepEqual(database.audit?.afterJson, { selectedReadOnly: true, selectionMode: "ONLY_AVAILABLE_RESOURCE" }, "Audit metadata must not contain Google identifiers.");
+  assert.equal(JSON.stringify(database.audit).includes("verification-access-token"), false, "Access tokens must not enter audit data.");
+  assert.equal(JSON.stringify(database.audit).includes("must-not-leak"), false, "Raw provider fields must not enter audit data.");
   const beforeDenied = calls.length;
-  await assert.rejects(() => service.resources({ ...context, companyId: "55555555-5555-4555-8555-555555555555" }), /not available/);
+  await assert.rejects(() => service.selectOnlyAvailableResource({ ...context, companyId: "55555555-5555-4555-8555-555555555555" }), /not available/);
   assert.equal(calls.length, beforeDenied, "A company outside the ARZ allowlist must not trigger token refresh or provider egress.");
-  await assert.rejects(() => service.select(context, { accountResourceName: "accounts/123", locationResourceName: "locations/999", idempotencyKey: "55555555-5555-4555-8555-555555555556" }), /not available/);
-  const oneStep = await service.selectOnlyAvailableResource(context);
-  assert.deepEqual(oneStep, { selected: true, reason: null }, "A single account/location pair must be saved without browser selection steps.");
   discoveryMode = "AMBIGUOUS";
   assert.deepEqual(await service.selectOnlyAvailableResource(context), { selected: false, reason: "ACCOUNT_AMBIGUOUS" }, "Multiple accounts must never be selected by order or name.");
-  console.log("Marketing Google Business selection verification passed: ARZ-only egress, transient discovery, explicit membership validation, and safe audit output.");
+  console.log("Marketing Google Business selection verification passed: ARZ-only egress, one-step transient discovery, plurality refusal, and safe audit output.");
 } finally {
   globalThis.fetch = originalFetch;
 }
