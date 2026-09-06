@@ -22,7 +22,7 @@ async function openFinanceReportsFixture(page: Page) {
     const path = new URL(route.request().url()).pathname;
     if (path === "/v1/companies/available") return fulfill(route, { companies: [{
       id: companyId, nameAr: "شركة عينة المالية", nameEn: "Finance sample company",
-      permissionCodes: ["reports.read", "finance.purchase_expense.read", "finance.vaults.read", "finance.configuration.read"],
+      permissionCodes: ["reports.read", "finance.purchase_expense.read", "finance.ledger.read", "finance.vaults.read", "finance.configuration.read"],
     }] });
     if (path === "/v1/finance/invoice-register") return fulfill(route, {
       companyId, appliedPeriod: { fromBusinessDate: "2026-08-01", toBusinessDate: "2026-08-31", businessMonths: ["2026-08"] },

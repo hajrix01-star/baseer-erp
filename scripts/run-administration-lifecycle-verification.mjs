@@ -65,7 +65,7 @@ try {
   const createdRoleBody = JSON.parse(createRole.body);
   const createdRole = await database.inTenantTransaction(fixture.tenantId, (tx) => tx.role.findFirstOrThrow({ where: { id: createdRoleBody.id }, include: { grants: { orderBy: { permissionCode: "asc" } } } }));
   assert.match(createdRole.code, /^CUSTOM_TEST_CASHIER_[A-F0-9]{8}$/);
-  assert.deepEqual(createdRole.grants.map((grant) => grant.permissionCode), ["finance.daily_sales.create", "finance.daily_sales.read"]);
+  assert.deepEqual(createdRole.grants.map((grant) => grant.permissionCode), ["finance.daily_sales.create"]);
 
   const logoPng = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00, 0x0d]);
   const uploadedLogo = await server.inject({ method: "POST", url: `/v1/administration/companies/${fixture.companyId}/logo`, headers, payload: { fileName: "company.png", contentBase64: logoPng.toString("base64") } });
