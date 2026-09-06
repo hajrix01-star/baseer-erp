@@ -5,7 +5,7 @@ import assert from "node:assert/strict";
 
 import { DisconnectReason } from "@whiskeysockets/baileys";
 
-import { WhatsappInvoiceBaileysPilotConnectorService } from "./whatsapp-invoice-baileys-connector.service.js";
+import { selectLiveInvoiceMessages, WhatsappInvoiceBaileysPilotConnectorService } from "./whatsapp-invoice-baileys-connector.service.js";
 import { WhatsappInvoiceBaileysPilotFoundationService } from "./whatsapp-invoice-baileys-pilot-foundation.service.js";
 
 type CloseHandler = {
@@ -16,6 +16,39 @@ type CloseHandler = {
 type PersistenceHandler = {
   persistAuthentication(active: unknown, state: unknown): Promise<void>;
 };
+
+const onlineAtSeconds = 1_726_000_000;
+const firstAcceptedAppendSeconds = onlineAtSeconds + 1;
+const ownLiveMessage = {
+  key: { fromMe: true, remoteJid: "120363430786105597@g.us", id: "own-live-media" },
+  messageTimestamp: firstAcceptedAppendSeconds,
+  message: { imageMessage: { mimetype: "image/jpeg" } },
+} as never;
+const ownHistoricalMessage = {
+  key: { fromMe: true, remoteJid: "120363430786105597@g.us", id: "own-old-media" },
+  messageTimestamp: onlineAtSeconds,
+  message: { imageMessage: { mimetype: "image/jpeg" } },
+} as never;
+const otherHistoricalAppend = {
+  key: { fromMe: false, remoteJid: "120363430786105597@g.us", id: "other-old-media" },
+  messageTimestamp: onlineAtSeconds + 1,
+  message: { imageMessage: { mimetype: "image/jpeg" } },
+} as never;
+assert.deepEqual(
+  selectLiveInvoiceMessages({ type: "append", messages: [ownHistoricalMessage, ownLiveMessage, otherHistoricalAppend] }, firstAcceptedAppendSeconds),
+  [ownLiveMessage],
+  "Only a newly sent linked-account message after the opening second may pass an appended event; historical rows remain excluded.",
+);
+assert.deepEqual(
+  selectLiveInvoiceMessages({ type: "notify", messages: [ownLiveMessage] }, firstAcceptedAppendSeconds),
+  [ownLiveMessage],
+  "A live notification from the linked account must reach the normal group/media filters.",
+);
+assert.deepEqual(
+  selectLiveInvoiceMessages({ type: "append", messages: [ownLiveMessage] }, null),
+  [],
+  "No appended event may be accepted before this socket is online.",
+);
 
 const statuses: string[] = [];
 const connector = new WhatsappInvoiceBaileysPilotConnectorService(
@@ -210,4 +243,4 @@ await lifecycleConnector.onModuleDestroy();
 assert.deepEqual(disposedScopes, [{ tenantId: "tenant", connectionId: "connection" }], "Service shutdown must dispose locally without issuing a durable user stop.");
 if (previousLifecyclePilotEnabled === undefined) delete process.env.BASEER_WAI_BAILEYS_PILOT_ENABLED; else process.env.BASEER_WAI_BAILEYS_PILOT_ENABLED = previousLifecyclePilotEnabled;
 
-console.log(JSON.stringify({ ok: true, verified: ["transient-pairing-close-reconnects", "logout-does-not-reconnect", "queued-pairing-credentials-survive-dispose", "stale-owner-cannot-persist-session", "reauthentication-starts-fresh-qr", "stopped-connection-cannot-reconnect", "expired-owner-rechecks-without-stealing", "recovery-failure-becomes-gap", "startup-finds-resumable-scopes", "service-shutdown-preserves-resume-intent"] }));
+console.log(JSON.stringify({ ok: true, verified: ["live-own-media-is-not-dropped", "historical-appends-remain-excluded", "transient-pairing-close-reconnects", "logout-does-not-reconnect", "queued-pairing-credentials-survive-dispose", "stale-owner-cannot-persist-session", "reauthentication-starts-fresh-qr", "stopped-connection-cannot-reconnect", "expired-owner-rechecks-without-stealing", "recovery-failure-becomes-gap", "startup-finds-resumable-scopes", "service-shutdown-preserves-resume-intent"] }));
