@@ -45,7 +45,7 @@ function overview(owner = true, logoFileMetadataId: string | null = null) {
     owner,
     companies: [{ id: companyId, nameAr: "شركة الاختبار", nameEn: "Test company", businessTimezone: "Asia/Riyadh", status: "ACTIVE", logoFileMetadataId, contextLocationCode: null, contextLocationLabelAr: null, contextLatitude: null, contextLongitude: null }],
     users: [{ id: userId, login: "user@test.local", nameAr: "مستخدم الاختبار", nameEn: "Test user", preferredLanguage: "ar", avatarKind: "INITIALS", status: "ACTIVE", isOwner: false, memberships: [{ companyId, companyNameAr: "شركة الاختبار", companyNameEn: "Test company", roleId, roleNameAr: "مدير الاختبار", roleNameEn: "Test manager" }] }],
-    roles: [{ id: roleId, code: "TEST_MANAGER", nameAr: "مدير الاختبار", nameEn: "Test manager", isSystem: false, permissionCodes: ["administration.users.manage"] }],
+    roles: [{ id: roleId, code: "TEST_MANAGER", nameAr: "مدير الاختبار", nameEn: "Test manager", isSystem: false, permissionCodes: ["administration.users.manage", "administration.users.read"] }],
     permissions: [
       { code: "administration.users.read", module: "administration", moduleAr: "الإدارة", moduleEn: "Administration", moduleOrder: 10, sectionAr: "المستخدمون", sectionEn: "Users", sectionOrder: 30, nameAr: "عرض المستخدمين", nameEn: "View users", risk: "standard", requires: [] },
       { code: "administration.users.manage", module: "administration", moduleAr: "الإدارة", moduleEn: "Administration", moduleOrder: 10, sectionAr: "المستخدمون", sectionEn: "Users", sectionOrder: 30, nameAr: "إدارة المستخدمين", nameEn: "Manage users", risk: "sensitive", requires: ["administration.users.read"] },
@@ -151,19 +151,35 @@ test("role editor validates its fields and permission selection", async ({ page 
   expect(accessibility.violations).toEqual([]);
 });
 
-test("role card reveals effective permissions without opening the editor", async ({ page }) => {
+test("role card distinguishes direct grants from automatic prerequisites without opening the editor", async ({ page }) => {
   await mockAdministration(page, "ar");
   await page.goto("/#module=administration&section=3");
 
   const role = page.locator(".administration-role-cards article", { hasText: "مدير الاختبار" });
   await role.getByRole("button", { name: "عرض الصلاحيات" }).click();
   await expect(role.getByRole("button", { name: "إخفاء الصلاحيات" })).toHaveAttribute("aria-expanded", "true");
-  await expect(role.getByText("صلاحيات الدور الفعّالة")).toBeVisible();
+  await expect(role.getByText("الصلاحيات المعينة مباشرة")).toBeVisible();
+  await expect(role.getByText("صلاحيات مفعّلة تلقائياً")).toBeVisible();
   await expect(role.getByText("عرض المستخدمين")).toBeVisible();
   await expect(role.getByText("إدارة المستخدمين")).toBeVisible();
   await expect(page.getByRole("heading", { name: /تعديل دور/ })).toHaveCount(0);
   await role.getByRole("button", { name: "إخفاء الصلاحيات" }).click();
   await expect(role.getByRole("button", { name: "عرض الصلاحيات" })).toHaveAttribute("aria-expanded", "false");
+});
+
+test("editing a role preserves direct choices without persisting its read prerequisite", async ({ page }) => {
+  const requests: string[] = [];
+  let savedBody: Record<string, unknown> | null = null;
+  await mockAdministration(page, "ar", requests);
+  await page.route(`**/v1/administration/roles/${roleId}`, async (route) => {
+    savedBody = route.request().postDataJSON() as Record<string, unknown>;
+    return fulfill(route, { updated: true });
+  });
+  await page.goto("/#module=administration&section=3");
+  await page.getByRole("button", { name: "تعديل الصلاحيات" }).click();
+  await page.getByRole("button", { name: "حفظ التغييرات" }).click();
+  await expect.poll(() => savedBody).not.toBeNull();
+  expect(savedBody?.permissionCodes).toEqual(["administration.users.manage"]);
 });
 
 test("role editor projects purchases as an operations section after sales", async ({ page }) => {

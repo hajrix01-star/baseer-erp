@@ -12,6 +12,7 @@ const appSource = readFileSync(resolve(testDirectory, "../src/App.tsx"), "utf8")
 const shellSource = readFileSync(resolve(testDirectory, "../src/baseer-app-shell.tsx"), "utf8");
 const modernAdminThemeSource = readFileSync(resolve(testDirectory, "../src/baseer-modern-admin-theme.css"), "utf8");
 const paletteSource = readFileSync(resolve(testDirectory, "../src/baseer-modern-admin-palettes.css"), "utf8");
+const invoiceRegisterControllerSource = readFileSync(resolve(testDirectory, "../../api/src/finance/invoice-register.controller.ts"), "utf8");
 
 /**
  * This is a route-contract test, not a visual approval test.  It deliberately
@@ -55,4 +56,12 @@ test("the only registry-page navigation exception is explicit and security scope
   expect(appSource).toContain(
     '<OperationsInternalRegistrationWorkspace language={language} /></Suspense>, { navigation: false }',
   );
+});
+
+test("the unified financial register has a dedicated navigation and API capability", () => {
+  const ledger = pageRegistry.find((page) => page.id === "finance-ledger");
+
+  expect(ledger?.requiredPermissions).toEqual(["finance.ledger.read"]);
+  expect(invoiceRegisterControllerSource).toContain('requiredCapabilities: ["finance.ledger.read"]');
+  expect(invoiceRegisterControllerSource).not.toContain('requiredCapabilities: ["finance.purchase_expense.read"]');
 });
