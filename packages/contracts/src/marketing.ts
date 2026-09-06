@@ -382,6 +382,16 @@ export const marketingGoogleBusinessReviewSchema = z.object({
   replyUpdatedAt: z.string().datetime().nullable(),
 }).strict();
 
+export const marketingGoogleBusinessReviewReplyStateSchema = z.enum(["ALL", "REPLIED", "UNREPLIED"]);
+
+/** Query controls are intentionally narrow: filtering and pagination happen in
+ * the company-scoped read model, never against a client-side partial page. */
+export const marketingGoogleBusinessReviewsQuerySchema = z.object({
+  cursor: z.string().min(1).max(500).optional(),
+  rating: z.coerce.number().int().min(1).max(5).optional(),
+  replyState: marketingGoogleBusinessReviewReplyStateSchema.optional(),
+}).strict();
+
 export const marketingGoogleBusinessReviewsReadSchema = z.object({
   sourceStatus: z.enum(["NOT_CONNECTED", "NO_DATA", "READY"]),
   asOf: z.string().datetime().nullable(),
@@ -390,10 +400,17 @@ export const marketingGoogleBusinessReviewsReadSchema = z.object({
     totalReviewCount: z.number().int().nonnegative().nullable(),
     storedReviewCount: z.number().int().nonnegative(),
     repliedReviewCount: z.number().int().nonnegative(),
+    unrepliedReviewCount: z.number().int().nonnegative(),
     responseRatePercent: z.number().int().min(0).max(100).nullable(),
     analysisAr: z.string().min(1).max(1_000),
     analysisEn: z.string().min(1).max(1_000),
   }).strict(),
+  distribution: z.array(z.object({
+    rating: z.number().int().min(1).max(5),
+    reviewCount: z.number().int().nonnegative(),
+    sharePercent: z.number().int().min(0).max(100),
+  }).strict()).length(5),
+  filteredReviewCount: z.number().int().nonnegative(),
   sync: z.object({ rowsRead: z.number().int().nonnegative(), rowsWritten: z.number().int().nonnegative() }).strict().nullable(),
   reviews: z.array(marketingGoogleBusinessReviewSchema).max(50),
   nextCursor: z.string().min(1).max(500).nullable(),
@@ -401,8 +418,8 @@ export const marketingGoogleBusinessReviewsReadSchema = z.object({
 
 export const marketingGoogleBusinessReviewSyncReceiptSchema = z.object({
   status: z.literal("COMPLETED"),
-  rowsRead: z.number().int().nonnegative().max(500),
-  rowsWritten: z.number().int().nonnegative().max(500),
+  rowsRead: z.number().int().nonnegative().max(5_000),
+  rowsWritten: z.number().int().nonnegative().max(5_000),
   sourceFreshAt: z.string().datetime(),
   totalReviewCount: z.number().int().nonnegative().nullable(),
 }).strict();

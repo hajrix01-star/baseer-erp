@@ -1,5 +1,5 @@
 import { BadRequestException, Body, Controller, Delete, ForbiddenException, Get, Headers, HttpCode, Param, Post, Put, Query, Res, UnauthorizedException } from "@nestjs/common";
-import { analysisReadinessReceiptSchema, archiveMarketingCampaignRequestSchema, createMarketingCampaignAnalysisFeedbackRequestSchema, createMarketingCampaignRequestSchema, linkMarketingCampaignContextRequestSchema, linkMarketingCampaignFinancialDocumentRequestSchema, marketingCalendarQuerySchema, marketingCalendarReadSchema, marketingCampaignAnalysisSchema, marketingEntityReceiptSchema, marketingGoogleBusinessPilotDisconnectReceiptSchema, marketingGoogleBusinessReviewsReadSchema, marketingGoogleBusinessReviewSyncReceiptSchema, marketingLinkableFinancialDocumentsSchema, marketingProviderConnectionsReadSchema, marketingProviderSchema, marketingTargetMonthSchema, marketingWorkspaceSchema, requestMarketingProviderConnectionSetupSchema, stopMarketingCampaignRequestSchema, updateMarketingCampaignRequestSchema, updateMarketingReputationReplyPolicyRequestSchema, upsertMarketingSalesTargetRequestSchema } from "@baseer-erp/contracts";
+import { analysisReadinessReceiptSchema, archiveMarketingCampaignRequestSchema, createMarketingCampaignAnalysisFeedbackRequestSchema, createMarketingCampaignRequestSchema, linkMarketingCampaignContextRequestSchema, linkMarketingCampaignFinancialDocumentRequestSchema, marketingCalendarQuerySchema, marketingCalendarReadSchema, marketingCampaignAnalysisSchema, marketingEntityReceiptSchema, marketingGoogleBusinessPilotDisconnectReceiptSchema, marketingGoogleBusinessReviewsQuerySchema, marketingGoogleBusinessReviewsReadSchema, marketingGoogleBusinessReviewSyncReceiptSchema, marketingLinkableFinancialDocumentsSchema, marketingProviderConnectionsReadSchema, marketingProviderSchema, marketingTargetMonthSchema, marketingWorkspaceSchema, requestMarketingProviderConnectionSetupSchema, stopMarketingCampaignRequestSchema, updateMarketingCampaignRequestSchema, updateMarketingReputationReplyPolicyRequestSchema, upsertMarketingSalesTargetRequestSchema } from "@baseer-erp/contracts";
 import type { FastifyReply } from "fastify";
 
 import { CompanyContextService } from "../company-context/company-context.service.js";
@@ -142,8 +142,10 @@ export class MarketingController {
   }
 
   @Get("reputation/reviews")
-  async reputationReviews(@Query("cursor") cursor: string | undefined, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
-    return marketingGoogleBusinessReviewsReadSchema.parse(await this.googleBusinessReviews.read(await this.context(authorization, companyId, "marketing.insights.read"), cursor));
+  async reputationReviews(@Query() query: Record<string, unknown>, @Headers("authorization") authorization?: string, @Headers("x-baseer-company-id") companyId?: string) {
+    const parsed = marketingGoogleBusinessReviewsQuerySchema.safeParse(query);
+    if (!parsed.success) throw new BadRequestException("Invalid Google Business review query.");
+    return marketingGoogleBusinessReviewsReadSchema.parse(await this.googleBusinessReviews.read(await this.context(authorization, companyId, "marketing.insights.read"), parsed.data));
   }
 
   @Post("reputation/reviews/sync")

@@ -15,6 +15,7 @@
 | ADR-MKT-001 | Active | حد موصلات Google: خلفية خادمية، أسرار منفصلة، اختيار صريح وfail-closed | `../ADR-MKT-001-GOOGLE-PROVIDER-BOUNDARY.md` |
 | ADR-MKT-002 | Active for public legal-page slice | صفحات خصوصية/شروط عامة ثابتة قبل OAuth، بلا جلسة أو API أو أسرار | `../ADR-MKT-002-GOOGLE-OAUTH-PUBLIC-LEGAL-PAGES.md` |
 | ADR-MKT-003 | Active for review read slice | مزامنة Google Business خادمية ومحدودة وقراءة التحليل/الردود فقط | `../ADR-MKT-003-GOOGLE-BUSINESS-REVIEW-SYNC.md` |
+| ADR-MKT-004 | Active for full review history | احتفاظ كامل بتقييمات Google Business ولوحة سمعة خادمية قابلة للتصفح | `../ADR-MKT-004-FULL-REVIEW-HISTORY-AND-REPUTATION-DESIGN.md` |
 | ADR-WAI-001 | Proposed | مراقبة فواتير WhatsApp: Baileys غير رسمي، mapping مجموعة/شركة، فصل رقابي بلا أثر مالي | `../ADR-WAI-001-WHATSAPP-INVOICE-MONITORING-BOUNDARY.md` |
 | ADR-WAI-001 / WAI v2 | Proposed — supersedes scope summary above | تطوير 2026-09-05: فصل ملف/صفحات/فاتورة، حماية التعديلات، حالات وتكرار تاريخي، مؤشرات وعقد بصيرة، وجسر صريح غير مالي يفتح المشتريات | `../WHATSAPP_INVOICE_MONITORING_BUILD_PLAN_AR_2026-09-05.md` |
 
