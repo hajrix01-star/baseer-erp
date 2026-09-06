@@ -5,7 +5,7 @@ import assert from "node:assert/strict";
 
 import { DisconnectReason } from "@whiskeysockets/baileys";
 
-import { selectLiveInvoiceMessages, WhatsappInvoiceBaileysPilotConnectorService } from "./whatsapp-invoice-baileys-connector.service.js";
+import { normalizeInvoiceMessageContent, selectLiveInvoiceMessages, WhatsappInvoiceBaileysPilotConnectorService } from "./whatsapp-invoice-baileys-connector.service.js";
 import { WhatsappInvoiceBaileysPilotFoundationService } from "./whatsapp-invoice-baileys-pilot-foundation.service.js";
 
 type CloseHandler = {
@@ -48,6 +48,33 @@ assert.deepEqual(
   selectLiveInvoiceMessages({ type: "append", messages: [ownLiveMessage] }, null),
   [],
   "No appended event may be accepted before this socket is online.",
+);
+const wrappedInvoiceImage = {
+  key: { fromMe: true, remoteJid: "120363430786105597@g.us", id: "wrapped-image" },
+  message: { ephemeralMessage: { message: { imageMessage: { mimetype: "image/jpeg" } } } },
+} as never;
+assert.equal(
+  normalizeInvoiceMessageContent(wrappedInvoiceImage)?.imageMessage?.mimetype,
+  "image/jpeg",
+  "An image inside WhatsApp's ephemeral envelope must reach the same media admission path as a direct image.",
+);
+const wrappedInvoicePdf = {
+  key: { fromMe: true, remoteJid: "120363430786105597@g.us", id: "wrapped-pdf" },
+  message: { documentWithCaptionMessage: { message: { documentMessage: { mimetype: "application/pdf", fileName: "invoice.pdf" } } } },
+} as never;
+assert.equal(
+  normalizeInvoiceMessageContent(wrappedInvoicePdf)?.documentMessage?.mimetype,
+  "application/pdf",
+  "A PDF inside WhatsApp's caption envelope must reach the same media admission path as a direct PDF.",
+);
+const viewOnceInvoiceImage = {
+  key: { fromMe: true, remoteJid: "120363430786105597@g.us", id: "view-once-image" },
+  message: { viewOnceMessageV2: { message: { imageMessage: { mimetype: "image/png" } } } },
+} as never;
+assert.equal(
+  normalizeInvoiceMessageContent(viewOnceInvoiceImage)?.imageMessage?.mimetype,
+  "image/png",
+  "An image inside WhatsApp's view-once envelope must reach the same media admission path as a direct image.",
 );
 
 const statuses: string[] = [];
@@ -243,4 +270,4 @@ await lifecycleConnector.onModuleDestroy();
 assert.deepEqual(disposedScopes, [{ tenantId: "tenant", connectionId: "connection" }], "Service shutdown must dispose locally without issuing a durable user stop.");
 if (previousLifecyclePilotEnabled === undefined) delete process.env.BASEER_WAI_BAILEYS_PILOT_ENABLED; else process.env.BASEER_WAI_BAILEYS_PILOT_ENABLED = previousLifecyclePilotEnabled;
 
-console.log(JSON.stringify({ ok: true, verified: ["live-own-media-is-not-dropped", "historical-appends-remain-excluded", "transient-pairing-close-reconnects", "logout-does-not-reconnect", "queued-pairing-credentials-survive-dispose", "stale-owner-cannot-persist-session", "reauthentication-starts-fresh-qr", "stopped-connection-cannot-reconnect", "expired-owner-rechecks-without-stealing", "recovery-failure-becomes-gap", "startup-finds-resumable-scopes", "service-shutdown-preserves-resume-intent"] }));
+console.log(JSON.stringify({ ok: true, verified: ["live-own-media-is-not-dropped", "historical-appends-remain-excluded", "wrapped-invoice-media-is-normalized", "transient-pairing-close-reconnects", "logout-does-not-reconnect", "queued-pairing-credentials-survive-dispose", "stale-owner-cannot-persist-session", "reauthentication-starts-fresh-qr", "stopped-connection-cannot-reconnect", "expired-owner-rechecks-without-stealing", "recovery-failure-becomes-gap", "startup-finds-resumable-scopes", "service-shutdown-preserves-resume-intent"] }));
