@@ -93,6 +93,10 @@
 }
 
 .hr-payroll-create__summary { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.hr-payroll-create__update-status { min-height: 2.8em; margin: 0; color: var(--muted); font-size: var(--font-caption); line-height: 1.4; }
+.hr-payroll-create__update-status[data-visible="false"] { visibility: hidden; }
+.hr-payroll-create__total-status { display: block; min-height: 1.4em; font-size: var(--font-caption); color: var(--muted); }
+.hr-payroll-create__total-status[data-visible="false"] { visibility: hidden; }
 .hr-payroll-create__selection-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
 .hr-payroll-create__employee-toggle { display: flex; align-items: center; gap: .5rem; cursor: pointer; }
 .hr-payroll-create__unselected strong { color: var(--muted); font-weight: 500; }
