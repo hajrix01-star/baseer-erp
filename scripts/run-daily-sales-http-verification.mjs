@@ -577,8 +577,8 @@ async function seedFixture() {
       ],
     );
     await client.query(
-      'INSERT INTO "RolePermission" ("tenantId", "roleId", "permissionCode") VALUES ($1::uuid, $2::uuid, $3), ($1::uuid, $2::uuid, $4), ($1::uuid, $2::uuid, $5), ($1::uuid, $2::uuid, $6)',
-      [fixture.tenantId, roleId, "finance.configuration.read", "finance.loans.read", "finance.purchase_expense.read", "finance.supplier_dues.read"],
+      'INSERT INTO "RolePermission" ("tenantId", "roleId", "permissionCode") VALUES ($1::uuid, $2::uuid, $3), ($1::uuid, $2::uuid, $4), ($1::uuid, $2::uuid, $5), ($1::uuid, $2::uuid, $6), ($1::uuid, $2::uuid, $7)',
+      [fixture.tenantId, roleId, "finance.configuration.read", "finance.loans.read", "finance.purchase_expense.read", "finance.ledger.read", "finance.supplier_dues.read"],
     );
     await client.query(
       'INSERT INTO "RolePermission" ("tenantId", "roleId", "permissionCode") VALUES ($1::uuid, $2::uuid, $3), ($1::uuid, $2::uuid, $4), ($1::uuid, $2::uuid, $5)',
