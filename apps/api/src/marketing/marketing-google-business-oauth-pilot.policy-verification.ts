@@ -12,6 +12,7 @@ class PilotDatabase {
   state: StateRow | null = null;
   connection = { id: "44444444-4444-4444-8444-444444444444", status: "NOT_CONNECTED" };
   envelope: Record<string, unknown> | null = null;
+  locationMapping = true;
   transactionCount = 0;
   readonly tx = {
     $executeRaw: async () => 1,
@@ -19,7 +20,11 @@ class PilotDatabase {
       findFirst: async () => this.connection.id ? { id: this.connection.id } : null,
       create: async ({ data }: any) => { this.connection = { id: data.id, status: data.status }; return data; },
       update: async ({ data }: any) => { this.connection.status = data.status; return { ...this.connection }; },
-      updateMany: async ({ data }: any) => { this.connection.status = data.status; return { count: 1 }; },
+      updateMany: async ({ where, data }: any) => {
+        if (where.status && this.connection.status !== where.status) return { count: 0 };
+        this.connection.status = data.status;
+        return { count: 1 };
+      },
     },
     marketingGoogleBusinessOAuthState: {
       updateMany: async ({ where, data }: any) => {
@@ -28,12 +33,21 @@ class PilotDatabase {
         return { count: 1 };
       },
       create: async ({ data }: any) => { this.state = { ...data }; return data; },
-      findFirst: async ({ where }: any) => this.state && !this.state.consumedAt && this.state.stateHash === where.stateHash && this.state.expiresAt > new Date() ? { ...this.state } : null,
+      findFirst: async ({ where }: any) => {
+        if (!this.state) return null;
+        if (where.stateHash) return !this.state.consumedAt && this.state.stateHash === where.stateHash && this.state.expiresAt > new Date() ? { ...this.state } : null;
+        return this.state.tenantId === where.tenantId
+          && this.state.companyId === where.companyId
+          && this.state.connectionId === where.connectionId
+          && this.state.provider === where.provider ? { ...this.state } : null;
+      },
     },
     marketingProviderCredentialEnvelope: {
       upsert: async ({ create, update }: any) => { this.envelope = this.envelope ? { ...this.envelope, ...update } : { ...create }; return this.envelope; },
       updateMany: async ({ data }: any) => { if (!this.envelope || this.envelope.status !== "ACTIVE") return { count: 0 }; this.envelope = { ...this.envelope, ...data }; return { count: 1 }; },
+      deleteMany: async () => { const count = this.envelope ? 1 : 0; this.envelope = null; return { count }; },
     },
+    marketingGoogleBusinessLocationMapping: { deleteMany: async () => { const count = this.locationMapping ? 1 : 0; this.locationMapping = false; return { count }; } },
     auditEvent: { create: async () => ({}) },
   };
   async inTenantTransaction<T>(_tenant: string, operation: (tx: any) => Promise<T>) { this.transactionCount += 1; return operation(this.tx); }
@@ -67,7 +81,16 @@ const onlyResourceSelection = new OnlyResourceSelection();
 const service = new MarketingGoogleBusinessOAuthPilotService(database as any, platform as any, new PilotVault() as any, onlyResourceSelection as any);
 const originalFetch = globalThis.fetch;
 let fetchCalls = 0;
-globalThis.fetch = (async () => { fetchCalls += 1; return new Response(JSON.stringify({ refresh_token: "verification-only-refresh-token" }), { status: 200, headers: { "content-type": "application/json" } }); }) as typeof fetch;
+const deferredExchange = { resolve: null as ((response: Response) => void) | null };
+let deferNextExchange = false;
+globalThis.fetch = (async () => {
+  fetchCalls += 1;
+  if (deferNextExchange) {
+    deferNextExchange = false;
+    return new Promise<Response>((resolve) => { deferredExchange.resolve = resolve; });
+  }
+  return new Response(JSON.stringify({ refresh_token: "verification-only-refresh-token" }), { status: 200, headers: { "content-type": "application/json" } });
+}) as typeof fetch;
 
 const platformEnvironmentNames = [
   "BASEER_MARKETING_GOOGLE_BUSINESS_PILOT_COMPANY_ID",
@@ -104,6 +127,31 @@ try {
   assert.equal(fetchCalls, beforeDisabledCallback, "The second kill-switch check must prevent egress.");
   assert.equal(database.connection.status, "BLOCKED");
   assert.equal(database.envelope?.status, "REVOKED", "A failed re-authorization must not leave an older credential active.");
+  platform.enabled = true;
+  const late = await service.begin(context);
+  const lateState = new URL(late.authorizationUrl).searchParams.get("state");
+  assert.ok(lateState);
+  await service.disconnect(context);
+  assert.equal(database.connection.status, "NOT_CONNECTED", "Disconnect must restore the company to the safe local state.");
+  assert.equal(database.envelope, null, "Disconnect must remove the sealed refresh credential rather than retain a revoked copy.");
+  assert.equal(database.locationMapping, false, "Disconnect must remove the selected Google resource from this company.");
+  const beforeLateCallback = fetchCalls;
+  await assert.rejects(() => service.complete({ state: lateState, code: "verification-code", error: undefined }), "A callback that was cancelled by disconnect must not complete.");
+  assert.equal(fetchCalls, beforeLateCallback, "A cancelled callback must never make a token-exchange request.");
+
+  const firstRace = await service.begin(context);
+  const firstRaceState = new URL(firstRace.authorizationUrl).searchParams.get("state");
+  assert.ok(firstRaceState);
+  deferNextExchange = true;
+  const firstRaceCompletion = service.complete({ state: firstRaceState, code: "verification-code", error: undefined });
+  await new Promise<void>((resolve) => setTimeout(resolve, 0));
+  assert.ok(deferredExchange.resolve, "The first callback must be held after claiming state and before credential persistence.");
+  const secondRace = await service.begin(context);
+  assert.ok(new URL(secondRace.authorizationUrl).searchParams.get("state"), "A newer authorization must replace the active state.");
+  deferredExchange.resolve!(new Response(JSON.stringify({ refresh_token: "stale-refresh-token" }), { status: 200, headers: { "content-type": "application/json" } }));
+  assert.equal(await firstRaceCompletion, "BLOCKED", "An older callback must not overwrite a newer authorization journey.");
+  assert.equal(database.connection.status, "AUTHORIZING", "The newest authorization remains active after a stale callback returns.");
+  assert.equal(database.envelope, null, "A stale callback must not write a credential envelope.");
   Object.assign(process.env, {
     BASEER_MARKETING_GOOGLE_BUSINESS_PILOT_COMPANY_ID: companyId,
     BASEER_MARKETING_GOOGLE_BUSINESS_PILOT_ENABLED: "true",
@@ -118,7 +166,7 @@ try {
   assert.equal(platformReadiness.googleBusinessPilotAuthorizationAvailable("55555555-5555-4555-8555-555555555555"), false, "A different company must not see the pilot action.");
   process.env.BASEER_MARKETING_GOOGLE_BUSINESS_PILOT_ENABLED = "false";
   assert.equal(platformReadiness.googleBusinessPilotAuthorizationAvailable(companyId), false, "The pilot action must fail closed when disabled.");
-  console.log("Marketing Google Business OAuth pilot policy verification passed: atomic callback claim, encrypted-envelope-only success path, and pre-exchange kill switch.");
+  console.log("Marketing Google Business OAuth pilot policy verification passed: atomic callback claim, stale-authorization fence, encrypted-envelope-only success path, kill switch, and local disconnect cancellation.");
 } finally {
   globalThis.fetch = originalFetch;
   for (const [name, value] of originalPlatformEnvironment) {

@@ -80,6 +80,42 @@ export class MarketingGoogleBusinessOAuthPilotService {
     return { authorizationUrl: url.toString(), expiresAt: expiresAt.toISOString() };
   }
 
+  /**
+   * Local credential removal only. Google is not called here: removing the
+   * sealed refresh credential and selected resource is immediate, while Google
+   * account-consent remains controlled by the account owner at Google.
+   */
+  async disconnect(context: TrustedCompanyActorContext) {
+    this.requirePilotCompany(context.companyId);
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      await this.lockCompanyPilot(tx, context.tenantId, context.companyId);
+      const connection = await tx.marketingProviderConnection.findFirst({
+        where: { tenantId: context.tenantId, companyId: context.companyId, provider: "GOOGLE_BUSINESS" },
+        select: { id: true },
+      });
+      if (!connection) return { status: "NOT_CONNECTED" as const };
+      const now = new Date();
+      await tx.marketingGoogleBusinessOAuthState.updateMany({
+        where: { tenantId: context.tenantId, companyId: context.companyId, provider: "GOOGLE_BUSINESS", consumedAt: null },
+        data: { consumedAt: now },
+      });
+      const mappings = await tx.marketingGoogleBusinessLocationMapping.deleteMany({
+        where: { tenantId: context.tenantId, companyId: context.companyId, connectionId: connection.id, provider: "GOOGLE_BUSINESS" },
+      });
+      const credentials = await tx.marketingProviderCredentialEnvelope.deleteMany({
+        where: { tenantId: context.tenantId, companyId: context.companyId, connectionId: connection.id, provider: "GOOGLE_BUSINESS" },
+      });
+      await tx.marketingProviderConnection.update({
+        where: { id: connection.id },
+        data: { status: "NOT_CONNECTED", setupRequestedAt: null, setupRequestedByUserId: null },
+      });
+      await this.audit(tx, context, "marketing.google_business_pilot.disconnected", connection.id, {
+        status: "NOT_CONNECTED", credentialDeleted: String(credentials.count > 0), locationMappingDeleted: String(mappings.count > 0),
+      });
+      return { status: "NOT_CONNECTED" as const };
+    });
+  }
+
   async complete(query: CallbackQuery): Promise<"AUTHORIZED" | "BLOCKED"> {
     const state = this.validateState(query.state);
     const claimed = await this.claim(state);
@@ -101,15 +137,38 @@ export class MarketingGoogleBusinessOAuthPilotService {
       const encrypted = this.vault.encrypt(JSON.stringify({ kind: "google-business-refresh-token.v1", refreshToken }), {
         tenantId: claimed.tenantId, companyId: claimed.companyId, provider: "GOOGLE_BUSINESS",
       });
-      await this.database.inTenantTransaction(claimed.tenantId, async (tx) => {
+      const persisted = await this.database.inTenantTransaction(claimed.tenantId, async (tx) => {
+        await this.lockCompanyPilot(tx, claimed.tenantId, claimed.companyId);
+        // `begin` consumes every preceding state while holding this same lock.
+        // A callback may have already claimed an older state before a new consent
+        // journey starts, so status AUTHORIZING alone is not a sufficient fence.
+        // Only the most recently created authorization state may persist or alter
+        // this connection's credential lifecycle.
+        const latest = await tx.marketingGoogleBusinessOAuthState.findFirst({
+          where: {
+            tenantId: claimed.tenantId,
+            companyId: claimed.companyId,
+            connectionId: claimed.connectionId,
+            provider: "GOOGLE_BUSINESS",
+          },
+          orderBy: { createdAt: "desc" },
+          select: { id: true },
+        });
+        if (latest?.id !== claimed.id) return false;
+        const current = await tx.marketingProviderConnection.updateMany({
+          where: { id: claimed.connectionId, tenantId: claimed.tenantId, companyId: claimed.companyId, provider: "GOOGLE_BUSINESS", status: "AUTHORIZING" },
+          data: { status: "AUTHORIZED_AWAITING_SELECTION" },
+        });
+        if (current.count !== 1) return false;
         await tx.marketingProviderCredentialEnvelope.upsert({
           where: { connectionId_tenantId_companyId_provider: { connectionId: claimed.connectionId, tenantId: claimed.tenantId, companyId: claimed.companyId, provider: "GOOGLE_BUSINESS" } },
           create: { id: randomUUID(), tenantId: claimed.tenantId, companyId: claimed.companyId, connectionId: claimed.connectionId, provider: "GOOGLE_BUSINESS", ...encrypted, status: "ACTIVE", revokedAt: null },
           update: { ...encrypted, status: "ACTIVE", revokedAt: null },
         });
-        await tx.marketingProviderConnection.update({ where: { id: claimed.connectionId }, data: { status: "AUTHORIZED_AWAITING_SELECTION" } });
         await this.audit(tx, claimed, "marketing.google_business_pilot.authorized", claimed.connectionId, { status: "AUTHORIZED_AWAITING_SELECTION" });
+        return true;
       });
+      if (!persisted) return "BLOCKED";
       // A consent callback is the only user action after Google. Complete the
       // company mapping only for an unambiguous resource; discovery failure or
       // plurality must preserve authorized consent rather than revoke it.
@@ -166,11 +225,29 @@ export class MarketingGoogleBusinessOAuthPilotService {
 
   private async block(state: ClaimedState, safeCode: string) {
     await this.database.inTenantTransaction(state.tenantId, async (tx) => {
+      await this.lockCompanyPilot(tx, state.tenantId, state.companyId);
+      // Do not let an old denied/failed callback block a later authorization
+      // that has already replaced it.
+      const latest = await tx.marketingGoogleBusinessOAuthState.findFirst({
+        where: {
+          tenantId: state.tenantId,
+          companyId: state.companyId,
+          connectionId: state.connectionId,
+          provider: "GOOGLE_BUSINESS",
+        },
+        orderBy: { createdAt: "desc" },
+        select: { id: true },
+      });
+      if (latest?.id !== state.id) return;
+      const current = await tx.marketingProviderConnection.updateMany({
+        where: { id: state.connectionId, tenantId: state.tenantId, companyId: state.companyId, provider: "GOOGLE_BUSINESS", status: "AUTHORIZING" },
+        data: { status: "BLOCKED" },
+      });
+      if (current.count !== 1) return;
       await tx.marketingProviderCredentialEnvelope.updateMany({
         where: { connectionId: state.connectionId, tenantId: state.tenantId, companyId: state.companyId, provider: "GOOGLE_BUSINESS", status: "ACTIVE" },
         data: { status: "REVOKED", revokedAt: new Date() },
       });
-      await tx.marketingProviderConnection.updateMany({ where: { id: state.connectionId, tenantId: state.tenantId, companyId: state.companyId, provider: "GOOGLE_BUSINESS" }, data: { status: "BLOCKED" } });
       await this.audit(tx, state, "marketing.google_business_pilot.blocked", state.connectionId, { status: "BLOCKED", safeCode });
     });
   }
