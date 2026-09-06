@@ -579,6 +579,11 @@ export const ModelName = {
   AiProviderConfiguration: 'AiProviderConfiguration',
   AiCompanyIdentity: 'AiCompanyIdentity',
   AiCompanyContext: 'AiCompanyContext',
+  AiCompanyPolicy: 'AiCompanyPolicy',
+  AiCompanyPolicyRevision: 'AiCompanyPolicyRevision',
+  AiCompanyPolicyProviderAllowlist: 'AiCompanyPolicyProviderAllowlist',
+  AiCompanyPolicyPilotAllowlist: 'AiCompanyPolicyPilotAllowlist',
+  AiCompanySkillOverride: 'AiCompanySkillOverride',
   AiSkillActivation: 'AiSkillActivation',
   AiExecutionReceipt: 'AiExecutionReceipt',
   AiInterpretation: 'AiInterpretation',
@@ -626,7 +631,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "backupPolicy" | "backupJob" | "backupArtifact" | "backupAuditEvent" | "legacyMigrationRun" | "legacyMigrationCompanyMap" | "legacyMigrationRecordMap" | "noorixSourceAnnotation" | "nurixExcelStagingPackage" | "nurixExcelStagingBatch" | "nurixExcelStagingRow" | "nurixExcelMasterDataExecution" | "nurixExcelMasterDataItem" | "nurixExcelFinancialExecution" | "nurixExcelFinancialWave" | "nurixExcelFinancialItem" | "nurixExcelFinancialSourceMap" | "nurixExcelFinancialReceipt" | "nurixHistoricalPayrollEvidence" | "nurixHistoricalPayrollLineEvidence" | "nurixHistoricalPayrollAccountingEvidence" | "legacyMigrationException" | "legacyMigrationReviewAction" | "ownerDailyBriefSnapshot" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "marketingProviderCredentialEnvelope" | "marketingGoogleBusinessLocationMapping" | "marketingProviderSyncRun" | "marketingGoogleBusinessReviewFact" | "financeAccount" | "financePnlMappingVersion" | "financePnlStatementLine" | "financePnlAccountMapping" | "financeLedgerRevision" | "reportRun" | "decisionMetricDefinition" | "decisionSalesChangePolicy" | "decisionRuleDefinition" | "decisionContextSource" | "decisionContextImportRun" | "decisionContextResearchRun" | "decisionContextCandidate" | "decisionGlobalContextEvent" | "decisionGlobalContextEventRevision" | "decisionGlobalContextReviewAction" | "decisionCompanyContextEvent" | "decisionEvaluationRun" | "decisionEvidenceSnapshot" | "decisionAlert" | "decisionAlertAction" | "decisionFeedback" | "inboundEvidenceLabel" | "inboundEvidenceRule" | "inboundEvidenceCommandReceipt" | "inboundEvidenceGmailConnection" | "inboundEvidenceGmailOAuthState" | "inboundEvidenceMessage" | "inboundEvidenceAttachment" | "inboundEvidenceDocumentAnalysis" | "inboundEvidenceMessageLabel" | "whatsappInvoiceConnection" | "whatsappInvoiceConnectionSession" | "whatsappInvoiceConnectionLease" | "whatsappInvoiceGroupBinding" | "whatsappInboundMessage" | "whatsappInvoiceAsset" | "whatsappInvoiceMediaWorkItem" | "whatsappInvoiceAssetPage" | "whatsappInvoiceRecord" | "whatsappInvoicePageAssignment" | "whatsappInvoiceExtractionRevision" | "whatsappInvoiceReview" | "whatsappInvoiceDuplicateAssessment" | "marketingCampaign" | "marketingCampaignAnalysisFeedback" | "marketingCampaignFinancialLink" | "marketingCampaignContextLink" | "marketingSalesTarget" | "marketingProviderConnection" | "marketingGoogleBusinessOAuthState" | "marketingProviderOAuthState" | "marketingReputationReplyPolicy" | "reportDocument" | "vatSimulation" | "financeCashPerformanceEvent" | "financeCashPerformanceCoverage" | "financeCashPerformanceHistoricalImport" | "financeVatSettlement" | "financeCategory" | "financeSupplier" | "financeCounterpartyIdentity" | "financeCounterpartyAlias" | "legacyMigrationCounterpartyResolution" | "legacyMigrationCounterpartyCandidate" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowDocumentRevision" | "operationsAssetWarrantyAsset" | "operationsAssetWarrantyLine" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "attendanceEmployeeCredential" | "attendanceBranch" | "attendanceRosterPlan" | "attendanceRosterPeakPeriod" | "attendanceRosterEntry" | "attendanceRosterEntryPeriod" | "attendanceScheduleTemplate" | "attendanceScheduleTemplateVersion" | "attendanceSchedulePeriod" | "attendanceEmployeeScheduleAssignment" | "attendanceEmployeeWeeklyAdjustment" | "attendanceEmployeeWeeklyAdjustmentPeriod" | "attendanceScheduleException" | "attendanceScheduleExceptionPeriod" | "attendanceEvent" | "attendanceQrScanUse" | "attendanceWorkSession" | "hrEmployeeWorkTerms" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiCompanyContext" | "aiSkillActivation" | "aiExecutionReceipt" | "aiInterpretation" | "aiInterpretationRun" | "aiModelPriceRevision" | "aiBudgetReservation" | "aiUsageLedger" | "aiInterpretationPlacement" | "aiHumanInsight" | "aiEvaluationFeedback" | "aiSkillEvaluationRun" | "aiSystemIdentity" | "operationsSection" | "operationsUnit" | "operationsCatalogCategory" | "operationsItem" | "operationsItemUnit" | "operationsItemConversionVersion" | "operationsItemConversionEdge" | "operationsInternalRegistration" | "operationsInternalRegistrationLine" | "operationsInternalRegistrationConsumption" | "operationsRecipeVersion" | "operationsRecipeLine" | "operationsPurchaseRequest" | "operationsPurchaseRequestLine" | "operationsPurchaseReceipt" | "operationsPurchaseReceiptLine" | "operationsCustodyProfile" | "operationsCustodyEvent" | "operationsInventoryBalance" | "operationsInventoryMovement"
+    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "backupPolicy" | "backupJob" | "backupArtifact" | "backupAuditEvent" | "legacyMigrationRun" | "legacyMigrationCompanyMap" | "legacyMigrationRecordMap" | "noorixSourceAnnotation" | "nurixExcelStagingPackage" | "nurixExcelStagingBatch" | "nurixExcelStagingRow" | "nurixExcelMasterDataExecution" | "nurixExcelMasterDataItem" | "nurixExcelFinancialExecution" | "nurixExcelFinancialWave" | "nurixExcelFinancialItem" | "nurixExcelFinancialSourceMap" | "nurixExcelFinancialReceipt" | "nurixHistoricalPayrollEvidence" | "nurixHistoricalPayrollLineEvidence" | "nurixHistoricalPayrollAccountingEvidence" | "legacyMigrationException" | "legacyMigrationReviewAction" | "ownerDailyBriefSnapshot" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "marketingProviderCredentialEnvelope" | "marketingGoogleBusinessLocationMapping" | "marketingProviderSyncRun" | "marketingGoogleBusinessReviewFact" | "financeAccount" | "financePnlMappingVersion" | "financePnlStatementLine" | "financePnlAccountMapping" | "financeLedgerRevision" | "reportRun" | "decisionMetricDefinition" | "decisionSalesChangePolicy" | "decisionRuleDefinition" | "decisionContextSource" | "decisionContextImportRun" | "decisionContextResearchRun" | "decisionContextCandidate" | "decisionGlobalContextEvent" | "decisionGlobalContextEventRevision" | "decisionGlobalContextReviewAction" | "decisionCompanyContextEvent" | "decisionEvaluationRun" | "decisionEvidenceSnapshot" | "decisionAlert" | "decisionAlertAction" | "decisionFeedback" | "inboundEvidenceLabel" | "inboundEvidenceRule" | "inboundEvidenceCommandReceipt" | "inboundEvidenceGmailConnection" | "inboundEvidenceGmailOAuthState" | "inboundEvidenceMessage" | "inboundEvidenceAttachment" | "inboundEvidenceDocumentAnalysis" | "inboundEvidenceMessageLabel" | "whatsappInvoiceConnection" | "whatsappInvoiceConnectionSession" | "whatsappInvoiceConnectionLease" | "whatsappInvoiceGroupBinding" | "whatsappInboundMessage" | "whatsappInvoiceAsset" | "whatsappInvoiceMediaWorkItem" | "whatsappInvoiceAssetPage" | "whatsappInvoiceRecord" | "whatsappInvoicePageAssignment" | "whatsappInvoiceExtractionRevision" | "whatsappInvoiceReview" | "whatsappInvoiceDuplicateAssessment" | "marketingCampaign" | "marketingCampaignAnalysisFeedback" | "marketingCampaignFinancialLink" | "marketingCampaignContextLink" | "marketingSalesTarget" | "marketingProviderConnection" | "marketingGoogleBusinessOAuthState" | "marketingProviderOAuthState" | "marketingReputationReplyPolicy" | "reportDocument" | "vatSimulation" | "financeCashPerformanceEvent" | "financeCashPerformanceCoverage" | "financeCashPerformanceHistoricalImport" | "financeVatSettlement" | "financeCategory" | "financeSupplier" | "financeCounterpartyIdentity" | "financeCounterpartyAlias" | "legacyMigrationCounterpartyResolution" | "legacyMigrationCounterpartyCandidate" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowDocumentRevision" | "operationsAssetWarrantyAsset" | "operationsAssetWarrantyLine" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "attendanceEmployeeCredential" | "attendanceBranch" | "attendanceRosterPlan" | "attendanceRosterPeakPeriod" | "attendanceRosterEntry" | "attendanceRosterEntryPeriod" | "attendanceScheduleTemplate" | "attendanceScheduleTemplateVersion" | "attendanceSchedulePeriod" | "attendanceEmployeeScheduleAssignment" | "attendanceEmployeeWeeklyAdjustment" | "attendanceEmployeeWeeklyAdjustmentPeriod" | "attendanceScheduleException" | "attendanceScheduleExceptionPeriod" | "attendanceEvent" | "attendanceQrScanUse" | "attendanceWorkSession" | "hrEmployeeWorkTerms" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiCompanyContext" | "aiCompanyPolicy" | "aiCompanyPolicyRevision" | "aiCompanyPolicyProviderAllowlist" | "aiCompanyPolicyPilotAllowlist" | "aiCompanySkillOverride" | "aiSkillActivation" | "aiExecutionReceipt" | "aiInterpretation" | "aiInterpretationRun" | "aiModelPriceRevision" | "aiBudgetReservation" | "aiUsageLedger" | "aiInterpretationPlacement" | "aiHumanInsight" | "aiEvaluationFeedback" | "aiSkillEvaluationRun" | "aiSystemIdentity" | "operationsSection" | "operationsUnit" | "operationsCatalogCategory" | "operationsItem" | "operationsItemUnit" | "operationsItemConversionVersion" | "operationsItemConversionEdge" | "operationsInternalRegistration" | "operationsInternalRegistrationLine" | "operationsInternalRegistrationConsumption" | "operationsRecipeVersion" | "operationsRecipeLine" | "operationsPurchaseRequest" | "operationsPurchaseRequestLine" | "operationsPurchaseReceipt" | "operationsPurchaseReceiptLine" | "operationsCustodyProfile" | "operationsCustodyEvent" | "operationsInventoryBalance" | "operationsInventoryMovement"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -14098,6 +14103,376 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AiCompanyPolicy: {
+      payload: Prisma.$AiCompanyPolicyPayload<ExtArgs>
+      fields: Prisma.AiCompanyPolicyFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AiCompanyPolicyFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AiCompanyPolicyFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyPayload>
+        }
+        findFirst: {
+          args: Prisma.AiCompanyPolicyFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AiCompanyPolicyFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyPayload>
+        }
+        findMany: {
+          args: Prisma.AiCompanyPolicyFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyPayload>[]
+        }
+        create: {
+          args: Prisma.AiCompanyPolicyCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyPayload>
+        }
+        createMany: {
+          args: Prisma.AiCompanyPolicyCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AiCompanyPolicyCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyPayload>[]
+        }
+        delete: {
+          args: Prisma.AiCompanyPolicyDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyPayload>
+        }
+        update: {
+          args: Prisma.AiCompanyPolicyUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyPayload>
+        }
+        deleteMany: {
+          args: Prisma.AiCompanyPolicyDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AiCompanyPolicyUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AiCompanyPolicyUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyPayload>[]
+        }
+        upsert: {
+          args: Prisma.AiCompanyPolicyUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyPayload>
+        }
+        aggregate: {
+          args: Prisma.AiCompanyPolicyAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAiCompanyPolicy>
+        }
+        groupBy: {
+          args: Prisma.AiCompanyPolicyGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiCompanyPolicyGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AiCompanyPolicyCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiCompanyPolicyCountAggregateOutputType> | number
+        }
+      }
+    }
+    AiCompanyPolicyRevision: {
+      payload: Prisma.$AiCompanyPolicyRevisionPayload<ExtArgs>
+      fields: Prisma.AiCompanyPolicyRevisionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AiCompanyPolicyRevisionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyRevisionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AiCompanyPolicyRevisionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyRevisionPayload>
+        }
+        findFirst: {
+          args: Prisma.AiCompanyPolicyRevisionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyRevisionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AiCompanyPolicyRevisionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyRevisionPayload>
+        }
+        findMany: {
+          args: Prisma.AiCompanyPolicyRevisionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyRevisionPayload>[]
+        }
+        create: {
+          args: Prisma.AiCompanyPolicyRevisionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyRevisionPayload>
+        }
+        createMany: {
+          args: Prisma.AiCompanyPolicyRevisionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AiCompanyPolicyRevisionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyRevisionPayload>[]
+        }
+        delete: {
+          args: Prisma.AiCompanyPolicyRevisionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyRevisionPayload>
+        }
+        update: {
+          args: Prisma.AiCompanyPolicyRevisionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyRevisionPayload>
+        }
+        deleteMany: {
+          args: Prisma.AiCompanyPolicyRevisionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AiCompanyPolicyRevisionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AiCompanyPolicyRevisionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyRevisionPayload>[]
+        }
+        upsert: {
+          args: Prisma.AiCompanyPolicyRevisionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyRevisionPayload>
+        }
+        aggregate: {
+          args: Prisma.AiCompanyPolicyRevisionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAiCompanyPolicyRevision>
+        }
+        groupBy: {
+          args: Prisma.AiCompanyPolicyRevisionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiCompanyPolicyRevisionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AiCompanyPolicyRevisionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiCompanyPolicyRevisionCountAggregateOutputType> | number
+        }
+      }
+    }
+    AiCompanyPolicyProviderAllowlist: {
+      payload: Prisma.$AiCompanyPolicyProviderAllowlistPayload<ExtArgs>
+      fields: Prisma.AiCompanyPolicyProviderAllowlistFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AiCompanyPolicyProviderAllowlistFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyProviderAllowlistPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AiCompanyPolicyProviderAllowlistFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyProviderAllowlistPayload>
+        }
+        findFirst: {
+          args: Prisma.AiCompanyPolicyProviderAllowlistFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyProviderAllowlistPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AiCompanyPolicyProviderAllowlistFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyProviderAllowlistPayload>
+        }
+        findMany: {
+          args: Prisma.AiCompanyPolicyProviderAllowlistFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyProviderAllowlistPayload>[]
+        }
+        create: {
+          args: Prisma.AiCompanyPolicyProviderAllowlistCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyProviderAllowlistPayload>
+        }
+        createMany: {
+          args: Prisma.AiCompanyPolicyProviderAllowlistCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AiCompanyPolicyProviderAllowlistCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyProviderAllowlistPayload>[]
+        }
+        delete: {
+          args: Prisma.AiCompanyPolicyProviderAllowlistDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyProviderAllowlistPayload>
+        }
+        update: {
+          args: Prisma.AiCompanyPolicyProviderAllowlistUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyProviderAllowlistPayload>
+        }
+        deleteMany: {
+          args: Prisma.AiCompanyPolicyProviderAllowlistDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AiCompanyPolicyProviderAllowlistUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AiCompanyPolicyProviderAllowlistUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyProviderAllowlistPayload>[]
+        }
+        upsert: {
+          args: Prisma.AiCompanyPolicyProviderAllowlistUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyProviderAllowlistPayload>
+        }
+        aggregate: {
+          args: Prisma.AiCompanyPolicyProviderAllowlistAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAiCompanyPolicyProviderAllowlist>
+        }
+        groupBy: {
+          args: Prisma.AiCompanyPolicyProviderAllowlistGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiCompanyPolicyProviderAllowlistGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AiCompanyPolicyProviderAllowlistCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiCompanyPolicyProviderAllowlistCountAggregateOutputType> | number
+        }
+      }
+    }
+    AiCompanyPolicyPilotAllowlist: {
+      payload: Prisma.$AiCompanyPolicyPilotAllowlistPayload<ExtArgs>
+      fields: Prisma.AiCompanyPolicyPilotAllowlistFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AiCompanyPolicyPilotAllowlistFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyPilotAllowlistPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AiCompanyPolicyPilotAllowlistFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyPilotAllowlistPayload>
+        }
+        findFirst: {
+          args: Prisma.AiCompanyPolicyPilotAllowlistFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyPilotAllowlistPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AiCompanyPolicyPilotAllowlistFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyPilotAllowlistPayload>
+        }
+        findMany: {
+          args: Prisma.AiCompanyPolicyPilotAllowlistFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyPilotAllowlistPayload>[]
+        }
+        create: {
+          args: Prisma.AiCompanyPolicyPilotAllowlistCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyPilotAllowlistPayload>
+        }
+        createMany: {
+          args: Prisma.AiCompanyPolicyPilotAllowlistCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AiCompanyPolicyPilotAllowlistCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyPilotAllowlistPayload>[]
+        }
+        delete: {
+          args: Prisma.AiCompanyPolicyPilotAllowlistDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyPilotAllowlistPayload>
+        }
+        update: {
+          args: Prisma.AiCompanyPolicyPilotAllowlistUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyPilotAllowlistPayload>
+        }
+        deleteMany: {
+          args: Prisma.AiCompanyPolicyPilotAllowlistDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AiCompanyPolicyPilotAllowlistUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AiCompanyPolicyPilotAllowlistUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyPilotAllowlistPayload>[]
+        }
+        upsert: {
+          args: Prisma.AiCompanyPolicyPilotAllowlistUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanyPolicyPilotAllowlistPayload>
+        }
+        aggregate: {
+          args: Prisma.AiCompanyPolicyPilotAllowlistAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAiCompanyPolicyPilotAllowlist>
+        }
+        groupBy: {
+          args: Prisma.AiCompanyPolicyPilotAllowlistGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiCompanyPolicyPilotAllowlistGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AiCompanyPolicyPilotAllowlistCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiCompanyPolicyPilotAllowlistCountAggregateOutputType> | number
+        }
+      }
+    }
+    AiCompanySkillOverride: {
+      payload: Prisma.$AiCompanySkillOverridePayload<ExtArgs>
+      fields: Prisma.AiCompanySkillOverrideFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AiCompanySkillOverrideFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanySkillOverridePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AiCompanySkillOverrideFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanySkillOverridePayload>
+        }
+        findFirst: {
+          args: Prisma.AiCompanySkillOverrideFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanySkillOverridePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AiCompanySkillOverrideFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanySkillOverridePayload>
+        }
+        findMany: {
+          args: Prisma.AiCompanySkillOverrideFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanySkillOverridePayload>[]
+        }
+        create: {
+          args: Prisma.AiCompanySkillOverrideCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanySkillOverridePayload>
+        }
+        createMany: {
+          args: Prisma.AiCompanySkillOverrideCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AiCompanySkillOverrideCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanySkillOverridePayload>[]
+        }
+        delete: {
+          args: Prisma.AiCompanySkillOverrideDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanySkillOverridePayload>
+        }
+        update: {
+          args: Prisma.AiCompanySkillOverrideUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanySkillOverridePayload>
+        }
+        deleteMany: {
+          args: Prisma.AiCompanySkillOverrideDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AiCompanySkillOverrideUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AiCompanySkillOverrideUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanySkillOverridePayload>[]
+        }
+        upsert: {
+          args: Prisma.AiCompanySkillOverrideUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiCompanySkillOverridePayload>
+        }
+        aggregate: {
+          args: Prisma.AiCompanySkillOverrideAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAiCompanySkillOverride>
+        }
+        groupBy: {
+          args: Prisma.AiCompanySkillOverrideGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiCompanySkillOverrideGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AiCompanySkillOverrideCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiCompanySkillOverrideCountAggregateOutputType> | number
+        }
+      }
+    }
     AiSkillActivation: {
       payload: Prisma.$AiSkillActivationPayload<ExtArgs>
       fields: Prisma.AiSkillActivationFieldRefs
@@ -19843,6 +20218,80 @@ export const AiCompanyContextScalarFieldEnum = {
 export type AiCompanyContextScalarFieldEnum = (typeof AiCompanyContextScalarFieldEnum)[keyof typeof AiCompanyContextScalarFieldEnum]
 
 
+export const AiCompanyPolicyScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  currentVersion: 'currentVersion',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AiCompanyPolicyScalarFieldEnum = (typeof AiCompanyPolicyScalarFieldEnum)[keyof typeof AiCompanyPolicyScalarFieldEnum]
+
+
+export const AiCompanyPolicyRevisionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  policyId: 'policyId',
+  version: 'version',
+  mode: 'mode',
+  monthlyBudgetUsdCents: 'monthlyBudgetUsdCents',
+  billingTimeZone: 'billingTimeZone',
+  autoEnrollStable: 'autoEnrollStable',
+  changedByUserId: 'changedByUserId',
+  changeReason: 'changeReason',
+  policyDigest: 'policyDigest',
+  createdAt: 'createdAt'
+} as const
+
+export type AiCompanyPolicyRevisionScalarFieldEnum = (typeof AiCompanyPolicyRevisionScalarFieldEnum)[keyof typeof AiCompanyPolicyRevisionScalarFieldEnum]
+
+
+export const AiCompanyPolicyProviderAllowlistScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  policyRevisionId: 'policyRevisionId',
+  providerConfigurationId: 'providerConfigurationId',
+  providerSnapshot: 'providerSnapshot',
+  modelSnapshot: 'modelSnapshot',
+  createdAt: 'createdAt'
+} as const
+
+export type AiCompanyPolicyProviderAllowlistScalarFieldEnum = (typeof AiCompanyPolicyProviderAllowlistScalarFieldEnum)[keyof typeof AiCompanyPolicyProviderAllowlistScalarFieldEnum]
+
+
+export const AiCompanyPolicyPilotAllowlistScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  policyRevisionId: 'policyRevisionId',
+  skillKey: 'skillKey',
+  skillVersion: 'skillVersion',
+  policyVersion: 'policyVersion',
+  createdAt: 'createdAt'
+} as const
+
+export type AiCompanyPolicyPilotAllowlistScalarFieldEnum = (typeof AiCompanyPolicyPilotAllowlistScalarFieldEnum)[keyof typeof AiCompanyPolicyPilotAllowlistScalarFieldEnum]
+
+
+export const AiCompanySkillOverrideScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  skillKey: 'skillKey',
+  state: 'state',
+  rowVersion: 'rowVersion',
+  reason: 'reason',
+  changedByUserId: 'changedByUserId',
+  changedAt: 'changedAt'
+} as const
+
+export type AiCompanySkillOverrideScalarFieldEnum = (typeof AiCompanySkillOverrideScalarFieldEnum)[keyof typeof AiCompanySkillOverrideScalarFieldEnum]
+
+
 export const AiSkillActivationScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -19860,6 +20309,8 @@ export const AiSkillActivationScalarFieldEnum = {
   suspendedByUserId: 'suspendedByUserId',
   suspendedAt: 'suspendedAt',
   suspensionReason: 'suspensionReason',
+  origin: 'origin',
+  companyPolicyRevisionId: 'companyPolicyRevisionId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -19881,6 +20332,8 @@ export const AiExecutionReceiptScalarFieldEnum = {
   skillKey: 'skillKey',
   skillVersion: 'skillVersion',
   policyVersion: 'policyVersion',
+  companyPolicyRevisionId: 'companyPolicyRevisionId',
+  billingPeriodStartAt: 'billingPeriodStartAt',
   outcome: 'outcome',
   providerSnapshot: 'providerSnapshot',
   modelSnapshot: 'modelSnapshot',
@@ -19983,6 +20436,8 @@ export const AiBudgetReservationScalarFieldEnum = {
   interpretationRunId: 'interpretationRunId',
   modelPriceRevisionId: 'modelPriceRevisionId',
   dayStartAt: 'dayStartAt',
+  monthStartAt: 'monthStartAt',
+  companyPolicyRevisionId: 'companyPolicyRevisionId',
   status: 'status',
   inputTokenEstimate: 'inputTokenEstimate',
   maxOutputTokens: 'maxOutputTokens',
@@ -22543,6 +22998,34 @@ export type ListEnumAiCompanyPresentationStyleFieldRefInput<$PrismaModel> = Fiel
 
 
 /**
+ * Reference to a field of type 'AiCompanyPolicyMode'
+ */
+export type EnumAiCompanyPolicyModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiCompanyPolicyMode'>
+    
+
+
+/**
+ * Reference to a field of type 'AiCompanyPolicyMode[]'
+ */
+export type ListEnumAiCompanyPolicyModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiCompanyPolicyMode[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AiCompanySkillOverrideState'
+ */
+export type EnumAiCompanySkillOverrideStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiCompanySkillOverrideState'>
+    
+
+
+/**
+ * Reference to a field of type 'AiCompanySkillOverrideState[]'
+ */
+export type ListEnumAiCompanySkillOverrideStateFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiCompanySkillOverrideState[]'>
+    
+
+
+/**
  * Reference to a field of type 'AiSkillActivationStatus'
  */
 export type EnumAiSkillActivationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiSkillActivationStatus'>
@@ -22553,6 +23036,20 @@ export type EnumAiSkillActivationStatusFieldRefInput<$PrismaModel> = FieldRefInp
  * Reference to a field of type 'AiSkillActivationStatus[]'
  */
 export type ListEnumAiSkillActivationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiSkillActivationStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AiSkillActivationOrigin'
+ */
+export type EnumAiSkillActivationOriginFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiSkillActivationOrigin'>
+    
+
+
+/**
+ * Reference to a field of type 'AiSkillActivationOrigin[]'
+ */
+export type ListEnumAiSkillActivationOriginFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AiSkillActivationOrigin[]'>
     
 
 
@@ -23210,6 +23707,11 @@ export type GlobalOmitConfig = {
   aiProviderConfiguration?: Prisma.AiProviderConfigurationOmit
   aiCompanyIdentity?: Prisma.AiCompanyIdentityOmit
   aiCompanyContext?: Prisma.AiCompanyContextOmit
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyOmit
+  aiCompanyPolicyRevision?: Prisma.AiCompanyPolicyRevisionOmit
+  aiCompanyPolicyProviderAllowlist?: Prisma.AiCompanyPolicyProviderAllowlistOmit
+  aiCompanyPolicyPilotAllowlist?: Prisma.AiCompanyPolicyPilotAllowlistOmit
+  aiCompanySkillOverride?: Prisma.AiCompanySkillOverrideOmit
   aiSkillActivation?: Prisma.AiSkillActivationOmit
   aiExecutionReceipt?: Prisma.AiExecutionReceiptOmit
   aiInterpretation?: Prisma.AiInterpretationOmit

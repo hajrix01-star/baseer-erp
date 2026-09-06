@@ -21,6 +21,8 @@ import {
   approveAiHumanInsightRequestSchema,
   aiInterpretationListQuerySchema,
   suspendAiSkillActivationRequestSchema,
+  aiCompanyPolicyReceiptSchema,
+  putAiCompanyPolicyRequestSchema,
 } from "@baseer-erp/contracts";
 import {
   BadRequestException,
@@ -32,6 +34,7 @@ import {
   HttpCode,
   Param,
   Post,
+  Put,
   Query,
   UnauthorizedException,
 } from "@nestjs/common";
@@ -238,6 +241,32 @@ export class AiPlatformController {
     @Headers("x-baseer-company-id") companyId?: string,
   ) {
     return this.platform.readGovernance(this.scope(authorization, companyId));
+  }
+
+  @Get("company-policy")
+  async companyPolicy(
+    @Headers("authorization") authorization?: string,
+    @Headers("x-baseer-company-id") companyId?: string,
+  ) {
+    const scope = this.scope(authorization, companyId);
+    return aiCompanyPolicyReceiptSchema.parse(await this.platform.readCompanyPolicy(scope));
+  }
+
+  @Put("company-policy")
+  async putCompanyPolicy(
+    @Body() body: unknown,
+    @Headers("authorization") authorization?: string,
+    @Headers("x-baseer-company-id") companyId?: string,
+  ) {
+    const request = putAiCompanyPolicyRequestSchema.safeParse(body);
+    if (!request.success) throw new BadRequestException("Invalid Basira company policy.");
+    const scope = this.scope(authorization, companyId);
+    return aiCompanyPolicyReceiptSchema.parse(
+      await this.platform.putCompanyPolicy(
+        await this.platform.authorizeCompanyPolicyWrite(scope.accessToken, scope.companyId),
+        request.data,
+      ),
+    );
   }
 
   @Post("company-contexts")

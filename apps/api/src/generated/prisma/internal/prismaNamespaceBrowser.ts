@@ -233,6 +233,11 @@ export const ModelName = {
   AiProviderConfiguration: 'AiProviderConfiguration',
   AiCompanyIdentity: 'AiCompanyIdentity',
   AiCompanyContext: 'AiCompanyContext',
+  AiCompanyPolicy: 'AiCompanyPolicy',
+  AiCompanyPolicyRevision: 'AiCompanyPolicyRevision',
+  AiCompanyPolicyProviderAllowlist: 'AiCompanyPolicyProviderAllowlist',
+  AiCompanyPolicyPilotAllowlist: 'AiCompanyPolicyPilotAllowlist',
+  AiCompanySkillOverride: 'AiCompanySkillOverride',
   AiSkillActivation: 'AiSkillActivation',
   AiExecutionReceipt: 'AiExecutionReceipt',
   AiInterpretation: 'AiInterpretation',
@@ -3621,6 +3626,80 @@ export const AiCompanyContextScalarFieldEnum = {
 export type AiCompanyContextScalarFieldEnum = (typeof AiCompanyContextScalarFieldEnum)[keyof typeof AiCompanyContextScalarFieldEnum]
 
 
+export const AiCompanyPolicyScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  currentVersion: 'currentVersion',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AiCompanyPolicyScalarFieldEnum = (typeof AiCompanyPolicyScalarFieldEnum)[keyof typeof AiCompanyPolicyScalarFieldEnum]
+
+
+export const AiCompanyPolicyRevisionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  policyId: 'policyId',
+  version: 'version',
+  mode: 'mode',
+  monthlyBudgetUsdCents: 'monthlyBudgetUsdCents',
+  billingTimeZone: 'billingTimeZone',
+  autoEnrollStable: 'autoEnrollStable',
+  changedByUserId: 'changedByUserId',
+  changeReason: 'changeReason',
+  policyDigest: 'policyDigest',
+  createdAt: 'createdAt'
+} as const
+
+export type AiCompanyPolicyRevisionScalarFieldEnum = (typeof AiCompanyPolicyRevisionScalarFieldEnum)[keyof typeof AiCompanyPolicyRevisionScalarFieldEnum]
+
+
+export const AiCompanyPolicyProviderAllowlistScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  policyRevisionId: 'policyRevisionId',
+  providerConfigurationId: 'providerConfigurationId',
+  providerSnapshot: 'providerSnapshot',
+  modelSnapshot: 'modelSnapshot',
+  createdAt: 'createdAt'
+} as const
+
+export type AiCompanyPolicyProviderAllowlistScalarFieldEnum = (typeof AiCompanyPolicyProviderAllowlistScalarFieldEnum)[keyof typeof AiCompanyPolicyProviderAllowlistScalarFieldEnum]
+
+
+export const AiCompanyPolicyPilotAllowlistScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  policyRevisionId: 'policyRevisionId',
+  skillKey: 'skillKey',
+  skillVersion: 'skillVersion',
+  policyVersion: 'policyVersion',
+  createdAt: 'createdAt'
+} as const
+
+export type AiCompanyPolicyPilotAllowlistScalarFieldEnum = (typeof AiCompanyPolicyPilotAllowlistScalarFieldEnum)[keyof typeof AiCompanyPolicyPilotAllowlistScalarFieldEnum]
+
+
+export const AiCompanySkillOverrideScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  skillKey: 'skillKey',
+  state: 'state',
+  rowVersion: 'rowVersion',
+  reason: 'reason',
+  changedByUserId: 'changedByUserId',
+  changedAt: 'changedAt'
+} as const
+
+export type AiCompanySkillOverrideScalarFieldEnum = (typeof AiCompanySkillOverrideScalarFieldEnum)[keyof typeof AiCompanySkillOverrideScalarFieldEnum]
+
+
 export const AiSkillActivationScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -3638,6 +3717,8 @@ export const AiSkillActivationScalarFieldEnum = {
   suspendedByUserId: 'suspendedByUserId',
   suspendedAt: 'suspendedAt',
   suspensionReason: 'suspensionReason',
+  origin: 'origin',
+  companyPolicyRevisionId: 'companyPolicyRevisionId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -3659,6 +3740,8 @@ export const AiExecutionReceiptScalarFieldEnum = {
   skillKey: 'skillKey',
   skillVersion: 'skillVersion',
   policyVersion: 'policyVersion',
+  companyPolicyRevisionId: 'companyPolicyRevisionId',
+  billingPeriodStartAt: 'billingPeriodStartAt',
   outcome: 'outcome',
   providerSnapshot: 'providerSnapshot',
   modelSnapshot: 'modelSnapshot',
@@ -3761,6 +3844,8 @@ export const AiBudgetReservationScalarFieldEnum = {
   interpretationRunId: 'interpretationRunId',
   modelPriceRevisionId: 'modelPriceRevisionId',
   dayStartAt: 'dayStartAt',
+  monthStartAt: 'monthStartAt',
+  companyPolicyRevisionId: 'companyPolicyRevisionId',
   status: 'status',
   inputTokenEstimate: 'inputTokenEstimate',
   maxOutputTokens: 'maxOutputTokens',

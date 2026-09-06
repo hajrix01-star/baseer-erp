@@ -91,6 +91,7 @@
         "check:command-center-rls": "node scripts/check-command-center-rls.mjs",
         "verify:administration-lifecycle": "npm run build --workspace @baseer-erp/api && node scripts/run-administration-lifecycle-verification.mjs",
         "verify:ai-gate-b-http": "npm run build --workspace @baseer-erp/contracts && npm run build --workspace @baseer-erp/api && node scripts/run-ai-gate-b-http-verification.mjs",
+        "verify:basira-company-policy-http": "npm run build --workspace @baseer-erp/contracts && npm run build --workspace @baseer-erp/api && node scripts/run-basira-company-policy-http-verification.mjs",
         "verify:daily-sales-db": "npm run build --workspace @baseer-erp/contracts && npm run build --workspace @baseer-erp/api && node scripts/run-daily-sales-gate-b-verification.mjs",
         "verify:daily-sales-http": "npm run build --workspace @baseer-erp/contracts && npm run build --workspace @baseer-erp/api && node scripts/run-daily-sales-http-verification.mjs",
         "verify:finance-accounts-http": "npm run build --workspace @baseer-erp/contracts && npm run build --workspace @baseer-erp/api && node scripts/run-finance-accounts-http-verification.mjs",

@@ -2,7 +2,9 @@ import { Module } from '@nestjs/common';
 import { ThrottlerModule } from '@nestjs/throttler';
 
 import { AiCredentialVault } from './ai-platform/ai-credential-vault.js';
+import { AiCompanyPolicyService } from './ai-platform/ai-company-policy.service.js';
 import { AiConsumptionGuardService } from './ai-platform/ai-consumption-guard.service.js';
+import { AiConsumptionReconciliationSchedulerService } from './ai-platform/ai-consumption-reconciliation-scheduler.service.js';
 import { AiInterpretationService } from './ai-platform/ai-interpretation.service.js';
 import { AiInterpretationCenterService } from './ai-platform/ai-interpretation-center.service.js';
 import { AdministrationController } from './administration/administration.controller.js';
@@ -231,7 +233,9 @@ import { WhatsappInvoiceMonitoringSettingsService } from './whatsapp-invoice-mon
     TenantAdministrationContextService,
     AdministrationService,
     AiCredentialVault,
+    AiCompanyPolicyService,
     AiConsumptionGuardService,
+    AiConsumptionReconciliationSchedulerService,
     AiInterpretationService,
     AiInterpretationCenterService,
     AiPlatformService,

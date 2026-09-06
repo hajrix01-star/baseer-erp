@@ -18,3 +18,15 @@ export function startOfRiyadhDay(value: Date): Date {
     ),
   );
 }
+
+/** A billing month follows the same fixed business timezone as the daily cap. */
+export function startOfRiyadhMonth(value: Date): Date {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Riyadh",
+    year: "numeric",
+    month: "2-digit",
+  }).formatToParts(value);
+  const part = (type: Intl.DateTimeFormatPartTypes) =>
+    parts.find((item) => item.type === type)?.value;
+  return new Date(Date.UTC(Number(part("year")), Number(part("month")) - 1, 1, -3));
+}

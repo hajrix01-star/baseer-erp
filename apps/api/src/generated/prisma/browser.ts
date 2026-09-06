@@ -1074,6 +1074,33 @@ export type AiCompanyIdentity = Prisma.AiCompanyIdentityModel
  */
 export type AiCompanyContext = Prisma.AiCompanyContextModel
 /**
+ * Model AiCompanyPolicy
+ * One current policy pointer per company. Each operational decision is held
+ * in an immutable revision so executions can retain their governing policy.
+ */
+export type AiCompanyPolicy = Prisma.AiCompanyPolicyModel
+/**
+ * Model AiCompanyPolicyRevision
+ * The monthly input is a whole number of USD cents. Provider charges retain
+ * their existing precise decimal representation in the consumption ledger.
+ */
+export type AiCompanyPolicyRevision = Prisma.AiCompanyPolicyRevisionModel
+/**
+ * Model AiCompanyPolicyProviderAllowlist
+ * 
+ */
+export type AiCompanyPolicyProviderAllowlist = Prisma.AiCompanyPolicyProviderAllowlistModel
+/**
+ * Model AiCompanyPolicyPilotAllowlist
+ * 
+ */
+export type AiCompanyPolicyPilotAllowlist = Prisma.AiCompanyPolicyPilotAllowlistModel
+/**
+ * Model AiCompanySkillOverride
+ * A key-wide stop survives a future code-owned skill revision.
+ */
+export type AiCompanySkillOverride = Prisma.AiCompanySkillOverrideModel
+/**
  * Model AiSkillActivation
  * Company-scoped approval for a fixed code-owned skill revision. Catalogue
  * status alone never authorises runtime use.

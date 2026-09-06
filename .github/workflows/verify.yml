@@ -107,6 +107,8 @@ jobs:
       - run: npm run verify:finance-period-race
       - run: npm run verify:ai-gate-b-db
       - run: npm run verify:ai-gate-b-http
+      - run: npm run verify:basira-company-policy-http
+      - run: npm run verify:basira-consumption-guard
       - run: npm run verify:daily-sales-db
       - run: npm run verify:daily-sales-http
       - name: Verify attendance HTTP boundaries and retention

@@ -378,6 +378,9 @@ export type CompanyWhereInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementListRelationFilter
   aiCompanyIdentities?: Prisma.AiCompanyIdentityListRelationFilter
   aiCompanyContexts?: Prisma.AiCompanyContextListRelationFilter
+  aiCompanyPolicy?: Prisma.XOR<Prisma.AiCompanyPolicyNullableScalarRelationFilter, Prisma.AiCompanyPolicyWhereInput> | null
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionListRelationFilter
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideListRelationFilter
   aiSkillActivations?: Prisma.AiSkillActivationListRelationFilter
   aiExecutionReceipts?: Prisma.AiExecutionReceiptListRelationFilter
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackListRelationFilter
@@ -557,6 +560,9 @@ export type CompanyOrderByWithRelationInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementOrderByRelationAggregateInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityOrderByRelationAggregateInput
   aiCompanyContexts?: Prisma.AiCompanyContextOrderByRelationAggregateInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyOrderByWithRelationInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionOrderByRelationAggregateInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideOrderByRelationAggregateInput
   aiSkillActivations?: Prisma.AiSkillActivationOrderByRelationAggregateInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptOrderByRelationAggregateInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackOrderByRelationAggregateInput
@@ -740,6 +746,9 @@ export type CompanyWhereUniqueInput = Prisma.AtLeast<{
   hrFinalSettlements?: Prisma.HrFinalSettlementListRelationFilter
   aiCompanyIdentities?: Prisma.AiCompanyIdentityListRelationFilter
   aiCompanyContexts?: Prisma.AiCompanyContextListRelationFilter
+  aiCompanyPolicy?: Prisma.XOR<Prisma.AiCompanyPolicyNullableScalarRelationFilter, Prisma.AiCompanyPolicyWhereInput> | null
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionListRelationFilter
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideListRelationFilter
   aiSkillActivations?: Prisma.AiSkillActivationListRelationFilter
   aiExecutionReceipts?: Prisma.AiExecutionReceiptListRelationFilter
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackListRelationFilter
@@ -960,6 +969,9 @@ export type CompanyCreateInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -1138,6 +1150,9 @@ export type CompanyUncheckedCreateInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -1316,6 +1331,9 @@ export type CompanyUpdateInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -1494,6 +1512,9 @@ export type CompanyUncheckedUpdateInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -3606,6 +3627,48 @@ export type CompanyUpdateOneRequiredWithoutAiCompanyContextsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutAiCompanyContextsInput, Prisma.CompanyUpdateWithoutAiCompanyContextsInput>, Prisma.CompanyUncheckedUpdateWithoutAiCompanyContextsInput>
 }
 
+export type CompanyCreateNestedOneWithoutAiCompanyPolicyInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutAiCompanyPolicyInput, Prisma.CompanyUncheckedCreateWithoutAiCompanyPolicyInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutAiCompanyPolicyInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneRequiredWithoutAiCompanyPolicyNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutAiCompanyPolicyInput, Prisma.CompanyUncheckedCreateWithoutAiCompanyPolicyInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutAiCompanyPolicyInput
+  upsert?: Prisma.CompanyUpsertWithoutAiCompanyPolicyInput
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutAiCompanyPolicyInput, Prisma.CompanyUpdateWithoutAiCompanyPolicyInput>, Prisma.CompanyUncheckedUpdateWithoutAiCompanyPolicyInput>
+}
+
+export type CompanyCreateNestedOneWithoutAiCompanyPolicyRevisionsInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutAiCompanyPolicyRevisionsInput, Prisma.CompanyUncheckedCreateWithoutAiCompanyPolicyRevisionsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutAiCompanyPolicyRevisionsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneRequiredWithoutAiCompanyPolicyRevisionsNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutAiCompanyPolicyRevisionsInput, Prisma.CompanyUncheckedCreateWithoutAiCompanyPolicyRevisionsInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutAiCompanyPolicyRevisionsInput
+  upsert?: Prisma.CompanyUpsertWithoutAiCompanyPolicyRevisionsInput
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutAiCompanyPolicyRevisionsInput, Prisma.CompanyUpdateWithoutAiCompanyPolicyRevisionsInput>, Prisma.CompanyUncheckedUpdateWithoutAiCompanyPolicyRevisionsInput>
+}
+
+export type CompanyCreateNestedOneWithoutAiCompanySkillOverridesInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutAiCompanySkillOverridesInput, Prisma.CompanyUncheckedCreateWithoutAiCompanySkillOverridesInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutAiCompanySkillOverridesInput
+  connect?: Prisma.CompanyWhereUniqueInput
+}
+
+export type CompanyUpdateOneRequiredWithoutAiCompanySkillOverridesNestedInput = {
+  create?: Prisma.XOR<Prisma.CompanyCreateWithoutAiCompanySkillOverridesInput, Prisma.CompanyUncheckedCreateWithoutAiCompanySkillOverridesInput>
+  connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutAiCompanySkillOverridesInput
+  upsert?: Prisma.CompanyUpsertWithoutAiCompanySkillOverridesInput
+  connect?: Prisma.CompanyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CompanyUpdateToOneWithWhereWithoutAiCompanySkillOverridesInput, Prisma.CompanyUpdateWithoutAiCompanySkillOverridesInput>, Prisma.CompanyUncheckedUpdateWithoutAiCompanySkillOverridesInput>
+}
+
 export type CompanyCreateNestedOneWithoutAiSkillActivationsInput = {
   create?: Prisma.XOR<Prisma.CompanyCreateWithoutAiSkillActivationsInput, Prisma.CompanyUncheckedCreateWithoutAiSkillActivationsInput>
   connectOrCreate?: Prisma.CompanyCreateOrConnectWithoutAiSkillActivationsInput
@@ -4125,6 +4188,9 @@ export type CompanyCreateWithoutTenantInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -4302,6 +4368,9 @@ export type CompanyUncheckedCreateWithoutTenantInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -4526,6 +4595,9 @@ export type CompanyCreateWithoutBrandingInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -4703,6 +4775,9 @@ export type CompanyUncheckedCreateWithoutBrandingInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -4896,6 +4971,9 @@ export type CompanyUpdateWithoutBrandingInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -5073,6 +5151,9 @@ export type CompanyUncheckedUpdateWithoutBrandingInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -5249,6 +5330,9 @@ export type CompanyCreateWithoutMembershipsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -5426,6 +5510,9 @@ export type CompanyUncheckedCreateWithoutMembershipsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -5619,6 +5706,9 @@ export type CompanyUpdateWithoutMembershipsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -5796,6 +5886,9 @@ export type CompanyUncheckedUpdateWithoutMembershipsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -5973,6 +6066,9 @@ export type CompanyCreateWithoutAuditsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -6150,6 +6246,9 @@ export type CompanyUncheckedCreateWithoutAuditsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -6343,6 +6442,9 @@ export type CompanyUpdateWithoutAuditsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -6520,6 +6622,9 @@ export type CompanyUncheckedUpdateWithoutAuditsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -6697,6 +6802,9 @@ export type CompanyCreateWithoutIdempotencyReceiptsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -6874,6 +6982,9 @@ export type CompanyUncheckedCreateWithoutIdempotencyReceiptsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -7067,6 +7178,9 @@ export type CompanyUpdateWithoutIdempotencyReceiptsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -7244,6 +7358,9 @@ export type CompanyUncheckedUpdateWithoutIdempotencyReceiptsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -7422,6 +7539,9 @@ export type CompanyCreateWithoutBackupPoliciesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -7599,6 +7719,9 @@ export type CompanyUncheckedCreateWithoutBackupPoliciesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -7792,6 +7915,9 @@ export type CompanyUpdateWithoutBackupPoliciesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -7969,6 +8095,9 @@ export type CompanyUncheckedUpdateWithoutBackupPoliciesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -8146,6 +8275,9 @@ export type CompanyCreateWithoutBackupJobsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -8323,6 +8455,9 @@ export type CompanyUncheckedCreateWithoutBackupJobsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -8516,6 +8651,9 @@ export type CompanyUpdateWithoutBackupJobsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -8693,6 +8831,9 @@ export type CompanyUncheckedUpdateWithoutBackupJobsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -8870,6 +9011,9 @@ export type CompanyCreateWithoutBackupArtifactsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -9047,6 +9191,9 @@ export type CompanyUncheckedCreateWithoutBackupArtifactsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -9240,6 +9387,9 @@ export type CompanyUpdateWithoutBackupArtifactsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -9417,6 +9567,9 @@ export type CompanyUncheckedUpdateWithoutBackupArtifactsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -9594,6 +9747,9 @@ export type CompanyCreateWithoutBackupAuditEventsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -9771,6 +9927,9 @@ export type CompanyUncheckedCreateWithoutBackupAuditEventsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -9964,6 +10123,9 @@ export type CompanyUpdateWithoutBackupAuditEventsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -10141,6 +10303,9 @@ export type CompanyUncheckedUpdateWithoutBackupAuditEventsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -10318,6 +10483,9 @@ export type CompanyCreateWithoutLegacyMigrationCompanyMapsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -10495,6 +10663,9 @@ export type CompanyUncheckedCreateWithoutLegacyMigrationCompanyMapsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -10688,6 +10859,9 @@ export type CompanyUpdateWithoutLegacyMigrationCompanyMapsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -10865,6 +11039,9 @@ export type CompanyUncheckedUpdateWithoutLegacyMigrationCompanyMapsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -11042,6 +11219,9 @@ export type CompanyCreateWithoutLegacyMigrationRecordMapsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -11219,6 +11399,9 @@ export type CompanyUncheckedCreateWithoutLegacyMigrationRecordMapsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -11412,6 +11595,9 @@ export type CompanyUpdateWithoutLegacyMigrationRecordMapsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -11589,6 +11775,9 @@ export type CompanyUncheckedUpdateWithoutLegacyMigrationRecordMapsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -11765,6 +11954,9 @@ export type CompanyCreateWithoutNoorixSourceAnnotationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -11942,6 +12134,9 @@ export type CompanyUncheckedCreateWithoutNoorixSourceAnnotationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -12135,6 +12330,9 @@ export type CompanyUpdateWithoutNoorixSourceAnnotationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -12312,6 +12510,9 @@ export type CompanyUncheckedUpdateWithoutNoorixSourceAnnotationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -12490,6 +12691,9 @@ export type CompanyCreateWithoutNurixExcelStagingPackagesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -12667,6 +12871,9 @@ export type CompanyUncheckedCreateWithoutNurixExcelStagingPackagesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -12860,6 +13067,9 @@ export type CompanyUpdateWithoutNurixExcelStagingPackagesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -13037,6 +13247,9 @@ export type CompanyUncheckedUpdateWithoutNurixExcelStagingPackagesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -13214,6 +13427,9 @@ export type CompanyCreateWithoutNurixExcelMasterDataExecutionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -13391,6 +13607,9 @@ export type CompanyUncheckedCreateWithoutNurixExcelMasterDataExecutionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -13584,6 +13803,9 @@ export type CompanyUpdateWithoutNurixExcelMasterDataExecutionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -13761,6 +13983,9 @@ export type CompanyUncheckedUpdateWithoutNurixExcelMasterDataExecutionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -13938,6 +14163,9 @@ export type CompanyCreateWithoutNurixExcelFinancialExecutionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -14115,6 +14343,9 @@ export type CompanyUncheckedCreateWithoutNurixExcelFinancialExecutionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -14308,6 +14539,9 @@ export type CompanyUpdateWithoutNurixExcelFinancialExecutionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -14485,6 +14719,9 @@ export type CompanyUncheckedUpdateWithoutNurixExcelFinancialExecutionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -14662,6 +14899,9 @@ export type CompanyCreateWithoutNurixExcelFinancialWavesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -14839,6 +15079,9 @@ export type CompanyUncheckedCreateWithoutNurixExcelFinancialWavesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -15032,6 +15275,9 @@ export type CompanyUpdateWithoutNurixExcelFinancialWavesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -15209,6 +15455,9 @@ export type CompanyUncheckedUpdateWithoutNurixExcelFinancialWavesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -15386,6 +15635,9 @@ export type CompanyCreateWithoutNurixExcelFinancialItemsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -15563,6 +15815,9 @@ export type CompanyUncheckedCreateWithoutNurixExcelFinancialItemsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -15756,6 +16011,9 @@ export type CompanyUpdateWithoutNurixExcelFinancialItemsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -15933,6 +16191,9 @@ export type CompanyUncheckedUpdateWithoutNurixExcelFinancialItemsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -16110,6 +16371,9 @@ export type CompanyCreateWithoutNurixExcelFinancialSourceMapsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -16287,6 +16551,9 @@ export type CompanyUncheckedCreateWithoutNurixExcelFinancialSourceMapsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -16480,6 +16747,9 @@ export type CompanyUpdateWithoutNurixExcelFinancialSourceMapsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -16657,6 +16927,9 @@ export type CompanyUncheckedUpdateWithoutNurixExcelFinancialSourceMapsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -16834,6 +17107,9 @@ export type CompanyCreateWithoutNurixExcelFinancialReceiptsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -17011,6 +17287,9 @@ export type CompanyUncheckedCreateWithoutNurixExcelFinancialReceiptsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -17204,6 +17483,9 @@ export type CompanyUpdateWithoutNurixExcelFinancialReceiptsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -17381,6 +17663,9 @@ export type CompanyUncheckedUpdateWithoutNurixExcelFinancialReceiptsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -17557,6 +17842,9 @@ export type CompanyCreateWithoutDocumentSerialCountersInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -17734,6 +18022,9 @@ export type CompanyUncheckedCreateWithoutDocumentSerialCountersInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -17927,6 +18218,9 @@ export type CompanyUpdateWithoutDocumentSerialCountersInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -18104,6 +18398,9 @@ export type CompanyUncheckedUpdateWithoutDocumentSerialCountersInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -18281,6 +18578,9 @@ export type CompanyCreateWithoutFileMetadataInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -18458,6 +18758,9 @@ export type CompanyUncheckedCreateWithoutFileMetadataInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -18651,6 +18954,9 @@ export type CompanyUpdateWithoutFileMetadataInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -18828,6 +19134,9 @@ export type CompanyUncheckedUpdateWithoutFileMetadataInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -19005,6 +19314,9 @@ export type CompanyCreateWithoutFinanceProfileInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -19182,6 +19494,9 @@ export type CompanyUncheckedCreateWithoutFinanceProfileInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -19375,6 +19690,9 @@ export type CompanyUpdateWithoutFinanceProfileInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -19552,6 +19870,9 @@ export type CompanyUncheckedUpdateWithoutFinanceProfileInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -19730,6 +20051,9 @@ export type CompanyCreateWithoutMarketingProviderCredentialEnvelopesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -19907,6 +20231,9 @@ export type CompanyUncheckedCreateWithoutMarketingProviderCredentialEnvelopesInp
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -20100,6 +20427,9 @@ export type CompanyUpdateWithoutMarketingProviderCredentialEnvelopesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -20277,6 +20607,9 @@ export type CompanyUncheckedUpdateWithoutMarketingProviderCredentialEnvelopesInp
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -20454,6 +20787,9 @@ export type CompanyCreateWithoutMarketingGoogleBusinessLocationMappingsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -20631,6 +20967,9 @@ export type CompanyUncheckedCreateWithoutMarketingGoogleBusinessLocationMappings
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -20824,6 +21163,9 @@ export type CompanyUpdateWithoutMarketingGoogleBusinessLocationMappingsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -21001,6 +21343,9 @@ export type CompanyUncheckedUpdateWithoutMarketingGoogleBusinessLocationMappings
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -21178,6 +21523,9 @@ export type CompanyCreateWithoutMarketingProviderSyncRunsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -21355,6 +21703,9 @@ export type CompanyUncheckedCreateWithoutMarketingProviderSyncRunsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -21548,6 +21899,9 @@ export type CompanyUpdateWithoutMarketingProviderSyncRunsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -21725,6 +22079,9 @@ export type CompanyUncheckedUpdateWithoutMarketingProviderSyncRunsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -21902,6 +22259,9 @@ export type CompanyCreateWithoutMarketingGoogleBusinessReviewFactsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -22079,6 +22439,9 @@ export type CompanyUncheckedCreateWithoutMarketingGoogleBusinessReviewFactsInput
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -22272,6 +22635,9 @@ export type CompanyUpdateWithoutMarketingGoogleBusinessReviewFactsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -22449,6 +22815,9 @@ export type CompanyUncheckedUpdateWithoutMarketingGoogleBusinessReviewFactsInput
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -22625,6 +22994,9 @@ export type CompanyCreateWithoutFinanceAccountsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -22802,6 +23174,9 @@ export type CompanyUncheckedCreateWithoutFinanceAccountsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -22995,6 +23370,9 @@ export type CompanyUpdateWithoutFinanceAccountsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -23172,6 +23550,9 @@ export type CompanyUncheckedUpdateWithoutFinanceAccountsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -23349,6 +23730,9 @@ export type CompanyCreateWithoutPnlMappingVersionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -23526,6 +23910,9 @@ export type CompanyUncheckedCreateWithoutPnlMappingVersionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -23719,6 +24106,9 @@ export type CompanyUpdateWithoutPnlMappingVersionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -23896,6 +24286,9 @@ export type CompanyUncheckedUpdateWithoutPnlMappingVersionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -24073,6 +24466,9 @@ export type CompanyCreateWithoutPnlStatementLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -24250,6 +24646,9 @@ export type CompanyUncheckedCreateWithoutPnlStatementLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -24443,6 +24842,9 @@ export type CompanyUpdateWithoutPnlStatementLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -24620,6 +25022,9 @@ export type CompanyUncheckedUpdateWithoutPnlStatementLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -24797,6 +25202,9 @@ export type CompanyCreateWithoutPnlAccountMappingsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -24974,6 +25382,9 @@ export type CompanyUncheckedCreateWithoutPnlAccountMappingsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -25167,6 +25578,9 @@ export type CompanyUpdateWithoutPnlAccountMappingsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -25344,6 +25758,9 @@ export type CompanyUncheckedUpdateWithoutPnlAccountMappingsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -25521,6 +25938,9 @@ export type CompanyCreateWithoutLedgerRevisionInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -25698,6 +26118,9 @@ export type CompanyUncheckedCreateWithoutLedgerRevisionInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -25891,6 +26314,9 @@ export type CompanyUpdateWithoutLedgerRevisionInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -26068,6 +26494,9 @@ export type CompanyUncheckedUpdateWithoutLedgerRevisionInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -26245,6 +26674,9 @@ export type CompanyCreateWithoutReportRunsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -26422,6 +26854,9 @@ export type CompanyUncheckedCreateWithoutReportRunsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -26615,6 +27050,9 @@ export type CompanyUpdateWithoutReportRunsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -26792,6 +27230,9 @@ export type CompanyUncheckedUpdateWithoutReportRunsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -26970,6 +27411,9 @@ export type CompanyCreateWithoutDecisionMetricDefinitionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -27147,6 +27591,9 @@ export type CompanyUncheckedCreateWithoutDecisionMetricDefinitionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -27340,6 +27787,9 @@ export type CompanyUpdateWithoutDecisionMetricDefinitionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -27517,6 +27967,9 @@ export type CompanyUncheckedUpdateWithoutDecisionMetricDefinitionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -27694,6 +28147,9 @@ export type CompanyCreateWithoutDecisionSalesChangePolicyInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -27871,6 +28327,9 @@ export type CompanyUncheckedCreateWithoutDecisionSalesChangePolicyInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -28064,6 +28523,9 @@ export type CompanyUpdateWithoutDecisionSalesChangePolicyInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -28241,6 +28703,9 @@ export type CompanyUncheckedUpdateWithoutDecisionSalesChangePolicyInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -28418,6 +28883,9 @@ export type CompanyCreateWithoutDecisionRuleDefinitionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -28595,6 +29063,9 @@ export type CompanyUncheckedCreateWithoutDecisionRuleDefinitionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -28788,6 +29259,9 @@ export type CompanyUpdateWithoutDecisionRuleDefinitionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -28965,6 +29439,9 @@ export type CompanyUncheckedUpdateWithoutDecisionRuleDefinitionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -29142,6 +29619,9 @@ export type CompanyCreateWithoutDecisionCompanyContextEventsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -29319,6 +29799,9 @@ export type CompanyUncheckedCreateWithoutDecisionCompanyContextEventsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -29512,6 +29995,9 @@ export type CompanyUpdateWithoutDecisionCompanyContextEventsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -29689,6 +30175,9 @@ export type CompanyUncheckedUpdateWithoutDecisionCompanyContextEventsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -29866,6 +30355,9 @@ export type CompanyCreateWithoutDecisionEvaluationRunsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -30043,6 +30535,9 @@ export type CompanyUncheckedCreateWithoutDecisionEvaluationRunsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -30236,6 +30731,9 @@ export type CompanyUpdateWithoutDecisionEvaluationRunsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -30413,6 +30911,9 @@ export type CompanyUncheckedUpdateWithoutDecisionEvaluationRunsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -30590,6 +31091,9 @@ export type CompanyCreateWithoutDecisionEvidenceSnapshotsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -30767,6 +31271,9 @@ export type CompanyUncheckedCreateWithoutDecisionEvidenceSnapshotsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -30960,6 +31467,9 @@ export type CompanyUpdateWithoutDecisionEvidenceSnapshotsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -31137,6 +31647,9 @@ export type CompanyUncheckedUpdateWithoutDecisionEvidenceSnapshotsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -31314,6 +31827,9 @@ export type CompanyCreateWithoutDecisionAlertsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -31491,6 +32007,9 @@ export type CompanyUncheckedCreateWithoutDecisionAlertsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -31684,6 +32203,9 @@ export type CompanyUpdateWithoutDecisionAlertsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -31861,6 +32383,9 @@ export type CompanyUncheckedUpdateWithoutDecisionAlertsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -32038,6 +32563,9 @@ export type CompanyCreateWithoutDecisionAlertActionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -32215,6 +32743,9 @@ export type CompanyUncheckedCreateWithoutDecisionAlertActionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -32408,6 +32939,9 @@ export type CompanyUpdateWithoutDecisionAlertActionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -32585,6 +33119,9 @@ export type CompanyUncheckedUpdateWithoutDecisionAlertActionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -32762,6 +33299,9 @@ export type CompanyCreateWithoutDecisionFeedbackInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -32939,6 +33479,9 @@ export type CompanyUncheckedCreateWithoutDecisionFeedbackInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -33132,6 +33675,9 @@ export type CompanyUpdateWithoutDecisionFeedbackInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -33309,6 +33855,9 @@ export type CompanyUncheckedUpdateWithoutDecisionFeedbackInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -33486,6 +34035,9 @@ export type CompanyCreateWithoutWhatsappInvoiceGroupBindingsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -33663,6 +34215,9 @@ export type CompanyUncheckedCreateWithoutWhatsappInvoiceGroupBindingsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -33856,6 +34411,9 @@ export type CompanyUpdateWithoutWhatsappInvoiceGroupBindingsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -34033,6 +34591,9 @@ export type CompanyUncheckedUpdateWithoutWhatsappInvoiceGroupBindingsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -34210,6 +34771,9 @@ export type CompanyCreateWithoutWhatsappInboundMessagesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -34387,6 +34951,9 @@ export type CompanyUncheckedCreateWithoutWhatsappInboundMessagesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -34580,6 +35147,9 @@ export type CompanyUpdateWithoutWhatsappInboundMessagesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -34757,6 +35327,9 @@ export type CompanyUncheckedUpdateWithoutWhatsappInboundMessagesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -34934,6 +35507,9 @@ export type CompanyCreateWithoutWhatsappInvoiceAssetsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -35111,6 +35687,9 @@ export type CompanyUncheckedCreateWithoutWhatsappInvoiceAssetsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -35304,6 +35883,9 @@ export type CompanyUpdateWithoutWhatsappInvoiceAssetsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -35481,6 +36063,9 @@ export type CompanyUncheckedUpdateWithoutWhatsappInvoiceAssetsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -35658,6 +36243,9 @@ export type CompanyCreateWithoutWhatsappInvoiceMediaWorkItemsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -35835,6 +36423,9 @@ export type CompanyUncheckedCreateWithoutWhatsappInvoiceMediaWorkItemsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -36028,6 +36619,9 @@ export type CompanyUpdateWithoutWhatsappInvoiceMediaWorkItemsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -36205,6 +36799,9 @@ export type CompanyUncheckedUpdateWithoutWhatsappInvoiceMediaWorkItemsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -36382,6 +36979,9 @@ export type CompanyCreateWithoutWhatsappInvoiceAssetPagesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -36559,6 +37159,9 @@ export type CompanyUncheckedCreateWithoutWhatsappInvoiceAssetPagesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -36752,6 +37355,9 @@ export type CompanyUpdateWithoutWhatsappInvoiceAssetPagesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -36929,6 +37535,9 @@ export type CompanyUncheckedUpdateWithoutWhatsappInvoiceAssetPagesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -37106,6 +37715,9 @@ export type CompanyCreateWithoutWhatsappInvoiceRecordsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -37283,6 +37895,9 @@ export type CompanyUncheckedCreateWithoutWhatsappInvoiceRecordsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -37476,6 +38091,9 @@ export type CompanyUpdateWithoutWhatsappInvoiceRecordsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -37653,6 +38271,9 @@ export type CompanyUncheckedUpdateWithoutWhatsappInvoiceRecordsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -37830,6 +38451,9 @@ export type CompanyCreateWithoutWhatsappInvoicePageAssignmentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -38007,6 +38631,9 @@ export type CompanyUncheckedCreateWithoutWhatsappInvoicePageAssignmentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -38200,6 +38827,9 @@ export type CompanyUpdateWithoutWhatsappInvoicePageAssignmentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -38377,6 +39007,9 @@ export type CompanyUncheckedUpdateWithoutWhatsappInvoicePageAssignmentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -38554,6 +39187,9 @@ export type CompanyCreateWithoutWhatsappInvoiceExtractionRevisionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -38731,6 +39367,9 @@ export type CompanyUncheckedCreateWithoutWhatsappInvoiceExtractionRevisionsInput
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -38924,6 +39563,9 @@ export type CompanyUpdateWithoutWhatsappInvoiceExtractionRevisionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -39101,6 +39743,9 @@ export type CompanyUncheckedUpdateWithoutWhatsappInvoiceExtractionRevisionsInput
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -39278,6 +39923,9 @@ export type CompanyCreateWithoutWhatsappInvoiceReviewsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -39455,6 +40103,9 @@ export type CompanyUncheckedCreateWithoutWhatsappInvoiceReviewsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -39648,6 +40299,9 @@ export type CompanyUpdateWithoutWhatsappInvoiceReviewsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -39825,6 +40479,9 @@ export type CompanyUncheckedUpdateWithoutWhatsappInvoiceReviewsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -40002,6 +40659,9 @@ export type CompanyCreateWithoutWhatsappInvoiceDuplicateAssessmentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -40179,6 +40839,9 @@ export type CompanyUncheckedCreateWithoutWhatsappInvoiceDuplicateAssessmentsInpu
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -40372,6 +41035,9 @@ export type CompanyUpdateWithoutWhatsappInvoiceDuplicateAssessmentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -40549,6 +41215,9 @@ export type CompanyUncheckedUpdateWithoutWhatsappInvoiceDuplicateAssessmentsInpu
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -40726,6 +41395,9 @@ export type CompanyCreateWithoutMarketingCampaignsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -40903,6 +41575,9 @@ export type CompanyUncheckedCreateWithoutMarketingCampaignsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -41096,6 +41771,9 @@ export type CompanyUpdateWithoutMarketingCampaignsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -41273,6 +41951,9 @@ export type CompanyUncheckedUpdateWithoutMarketingCampaignsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -41450,6 +42131,9 @@ export type CompanyCreateWithoutMarketingCampaignAnalysisFeedbackInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -41627,6 +42311,9 @@ export type CompanyUncheckedCreateWithoutMarketingCampaignAnalysisFeedbackInput 
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -41820,6 +42507,9 @@ export type CompanyUpdateWithoutMarketingCampaignAnalysisFeedbackInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -41997,6 +42687,9 @@ export type CompanyUncheckedUpdateWithoutMarketingCampaignAnalysisFeedbackInput 
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -42174,6 +42867,9 @@ export type CompanyCreateWithoutMarketingCampaignFinancialLinksInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -42351,6 +43047,9 @@ export type CompanyUncheckedCreateWithoutMarketingCampaignFinancialLinksInput = 
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -42544,6 +43243,9 @@ export type CompanyUpdateWithoutMarketingCampaignFinancialLinksInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -42721,6 +43423,9 @@ export type CompanyUncheckedUpdateWithoutMarketingCampaignFinancialLinksInput = 
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -42898,6 +43603,9 @@ export type CompanyCreateWithoutMarketingCampaignContextLinksInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -43075,6 +43783,9 @@ export type CompanyUncheckedCreateWithoutMarketingCampaignContextLinksInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -43268,6 +43979,9 @@ export type CompanyUpdateWithoutMarketingCampaignContextLinksInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -43445,6 +44159,9 @@ export type CompanyUncheckedUpdateWithoutMarketingCampaignContextLinksInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -43621,6 +44338,9 @@ export type CompanyCreateWithoutMarketingSalesTargetsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -43798,6 +44518,9 @@ export type CompanyUncheckedCreateWithoutMarketingSalesTargetsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -43991,6 +44714,9 @@ export type CompanyUpdateWithoutMarketingSalesTargetsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -44168,6 +44894,9 @@ export type CompanyUncheckedUpdateWithoutMarketingSalesTargetsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -44346,6 +45075,9 @@ export type CompanyCreateWithoutMarketingProviderConnectionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -44523,6 +45255,9 @@ export type CompanyUncheckedCreateWithoutMarketingProviderConnectionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -44716,6 +45451,9 @@ export type CompanyUpdateWithoutMarketingProviderConnectionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -44893,6 +45631,9 @@ export type CompanyUncheckedUpdateWithoutMarketingProviderConnectionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -45070,6 +45811,9 @@ export type CompanyCreateWithoutMarketingGoogleBusinessOAuthStatesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -45247,6 +45991,9 @@ export type CompanyUncheckedCreateWithoutMarketingGoogleBusinessOAuthStatesInput
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -45440,6 +46187,9 @@ export type CompanyUpdateWithoutMarketingGoogleBusinessOAuthStatesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -45617,6 +46367,9 @@ export type CompanyUncheckedUpdateWithoutMarketingGoogleBusinessOAuthStatesInput
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -45794,6 +46547,9 @@ export type CompanyCreateWithoutMarketingReputationReplyPolicyInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -45971,6 +46727,9 @@ export type CompanyUncheckedCreateWithoutMarketingReputationReplyPolicyInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -46164,6 +46923,9 @@ export type CompanyUpdateWithoutMarketingReputationReplyPolicyInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -46341,6 +47103,9 @@ export type CompanyUncheckedUpdateWithoutMarketingReputationReplyPolicyInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -46517,6 +47282,9 @@ export type CompanyCreateWithoutReportDocumentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -46694,6 +47462,9 @@ export type CompanyUncheckedCreateWithoutReportDocumentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -46887,6 +47658,9 @@ export type CompanyUpdateWithoutReportDocumentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -47064,6 +47838,9 @@ export type CompanyUncheckedUpdateWithoutReportDocumentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -47241,6 +48018,9 @@ export type CompanyCreateWithoutVatSimulationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -47418,6 +48198,9 @@ export type CompanyUncheckedCreateWithoutVatSimulationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -47611,6 +48394,9 @@ export type CompanyUpdateWithoutVatSimulationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -47788,6 +48574,9 @@ export type CompanyUncheckedUpdateWithoutVatSimulationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -47965,6 +48754,9 @@ export type CompanyCreateWithoutCashPerformanceEventsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -48142,6 +48934,9 @@ export type CompanyUncheckedCreateWithoutCashPerformanceEventsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -48335,6 +49130,9 @@ export type CompanyUpdateWithoutCashPerformanceEventsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -48512,6 +49310,9 @@ export type CompanyUncheckedUpdateWithoutCashPerformanceEventsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -48689,6 +49490,9 @@ export type CompanyCreateWithoutCashPerformanceCoverageInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -48866,6 +49670,9 @@ export type CompanyUncheckedCreateWithoutCashPerformanceCoverageInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -49059,6 +49866,9 @@ export type CompanyUpdateWithoutCashPerformanceCoverageInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -49236,6 +50046,9 @@ export type CompanyUncheckedUpdateWithoutCashPerformanceCoverageInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -49413,6 +50226,9 @@ export type CompanyCreateWithoutCashPerformanceHistoricalImportsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -49590,6 +50406,9 @@ export type CompanyUncheckedCreateWithoutCashPerformanceHistoricalImportsInput =
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -49783,6 +50602,9 @@ export type CompanyUpdateWithoutCashPerformanceHistoricalImportsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -49960,6 +50782,9 @@ export type CompanyUncheckedUpdateWithoutCashPerformanceHistoricalImportsInput =
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -50137,6 +50962,9 @@ export type CompanyCreateWithoutVatSettlementsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -50314,6 +51142,9 @@ export type CompanyUncheckedCreateWithoutVatSettlementsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -50507,6 +51338,9 @@ export type CompanyUpdateWithoutVatSettlementsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -50684,6 +51518,9 @@ export type CompanyUncheckedUpdateWithoutVatSettlementsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -50861,6 +51698,9 @@ export type CompanyCreateWithoutFinanceCategoriesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -51038,6 +51878,9 @@ export type CompanyUncheckedCreateWithoutFinanceCategoriesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -51231,6 +52074,9 @@ export type CompanyUpdateWithoutFinanceCategoriesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -51408,6 +52254,9 @@ export type CompanyUncheckedUpdateWithoutFinanceCategoriesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -51585,6 +52434,9 @@ export type CompanyCreateWithoutFinanceSuppliersInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -51762,6 +52614,9 @@ export type CompanyUncheckedCreateWithoutFinanceSuppliersInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -51955,6 +52810,9 @@ export type CompanyUpdateWithoutFinanceSuppliersInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -52132,6 +52990,9 @@ export type CompanyUncheckedUpdateWithoutFinanceSuppliersInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -52309,6 +53170,9 @@ export type CompanyCreateWithoutFinanceFiscalPeriodsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -52486,6 +53350,9 @@ export type CompanyUncheckedCreateWithoutFinanceFiscalPeriodsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -52679,6 +53546,9 @@ export type CompanyUpdateWithoutFinanceFiscalPeriodsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -52856,6 +53726,9 @@ export type CompanyUncheckedUpdateWithoutFinanceFiscalPeriodsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -53033,6 +53906,9 @@ export type CompanyCreateWithoutFinanceVaultsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -53210,6 +54086,9 @@ export type CompanyUncheckedCreateWithoutFinanceVaultsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -53403,6 +54282,9 @@ export type CompanyUpdateWithoutFinanceVaultsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -53580,6 +54462,9 @@ export type CompanyUncheckedUpdateWithoutFinanceVaultsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -53757,6 +54642,9 @@ export type CompanyCreateWithoutFinanceVaultReconciliationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -53934,6 +54822,9 @@ export type CompanyUncheckedCreateWithoutFinanceVaultReconciliationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -54127,6 +55018,9 @@ export type CompanyUpdateWithoutFinanceVaultReconciliationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -54304,6 +55198,9 @@ export type CompanyUncheckedUpdateWithoutFinanceVaultReconciliationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -54481,6 +55378,9 @@ export type CompanyCreateWithoutFinanceSupplierDuesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -54658,6 +55558,9 @@ export type CompanyUncheckedCreateWithoutFinanceSupplierDuesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -54851,6 +55754,9 @@ export type CompanyUpdateWithoutFinanceSupplierDuesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -55028,6 +55934,9 @@ export type CompanyUncheckedUpdateWithoutFinanceSupplierDuesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -55205,6 +56114,9 @@ export type CompanyCreateWithoutFinanceSupplierDuePaymentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -55382,6 +56294,9 @@ export type CompanyUncheckedCreateWithoutFinanceSupplierDuePaymentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -55575,6 +56490,9 @@ export type CompanyUpdateWithoutFinanceSupplierDuePaymentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -55752,6 +56670,9 @@ export type CompanyUncheckedUpdateWithoutFinanceSupplierDuePaymentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -55929,6 +56850,9 @@ export type CompanyCreateWithoutFinanceJournalEntriesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -56106,6 +57030,9 @@ export type CompanyUncheckedCreateWithoutFinanceJournalEntriesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -56299,6 +57226,9 @@ export type CompanyUpdateWithoutFinanceJournalEntriesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -56476,6 +57406,9 @@ export type CompanyUncheckedUpdateWithoutFinanceJournalEntriesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -56653,6 +57586,9 @@ export type CompanyCreateWithoutOutflowDocumentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -56830,6 +57766,9 @@ export type CompanyUncheckedCreateWithoutOutflowDocumentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -57023,6 +57962,9 @@ export type CompanyUpdateWithoutOutflowDocumentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -57200,6 +58142,9 @@ export type CompanyUncheckedUpdateWithoutOutflowDocumentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -57377,6 +58322,9 @@ export type CompanyCreateWithoutOutflowDocumentRevisionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -57554,6 +58502,9 @@ export type CompanyUncheckedCreateWithoutOutflowDocumentRevisionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -57747,6 +58698,9 @@ export type CompanyUpdateWithoutOutflowDocumentRevisionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -57924,6 +58878,9 @@ export type CompanyUncheckedUpdateWithoutOutflowDocumentRevisionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -58102,6 +59059,9 @@ export type CompanyCreateWithoutOperationsAssetWarrantyAssetsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -58279,6 +59239,9 @@ export type CompanyUncheckedCreateWithoutOperationsAssetWarrantyAssetsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -58472,6 +59435,9 @@ export type CompanyUpdateWithoutOperationsAssetWarrantyAssetsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -58649,6 +59615,9 @@ export type CompanyUncheckedUpdateWithoutOperationsAssetWarrantyAssetsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -58826,6 +59795,9 @@ export type CompanyCreateWithoutOperationsAssetWarrantyLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -59003,6 +59975,9 @@ export type CompanyUncheckedCreateWithoutOperationsAssetWarrantyLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -59196,6 +60171,9 @@ export type CompanyUpdateWithoutOperationsAssetWarrantyLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -59373,6 +60351,9 @@ export type CompanyUncheckedUpdateWithoutOperationsAssetWarrantyLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -59549,6 +60530,9 @@ export type CompanyCreateWithoutOutflowBatchesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -59726,6 +60710,9 @@ export type CompanyUncheckedCreateWithoutOutflowBatchesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -59919,6 +60906,9 @@ export type CompanyUpdateWithoutOutflowBatchesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -60096,6 +61086,9 @@ export type CompanyUncheckedUpdateWithoutOutflowBatchesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -60273,6 +61266,9 @@ export type CompanyCreateWithoutHrEmployeesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -60450,6 +61446,9 @@ export type CompanyUncheckedCreateWithoutHrEmployeesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -60643,6 +61642,9 @@ export type CompanyUpdateWithoutHrEmployeesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -60820,6 +61822,9 @@ export type CompanyUncheckedUpdateWithoutHrEmployeesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -60997,6 +62002,9 @@ export type CompanyCreateWithoutAttendanceCredentialsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -61174,6 +62182,9 @@ export type CompanyUncheckedCreateWithoutAttendanceCredentialsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -61367,6 +62378,9 @@ export type CompanyUpdateWithoutAttendanceCredentialsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -61544,6 +62558,9 @@ export type CompanyUncheckedUpdateWithoutAttendanceCredentialsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -61721,6 +62738,9 @@ export type CompanyCreateWithoutAttendanceBranchesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -61898,6 +62918,9 @@ export type CompanyUncheckedCreateWithoutAttendanceBranchesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -62091,6 +63114,9 @@ export type CompanyUpdateWithoutAttendanceBranchesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -62268,6 +63294,9 @@ export type CompanyUncheckedUpdateWithoutAttendanceBranchesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -62445,6 +63474,9 @@ export type CompanyCreateWithoutAttendanceRosterPlansInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -62622,6 +63654,9 @@ export type CompanyUncheckedCreateWithoutAttendanceRosterPlansInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -62815,6 +63850,9 @@ export type CompanyUpdateWithoutAttendanceRosterPlansInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -62992,6 +64030,9 @@ export type CompanyUncheckedUpdateWithoutAttendanceRosterPlansInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -63169,6 +64210,9 @@ export type CompanyCreateWithoutAttendanceRosterPeakPeriodsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -63346,6 +64390,9 @@ export type CompanyUncheckedCreateWithoutAttendanceRosterPeakPeriodsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -63539,6 +64586,9 @@ export type CompanyUpdateWithoutAttendanceRosterPeakPeriodsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -63716,6 +64766,9 @@ export type CompanyUncheckedUpdateWithoutAttendanceRosterPeakPeriodsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -63893,6 +64946,9 @@ export type CompanyCreateWithoutAttendanceRosterEntriesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -64070,6 +65126,9 @@ export type CompanyUncheckedCreateWithoutAttendanceRosterEntriesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -64263,6 +65322,9 @@ export type CompanyUpdateWithoutAttendanceRosterEntriesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -64440,6 +65502,9 @@ export type CompanyUncheckedUpdateWithoutAttendanceRosterEntriesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -64617,6 +65682,9 @@ export type CompanyCreateWithoutAttendanceRosterEntryPeriodsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -64794,6 +65862,9 @@ export type CompanyUncheckedCreateWithoutAttendanceRosterEntryPeriodsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -64987,6 +66058,9 @@ export type CompanyUpdateWithoutAttendanceRosterEntryPeriodsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -65164,6 +66238,9 @@ export type CompanyUncheckedUpdateWithoutAttendanceRosterEntryPeriodsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -65341,6 +66418,9 @@ export type CompanyCreateWithoutAttendanceScheduleTemplatesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -65518,6 +66598,9 @@ export type CompanyUncheckedCreateWithoutAttendanceScheduleTemplatesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -65711,6 +66794,9 @@ export type CompanyUpdateWithoutAttendanceScheduleTemplatesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -65888,6 +66974,9 @@ export type CompanyUncheckedUpdateWithoutAttendanceScheduleTemplatesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -66065,6 +67154,9 @@ export type CompanyCreateWithoutAttendanceScheduleTemplateVersionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -66242,6 +67334,9 @@ export type CompanyUncheckedCreateWithoutAttendanceScheduleTemplateVersionsInput
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -66435,6 +67530,9 @@ export type CompanyUpdateWithoutAttendanceScheduleTemplateVersionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -66612,6 +67710,9 @@ export type CompanyUncheckedUpdateWithoutAttendanceScheduleTemplateVersionsInput
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -66789,6 +67890,9 @@ export type CompanyCreateWithoutAttendanceSchedulePeriodsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -66966,6 +68070,9 @@ export type CompanyUncheckedCreateWithoutAttendanceSchedulePeriodsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -67159,6 +68266,9 @@ export type CompanyUpdateWithoutAttendanceSchedulePeriodsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -67336,6 +68446,9 @@ export type CompanyUncheckedUpdateWithoutAttendanceSchedulePeriodsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -67513,6 +68626,9 @@ export type CompanyCreateWithoutAttendanceEmployeeScheduleAssignmentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -67690,6 +68806,9 @@ export type CompanyUncheckedCreateWithoutAttendanceEmployeeScheduleAssignmentsIn
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -67883,6 +69002,9 @@ export type CompanyUpdateWithoutAttendanceEmployeeScheduleAssignmentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -68060,6 +69182,9 @@ export type CompanyUncheckedUpdateWithoutAttendanceEmployeeScheduleAssignmentsIn
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -68237,6 +69362,9 @@ export type CompanyCreateWithoutAttendanceEmployeeWeeklyAdjustmentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -68414,6 +69542,9 @@ export type CompanyUncheckedCreateWithoutAttendanceEmployeeWeeklyAdjustmentsInpu
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -68607,6 +69738,9 @@ export type CompanyUpdateWithoutAttendanceEmployeeWeeklyAdjustmentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -68784,6 +69918,9 @@ export type CompanyUncheckedUpdateWithoutAttendanceEmployeeWeeklyAdjustmentsInpu
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -68961,6 +70098,9 @@ export type CompanyCreateWithoutAttendanceEmployeeWeeklyAdjustmentPeriodsInput =
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -69138,6 +70278,9 @@ export type CompanyUncheckedCreateWithoutAttendanceEmployeeWeeklyAdjustmentPerio
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -69331,6 +70474,9 @@ export type CompanyUpdateWithoutAttendanceEmployeeWeeklyAdjustmentPeriodsInput =
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -69508,6 +70654,9 @@ export type CompanyUncheckedUpdateWithoutAttendanceEmployeeWeeklyAdjustmentPerio
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -69685,6 +70834,9 @@ export type CompanyCreateWithoutAttendanceScheduleExceptionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -69862,6 +71014,9 @@ export type CompanyUncheckedCreateWithoutAttendanceScheduleExceptionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -70055,6 +71210,9 @@ export type CompanyUpdateWithoutAttendanceScheduleExceptionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -70232,6 +71390,9 @@ export type CompanyUncheckedUpdateWithoutAttendanceScheduleExceptionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -70409,6 +71570,9 @@ export type CompanyCreateWithoutAttendanceScheduleExceptionPeriodsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -70586,6 +71750,9 @@ export type CompanyUncheckedCreateWithoutAttendanceScheduleExceptionPeriodsInput
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -70779,6 +71946,9 @@ export type CompanyUpdateWithoutAttendanceScheduleExceptionPeriodsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -70956,6 +72126,9 @@ export type CompanyUncheckedUpdateWithoutAttendanceScheduleExceptionPeriodsInput
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -71133,6 +72306,9 @@ export type CompanyCreateWithoutAttendanceEventsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -71310,6 +72486,9 @@ export type CompanyUncheckedCreateWithoutAttendanceEventsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -71503,6 +72682,9 @@ export type CompanyUpdateWithoutAttendanceEventsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -71680,6 +72862,9 @@ export type CompanyUncheckedUpdateWithoutAttendanceEventsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -71857,6 +73042,9 @@ export type CompanyCreateWithoutAttendanceWorkSessionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -72034,6 +73222,9 @@ export type CompanyUncheckedCreateWithoutAttendanceWorkSessionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -72227,6 +73418,9 @@ export type CompanyUpdateWithoutAttendanceWorkSessionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -72404,6 +73598,9 @@ export type CompanyUncheckedUpdateWithoutAttendanceWorkSessionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -72581,6 +73778,9 @@ export type CompanyCreateWithoutHrEmployeeWorkTermsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -72758,6 +73958,9 @@ export type CompanyUncheckedCreateWithoutHrEmployeeWorkTermsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -72951,6 +74154,9 @@ export type CompanyUpdateWithoutHrEmployeeWorkTermsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -73128,6 +74334,9 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeWorkTermsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -73305,6 +74514,9 @@ export type CompanyCreateWithoutHrEmployeePromotionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -73482,6 +74694,9 @@ export type CompanyUncheckedCreateWithoutHrEmployeePromotionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -73675,6 +74890,9 @@ export type CompanyUpdateWithoutHrEmployeePromotionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -73852,6 +75070,9 @@ export type CompanyUncheckedUpdateWithoutHrEmployeePromotionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -74029,6 +75250,9 @@ export type CompanyCreateWithoutHrEmployeeLeavesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -74206,6 +75430,9 @@ export type CompanyUncheckedCreateWithoutHrEmployeeLeavesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -74399,6 +75626,9 @@ export type CompanyUpdateWithoutHrEmployeeLeavesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -74576,6 +75806,9 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeLeavesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -74753,6 +75986,9 @@ export type CompanyCreateWithoutHrEmployeeDocumentBlobsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -74930,6 +76166,9 @@ export type CompanyUncheckedCreateWithoutHrEmployeeDocumentBlobsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -75123,6 +76362,9 @@ export type CompanyUpdateWithoutHrEmployeeDocumentBlobsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -75300,6 +76542,9 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeDocumentBlobsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -75477,6 +76722,9 @@ export type CompanyCreateWithoutHrEmployeeDocumentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -75654,6 +76902,9 @@ export type CompanyUncheckedCreateWithoutHrEmployeeDocumentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -75847,6 +77098,9 @@ export type CompanyUpdateWithoutHrEmployeeDocumentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -76024,6 +77278,9 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeDocumentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -76201,6 +77458,9 @@ export type CompanyCreateWithoutHrEmployeeLettersInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -76378,6 +77638,9 @@ export type CompanyUncheckedCreateWithoutHrEmployeeLettersInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -76571,6 +77834,9 @@ export type CompanyUpdateWithoutHrEmployeeLettersInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -76748,6 +78014,9 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeLettersInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -76925,6 +78194,9 @@ export type CompanyCreateWithoutHrEmployeeServicesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -77102,6 +78374,9 @@ export type CompanyUncheckedCreateWithoutHrEmployeeServicesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -77295,6 +78570,9 @@ export type CompanyUpdateWithoutHrEmployeeServicesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -77472,6 +78750,9 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeServicesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -77649,6 +78930,9 @@ export type CompanyCreateWithoutHrEmployeeFinancialMovementsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -77826,6 +79110,9 @@ export type CompanyUncheckedCreateWithoutHrEmployeeFinancialMovementsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -78019,6 +79306,9 @@ export type CompanyUpdateWithoutHrEmployeeFinancialMovementsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -78196,6 +79486,9 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeFinancialMovementsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -78373,6 +79666,9 @@ export type CompanyCreateWithoutHrFinalSettlementsInput = {
   attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -78550,6 +79846,9 @@ export type CompanyUncheckedCreateWithoutHrFinalSettlementsInput = {
   attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -78743,6 +80042,9 @@ export type CompanyUpdateWithoutHrFinalSettlementsInput = {
   attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -78920,6 +80222,9 @@ export type CompanyUncheckedUpdateWithoutHrFinalSettlementsInput = {
   attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -79097,6 +80402,9 @@ export type CompanyCreateWithoutHrEmployeeAdvancesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -79274,6 +80582,9 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvancesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -79467,6 +80778,9 @@ export type CompanyUpdateWithoutHrEmployeeAdvancesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -79644,6 +80958,9 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvancesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -79821,6 +81138,9 @@ export type CompanyCreateWithoutHrEmployeeAdvanceAllocationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -79998,6 +81318,9 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceAllocationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -80191,6 +81514,9 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceAllocationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -80368,6 +81694,9 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceAllocationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -80545,6 +81874,9 @@ export type CompanyCreateWithoutHrEmployeeAdvanceSettlementsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -80722,6 +82054,9 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceSettlementsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -80915,6 +82250,9 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceSettlementsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -81092,6 +82430,9 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceSettlementsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -81269,6 +82610,9 @@ export type CompanyCreateWithoutHrEmployeeAdvanceDeferralsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -81446,6 +82790,9 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdvanceDeferralsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -81639,6 +82986,9 @@ export type CompanyUpdateWithoutHrEmployeeAdvanceDeferralsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -81816,6 +83166,9 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdvanceDeferralsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -81993,6 +83346,9 @@ export type CompanyCreateWithoutHrEmployeeAdministrativeDeductionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -82170,6 +83526,9 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdministrativeDeductionsInput
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -82363,6 +83722,9 @@ export type CompanyUpdateWithoutHrEmployeeAdministrativeDeductionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -82540,6 +83902,9 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdministrativeDeductionsInput
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -82717,6 +84082,9 @@ export type CompanyCreateWithoutHrEmployeeAdministrativeDeductionActionsInput = 
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -82894,6 +84262,9 @@ export type CompanyUncheckedCreateWithoutHrEmployeeAdministrativeDeductionAction
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -83087,6 +84458,9 @@ export type CompanyUpdateWithoutHrEmployeeAdministrativeDeductionActionsInput = 
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -83264,6 +84638,9 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeAdministrativeDeductionAction
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -83441,6 +84818,9 @@ export type CompanyCreateWithoutHrEmployeeCompensationProfilesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -83618,6 +84998,9 @@ export type CompanyUncheckedCreateWithoutHrEmployeeCompensationProfilesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -83811,6 +85194,9 @@ export type CompanyUpdateWithoutHrEmployeeCompensationProfilesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -83988,6 +85374,9 @@ export type CompanyUncheckedUpdateWithoutHrEmployeeCompensationProfilesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -84165,6 +85554,9 @@ export type CompanyCreateWithoutHrCompensationPoliciesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -84342,6 +85734,9 @@ export type CompanyUncheckedCreateWithoutHrCompensationPoliciesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -84535,6 +85930,9 @@ export type CompanyUpdateWithoutHrCompensationPoliciesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -84712,6 +86110,9 @@ export type CompanyUncheckedUpdateWithoutHrCompensationPoliciesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -84889,6 +86290,9 @@ export type CompanyCreateWithoutHrCompensationPolicyVersionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -85066,6 +86470,9 @@ export type CompanyUncheckedCreateWithoutHrCompensationPolicyVersionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -85259,6 +86666,9 @@ export type CompanyUpdateWithoutHrCompensationPolicyVersionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -85436,6 +86846,9 @@ export type CompanyUncheckedUpdateWithoutHrCompensationPolicyVersionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -85613,6 +87026,9 @@ export type CompanyCreateWithoutHrPayrollRunsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -85790,6 +87206,9 @@ export type CompanyUncheckedCreateWithoutHrPayrollRunsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -85983,6 +87402,9 @@ export type CompanyUpdateWithoutHrPayrollRunsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -86160,6 +87582,9 @@ export type CompanyUncheckedUpdateWithoutHrPayrollRunsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -86337,6 +87762,9 @@ export type CompanyCreateWithoutHrPayrollLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -86514,6 +87942,9 @@ export type CompanyUncheckedCreateWithoutHrPayrollLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -86707,6 +88138,9 @@ export type CompanyUpdateWithoutHrPayrollLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -86884,6 +88318,9 @@ export type CompanyUncheckedUpdateWithoutHrPayrollLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -87061,6 +88498,9 @@ export type CompanyCreateWithoutHrPayrollAdvanceApplicationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -87238,6 +88678,9 @@ export type CompanyUncheckedCreateWithoutHrPayrollAdvanceApplicationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -87431,6 +88874,9 @@ export type CompanyUpdateWithoutHrPayrollAdvanceApplicationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -87608,6 +89054,9 @@ export type CompanyUncheckedUpdateWithoutHrPayrollAdvanceApplicationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -87785,6 +89234,9 @@ export type CompanyCreateWithoutHrPayrollDeductionApplicationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -87962,6 +89414,9 @@ export type CompanyUncheckedCreateWithoutHrPayrollDeductionApplicationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -88155,6 +89610,9 @@ export type CompanyUpdateWithoutHrPayrollDeductionApplicationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -88332,6 +89790,9 @@ export type CompanyUncheckedUpdateWithoutHrPayrollDeductionApplicationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -88509,6 +89970,9 @@ export type CompanyCreateWithoutHrPayrollPaymentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -88686,6 +90150,9 @@ export type CompanyUncheckedCreateWithoutHrPayrollPaymentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -88879,6 +90346,9 @@ export type CompanyUpdateWithoutHrPayrollPaymentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -89056,6 +90526,9 @@ export type CompanyUncheckedUpdateWithoutHrPayrollPaymentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -89233,6 +90706,9 @@ export type CompanyCreateWithoutHrPayrollPaymentAllocationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -89410,6 +90886,9 @@ export type CompanyUncheckedCreateWithoutHrPayrollPaymentAllocationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -89603,6 +91082,9 @@ export type CompanyUpdateWithoutHrPayrollPaymentAllocationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -89780,6 +91262,9 @@ export type CompanyUncheckedUpdateWithoutHrPayrollPaymentAllocationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -89957,6 +91442,9 @@ export type CompanyCreateWithoutFinanceJournalLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -90134,6 +91622,9 @@ export type CompanyUncheckedCreateWithoutFinanceJournalLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -90327,6 +91818,9 @@ export type CompanyUpdateWithoutFinanceJournalLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -90504,6 +91998,9 @@ export type CompanyUncheckedUpdateWithoutFinanceJournalLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -90681,6 +92178,9 @@ export type CompanyCreateWithoutOperationalDaysInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -90858,6 +92358,9 @@ export type CompanyUncheckedCreateWithoutOperationalDaysInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -91051,6 +92554,9 @@ export type CompanyUpdateWithoutOperationalDaysInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -91228,6 +92734,9 @@ export type CompanyUncheckedUpdateWithoutOperationalDaysInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -91405,6 +92914,9 @@ export type CompanyCreateWithoutDailySalesClosingsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -91582,6 +93094,9 @@ export type CompanyUncheckedCreateWithoutDailySalesClosingsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -91775,6 +93290,9 @@ export type CompanyUpdateWithoutDailySalesClosingsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -91952,6 +93470,9 @@ export type CompanyUncheckedUpdateWithoutDailySalesClosingsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -92129,6 +93650,9 @@ export type CompanyCreateWithoutDailySalesAllocationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -92306,6 +93830,9 @@ export type CompanyUncheckedCreateWithoutDailySalesAllocationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -92499,6 +94026,9 @@ export type CompanyUpdateWithoutDailySalesAllocationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -92676,6 +94206,9 @@ export type CompanyUncheckedUpdateWithoutDailySalesAllocationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -92853,6 +94386,9 @@ export type CompanyCreateWithoutDailyFinancialSummariesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -93030,6 +94566,9 @@ export type CompanyUncheckedCreateWithoutDailyFinancialSummariesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -93223,6 +94762,9 @@ export type CompanyUpdateWithoutDailyFinancialSummariesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -93400,6 +94942,9 @@ export type CompanyUncheckedUpdateWithoutDailyFinancialSummariesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -93577,6 +95122,9 @@ export type CompanyCreateWithoutDailySalesChannelSummariesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -93754,6 +95302,9 @@ export type CompanyUncheckedCreateWithoutDailySalesChannelSummariesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -93947,6 +95498,9 @@ export type CompanyUpdateWithoutDailySalesChannelSummariesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -94124,6 +95678,9 @@ export type CompanyUncheckedUpdateWithoutDailySalesChannelSummariesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -94301,6 +95858,9 @@ export type CompanyCreateWithoutRecurringExpenseProfilesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -94478,6 +96038,9 @@ export type CompanyUncheckedCreateWithoutRecurringExpenseProfilesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -94671,6 +96234,9 @@ export type CompanyUpdateWithoutRecurringExpenseProfilesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -94848,6 +96414,9 @@ export type CompanyUncheckedUpdateWithoutRecurringExpenseProfilesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -95025,6 +96594,9 @@ export type CompanyCreateWithoutRecurringExpenseCoveragesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -95202,6 +96774,9 @@ export type CompanyUncheckedCreateWithoutRecurringExpenseCoveragesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -95395,6 +96970,9 @@ export type CompanyUpdateWithoutRecurringExpenseCoveragesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -95572,6 +97150,9 @@ export type CompanyUncheckedUpdateWithoutRecurringExpenseCoveragesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -95749,6 +97330,9 @@ export type CompanyCreateWithoutInclusiveLoansInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -95926,6 +97510,9 @@ export type CompanyUncheckedCreateWithoutInclusiveLoansInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -96119,6 +97706,9 @@ export type CompanyUpdateWithoutInclusiveLoansInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -96296,6 +97886,9 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoansInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -96473,6 +98066,9 @@ export type CompanyCreateWithoutInclusiveLoanPaymentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -96650,6 +98246,9 @@ export type CompanyUncheckedCreateWithoutInclusiveLoanPaymentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -96843,6 +98442,9 @@ export type CompanyUpdateWithoutInclusiveLoanPaymentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -97020,6 +98622,9 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoanPaymentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -97197,6 +98802,9 @@ export type CompanyCreateWithoutInclusiveLoanInstallmentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -97374,6 +98982,9 @@ export type CompanyUncheckedCreateWithoutInclusiveLoanInstallmentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -97567,6 +99178,9 @@ export type CompanyUpdateWithoutInclusiveLoanInstallmentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -97744,6 +99358,9 @@ export type CompanyUncheckedUpdateWithoutInclusiveLoanInstallmentsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -97921,6 +99538,9 @@ export type CompanyCreateWithoutAiCompanyIdentitiesInput = {
   attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodCreateNestedManyWithoutCompanyInput
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -98098,6 +99718,9 @@ export type CompanyUncheckedCreateWithoutAiCompanyIdentitiesInput = {
   attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodUncheckedCreateNestedManyWithoutCompanyInput
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -98291,6 +99914,9 @@ export type CompanyUpdateWithoutAiCompanyIdentitiesInput = {
   attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodUpdateManyWithoutCompanyNestedInput
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -98468,6 +100094,9 @@ export type CompanyUncheckedUpdateWithoutAiCompanyIdentitiesInput = {
   attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -98645,6 +100274,9 @@ export type CompanyCreateWithoutAiCompanyContextsInput = {
   attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodCreateNestedManyWithoutCompanyInput
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -98822,6 +100454,9 @@ export type CompanyUncheckedCreateWithoutAiCompanyContextsInput = {
   attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodUncheckedCreateNestedManyWithoutCompanyInput
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -99015,6 +100650,9 @@ export type CompanyUpdateWithoutAiCompanyContextsInput = {
   attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodUpdateManyWithoutCompanyNestedInput
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -99192,6 +100830,2217 @@ export type CompanyUncheckedUpdateWithoutAiCompanyContextsInput = {
   attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodUncheckedUpdateManyWithoutCompanyNestedInput
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
+  aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
+  aiInterpretations?: Prisma.AiInterpretationUncheckedUpdateManyWithoutCompanyNestedInput
+  aiInterpretationRuns?: Prisma.AiInterpretationRunUncheckedUpdateManyWithoutCompanyNestedInput
+  aiInterpretationPlacements?: Prisma.AiInterpretationPlacementUncheckedUpdateManyWithoutCompanyNestedInput
+  aiHumanInsights?: Prisma.AiHumanInsightUncheckedUpdateManyWithoutCompanyNestedInput
+  aiBudgetReservations?: Prisma.AiBudgetReservationUncheckedUpdateManyWithoutCompanyNestedInput
+  aiUsageLedgerEntries?: Prisma.AiUsageLedgerUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaignAnalysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingProviderConnections?: Prisma.MarketingProviderConnectionUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingProviderCredentialEnvelopes?: Prisma.MarketingProviderCredentialEnvelopeUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingGoogleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingGoogleBusinessReviewFacts?: Prisma.MarketingGoogleBusinessReviewFactUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingGoogleBusinessOAuthStates?: Prisma.MarketingGoogleBusinessOAuthStateUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingProviderSyncRuns?: Prisma.MarketingProviderSyncRunUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsCatalogCategories?: Prisma.OperationsCatalogCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUncheckedUpdateOneWithoutCompanyNestedInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUncheckedUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutCompanyNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutCompanyNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutCompanyNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceGroupBindings?: Prisma.WhatsappInvoiceGroupBindingUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInboundMessages?: Prisma.WhatsappInboundMessageUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceAssets?: Prisma.WhatsappInvoiceAssetUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceAssetPages?: Prisma.WhatsappInvoiceAssetPageUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoicePageAssignments?: Prisma.WhatsappInvoicePageAssignmentUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceExtractionRevisions?: Prisma.WhatsappInvoiceExtractionRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceReviews?: Prisma.WhatsappInvoiceReviewUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceDuplicateAssessments?: Prisma.WhatsappInvoiceDuplicateAssessmentUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceMediaWorkItems?: Prisma.WhatsappInvoiceMediaWorkItemUncheckedUpdateManyWithoutCompanyNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTargetCompanyNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTargetCompanyNestedInput
+  nurixExcelStagingPackages?: Prisma.NurixExcelStagingPackageUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelMasterDataExecutions?: Prisma.NurixExcelMasterDataExecutionUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutAiCompanyPolicyInput = {
+  id?: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: $Enums.CompanyStatus
+  migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
+  memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionCreateNestedManyWithoutCompanyInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineCreateNestedManyWithoutCompanyInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingCreateNestedManyWithoutCompanyInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
+  reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
+  vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionCreateNestedManyWithoutCompanyInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileCreateNestedManyWithoutCompanyInput
+  marketingSalesTargets?: Prisma.MarketingSalesTargetCreateNestedManyWithoutCompanyInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionCreateNestedManyWithoutCompanyInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveCreateNestedManyWithoutCompanyInput
+  hrPayrollRuns?: Prisma.HrPayrollRunCreateNestedManyWithoutCompanyInput
+  hrPayrollLines?: Prisma.HrPayrollLineCreateNestedManyWithoutCompanyInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationCreateNestedManyWithoutCompanyInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationCreateNestedManyWithoutCompanyInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentCreateNestedManyWithoutCompanyInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
+  attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
+  attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
+  attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
+  attendanceWorkSessions?: Prisma.AttendanceWorkSessionCreateNestedManyWithoutCompanyInput
+  attendanceScheduleTemplates?: Prisma.AttendanceScheduleTemplateCreateNestedManyWithoutCompanyInput
+  attendanceScheduleTemplateVersions?: Prisma.AttendanceScheduleTemplateVersionCreateNestedManyWithoutCompanyInput
+  attendanceSchedulePeriods?: Prisma.AttendanceSchedulePeriodCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeScheduleAssignments?: Prisma.AttendanceEmployeeScheduleAssignmentCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeWeeklyAdjustments?: Prisma.AttendanceEmployeeWeeklyAdjustmentCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeWeeklyAdjustmentPeriods?: Prisma.AttendanceEmployeeWeeklyAdjustmentPeriodCreateNestedManyWithoutCompanyInput
+  attendanceScheduleExceptions?: Prisma.AttendanceScheduleExceptionCreateNestedManyWithoutCompanyInput
+  attendanceScheduleExceptionPeriods?: Prisma.AttendanceScheduleExceptionPeriodCreateNestedManyWithoutCompanyInput
+  attendanceRosterPlans?: Prisma.AttendanceRosterPlanCreateNestedManyWithoutCompanyInput
+  attendanceRosterEntries?: Prisma.AttendanceRosterEntryCreateNestedManyWithoutCompanyInput
+  attendanceRosterEntryPeriods?: Prisma.AttendanceRosterEntryPeriodCreateNestedManyWithoutCompanyInput
+  attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
+  aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
+  aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCompanyInput
+  aiInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutCompanyInput
+  aiInterpretationRuns?: Prisma.AiInterpretationRunCreateNestedManyWithoutCompanyInput
+  aiInterpretationPlacements?: Prisma.AiInterpretationPlacementCreateNestedManyWithoutCompanyInput
+  aiHumanInsights?: Prisma.AiHumanInsightCreateNestedManyWithoutCompanyInput
+  aiBudgetReservations?: Prisma.AiBudgetReservationCreateNestedManyWithoutCompanyInput
+  aiUsageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutCompanyInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
+  decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
+  decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
+  marketingCampaignAnalysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkCreateNestedManyWithoutCompanyInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkCreateNestedManyWithoutCompanyInput
+  marketingProviderConnections?: Prisma.MarketingProviderConnectionCreateNestedManyWithoutCompanyInput
+  marketingProviderCredentialEnvelopes?: Prisma.MarketingProviderCredentialEnvelopeCreateNestedManyWithoutCompanyInput
+  marketingGoogleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingCreateNestedManyWithoutCompanyInput
+  marketingGoogleBusinessReviewFacts?: Prisma.MarketingGoogleBusinessReviewFactCreateNestedManyWithoutCompanyInput
+  marketingGoogleBusinessOAuthStates?: Prisma.MarketingGoogleBusinessOAuthStateCreateNestedManyWithoutCompanyInput
+  marketingProviderSyncRuns?: Prisma.MarketingProviderSyncRunCreateNestedManyWithoutCompanyInput
+  marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyCreateNestedOneWithoutCompanyInput
+  operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
+  operationsCatalogCategories?: Prisma.OperationsCatalogCategoryCreateNestedManyWithoutCompanyInput
+  operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
+  operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
+  operationsItemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutCompanyInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionCreateNestedManyWithoutCompanyInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeCreateNestedManyWithoutCompanyInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionCreateNestedManyWithoutCompanyInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutCompanyInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileCreateNestedOneWithoutCompanyInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventCreateNestedManyWithoutCompanyInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceCreateNestedManyWithoutCompanyInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutCompanyInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutCompanyInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutCompanyInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceGroupBindings?: Prisma.WhatsappInvoiceGroupBindingCreateNestedManyWithoutCompanyInput
+  whatsappInboundMessages?: Prisma.WhatsappInboundMessageCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceAssets?: Prisma.WhatsappInvoiceAssetCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceAssetPages?: Prisma.WhatsappInvoiceAssetPageCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordCreateNestedManyWithoutCompanyInput
+  whatsappInvoicePageAssignments?: Prisma.WhatsappInvoicePageAssignmentCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceExtractionRevisions?: Prisma.WhatsappInvoiceExtractionRevisionCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceReviews?: Prisma.WhatsappInvoiceReviewCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceDuplicateAssessments?: Prisma.WhatsappInvoiceDuplicateAssessmentCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceMediaWorkItems?: Prisma.WhatsappInvoiceMediaWorkItemCreateNestedManyWithoutCompanyInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTargetCompanyInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTargetCompanyInput
+  nurixExcelStagingPackages?: Prisma.NurixExcelStagingPackageCreateNestedManyWithoutCompanyInput
+  nurixExcelMasterDataExecutions?: Prisma.NurixExcelMasterDataExecutionCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutAiCompanyPolicyInput = {
+  id?: string
+  tenantId: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: $Enums.CompanyStatus
+  migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUncheckedCreateNestedManyWithoutCompanyInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUncheckedCreateNestedManyWithoutCompanyInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedCreateNestedManyWithoutCompanyInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
+  reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedCreateNestedManyWithoutCompanyInput
+  marketingSalesTargets?: Prisma.MarketingSalesTargetUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUncheckedCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUncheckedCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollLines?: Prisma.HrPayrollLineUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceWorkSessions?: Prisma.AttendanceWorkSessionUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceScheduleTemplates?: Prisma.AttendanceScheduleTemplateUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceScheduleTemplateVersions?: Prisma.AttendanceScheduleTemplateVersionUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceSchedulePeriods?: Prisma.AttendanceSchedulePeriodUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeScheduleAssignments?: Prisma.AttendanceEmployeeScheduleAssignmentUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeWeeklyAdjustments?: Prisma.AttendanceEmployeeWeeklyAdjustmentUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeWeeklyAdjustmentPeriods?: Prisma.AttendanceEmployeeWeeklyAdjustmentPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceScheduleExceptions?: Prisma.AttendanceScheduleExceptionUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceScheduleExceptionPeriods?: Prisma.AttendanceScheduleExceptionPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceRosterPlans?: Prisma.AttendanceRosterPlanUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceRosterEntries?: Prisma.AttendanceRosterEntryUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceRosterEntryPeriods?: Prisma.AttendanceRosterEntryPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
+  aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
+  aiInterpretations?: Prisma.AiInterpretationUncheckedCreateNestedManyWithoutCompanyInput
+  aiInterpretationRuns?: Prisma.AiInterpretationRunUncheckedCreateNestedManyWithoutCompanyInput
+  aiInterpretationPlacements?: Prisma.AiInterpretationPlacementUncheckedCreateNestedManyWithoutCompanyInput
+  aiHumanInsights?: Prisma.AiHumanInsightUncheckedCreateNestedManyWithoutCompanyInput
+  aiBudgetReservations?: Prisma.AiBudgetReservationUncheckedCreateNestedManyWithoutCompanyInput
+  aiUsageLedgerEntries?: Prisma.AiUsageLedgerUncheckedCreateNestedManyWithoutCompanyInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaignAnalysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUncheckedCreateNestedManyWithoutCompanyInput
+  marketingProviderConnections?: Prisma.MarketingProviderConnectionUncheckedCreateNestedManyWithoutCompanyInput
+  marketingProviderCredentialEnvelopes?: Prisma.MarketingProviderCredentialEnvelopeUncheckedCreateNestedManyWithoutCompanyInput
+  marketingGoogleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingUncheckedCreateNestedManyWithoutCompanyInput
+  marketingGoogleBusinessReviewFacts?: Prisma.MarketingGoogleBusinessReviewFactUncheckedCreateNestedManyWithoutCompanyInput
+  marketingGoogleBusinessOAuthStates?: Prisma.MarketingGoogleBusinessOAuthStateUncheckedCreateNestedManyWithoutCompanyInput
+  marketingProviderSyncRuns?: Prisma.MarketingProviderSyncRunUncheckedCreateNestedManyWithoutCompanyInput
+  marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsCatalogCategories?: Prisma.OperationsCatalogCategoryUncheckedCreateNestedManyWithoutCompanyInput
+  operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
+  operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUncheckedCreateNestedManyWithoutCompanyInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUncheckedCreateNestedManyWithoutCompanyInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUncheckedCreateNestedOneWithoutCompanyInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUncheckedCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutCompanyInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutCompanyInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutCompanyInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceGroupBindings?: Prisma.WhatsappInvoiceGroupBindingUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInboundMessages?: Prisma.WhatsappInboundMessageUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceAssets?: Prisma.WhatsappInvoiceAssetUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceAssetPages?: Prisma.WhatsappInvoiceAssetPageUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoicePageAssignments?: Prisma.WhatsappInvoicePageAssignmentUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceExtractionRevisions?: Prisma.WhatsappInvoiceExtractionRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceReviews?: Prisma.WhatsappInvoiceReviewUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceDuplicateAssessments?: Prisma.WhatsappInvoiceDuplicateAssessmentUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceMediaWorkItems?: Prisma.WhatsappInvoiceMediaWorkItemUncheckedCreateNestedManyWithoutCompanyInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTargetCompanyInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTargetCompanyInput
+  nurixExcelStagingPackages?: Prisma.NurixExcelStagingPackageUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelMasterDataExecutions?: Prisma.NurixExcelMasterDataExecutionUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutAiCompanyPolicyInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutAiCompanyPolicyInput, Prisma.CompanyUncheckedCreateWithoutAiCompanyPolicyInput>
+}
+
+export type CompanyUpsertWithoutAiCompanyPolicyInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutAiCompanyPolicyInput, Prisma.CompanyUncheckedUpdateWithoutAiCompanyPolicyInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutAiCompanyPolicyInput, Prisma.CompanyUncheckedCreateWithoutAiCompanyPolicyInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutAiCompanyPolicyInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutAiCompanyPolicyInput, Prisma.CompanyUncheckedUpdateWithoutAiCompanyPolicyInput>
+}
+
+export type CompanyUpdateWithoutAiCompanyPolicyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
+  memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUpdateManyWithoutCompanyNestedInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUpdateManyWithoutCompanyNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUpdateManyWithoutCompanyNestedInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
+  reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUpdateManyWithoutCompanyNestedInput
+  marketingSalesTargets?: Prisma.MarketingSalesTargetUpdateManyWithoutCompanyNestedInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUpdateManyWithoutCompanyNestedInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUpdateManyWithoutCompanyNestedInput
+  hrPayrollLines?: Prisma.HrPayrollLineUpdateManyWithoutCompanyNestedInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUpdateManyWithoutCompanyNestedInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUpdateManyWithoutCompanyNestedInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUpdateManyWithoutCompanyNestedInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
+  attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
+  attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
+  attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
+  attendanceWorkSessions?: Prisma.AttendanceWorkSessionUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleTemplates?: Prisma.AttendanceScheduleTemplateUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleTemplateVersions?: Prisma.AttendanceScheduleTemplateVersionUpdateManyWithoutCompanyNestedInput
+  attendanceSchedulePeriods?: Prisma.AttendanceSchedulePeriodUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeScheduleAssignments?: Prisma.AttendanceEmployeeScheduleAssignmentUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeWeeklyAdjustments?: Prisma.AttendanceEmployeeWeeklyAdjustmentUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeWeeklyAdjustmentPeriods?: Prisma.AttendanceEmployeeWeeklyAdjustmentPeriodUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleExceptions?: Prisma.AttendanceScheduleExceptionUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleExceptionPeriods?: Prisma.AttendanceScheduleExceptionPeriodUpdateManyWithoutCompanyNestedInput
+  attendanceRosterPlans?: Prisma.AttendanceRosterPlanUpdateManyWithoutCompanyNestedInput
+  attendanceRosterEntries?: Prisma.AttendanceRosterEntryUpdateManyWithoutCompanyNestedInput
+  attendanceRosterEntryPeriods?: Prisma.AttendanceRosterEntryPeriodUpdateManyWithoutCompanyNestedInput
+  attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
+  aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
+  aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCompanyNestedInput
+  aiInterpretations?: Prisma.AiInterpretationUpdateManyWithoutCompanyNestedInput
+  aiInterpretationRuns?: Prisma.AiInterpretationRunUpdateManyWithoutCompanyNestedInput
+  aiInterpretationPlacements?: Prisma.AiInterpretationPlacementUpdateManyWithoutCompanyNestedInput
+  aiHumanInsights?: Prisma.AiHumanInsightUpdateManyWithoutCompanyNestedInput
+  aiBudgetReservations?: Prisma.AiBudgetReservationUpdateManyWithoutCompanyNestedInput
+  aiUsageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutCompanyNestedInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
+  decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
+  decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
+  marketingCampaignAnalysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUpdateManyWithoutCompanyNestedInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUpdateManyWithoutCompanyNestedInput
+  marketingProviderConnections?: Prisma.MarketingProviderConnectionUpdateManyWithoutCompanyNestedInput
+  marketingProviderCredentialEnvelopes?: Prisma.MarketingProviderCredentialEnvelopeUpdateManyWithoutCompanyNestedInput
+  marketingGoogleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingUpdateManyWithoutCompanyNestedInput
+  marketingGoogleBusinessReviewFacts?: Prisma.MarketingGoogleBusinessReviewFactUpdateManyWithoutCompanyNestedInput
+  marketingGoogleBusinessOAuthStates?: Prisma.MarketingGoogleBusinessOAuthStateUpdateManyWithoutCompanyNestedInput
+  marketingProviderSyncRuns?: Prisma.MarketingProviderSyncRunUpdateManyWithoutCompanyNestedInput
+  marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyUpdateOneWithoutCompanyNestedInput
+  operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
+  operationsCatalogCategories?: Prisma.OperationsCatalogCategoryUpdateManyWithoutCompanyNestedInput
+  operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
+  operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutCompanyNestedInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUpdateManyWithoutCompanyNestedInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUpdateManyWithoutCompanyNestedInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUpdateManyWithoutCompanyNestedInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutCompanyNestedInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUpdateOneWithoutCompanyNestedInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUpdateManyWithoutCompanyNestedInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUpdateManyWithoutCompanyNestedInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutCompanyNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutCompanyNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutCompanyNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceGroupBindings?: Prisma.WhatsappInvoiceGroupBindingUpdateManyWithoutCompanyNestedInput
+  whatsappInboundMessages?: Prisma.WhatsappInboundMessageUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceAssets?: Prisma.WhatsappInvoiceAssetUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceAssetPages?: Prisma.WhatsappInvoiceAssetPageUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUpdateManyWithoutCompanyNestedInput
+  whatsappInvoicePageAssignments?: Prisma.WhatsappInvoicePageAssignmentUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceExtractionRevisions?: Prisma.WhatsappInvoiceExtractionRevisionUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceReviews?: Prisma.WhatsappInvoiceReviewUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceDuplicateAssessments?: Prisma.WhatsappInvoiceDuplicateAssessmentUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceMediaWorkItems?: Prisma.WhatsappInvoiceMediaWorkItemUpdateManyWithoutCompanyNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTargetCompanyNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTargetCompanyNestedInput
+  nurixExcelStagingPackages?: Prisma.NurixExcelStagingPackageUpdateManyWithoutCompanyNestedInput
+  nurixExcelMasterDataExecutions?: Prisma.NurixExcelMasterDataExecutionUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutAiCompanyPolicyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedUpdateManyWithoutCompanyNestedInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
+  reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingSalesTargets?: Prisma.MarketingSalesTargetUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUncheckedUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollLines?: Prisma.HrPayrollLineUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceWorkSessions?: Prisma.AttendanceWorkSessionUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleTemplates?: Prisma.AttendanceScheduleTemplateUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleTemplateVersions?: Prisma.AttendanceScheduleTemplateVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceSchedulePeriods?: Prisma.AttendanceSchedulePeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeScheduleAssignments?: Prisma.AttendanceEmployeeScheduleAssignmentUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeWeeklyAdjustments?: Prisma.AttendanceEmployeeWeeklyAdjustmentUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeWeeklyAdjustmentPeriods?: Prisma.AttendanceEmployeeWeeklyAdjustmentPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleExceptions?: Prisma.AttendanceScheduleExceptionUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleExceptionPeriods?: Prisma.AttendanceScheduleExceptionPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceRosterPlans?: Prisma.AttendanceRosterPlanUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceRosterEntries?: Prisma.AttendanceRosterEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceRosterEntryPeriods?: Prisma.AttendanceRosterEntryPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
+  aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
+  aiInterpretations?: Prisma.AiInterpretationUncheckedUpdateManyWithoutCompanyNestedInput
+  aiInterpretationRuns?: Prisma.AiInterpretationRunUncheckedUpdateManyWithoutCompanyNestedInput
+  aiInterpretationPlacements?: Prisma.AiInterpretationPlacementUncheckedUpdateManyWithoutCompanyNestedInput
+  aiHumanInsights?: Prisma.AiHumanInsightUncheckedUpdateManyWithoutCompanyNestedInput
+  aiBudgetReservations?: Prisma.AiBudgetReservationUncheckedUpdateManyWithoutCompanyNestedInput
+  aiUsageLedgerEntries?: Prisma.AiUsageLedgerUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaignAnalysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingProviderConnections?: Prisma.MarketingProviderConnectionUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingProviderCredentialEnvelopes?: Prisma.MarketingProviderCredentialEnvelopeUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingGoogleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingGoogleBusinessReviewFacts?: Prisma.MarketingGoogleBusinessReviewFactUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingGoogleBusinessOAuthStates?: Prisma.MarketingGoogleBusinessOAuthStateUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingProviderSyncRuns?: Prisma.MarketingProviderSyncRunUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsCatalogCategories?: Prisma.OperationsCatalogCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUncheckedUpdateOneWithoutCompanyNestedInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUncheckedUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutCompanyNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutCompanyNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutCompanyNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceGroupBindings?: Prisma.WhatsappInvoiceGroupBindingUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInboundMessages?: Prisma.WhatsappInboundMessageUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceAssets?: Prisma.WhatsappInvoiceAssetUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceAssetPages?: Prisma.WhatsappInvoiceAssetPageUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoicePageAssignments?: Prisma.WhatsappInvoicePageAssignmentUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceExtractionRevisions?: Prisma.WhatsappInvoiceExtractionRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceReviews?: Prisma.WhatsappInvoiceReviewUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceDuplicateAssessments?: Prisma.WhatsappInvoiceDuplicateAssessmentUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceMediaWorkItems?: Prisma.WhatsappInvoiceMediaWorkItemUncheckedUpdateManyWithoutCompanyNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTargetCompanyNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTargetCompanyNestedInput
+  nurixExcelStagingPackages?: Prisma.NurixExcelStagingPackageUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelMasterDataExecutions?: Prisma.NurixExcelMasterDataExecutionUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutAiCompanyPolicyRevisionsInput = {
+  id?: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: $Enums.CompanyStatus
+  migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
+  memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionCreateNestedManyWithoutCompanyInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineCreateNestedManyWithoutCompanyInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingCreateNestedManyWithoutCompanyInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
+  reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
+  vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionCreateNestedManyWithoutCompanyInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileCreateNestedManyWithoutCompanyInput
+  marketingSalesTargets?: Prisma.MarketingSalesTargetCreateNestedManyWithoutCompanyInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionCreateNestedManyWithoutCompanyInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveCreateNestedManyWithoutCompanyInput
+  hrPayrollRuns?: Prisma.HrPayrollRunCreateNestedManyWithoutCompanyInput
+  hrPayrollLines?: Prisma.HrPayrollLineCreateNestedManyWithoutCompanyInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationCreateNestedManyWithoutCompanyInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationCreateNestedManyWithoutCompanyInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentCreateNestedManyWithoutCompanyInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
+  attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
+  attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
+  attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
+  attendanceWorkSessions?: Prisma.AttendanceWorkSessionCreateNestedManyWithoutCompanyInput
+  attendanceScheduleTemplates?: Prisma.AttendanceScheduleTemplateCreateNestedManyWithoutCompanyInput
+  attendanceScheduleTemplateVersions?: Prisma.AttendanceScheduleTemplateVersionCreateNestedManyWithoutCompanyInput
+  attendanceSchedulePeriods?: Prisma.AttendanceSchedulePeriodCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeScheduleAssignments?: Prisma.AttendanceEmployeeScheduleAssignmentCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeWeeklyAdjustments?: Prisma.AttendanceEmployeeWeeklyAdjustmentCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeWeeklyAdjustmentPeriods?: Prisma.AttendanceEmployeeWeeklyAdjustmentPeriodCreateNestedManyWithoutCompanyInput
+  attendanceScheduleExceptions?: Prisma.AttendanceScheduleExceptionCreateNestedManyWithoutCompanyInput
+  attendanceScheduleExceptionPeriods?: Prisma.AttendanceScheduleExceptionPeriodCreateNestedManyWithoutCompanyInput
+  attendanceRosterPlans?: Prisma.AttendanceRosterPlanCreateNestedManyWithoutCompanyInput
+  attendanceRosterEntries?: Prisma.AttendanceRosterEntryCreateNestedManyWithoutCompanyInput
+  attendanceRosterEntryPeriods?: Prisma.AttendanceRosterEntryPeriodCreateNestedManyWithoutCompanyInput
+  attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
+  aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
+  aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCompanyInput
+  aiInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutCompanyInput
+  aiInterpretationRuns?: Prisma.AiInterpretationRunCreateNestedManyWithoutCompanyInput
+  aiInterpretationPlacements?: Prisma.AiInterpretationPlacementCreateNestedManyWithoutCompanyInput
+  aiHumanInsights?: Prisma.AiHumanInsightCreateNestedManyWithoutCompanyInput
+  aiBudgetReservations?: Prisma.AiBudgetReservationCreateNestedManyWithoutCompanyInput
+  aiUsageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutCompanyInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
+  decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
+  decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
+  marketingCampaignAnalysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkCreateNestedManyWithoutCompanyInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkCreateNestedManyWithoutCompanyInput
+  marketingProviderConnections?: Prisma.MarketingProviderConnectionCreateNestedManyWithoutCompanyInput
+  marketingProviderCredentialEnvelopes?: Prisma.MarketingProviderCredentialEnvelopeCreateNestedManyWithoutCompanyInput
+  marketingGoogleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingCreateNestedManyWithoutCompanyInput
+  marketingGoogleBusinessReviewFacts?: Prisma.MarketingGoogleBusinessReviewFactCreateNestedManyWithoutCompanyInput
+  marketingGoogleBusinessOAuthStates?: Prisma.MarketingGoogleBusinessOAuthStateCreateNestedManyWithoutCompanyInput
+  marketingProviderSyncRuns?: Prisma.MarketingProviderSyncRunCreateNestedManyWithoutCompanyInput
+  marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyCreateNestedOneWithoutCompanyInput
+  operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
+  operationsCatalogCategories?: Prisma.OperationsCatalogCategoryCreateNestedManyWithoutCompanyInput
+  operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
+  operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
+  operationsItemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutCompanyInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionCreateNestedManyWithoutCompanyInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeCreateNestedManyWithoutCompanyInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionCreateNestedManyWithoutCompanyInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutCompanyInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileCreateNestedOneWithoutCompanyInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventCreateNestedManyWithoutCompanyInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceCreateNestedManyWithoutCompanyInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutCompanyInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutCompanyInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutCompanyInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceGroupBindings?: Prisma.WhatsappInvoiceGroupBindingCreateNestedManyWithoutCompanyInput
+  whatsappInboundMessages?: Prisma.WhatsappInboundMessageCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceAssets?: Prisma.WhatsappInvoiceAssetCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceAssetPages?: Prisma.WhatsappInvoiceAssetPageCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordCreateNestedManyWithoutCompanyInput
+  whatsappInvoicePageAssignments?: Prisma.WhatsappInvoicePageAssignmentCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceExtractionRevisions?: Prisma.WhatsappInvoiceExtractionRevisionCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceReviews?: Prisma.WhatsappInvoiceReviewCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceDuplicateAssessments?: Prisma.WhatsappInvoiceDuplicateAssessmentCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceMediaWorkItems?: Prisma.WhatsappInvoiceMediaWorkItemCreateNestedManyWithoutCompanyInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTargetCompanyInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTargetCompanyInput
+  nurixExcelStagingPackages?: Prisma.NurixExcelStagingPackageCreateNestedManyWithoutCompanyInput
+  nurixExcelMasterDataExecutions?: Prisma.NurixExcelMasterDataExecutionCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutAiCompanyPolicyRevisionsInput = {
+  id?: string
+  tenantId: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: $Enums.CompanyStatus
+  migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUncheckedCreateNestedManyWithoutCompanyInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUncheckedCreateNestedManyWithoutCompanyInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedCreateNestedManyWithoutCompanyInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
+  reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedCreateNestedManyWithoutCompanyInput
+  marketingSalesTargets?: Prisma.MarketingSalesTargetUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUncheckedCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUncheckedCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollLines?: Prisma.HrPayrollLineUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceWorkSessions?: Prisma.AttendanceWorkSessionUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceScheduleTemplates?: Prisma.AttendanceScheduleTemplateUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceScheduleTemplateVersions?: Prisma.AttendanceScheduleTemplateVersionUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceSchedulePeriods?: Prisma.AttendanceSchedulePeriodUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeScheduleAssignments?: Prisma.AttendanceEmployeeScheduleAssignmentUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeWeeklyAdjustments?: Prisma.AttendanceEmployeeWeeklyAdjustmentUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeWeeklyAdjustmentPeriods?: Prisma.AttendanceEmployeeWeeklyAdjustmentPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceScheduleExceptions?: Prisma.AttendanceScheduleExceptionUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceScheduleExceptionPeriods?: Prisma.AttendanceScheduleExceptionPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceRosterPlans?: Prisma.AttendanceRosterPlanUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceRosterEntries?: Prisma.AttendanceRosterEntryUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceRosterEntryPeriods?: Prisma.AttendanceRosterEntryPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
+  aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
+  aiInterpretations?: Prisma.AiInterpretationUncheckedCreateNestedManyWithoutCompanyInput
+  aiInterpretationRuns?: Prisma.AiInterpretationRunUncheckedCreateNestedManyWithoutCompanyInput
+  aiInterpretationPlacements?: Prisma.AiInterpretationPlacementUncheckedCreateNestedManyWithoutCompanyInput
+  aiHumanInsights?: Prisma.AiHumanInsightUncheckedCreateNestedManyWithoutCompanyInput
+  aiBudgetReservations?: Prisma.AiBudgetReservationUncheckedCreateNestedManyWithoutCompanyInput
+  aiUsageLedgerEntries?: Prisma.AiUsageLedgerUncheckedCreateNestedManyWithoutCompanyInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaignAnalysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUncheckedCreateNestedManyWithoutCompanyInput
+  marketingProviderConnections?: Prisma.MarketingProviderConnectionUncheckedCreateNestedManyWithoutCompanyInput
+  marketingProviderCredentialEnvelopes?: Prisma.MarketingProviderCredentialEnvelopeUncheckedCreateNestedManyWithoutCompanyInput
+  marketingGoogleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingUncheckedCreateNestedManyWithoutCompanyInput
+  marketingGoogleBusinessReviewFacts?: Prisma.MarketingGoogleBusinessReviewFactUncheckedCreateNestedManyWithoutCompanyInput
+  marketingGoogleBusinessOAuthStates?: Prisma.MarketingGoogleBusinessOAuthStateUncheckedCreateNestedManyWithoutCompanyInput
+  marketingProviderSyncRuns?: Prisma.MarketingProviderSyncRunUncheckedCreateNestedManyWithoutCompanyInput
+  marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsCatalogCategories?: Prisma.OperationsCatalogCategoryUncheckedCreateNestedManyWithoutCompanyInput
+  operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
+  operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUncheckedCreateNestedManyWithoutCompanyInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUncheckedCreateNestedManyWithoutCompanyInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUncheckedCreateNestedOneWithoutCompanyInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUncheckedCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutCompanyInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutCompanyInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutCompanyInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceGroupBindings?: Prisma.WhatsappInvoiceGroupBindingUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInboundMessages?: Prisma.WhatsappInboundMessageUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceAssets?: Prisma.WhatsappInvoiceAssetUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceAssetPages?: Prisma.WhatsappInvoiceAssetPageUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoicePageAssignments?: Prisma.WhatsappInvoicePageAssignmentUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceExtractionRevisions?: Prisma.WhatsappInvoiceExtractionRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceReviews?: Prisma.WhatsappInvoiceReviewUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceDuplicateAssessments?: Prisma.WhatsappInvoiceDuplicateAssessmentUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceMediaWorkItems?: Prisma.WhatsappInvoiceMediaWorkItemUncheckedCreateNestedManyWithoutCompanyInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTargetCompanyInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTargetCompanyInput
+  nurixExcelStagingPackages?: Prisma.NurixExcelStagingPackageUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelMasterDataExecutions?: Prisma.NurixExcelMasterDataExecutionUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutAiCompanyPolicyRevisionsInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutAiCompanyPolicyRevisionsInput, Prisma.CompanyUncheckedCreateWithoutAiCompanyPolicyRevisionsInput>
+}
+
+export type CompanyUpsertWithoutAiCompanyPolicyRevisionsInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutAiCompanyPolicyRevisionsInput, Prisma.CompanyUncheckedUpdateWithoutAiCompanyPolicyRevisionsInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutAiCompanyPolicyRevisionsInput, Prisma.CompanyUncheckedCreateWithoutAiCompanyPolicyRevisionsInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutAiCompanyPolicyRevisionsInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutAiCompanyPolicyRevisionsInput, Prisma.CompanyUncheckedUpdateWithoutAiCompanyPolicyRevisionsInput>
+}
+
+export type CompanyUpdateWithoutAiCompanyPolicyRevisionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
+  memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUpdateManyWithoutCompanyNestedInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUpdateManyWithoutCompanyNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUpdateManyWithoutCompanyNestedInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
+  reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUpdateManyWithoutCompanyNestedInput
+  marketingSalesTargets?: Prisma.MarketingSalesTargetUpdateManyWithoutCompanyNestedInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUpdateManyWithoutCompanyNestedInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUpdateManyWithoutCompanyNestedInput
+  hrPayrollLines?: Prisma.HrPayrollLineUpdateManyWithoutCompanyNestedInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUpdateManyWithoutCompanyNestedInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUpdateManyWithoutCompanyNestedInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUpdateManyWithoutCompanyNestedInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
+  attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
+  attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
+  attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
+  attendanceWorkSessions?: Prisma.AttendanceWorkSessionUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleTemplates?: Prisma.AttendanceScheduleTemplateUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleTemplateVersions?: Prisma.AttendanceScheduleTemplateVersionUpdateManyWithoutCompanyNestedInput
+  attendanceSchedulePeriods?: Prisma.AttendanceSchedulePeriodUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeScheduleAssignments?: Prisma.AttendanceEmployeeScheduleAssignmentUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeWeeklyAdjustments?: Prisma.AttendanceEmployeeWeeklyAdjustmentUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeWeeklyAdjustmentPeriods?: Prisma.AttendanceEmployeeWeeklyAdjustmentPeriodUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleExceptions?: Prisma.AttendanceScheduleExceptionUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleExceptionPeriods?: Prisma.AttendanceScheduleExceptionPeriodUpdateManyWithoutCompanyNestedInput
+  attendanceRosterPlans?: Prisma.AttendanceRosterPlanUpdateManyWithoutCompanyNestedInput
+  attendanceRosterEntries?: Prisma.AttendanceRosterEntryUpdateManyWithoutCompanyNestedInput
+  attendanceRosterEntryPeriods?: Prisma.AttendanceRosterEntryPeriodUpdateManyWithoutCompanyNestedInput
+  attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
+  aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
+  aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCompanyNestedInput
+  aiInterpretations?: Prisma.AiInterpretationUpdateManyWithoutCompanyNestedInput
+  aiInterpretationRuns?: Prisma.AiInterpretationRunUpdateManyWithoutCompanyNestedInput
+  aiInterpretationPlacements?: Prisma.AiInterpretationPlacementUpdateManyWithoutCompanyNestedInput
+  aiHumanInsights?: Prisma.AiHumanInsightUpdateManyWithoutCompanyNestedInput
+  aiBudgetReservations?: Prisma.AiBudgetReservationUpdateManyWithoutCompanyNestedInput
+  aiUsageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutCompanyNestedInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
+  decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
+  decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
+  marketingCampaignAnalysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUpdateManyWithoutCompanyNestedInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUpdateManyWithoutCompanyNestedInput
+  marketingProviderConnections?: Prisma.MarketingProviderConnectionUpdateManyWithoutCompanyNestedInput
+  marketingProviderCredentialEnvelopes?: Prisma.MarketingProviderCredentialEnvelopeUpdateManyWithoutCompanyNestedInput
+  marketingGoogleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingUpdateManyWithoutCompanyNestedInput
+  marketingGoogleBusinessReviewFacts?: Prisma.MarketingGoogleBusinessReviewFactUpdateManyWithoutCompanyNestedInput
+  marketingGoogleBusinessOAuthStates?: Prisma.MarketingGoogleBusinessOAuthStateUpdateManyWithoutCompanyNestedInput
+  marketingProviderSyncRuns?: Prisma.MarketingProviderSyncRunUpdateManyWithoutCompanyNestedInput
+  marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyUpdateOneWithoutCompanyNestedInput
+  operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
+  operationsCatalogCategories?: Prisma.OperationsCatalogCategoryUpdateManyWithoutCompanyNestedInput
+  operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
+  operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutCompanyNestedInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUpdateManyWithoutCompanyNestedInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUpdateManyWithoutCompanyNestedInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUpdateManyWithoutCompanyNestedInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutCompanyNestedInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUpdateOneWithoutCompanyNestedInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUpdateManyWithoutCompanyNestedInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUpdateManyWithoutCompanyNestedInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutCompanyNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutCompanyNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutCompanyNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceGroupBindings?: Prisma.WhatsappInvoiceGroupBindingUpdateManyWithoutCompanyNestedInput
+  whatsappInboundMessages?: Prisma.WhatsappInboundMessageUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceAssets?: Prisma.WhatsappInvoiceAssetUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceAssetPages?: Prisma.WhatsappInvoiceAssetPageUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUpdateManyWithoutCompanyNestedInput
+  whatsappInvoicePageAssignments?: Prisma.WhatsappInvoicePageAssignmentUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceExtractionRevisions?: Prisma.WhatsappInvoiceExtractionRevisionUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceReviews?: Prisma.WhatsappInvoiceReviewUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceDuplicateAssessments?: Prisma.WhatsappInvoiceDuplicateAssessmentUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceMediaWorkItems?: Prisma.WhatsappInvoiceMediaWorkItemUpdateManyWithoutCompanyNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTargetCompanyNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTargetCompanyNestedInput
+  nurixExcelStagingPackages?: Prisma.NurixExcelStagingPackageUpdateManyWithoutCompanyNestedInput
+  nurixExcelMasterDataExecutions?: Prisma.NurixExcelMasterDataExecutionUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutAiCompanyPolicyRevisionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedUpdateManyWithoutCompanyNestedInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
+  reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingSalesTargets?: Prisma.MarketingSalesTargetUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUncheckedUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollLines?: Prisma.HrPayrollLineUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceWorkSessions?: Prisma.AttendanceWorkSessionUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleTemplates?: Prisma.AttendanceScheduleTemplateUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleTemplateVersions?: Prisma.AttendanceScheduleTemplateVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceSchedulePeriods?: Prisma.AttendanceSchedulePeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeScheduleAssignments?: Prisma.AttendanceEmployeeScheduleAssignmentUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeWeeklyAdjustments?: Prisma.AttendanceEmployeeWeeklyAdjustmentUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeWeeklyAdjustmentPeriods?: Prisma.AttendanceEmployeeWeeklyAdjustmentPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleExceptions?: Prisma.AttendanceScheduleExceptionUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleExceptionPeriods?: Prisma.AttendanceScheduleExceptionPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceRosterPlans?: Prisma.AttendanceRosterPlanUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceRosterEntries?: Prisma.AttendanceRosterEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceRosterEntryPeriods?: Prisma.AttendanceRosterEntryPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
+  aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
+  aiInterpretations?: Prisma.AiInterpretationUncheckedUpdateManyWithoutCompanyNestedInput
+  aiInterpretationRuns?: Prisma.AiInterpretationRunUncheckedUpdateManyWithoutCompanyNestedInput
+  aiInterpretationPlacements?: Prisma.AiInterpretationPlacementUncheckedUpdateManyWithoutCompanyNestedInput
+  aiHumanInsights?: Prisma.AiHumanInsightUncheckedUpdateManyWithoutCompanyNestedInput
+  aiBudgetReservations?: Prisma.AiBudgetReservationUncheckedUpdateManyWithoutCompanyNestedInput
+  aiUsageLedgerEntries?: Prisma.AiUsageLedgerUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlerts?: Prisma.DecisionAlertUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedUpdateManyWithoutCompanyNestedInput
+  decisionFeedback?: Prisma.DecisionFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaignAnalysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingProviderConnections?: Prisma.MarketingProviderConnectionUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingProviderCredentialEnvelopes?: Prisma.MarketingProviderCredentialEnvelopeUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingGoogleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingGoogleBusinessReviewFacts?: Prisma.MarketingGoogleBusinessReviewFactUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingGoogleBusinessOAuthStates?: Prisma.MarketingGoogleBusinessOAuthStateUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingProviderSyncRuns?: Prisma.MarketingProviderSyncRunUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  operationsSections?: Prisma.OperationsSectionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsCatalogCategories?: Prisma.OperationsCatalogCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsUnits?: Prisma.OperationsUnitUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsItems?: Prisma.OperationsItemUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUncheckedUpdateOneWithoutCompanyNestedInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUncheckedUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUncheckedUpdateOneWithoutCompanyNestedInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedUpdateManyWithoutCompanyNestedInput
+  backupJobs?: Prisma.BackupJobUncheckedUpdateManyWithoutCompanyNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedUpdateManyWithoutCompanyNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceGroupBindings?: Prisma.WhatsappInvoiceGroupBindingUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInboundMessages?: Prisma.WhatsappInboundMessageUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceAssets?: Prisma.WhatsappInvoiceAssetUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceAssetPages?: Prisma.WhatsappInvoiceAssetPageUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoicePageAssignments?: Prisma.WhatsappInvoicePageAssignmentUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceExtractionRevisions?: Prisma.WhatsappInvoiceExtractionRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceReviews?: Prisma.WhatsappInvoiceReviewUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceDuplicateAssessments?: Prisma.WhatsappInvoiceDuplicateAssessmentUncheckedUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceMediaWorkItems?: Prisma.WhatsappInvoiceMediaWorkItemUncheckedUpdateManyWithoutCompanyNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedUpdateManyWithoutTargetCompanyNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedUpdateManyWithoutTargetCompanyNestedInput
+  nurixExcelStagingPackages?: Prisma.NurixExcelStagingPackageUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelMasterDataExecutions?: Prisma.NurixExcelMasterDataExecutionUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyCreateWithoutAiCompanySkillOverridesInput = {
+  id?: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: $Enums.CompanyStatus
+  migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutCompaniesInput
+  memberships?: Prisma.CompanyMembershipCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentCreateNestedManyWithoutCompanyInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchCreateNestedManyWithoutCompanyInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionCreateNestedManyWithoutCompanyInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineCreateNestedManyWithoutCompanyInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingCreateNestedManyWithoutCompanyInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionCreateNestedOneWithoutCompanyInput
+  reportRuns?: Prisma.ReportRunCreateNestedManyWithoutCompanyInput
+  reportDocuments?: Prisma.ReportDocumentCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationCreateNestedManyWithoutCompanyInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventCreateNestedManyWithoutCompanyInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageCreateNestedOneWithoutCompanyInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportCreateNestedManyWithoutCompanyInput
+  vatSettlements?: Prisma.FinanceVatSettlementCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionCreateNestedManyWithoutCompanyInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileCreateNestedManyWithoutCompanyInput
+  marketingSalesTargets?: Prisma.MarketingSalesTargetCreateNestedManyWithoutCompanyInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionCreateNestedManyWithoutCompanyInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveCreateNestedManyWithoutCompanyInput
+  hrPayrollRuns?: Prisma.HrPayrollRunCreateNestedManyWithoutCompanyInput
+  hrPayrollLines?: Prisma.HrPayrollLineCreateNestedManyWithoutCompanyInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationCreateNestedManyWithoutCompanyInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationCreateNestedManyWithoutCompanyInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentCreateNestedManyWithoutCompanyInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutCompanyInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsCreateNestedManyWithoutCompanyInput
+  attendanceBranches?: Prisma.AttendanceBranchCreateNestedManyWithoutCompanyInput
+  attendanceCredentials?: Prisma.AttendanceEmployeeCredentialCreateNestedManyWithoutCompanyInput
+  attendanceEvents?: Prisma.AttendanceEventCreateNestedManyWithoutCompanyInput
+  attendanceWorkSessions?: Prisma.AttendanceWorkSessionCreateNestedManyWithoutCompanyInput
+  attendanceScheduleTemplates?: Prisma.AttendanceScheduleTemplateCreateNestedManyWithoutCompanyInput
+  attendanceScheduleTemplateVersions?: Prisma.AttendanceScheduleTemplateVersionCreateNestedManyWithoutCompanyInput
+  attendanceSchedulePeriods?: Prisma.AttendanceSchedulePeriodCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeScheduleAssignments?: Prisma.AttendanceEmployeeScheduleAssignmentCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeWeeklyAdjustments?: Prisma.AttendanceEmployeeWeeklyAdjustmentCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeWeeklyAdjustmentPeriods?: Prisma.AttendanceEmployeeWeeklyAdjustmentPeriodCreateNestedManyWithoutCompanyInput
+  attendanceScheduleExceptions?: Prisma.AttendanceScheduleExceptionCreateNestedManyWithoutCompanyInput
+  attendanceScheduleExceptionPeriods?: Prisma.AttendanceScheduleExceptionPeriodCreateNestedManyWithoutCompanyInput
+  attendanceRosterPlans?: Prisma.AttendanceRosterPlanCreateNestedManyWithoutCompanyInput
+  attendanceRosterEntries?: Prisma.AttendanceRosterEntryCreateNestedManyWithoutCompanyInput
+  attendanceRosterEntryPeriods?: Prisma.AttendanceRosterEntryPeriodCreateNestedManyWithoutCompanyInput
+  attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
+  aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCompanyInput
+  aiInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutCompanyInput
+  aiInterpretationRuns?: Prisma.AiInterpretationRunCreateNestedManyWithoutCompanyInput
+  aiInterpretationPlacements?: Prisma.AiInterpretationPlacementCreateNestedManyWithoutCompanyInput
+  aiHumanInsights?: Prisma.AiHumanInsightCreateNestedManyWithoutCompanyInput
+  aiBudgetReservations?: Prisma.AiBudgetReservationCreateNestedManyWithoutCompanyInput
+  aiUsageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutCompanyInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyCreateNestedOneWithoutCompanyInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionCreateNestedManyWithoutCompanyInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventCreateNestedManyWithoutCompanyInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunCreateNestedManyWithoutCompanyInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotCreateNestedManyWithoutCompanyInput
+  decisionAlerts?: Prisma.DecisionAlertCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionCreateNestedManyWithoutCompanyInput
+  decisionFeedback?: Prisma.DecisionFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignCreateNestedManyWithoutCompanyInput
+  marketingCampaignAnalysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackCreateNestedManyWithoutCompanyInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkCreateNestedManyWithoutCompanyInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkCreateNestedManyWithoutCompanyInput
+  marketingProviderConnections?: Prisma.MarketingProviderConnectionCreateNestedManyWithoutCompanyInput
+  marketingProviderCredentialEnvelopes?: Prisma.MarketingProviderCredentialEnvelopeCreateNestedManyWithoutCompanyInput
+  marketingGoogleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingCreateNestedManyWithoutCompanyInput
+  marketingGoogleBusinessReviewFacts?: Prisma.MarketingGoogleBusinessReviewFactCreateNestedManyWithoutCompanyInput
+  marketingGoogleBusinessOAuthStates?: Prisma.MarketingGoogleBusinessOAuthStateCreateNestedManyWithoutCompanyInput
+  marketingProviderSyncRuns?: Prisma.MarketingProviderSyncRunCreateNestedManyWithoutCompanyInput
+  marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyCreateNestedOneWithoutCompanyInput
+  operationsSections?: Prisma.OperationsSectionCreateNestedManyWithoutCompanyInput
+  operationsCatalogCategories?: Prisma.OperationsCatalogCategoryCreateNestedManyWithoutCompanyInput
+  operationsUnits?: Prisma.OperationsUnitCreateNestedManyWithoutCompanyInput
+  operationsItems?: Prisma.OperationsItemCreateNestedManyWithoutCompanyInput
+  operationsItemUnits?: Prisma.OperationsItemUnitCreateNestedManyWithoutCompanyInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionCreateNestedManyWithoutCompanyInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeCreateNestedManyWithoutCompanyInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionCreateNestedManyWithoutCompanyInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineCreateNestedManyWithoutCompanyInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileCreateNestedOneWithoutCompanyInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventCreateNestedManyWithoutCompanyInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceCreateNestedManyWithoutCompanyInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingCreateNestedOneWithoutCompanyInput
+  backupPolicies?: Prisma.BackupPolicyCreateNestedManyWithoutCompanyInput
+  backupJobs?: Prisma.BackupJobCreateNestedManyWithoutCompanyInput
+  backupArtifacts?: Prisma.BackupArtifactCreateNestedManyWithoutCompanyInput
+  backupAuditEvents?: Prisma.BackupAuditEventCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceGroupBindings?: Prisma.WhatsappInvoiceGroupBindingCreateNestedManyWithoutCompanyInput
+  whatsappInboundMessages?: Prisma.WhatsappInboundMessageCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceAssets?: Prisma.WhatsappInvoiceAssetCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceAssetPages?: Prisma.WhatsappInvoiceAssetPageCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordCreateNestedManyWithoutCompanyInput
+  whatsappInvoicePageAssignments?: Prisma.WhatsappInvoicePageAssignmentCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceExtractionRevisions?: Prisma.WhatsappInvoiceExtractionRevisionCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceReviews?: Prisma.WhatsappInvoiceReviewCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceDuplicateAssessments?: Prisma.WhatsappInvoiceDuplicateAssessmentCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceMediaWorkItems?: Prisma.WhatsappInvoiceMediaWorkItemCreateNestedManyWithoutCompanyInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapCreateNestedManyWithoutTargetCompanyInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapCreateNestedManyWithoutTargetCompanyInput
+  nurixExcelStagingPackages?: Prisma.NurixExcelStagingPackageCreateNestedManyWithoutCompanyInput
+  nurixExcelMasterDataExecutions?: Prisma.NurixExcelMasterDataExecutionCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyUncheckedCreateWithoutAiCompanySkillOverridesInput = {
+  id?: string
+  tenantId: string
+  nameAr: string
+  nameEn: string
+  businessTimezone?: string
+  contextLocationCode?: string | null
+  contextLocationLabelAr?: string | null
+  contextLatitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: $Enums.CompanyStatus
+  migrationReviewLocked?: boolean
+  attendanceLocationEnabled?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedCreateNestedManyWithoutCompanyInput
+  audits?: Prisma.AuditEventUncheckedCreateNestedManyWithoutCompanyInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedCreateNestedManyWithoutCompanyInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedCreateNestedManyWithoutCompanyInput
+  fileMetadata?: Prisma.FileMetadataUncheckedCreateNestedManyWithoutCompanyInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedCreateNestedOneWithoutCompanyInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedCreateNestedManyWithoutCompanyInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedCreateNestedManyWithoutCompanyInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedCreateNestedManyWithoutCompanyInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaults?: Prisma.FinanceVaultUncheckedCreateNestedManyWithoutCompanyInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedCreateNestedManyWithoutCompanyInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedCreateNestedManyWithoutCompanyInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedCreateNestedManyWithoutCompanyInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedCreateNestedManyWithoutCompanyInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedCreateNestedManyWithoutCompanyInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedCreateNestedManyWithoutCompanyInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUncheckedCreateNestedManyWithoutCompanyInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUncheckedCreateNestedManyWithoutCompanyInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedCreateNestedManyWithoutCompanyInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedCreateNestedOneWithoutCompanyInput
+  reportRuns?: Prisma.ReportRunUncheckedCreateNestedManyWithoutCompanyInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  vatSimulations?: Prisma.VatSimulationUncheckedCreateNestedManyWithoutCompanyInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedCreateNestedManyWithoutCompanyInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedCreateNestedOneWithoutCompanyInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedCreateNestedManyWithoutCompanyInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedCreateNestedManyWithoutCompanyInput
+  marketingSalesTargets?: Prisma.MarketingSalesTargetUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUncheckedCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUncheckedCreateNestedManyWithoutCompanyInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollLines?: Prisma.HrPayrollLineUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUncheckedCreateNestedManyWithoutCompanyInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedCreateNestedManyWithoutCompanyInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceBranches?: Prisma.AttendanceBranchUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceEvents?: Prisma.AttendanceEventUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceWorkSessions?: Prisma.AttendanceWorkSessionUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceScheduleTemplates?: Prisma.AttendanceScheduleTemplateUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceScheduleTemplateVersions?: Prisma.AttendanceScheduleTemplateVersionUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceSchedulePeriods?: Prisma.AttendanceSchedulePeriodUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeScheduleAssignments?: Prisma.AttendanceEmployeeScheduleAssignmentUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeWeeklyAdjustments?: Prisma.AttendanceEmployeeWeeklyAdjustmentUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceEmployeeWeeklyAdjustmentPeriods?: Prisma.AttendanceEmployeeWeeklyAdjustmentPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceScheduleExceptions?: Prisma.AttendanceScheduleExceptionUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceScheduleExceptionPeriods?: Prisma.AttendanceScheduleExceptionPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceRosterPlans?: Prisma.AttendanceRosterPlanUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceRosterEntries?: Prisma.AttendanceRosterEntryUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceRosterEntryPeriods?: Prisma.AttendanceRosterEntryPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodUncheckedCreateNestedManyWithoutCompanyInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
+  aiInterpretations?: Prisma.AiInterpretationUncheckedCreateNestedManyWithoutCompanyInput
+  aiInterpretationRuns?: Prisma.AiInterpretationRunUncheckedCreateNestedManyWithoutCompanyInput
+  aiInterpretationPlacements?: Prisma.AiInterpretationPlacementUncheckedCreateNestedManyWithoutCompanyInput
+  aiHumanInsights?: Prisma.AiHumanInsightUncheckedCreateNestedManyWithoutCompanyInput
+  aiBudgetReservations?: Prisma.AiBudgetReservationUncheckedCreateNestedManyWithoutCompanyInput
+  aiUsageLedgerEntries?: Prisma.AiUsageLedgerUncheckedCreateNestedManyWithoutCompanyInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUncheckedCreateNestedOneWithoutCompanyInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUncheckedCreateNestedManyWithoutCompanyInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlerts?: Prisma.DecisionAlertUncheckedCreateNestedManyWithoutCompanyInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUncheckedCreateNestedManyWithoutCompanyInput
+  decisionFeedback?: Prisma.DecisionFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaigns?: Prisma.MarketingCampaignUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaignAnalysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUncheckedCreateNestedManyWithoutCompanyInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUncheckedCreateNestedManyWithoutCompanyInput
+  marketingProviderConnections?: Prisma.MarketingProviderConnectionUncheckedCreateNestedManyWithoutCompanyInput
+  marketingProviderCredentialEnvelopes?: Prisma.MarketingProviderCredentialEnvelopeUncheckedCreateNestedManyWithoutCompanyInput
+  marketingGoogleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingUncheckedCreateNestedManyWithoutCompanyInput
+  marketingGoogleBusinessReviewFacts?: Prisma.MarketingGoogleBusinessReviewFactUncheckedCreateNestedManyWithoutCompanyInput
+  marketingGoogleBusinessOAuthStates?: Prisma.MarketingGoogleBusinessOAuthStateUncheckedCreateNestedManyWithoutCompanyInput
+  marketingProviderSyncRuns?: Prisma.MarketingProviderSyncRunUncheckedCreateNestedManyWithoutCompanyInput
+  marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  operationsSections?: Prisma.OperationsSectionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsCatalogCategories?: Prisma.OperationsCatalogCategoryUncheckedCreateNestedManyWithoutCompanyInput
+  operationsUnits?: Prisma.OperationsUnitUncheckedCreateNestedManyWithoutCompanyInput
+  operationsItems?: Prisma.OperationsItemUncheckedCreateNestedManyWithoutCompanyInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUncheckedCreateNestedManyWithoutCompanyInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUncheckedCreateNestedManyWithoutCompanyInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUncheckedCreateNestedManyWithoutCompanyInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUncheckedCreateNestedOneWithoutCompanyInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUncheckedCreateNestedManyWithoutCompanyInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUncheckedCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUncheckedCreateNestedManyWithoutCompanyInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUncheckedCreateNestedManyWithoutCompanyInput
+  branding?: Prisma.CompanyBrandingUncheckedCreateNestedOneWithoutCompanyInput
+  backupPolicies?: Prisma.BackupPolicyUncheckedCreateNestedManyWithoutCompanyInput
+  backupJobs?: Prisma.BackupJobUncheckedCreateNestedManyWithoutCompanyInput
+  backupArtifacts?: Prisma.BackupArtifactUncheckedCreateNestedManyWithoutCompanyInput
+  backupAuditEvents?: Prisma.BackupAuditEventUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceGroupBindings?: Prisma.WhatsappInvoiceGroupBindingUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInboundMessages?: Prisma.WhatsappInboundMessageUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceAssets?: Prisma.WhatsappInvoiceAssetUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceAssetPages?: Prisma.WhatsappInvoiceAssetPageUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoicePageAssignments?: Prisma.WhatsappInvoicePageAssignmentUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceExtractionRevisions?: Prisma.WhatsappInvoiceExtractionRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceReviews?: Prisma.WhatsappInvoiceReviewUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceDuplicateAssessments?: Prisma.WhatsappInvoiceDuplicateAssessmentUncheckedCreateNestedManyWithoutCompanyInput
+  whatsappInvoiceMediaWorkItems?: Prisma.WhatsappInvoiceMediaWorkItemUncheckedCreateNestedManyWithoutCompanyInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUncheckedCreateNestedManyWithoutTargetCompanyInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUncheckedCreateNestedManyWithoutTargetCompanyInput
+  nurixExcelStagingPackages?: Prisma.NurixExcelStagingPackageUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelMasterDataExecutions?: Prisma.NurixExcelMasterDataExecutionUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUncheckedCreateNestedManyWithoutCompanyInput
+  nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUncheckedCreateNestedManyWithoutCompanyInput
+}
+
+export type CompanyCreateOrConnectWithoutAiCompanySkillOverridesInput = {
+  where: Prisma.CompanyWhereUniqueInput
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutAiCompanySkillOverridesInput, Prisma.CompanyUncheckedCreateWithoutAiCompanySkillOverridesInput>
+}
+
+export type CompanyUpsertWithoutAiCompanySkillOverridesInput = {
+  update: Prisma.XOR<Prisma.CompanyUpdateWithoutAiCompanySkillOverridesInput, Prisma.CompanyUncheckedUpdateWithoutAiCompanySkillOverridesInput>
+  create: Prisma.XOR<Prisma.CompanyCreateWithoutAiCompanySkillOverridesInput, Prisma.CompanyUncheckedCreateWithoutAiCompanySkillOverridesInput>
+  where?: Prisma.CompanyWhereInput
+}
+
+export type CompanyUpdateToOneWithWhereWithoutAiCompanySkillOverridesInput = {
+  where?: Prisma.CompanyWhereInput
+  data: Prisma.XOR<Prisma.CompanyUpdateWithoutAiCompanySkillOverridesInput, Prisma.CompanyUncheckedUpdateWithoutAiCompanySkillOverridesInput>
+}
+
+export type CompanyUpdateWithoutAiCompanySkillOverridesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCompaniesNestedInput
+  memberships?: Prisma.CompanyMembershipUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUpdateManyWithoutCompanyNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUpdateManyWithoutCompanyNestedInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUpdateManyWithoutCompanyNestedInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUpdateManyWithoutCompanyNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUpdateManyWithoutCompanyNestedInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUpdateOneWithoutCompanyNestedInput
+  reportRuns?: Prisma.ReportRunUpdateManyWithoutCompanyNestedInput
+  reportDocuments?: Prisma.ReportDocumentUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUpdateManyWithoutCompanyNestedInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUpdateManyWithoutCompanyNestedInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUpdateOneWithoutCompanyNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUpdateManyWithoutCompanyNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUpdateManyWithoutCompanyNestedInput
+  marketingSalesTargets?: Prisma.MarketingSalesTargetUpdateManyWithoutCompanyNestedInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUpdateManyWithoutCompanyNestedInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUpdateManyWithoutCompanyNestedInput
+  hrPayrollLines?: Prisma.HrPayrollLineUpdateManyWithoutCompanyNestedInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUpdateManyWithoutCompanyNestedInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUpdateManyWithoutCompanyNestedInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUpdateManyWithoutCompanyNestedInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUpdateManyWithoutCompanyNestedInput
+  attendanceBranches?: Prisma.AttendanceBranchUpdateManyWithoutCompanyNestedInput
+  attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUpdateManyWithoutCompanyNestedInput
+  attendanceEvents?: Prisma.AttendanceEventUpdateManyWithoutCompanyNestedInput
+  attendanceWorkSessions?: Prisma.AttendanceWorkSessionUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleTemplates?: Prisma.AttendanceScheduleTemplateUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleTemplateVersions?: Prisma.AttendanceScheduleTemplateVersionUpdateManyWithoutCompanyNestedInput
+  attendanceSchedulePeriods?: Prisma.AttendanceSchedulePeriodUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeScheduleAssignments?: Prisma.AttendanceEmployeeScheduleAssignmentUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeWeeklyAdjustments?: Prisma.AttendanceEmployeeWeeklyAdjustmentUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeWeeklyAdjustmentPeriods?: Prisma.AttendanceEmployeeWeeklyAdjustmentPeriodUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleExceptions?: Prisma.AttendanceScheduleExceptionUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleExceptionPeriods?: Prisma.AttendanceScheduleExceptionPeriodUpdateManyWithoutCompanyNestedInput
+  attendanceRosterPlans?: Prisma.AttendanceRosterPlanUpdateManyWithoutCompanyNestedInput
+  attendanceRosterEntries?: Prisma.AttendanceRosterEntryUpdateManyWithoutCompanyNestedInput
+  attendanceRosterEntryPeriods?: Prisma.AttendanceRosterEntryPeriodUpdateManyWithoutCompanyNestedInput
+  attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
+  aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
+  aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
+  aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
+  aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCompanyNestedInput
+  aiInterpretations?: Prisma.AiInterpretationUpdateManyWithoutCompanyNestedInput
+  aiInterpretationRuns?: Prisma.AiInterpretationRunUpdateManyWithoutCompanyNestedInput
+  aiInterpretationPlacements?: Prisma.AiInterpretationPlacementUpdateManyWithoutCompanyNestedInput
+  aiHumanInsights?: Prisma.AiHumanInsightUpdateManyWithoutCompanyNestedInput
+  aiBudgetReservations?: Prisma.AiBudgetReservationUpdateManyWithoutCompanyNestedInput
+  aiUsageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutCompanyNestedInput
+  decisionMetricDefinitions?: Prisma.DecisionMetricDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionSalesChangePolicy?: Prisma.DecisionSalesChangePolicyUpdateOneWithoutCompanyNestedInput
+  decisionRuleDefinitions?: Prisma.DecisionRuleDefinitionUpdateManyWithoutCompanyNestedInput
+  decisionCompanyContextEvents?: Prisma.DecisionCompanyContextEventUpdateManyWithoutCompanyNestedInput
+  decisionEvaluationRuns?: Prisma.DecisionEvaluationRunUpdateManyWithoutCompanyNestedInput
+  decisionEvidenceSnapshots?: Prisma.DecisionEvidenceSnapshotUpdateManyWithoutCompanyNestedInput
+  decisionAlerts?: Prisma.DecisionAlertUpdateManyWithoutCompanyNestedInput
+  decisionAlertActions?: Prisma.DecisionAlertActionUpdateManyWithoutCompanyNestedInput
+  decisionFeedback?: Prisma.DecisionFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaigns?: Prisma.MarketingCampaignUpdateManyWithoutCompanyNestedInput
+  marketingCampaignAnalysisFeedback?: Prisma.MarketingCampaignAnalysisFeedbackUpdateManyWithoutCompanyNestedInput
+  marketingCampaignFinancialLinks?: Prisma.MarketingCampaignFinancialLinkUpdateManyWithoutCompanyNestedInput
+  marketingCampaignContextLinks?: Prisma.MarketingCampaignContextLinkUpdateManyWithoutCompanyNestedInput
+  marketingProviderConnections?: Prisma.MarketingProviderConnectionUpdateManyWithoutCompanyNestedInput
+  marketingProviderCredentialEnvelopes?: Prisma.MarketingProviderCredentialEnvelopeUpdateManyWithoutCompanyNestedInput
+  marketingGoogleBusinessLocationMappings?: Prisma.MarketingGoogleBusinessLocationMappingUpdateManyWithoutCompanyNestedInput
+  marketingGoogleBusinessReviewFacts?: Prisma.MarketingGoogleBusinessReviewFactUpdateManyWithoutCompanyNestedInput
+  marketingGoogleBusinessOAuthStates?: Prisma.MarketingGoogleBusinessOAuthStateUpdateManyWithoutCompanyNestedInput
+  marketingProviderSyncRuns?: Prisma.MarketingProviderSyncRunUpdateManyWithoutCompanyNestedInput
+  marketingReputationReplyPolicy?: Prisma.MarketingReputationReplyPolicyUpdateOneWithoutCompanyNestedInput
+  operationsSections?: Prisma.OperationsSectionUpdateManyWithoutCompanyNestedInput
+  operationsCatalogCategories?: Prisma.OperationsCatalogCategoryUpdateManyWithoutCompanyNestedInput
+  operationsUnits?: Prisma.OperationsUnitUpdateManyWithoutCompanyNestedInput
+  operationsItems?: Prisma.OperationsItemUpdateManyWithoutCompanyNestedInput
+  operationsItemUnits?: Prisma.OperationsItemUnitUpdateManyWithoutCompanyNestedInput
+  operationsConversionVersions?: Prisma.OperationsItemConversionVersionUpdateManyWithoutCompanyNestedInput
+  operationsConversionEdges?: Prisma.OperationsItemConversionEdgeUpdateManyWithoutCompanyNestedInput
+  operationsRecipeVersions?: Prisma.OperationsRecipeVersionUpdateManyWithoutCompanyNestedInput
+  operationsRecipeLines?: Prisma.OperationsRecipeLineUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequests?: Prisma.OperationsPurchaseRequestUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseRequestLines?: Prisma.OperationsPurchaseRequestLineUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceipts?: Prisma.OperationsPurchaseReceiptUpdateManyWithoutCompanyNestedInput
+  operationsPurchaseReceiptLines?: Prisma.OperationsPurchaseReceiptLineUpdateManyWithoutCompanyNestedInput
+  operationsCustodyProfile?: Prisma.OperationsCustodyProfileUpdateOneWithoutCompanyNestedInput
+  operationsCustodyEvents?: Prisma.OperationsCustodyEventUpdateManyWithoutCompanyNestedInput
+  operationsInventoryBalances?: Prisma.OperationsInventoryBalanceUpdateManyWithoutCompanyNestedInput
+  operationsInventoryMovements?: Prisma.OperationsInventoryMovementUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrations?: Prisma.OperationsInternalRegistrationUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationLines?: Prisma.OperationsInternalRegistrationLineUpdateManyWithoutCompanyNestedInput
+  operationsInternalRegistrationConsumptions?: Prisma.OperationsInternalRegistrationConsumptionUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyAssets?: Prisma.OperationsAssetWarrantyAssetUpdateManyWithoutCompanyNestedInput
+  operationsAssetWarrantyLines?: Prisma.OperationsAssetWarrantyLineUpdateManyWithoutCompanyNestedInput
+  branding?: Prisma.CompanyBrandingUpdateOneWithoutCompanyNestedInput
+  backupPolicies?: Prisma.BackupPolicyUpdateManyWithoutCompanyNestedInput
+  backupJobs?: Prisma.BackupJobUpdateManyWithoutCompanyNestedInput
+  backupArtifacts?: Prisma.BackupArtifactUpdateManyWithoutCompanyNestedInput
+  backupAuditEvents?: Prisma.BackupAuditEventUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceGroupBindings?: Prisma.WhatsappInvoiceGroupBindingUpdateManyWithoutCompanyNestedInput
+  whatsappInboundMessages?: Prisma.WhatsappInboundMessageUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceAssets?: Prisma.WhatsappInvoiceAssetUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceAssetPages?: Prisma.WhatsappInvoiceAssetPageUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceRecords?: Prisma.WhatsappInvoiceRecordUpdateManyWithoutCompanyNestedInput
+  whatsappInvoicePageAssignments?: Prisma.WhatsappInvoicePageAssignmentUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceExtractionRevisions?: Prisma.WhatsappInvoiceExtractionRevisionUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceReviews?: Prisma.WhatsappInvoiceReviewUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceDuplicateAssessments?: Prisma.WhatsappInvoiceDuplicateAssessmentUpdateManyWithoutCompanyNestedInput
+  whatsappInvoiceMediaWorkItems?: Prisma.WhatsappInvoiceMediaWorkItemUpdateManyWithoutCompanyNestedInput
+  legacyMigrationCompanyMaps?: Prisma.LegacyMigrationCompanyMapUpdateManyWithoutTargetCompanyNestedInput
+  legacyMigrationRecordMaps?: Prisma.LegacyMigrationRecordMapUpdateManyWithoutTargetCompanyNestedInput
+  nurixExcelStagingPackages?: Prisma.NurixExcelStagingPackageUpdateManyWithoutCompanyNestedInput
+  nurixExcelMasterDataExecutions?: Prisma.NurixExcelMasterDataExecutionUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialExecutions?: Prisma.NurixExcelFinancialExecutionUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialWaves?: Prisma.NurixExcelFinancialWaveUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialItems?: Prisma.NurixExcelFinancialItemUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialSourceMaps?: Prisma.NurixExcelFinancialSourceMapUpdateManyWithoutCompanyNestedInput
+  nurixExcelFinancialReceipts?: Prisma.NurixExcelFinancialReceiptUpdateManyWithoutCompanyNestedInput
+}
+
+export type CompanyUncheckedUpdateWithoutAiCompanySkillOverridesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  nameAr?: Prisma.StringFieldUpdateOperationsInput | string
+  nameEn?: Prisma.StringFieldUpdateOperationsInput | string
+  businessTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  contextLocationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLocationLabelAr?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contextLatitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  contextLongitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  status?: Prisma.EnumCompanyStatusFieldUpdateOperationsInput | $Enums.CompanyStatus
+  migrationReviewLocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  attendanceLocationEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  memberships?: Prisma.CompanyMembershipUncheckedUpdateManyWithoutCompanyNestedInput
+  audits?: Prisma.AuditEventUncheckedUpdateManyWithoutCompanyNestedInput
+  idempotencyReceipts?: Prisma.IdempotencyReceiptUncheckedUpdateManyWithoutCompanyNestedInput
+  noorixSourceAnnotations?: Prisma.NoorixSourceAnnotationUncheckedUpdateManyWithoutCompanyNestedInput
+  documentSerialCounters?: Prisma.DocumentSerialCounterUncheckedUpdateManyWithoutCompanyNestedInput
+  fileMetadata?: Prisma.FileMetadataUncheckedUpdateManyWithoutCompanyNestedInput
+  financeProfile?: Prisma.CompanyFinanceProfileUncheckedUpdateOneWithoutCompanyNestedInput
+  financeAccounts?: Prisma.FinanceAccountUncheckedUpdateManyWithoutCompanyNestedInput
+  financeCategories?: Prisma.FinanceCategoryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSuppliers?: Prisma.FinanceSupplierUncheckedUpdateManyWithoutCompanyNestedInput
+  financeFiscalPeriods?: Prisma.FinanceFiscalPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaults?: Prisma.FinanceVaultUncheckedUpdateManyWithoutCompanyNestedInput
+  financeVaultReconciliations?: Prisma.FinanceVaultReconciliationUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDues?: Prisma.FinanceSupplierDueUncheckedUpdateManyWithoutCompanyNestedInput
+  financeSupplierDuePayments?: Prisma.FinanceSupplierDuePaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalEntries?: Prisma.FinanceJournalEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  financeJournalLines?: Prisma.FinanceJournalLineUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseProfiles?: Prisma.FinanceRecurringExpenseProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  recurringExpenseCoverages?: Prisma.FinanceRecurringExpenseCoverageUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoans?: Prisma.FinanceInclusiveLoanUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanPayments?: Prisma.FinanceInclusiveLoanPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  inclusiveLoanInstallments?: Prisma.FinanceInclusiveLoanInstallmentPlanUncheckedUpdateManyWithoutCompanyNestedInput
+  operationalDays?: Prisma.FinanceOperationalDayUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesClosings?: Prisma.FinanceDailySalesClosingUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesAllocations?: Prisma.FinanceDailySalesAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  dailyFinancialSummaries?: Prisma.FinanceDailyFinancialSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  dailySalesChannelSummaries?: Prisma.FinanceDailySalesChannelSummaryUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowDocuments?: Prisma.FinanceOutflowDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowDocumentRevisions?: Prisma.FinanceOutflowDocumentRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  outflowBatches?: Prisma.FinanceOutflowBatchUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlMappingVersions?: Prisma.FinancePnlMappingVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlStatementLines?: Prisma.FinancePnlStatementLineUncheckedUpdateManyWithoutCompanyNestedInput
+  pnlAccountMappings?: Prisma.FinancePnlAccountMappingUncheckedUpdateManyWithoutCompanyNestedInput
+  ledgerRevision?: Prisma.FinanceLedgerRevisionUncheckedUpdateOneWithoutCompanyNestedInput
+  reportRuns?: Prisma.ReportRunUncheckedUpdateManyWithoutCompanyNestedInput
+  reportDocuments?: Prisma.ReportDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSimulations?: Prisma.VatSimulationUncheckedUpdateManyWithoutCompanyNestedInput
+  cashPerformanceEvents?: Prisma.FinanceCashPerformanceEventUncheckedUpdateManyWithoutCompanyNestedInput
+  cashPerformanceCoverage?: Prisma.FinanceCashPerformanceCoverageUncheckedUpdateOneWithoutCompanyNestedInput
+  cashPerformanceHistoricalImports?: Prisma.FinanceCashPerformanceHistoricalImportUncheckedUpdateManyWithoutCompanyNestedInput
+  vatSettlements?: Prisma.FinanceVatSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeServices?: Prisma.HrEmployeeServiceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeFinancialMovements?: Prisma.HrEmployeeFinancialMovementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvances?: Prisma.HrEmployeeAdvanceUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceAllocations?: Prisma.HrEmployeeAdvancePayoutAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceSettlements?: Prisma.HrEmployeeAdvanceSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdvanceDeferrals?: Prisma.HrEmployeeAdvanceDeferralUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductions?: Prisma.HrEmployeeAdministrativeDeductionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeAdministrativeDeductionActions?: Prisma.HrEmployeeAdministrativeDeductionActionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeCompensationProfiles?: Prisma.HrEmployeeCompensationProfileUncheckedUpdateManyWithoutCompanyNestedInput
+  marketingSalesTargets?: Prisma.MarketingSalesTargetUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeePromotions?: Prisma.HrEmployeePromotionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicies?: Prisma.HrCompensationPolicyUncheckedUpdateManyWithoutCompanyNestedInput
+  hrCompensationPolicyVersions?: Prisma.HrCompensationPolicyVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLeaves?: Prisma.HrEmployeeLeaveUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollRuns?: Prisma.HrPayrollRunUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollLines?: Prisma.HrPayrollLineUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollAdvanceApplications?: Prisma.HrPayrollAdvanceApplicationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollDeductionApplications?: Prisma.HrPayrollAdministrativeDeductionApplicationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollPayments?: Prisma.HrPayrollPaymentUncheckedUpdateManyWithoutCompanyNestedInput
+  hrPayrollPaymentAllocations?: Prisma.HrPayrollPaymentAllocationUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocumentBlobs?: Prisma.HrEmployeeDocumentBlobUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeLetters?: Prisma.HrEmployeeLetterUncheckedUpdateManyWithoutCompanyNestedInput
+  hrEmployeeWorkTerms?: Prisma.HrEmployeeWorkTermsUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceBranches?: Prisma.AttendanceBranchUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceCredentials?: Prisma.AttendanceEmployeeCredentialUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceEvents?: Prisma.AttendanceEventUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceWorkSessions?: Prisma.AttendanceWorkSessionUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleTemplates?: Prisma.AttendanceScheduleTemplateUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleTemplateVersions?: Prisma.AttendanceScheduleTemplateVersionUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceSchedulePeriods?: Prisma.AttendanceSchedulePeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeScheduleAssignments?: Prisma.AttendanceEmployeeScheduleAssignmentUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeWeeklyAdjustments?: Prisma.AttendanceEmployeeWeeklyAdjustmentUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceEmployeeWeeklyAdjustmentPeriods?: Prisma.AttendanceEmployeeWeeklyAdjustmentPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleExceptions?: Prisma.AttendanceScheduleExceptionUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceScheduleExceptionPeriods?: Prisma.AttendanceScheduleExceptionPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceRosterPlans?: Prisma.AttendanceRosterPlanUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceRosterEntries?: Prisma.AttendanceRosterEntryUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceRosterEntryPeriods?: Prisma.AttendanceRosterEntryPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  attendanceRosterPeakPeriods?: Prisma.AttendanceRosterPeakPeriodUncheckedUpdateManyWithoutCompanyNestedInput
+  hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -99370,6 +103219,9 @@ export type CompanyCreateWithoutAiSkillActivationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
   aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCompanyInput
@@ -99547,6 +103399,9 @@ export type CompanyUncheckedCreateWithoutAiSkillActivationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
@@ -99740,6 +103595,9 @@ export type CompanyUpdateWithoutAiSkillActivationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
   aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCompanyNestedInput
@@ -99917,6 +103775,9 @@ export type CompanyUncheckedUpdateWithoutAiSkillActivationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
@@ -100094,6 +103955,9 @@ export type CompanyCreateWithoutAiExecutionReceiptsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
   aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCompanyInput
@@ -100271,6 +104135,9 @@ export type CompanyUncheckedCreateWithoutAiExecutionReceiptsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
@@ -100464,6 +104331,9 @@ export type CompanyUpdateWithoutAiExecutionReceiptsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
   aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCompanyNestedInput
@@ -100641,6 +104511,9 @@ export type CompanyUncheckedUpdateWithoutAiExecutionReceiptsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
@@ -100818,6 +104691,9 @@ export type CompanyCreateWithoutAiInterpretationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -100995,6 +104871,9 @@ export type CompanyUncheckedCreateWithoutAiInterpretationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -101188,6 +105067,9 @@ export type CompanyUpdateWithoutAiInterpretationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -101365,6 +105247,9 @@ export type CompanyUncheckedUpdateWithoutAiInterpretationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -101542,6 +105427,9 @@ export type CompanyCreateWithoutAiInterpretationRunsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -101719,6 +105607,9 @@ export type CompanyUncheckedCreateWithoutAiInterpretationRunsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -101912,6 +105803,9 @@ export type CompanyUpdateWithoutAiInterpretationRunsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -102089,6 +105983,9 @@ export type CompanyUncheckedUpdateWithoutAiInterpretationRunsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -102266,6 +106163,9 @@ export type CompanyCreateWithoutAiBudgetReservationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -102443,6 +106343,9 @@ export type CompanyUncheckedCreateWithoutAiBudgetReservationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -102636,6 +106539,9 @@ export type CompanyUpdateWithoutAiBudgetReservationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -102813,6 +106719,9 @@ export type CompanyUncheckedUpdateWithoutAiBudgetReservationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -102990,6 +106899,9 @@ export type CompanyCreateWithoutAiUsageLedgerEntriesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -103167,6 +107079,9 @@ export type CompanyUncheckedCreateWithoutAiUsageLedgerEntriesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -103360,6 +107275,9 @@ export type CompanyUpdateWithoutAiUsageLedgerEntriesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -103537,6 +107455,9 @@ export type CompanyUncheckedUpdateWithoutAiUsageLedgerEntriesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -103714,6 +107635,9 @@ export type CompanyCreateWithoutAiInterpretationPlacementsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -103891,6 +107815,9 @@ export type CompanyUncheckedCreateWithoutAiInterpretationPlacementsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -104084,6 +108011,9 @@ export type CompanyUpdateWithoutAiInterpretationPlacementsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -104261,6 +108191,9 @@ export type CompanyUncheckedUpdateWithoutAiInterpretationPlacementsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -104438,6 +108371,9 @@ export type CompanyCreateWithoutAiHumanInsightsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -104615,6 +108551,9 @@ export type CompanyUncheckedCreateWithoutAiHumanInsightsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -104808,6 +108747,9 @@ export type CompanyUpdateWithoutAiHumanInsightsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -104985,6 +108927,9 @@ export type CompanyUncheckedUpdateWithoutAiHumanInsightsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -105162,6 +109107,9 @@ export type CompanyCreateWithoutAiEvaluationFeedbackInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunCreateNestedManyWithoutCompanyInput
@@ -105339,6 +109287,9 @@ export type CompanyUncheckedCreateWithoutAiEvaluationFeedbackInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedCreateNestedManyWithoutCompanyInput
@@ -105532,6 +109483,9 @@ export type CompanyUpdateWithoutAiEvaluationFeedbackInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUpdateManyWithoutCompanyNestedInput
@@ -105709,6 +109663,9 @@ export type CompanyUncheckedUpdateWithoutAiEvaluationFeedbackInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillEvaluationRuns?: Prisma.AiSkillEvaluationRunUncheckedUpdateManyWithoutCompanyNestedInput
@@ -105886,6 +109843,9 @@ export type CompanyCreateWithoutAiSkillEvaluationRunsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -106063,6 +110023,9 @@ export type CompanyUncheckedCreateWithoutAiSkillEvaluationRunsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -106256,6 +110219,9 @@ export type CompanyUpdateWithoutAiSkillEvaluationRunsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -106433,6 +110399,9 @@ export type CompanyUncheckedUpdateWithoutAiSkillEvaluationRunsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -106610,6 +110579,9 @@ export type CompanyCreateWithoutOperationsSectionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -106787,6 +110759,9 @@ export type CompanyUncheckedCreateWithoutOperationsSectionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -106980,6 +110955,9 @@ export type CompanyUpdateWithoutOperationsSectionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -107157,6 +111135,9 @@ export type CompanyUncheckedUpdateWithoutOperationsSectionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -107334,6 +111315,9 @@ export type CompanyCreateWithoutOperationsUnitsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -107511,6 +111495,9 @@ export type CompanyUncheckedCreateWithoutOperationsUnitsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -107704,6 +111691,9 @@ export type CompanyUpdateWithoutOperationsUnitsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -107881,6 +111871,9 @@ export type CompanyUncheckedUpdateWithoutOperationsUnitsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -108058,6 +112051,9 @@ export type CompanyCreateWithoutOperationsCatalogCategoriesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -108235,6 +112231,9 @@ export type CompanyUncheckedCreateWithoutOperationsCatalogCategoriesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -108428,6 +112427,9 @@ export type CompanyUpdateWithoutOperationsCatalogCategoriesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -108605,6 +112607,9 @@ export type CompanyUncheckedUpdateWithoutOperationsCatalogCategoriesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -108782,6 +112787,9 @@ export type CompanyCreateWithoutOperationsItemsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -108959,6 +112967,9 @@ export type CompanyUncheckedCreateWithoutOperationsItemsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -109152,6 +113163,9 @@ export type CompanyUpdateWithoutOperationsItemsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -109329,6 +113343,9 @@ export type CompanyUncheckedUpdateWithoutOperationsItemsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -109506,6 +113523,9 @@ export type CompanyCreateWithoutOperationsItemUnitsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -109683,6 +113703,9 @@ export type CompanyUncheckedCreateWithoutOperationsItemUnitsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -109876,6 +113899,9 @@ export type CompanyUpdateWithoutOperationsItemUnitsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -110053,6 +114079,9 @@ export type CompanyUncheckedUpdateWithoutOperationsItemUnitsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -110230,6 +114259,9 @@ export type CompanyCreateWithoutOperationsConversionVersionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -110407,6 +114439,9 @@ export type CompanyUncheckedCreateWithoutOperationsConversionVersionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -110600,6 +114635,9 @@ export type CompanyUpdateWithoutOperationsConversionVersionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -110777,6 +114815,9 @@ export type CompanyUncheckedUpdateWithoutOperationsConversionVersionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -110954,6 +114995,9 @@ export type CompanyCreateWithoutOperationsConversionEdgesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -111131,6 +115175,9 @@ export type CompanyUncheckedCreateWithoutOperationsConversionEdgesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -111324,6 +115371,9 @@ export type CompanyUpdateWithoutOperationsConversionEdgesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -111501,6 +115551,9 @@ export type CompanyUncheckedUpdateWithoutOperationsConversionEdgesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -111678,6 +115731,9 @@ export type CompanyCreateWithoutOperationsInternalRegistrationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -111855,6 +115911,9 @@ export type CompanyUncheckedCreateWithoutOperationsInternalRegistrationsInput = 
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -112048,6 +116107,9 @@ export type CompanyUpdateWithoutOperationsInternalRegistrationsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -112225,6 +116287,9 @@ export type CompanyUncheckedUpdateWithoutOperationsInternalRegistrationsInput = 
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -112402,6 +116467,9 @@ export type CompanyCreateWithoutOperationsInternalRegistrationLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -112579,6 +116647,9 @@ export type CompanyUncheckedCreateWithoutOperationsInternalRegistrationLinesInpu
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -112772,6 +116843,9 @@ export type CompanyUpdateWithoutOperationsInternalRegistrationLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -112949,6 +117023,9 @@ export type CompanyUncheckedUpdateWithoutOperationsInternalRegistrationLinesInpu
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -113126,6 +117203,9 @@ export type CompanyCreateWithoutOperationsInternalRegistrationConsumptionsInput 
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -113303,6 +117383,9 @@ export type CompanyUncheckedCreateWithoutOperationsInternalRegistrationConsumpti
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -113496,6 +117579,9 @@ export type CompanyUpdateWithoutOperationsInternalRegistrationConsumptionsInput 
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -113673,6 +117759,9 @@ export type CompanyUncheckedUpdateWithoutOperationsInternalRegistrationConsumpti
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -113850,6 +117939,9 @@ export type CompanyCreateWithoutOperationsRecipeVersionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -114027,6 +118119,9 @@ export type CompanyUncheckedCreateWithoutOperationsRecipeVersionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -114220,6 +118315,9 @@ export type CompanyUpdateWithoutOperationsRecipeVersionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -114397,6 +118495,9 @@ export type CompanyUncheckedUpdateWithoutOperationsRecipeVersionsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -114574,6 +118675,9 @@ export type CompanyCreateWithoutOperationsRecipeLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -114751,6 +118855,9 @@ export type CompanyUncheckedCreateWithoutOperationsRecipeLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -114944,6 +119051,9 @@ export type CompanyUpdateWithoutOperationsRecipeLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -115121,6 +119231,9 @@ export type CompanyUncheckedUpdateWithoutOperationsRecipeLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -115298,6 +119411,9 @@ export type CompanyCreateWithoutOperationsPurchaseRequestsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -115475,6 +119591,9 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseRequestsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -115668,6 +119787,9 @@ export type CompanyUpdateWithoutOperationsPurchaseRequestsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -115845,6 +119967,9 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseRequestsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -116022,6 +120147,9 @@ export type CompanyCreateWithoutOperationsPurchaseRequestLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -116199,6 +120327,9 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseRequestLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -116392,6 +120523,9 @@ export type CompanyUpdateWithoutOperationsPurchaseRequestLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -116569,6 +120703,9 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseRequestLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -116746,6 +120883,9 @@ export type CompanyCreateWithoutOperationsPurchaseReceiptsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -116923,6 +121063,9 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseReceiptsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -117116,6 +121259,9 @@ export type CompanyUpdateWithoutOperationsPurchaseReceiptsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -117293,6 +121439,9 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseReceiptsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -117470,6 +121619,9 @@ export type CompanyCreateWithoutOperationsPurchaseReceiptLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -117647,6 +121799,9 @@ export type CompanyUncheckedCreateWithoutOperationsPurchaseReceiptLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -117840,6 +121995,9 @@ export type CompanyUpdateWithoutOperationsPurchaseReceiptLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -118017,6 +122175,9 @@ export type CompanyUncheckedUpdateWithoutOperationsPurchaseReceiptLinesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -118194,6 +122355,9 @@ export type CompanyCreateWithoutOperationsCustodyProfileInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -118371,6 +122535,9 @@ export type CompanyUncheckedCreateWithoutOperationsCustodyProfileInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -118564,6 +122731,9 @@ export type CompanyUpdateWithoutOperationsCustodyProfileInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -118741,6 +122911,9 @@ export type CompanyUncheckedUpdateWithoutOperationsCustodyProfileInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -118918,6 +123091,9 @@ export type CompanyCreateWithoutOperationsCustodyEventsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -119095,6 +123271,9 @@ export type CompanyUncheckedCreateWithoutOperationsCustodyEventsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -119288,6 +123467,9 @@ export type CompanyUpdateWithoutOperationsCustodyEventsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -119465,6 +123647,9 @@ export type CompanyUncheckedUpdateWithoutOperationsCustodyEventsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -119642,6 +123827,9 @@ export type CompanyCreateWithoutOperationsInventoryBalancesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -119819,6 +124007,9 @@ export type CompanyUncheckedCreateWithoutOperationsInventoryBalancesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -120012,6 +124203,9 @@ export type CompanyUpdateWithoutOperationsInventoryBalancesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -120189,6 +124383,9 @@ export type CompanyUncheckedUpdateWithoutOperationsInventoryBalancesInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -120366,6 +124563,9 @@ export type CompanyCreateWithoutOperationsInventoryMovementsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutCompanyInput
@@ -120543,6 +124743,9 @@ export type CompanyUncheckedCreateWithoutOperationsInventoryMovementsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedCreateNestedManyWithoutCompanyInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedCreateNestedOneWithoutCompanyInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedCreateNestedManyWithoutCompanyInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedCreateNestedManyWithoutCompanyInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedCreateNestedManyWithoutCompanyInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutCompanyInput
@@ -120736,6 +124939,9 @@ export type CompanyUpdateWithoutOperationsInventoryMovementsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -120913,6 +125119,9 @@ export type CompanyUncheckedUpdateWithoutOperationsInventoryMovementsInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -121105,6 +125314,9 @@ export type CompanyUpdateWithoutTenantInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutCompanyNestedInput
@@ -121282,6 +125494,9 @@ export type CompanyUncheckedUpdateWithoutTenantInput = {
   hrFinalSettlements?: Prisma.HrFinalSettlementUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyIdentities?: Prisma.AiCompanyIdentityUncheckedUpdateManyWithoutCompanyNestedInput
   aiCompanyContexts?: Prisma.AiCompanyContextUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanyPolicy?: Prisma.AiCompanyPolicyUncheckedUpdateOneWithoutCompanyNestedInput
+  aiCompanyPolicyRevisions?: Prisma.AiCompanyPolicyRevisionUncheckedUpdateManyWithoutCompanyNestedInput
+  aiCompanySkillOverrides?: Prisma.AiCompanySkillOverrideUncheckedUpdateManyWithoutCompanyNestedInput
   aiSkillActivations?: Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput
   aiExecutionReceipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyNestedInput
   aiEvaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutCompanyNestedInput
@@ -121464,6 +125679,8 @@ export type CompanyCountOutputType = {
   hrFinalSettlements: number
   aiCompanyIdentities: number
   aiCompanyContexts: number
+  aiCompanyPolicyRevisions: number
+  aiCompanySkillOverrides: number
   aiSkillActivations: number
   aiExecutionReceipts: number
   aiEvaluationFeedback: number
@@ -121621,6 +125838,8 @@ export type CompanyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   hrFinalSettlements?: boolean | CompanyCountOutputTypeCountHrFinalSettlementsArgs
   aiCompanyIdentities?: boolean | CompanyCountOutputTypeCountAiCompanyIdentitiesArgs
   aiCompanyContexts?: boolean | CompanyCountOutputTypeCountAiCompanyContextsArgs
+  aiCompanyPolicyRevisions?: boolean | CompanyCountOutputTypeCountAiCompanyPolicyRevisionsArgs
+  aiCompanySkillOverrides?: boolean | CompanyCountOutputTypeCountAiCompanySkillOverridesArgs
   aiSkillActivations?: boolean | CompanyCountOutputTypeCountAiSkillActivationsArgs
   aiExecutionReceipts?: boolean | CompanyCountOutputTypeCountAiExecutionReceiptsArgs
   aiEvaluationFeedback?: boolean | CompanyCountOutputTypeCountAiEvaluationFeedbackArgs
@@ -122282,6 +126501,20 @@ export type CompanyCountOutputTypeCountAiCompanyContextsArgs<ExtArgs extends run
 /**
  * CompanyCountOutputType without action
  */
+export type CompanyCountOutputTypeCountAiCompanyPolicyRevisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AiCompanyPolicyRevisionWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
+export type CompanyCountOutputTypeCountAiCompanySkillOverridesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AiCompanySkillOverrideWhereInput
+}
+
+/**
+ * CompanyCountOutputType without action
+ */
 export type CompanyCountOutputTypeCountAiSkillActivationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AiSkillActivationWhereInput
 }
@@ -122885,6 +127118,9 @@ export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   hrFinalSettlements?: boolean | Prisma.Company$hrFinalSettlementsArgs<ExtArgs>
   aiCompanyIdentities?: boolean | Prisma.Company$aiCompanyIdentitiesArgs<ExtArgs>
   aiCompanyContexts?: boolean | Prisma.Company$aiCompanyContextsArgs<ExtArgs>
+  aiCompanyPolicy?: boolean | Prisma.Company$aiCompanyPolicyArgs<ExtArgs>
+  aiCompanyPolicyRevisions?: boolean | Prisma.Company$aiCompanyPolicyRevisionsArgs<ExtArgs>
+  aiCompanySkillOverrides?: boolean | Prisma.Company$aiCompanySkillOverridesArgs<ExtArgs>
   aiSkillActivations?: boolean | Prisma.Company$aiSkillActivationsArgs<ExtArgs>
   aiExecutionReceipts?: boolean | Prisma.Company$aiExecutionReceiptsArgs<ExtArgs>
   aiEvaluationFeedback?: boolean | Prisma.Company$aiEvaluationFeedbackArgs<ExtArgs>
@@ -123105,6 +127341,9 @@ export type CompanyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   hrFinalSettlements?: boolean | Prisma.Company$hrFinalSettlementsArgs<ExtArgs>
   aiCompanyIdentities?: boolean | Prisma.Company$aiCompanyIdentitiesArgs<ExtArgs>
   aiCompanyContexts?: boolean | Prisma.Company$aiCompanyContextsArgs<ExtArgs>
+  aiCompanyPolicy?: boolean | Prisma.Company$aiCompanyPolicyArgs<ExtArgs>
+  aiCompanyPolicyRevisions?: boolean | Prisma.Company$aiCompanyPolicyRevisionsArgs<ExtArgs>
+  aiCompanySkillOverrides?: boolean | Prisma.Company$aiCompanySkillOverridesArgs<ExtArgs>
   aiSkillActivations?: boolean | Prisma.Company$aiSkillActivationsArgs<ExtArgs>
   aiExecutionReceipts?: boolean | Prisma.Company$aiExecutionReceiptsArgs<ExtArgs>
   aiEvaluationFeedback?: boolean | Prisma.Company$aiEvaluationFeedbackArgs<ExtArgs>
@@ -123279,6 +127518,9 @@ export type $CompanyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     hrFinalSettlements: Prisma.$HrFinalSettlementPayload<ExtArgs>[]
     aiCompanyIdentities: Prisma.$AiCompanyIdentityPayload<ExtArgs>[]
     aiCompanyContexts: Prisma.$AiCompanyContextPayload<ExtArgs>[]
+    aiCompanyPolicy: Prisma.$AiCompanyPolicyPayload<ExtArgs> | null
+    aiCompanyPolicyRevisions: Prisma.$AiCompanyPolicyRevisionPayload<ExtArgs>[]
+    aiCompanySkillOverrides: Prisma.$AiCompanySkillOverridePayload<ExtArgs>[]
     aiSkillActivations: Prisma.$AiSkillActivationPayload<ExtArgs>[]
     aiExecutionReceipts: Prisma.$AiExecutionReceiptPayload<ExtArgs>[]
     aiEvaluationFeedback: Prisma.$AiEvaluationFeedbackPayload<ExtArgs>[]
@@ -123859,6 +128101,9 @@ export interface Prisma__CompanyClient<T, Null = never, ExtArgs extends runtime.
   hrFinalSettlements<T extends Prisma.Company$hrFinalSettlementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$hrFinalSettlementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrFinalSettlementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   aiCompanyIdentities<T extends Prisma.Company$aiCompanyIdentitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$aiCompanyIdentitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiCompanyIdentityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   aiCompanyContexts<T extends Prisma.Company$aiCompanyContextsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$aiCompanyContextsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiCompanyContextPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  aiCompanyPolicy<T extends Prisma.Company$aiCompanyPolicyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$aiCompanyPolicyArgs<ExtArgs>>): Prisma.Prisma__AiCompanyPolicyClient<runtime.Types.Result.GetResult<Prisma.$AiCompanyPolicyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  aiCompanyPolicyRevisions<T extends Prisma.Company$aiCompanyPolicyRevisionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$aiCompanyPolicyRevisionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiCompanyPolicyRevisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  aiCompanySkillOverrides<T extends Prisma.Company$aiCompanySkillOverridesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$aiCompanySkillOverridesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiCompanySkillOverridePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   aiSkillActivations<T extends Prisma.Company$aiSkillActivationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$aiSkillActivationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiSkillActivationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   aiExecutionReceipts<T extends Prisma.Company$aiExecutionReceiptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$aiExecutionReceiptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiExecutionReceiptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   aiEvaluationFeedback<T extends Prisma.Company$aiEvaluationFeedbackArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Company$aiEvaluationFeedbackArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiEvaluationFeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -126401,6 +130646,73 @@ export type Company$aiCompanyContextsArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.AiCompanyContextScalarFieldEnum | Prisma.AiCompanyContextScalarFieldEnum[]
+}
+
+/**
+ * Company.aiCompanyPolicy
+ */
+export type Company$aiCompanyPolicyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AiCompanyPolicy
+   */
+  select?: Prisma.AiCompanyPolicySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AiCompanyPolicy
+   */
+  omit?: Prisma.AiCompanyPolicyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiCompanyPolicyInclude<ExtArgs> | null
+  where?: Prisma.AiCompanyPolicyWhereInput
+}
+
+/**
+ * Company.aiCompanyPolicyRevisions
+ */
+export type Company$aiCompanyPolicyRevisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AiCompanyPolicyRevision
+   */
+  select?: Prisma.AiCompanyPolicyRevisionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AiCompanyPolicyRevision
+   */
+  omit?: Prisma.AiCompanyPolicyRevisionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiCompanyPolicyRevisionInclude<ExtArgs> | null
+  where?: Prisma.AiCompanyPolicyRevisionWhereInput
+  orderBy?: Prisma.AiCompanyPolicyRevisionOrderByWithRelationInput | Prisma.AiCompanyPolicyRevisionOrderByWithRelationInput[]
+  cursor?: Prisma.AiCompanyPolicyRevisionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AiCompanyPolicyRevisionScalarFieldEnum | Prisma.AiCompanyPolicyRevisionScalarFieldEnum[]
+}
+
+/**
+ * Company.aiCompanySkillOverrides
+ */
+export type Company$aiCompanySkillOverridesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AiCompanySkillOverride
+   */
+  select?: Prisma.AiCompanySkillOverrideSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AiCompanySkillOverride
+   */
+  omit?: Prisma.AiCompanySkillOverrideOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiCompanySkillOverrideInclude<ExtArgs> | null
+  where?: Prisma.AiCompanySkillOverrideWhereInput
+  orderBy?: Prisma.AiCompanySkillOverrideOrderByWithRelationInput | Prisma.AiCompanySkillOverrideOrderByWithRelationInput[]
+  cursor?: Prisma.AiCompanySkillOverrideWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AiCompanySkillOverrideScalarFieldEnum | Prisma.AiCompanySkillOverrideScalarFieldEnum[]
 }
 
 /**

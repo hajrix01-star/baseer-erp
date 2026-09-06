@@ -52,6 +52,8 @@ export type AiBudgetReservationMinAggregateOutputType = {
   interpretationRunId: string | null
   modelPriceRevisionId: string | null
   dayStartAt: Date | null
+  monthStartAt: Date | null
+  companyPolicyRevisionId: string | null
   status: $Enums.AiBudgetReservationStatus | null
   inputTokenEstimate: number | null
   maxOutputTokens: number | null
@@ -74,6 +76,8 @@ export type AiBudgetReservationMaxAggregateOutputType = {
   interpretationRunId: string | null
   modelPriceRevisionId: string | null
   dayStartAt: Date | null
+  monthStartAt: Date | null
+  companyPolicyRevisionId: string | null
   status: $Enums.AiBudgetReservationStatus | null
   inputTokenEstimate: number | null
   maxOutputTokens: number | null
@@ -96,6 +100,8 @@ export type AiBudgetReservationCountAggregateOutputType = {
   interpretationRunId: number
   modelPriceRevisionId: number
   dayStartAt: number
+  monthStartAt: number
+  companyPolicyRevisionId: number
   status: number
   inputTokenEstimate: number
   maxOutputTokens: number
@@ -136,6 +142,8 @@ export type AiBudgetReservationMinAggregateInputType = {
   interpretationRunId?: true
   modelPriceRevisionId?: true
   dayStartAt?: true
+  monthStartAt?: true
+  companyPolicyRevisionId?: true
   status?: true
   inputTokenEstimate?: true
   maxOutputTokens?: true
@@ -158,6 +166,8 @@ export type AiBudgetReservationMaxAggregateInputType = {
   interpretationRunId?: true
   modelPriceRevisionId?: true
   dayStartAt?: true
+  monthStartAt?: true
+  companyPolicyRevisionId?: true
   status?: true
   inputTokenEstimate?: true
   maxOutputTokens?: true
@@ -180,6 +190,8 @@ export type AiBudgetReservationCountAggregateInputType = {
   interpretationRunId?: true
   modelPriceRevisionId?: true
   dayStartAt?: true
+  monthStartAt?: true
+  companyPolicyRevisionId?: true
   status?: true
   inputTokenEstimate?: true
   maxOutputTokens?: true
@@ -289,6 +301,8 @@ export type AiBudgetReservationGroupByOutputType = {
   interpretationRunId: string
   modelPriceRevisionId: string
   dayStartAt: Date
+  monthStartAt: Date | null
+  companyPolicyRevisionId: string | null
   status: $Enums.AiBudgetReservationStatus
   inputTokenEstimate: number
   maxOutputTokens: number
@@ -334,6 +348,8 @@ export type AiBudgetReservationWhereInput = {
   interpretationRunId?: Prisma.UuidFilter<"AiBudgetReservation"> | string
   modelPriceRevisionId?: Prisma.UuidFilter<"AiBudgetReservation"> | string
   dayStartAt?: Prisma.DateTimeFilter<"AiBudgetReservation"> | Date | string
+  monthStartAt?: Prisma.DateTimeNullableFilter<"AiBudgetReservation"> | Date | string | null
+  companyPolicyRevisionId?: Prisma.UuidNullableFilter<"AiBudgetReservation"> | string | null
   status?: Prisma.EnumAiBudgetReservationStatusFilter<"AiBudgetReservation"> | $Enums.AiBudgetReservationStatus
   inputTokenEstimate?: Prisma.IntFilter<"AiBudgetReservation"> | number
   maxOutputTokens?: Prisma.IntFilter<"AiBudgetReservation"> | number
@@ -350,6 +366,7 @@ export type AiBudgetReservationWhereInput = {
   skillActivation?: Prisma.XOR<Prisma.AiSkillActivationScalarRelationFilter, Prisma.AiSkillActivationWhereInput>
   interpretationRun?: Prisma.XOR<Prisma.AiInterpretationRunScalarRelationFilter, Prisma.AiInterpretationRunWhereInput>
   modelPriceRevision?: Prisma.XOR<Prisma.AiModelPriceRevisionScalarRelationFilter, Prisma.AiModelPriceRevisionWhereInput>
+  companyPolicyRevision?: Prisma.XOR<Prisma.AiCompanyPolicyRevisionNullableScalarRelationFilter, Prisma.AiCompanyPolicyRevisionWhereInput> | null
   ledgerEntries?: Prisma.AiUsageLedgerListRelationFilter
 }
 
@@ -362,6 +379,8 @@ export type AiBudgetReservationOrderByWithRelationInput = {
   interpretationRunId?: Prisma.SortOrder
   modelPriceRevisionId?: Prisma.SortOrder
   dayStartAt?: Prisma.SortOrder
+  monthStartAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  companyPolicyRevisionId?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   inputTokenEstimate?: Prisma.SortOrder
   maxOutputTokens?: Prisma.SortOrder
@@ -378,6 +397,7 @@ export type AiBudgetReservationOrderByWithRelationInput = {
   skillActivation?: Prisma.AiSkillActivationOrderByWithRelationInput
   interpretationRun?: Prisma.AiInterpretationRunOrderByWithRelationInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionOrderByWithRelationInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionOrderByWithRelationInput
   ledgerEntries?: Prisma.AiUsageLedgerOrderByRelationAggregateInput
 }
 
@@ -395,6 +415,8 @@ export type AiBudgetReservationWhereUniqueInput = Prisma.AtLeast<{
   interpretationRunId?: Prisma.UuidFilter<"AiBudgetReservation"> | string
   modelPriceRevisionId?: Prisma.UuidFilter<"AiBudgetReservation"> | string
   dayStartAt?: Prisma.DateTimeFilter<"AiBudgetReservation"> | Date | string
+  monthStartAt?: Prisma.DateTimeNullableFilter<"AiBudgetReservation"> | Date | string | null
+  companyPolicyRevisionId?: Prisma.UuidNullableFilter<"AiBudgetReservation"> | string | null
   status?: Prisma.EnumAiBudgetReservationStatusFilter<"AiBudgetReservation"> | $Enums.AiBudgetReservationStatus
   inputTokenEstimate?: Prisma.IntFilter<"AiBudgetReservation"> | number
   maxOutputTokens?: Prisma.IntFilter<"AiBudgetReservation"> | number
@@ -411,6 +433,7 @@ export type AiBudgetReservationWhereUniqueInput = Prisma.AtLeast<{
   skillActivation?: Prisma.XOR<Prisma.AiSkillActivationScalarRelationFilter, Prisma.AiSkillActivationWhereInput>
   interpretationRun?: Prisma.XOR<Prisma.AiInterpretationRunScalarRelationFilter, Prisma.AiInterpretationRunWhereInput>
   modelPriceRevision?: Prisma.XOR<Prisma.AiModelPriceRevisionScalarRelationFilter, Prisma.AiModelPriceRevisionWhereInput>
+  companyPolicyRevision?: Prisma.XOR<Prisma.AiCompanyPolicyRevisionNullableScalarRelationFilter, Prisma.AiCompanyPolicyRevisionWhereInput> | null
   ledgerEntries?: Prisma.AiUsageLedgerListRelationFilter
 }, "id" | "id_tenantId_companyId" | "interpretationRunId_tenantId_companyId">
 
@@ -423,6 +446,8 @@ export type AiBudgetReservationOrderByWithAggregationInput = {
   interpretationRunId?: Prisma.SortOrder
   modelPriceRevisionId?: Prisma.SortOrder
   dayStartAt?: Prisma.SortOrder
+  monthStartAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  companyPolicyRevisionId?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   inputTokenEstimate?: Prisma.SortOrder
   maxOutputTokens?: Prisma.SortOrder
@@ -453,6 +478,8 @@ export type AiBudgetReservationScalarWhereWithAggregatesInput = {
   interpretationRunId?: Prisma.UuidWithAggregatesFilter<"AiBudgetReservation"> | string
   modelPriceRevisionId?: Prisma.UuidWithAggregatesFilter<"AiBudgetReservation"> | string
   dayStartAt?: Prisma.DateTimeWithAggregatesFilter<"AiBudgetReservation"> | Date | string
+  monthStartAt?: Prisma.DateTimeNullableWithAggregatesFilter<"AiBudgetReservation"> | Date | string | null
+  companyPolicyRevisionId?: Prisma.UuidNullableWithAggregatesFilter<"AiBudgetReservation"> | string | null
   status?: Prisma.EnumAiBudgetReservationStatusWithAggregatesFilter<"AiBudgetReservation"> | $Enums.AiBudgetReservationStatus
   inputTokenEstimate?: Prisma.IntWithAggregatesFilter<"AiBudgetReservation"> | number
   maxOutputTokens?: Prisma.IntWithAggregatesFilter<"AiBudgetReservation"> | number
@@ -469,6 +496,7 @@ export type AiBudgetReservationScalarWhereWithAggregatesInput = {
 export type AiBudgetReservationCreateInput = {
   id?: string
   dayStartAt: Date | string
+  monthStartAt?: Date | string | null
   status?: $Enums.AiBudgetReservationStatus
   inputTokenEstimate: number
   maxOutputTokens: number
@@ -485,6 +513,7 @@ export type AiBudgetReservationCreateInput = {
   skillActivation: Prisma.AiSkillActivationCreateNestedOneWithoutBudgetReservationsInput
   interpretationRun: Prisma.AiInterpretationRunCreateNestedOneWithoutBudgetReservationInput
   modelPriceRevision: Prisma.AiModelPriceRevisionCreateNestedOneWithoutBudgetReservationsInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionCreateNestedOneWithoutReservationsInput
   ledgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutReservationInput
 }
 
@@ -497,6 +526,8 @@ export type AiBudgetReservationUncheckedCreateInput = {
   interpretationRunId: string
   modelPriceRevisionId: string
   dayStartAt: Date | string
+  monthStartAt?: Date | string | null
+  companyPolicyRevisionId?: string | null
   status?: $Enums.AiBudgetReservationStatus
   inputTokenEstimate: number
   maxOutputTokens: number
@@ -514,6 +545,7 @@ export type AiBudgetReservationUncheckedCreateInput = {
 export type AiBudgetReservationUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   dayStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumAiBudgetReservationStatusFieldUpdateOperationsInput | $Enums.AiBudgetReservationStatus
   inputTokenEstimate?: Prisma.IntFieldUpdateOperationsInput | number
   maxOutputTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -530,6 +562,7 @@ export type AiBudgetReservationUpdateInput = {
   skillActivation?: Prisma.AiSkillActivationUpdateOneRequiredWithoutBudgetReservationsNestedInput
   interpretationRun?: Prisma.AiInterpretationRunUpdateOneRequiredWithoutBudgetReservationNestedInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneRequiredWithoutBudgetReservationsNestedInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionUpdateOneWithoutReservationsNestedInput
   ledgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutReservationNestedInput
 }
 
@@ -542,6 +575,8 @@ export type AiBudgetReservationUncheckedUpdateInput = {
   interpretationRunId?: Prisma.StringFieldUpdateOperationsInput | string
   modelPriceRevisionId?: Prisma.StringFieldUpdateOperationsInput | string
   dayStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumAiBudgetReservationStatusFieldUpdateOperationsInput | $Enums.AiBudgetReservationStatus
   inputTokenEstimate?: Prisma.IntFieldUpdateOperationsInput | number
   maxOutputTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -565,6 +600,8 @@ export type AiBudgetReservationCreateManyInput = {
   interpretationRunId: string
   modelPriceRevisionId: string
   dayStartAt: Date | string
+  monthStartAt?: Date | string | null
+  companyPolicyRevisionId?: string | null
   status?: $Enums.AiBudgetReservationStatus
   inputTokenEstimate: number
   maxOutputTokens: number
@@ -581,6 +618,7 @@ export type AiBudgetReservationCreateManyInput = {
 export type AiBudgetReservationUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   dayStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumAiBudgetReservationStatusFieldUpdateOperationsInput | $Enums.AiBudgetReservationStatus
   inputTokenEstimate?: Prisma.IntFieldUpdateOperationsInput | number
   maxOutputTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -603,6 +641,8 @@ export type AiBudgetReservationUncheckedUpdateManyInput = {
   interpretationRunId?: Prisma.StringFieldUpdateOperationsInput | string
   modelPriceRevisionId?: Prisma.StringFieldUpdateOperationsInput | string
   dayStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumAiBudgetReservationStatusFieldUpdateOperationsInput | $Enums.AiBudgetReservationStatus
   inputTokenEstimate?: Prisma.IntFieldUpdateOperationsInput | number
   maxOutputTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -652,6 +692,8 @@ export type AiBudgetReservationCountOrderByAggregateInput = {
   interpretationRunId?: Prisma.SortOrder
   modelPriceRevisionId?: Prisma.SortOrder
   dayStartAt?: Prisma.SortOrder
+  monthStartAt?: Prisma.SortOrder
+  companyPolicyRevisionId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   inputTokenEstimate?: Prisma.SortOrder
   maxOutputTokens?: Prisma.SortOrder
@@ -682,6 +724,8 @@ export type AiBudgetReservationMaxOrderByAggregateInput = {
   interpretationRunId?: Prisma.SortOrder
   modelPriceRevisionId?: Prisma.SortOrder
   dayStartAt?: Prisma.SortOrder
+  monthStartAt?: Prisma.SortOrder
+  companyPolicyRevisionId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   inputTokenEstimate?: Prisma.SortOrder
   maxOutputTokens?: Prisma.SortOrder
@@ -704,6 +748,8 @@ export type AiBudgetReservationMinOrderByAggregateInput = {
   interpretationRunId?: Prisma.SortOrder
   modelPriceRevisionId?: Prisma.SortOrder
   dayStartAt?: Prisma.SortOrder
+  monthStartAt?: Prisma.SortOrder
+  companyPolicyRevisionId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   inputTokenEstimate?: Prisma.SortOrder
   maxOutputTokens?: Prisma.SortOrder
@@ -811,6 +857,48 @@ export type AiBudgetReservationUncheckedUpdateManyWithoutProviderConfigurationNe
   connect?: Prisma.AiBudgetReservationWhereUniqueInput | Prisma.AiBudgetReservationWhereUniqueInput[]
   update?: Prisma.AiBudgetReservationUpdateWithWhereUniqueWithoutProviderConfigurationInput | Prisma.AiBudgetReservationUpdateWithWhereUniqueWithoutProviderConfigurationInput[]
   updateMany?: Prisma.AiBudgetReservationUpdateManyWithWhereWithoutProviderConfigurationInput | Prisma.AiBudgetReservationUpdateManyWithWhereWithoutProviderConfigurationInput[]
+  deleteMany?: Prisma.AiBudgetReservationScalarWhereInput | Prisma.AiBudgetReservationScalarWhereInput[]
+}
+
+export type AiBudgetReservationCreateNestedManyWithoutCompanyPolicyRevisionInput = {
+  create?: Prisma.XOR<Prisma.AiBudgetReservationCreateWithoutCompanyPolicyRevisionInput, Prisma.AiBudgetReservationUncheckedCreateWithoutCompanyPolicyRevisionInput> | Prisma.AiBudgetReservationCreateWithoutCompanyPolicyRevisionInput[] | Prisma.AiBudgetReservationUncheckedCreateWithoutCompanyPolicyRevisionInput[]
+  connectOrCreate?: Prisma.AiBudgetReservationCreateOrConnectWithoutCompanyPolicyRevisionInput | Prisma.AiBudgetReservationCreateOrConnectWithoutCompanyPolicyRevisionInput[]
+  createMany?: Prisma.AiBudgetReservationCreateManyCompanyPolicyRevisionInputEnvelope
+  connect?: Prisma.AiBudgetReservationWhereUniqueInput | Prisma.AiBudgetReservationWhereUniqueInput[]
+}
+
+export type AiBudgetReservationUncheckedCreateNestedManyWithoutCompanyPolicyRevisionInput = {
+  create?: Prisma.XOR<Prisma.AiBudgetReservationCreateWithoutCompanyPolicyRevisionInput, Prisma.AiBudgetReservationUncheckedCreateWithoutCompanyPolicyRevisionInput> | Prisma.AiBudgetReservationCreateWithoutCompanyPolicyRevisionInput[] | Prisma.AiBudgetReservationUncheckedCreateWithoutCompanyPolicyRevisionInput[]
+  connectOrCreate?: Prisma.AiBudgetReservationCreateOrConnectWithoutCompanyPolicyRevisionInput | Prisma.AiBudgetReservationCreateOrConnectWithoutCompanyPolicyRevisionInput[]
+  createMany?: Prisma.AiBudgetReservationCreateManyCompanyPolicyRevisionInputEnvelope
+  connect?: Prisma.AiBudgetReservationWhereUniqueInput | Prisma.AiBudgetReservationWhereUniqueInput[]
+}
+
+export type AiBudgetReservationUpdateManyWithoutCompanyPolicyRevisionNestedInput = {
+  create?: Prisma.XOR<Prisma.AiBudgetReservationCreateWithoutCompanyPolicyRevisionInput, Prisma.AiBudgetReservationUncheckedCreateWithoutCompanyPolicyRevisionInput> | Prisma.AiBudgetReservationCreateWithoutCompanyPolicyRevisionInput[] | Prisma.AiBudgetReservationUncheckedCreateWithoutCompanyPolicyRevisionInput[]
+  connectOrCreate?: Prisma.AiBudgetReservationCreateOrConnectWithoutCompanyPolicyRevisionInput | Prisma.AiBudgetReservationCreateOrConnectWithoutCompanyPolicyRevisionInput[]
+  upsert?: Prisma.AiBudgetReservationUpsertWithWhereUniqueWithoutCompanyPolicyRevisionInput | Prisma.AiBudgetReservationUpsertWithWhereUniqueWithoutCompanyPolicyRevisionInput[]
+  createMany?: Prisma.AiBudgetReservationCreateManyCompanyPolicyRevisionInputEnvelope
+  set?: Prisma.AiBudgetReservationWhereUniqueInput | Prisma.AiBudgetReservationWhereUniqueInput[]
+  disconnect?: Prisma.AiBudgetReservationWhereUniqueInput | Prisma.AiBudgetReservationWhereUniqueInput[]
+  delete?: Prisma.AiBudgetReservationWhereUniqueInput | Prisma.AiBudgetReservationWhereUniqueInput[]
+  connect?: Prisma.AiBudgetReservationWhereUniqueInput | Prisma.AiBudgetReservationWhereUniqueInput[]
+  update?: Prisma.AiBudgetReservationUpdateWithWhereUniqueWithoutCompanyPolicyRevisionInput | Prisma.AiBudgetReservationUpdateWithWhereUniqueWithoutCompanyPolicyRevisionInput[]
+  updateMany?: Prisma.AiBudgetReservationUpdateManyWithWhereWithoutCompanyPolicyRevisionInput | Prisma.AiBudgetReservationUpdateManyWithWhereWithoutCompanyPolicyRevisionInput[]
+  deleteMany?: Prisma.AiBudgetReservationScalarWhereInput | Prisma.AiBudgetReservationScalarWhereInput[]
+}
+
+export type AiBudgetReservationUncheckedUpdateManyWithoutCompanyPolicyRevisionNestedInput = {
+  create?: Prisma.XOR<Prisma.AiBudgetReservationCreateWithoutCompanyPolicyRevisionInput, Prisma.AiBudgetReservationUncheckedCreateWithoutCompanyPolicyRevisionInput> | Prisma.AiBudgetReservationCreateWithoutCompanyPolicyRevisionInput[] | Prisma.AiBudgetReservationUncheckedCreateWithoutCompanyPolicyRevisionInput[]
+  connectOrCreate?: Prisma.AiBudgetReservationCreateOrConnectWithoutCompanyPolicyRevisionInput | Prisma.AiBudgetReservationCreateOrConnectWithoutCompanyPolicyRevisionInput[]
+  upsert?: Prisma.AiBudgetReservationUpsertWithWhereUniqueWithoutCompanyPolicyRevisionInput | Prisma.AiBudgetReservationUpsertWithWhereUniqueWithoutCompanyPolicyRevisionInput[]
+  createMany?: Prisma.AiBudgetReservationCreateManyCompanyPolicyRevisionInputEnvelope
+  set?: Prisma.AiBudgetReservationWhereUniqueInput | Prisma.AiBudgetReservationWhereUniqueInput[]
+  disconnect?: Prisma.AiBudgetReservationWhereUniqueInput | Prisma.AiBudgetReservationWhereUniqueInput[]
+  delete?: Prisma.AiBudgetReservationWhereUniqueInput | Prisma.AiBudgetReservationWhereUniqueInput[]
+  connect?: Prisma.AiBudgetReservationWhereUniqueInput | Prisma.AiBudgetReservationWhereUniqueInput[]
+  update?: Prisma.AiBudgetReservationUpdateWithWhereUniqueWithoutCompanyPolicyRevisionInput | Prisma.AiBudgetReservationUpdateWithWhereUniqueWithoutCompanyPolicyRevisionInput[]
+  updateMany?: Prisma.AiBudgetReservationUpdateManyWithWhereWithoutCompanyPolicyRevisionInput | Prisma.AiBudgetReservationUpdateManyWithWhereWithoutCompanyPolicyRevisionInput[]
   deleteMany?: Prisma.AiBudgetReservationScalarWhereInput | Prisma.AiBudgetReservationScalarWhereInput[]
 }
 
@@ -951,6 +1039,7 @@ export type AiBudgetReservationUpdateOneRequiredWithoutLedgerEntriesNestedInput 
 export type AiBudgetReservationCreateWithoutCompanyInput = {
   id?: string
   dayStartAt: Date | string
+  monthStartAt?: Date | string | null
   status?: $Enums.AiBudgetReservationStatus
   inputTokenEstimate: number
   maxOutputTokens: number
@@ -966,6 +1055,7 @@ export type AiBudgetReservationCreateWithoutCompanyInput = {
   skillActivation: Prisma.AiSkillActivationCreateNestedOneWithoutBudgetReservationsInput
   interpretationRun: Prisma.AiInterpretationRunCreateNestedOneWithoutBudgetReservationInput
   modelPriceRevision: Prisma.AiModelPriceRevisionCreateNestedOneWithoutBudgetReservationsInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionCreateNestedOneWithoutReservationsInput
   ledgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutReservationInput
 }
 
@@ -976,6 +1066,8 @@ export type AiBudgetReservationUncheckedCreateWithoutCompanyInput = {
   interpretationRunId: string
   modelPriceRevisionId: string
   dayStartAt: Date | string
+  monthStartAt?: Date | string | null
+  companyPolicyRevisionId?: string | null
   status?: $Enums.AiBudgetReservationStatus
   inputTokenEstimate: number
   maxOutputTokens: number
@@ -1028,6 +1120,8 @@ export type AiBudgetReservationScalarWhereInput = {
   interpretationRunId?: Prisma.UuidFilter<"AiBudgetReservation"> | string
   modelPriceRevisionId?: Prisma.UuidFilter<"AiBudgetReservation"> | string
   dayStartAt?: Prisma.DateTimeFilter<"AiBudgetReservation"> | Date | string
+  monthStartAt?: Prisma.DateTimeNullableFilter<"AiBudgetReservation"> | Date | string | null
+  companyPolicyRevisionId?: Prisma.UuidNullableFilter<"AiBudgetReservation"> | string | null
   status?: Prisma.EnumAiBudgetReservationStatusFilter<"AiBudgetReservation"> | $Enums.AiBudgetReservationStatus
   inputTokenEstimate?: Prisma.IntFilter<"AiBudgetReservation"> | number
   maxOutputTokens?: Prisma.IntFilter<"AiBudgetReservation"> | number
@@ -1044,6 +1138,7 @@ export type AiBudgetReservationScalarWhereInput = {
 export type AiBudgetReservationCreateWithoutProviderConfigurationInput = {
   id?: string
   dayStartAt: Date | string
+  monthStartAt?: Date | string | null
   status?: $Enums.AiBudgetReservationStatus
   inputTokenEstimate: number
   maxOutputTokens: number
@@ -1059,6 +1154,7 @@ export type AiBudgetReservationCreateWithoutProviderConfigurationInput = {
   skillActivation: Prisma.AiSkillActivationCreateNestedOneWithoutBudgetReservationsInput
   interpretationRun: Prisma.AiInterpretationRunCreateNestedOneWithoutBudgetReservationInput
   modelPriceRevision: Prisma.AiModelPriceRevisionCreateNestedOneWithoutBudgetReservationsInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionCreateNestedOneWithoutReservationsInput
   ledgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutReservationInput
 }
 
@@ -1069,6 +1165,8 @@ export type AiBudgetReservationUncheckedCreateWithoutProviderConfigurationInput 
   interpretationRunId: string
   modelPriceRevisionId: string
   dayStartAt: Date | string
+  monthStartAt?: Date | string | null
+  companyPolicyRevisionId?: string | null
   status?: $Enums.AiBudgetReservationStatus
   inputTokenEstimate: number
   maxOutputTokens: number
@@ -1109,9 +1207,81 @@ export type AiBudgetReservationUpdateManyWithWhereWithoutProviderConfigurationIn
   data: Prisma.XOR<Prisma.AiBudgetReservationUpdateManyMutationInput, Prisma.AiBudgetReservationUncheckedUpdateManyWithoutProviderConfigurationInput>
 }
 
+export type AiBudgetReservationCreateWithoutCompanyPolicyRevisionInput = {
+  id?: string
+  dayStartAt: Date | string
+  monthStartAt?: Date | string | null
+  status?: $Enums.AiBudgetReservationStatus
+  inputTokenEstimate: number
+  maxOutputTokens: number
+  estimatedCostUsd: runtime.Decimal | runtime.DecimalJsLike | number | string
+  chargeCostUsd: runtime.Decimal | runtime.DecimalJsLike | number | string
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  expiresAt: Date | string
+  settledAt?: Date | string | null
+  releasedAt?: Date | string | null
+  releaseReason?: string | null
+  createdAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutAiBudgetReservationsInput
+  providerConfiguration: Prisma.AiProviderConfigurationCreateNestedOneWithoutBudgetReservationsInput
+  skillActivation: Prisma.AiSkillActivationCreateNestedOneWithoutBudgetReservationsInput
+  interpretationRun: Prisma.AiInterpretationRunCreateNestedOneWithoutBudgetReservationInput
+  modelPriceRevision: Prisma.AiModelPriceRevisionCreateNestedOneWithoutBudgetReservationsInput
+  ledgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutReservationInput
+}
+
+export type AiBudgetReservationUncheckedCreateWithoutCompanyPolicyRevisionInput = {
+  id?: string
+  providerConfigurationId: string
+  skillActivationId: string
+  interpretationRunId: string
+  modelPriceRevisionId: string
+  dayStartAt: Date | string
+  monthStartAt?: Date | string | null
+  status?: $Enums.AiBudgetReservationStatus
+  inputTokenEstimate: number
+  maxOutputTokens: number
+  estimatedCostUsd: runtime.Decimal | runtime.DecimalJsLike | number | string
+  chargeCostUsd: runtime.Decimal | runtime.DecimalJsLike | number | string
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  expiresAt: Date | string
+  settledAt?: Date | string | null
+  releasedAt?: Date | string | null
+  releaseReason?: string | null
+  createdAt?: Date | string
+  ledgerEntries?: Prisma.AiUsageLedgerUncheckedCreateNestedManyWithoutReservationInput
+}
+
+export type AiBudgetReservationCreateOrConnectWithoutCompanyPolicyRevisionInput = {
+  where: Prisma.AiBudgetReservationWhereUniqueInput
+  create: Prisma.XOR<Prisma.AiBudgetReservationCreateWithoutCompanyPolicyRevisionInput, Prisma.AiBudgetReservationUncheckedCreateWithoutCompanyPolicyRevisionInput>
+}
+
+export type AiBudgetReservationCreateManyCompanyPolicyRevisionInputEnvelope = {
+  data: Prisma.AiBudgetReservationCreateManyCompanyPolicyRevisionInput | Prisma.AiBudgetReservationCreateManyCompanyPolicyRevisionInput[]
+  skipDuplicates?: boolean
+}
+
+export type AiBudgetReservationUpsertWithWhereUniqueWithoutCompanyPolicyRevisionInput = {
+  where: Prisma.AiBudgetReservationWhereUniqueInput
+  update: Prisma.XOR<Prisma.AiBudgetReservationUpdateWithoutCompanyPolicyRevisionInput, Prisma.AiBudgetReservationUncheckedUpdateWithoutCompanyPolicyRevisionInput>
+  create: Prisma.XOR<Prisma.AiBudgetReservationCreateWithoutCompanyPolicyRevisionInput, Prisma.AiBudgetReservationUncheckedCreateWithoutCompanyPolicyRevisionInput>
+}
+
+export type AiBudgetReservationUpdateWithWhereUniqueWithoutCompanyPolicyRevisionInput = {
+  where: Prisma.AiBudgetReservationWhereUniqueInput
+  data: Prisma.XOR<Prisma.AiBudgetReservationUpdateWithoutCompanyPolicyRevisionInput, Prisma.AiBudgetReservationUncheckedUpdateWithoutCompanyPolicyRevisionInput>
+}
+
+export type AiBudgetReservationUpdateManyWithWhereWithoutCompanyPolicyRevisionInput = {
+  where: Prisma.AiBudgetReservationScalarWhereInput
+  data: Prisma.XOR<Prisma.AiBudgetReservationUpdateManyMutationInput, Prisma.AiBudgetReservationUncheckedUpdateManyWithoutCompanyPolicyRevisionInput>
+}
+
 export type AiBudgetReservationCreateWithoutSkillActivationInput = {
   id?: string
   dayStartAt: Date | string
+  monthStartAt?: Date | string | null
   status?: $Enums.AiBudgetReservationStatus
   inputTokenEstimate: number
   maxOutputTokens: number
@@ -1127,6 +1297,7 @@ export type AiBudgetReservationCreateWithoutSkillActivationInput = {
   providerConfiguration: Prisma.AiProviderConfigurationCreateNestedOneWithoutBudgetReservationsInput
   interpretationRun: Prisma.AiInterpretationRunCreateNestedOneWithoutBudgetReservationInput
   modelPriceRevision: Prisma.AiModelPriceRevisionCreateNestedOneWithoutBudgetReservationsInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionCreateNestedOneWithoutReservationsInput
   ledgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutReservationInput
 }
 
@@ -1136,6 +1307,8 @@ export type AiBudgetReservationUncheckedCreateWithoutSkillActivationInput = {
   interpretationRunId: string
   modelPriceRevisionId: string
   dayStartAt: Date | string
+  monthStartAt?: Date | string | null
+  companyPolicyRevisionId?: string | null
   status?: $Enums.AiBudgetReservationStatus
   inputTokenEstimate: number
   maxOutputTokens: number
@@ -1179,6 +1352,7 @@ export type AiBudgetReservationUpdateManyWithWhereWithoutSkillActivationInput = 
 export type AiBudgetReservationCreateWithoutInterpretationRunInput = {
   id?: string
   dayStartAt: Date | string
+  monthStartAt?: Date | string | null
   status?: $Enums.AiBudgetReservationStatus
   inputTokenEstimate: number
   maxOutputTokens: number
@@ -1194,6 +1368,7 @@ export type AiBudgetReservationCreateWithoutInterpretationRunInput = {
   providerConfiguration: Prisma.AiProviderConfigurationCreateNestedOneWithoutBudgetReservationsInput
   skillActivation: Prisma.AiSkillActivationCreateNestedOneWithoutBudgetReservationsInput
   modelPriceRevision: Prisma.AiModelPriceRevisionCreateNestedOneWithoutBudgetReservationsInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionCreateNestedOneWithoutReservationsInput
   ledgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutReservationInput
 }
 
@@ -1203,6 +1378,8 @@ export type AiBudgetReservationUncheckedCreateWithoutInterpretationRunInput = {
   skillActivationId: string
   modelPriceRevisionId: string
   dayStartAt: Date | string
+  monthStartAt?: Date | string | null
+  companyPolicyRevisionId?: string | null
   status?: $Enums.AiBudgetReservationStatus
   inputTokenEstimate: number
   maxOutputTokens: number
@@ -1236,6 +1413,7 @@ export type AiBudgetReservationUpdateToOneWithWhereWithoutInterpretationRunInput
 export type AiBudgetReservationUpdateWithoutInterpretationRunInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   dayStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumAiBudgetReservationStatusFieldUpdateOperationsInput | $Enums.AiBudgetReservationStatus
   inputTokenEstimate?: Prisma.IntFieldUpdateOperationsInput | number
   maxOutputTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1251,6 +1429,7 @@ export type AiBudgetReservationUpdateWithoutInterpretationRunInput = {
   providerConfiguration?: Prisma.AiProviderConfigurationUpdateOneRequiredWithoutBudgetReservationsNestedInput
   skillActivation?: Prisma.AiSkillActivationUpdateOneRequiredWithoutBudgetReservationsNestedInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneRequiredWithoutBudgetReservationsNestedInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionUpdateOneWithoutReservationsNestedInput
   ledgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutReservationNestedInput
 }
 
@@ -1260,6 +1439,8 @@ export type AiBudgetReservationUncheckedUpdateWithoutInterpretationRunInput = {
   skillActivationId?: Prisma.StringFieldUpdateOperationsInput | string
   modelPriceRevisionId?: Prisma.StringFieldUpdateOperationsInput | string
   dayStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumAiBudgetReservationStatusFieldUpdateOperationsInput | $Enums.AiBudgetReservationStatus
   inputTokenEstimate?: Prisma.IntFieldUpdateOperationsInput | number
   maxOutputTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1277,6 +1458,7 @@ export type AiBudgetReservationUncheckedUpdateWithoutInterpretationRunInput = {
 export type AiBudgetReservationCreateWithoutModelPriceRevisionInput = {
   id?: string
   dayStartAt: Date | string
+  monthStartAt?: Date | string | null
   status?: $Enums.AiBudgetReservationStatus
   inputTokenEstimate: number
   maxOutputTokens: number
@@ -1292,6 +1474,7 @@ export type AiBudgetReservationCreateWithoutModelPriceRevisionInput = {
   providerConfiguration: Prisma.AiProviderConfigurationCreateNestedOneWithoutBudgetReservationsInput
   skillActivation: Prisma.AiSkillActivationCreateNestedOneWithoutBudgetReservationsInput
   interpretationRun: Prisma.AiInterpretationRunCreateNestedOneWithoutBudgetReservationInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionCreateNestedOneWithoutReservationsInput
   ledgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutReservationInput
 }
 
@@ -1303,6 +1486,8 @@ export type AiBudgetReservationUncheckedCreateWithoutModelPriceRevisionInput = {
   skillActivationId: string
   interpretationRunId: string
   dayStartAt: Date | string
+  monthStartAt?: Date | string | null
+  companyPolicyRevisionId?: string | null
   status?: $Enums.AiBudgetReservationStatus
   inputTokenEstimate: number
   maxOutputTokens: number
@@ -1346,6 +1531,7 @@ export type AiBudgetReservationUpdateManyWithWhereWithoutModelPriceRevisionInput
 export type AiBudgetReservationCreateWithoutLedgerEntriesInput = {
   id?: string
   dayStartAt: Date | string
+  monthStartAt?: Date | string | null
   status?: $Enums.AiBudgetReservationStatus
   inputTokenEstimate: number
   maxOutputTokens: number
@@ -1362,6 +1548,7 @@ export type AiBudgetReservationCreateWithoutLedgerEntriesInput = {
   skillActivation: Prisma.AiSkillActivationCreateNestedOneWithoutBudgetReservationsInput
   interpretationRun: Prisma.AiInterpretationRunCreateNestedOneWithoutBudgetReservationInput
   modelPriceRevision: Prisma.AiModelPriceRevisionCreateNestedOneWithoutBudgetReservationsInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionCreateNestedOneWithoutReservationsInput
 }
 
 export type AiBudgetReservationUncheckedCreateWithoutLedgerEntriesInput = {
@@ -1373,6 +1560,8 @@ export type AiBudgetReservationUncheckedCreateWithoutLedgerEntriesInput = {
   interpretationRunId: string
   modelPriceRevisionId: string
   dayStartAt: Date | string
+  monthStartAt?: Date | string | null
+  companyPolicyRevisionId?: string | null
   status?: $Enums.AiBudgetReservationStatus
   inputTokenEstimate: number
   maxOutputTokens: number
@@ -1405,6 +1594,7 @@ export type AiBudgetReservationUpdateToOneWithWhereWithoutLedgerEntriesInput = {
 export type AiBudgetReservationUpdateWithoutLedgerEntriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   dayStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumAiBudgetReservationStatusFieldUpdateOperationsInput | $Enums.AiBudgetReservationStatus
   inputTokenEstimate?: Prisma.IntFieldUpdateOperationsInput | number
   maxOutputTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1421,6 +1611,7 @@ export type AiBudgetReservationUpdateWithoutLedgerEntriesInput = {
   skillActivation?: Prisma.AiSkillActivationUpdateOneRequiredWithoutBudgetReservationsNestedInput
   interpretationRun?: Prisma.AiInterpretationRunUpdateOneRequiredWithoutBudgetReservationNestedInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneRequiredWithoutBudgetReservationsNestedInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionUpdateOneWithoutReservationsNestedInput
 }
 
 export type AiBudgetReservationUncheckedUpdateWithoutLedgerEntriesInput = {
@@ -1432,6 +1623,8 @@ export type AiBudgetReservationUncheckedUpdateWithoutLedgerEntriesInput = {
   interpretationRunId?: Prisma.StringFieldUpdateOperationsInput | string
   modelPriceRevisionId?: Prisma.StringFieldUpdateOperationsInput | string
   dayStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumAiBudgetReservationStatusFieldUpdateOperationsInput | $Enums.AiBudgetReservationStatus
   inputTokenEstimate?: Prisma.IntFieldUpdateOperationsInput | number
   maxOutputTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1452,6 +1645,8 @@ export type AiBudgetReservationCreateManyCompanyInput = {
   interpretationRunId: string
   modelPriceRevisionId: string
   dayStartAt: Date | string
+  monthStartAt?: Date | string | null
+  companyPolicyRevisionId?: string | null
   status?: $Enums.AiBudgetReservationStatus
   inputTokenEstimate: number
   maxOutputTokens: number
@@ -1468,6 +1663,7 @@ export type AiBudgetReservationCreateManyCompanyInput = {
 export type AiBudgetReservationUpdateWithoutCompanyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   dayStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumAiBudgetReservationStatusFieldUpdateOperationsInput | $Enums.AiBudgetReservationStatus
   inputTokenEstimate?: Prisma.IntFieldUpdateOperationsInput | number
   maxOutputTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1483,6 +1679,7 @@ export type AiBudgetReservationUpdateWithoutCompanyInput = {
   skillActivation?: Prisma.AiSkillActivationUpdateOneRequiredWithoutBudgetReservationsNestedInput
   interpretationRun?: Prisma.AiInterpretationRunUpdateOneRequiredWithoutBudgetReservationNestedInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneRequiredWithoutBudgetReservationsNestedInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionUpdateOneWithoutReservationsNestedInput
   ledgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutReservationNestedInput
 }
 
@@ -1493,6 +1690,8 @@ export type AiBudgetReservationUncheckedUpdateWithoutCompanyInput = {
   interpretationRunId?: Prisma.StringFieldUpdateOperationsInput | string
   modelPriceRevisionId?: Prisma.StringFieldUpdateOperationsInput | string
   dayStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumAiBudgetReservationStatusFieldUpdateOperationsInput | $Enums.AiBudgetReservationStatus
   inputTokenEstimate?: Prisma.IntFieldUpdateOperationsInput | number
   maxOutputTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1514,6 +1713,8 @@ export type AiBudgetReservationUncheckedUpdateManyWithoutCompanyInput = {
   interpretationRunId?: Prisma.StringFieldUpdateOperationsInput | string
   modelPriceRevisionId?: Prisma.StringFieldUpdateOperationsInput | string
   dayStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumAiBudgetReservationStatusFieldUpdateOperationsInput | $Enums.AiBudgetReservationStatus
   inputTokenEstimate?: Prisma.IntFieldUpdateOperationsInput | number
   maxOutputTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1534,6 +1735,8 @@ export type AiBudgetReservationCreateManyProviderConfigurationInput = {
   interpretationRunId: string
   modelPriceRevisionId: string
   dayStartAt: Date | string
+  monthStartAt?: Date | string | null
+  companyPolicyRevisionId?: string | null
   status?: $Enums.AiBudgetReservationStatus
   inputTokenEstimate: number
   maxOutputTokens: number
@@ -1550,6 +1753,7 @@ export type AiBudgetReservationCreateManyProviderConfigurationInput = {
 export type AiBudgetReservationUpdateWithoutProviderConfigurationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   dayStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumAiBudgetReservationStatusFieldUpdateOperationsInput | $Enums.AiBudgetReservationStatus
   inputTokenEstimate?: Prisma.IntFieldUpdateOperationsInput | number
   maxOutputTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1565,6 +1769,7 @@ export type AiBudgetReservationUpdateWithoutProviderConfigurationInput = {
   skillActivation?: Prisma.AiSkillActivationUpdateOneRequiredWithoutBudgetReservationsNestedInput
   interpretationRun?: Prisma.AiInterpretationRunUpdateOneRequiredWithoutBudgetReservationNestedInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneRequiredWithoutBudgetReservationsNestedInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionUpdateOneWithoutReservationsNestedInput
   ledgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutReservationNestedInput
 }
 
@@ -1575,6 +1780,8 @@ export type AiBudgetReservationUncheckedUpdateWithoutProviderConfigurationInput 
   interpretationRunId?: Prisma.StringFieldUpdateOperationsInput | string
   modelPriceRevisionId?: Prisma.StringFieldUpdateOperationsInput | string
   dayStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumAiBudgetReservationStatusFieldUpdateOperationsInput | $Enums.AiBudgetReservationStatus
   inputTokenEstimate?: Prisma.IntFieldUpdateOperationsInput | number
   maxOutputTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1596,6 +1803,95 @@ export type AiBudgetReservationUncheckedUpdateManyWithoutProviderConfigurationIn
   interpretationRunId?: Prisma.StringFieldUpdateOperationsInput | string
   modelPriceRevisionId?: Prisma.StringFieldUpdateOperationsInput | string
   dayStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumAiBudgetReservationStatusFieldUpdateOperationsInput | $Enums.AiBudgetReservationStatus
+  inputTokenEstimate?: Prisma.IntFieldUpdateOperationsInput | number
+  maxOutputTokens?: Prisma.IntFieldUpdateOperationsInput | number
+  estimatedCostUsd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  chargeCostUsd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  releasedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  releaseReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AiBudgetReservationCreateManyCompanyPolicyRevisionInput = {
+  id?: string
+  providerConfigurationId: string
+  skillActivationId: string
+  interpretationRunId: string
+  modelPriceRevisionId: string
+  dayStartAt: Date | string
+  monthStartAt?: Date | string | null
+  status?: $Enums.AiBudgetReservationStatus
+  inputTokenEstimate: number
+  maxOutputTokens: number
+  estimatedCostUsd: runtime.Decimal | runtime.DecimalJsLike | number | string
+  chargeCostUsd: runtime.Decimal | runtime.DecimalJsLike | number | string
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  expiresAt: Date | string
+  settledAt?: Date | string | null
+  releasedAt?: Date | string | null
+  releaseReason?: string | null
+  createdAt?: Date | string
+}
+
+export type AiBudgetReservationUpdateWithoutCompanyPolicyRevisionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  dayStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumAiBudgetReservationStatusFieldUpdateOperationsInput | $Enums.AiBudgetReservationStatus
+  inputTokenEstimate?: Prisma.IntFieldUpdateOperationsInput | number
+  maxOutputTokens?: Prisma.IntFieldUpdateOperationsInput | number
+  estimatedCostUsd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  chargeCostUsd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  releasedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  releaseReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutAiBudgetReservationsNestedInput
+  providerConfiguration?: Prisma.AiProviderConfigurationUpdateOneRequiredWithoutBudgetReservationsNestedInput
+  skillActivation?: Prisma.AiSkillActivationUpdateOneRequiredWithoutBudgetReservationsNestedInput
+  interpretationRun?: Prisma.AiInterpretationRunUpdateOneRequiredWithoutBudgetReservationNestedInput
+  modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneRequiredWithoutBudgetReservationsNestedInput
+  ledgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutReservationNestedInput
+}
+
+export type AiBudgetReservationUncheckedUpdateWithoutCompanyPolicyRevisionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  providerConfigurationId?: Prisma.StringFieldUpdateOperationsInput | string
+  skillActivationId?: Prisma.StringFieldUpdateOperationsInput | string
+  interpretationRunId?: Prisma.StringFieldUpdateOperationsInput | string
+  modelPriceRevisionId?: Prisma.StringFieldUpdateOperationsInput | string
+  dayStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumAiBudgetReservationStatusFieldUpdateOperationsInput | $Enums.AiBudgetReservationStatus
+  inputTokenEstimate?: Prisma.IntFieldUpdateOperationsInput | number
+  maxOutputTokens?: Prisma.IntFieldUpdateOperationsInput | number
+  estimatedCostUsd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  chargeCostUsd?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  releasedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  releaseReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ledgerEntries?: Prisma.AiUsageLedgerUncheckedUpdateManyWithoutReservationNestedInput
+}
+
+export type AiBudgetReservationUncheckedUpdateManyWithoutCompanyPolicyRevisionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  providerConfigurationId?: Prisma.StringFieldUpdateOperationsInput | string
+  skillActivationId?: Prisma.StringFieldUpdateOperationsInput | string
+  interpretationRunId?: Prisma.StringFieldUpdateOperationsInput | string
+  modelPriceRevisionId?: Prisma.StringFieldUpdateOperationsInput | string
+  dayStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumAiBudgetReservationStatusFieldUpdateOperationsInput | $Enums.AiBudgetReservationStatus
   inputTokenEstimate?: Prisma.IntFieldUpdateOperationsInput | number
   maxOutputTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1615,6 +1911,8 @@ export type AiBudgetReservationCreateManySkillActivationInput = {
   interpretationRunId: string
   modelPriceRevisionId: string
   dayStartAt: Date | string
+  monthStartAt?: Date | string | null
+  companyPolicyRevisionId?: string | null
   status?: $Enums.AiBudgetReservationStatus
   inputTokenEstimate: number
   maxOutputTokens: number
@@ -1631,6 +1929,7 @@ export type AiBudgetReservationCreateManySkillActivationInput = {
 export type AiBudgetReservationUpdateWithoutSkillActivationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   dayStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumAiBudgetReservationStatusFieldUpdateOperationsInput | $Enums.AiBudgetReservationStatus
   inputTokenEstimate?: Prisma.IntFieldUpdateOperationsInput | number
   maxOutputTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1646,6 +1945,7 @@ export type AiBudgetReservationUpdateWithoutSkillActivationInput = {
   providerConfiguration?: Prisma.AiProviderConfigurationUpdateOneRequiredWithoutBudgetReservationsNestedInput
   interpretationRun?: Prisma.AiInterpretationRunUpdateOneRequiredWithoutBudgetReservationNestedInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneRequiredWithoutBudgetReservationsNestedInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionUpdateOneWithoutReservationsNestedInput
   ledgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutReservationNestedInput
 }
 
@@ -1655,6 +1955,8 @@ export type AiBudgetReservationUncheckedUpdateWithoutSkillActivationInput = {
   interpretationRunId?: Prisma.StringFieldUpdateOperationsInput | string
   modelPriceRevisionId?: Prisma.StringFieldUpdateOperationsInput | string
   dayStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumAiBudgetReservationStatusFieldUpdateOperationsInput | $Enums.AiBudgetReservationStatus
   inputTokenEstimate?: Prisma.IntFieldUpdateOperationsInput | number
   maxOutputTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1675,6 +1977,8 @@ export type AiBudgetReservationUncheckedUpdateManyWithoutSkillActivationInput = 
   interpretationRunId?: Prisma.StringFieldUpdateOperationsInput | string
   modelPriceRevisionId?: Prisma.StringFieldUpdateOperationsInput | string
   dayStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumAiBudgetReservationStatusFieldUpdateOperationsInput | $Enums.AiBudgetReservationStatus
   inputTokenEstimate?: Prisma.IntFieldUpdateOperationsInput | number
   maxOutputTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1696,6 +2000,8 @@ export type AiBudgetReservationCreateManyModelPriceRevisionInput = {
   skillActivationId: string
   interpretationRunId: string
   dayStartAt: Date | string
+  monthStartAt?: Date | string | null
+  companyPolicyRevisionId?: string | null
   status?: $Enums.AiBudgetReservationStatus
   inputTokenEstimate: number
   maxOutputTokens: number
@@ -1712,6 +2018,7 @@ export type AiBudgetReservationCreateManyModelPriceRevisionInput = {
 export type AiBudgetReservationUpdateWithoutModelPriceRevisionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   dayStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumAiBudgetReservationStatusFieldUpdateOperationsInput | $Enums.AiBudgetReservationStatus
   inputTokenEstimate?: Prisma.IntFieldUpdateOperationsInput | number
   maxOutputTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1727,6 +2034,7 @@ export type AiBudgetReservationUpdateWithoutModelPriceRevisionInput = {
   providerConfiguration?: Prisma.AiProviderConfigurationUpdateOneRequiredWithoutBudgetReservationsNestedInput
   skillActivation?: Prisma.AiSkillActivationUpdateOneRequiredWithoutBudgetReservationsNestedInput
   interpretationRun?: Prisma.AiInterpretationRunUpdateOneRequiredWithoutBudgetReservationNestedInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionUpdateOneWithoutReservationsNestedInput
   ledgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutReservationNestedInput
 }
 
@@ -1738,6 +2046,8 @@ export type AiBudgetReservationUncheckedUpdateWithoutModelPriceRevisionInput = {
   skillActivationId?: Prisma.StringFieldUpdateOperationsInput | string
   interpretationRunId?: Prisma.StringFieldUpdateOperationsInput | string
   dayStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumAiBudgetReservationStatusFieldUpdateOperationsInput | $Enums.AiBudgetReservationStatus
   inputTokenEstimate?: Prisma.IntFieldUpdateOperationsInput | number
   maxOutputTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1760,6 +2070,8 @@ export type AiBudgetReservationUncheckedUpdateManyWithoutModelPriceRevisionInput
   skillActivationId?: Prisma.StringFieldUpdateOperationsInput | string
   interpretationRunId?: Prisma.StringFieldUpdateOperationsInput | string
   dayStartAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  monthStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumAiBudgetReservationStatusFieldUpdateOperationsInput | $Enums.AiBudgetReservationStatus
   inputTokenEstimate?: Prisma.IntFieldUpdateOperationsInput | number
   maxOutputTokens?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1813,6 +2125,8 @@ export type AiBudgetReservationSelect<ExtArgs extends runtime.Types.Extensions.I
   interpretationRunId?: boolean
   modelPriceRevisionId?: boolean
   dayStartAt?: boolean
+  monthStartAt?: boolean
+  companyPolicyRevisionId?: boolean
   status?: boolean
   inputTokenEstimate?: boolean
   maxOutputTokens?: boolean
@@ -1829,6 +2143,7 @@ export type AiBudgetReservationSelect<ExtArgs extends runtime.Types.Extensions.I
   skillActivation?: boolean | Prisma.AiSkillActivationDefaultArgs<ExtArgs>
   interpretationRun?: boolean | Prisma.AiInterpretationRunDefaultArgs<ExtArgs>
   modelPriceRevision?: boolean | Prisma.AiModelPriceRevisionDefaultArgs<ExtArgs>
+  companyPolicyRevision?: boolean | Prisma.AiBudgetReservation$companyPolicyRevisionArgs<ExtArgs>
   ledgerEntries?: boolean | Prisma.AiBudgetReservation$ledgerEntriesArgs<ExtArgs>
   _count?: boolean | Prisma.AiBudgetReservationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["aiBudgetReservation"]>
@@ -1842,6 +2157,8 @@ export type AiBudgetReservationSelectCreateManyAndReturn<ExtArgs extends runtime
   interpretationRunId?: boolean
   modelPriceRevisionId?: boolean
   dayStartAt?: boolean
+  monthStartAt?: boolean
+  companyPolicyRevisionId?: boolean
   status?: boolean
   inputTokenEstimate?: boolean
   maxOutputTokens?: boolean
@@ -1858,6 +2175,7 @@ export type AiBudgetReservationSelectCreateManyAndReturn<ExtArgs extends runtime
   skillActivation?: boolean | Prisma.AiSkillActivationDefaultArgs<ExtArgs>
   interpretationRun?: boolean | Prisma.AiInterpretationRunDefaultArgs<ExtArgs>
   modelPriceRevision?: boolean | Prisma.AiModelPriceRevisionDefaultArgs<ExtArgs>
+  companyPolicyRevision?: boolean | Prisma.AiBudgetReservation$companyPolicyRevisionArgs<ExtArgs>
 }, ExtArgs["result"]["aiBudgetReservation"]>
 
 export type AiBudgetReservationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1869,6 +2187,8 @@ export type AiBudgetReservationSelectUpdateManyAndReturn<ExtArgs extends runtime
   interpretationRunId?: boolean
   modelPriceRevisionId?: boolean
   dayStartAt?: boolean
+  monthStartAt?: boolean
+  companyPolicyRevisionId?: boolean
   status?: boolean
   inputTokenEstimate?: boolean
   maxOutputTokens?: boolean
@@ -1885,6 +2205,7 @@ export type AiBudgetReservationSelectUpdateManyAndReturn<ExtArgs extends runtime
   skillActivation?: boolean | Prisma.AiSkillActivationDefaultArgs<ExtArgs>
   interpretationRun?: boolean | Prisma.AiInterpretationRunDefaultArgs<ExtArgs>
   modelPriceRevision?: boolean | Prisma.AiModelPriceRevisionDefaultArgs<ExtArgs>
+  companyPolicyRevision?: boolean | Prisma.AiBudgetReservation$companyPolicyRevisionArgs<ExtArgs>
 }, ExtArgs["result"]["aiBudgetReservation"]>
 
 export type AiBudgetReservationSelectScalar = {
@@ -1896,6 +2217,8 @@ export type AiBudgetReservationSelectScalar = {
   interpretationRunId?: boolean
   modelPriceRevisionId?: boolean
   dayStartAt?: boolean
+  monthStartAt?: boolean
+  companyPolicyRevisionId?: boolean
   status?: boolean
   inputTokenEstimate?: boolean
   maxOutputTokens?: boolean
@@ -1909,13 +2232,14 @@ export type AiBudgetReservationSelectScalar = {
   createdAt?: boolean
 }
 
-export type AiBudgetReservationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "providerConfigurationId" | "skillActivationId" | "interpretationRunId" | "modelPriceRevisionId" | "dayStartAt" | "status" | "inputTokenEstimate" | "maxOutputTokens" | "estimatedCostUsd" | "chargeCostUsd" | "actualCostUsd" | "expiresAt" | "settledAt" | "releasedAt" | "releaseReason" | "createdAt", ExtArgs["result"]["aiBudgetReservation"]>
+export type AiBudgetReservationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "providerConfigurationId" | "skillActivationId" | "interpretationRunId" | "modelPriceRevisionId" | "dayStartAt" | "monthStartAt" | "companyPolicyRevisionId" | "status" | "inputTokenEstimate" | "maxOutputTokens" | "estimatedCostUsd" | "chargeCostUsd" | "actualCostUsd" | "expiresAt" | "settledAt" | "releasedAt" | "releaseReason" | "createdAt", ExtArgs["result"]["aiBudgetReservation"]>
 export type AiBudgetReservationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   providerConfiguration?: boolean | Prisma.AiProviderConfigurationDefaultArgs<ExtArgs>
   skillActivation?: boolean | Prisma.AiSkillActivationDefaultArgs<ExtArgs>
   interpretationRun?: boolean | Prisma.AiInterpretationRunDefaultArgs<ExtArgs>
   modelPriceRevision?: boolean | Prisma.AiModelPriceRevisionDefaultArgs<ExtArgs>
+  companyPolicyRevision?: boolean | Prisma.AiBudgetReservation$companyPolicyRevisionArgs<ExtArgs>
   ledgerEntries?: boolean | Prisma.AiBudgetReservation$ledgerEntriesArgs<ExtArgs>
   _count?: boolean | Prisma.AiBudgetReservationCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1925,6 +2249,7 @@ export type AiBudgetReservationIncludeCreateManyAndReturn<ExtArgs extends runtim
   skillActivation?: boolean | Prisma.AiSkillActivationDefaultArgs<ExtArgs>
   interpretationRun?: boolean | Prisma.AiInterpretationRunDefaultArgs<ExtArgs>
   modelPriceRevision?: boolean | Prisma.AiModelPriceRevisionDefaultArgs<ExtArgs>
+  companyPolicyRevision?: boolean | Prisma.AiBudgetReservation$companyPolicyRevisionArgs<ExtArgs>
 }
 export type AiBudgetReservationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
@@ -1932,6 +2257,7 @@ export type AiBudgetReservationIncludeUpdateManyAndReturn<ExtArgs extends runtim
   skillActivation?: boolean | Prisma.AiSkillActivationDefaultArgs<ExtArgs>
   interpretationRun?: boolean | Prisma.AiInterpretationRunDefaultArgs<ExtArgs>
   modelPriceRevision?: boolean | Prisma.AiModelPriceRevisionDefaultArgs<ExtArgs>
+  companyPolicyRevision?: boolean | Prisma.AiBudgetReservation$companyPolicyRevisionArgs<ExtArgs>
 }
 
 export type $AiBudgetReservationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1942,6 +2268,7 @@ export type $AiBudgetReservationPayload<ExtArgs extends runtime.Types.Extensions
     skillActivation: Prisma.$AiSkillActivationPayload<ExtArgs>
     interpretationRun: Prisma.$AiInterpretationRunPayload<ExtArgs>
     modelPriceRevision: Prisma.$AiModelPriceRevisionPayload<ExtArgs>
+    companyPolicyRevision: Prisma.$AiCompanyPolicyRevisionPayload<ExtArgs> | null
     ledgerEntries: Prisma.$AiUsageLedgerPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1953,6 +2280,8 @@ export type $AiBudgetReservationPayload<ExtArgs extends runtime.Types.Extensions
     interpretationRunId: string
     modelPriceRevisionId: string
     dayStartAt: Date
+    monthStartAt: Date | null
+    companyPolicyRevisionId: string | null
     status: $Enums.AiBudgetReservationStatus
     inputTokenEstimate: number
     maxOutputTokens: number
@@ -2363,6 +2692,7 @@ export interface Prisma__AiBudgetReservationClient<T, Null = never, ExtArgs exte
   skillActivation<T extends Prisma.AiSkillActivationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiSkillActivationDefaultArgs<ExtArgs>>): Prisma.Prisma__AiSkillActivationClient<runtime.Types.Result.GetResult<Prisma.$AiSkillActivationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   interpretationRun<T extends Prisma.AiInterpretationRunDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiInterpretationRunDefaultArgs<ExtArgs>>): Prisma.Prisma__AiInterpretationRunClient<runtime.Types.Result.GetResult<Prisma.$AiInterpretationRunPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   modelPriceRevision<T extends Prisma.AiModelPriceRevisionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiModelPriceRevisionDefaultArgs<ExtArgs>>): Prisma.Prisma__AiModelPriceRevisionClient<runtime.Types.Result.GetResult<Prisma.$AiModelPriceRevisionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  companyPolicyRevision<T extends Prisma.AiBudgetReservation$companyPolicyRevisionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiBudgetReservation$companyPolicyRevisionArgs<ExtArgs>>): Prisma.Prisma__AiCompanyPolicyRevisionClient<runtime.Types.Result.GetResult<Prisma.$AiCompanyPolicyRevisionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   ledgerEntries<T extends Prisma.AiBudgetReservation$ledgerEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiBudgetReservation$ledgerEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiUsageLedgerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2401,6 +2731,8 @@ export interface AiBudgetReservationFieldRefs {
   readonly interpretationRunId: Prisma.FieldRef<"AiBudgetReservation", 'String'>
   readonly modelPriceRevisionId: Prisma.FieldRef<"AiBudgetReservation", 'String'>
   readonly dayStartAt: Prisma.FieldRef<"AiBudgetReservation", 'DateTime'>
+  readonly monthStartAt: Prisma.FieldRef<"AiBudgetReservation", 'DateTime'>
+  readonly companyPolicyRevisionId: Prisma.FieldRef<"AiBudgetReservation", 'String'>
   readonly status: Prisma.FieldRef<"AiBudgetReservation", 'AiBudgetReservationStatus'>
   readonly inputTokenEstimate: Prisma.FieldRef<"AiBudgetReservation", 'Int'>
   readonly maxOutputTokens: Prisma.FieldRef<"AiBudgetReservation", 'Int'>
@@ -2810,6 +3142,25 @@ export type AiBudgetReservationDeleteManyArgs<ExtArgs extends runtime.Types.Exte
    * Limit how many AiBudgetReservations to delete.
    */
   limit?: number
+}
+
+/**
+ * AiBudgetReservation.companyPolicyRevision
+ */
+export type AiBudgetReservation$companyPolicyRevisionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AiCompanyPolicyRevision
+   */
+  select?: Prisma.AiCompanyPolicyRevisionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AiCompanyPolicyRevision
+   */
+  omit?: Prisma.AiCompanyPolicyRevisionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiCompanyPolicyRevisionInclude<ExtArgs> | null
+  where?: Prisma.AiCompanyPolicyRevisionWhereInput
 }
 
 /**
