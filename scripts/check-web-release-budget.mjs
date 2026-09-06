@@ -89,7 +89,7 @@ const journeys = routeEntries.flatMap(([key, entry]) => {
   if (entry.src === "src/marketing-workspace.tsx") {
     const shellKeys = closureKeys(key);
     const leaves = (entry.dynamicImports ?? [])
-      .filter((dynamicKey) => /^src\/marketing-(?:overview|calendar|campaigns|reputation|policies)-workspace\.tsx$/.test(manifest[dynamicKey]?.src ?? ""));
+      .filter((dynamicKey) => /^src\/marketing-(?:overview|campaigns|reputation|google-ads|policies)-workspace\.tsx$/.test(manifest[dynamicKey]?.src ?? ""));
     if (leaves.length !== 5) throw new Error("Marketing workspace must expose five independently budgeted section entries.");
     return leaves.map((leafKey) => {
       const keys = new Set([...journeySharedKeys(entry), ...shellKeys, ...closureKeys(leafKey)]);

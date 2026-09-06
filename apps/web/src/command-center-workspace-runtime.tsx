@@ -321,7 +321,7 @@ function financialRowLabel(row: FinancialEvidenceRow, language: Language) {
 function MarketingPanel({ language, session, embedded = false }: { language: Language; session: ActiveSession; embedded?: boolean }) {
   const text = copy[language];
   return <section className={embedded ? "command-center__timeline-slot" : "command-center__section"}>
-    {!embedded ? <header className="command-center__section-header"><div><h2>{text.marketing}</h2><p>{text.marketingDescription}</p></div><button type="button" className="command-center__link" onClick={() => { window.location.hash = pageRouteHash("marketing-calendar"); }}>{text.openMarketing}</button></header> : null}
+    {!embedded ? <header className="command-center__section-header"><div><h2>{text.marketing}</h2><p>{text.marketingDescription}</p></div><button type="button" className="command-center__link" onClick={() => { window.location.hash = pageRouteHash("marketing-campaigns"); }}>{text.openMarketing}</button></header> : null}
     <MarketingTimelineRead language={language} session={session} />
   </section>;
 }

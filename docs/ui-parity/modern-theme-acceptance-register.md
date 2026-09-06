@@ -29,7 +29,7 @@
 | --- | --- | --- | --- |
 | مركز القيادة (4) | `command-money-marketing`, `command-calendar`, `command-analytics`, `command-owner-notebook` | مغطى | مفتوح: ألوان ثابتة مثبتة في أسطح مركز القيادة والتحليلات/لوحة المالك لم تفحص بلقطات قبول. |
 | مركز القرار والسياق (6) | `decision-overview`, `decision-timeline`, `decision-alerts`, `decision-data-quality`, `decision-sources-policies`, `decision-interpretations` | مغطى | مفتوح: لا اختبار منظر حديث لعائلة القرار. |
-| التسويق والسمعة (5) | `marketing-overview`, `marketing-calendar`, `marketing-campaigns`, `marketing-reputation`, `marketing-sources-policies` | مغطى | مفتوح: لا اختبار منظر حديث لعائلة التسويق. |
+| التسويق والسمعة (5) | `marketing-overview`, `marketing-campaigns`, `marketing-reputation`, `marketing-google-ads`, `marketing-sources-policies` | مغطى | مفتوح: لا اختبار منظر حديث لعائلة التسويق. |
 | البريد والأدلة (3) | `evidence-overview`, `evidence-labels`, `evidence-sources` | مغطى | مفتوح: لا اختبار منظر حديث لعائلة الأدلة. |
 | العمليات (10) | `operations-overview`, `operations-sales`, `operations-purchases`, `operations-expenses-obligations`, `operations-suppliers`, `operations-catalog`, `operations-execution`, `operations-internal-registration`, `operations-reports`, `operations-assets-warranties` | مغطى | مفتوح: عدة مكونات تشغيلية ذات CSS خاص؛ انظر الاستثناء الآتي. |
 | المالية والمحاسبة (5) | `finance-ledger`, `finance-treasury`, `finance-accounts`, `finance-categories`, `finance-settings` | مغطى جزئيًا | ربطت حالات الحسابات/السجل الآمنة بـ`record`؛ الخزائن والدفتر المكتمل ما زالا يحتاجان fixture بيانات وقياس هندسة. |

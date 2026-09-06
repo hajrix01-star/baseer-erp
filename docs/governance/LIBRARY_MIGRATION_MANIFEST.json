@@ -537,6 +537,11 @@
       "file": "marketing-campaigns-workspace.tsx",
       "decision": "verified-central-library-boundary-2026-09-02"
     },
+    "query:marketing-google-ads-workspace.tsx": {
+      "kind": "query",
+      "file": "marketing-google-ads-workspace.tsx",
+      "decision": "verified-central-library-boundary-2026-09-06"
+    },
     "query:marketing-overview-spend-runtime.tsx": {
       "kind": "query",
       "file": "marketing-overview-spend-runtime.tsx",

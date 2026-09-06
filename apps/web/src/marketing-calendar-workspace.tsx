@@ -9,11 +9,11 @@ import { marketingIsArabic, type MarketingLanguage } from "./marketing-shared";
 const MarketingCalendarWorkspaceRuntime = lazy(async () => ({ default: (await import("./marketing-calendar-workspace-runtime")).MarketingCalendarWorkspaceRuntime }));
 
 /** Keep the permission boundary and open the authorized report directly. */
-export function MarketingCalendarRoute({ language, permissionCodes }: { language: MarketingLanguage; permissionCodes: readonly string[] | null }) {
+export function MarketingCalendarRoute({ language, permissionCodes, embedded = false }: { language: MarketingLanguage; permissionCodes: readonly string[] | null; embedded?: boolean }) {
   const session = activeSession();
   const ar = marketingIsArabic(language);
   const canRead = permissionCodes?.includes("marketing.insights.read") ?? false;
   if (!session) return <DailySalesSignIn language={language} />;
   if (!canRead) return <section className="baseer-workspace"><BaseerEmptyState title={ar ? "لا تملك صلاحية عرض الأداء التسويقي" : "You cannot view marketing performance"} /></section>;
-  return <Suspense fallback={<BaseerCard aria-busy="true">{ar ? "جارٍ تحميل التقويم التسويقي…" : "Loading marketing calendar…"}</BaseerCard>}><MarketingCalendarWorkspaceRuntime language={language} session={session} /></Suspense>;
+  return <Suspense fallback={<BaseerCard aria-busy="true">{ar ? "جارٍ تحميل التقويم التسويقي…" : "Loading marketing calendar…"}</BaseerCard>}><MarketingCalendarWorkspaceRuntime language={language} session={session} embedded={embedded} /></Suspense>;
 }
