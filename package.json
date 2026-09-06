@@ -60,6 +60,7 @@
         "verify:ledger-trial-balance-policy": "npm run build --workspace @baseer-erp/api && node apps/api/dist/reports/ledger-trial-balance.policy-verification.js",
         "seed:personal-cash-performance-demo": "node scripts/seed-personal-cash-performance-demo.mjs",
         "verify:web-budget": "node scripts/check-web-release-budget.mjs",
+        "check:web-static-route": "node scripts/check-web-static-route.mjs",
         "check:web-financial-boundaries": "node scripts/check-web-financial-boundaries.mjs",
         "check:web-dialog-conventions": "node scripts/check-web-dialog-conventions.mjs",
         "check:web-numeric-policy": "node scripts/check-web-numeric-policy.mjs",
