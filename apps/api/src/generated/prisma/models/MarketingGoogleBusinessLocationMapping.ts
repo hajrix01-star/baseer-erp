@@ -234,6 +234,7 @@ export type MarketingGoogleBusinessLocationMappingWhereInput = {
   connection?: Prisma.XOR<Prisma.MarketingProviderConnectionScalarRelationFilter, Prisma.MarketingProviderConnectionWhereInput>
   selectedByMembership?: Prisma.XOR<Prisma.CompanyMembershipScalarRelationFilter, Prisma.CompanyMembershipWhereInput>
   syncRuns?: Prisma.MarketingProviderSyncRunListRelationFilter
+  reviewFacts?: Prisma.MarketingGoogleBusinessReviewFactListRelationFilter
 }
 
 export type MarketingGoogleBusinessLocationMappingOrderByWithRelationInput = {
@@ -252,6 +253,7 @@ export type MarketingGoogleBusinessLocationMappingOrderByWithRelationInput = {
   connection?: Prisma.MarketingProviderConnectionOrderByWithRelationInput
   selectedByMembership?: Prisma.CompanyMembershipOrderByWithRelationInput
   syncRuns?: Prisma.MarketingProviderSyncRunOrderByRelationAggregateInput
+  reviewFacts?: Prisma.MarketingGoogleBusinessReviewFactOrderByRelationAggregateInput
 }
 
 export type MarketingGoogleBusinessLocationMappingWhereUniqueInput = Prisma.AtLeast<{
@@ -276,6 +278,7 @@ export type MarketingGoogleBusinessLocationMappingWhereUniqueInput = Prisma.AtLe
   connection?: Prisma.XOR<Prisma.MarketingProviderConnectionScalarRelationFilter, Prisma.MarketingProviderConnectionWhereInput>
   selectedByMembership?: Prisma.XOR<Prisma.CompanyMembershipScalarRelationFilter, Prisma.CompanyMembershipWhereInput>
   syncRuns?: Prisma.MarketingProviderSyncRunListRelationFilter
+  reviewFacts?: Prisma.MarketingGoogleBusinessReviewFactListRelationFilter
 }, "id" | "id_tenantId_companyId" | "id_tenantId_companyId_provider" | "tenantId_companyId_connectionId_googleAccountResourceName_googleLocationResourceName">
 
 export type MarketingGoogleBusinessLocationMappingOrderByWithAggregationInput = {
@@ -323,6 +326,7 @@ export type MarketingGoogleBusinessLocationMappingCreateInput = {
   connection: Prisma.MarketingProviderConnectionCreateNestedOneWithoutGoogleBusinessLocationMappingsInput
   selectedByMembership: Prisma.CompanyMembershipCreateNestedOneWithoutMarketingGoogleBusinessLocationSelectionsInput
   syncRuns?: Prisma.MarketingProviderSyncRunCreateNestedManyWithoutLocationMappingInput
+  reviewFacts?: Prisma.MarketingGoogleBusinessReviewFactCreateNestedManyWithoutLocationMappingInput
 }
 
 export type MarketingGoogleBusinessLocationMappingUncheckedCreateInput = {
@@ -338,6 +342,7 @@ export type MarketingGoogleBusinessLocationMappingUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   syncRuns?: Prisma.MarketingProviderSyncRunUncheckedCreateNestedManyWithoutLocationMappingInput
+  reviewFacts?: Prisma.MarketingGoogleBusinessReviewFactUncheckedCreateNestedManyWithoutLocationMappingInput
 }
 
 export type MarketingGoogleBusinessLocationMappingUpdateInput = {
@@ -351,6 +356,7 @@ export type MarketingGoogleBusinessLocationMappingUpdateInput = {
   connection?: Prisma.MarketingProviderConnectionUpdateOneRequiredWithoutGoogleBusinessLocationMappingsNestedInput
   selectedByMembership?: Prisma.CompanyMembershipUpdateOneRequiredWithoutMarketingGoogleBusinessLocationSelectionsNestedInput
   syncRuns?: Prisma.MarketingProviderSyncRunUpdateManyWithoutLocationMappingNestedInput
+  reviewFacts?: Prisma.MarketingGoogleBusinessReviewFactUpdateManyWithoutLocationMappingNestedInput
 }
 
 export type MarketingGoogleBusinessLocationMappingUncheckedUpdateInput = {
@@ -366,6 +372,7 @@ export type MarketingGoogleBusinessLocationMappingUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   syncRuns?: Prisma.MarketingProviderSyncRunUncheckedUpdateManyWithoutLocationMappingNestedInput
+  reviewFacts?: Prisma.MarketingGoogleBusinessReviewFactUncheckedUpdateManyWithoutLocationMappingNestedInput
 }
 
 export type MarketingGoogleBusinessLocationMappingCreateManyInput = {
@@ -581,6 +588,20 @@ export type MarketingGoogleBusinessLocationMappingUpdateOneRequiredWithoutSyncRu
   update?: Prisma.XOR<Prisma.XOR<Prisma.MarketingGoogleBusinessLocationMappingUpdateToOneWithWhereWithoutSyncRunsInput, Prisma.MarketingGoogleBusinessLocationMappingUpdateWithoutSyncRunsInput>, Prisma.MarketingGoogleBusinessLocationMappingUncheckedUpdateWithoutSyncRunsInput>
 }
 
+export type MarketingGoogleBusinessLocationMappingCreateNestedOneWithoutReviewFactsInput = {
+  create?: Prisma.XOR<Prisma.MarketingGoogleBusinessLocationMappingCreateWithoutReviewFactsInput, Prisma.MarketingGoogleBusinessLocationMappingUncheckedCreateWithoutReviewFactsInput>
+  connectOrCreate?: Prisma.MarketingGoogleBusinessLocationMappingCreateOrConnectWithoutReviewFactsInput
+  connect?: Prisma.MarketingGoogleBusinessLocationMappingWhereUniqueInput
+}
+
+export type MarketingGoogleBusinessLocationMappingUpdateOneRequiredWithoutReviewFactsNestedInput = {
+  create?: Prisma.XOR<Prisma.MarketingGoogleBusinessLocationMappingCreateWithoutReviewFactsInput, Prisma.MarketingGoogleBusinessLocationMappingUncheckedCreateWithoutReviewFactsInput>
+  connectOrCreate?: Prisma.MarketingGoogleBusinessLocationMappingCreateOrConnectWithoutReviewFactsInput
+  upsert?: Prisma.MarketingGoogleBusinessLocationMappingUpsertWithoutReviewFactsInput
+  connect?: Prisma.MarketingGoogleBusinessLocationMappingWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MarketingGoogleBusinessLocationMappingUpdateToOneWithWhereWithoutReviewFactsInput, Prisma.MarketingGoogleBusinessLocationMappingUpdateWithoutReviewFactsInput>, Prisma.MarketingGoogleBusinessLocationMappingUncheckedUpdateWithoutReviewFactsInput>
+}
+
 export type MarketingGoogleBusinessLocationMappingCreateNestedManyWithoutConnectionInput = {
   create?: Prisma.XOR<Prisma.MarketingGoogleBusinessLocationMappingCreateWithoutConnectionInput, Prisma.MarketingGoogleBusinessLocationMappingUncheckedCreateWithoutConnectionInput> | Prisma.MarketingGoogleBusinessLocationMappingCreateWithoutConnectionInput[] | Prisma.MarketingGoogleBusinessLocationMappingUncheckedCreateWithoutConnectionInput[]
   connectOrCreate?: Prisma.MarketingGoogleBusinessLocationMappingCreateOrConnectWithoutConnectionInput | Prisma.MarketingGoogleBusinessLocationMappingCreateOrConnectWithoutConnectionInput[]
@@ -633,6 +654,7 @@ export type MarketingGoogleBusinessLocationMappingCreateWithoutCompanyInput = {
   connection: Prisma.MarketingProviderConnectionCreateNestedOneWithoutGoogleBusinessLocationMappingsInput
   selectedByMembership: Prisma.CompanyMembershipCreateNestedOneWithoutMarketingGoogleBusinessLocationSelectionsInput
   syncRuns?: Prisma.MarketingProviderSyncRunCreateNestedManyWithoutLocationMappingInput
+  reviewFacts?: Prisma.MarketingGoogleBusinessReviewFactCreateNestedManyWithoutLocationMappingInput
 }
 
 export type MarketingGoogleBusinessLocationMappingUncheckedCreateWithoutCompanyInput = {
@@ -646,6 +668,7 @@ export type MarketingGoogleBusinessLocationMappingUncheckedCreateWithoutCompanyI
   createdAt?: Date | string
   updatedAt?: Date | string
   syncRuns?: Prisma.MarketingProviderSyncRunUncheckedCreateNestedManyWithoutLocationMappingInput
+  reviewFacts?: Prisma.MarketingGoogleBusinessReviewFactUncheckedCreateNestedManyWithoutLocationMappingInput
 }
 
 export type MarketingGoogleBusinessLocationMappingCreateOrConnectWithoutCompanyInput = {
@@ -701,6 +724,7 @@ export type MarketingGoogleBusinessLocationMappingCreateWithoutSelectedByMembers
   company: Prisma.CompanyCreateNestedOneWithoutMarketingGoogleBusinessLocationMappingsInput
   connection: Prisma.MarketingProviderConnectionCreateNestedOneWithoutGoogleBusinessLocationMappingsInput
   syncRuns?: Prisma.MarketingProviderSyncRunCreateNestedManyWithoutLocationMappingInput
+  reviewFacts?: Prisma.MarketingGoogleBusinessReviewFactCreateNestedManyWithoutLocationMappingInput
 }
 
 export type MarketingGoogleBusinessLocationMappingUncheckedCreateWithoutSelectedByMembershipInput = {
@@ -713,6 +737,7 @@ export type MarketingGoogleBusinessLocationMappingUncheckedCreateWithoutSelected
   createdAt?: Date | string
   updatedAt?: Date | string
   syncRuns?: Prisma.MarketingProviderSyncRunUncheckedCreateNestedManyWithoutLocationMappingInput
+  reviewFacts?: Prisma.MarketingGoogleBusinessReviewFactUncheckedCreateNestedManyWithoutLocationMappingInput
 }
 
 export type MarketingGoogleBusinessLocationMappingCreateOrConnectWithoutSelectedByMembershipInput = {
@@ -751,6 +776,7 @@ export type MarketingGoogleBusinessLocationMappingCreateWithoutSyncRunsInput = {
   company: Prisma.CompanyCreateNestedOneWithoutMarketingGoogleBusinessLocationMappingsInput
   connection: Prisma.MarketingProviderConnectionCreateNestedOneWithoutGoogleBusinessLocationMappingsInput
   selectedByMembership: Prisma.CompanyMembershipCreateNestedOneWithoutMarketingGoogleBusinessLocationSelectionsInput
+  reviewFacts?: Prisma.MarketingGoogleBusinessReviewFactCreateNestedManyWithoutLocationMappingInput
 }
 
 export type MarketingGoogleBusinessLocationMappingUncheckedCreateWithoutSyncRunsInput = {
@@ -765,6 +791,7 @@ export type MarketingGoogleBusinessLocationMappingUncheckedCreateWithoutSyncRuns
   selectedByUserId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  reviewFacts?: Prisma.MarketingGoogleBusinessReviewFactUncheckedCreateNestedManyWithoutLocationMappingInput
 }
 
 export type MarketingGoogleBusinessLocationMappingCreateOrConnectWithoutSyncRunsInput = {
@@ -793,6 +820,7 @@ export type MarketingGoogleBusinessLocationMappingUpdateWithoutSyncRunsInput = {
   company?: Prisma.CompanyUpdateOneRequiredWithoutMarketingGoogleBusinessLocationMappingsNestedInput
   connection?: Prisma.MarketingProviderConnectionUpdateOneRequiredWithoutGoogleBusinessLocationMappingsNestedInput
   selectedByMembership?: Prisma.CompanyMembershipUpdateOneRequiredWithoutMarketingGoogleBusinessLocationSelectionsNestedInput
+  reviewFacts?: Prisma.MarketingGoogleBusinessReviewFactUpdateManyWithoutLocationMappingNestedInput
 }
 
 export type MarketingGoogleBusinessLocationMappingUncheckedUpdateWithoutSyncRunsInput = {
@@ -807,6 +835,79 @@ export type MarketingGoogleBusinessLocationMappingUncheckedUpdateWithoutSyncRuns
   selectedByUserId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewFacts?: Prisma.MarketingGoogleBusinessReviewFactUncheckedUpdateManyWithoutLocationMappingNestedInput
+}
+
+export type MarketingGoogleBusinessLocationMappingCreateWithoutReviewFactsInput = {
+  id?: string
+  googleAccountResourceName: string
+  googleLocationResourceName: string
+  selectedAt: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutMarketingGoogleBusinessLocationMappingsInput
+  connection: Prisma.MarketingProviderConnectionCreateNestedOneWithoutGoogleBusinessLocationMappingsInput
+  selectedByMembership: Prisma.CompanyMembershipCreateNestedOneWithoutMarketingGoogleBusinessLocationSelectionsInput
+  syncRuns?: Prisma.MarketingProviderSyncRunCreateNestedManyWithoutLocationMappingInput
+}
+
+export type MarketingGoogleBusinessLocationMappingUncheckedCreateWithoutReviewFactsInput = {
+  id?: string
+  tenantId: string
+  companyId: string
+  connectionId: string
+  provider?: $Enums.MarketingProvider
+  googleAccountResourceName: string
+  googleLocationResourceName: string
+  selectedAt: Date | string
+  selectedByUserId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  syncRuns?: Prisma.MarketingProviderSyncRunUncheckedCreateNestedManyWithoutLocationMappingInput
+}
+
+export type MarketingGoogleBusinessLocationMappingCreateOrConnectWithoutReviewFactsInput = {
+  where: Prisma.MarketingGoogleBusinessLocationMappingWhereUniqueInput
+  create: Prisma.XOR<Prisma.MarketingGoogleBusinessLocationMappingCreateWithoutReviewFactsInput, Prisma.MarketingGoogleBusinessLocationMappingUncheckedCreateWithoutReviewFactsInput>
+}
+
+export type MarketingGoogleBusinessLocationMappingUpsertWithoutReviewFactsInput = {
+  update: Prisma.XOR<Prisma.MarketingGoogleBusinessLocationMappingUpdateWithoutReviewFactsInput, Prisma.MarketingGoogleBusinessLocationMappingUncheckedUpdateWithoutReviewFactsInput>
+  create: Prisma.XOR<Prisma.MarketingGoogleBusinessLocationMappingCreateWithoutReviewFactsInput, Prisma.MarketingGoogleBusinessLocationMappingUncheckedCreateWithoutReviewFactsInput>
+  where?: Prisma.MarketingGoogleBusinessLocationMappingWhereInput
+}
+
+export type MarketingGoogleBusinessLocationMappingUpdateToOneWithWhereWithoutReviewFactsInput = {
+  where?: Prisma.MarketingGoogleBusinessLocationMappingWhereInput
+  data: Prisma.XOR<Prisma.MarketingGoogleBusinessLocationMappingUpdateWithoutReviewFactsInput, Prisma.MarketingGoogleBusinessLocationMappingUncheckedUpdateWithoutReviewFactsInput>
+}
+
+export type MarketingGoogleBusinessLocationMappingUpdateWithoutReviewFactsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  googleAccountResourceName?: Prisma.StringFieldUpdateOperationsInput | string
+  googleLocationResourceName?: Prisma.StringFieldUpdateOperationsInput | string
+  selectedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutMarketingGoogleBusinessLocationMappingsNestedInput
+  connection?: Prisma.MarketingProviderConnectionUpdateOneRequiredWithoutGoogleBusinessLocationMappingsNestedInput
+  selectedByMembership?: Prisma.CompanyMembershipUpdateOneRequiredWithoutMarketingGoogleBusinessLocationSelectionsNestedInput
+  syncRuns?: Prisma.MarketingProviderSyncRunUpdateManyWithoutLocationMappingNestedInput
+}
+
+export type MarketingGoogleBusinessLocationMappingUncheckedUpdateWithoutReviewFactsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyId?: Prisma.StringFieldUpdateOperationsInput | string
+  connectionId?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumMarketingProviderFieldUpdateOperationsInput | $Enums.MarketingProvider
+  googleAccountResourceName?: Prisma.StringFieldUpdateOperationsInput | string
+  googleLocationResourceName?: Prisma.StringFieldUpdateOperationsInput | string
+  selectedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  selectedByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  syncRuns?: Prisma.MarketingProviderSyncRunUncheckedUpdateManyWithoutLocationMappingNestedInput
 }
 
 export type MarketingGoogleBusinessLocationMappingCreateWithoutConnectionInput = {
@@ -819,6 +920,7 @@ export type MarketingGoogleBusinessLocationMappingCreateWithoutConnectionInput =
   company: Prisma.CompanyCreateNestedOneWithoutMarketingGoogleBusinessLocationMappingsInput
   selectedByMembership: Prisma.CompanyMembershipCreateNestedOneWithoutMarketingGoogleBusinessLocationSelectionsInput
   syncRuns?: Prisma.MarketingProviderSyncRunCreateNestedManyWithoutLocationMappingInput
+  reviewFacts?: Prisma.MarketingGoogleBusinessReviewFactCreateNestedManyWithoutLocationMappingInput
 }
 
 export type MarketingGoogleBusinessLocationMappingUncheckedCreateWithoutConnectionInput = {
@@ -830,6 +932,7 @@ export type MarketingGoogleBusinessLocationMappingUncheckedCreateWithoutConnecti
   createdAt?: Date | string
   updatedAt?: Date | string
   syncRuns?: Prisma.MarketingProviderSyncRunUncheckedCreateNestedManyWithoutLocationMappingInput
+  reviewFacts?: Prisma.MarketingGoogleBusinessReviewFactUncheckedCreateNestedManyWithoutLocationMappingInput
 }
 
 export type MarketingGoogleBusinessLocationMappingCreateOrConnectWithoutConnectionInput = {
@@ -880,6 +983,7 @@ export type MarketingGoogleBusinessLocationMappingUpdateWithoutCompanyInput = {
   connection?: Prisma.MarketingProviderConnectionUpdateOneRequiredWithoutGoogleBusinessLocationMappingsNestedInput
   selectedByMembership?: Prisma.CompanyMembershipUpdateOneRequiredWithoutMarketingGoogleBusinessLocationSelectionsNestedInput
   syncRuns?: Prisma.MarketingProviderSyncRunUpdateManyWithoutLocationMappingNestedInput
+  reviewFacts?: Prisma.MarketingGoogleBusinessReviewFactUpdateManyWithoutLocationMappingNestedInput
 }
 
 export type MarketingGoogleBusinessLocationMappingUncheckedUpdateWithoutCompanyInput = {
@@ -893,6 +997,7 @@ export type MarketingGoogleBusinessLocationMappingUncheckedUpdateWithoutCompanyI
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   syncRuns?: Prisma.MarketingProviderSyncRunUncheckedUpdateManyWithoutLocationMappingNestedInput
+  reviewFacts?: Prisma.MarketingGoogleBusinessReviewFactUncheckedUpdateManyWithoutLocationMappingNestedInput
 }
 
 export type MarketingGoogleBusinessLocationMappingUncheckedUpdateManyWithoutCompanyInput = {
@@ -928,6 +1033,7 @@ export type MarketingGoogleBusinessLocationMappingUpdateWithoutSelectedByMembers
   company?: Prisma.CompanyUpdateOneRequiredWithoutMarketingGoogleBusinessLocationMappingsNestedInput
   connection?: Prisma.MarketingProviderConnectionUpdateOneRequiredWithoutGoogleBusinessLocationMappingsNestedInput
   syncRuns?: Prisma.MarketingProviderSyncRunUpdateManyWithoutLocationMappingNestedInput
+  reviewFacts?: Prisma.MarketingGoogleBusinessReviewFactUpdateManyWithoutLocationMappingNestedInput
 }
 
 export type MarketingGoogleBusinessLocationMappingUncheckedUpdateWithoutSelectedByMembershipInput = {
@@ -940,6 +1046,7 @@ export type MarketingGoogleBusinessLocationMappingUncheckedUpdateWithoutSelected
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   syncRuns?: Prisma.MarketingProviderSyncRunUncheckedUpdateManyWithoutLocationMappingNestedInput
+  reviewFacts?: Prisma.MarketingGoogleBusinessReviewFactUncheckedUpdateManyWithoutLocationMappingNestedInput
 }
 
 export type MarketingGoogleBusinessLocationMappingUncheckedUpdateManyWithoutSelectedByMembershipInput = {
@@ -973,6 +1080,7 @@ export type MarketingGoogleBusinessLocationMappingUpdateWithoutConnectionInput =
   company?: Prisma.CompanyUpdateOneRequiredWithoutMarketingGoogleBusinessLocationMappingsNestedInput
   selectedByMembership?: Prisma.CompanyMembershipUpdateOneRequiredWithoutMarketingGoogleBusinessLocationSelectionsNestedInput
   syncRuns?: Prisma.MarketingProviderSyncRunUpdateManyWithoutLocationMappingNestedInput
+  reviewFacts?: Prisma.MarketingGoogleBusinessReviewFactUpdateManyWithoutLocationMappingNestedInput
 }
 
 export type MarketingGoogleBusinessLocationMappingUncheckedUpdateWithoutConnectionInput = {
@@ -984,6 +1092,7 @@ export type MarketingGoogleBusinessLocationMappingUncheckedUpdateWithoutConnecti
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   syncRuns?: Prisma.MarketingProviderSyncRunUncheckedUpdateManyWithoutLocationMappingNestedInput
+  reviewFacts?: Prisma.MarketingGoogleBusinessReviewFactUncheckedUpdateManyWithoutLocationMappingNestedInput
 }
 
 export type MarketingGoogleBusinessLocationMappingUncheckedUpdateManyWithoutConnectionInput = {
@@ -1003,10 +1112,12 @@ export type MarketingGoogleBusinessLocationMappingUncheckedUpdateManyWithoutConn
 
 export type MarketingGoogleBusinessLocationMappingCountOutputType = {
   syncRuns: number
+  reviewFacts: number
 }
 
 export type MarketingGoogleBusinessLocationMappingCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   syncRuns?: boolean | MarketingGoogleBusinessLocationMappingCountOutputTypeCountSyncRunsArgs
+  reviewFacts?: boolean | MarketingGoogleBusinessLocationMappingCountOutputTypeCountReviewFactsArgs
 }
 
 /**
@@ -1026,6 +1137,13 @@ export type MarketingGoogleBusinessLocationMappingCountOutputTypeCountSyncRunsAr
   where?: Prisma.MarketingProviderSyncRunWhereInput
 }
 
+/**
+ * MarketingGoogleBusinessLocationMappingCountOutputType without action
+ */
+export type MarketingGoogleBusinessLocationMappingCountOutputTypeCountReviewFactsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MarketingGoogleBusinessReviewFactWhereInput
+}
+
 
 export type MarketingGoogleBusinessLocationMappingSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1043,6 +1161,7 @@ export type MarketingGoogleBusinessLocationMappingSelect<ExtArgs extends runtime
   connection?: boolean | Prisma.MarketingProviderConnectionDefaultArgs<ExtArgs>
   selectedByMembership?: boolean | Prisma.CompanyMembershipDefaultArgs<ExtArgs>
   syncRuns?: boolean | Prisma.MarketingGoogleBusinessLocationMapping$syncRunsArgs<ExtArgs>
+  reviewFacts?: boolean | Prisma.MarketingGoogleBusinessLocationMapping$reviewFactsArgs<ExtArgs>
   _count?: boolean | Prisma.MarketingGoogleBusinessLocationMappingCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["marketingGoogleBusinessLocationMapping"]>
 
@@ -1100,6 +1219,7 @@ export type MarketingGoogleBusinessLocationMappingInclude<ExtArgs extends runtim
   connection?: boolean | Prisma.MarketingProviderConnectionDefaultArgs<ExtArgs>
   selectedByMembership?: boolean | Prisma.CompanyMembershipDefaultArgs<ExtArgs>
   syncRuns?: boolean | Prisma.MarketingGoogleBusinessLocationMapping$syncRunsArgs<ExtArgs>
+  reviewFacts?: boolean | Prisma.MarketingGoogleBusinessLocationMapping$reviewFactsArgs<ExtArgs>
   _count?: boolean | Prisma.MarketingGoogleBusinessLocationMappingCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type MarketingGoogleBusinessLocationMappingIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1120,6 +1240,7 @@ export type $MarketingGoogleBusinessLocationMappingPayload<ExtArgs extends runti
     connection: Prisma.$MarketingProviderConnectionPayload<ExtArgs>
     selectedByMembership: Prisma.$CompanyMembershipPayload<ExtArgs>
     syncRuns: Prisma.$MarketingProviderSyncRunPayload<ExtArgs>[]
+    reviewFacts: Prisma.$MarketingGoogleBusinessReviewFactPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1531,6 +1652,7 @@ export interface Prisma__MarketingGoogleBusinessLocationMappingClient<T, Null = 
   connection<T extends Prisma.MarketingProviderConnectionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketingProviderConnectionDefaultArgs<ExtArgs>>): Prisma.Prisma__MarketingProviderConnectionClient<runtime.Types.Result.GetResult<Prisma.$MarketingProviderConnectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   selectedByMembership<T extends Prisma.CompanyMembershipDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyMembershipDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyMembershipClient<runtime.Types.Result.GetResult<Prisma.$CompanyMembershipPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   syncRuns<T extends Prisma.MarketingGoogleBusinessLocationMapping$syncRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketingGoogleBusinessLocationMapping$syncRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarketingProviderSyncRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reviewFacts<T extends Prisma.MarketingGoogleBusinessLocationMapping$reviewFactsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MarketingGoogleBusinessLocationMapping$reviewFactsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MarketingGoogleBusinessReviewFactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1993,6 +2115,30 @@ export type MarketingGoogleBusinessLocationMapping$syncRunsArgs<ExtArgs extends 
   take?: number
   skip?: number
   distinct?: Prisma.MarketingProviderSyncRunScalarFieldEnum | Prisma.MarketingProviderSyncRunScalarFieldEnum[]
+}
+
+/**
+ * MarketingGoogleBusinessLocationMapping.reviewFacts
+ */
+export type MarketingGoogleBusinessLocationMapping$reviewFactsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MarketingGoogleBusinessReviewFact
+   */
+  select?: Prisma.MarketingGoogleBusinessReviewFactSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MarketingGoogleBusinessReviewFact
+   */
+  omit?: Prisma.MarketingGoogleBusinessReviewFactOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MarketingGoogleBusinessReviewFactInclude<ExtArgs> | null
+  where?: Prisma.MarketingGoogleBusinessReviewFactWhereInput
+  orderBy?: Prisma.MarketingGoogleBusinessReviewFactOrderByWithRelationInput | Prisma.MarketingGoogleBusinessReviewFactOrderByWithRelationInput[]
+  cursor?: Prisma.MarketingGoogleBusinessReviewFactWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MarketingGoogleBusinessReviewFactScalarFieldEnum | Prisma.MarketingGoogleBusinessReviewFactScalarFieldEnum[]
 }
 
 /**

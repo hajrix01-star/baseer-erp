@@ -100,7 +100,7 @@ RLS/e2e يرفض كل cross-company request. لا migration لtoken ولا مو�
 | الشريحة | القيمة المرئية | لا تتضمن |
 | --- | --- | --- |
 | A — السطح الموحد | الصفحات الخمس، اسم/ترتيب صحيحان، حالة اتصال موحدة، إصلاح ظهور/رفض الصلاحية | facts أو egress جديد أو migration أو مزامنة. |
-| B — Google Business facts | reviews read-only وcursor وsource quality بعد تشغيل sync آمن | automated replies أو نشر. |
+| B — Google Business facts | مزامنة يدوية للقراءة من الموقع المختار، facts معزولة، cursor، ملخص وتحليل خادمي؛ العقد في ADR-MKT-003 | automated replies أو نشر أو scheduler. |
 | C — Google Ads facts | قراءة performance ووسم عدم المساواة بالمبيعات | إنشاء/تعديل Ads. |
 | D — الردود المحكومة | outbox، مراجعة، approval، receipt، guardrails | auto-publish من policy وحدها. |
 | E — المعلم الشامي | تفعيل مستقل واختبارات عزل | مشاركة ARZ أو نقل أسرار. |

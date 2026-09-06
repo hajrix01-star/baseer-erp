@@ -369,6 +369,44 @@ export const updateMarketingReputationReplyPolicyRequestSchema = z.object({
   idempotencyKey: idempotencyKeySchema,
 }).strict();
 
+/** Google Business review facts are read-only provider evidence. They do not
+ * represent sales, revenue, a financial decision, or publishing authority. */
+export const marketingGoogleBusinessReviewSchema = z.object({
+  id: marketingIdSchema,
+  rating: z.number().int().min(1).max(5),
+  reviewerDisplayName: z.string().max(256).nullable(),
+  reviewComment: z.string().max(10_000).nullable(),
+  reviewCreatedAt: z.string().datetime(),
+  reviewUpdatedAt: z.string().datetime(),
+  replyComment: z.string().max(10_000).nullable(),
+  replyUpdatedAt: z.string().datetime().nullable(),
+}).strict();
+
+export const marketingGoogleBusinessReviewsReadSchema = z.object({
+  sourceStatus: z.enum(["NOT_CONNECTED", "NO_DATA", "READY"]),
+  asOf: z.string().datetime().nullable(),
+  summary: z.object({
+    averageRating: z.number().min(1).max(5).nullable(),
+    totalReviewCount: z.number().int().nonnegative().nullable(),
+    storedReviewCount: z.number().int().nonnegative(),
+    repliedReviewCount: z.number().int().nonnegative(),
+    responseRatePercent: z.number().int().min(0).max(100).nullable(),
+    analysisAr: z.string().min(1).max(1_000),
+    analysisEn: z.string().min(1).max(1_000),
+  }).strict(),
+  sync: z.object({ rowsRead: z.number().int().nonnegative(), rowsWritten: z.number().int().nonnegative() }).strict().nullable(),
+  reviews: z.array(marketingGoogleBusinessReviewSchema).max(50),
+  nextCursor: z.string().min(1).max(500).nullable(),
+}).strict();
+
+export const marketingGoogleBusinessReviewSyncReceiptSchema = z.object({
+  status: z.literal("COMPLETED"),
+  rowsRead: z.number().int().nonnegative().max(500),
+  rowsWritten: z.number().int().nonnegative().max(500),
+  sourceFreshAt: z.string().datetime(),
+  totalReviewCount: z.number().int().nonnegative().nullable(),
+}).strict();
+
 /** Feedback is deliberately categorical first so it can improve evaluation
  * without treating an open-ended note as a training instruction. */
 export const marketingCampaignAnalysisFeedbackKindSchema = z.enum([
@@ -401,4 +439,6 @@ export type MarketingCalendarRead = z.infer<typeof marketingCalendarReadSchema>;
 export type MarketingFinancialRead = z.infer<typeof marketingFinancialReadSchema>;
 export type UpsertMarketingSalesTargetRequest = z.infer<typeof upsertMarketingSalesTargetRequestSchema>;
 export type UpdateMarketingReputationReplyPolicyRequest = z.infer<typeof updateMarketingReputationReplyPolicyRequestSchema>;
+export type MarketingGoogleBusinessReviewsRead = z.infer<typeof marketingGoogleBusinessReviewsReadSchema>;
+export type MarketingGoogleBusinessReviewSyncReceipt = z.infer<typeof marketingGoogleBusinessReviewSyncReceiptSchema>;
 export type CreateMarketingCampaignAnalysisFeedbackRequest = z.infer<typeof createMarketingCampaignAnalysisFeedbackRequestSchema>;

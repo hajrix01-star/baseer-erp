@@ -438,6 +438,7 @@ export const ModelName = {
   MarketingProviderCredentialEnvelope: 'MarketingProviderCredentialEnvelope',
   MarketingGoogleBusinessLocationMapping: 'MarketingGoogleBusinessLocationMapping',
   MarketingProviderSyncRun: 'MarketingProviderSyncRun',
+  MarketingGoogleBusinessReviewFact: 'MarketingGoogleBusinessReviewFact',
   FinanceAccount: 'FinanceAccount',
   FinancePnlMappingVersion: 'FinancePnlMappingVersion',
   FinancePnlStatementLine: 'FinancePnlStatementLine',
@@ -625,7 +626,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "backupPolicy" | "backupJob" | "backupArtifact" | "backupAuditEvent" | "legacyMigrationRun" | "legacyMigrationCompanyMap" | "legacyMigrationRecordMap" | "noorixSourceAnnotation" | "nurixExcelStagingPackage" | "nurixExcelStagingBatch" | "nurixExcelStagingRow" | "nurixExcelMasterDataExecution" | "nurixExcelMasterDataItem" | "nurixExcelFinancialExecution" | "nurixExcelFinancialWave" | "nurixExcelFinancialItem" | "nurixExcelFinancialSourceMap" | "nurixExcelFinancialReceipt" | "nurixHistoricalPayrollEvidence" | "nurixHistoricalPayrollLineEvidence" | "nurixHistoricalPayrollAccountingEvidence" | "legacyMigrationException" | "legacyMigrationReviewAction" | "ownerDailyBriefSnapshot" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "marketingProviderCredentialEnvelope" | "marketingGoogleBusinessLocationMapping" | "marketingProviderSyncRun" | "financeAccount" | "financePnlMappingVersion" | "financePnlStatementLine" | "financePnlAccountMapping" | "financeLedgerRevision" | "reportRun" | "decisionMetricDefinition" | "decisionSalesChangePolicy" | "decisionRuleDefinition" | "decisionContextSource" | "decisionContextImportRun" | "decisionContextResearchRun" | "decisionContextCandidate" | "decisionGlobalContextEvent" | "decisionGlobalContextEventRevision" | "decisionGlobalContextReviewAction" | "decisionCompanyContextEvent" | "decisionEvaluationRun" | "decisionEvidenceSnapshot" | "decisionAlert" | "decisionAlertAction" | "decisionFeedback" | "inboundEvidenceLabel" | "inboundEvidenceRule" | "inboundEvidenceCommandReceipt" | "inboundEvidenceGmailConnection" | "inboundEvidenceGmailOAuthState" | "inboundEvidenceMessage" | "inboundEvidenceAttachment" | "inboundEvidenceDocumentAnalysis" | "inboundEvidenceMessageLabel" | "whatsappInvoiceConnection" | "whatsappInvoiceConnectionSession" | "whatsappInvoiceConnectionLease" | "whatsappInvoiceGroupBinding" | "whatsappInboundMessage" | "whatsappInvoiceAsset" | "whatsappInvoiceMediaWorkItem" | "whatsappInvoiceAssetPage" | "whatsappInvoiceRecord" | "whatsappInvoicePageAssignment" | "whatsappInvoiceExtractionRevision" | "whatsappInvoiceReview" | "whatsappInvoiceDuplicateAssessment" | "marketingCampaign" | "marketingCampaignAnalysisFeedback" | "marketingCampaignFinancialLink" | "marketingCampaignContextLink" | "marketingSalesTarget" | "marketingProviderConnection" | "marketingGoogleBusinessOAuthState" | "marketingProviderOAuthState" | "marketingReputationReplyPolicy" | "reportDocument" | "vatSimulation" | "financeCashPerformanceEvent" | "financeCashPerformanceCoverage" | "financeCashPerformanceHistoricalImport" | "financeVatSettlement" | "financeCategory" | "financeSupplier" | "financeCounterpartyIdentity" | "financeCounterpartyAlias" | "legacyMigrationCounterpartyResolution" | "legacyMigrationCounterpartyCandidate" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowDocumentRevision" | "operationsAssetWarrantyAsset" | "operationsAssetWarrantyLine" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "attendanceEmployeeCredential" | "attendanceBranch" | "attendanceRosterPlan" | "attendanceRosterPeakPeriod" | "attendanceRosterEntry" | "attendanceRosterEntryPeriod" | "attendanceScheduleTemplate" | "attendanceScheduleTemplateVersion" | "attendanceSchedulePeriod" | "attendanceEmployeeScheduleAssignment" | "attendanceEmployeeWeeklyAdjustment" | "attendanceEmployeeWeeklyAdjustmentPeriod" | "attendanceScheduleException" | "attendanceScheduleExceptionPeriod" | "attendanceEvent" | "attendanceQrScanUse" | "attendanceWorkSession" | "hrEmployeeWorkTerms" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiCompanyContext" | "aiSkillActivation" | "aiExecutionReceipt" | "aiInterpretation" | "aiInterpretationRun" | "aiModelPriceRevision" | "aiBudgetReservation" | "aiUsageLedger" | "aiInterpretationPlacement" | "aiHumanInsight" | "aiEvaluationFeedback" | "aiSkillEvaluationRun" | "aiSystemIdentity" | "operationsSection" | "operationsUnit" | "operationsCatalogCategory" | "operationsItem" | "operationsItemUnit" | "operationsItemConversionVersion" | "operationsItemConversionEdge" | "operationsInternalRegistration" | "operationsInternalRegistrationLine" | "operationsInternalRegistrationConsumption" | "operationsRecipeVersion" | "operationsRecipeLine" | "operationsPurchaseRequest" | "operationsPurchaseRequestLine" | "operationsPurchaseReceipt" | "operationsPurchaseReceiptLine" | "operationsCustodyProfile" | "operationsCustodyEvent" | "operationsInventoryBalance" | "operationsInventoryMovement"
+    modelProps: "tenant" | "user" | "company" | "tenantAdministrationAssignment" | "companyBranding" | "role" | "rolePermission" | "companyMembership" | "appSession" | "auditEvent" | "idempotencyReceipt" | "backupPolicy" | "backupJob" | "backupArtifact" | "backupAuditEvent" | "legacyMigrationRun" | "legacyMigrationCompanyMap" | "legacyMigrationRecordMap" | "noorixSourceAnnotation" | "nurixExcelStagingPackage" | "nurixExcelStagingBatch" | "nurixExcelStagingRow" | "nurixExcelMasterDataExecution" | "nurixExcelMasterDataItem" | "nurixExcelFinancialExecution" | "nurixExcelFinancialWave" | "nurixExcelFinancialItem" | "nurixExcelFinancialSourceMap" | "nurixExcelFinancialReceipt" | "nurixHistoricalPayrollEvidence" | "nurixHistoricalPayrollLineEvidence" | "nurixHistoricalPayrollAccountingEvidence" | "legacyMigrationException" | "legacyMigrationReviewAction" | "ownerDailyBriefSnapshot" | "documentSerialCounter" | "fileMetadata" | "companyFinanceProfile" | "marketingProviderCredentialEnvelope" | "marketingGoogleBusinessLocationMapping" | "marketingProviderSyncRun" | "marketingGoogleBusinessReviewFact" | "financeAccount" | "financePnlMappingVersion" | "financePnlStatementLine" | "financePnlAccountMapping" | "financeLedgerRevision" | "reportRun" | "decisionMetricDefinition" | "decisionSalesChangePolicy" | "decisionRuleDefinition" | "decisionContextSource" | "decisionContextImportRun" | "decisionContextResearchRun" | "decisionContextCandidate" | "decisionGlobalContextEvent" | "decisionGlobalContextEventRevision" | "decisionGlobalContextReviewAction" | "decisionCompanyContextEvent" | "decisionEvaluationRun" | "decisionEvidenceSnapshot" | "decisionAlert" | "decisionAlertAction" | "decisionFeedback" | "inboundEvidenceLabel" | "inboundEvidenceRule" | "inboundEvidenceCommandReceipt" | "inboundEvidenceGmailConnection" | "inboundEvidenceGmailOAuthState" | "inboundEvidenceMessage" | "inboundEvidenceAttachment" | "inboundEvidenceDocumentAnalysis" | "inboundEvidenceMessageLabel" | "whatsappInvoiceConnection" | "whatsappInvoiceConnectionSession" | "whatsappInvoiceConnectionLease" | "whatsappInvoiceGroupBinding" | "whatsappInboundMessage" | "whatsappInvoiceAsset" | "whatsappInvoiceMediaWorkItem" | "whatsappInvoiceAssetPage" | "whatsappInvoiceRecord" | "whatsappInvoicePageAssignment" | "whatsappInvoiceExtractionRevision" | "whatsappInvoiceReview" | "whatsappInvoiceDuplicateAssessment" | "marketingCampaign" | "marketingCampaignAnalysisFeedback" | "marketingCampaignFinancialLink" | "marketingCampaignContextLink" | "marketingSalesTarget" | "marketingProviderConnection" | "marketingGoogleBusinessOAuthState" | "marketingProviderOAuthState" | "marketingReputationReplyPolicy" | "reportDocument" | "vatSimulation" | "financeCashPerformanceEvent" | "financeCashPerformanceCoverage" | "financeCashPerformanceHistoricalImport" | "financeVatSettlement" | "financeCategory" | "financeSupplier" | "financeCounterpartyIdentity" | "financeCounterpartyAlias" | "legacyMigrationCounterpartyResolution" | "legacyMigrationCounterpartyCandidate" | "supplierCopyProvenance" | "financeFiscalPeriod" | "financeVault" | "financeVaultReconciliation" | "financeSupplierDue" | "financeSupplierDuePayment" | "financeJournalEntry" | "financeOutflowDocument" | "financeOutflowDocumentRevision" | "operationsAssetWarrantyAsset" | "operationsAssetWarrantyLine" | "financeOutflowBatch" | "financeOutflowAllocation" | "hrEmployee" | "attendanceEmployeeCredential" | "attendanceBranch" | "attendanceRosterPlan" | "attendanceRosterPeakPeriod" | "attendanceRosterEntry" | "attendanceRosterEntryPeriod" | "attendanceScheduleTemplate" | "attendanceScheduleTemplateVersion" | "attendanceSchedulePeriod" | "attendanceEmployeeScheduleAssignment" | "attendanceEmployeeWeeklyAdjustment" | "attendanceEmployeeWeeklyAdjustmentPeriod" | "attendanceScheduleException" | "attendanceScheduleExceptionPeriod" | "attendanceEvent" | "attendanceQrScanUse" | "attendanceWorkSession" | "hrEmployeeWorkTerms" | "hrEmployeePromotion" | "hrEmployeeLeave" | "hrEmployeeDocumentBlob" | "hrEmployeeDocument" | "hrEmployeeDocumentVersion" | "hrEmployeeLetter" | "hrEmployeeService" | "hrEmployeeFinancialMovement" | "hrFinalSettlement" | "hrFinalSettlementRecovery" | "hrFinalSettlementPayment" | "hrFinalSettlementPaymentAllocation" | "hrEmployeeAdvance" | "hrEmployeeAdvancePayoutAllocation" | "hrEmployeeAdvanceSettlement" | "hrEmployeeAdvanceDeferral" | "hrEmployeeAdministrativeDeduction" | "hrEmployeeAdministrativeDeductionAction" | "hrEmployeeCompensationProfile" | "hrCompensationPolicy" | "hrCompensationPolicyVersion" | "hrPayrollRun" | "hrPayrollLine" | "hrPayrollAdvanceApplication" | "hrPayrollAdministrativeDeductionApplication" | "hrPayrollPayment" | "hrPayrollPaymentAllocation" | "financeJournalLine" | "financeAccountDailyBalance" | "financeAccountMonthlyBalance" | "financeOperationalDay" | "financeDailySalesClosing" | "financeDailySalesAllocation" | "financeDailyFinancialSummary" | "financeDailySalesChannelSummary" | "financeRecurringExpenseProfile" | "financeRecurringExpenseCoverage" | "financeInclusiveLoan" | "financeInclusiveLoanPayment" | "financeInclusiveLoanInstallmentPlan" | "aiProviderConfiguration" | "aiCompanyIdentity" | "aiCompanyContext" | "aiSkillActivation" | "aiExecutionReceipt" | "aiInterpretation" | "aiInterpretationRun" | "aiModelPriceRevision" | "aiBudgetReservation" | "aiUsageLedger" | "aiInterpretationPlacement" | "aiHumanInsight" | "aiEvaluationFeedback" | "aiSkillEvaluationRun" | "aiSystemIdentity" | "operationsSection" | "operationsUnit" | "operationsCatalogCategory" | "operationsItem" | "operationsItemUnit" | "operationsItemConversionVersion" | "operationsItemConversionEdge" | "operationsInternalRegistration" | "operationsInternalRegistrationLine" | "operationsInternalRegistrationConsumption" | "operationsRecipeVersion" | "operationsRecipeLine" | "operationsPurchaseRequest" | "operationsPurchaseRequestLine" | "operationsPurchaseReceipt" | "operationsPurchaseReceiptLine" | "operationsCustodyProfile" | "operationsCustodyEvent" | "operationsInventoryBalance" | "operationsInventoryMovement"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3660,6 +3661,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.MarketingProviderSyncRunCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.MarketingProviderSyncRunCountAggregateOutputType> | number
+        }
+      }
+    }
+    MarketingGoogleBusinessReviewFact: {
+      payload: Prisma.$MarketingGoogleBusinessReviewFactPayload<ExtArgs>
+      fields: Prisma.MarketingGoogleBusinessReviewFactFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MarketingGoogleBusinessReviewFactFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingGoogleBusinessReviewFactPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MarketingGoogleBusinessReviewFactFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingGoogleBusinessReviewFactPayload>
+        }
+        findFirst: {
+          args: Prisma.MarketingGoogleBusinessReviewFactFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingGoogleBusinessReviewFactPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MarketingGoogleBusinessReviewFactFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingGoogleBusinessReviewFactPayload>
+        }
+        findMany: {
+          args: Prisma.MarketingGoogleBusinessReviewFactFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingGoogleBusinessReviewFactPayload>[]
+        }
+        create: {
+          args: Prisma.MarketingGoogleBusinessReviewFactCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingGoogleBusinessReviewFactPayload>
+        }
+        createMany: {
+          args: Prisma.MarketingGoogleBusinessReviewFactCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MarketingGoogleBusinessReviewFactCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingGoogleBusinessReviewFactPayload>[]
+        }
+        delete: {
+          args: Prisma.MarketingGoogleBusinessReviewFactDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingGoogleBusinessReviewFactPayload>
+        }
+        update: {
+          args: Prisma.MarketingGoogleBusinessReviewFactUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingGoogleBusinessReviewFactPayload>
+        }
+        deleteMany: {
+          args: Prisma.MarketingGoogleBusinessReviewFactDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MarketingGoogleBusinessReviewFactUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MarketingGoogleBusinessReviewFactUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingGoogleBusinessReviewFactPayload>[]
+        }
+        upsert: {
+          args: Prisma.MarketingGoogleBusinessReviewFactUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketingGoogleBusinessReviewFactPayload>
+        }
+        aggregate: {
+          args: Prisma.MarketingGoogleBusinessReviewFactAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMarketingGoogleBusinessReviewFact>
+        }
+        groupBy: {
+          args: Prisma.MarketingGoogleBusinessReviewFactGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MarketingGoogleBusinessReviewFactGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MarketingGoogleBusinessReviewFactCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MarketingGoogleBusinessReviewFactCountAggregateOutputType> | number
         }
       }
     }
@@ -17156,6 +17231,8 @@ export const MarketingProviderSyncRunScalarFieldEnum = {
   rowsWritten: 'rowsWritten',
   sourceChecksum: 'sourceChecksum',
   sourceFreshAt: 'sourceFreshAt',
+  providerAverageRating: 'providerAverageRating',
+  providerTotalReviewCount: 'providerTotalReviewCount',
   safeErrorCode: 'safeErrorCode',
   adapterVersion: 'adapterVersion',
   createdAt: 'createdAt',
@@ -17163,6 +17240,29 @@ export const MarketingProviderSyncRunScalarFieldEnum = {
 } as const
 
 export type MarketingProviderSyncRunScalarFieldEnum = (typeof MarketingProviderSyncRunScalarFieldEnum)[keyof typeof MarketingProviderSyncRunScalarFieldEnum]
+
+
+export const MarketingGoogleBusinessReviewFactScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  companyId: 'companyId',
+  locationMappingId: 'locationMappingId',
+  provider: 'provider',
+  providerReviewResourceName: 'providerReviewResourceName',
+  rating: 'rating',
+  reviewerDisplayName: 'reviewerDisplayName',
+  reviewComment: 'reviewComment',
+  reviewCreatedAt: 'reviewCreatedAt',
+  reviewUpdatedAt: 'reviewUpdatedAt',
+  replyComment: 'replyComment',
+  replyUpdatedAt: 'replyUpdatedAt',
+  fetchedAt: 'fetchedAt',
+  contentHash: 'contentHash',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MarketingGoogleBusinessReviewFactScalarFieldEnum = (typeof MarketingGoogleBusinessReviewFactScalarFieldEnum)[keyof typeof MarketingGoogleBusinessReviewFactScalarFieldEnum]
 
 
 export const FinanceAccountScalarFieldEnum = {
@@ -22969,6 +23069,7 @@ export type GlobalOmitConfig = {
   marketingProviderCredentialEnvelope?: Prisma.MarketingProviderCredentialEnvelopeOmit
   marketingGoogleBusinessLocationMapping?: Prisma.MarketingGoogleBusinessLocationMappingOmit
   marketingProviderSyncRun?: Prisma.MarketingProviderSyncRunOmit
+  marketingGoogleBusinessReviewFact?: Prisma.MarketingGoogleBusinessReviewFactOmit
   financeAccount?: Prisma.FinanceAccountOmit
   financePnlMappingVersion?: Prisma.FinancePnlMappingVersionOmit
   financePnlStatementLine?: Prisma.FinancePnlStatementLineOmit

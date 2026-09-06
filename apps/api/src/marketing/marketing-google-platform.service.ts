@@ -43,6 +43,20 @@ export class MarketingGooglePlatformService {
     };
   }
 
+  /** Server-only configuration for a proven, company-scoped Business mapping.
+   * It deliberately does not expose credentials to a controller or browser. */
+  googleBusinessReviewReadConfiguration() {
+    const required = [
+      "BASEER_GOOGLE_OAUTH_ENABLED",
+      "BASEER_GOOGLE_OAUTH_CLIENT_ID",
+      "BASEER_GOOGLE_OAUTH_CLIENT_SECRET",
+      "BASEER_PROVIDER_CREDENTIAL_ENCRYPTION_KEY",
+    ];
+    const missing = required.filter((name) => name.endsWith("_ENABLED") ? process.env[name] !== "true" : !process.env[name]?.trim());
+    if (missing.length) throw new ServiceUnavailableException("Google Business review synchronization is not configured.");
+    return { clientId: process.env.BASEER_GOOGLE_OAUTH_CLIENT_ID!.trim(), clientSecret: process.env.BASEER_GOOGLE_OAUTH_CLIENT_SECRET!.trim() };
+  }
+
   /**
    * Safe, read-only capability signal for the company control plane.  The
    * actual authorization endpoint repeats its allowlist and configuration

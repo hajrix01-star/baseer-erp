@@ -246,9 +246,16 @@ export type MarketingProviderCredentialEnvelope = Prisma.MarketingProviderCreden
 export type MarketingGoogleBusinessLocationMapping = Prisma.MarketingGoogleBusinessLocationMappingModel
 /**
  * Model MarketingProviderSyncRun
- * Immutable-safe operational metadata. A foundation run can never claim success.
+ * Bounded operational metadata for a server-side provider read. It never stores
+ * tokens, raw provider responses, or review content.
  */
 export type MarketingProviderSyncRun = Prisma.MarketingProviderSyncRunModel
+/**
+ * Model MarketingGoogleBusinessReviewFact
+ * Display-safe Google Business review facts. Provider content is minimized,
+ * tenant/company/mapping-scoped, and is never a financial or audit source.
+ */
+export type MarketingGoogleBusinessReviewFact = Prisma.MarketingGoogleBusinessReviewFactModel
 /**
  * Model FinanceAccount
  * 
