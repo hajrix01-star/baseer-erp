@@ -51,6 +51,11 @@
 
 لا يضاف endpoint لإرسال review reply أو لتعديل Ads في هذه الخطة.
 
+في الشريحة A تعتمد الصلاحيات المتخصصة أعلاه على `marketing.insights.read` عبر
+كتالوج الصلاحيات؛ هذه هي نقطة القراءة الحالية الآمنة للواجهة وAPI. بذلك لا يحفظ
+الدور صلاحية باسم صحيح من دون صفحة يمكنه دخولها. عندما تبنى B/C بعقود read
+مستقلة، يعاد تقييم هذا الاعتماد مع اختبارات role × route، لا يرفع صامتاً.
+
 ## نموذج البيانات المرحلي
 
 لا تنسخ جداول legacy ولا raw provider response. عند اعتماد شريحة fact، تكون
@@ -94,7 +99,7 @@ RLS/e2e يرفض كل cross-company request. لا migration لtoken ولا مو�
 
 | الشريحة | القيمة المرئية | لا تتضمن |
 | --- | --- | --- |
-| A — السطح الموحد | الصفحات الخمس، اسم/ترتيب صحيحان، حالة اتصال موحدة، إصلاح ظهور/رفض الصلاحية | facts أو egress أو migration. |
+| A — السطح الموحد | الصفحات الخمس، اسم/ترتيب صحيحان، حالة اتصال موحدة، إصلاح ظهور/رفض الصلاحية | facts أو egress جديد أو migration أو مزامنة. |
 | B — Google Business facts | reviews read-only وcursor وsource quality بعد تشغيل sync آمن | automated replies أو نشر. |
 | C — Google Ads facts | قراءة performance ووسم عدم المساواة بالمبيعات | إنشاء/تعديل Ads. |
 | D — الردود المحكومة | outbox، مراجعة، approval، receipt، guardrails | auto-publish من policy وحدها. |

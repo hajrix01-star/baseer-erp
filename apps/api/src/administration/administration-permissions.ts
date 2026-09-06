@@ -339,12 +339,28 @@ const SECTION_PREFIXES: ReadonlyArray<readonly [string, string, string]> = [
 ];
 const KNOWN_PERMISSION_CODES = new Set(ADMINISTRATION_PERMISSION_CATALOG.map((item) => item.code));
 const READ_DEPENDENT_ACTIONS = new Set(["manage", "write", "create", "correct", "cancel", "reverse", "approve", "pay", "issue", "settle", "receive", "return", "publish", "configure", "activate", "download", "revoke", "verify"]);
+/**
+ * Marketing's current workspace/API reads have one safe, company-scoped
+ * entry permission. A narrower capability without this dependency used to
+ * create a role that could hold an action grant but had no reachable UI or
+ * authorized read. Keep this explicit until provider-specific reads exist
+ * end-to-end.
+ */
+const MARKETING_WORKSPACE_DEPENDENCIES: Readonly<Record<string, readonly string[]>> = {
+  "marketing.campaign.write": ["marketing.insights.read"],
+  "marketing.reputation.policy.manage": ["marketing.insights.read"],
+  "marketing.google-connection.manage": ["marketing.insights.read"],
+  "marketing.google-ads.reporting.read": ["marketing.insights.read"],
+  "marketing.google-business.profile.read": ["marketing.insights.read"],
+  "marketing.google-business.publisher": ["marketing.google-business.profile.read"],
+};
 
 export function permissionDependencies(code: string): readonly string[] {
   if (!KNOWN_PERMISSION_CODES.has(code)) return [];
   const dependencies = new Set<string>();
   const parts = code.split("."); const action = parts.at(-1);
   if (action && READ_DEPENDENT_ACTIONS.has(action)) { const siblingRead = [...parts.slice(0, -1), "read"].join("."); if (KNOWN_PERMISSION_CODES.has(siblingRead)) dependencies.add(siblingRead); }
+  for (const dependency of MARKETING_WORKSPACE_DEPENDENCIES[code] ?? []) dependencies.add(dependency);
   return [...dependencies].sort();
 }
 export function normalizePermissionCodes(codes: readonly string[]): string[] {

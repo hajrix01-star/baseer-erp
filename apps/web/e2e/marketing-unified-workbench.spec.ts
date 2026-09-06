@@ -25,7 +25,18 @@ async function fulfill(route: Route, body: unknown, status = 200) {
   await route.fulfill({ status, contentType: "application/json", body: JSON.stringify(body) });
 }
 
-async function prepare(page: Page) {
+async function prepare(page: Page, options: { permissionCodes?: string[]; googleBusinessSelected?: boolean } = {}) {
+  const permissionCodes = options.permissionCodes ?? permissions;
+  const googleBusinessSelected = options.googleBusinessSelected ?? true;
+  const googleBusinessStatus = googleBusinessSelected ? "AUTHORIZED_READ_ONLY_SELECTED" : "NOT_CONNECTED";
+  const currentWorkspace = {
+    ...workspace,
+    readiness: workspace.readiness.map((item) => item.provider === "GOOGLE_BUSINESS" ? { ...item, status: googleBusinessStatus, messageAr: googleBusinessSelected ? item.messageAr : "Google Business غير متصل." } : item),
+  };
+  const currentConnections = {
+    ...connections,
+    connections: connections.connections.map((item) => item.provider === "GOOGLE_BUSINESS" ? { ...item, status: googleBusinessStatus, messageAr: googleBusinessSelected ? item.messageAr : "Google Business غير متصل." } : item),
+  };
   await page.addInitScript((company) => {
     sessionStorage.setItem("baseer.erp.access-token", "marketing-test-token");
     sessionStorage.setItem("baseer.erp.refresh-token", "marketing-test-refresh");
@@ -35,28 +46,43 @@ async function prepare(page: Page) {
   }, companyId);
   await page.route("**/v1/**", async (route) => {
     const url = new URL(route.request().url());
-    if (url.pathname === "/v1/companies/available") return fulfill(route, { companies: [{ id: companyId, nameAr: "شركة اختبار", nameEn: "Test company", isOwner: true, permissionCodes: permissions }] });
-    if (url.pathname === "/v1/marketing") return fulfill(route, workspace);
-    if (url.pathname === "/v1/marketing/provider-connections") return fulfill(route, connections);
+    if (url.pathname === "/v1/companies/available") return fulfill(route, { companies: [{ id: companyId, nameAr: "شركة اختبار", nameEn: "Test company", isOwner: true, permissionCodes }] });
+    if (url.pathname === "/v1/marketing") return fulfill(route, currentWorkspace);
+    if (url.pathname === "/v1/marketing/provider-connections") return fulfill(route, currentConnections);
+    if (url.pathname === "/v1/marketing/provider-connections/google-business/pilot/authorization") return fulfill(route, { authorizationUrl: "https://google.test/oauth", expiresAt: "2099-01-01T00:00:00.000Z" });
     if (url.pathname === "/v1/marketing/basira/analysis-readiness") return fulfill(route, { ready: false, reasons: [] });
     return fulfill(route, { error: { code: "FORBIDDEN", message: { ar: "غير متاح للاختبار", en: "Unavailable for test" } } }, 403);
   });
 }
 
-test("marketing has five clear sections and one Google Business action", async ({ page }) => {
+test("marketing has five clear sections in the same desktop and mobile order", async ({ page, isMobile }) => {
   await prepare(page);
   await page.goto("/#module=marketing&page=marketing-sources-policies");
 
-  if (test.info().project.name === "desktop-chromium") {
-    await expect(page.getByRole("button", { name: "النظرة", exact: true }).first()).toBeVisible();
-    await expect(page.getByRole("button", { name: "الحملات والعروض", exact: true }).first()).toBeVisible();
-    await expect(page.getByRole("button", { name: "السمعة والتقييمات", exact: true }).first()).toBeVisible();
-    await expect(page.getByRole("button", { name: "Google Ads", exact: true }).first()).toBeVisible();
-    await expect(page.getByRole("button", { name: "المصادر والسياسات", exact: true }).first()).toBeVisible();
-  }
+  const navigation = isMobile ? page.getByRole("dialog") : page.locator(".module-sidebar");
+  if (isMobile) await page.getByRole("button", { name: "الأقسام" }).click();
+  await expect(navigation.getByRole("button", { name: "النظرة", exact: true })).toBeVisible();
+  await expect(navigation.getByRole("button", { name: "الحملات والعروض", exact: true })).toBeVisible();
+  await expect(navigation.getByRole("button", { name: "السمعة والتقييمات", exact: true })).toBeVisible();
+  await expect(navigation.getByRole("button", { name: "Google Ads", exact: true })).toBeVisible();
+  await expect(navigation.getByRole("button", { name: "المصادر والربط", exact: true })).toBeVisible();
   await expect(page.getByText("متصل للقراءة فقط", { exact: true })).toBeVisible();
   await expect(page.getByText("اختر حساباً", { exact: false })).toHaveCount(0);
   await expect(page.getByText("اختر موقعاً", { exact: false })).toHaveCount(0);
+});
+
+test("Google Business starts from one authorized action and the calendar stays inside campaigns", async ({ page }) => {
+  await prepare(page, { googleBusinessSelected: false });
+  await page.goto("/#module=marketing&page=marketing-sources-policies");
+
+  const connect = page.getByRole("button", { name: "ربط Google Business", exact: true });
+  await expect(connect).toHaveCount(1);
+  const authorization = page.waitForRequest((request) => request.url().includes("/v1/marketing/provider-connections/google-business/pilot/authorization") && request.method() === "POST");
+  await connect.click();
+  await authorization;
+
+  await page.goto("/#module=marketing&page=marketing-campaigns");
+  await expect(page.getByRole("heading", { name: "التقويم والنتيجة", exact: true })).toBeVisible();
 });
 
 test("Google Ads is honest when no facts are connected", async ({ page }) => {

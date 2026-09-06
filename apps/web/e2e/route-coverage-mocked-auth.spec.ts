@@ -18,7 +18,7 @@ const uncoveredRoutes = [
   { module: "marketing", page: "marketing-campaigns", title: "الحملات والعروض" },
   { module: "marketing", page: "marketing-reputation", title: "السمعة والتقييمات" },
   { module: "marketing", page: "marketing-google-ads", title: "Google Ads" },
-  { module: "marketing", page: "marketing-sources-policies", title: "المصادر والسياسات" },
+  { module: "marketing", page: "marketing-sources-policies", title: "المصادر والربط" },
   { module: "inbound-evidence", page: "evidence-overview", title: "النظرة" },
   { module: "inbound-evidence", page: "evidence-labels", title: "Labels وقواعد الفرز" },
   { module: "inbound-evidence", page: "evidence-sources", title: "مصادر الربط" },
