@@ -71,7 +71,7 @@ test("marketing has five clear sections in the same desktop and mobile order", a
   await expect(page.getByText("اختر موقعاً", { exact: false })).toHaveCount(0);
 });
 
-test("Google Business starts from one authorized action and the calendar stays inside campaigns", async ({ page }) => {
+test("Google Business starts from one authorized action", async ({ page }) => {
   await prepare(page, { googleBusinessSelected: false });
   await page.goto("/#module=marketing&page=marketing-sources-policies");
 
@@ -80,7 +80,10 @@ test("Google Business starts from one authorized action and the calendar stays i
   const authorization = page.waitForRequest((request) => request.url().includes("/v1/marketing/provider-connections/google-business/pilot/authorization") && request.method() === "POST");
   await connect.click();
   await authorization;
+});
 
+test("the calendar stays inside campaigns", async ({ page }) => {
+  await prepare(page);
   await page.goto("/#module=marketing&page=marketing-campaigns");
   await expect(page.getByRole("heading", { name: "التقويم والنتيجة", exact: true })).toBeVisible();
 });
