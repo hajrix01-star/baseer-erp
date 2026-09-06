@@ -1,0 +1,2 @@
+ALTER TYPE "MarketingProviderConnectionStatus"
+  ADD VALUE IF NOT EXISTS 'AUTHORIZED_READ_ONLY_SELECTED';

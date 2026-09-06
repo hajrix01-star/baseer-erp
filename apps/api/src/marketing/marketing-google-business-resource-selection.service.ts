@@ -24,6 +24,7 @@ type ActiveConnection = Readonly<{
 }>;
 type Account = Readonly<{ resourceName: string; accountName: string; accountType: string }>;
 type Location = Readonly<{ resourceName: string; title: string; address: string | null }>;
+const SELECTABLE_CONNECTION_STATUSES: ("AUTHORIZED_AWAITING_SELECTION" | "AUTHORIZED_READ_ONLY_SELECTED")[] = ["AUTHORIZED_AWAITING_SELECTION", "AUTHORIZED_READ_ONLY_SELECTED"];
 
 /**
  * MKT-02B's deliberately narrow read-only boundary. Discovery stays transient:
@@ -90,7 +91,7 @@ export class MarketingGoogleBusinessResourceSelectionService {
       if (begun.kind === "in-progress") throw new ConflictException("The Google Business location selection is still in progress.");
       await this.lockCompany(tx, context.tenantId, context.companyId);
       const current = await tx.marketingProviderConnection.findFirst({
-        where: { id: connection.id, tenantId: context.tenantId, companyId: context.companyId, provider: "GOOGLE_BUSINESS", status: "AUTHORIZED_AWAITING_SELECTION" },
+        where: { id: connection.id, tenantId: context.tenantId, companyId: context.companyId, provider: "GOOGLE_BUSINESS", status: { in: SELECTABLE_CONNECTION_STATUSES } },
         select: { id: true },
       });
       if (!current) throw new ConflictException("Google Business connection is not ready for location selection.");
@@ -107,6 +108,7 @@ export class MarketingGoogleBusinessResourceSelectionService {
         : await tx.marketingGoogleBusinessLocationMapping.create({
           data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, connectionId: connection.id, provider: "GOOGLE_BUSINESS", googleAccountResourceName: request.accountResourceName, googleLocationResourceName: request.locationResourceName, selectedAt, selectedByUserId: context.actorUserId },
         });
+      await tx.marketingProviderConnection.update({ where: { id: current.id }, data: { status: "AUTHORIZED_READ_ONLY_SELECTED" } });
       await tx.auditEvent.create({
         data: {
           id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId,
@@ -120,13 +122,55 @@ export class MarketingGoogleBusinessResourceSelectionService {
     });
   }
 
+  /**
+   * The one-step OAuth completion path. It writes only when Google exposes a
+   * single unambiguous account/location pair; any plurality stays pending so
+   * a branch can never be chosen by name, order, or guesswork.
+   */
+  async selectOnlyAvailableResource(context: TrustedCompanyActorContext) {
+    const connection = await this.activeConnection(context);
+    const accessToken = await this.accessToken(context, connection);
+    const accounts = await this.accounts(accessToken);
+    const [account] = accounts;
+    if (!account || accounts.length !== 1) return { selected: false as const, reason: "ACCOUNT_AMBIGUOUS" as const };
+    const locations = await this.locationsFor(accessToken, account.resourceName);
+    const [location] = locations;
+    if (!location || locations.length !== 1) return { selected: false as const, reason: "LOCATION_AMBIGUOUS" as const };
+
+    return this.database.inTenantTransaction(context.tenantId, async (tx) => {
+      await this.lockCompany(tx, context.tenantId, context.companyId);
+      const current = await tx.marketingProviderConnection.findFirst({
+        where: { id: connection.id, tenantId: context.tenantId, companyId: context.companyId, provider: "GOOGLE_BUSINESS", status: "AUTHORIZED_AWAITING_SELECTION" },
+        select: { id: true },
+      });
+      if (!current) return { selected: false as const, reason: "CONNECTION_CHANGED" as const };
+      const selectedAt = new Date();
+      const existing = await tx.marketingGoogleBusinessLocationMapping.findFirst({
+        where: { tenantId: context.tenantId, companyId: context.companyId, connectionId: connection.id, provider: "GOOGLE_BUSINESS" },
+        select: { id: true },
+      });
+      const mapping = existing
+        ? await tx.marketingGoogleBusinessLocationMapping.update({ where: { id: existing.id }, data: { googleAccountResourceName: account.resourceName, googleLocationResourceName: location.resourceName, selectedAt, selectedByUserId: context.actorUserId } })
+        : await tx.marketingGoogleBusinessLocationMapping.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, connectionId: connection.id, provider: "GOOGLE_BUSINESS", googleAccountResourceName: account.resourceName, googleLocationResourceName: location.resourceName, selectedAt, selectedByUserId: context.actorUserId } });
+      await tx.marketingProviderConnection.update({ where: { id: current.id }, data: { status: "AUTHORIZED_READ_ONLY_SELECTED" } });
+      await tx.auditEvent.create({
+        data: {
+          id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId,
+          action: "marketing.google_business_pilot.only_resource_selected", entityType: "MarketingGoogleBusinessLocationMapping", entityId: mapping.id,
+          requestId: randomUUID(), beforeJson: Prisma.JsonNull, afterJson: { selectedReadOnly: true, selectionMode: "ONLY_AVAILABLE_RESOURCE" } as Prisma.InputJsonValue,
+        },
+      });
+      return { selected: true as const, reason: null };
+    });
+  }
+
   private async activeConnection(context: TrustedCompanyActorContext): Promise<ActiveConnection> {
     this.requirePilotCompany(context.companyId);
     // Rechecks every enabled/configured value before secret decryption or egress.
     this.platform.googleBusinessPilotConfiguration();
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
       const connection = await tx.marketingProviderConnection.findFirst({
-        where: { tenantId: context.tenantId, companyId: context.companyId, provider: "GOOGLE_BUSINESS", status: "AUTHORIZED_AWAITING_SELECTION" },
+        where: { tenantId: context.tenantId, companyId: context.companyId, provider: "GOOGLE_BUSINESS", status: { in: SELECTABLE_CONNECTION_STATUSES } },
         select: { id: true, credentialEnvelope: { select: { ciphertext: true, iv: true, tag: true, keyVersion: true, status: true, revokedAt: true } } },
       });
       const envelope = connection?.credentialEnvelope;

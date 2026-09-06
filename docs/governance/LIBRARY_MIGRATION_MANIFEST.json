@@ -717,11 +717,6 @@
       "file": "marketing-reputation-reply-policy-editor.tsx",
       "decision": "verified-central-library-boundary-2026-09-02"
     },
-    "searchable-selector:marketing-policies-workspace.tsx": {
-      "kind": "searchable-selector",
-      "file": "marketing-policies-workspace.tsx",
-      "decision": "mkt-02b-uses-central-baseer-select-2026-09-06"
-    },
     "searchable-selector:marketing-workspace-content.tsx": {
       "kind": "searchable-selector",
       "file": "marketing-workspace-content.tsx",

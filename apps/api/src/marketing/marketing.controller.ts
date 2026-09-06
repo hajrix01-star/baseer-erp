@@ -1,5 +1,6 @@
-import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Param, Post, Put, Query, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, Body, Controller, ForbiddenException, Get, Headers, HttpCode, Param, Post, Put, Query, Res, UnauthorizedException } from "@nestjs/common";
 import { analysisReadinessReceiptSchema, archiveMarketingCampaignRequestSchema, createMarketingCampaignAnalysisFeedbackRequestSchema, createMarketingCampaignRequestSchema, linkMarketingCampaignContextRequestSchema, linkMarketingCampaignFinancialDocumentRequestSchema, marketingCalendarQuerySchema, marketingCalendarReadSchema, marketingCampaignAnalysisSchema, marketingEntityReceiptSchema, marketingGoogleBusinessPilotLocationsReadSchema, marketingGoogleBusinessPilotResourcesReadSchema, marketingGoogleBusinessPilotSelectionReceiptSchema, marketingLinkableFinancialDocumentsSchema, marketingProviderConnectionsReadSchema, marketingProviderSchema, marketingTargetMonthSchema, marketingWorkspaceSchema, requestMarketingProviderConnectionSetupSchema, selectMarketingGoogleBusinessPilotLocationRequestSchema, stopMarketingCampaignRequestSchema, updateMarketingCampaignRequestSchema, updateMarketingReputationReplyPolicyRequestSchema, upsertMarketingSalesTargetRequestSchema } from "@baseer-erp/contracts";
+import type { FastifyReply } from "fastify";
 
 import { CompanyContextService } from "../company-context/company-context.service.js";
 import { MarketingGoogleBusinessOAuthPilotService } from "./marketing-google-business-oauth-pilot.service.js";
@@ -121,8 +122,11 @@ export class MarketingController {
 
   /** OAuth callbacks have no Baseer session; the single-use state restores context. */
   @Get("provider-connections/google-business/pilot/callback")
-  async completeGoogleBusinessPilot(@Query("state") state: string | undefined, @Query("code") code: string | undefined, @Query("error") error: string | undefined) {
-    return { outcome: await this.googleBusinessPilot.complete({ state, code, error }) };
+  async completeGoogleBusinessPilot(@Query("state") state: string | undefined, @Query("code") code: string | undefined, @Query("error") error: string | undefined, @Res() reply: FastifyReply) {
+    await this.googleBusinessPilot.complete({ state, code, error });
+    // The callback returns the user to the same single-action workspace. No
+    // provider data or OAuth value is placed in the redirect.
+    return reply.code(303).redirect("/#module=marketing&page=marketing-sources-policies");
   }
 
   /** MKT-02B: read-only resource discovery after the ARZ-only pilot consent. */

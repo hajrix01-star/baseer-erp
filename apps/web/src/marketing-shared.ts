@@ -36,7 +36,7 @@ export type MarketingWorkspaceRead = {
   campaigns: MarketingCampaign[];
   readiness: Array<{
     provider: "GOOGLE_ADS" | "GOOGLE_BUSINESS";
-    status: "NOT_CONNECTED";
+    status: "NOT_CONNECTED" | "AUTHORIZED_READ_ONLY_SELECTED";
     messageAr: string;
   }>;
   replyPolicy: MarketingReplyPolicy;

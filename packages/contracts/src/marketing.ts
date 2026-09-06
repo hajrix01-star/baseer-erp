@@ -22,7 +22,7 @@ export const marketingFinancialReadSchema = financialReadContractSchema;
 export const marketingCampaignPlatformSchema = z.enum(["MANUAL", "GOOGLE_ADS", "META", "TIKTOK", "SNAPCHAT", "OTHER"]);
 export const marketingCampaignStatusSchema = z.enum(["DRAFT", "PLANNED", "ACTIVE", "COMPLETED", "CANCELLED", "ARCHIVED"]);
 export const marketingProviderSchema = z.enum(["GOOGLE_ADS", "GOOGLE_BUSINESS"]);
-export const marketingProviderConnectionStatusSchema = z.enum(["NOT_CONNECTED", "SETUP_REQUESTED", "AUTHORIZING", "AUTHORIZED_AWAITING_SELECTION", "BLOCKED"]);
+export const marketingProviderConnectionStatusSchema = z.enum(["NOT_CONNECTED", "SETUP_REQUESTED", "AUTHORIZING", "AUTHORIZED_AWAITING_SELECTION", "AUTHORIZED_READ_ONLY_SELECTED", "BLOCKED"]);
 export const marketingReputationReplyAutomationStatusSchema = z.enum(["DISABLED", "ENABLED", "PAUSED"]);
 export const marketingReputationReplyAuthoringMethodSchema = z.enum(["TEMPLATE", "BASIRA_DRAFT"]);
 export const marketingReputationReplyToneSchema = z.enum(["WARM", "PROFESSIONAL", "FORMAL"]);
@@ -65,7 +65,7 @@ export const marketingWorkspaceSchema = z.object({
   campaigns: z.array(marketingCampaignSchema).max(1_000),
   readiness: z.array(z.object({
     provider: z.enum(["GOOGLE_ADS", "GOOGLE_BUSINESS"]),
-    status: z.literal("NOT_CONNECTED"),
+    status: z.enum(["NOT_CONNECTED", "AUTHORIZED_READ_ONLY_SELECTED"]),
     messageAr: z.string().min(1).max(500),
   }).strict()).length(2),
   replyPolicy: marketingReputationReplyPolicySchema,

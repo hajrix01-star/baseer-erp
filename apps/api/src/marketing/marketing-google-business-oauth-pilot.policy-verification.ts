@@ -52,11 +52,19 @@ class PilotVault {
   encrypt(value: string) { return { ciphertext: `sealed:${value}`, iv: "AAAAAAAAAAAAAAAA", tag: "AAAAAAAAAAAAAAAAAAAAAA==", keyVersion: 1 }; }
   decrypt(value: { ciphertext: string }) { return value.ciphertext.replace(/^sealed:/, ""); }
 }
+class OnlyResourceSelection {
+  selectedContext: Record<string, string> | null = null;
+  async selectOnlyAvailableResource(context: Record<string, string>) {
+    this.selectedContext = context;
+    return { selected: true as const, reason: null };
+  }
+}
 
 const context = { tenantId, companyId, actorUserId };
 const database = new PilotDatabase();
 const platform = new PilotPlatform();
-const service = new MarketingGoogleBusinessOAuthPilotService(database as any, platform as any, new PilotVault() as any);
+const onlyResourceSelection = new OnlyResourceSelection();
+const service = new MarketingGoogleBusinessOAuthPilotService(database as any, platform as any, new PilotVault() as any, onlyResourceSelection as any);
 const originalFetch = globalThis.fetch;
 let fetchCalls = 0;
 globalThis.fetch = (async () => { fetchCalls += 1; return new Response(JSON.stringify({ refresh_token: "verification-only-refresh-token" }), { status: 200, headers: { "content-type": "application/json" } }); }) as typeof fetch;
@@ -82,7 +90,8 @@ try {
   ]);
   assert.equal(callbacks.filter((item) => item.status === "fulfilled").length, 1, "Exactly one concurrent callback may claim the state.");
   assert.equal(fetchCalls, 1, "Only the winning callback may exchange its code.");
-  assert.equal(database.connection.status, "AUTHORIZED_AWAITING_SELECTION");
+  assert.equal(database.connection.status, "AUTHORIZED_AWAITING_SELECTION", "The OAuth boundary delegates the canonical transition to the resource-selection service.");
+  assert.deepEqual(onlyResourceSelection.selectedContext, context, "The callback must continue the same company and initiating actor through one-step selection.");
   assert.ok(database.envelope, "Only the successful callback may write an envelope.");
   assert.ok(!JSON.stringify(database.envelope).includes("verification-code"), "Authorization codes must never enter the envelope.");
 
