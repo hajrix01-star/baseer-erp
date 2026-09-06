@@ -47,8 +47,11 @@ function overview(owner = true, logoFileMetadataId: string | null = null) {
     users: [{ id: userId, login: "user@test.local", nameAr: "مستخدم الاختبار", nameEn: "Test user", preferredLanguage: "ar", avatarKind: "INITIALS", status: "ACTIVE", isOwner: false, memberships: [{ companyId, companyNameAr: "شركة الاختبار", companyNameEn: "Test company", roleId, roleNameAr: "مدير الاختبار", roleNameEn: "Test manager" }] }],
     roles: [{ id: roleId, code: "TEST_MANAGER", nameAr: "مدير الاختبار", nameEn: "Test manager", isSystem: false, permissionCodes: ["administration.users.manage"] }],
     permissions: [
-      { code: "administration.users.read", module: "administration", moduleAr: "الإدارة", moduleEn: "Administration", sectionAr: "المستخدمون", sectionEn: "Users", nameAr: "عرض المستخدمين", nameEn: "View users", risk: "standard", requires: [] },
-      { code: "administration.users.manage", module: "administration", moduleAr: "الإدارة", moduleEn: "Administration", sectionAr: "المستخدمون", sectionEn: "Users", nameAr: "إدارة المستخدمين", nameEn: "Manage users", risk: "sensitive", requires: ["administration.users.read"] },
+      { code: "administration.users.read", module: "administration", moduleAr: "الإدارة", moduleEn: "Administration", moduleOrder: 10, sectionAr: "المستخدمون", sectionEn: "Users", sectionOrder: 30, nameAr: "عرض المستخدمين", nameEn: "View users", risk: "standard", requires: [] },
+      { code: "administration.users.manage", module: "administration", moduleAr: "الإدارة", moduleEn: "Administration", moduleOrder: 10, sectionAr: "المستخدمون", sectionEn: "Users", sectionOrder: 30, nameAr: "إدارة المستخدمين", nameEn: "Manage users", risk: "sensitive", requires: ["administration.users.read"] },
+      { code: "finance.daily_sales.read", module: "operations", moduleAr: "العمليات", moduleEn: "Operations", moduleOrder: 30, sectionAr: "المبيعات", sectionEn: "Sales", sectionOrder: 20, nameAr: "عرض سجل المبيعات", nameEn: "View sales register", risk: "standard", requires: [] },
+      { code: "finance.purchase_expense.read", module: "operations", moduleAr: "العمليات", moduleEn: "Operations", moduleOrder: 30, sectionAr: "المشتريات", sectionEn: "Purchasing", sectionOrder: 30, nameAr: "عرض مستندات المشتريات والمصروفات", nameEn: "View purchase and expense documents", risk: "standard", requires: [] },
+      { code: "operations.purchase_request.read", module: "operations", moduleAr: "العمليات", moduleEn: "Operations", moduleOrder: 30, sectionAr: "الطلبات", sectionEn: "Requests", sectionOrder: 60, nameAr: "عرض طلبات المشتريات والعهدة", nameEn: "View purchase requests and custody", risk: "standard", requires: [] },
     ],
   };
 }
@@ -161,6 +164,21 @@ test("role card reveals effective permissions without opening the editor", async
   await expect(page.getByRole("heading", { name: /تعديل دور/ })).toHaveCount(0);
   await role.getByRole("button", { name: "إخفاء الصلاحيات" }).click();
   await expect(role.getByRole("button", { name: "عرض الصلاحيات" })).toHaveAttribute("aria-expanded", "false");
+});
+
+test("role editor projects purchases as an operations section after sales", async ({ page }) => {
+  await mockAdministration(page, "ar");
+  await page.goto("/#module=administration&section=3");
+  await page.getByRole("button", { name: /إضافة دور/ }).click();
+
+  const operations = page.locator(".administration-permission-module", { has: page.getByRole("heading", { name: "العمليات", level: 4 }) });
+  await expect(operations.getByRole("heading", { name: "المبيعات", level: 5 })).toBeVisible();
+  await expect(operations.getByRole("heading", { name: "المشتريات", level: 5 })).toBeVisible();
+  await expect(operations.getByRole("heading", { name: "الطلبات", level: 5 })).toBeVisible();
+  expect(await operations.getByRole("heading", { level: 5 }).allTextContents()).toEqual(["المبيعات", "المشتريات", "الطلبات"]);
+  await expect(operations.getByText("عرض مستندات المشتريات والمصروفات")).toBeVisible();
+  const finance = page.locator(".administration-permission-module", { has: page.getByRole("heading", { name: "المالية والخزائن", level: 4 }) });
+  await expect(finance.getByText("عرض مستندات المشتريات والمصروفات")).toHaveCount(0);
 });
 
 test("non-owner administration remains read-only", async ({ page }) => {
