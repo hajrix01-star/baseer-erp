@@ -5,7 +5,7 @@ import { BaseerButton } from "./baseer-button";
 import { BaseerCard } from "./baseer-card";
 import { BaseerCompanyReadQuery } from "./baseer-company-read-query";
 import { BaseerEmptyState } from "./baseer-workspace";
-import { activeSession, api, requestId } from "./daily-sales-client";
+import { activeSession, api } from "./daily-sales-client";
 import { DailySalesSignIn } from "./daily-sales-sign-in";
 import { marketingIsArabic, type MarketingCopy, type MarketingLanguage } from "./marketing-shared";
 
@@ -37,42 +37,27 @@ export function MarketingPoliciesWorkspace({ language, permissionCodes }: { lang
 function GoogleConnectionCenter({ language, canManage }: { language: MarketingLanguage; canManage: boolean }) {
   const ar = marketingIsArabic(language);
   const session = activeSession();
-  const [busyProvider, setBusyProvider] = useState<ProviderConnection["provider"] | null>(null);
+  const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   if (!session) return null;
-  const requestSetup = async (provider: ProviderConnection["provider"], refetch: () => Promise<void>) => {
-    if (!canManage || busyProvider) return;
-    setBusyProvider(provider);
-    setMessage(null);
-    try {
-      await api(session, `/marketing/provider-connections/${provider}/setup-requests`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idempotencyKey: requestId() }) });
-      setMessage(ar ? "تم تسجيل طلب التهيئة للشركة. لا يبدأ أي اتصال Google قبل اكتمال إعداد المنصة واعتماد الموصل." : "The company setup request was recorded. No Google connection starts before platform setup and provider approval are complete.");
-      await refetch();
-    } catch (error) {
-      setMessage(presentBaseerApiError(error, language, ar ? "تعذر تسجيل طلب التهيئة." : "The setup request could not be recorded."));
-    } finally {
-      setBusyProvider(null);
-    }
-  };
   const beginGoogleBusinessPilot = async () => {
-    if (!canManage || busyProvider) return;
-    setBusyProvider("GOOGLE_BUSINESS");
+    if (!canManage || busy) return;
+    setBusy(true);
     setMessage(null);
     try {
       const authorization = await api<GoogleBusinessPilotAuthorization>(session, "/marketing/provider-connections/google-business/pilot/authorization", { method: "POST" });
       window.location.assign(authorization.authorizationUrl);
     } catch (error) {
       setMessage(presentBaseerApiError(error, language, ar ? "تعذر بدء موافقة Google Business. لم يُنشأ اتصال أو تُحفظ أي بيانات." : "Google Business consent could not start. No connection was created and no data was stored."));
-      setBusyProvider(null);
+      setBusy(false);
     }
   };
   return <BaseerCompanyReadQuery session={session} resource="marketing.provider-connections" scope={[String(canManage)]} load={(current, signal) => api<ProviderConnectionsRead>(current, "/marketing/provider-connections", { signal })}>{({ data, error, refetch }) => {
     const businessPilotReady = data?.connections.some((connection) => connection.provider === "GOOGLE_BUSINESS" && connection.pilotAuthorizationAvailable) ?? false;
     return <BaseerCard className="marketing-workspace__boundary">
-      <header><div><strong>{ar ? "اتصالات Google" : "Google connections"}</strong><p>{ar ? "إجراء واحد للمسؤول: الربط ثم موافقة Google. لا يدخل المستخدم أي مفتاح أو يختار فرعاً يدوياً." : "One administrator action: connect, then grant Google consent. Users never enter secrets or manually choose a branch."}</p></div><span className={`baseer-status-badge ${businessPilotReady ? "baseer-status-badge--info" : "baseer-status-badge--warning"}`}><i className="baseer-status-badge__dot" />{businessPilotReady ? (ar ? "تجربة Google Business جاهزة لـ ARZ" : "ARZ Google Business pilot ready") : (ar ? "إعداد المنصة مطلوب" : "Platform setup required")}</span></header>
-      <BaseerCard tone="muted"><strong>{ar ? "كيف سيعمل الربط؟" : "How connection will work"}</strong><ol><li>{ar ? "إعداد منصة Google مرة واحدة: المشروع والسياسات والأسرار الخادمية." : "One-time platform setup: project, policies, and server-side secrets."}</li><li>{ar ? "مسؤول ARZ يضغط «ربط Google Business» ويمنح الموافقة في Google." : "The ARZ manager selects Connect Google Business and grants consent in Google."}</li><li>{ar ? "عند العودة يحفظ النظام المورد الوحيد تلقائياً للقراءة فقط. لا تبدأ مزامنة أو نشر أو ردود." : "On return, the system saves the only available resource for read-only preparation. No sync, publishing, or replies start."}</li></ol><small>{businessPilotReady ? (ar ? "عند تعدد الحسابات أو المواقع لا يختار النظام بالتخمين؛ تظهر حالة إدارية واضحة." : "When accounts or locations are multiple, the system does not guess; it shows a clear administrative status.") : (ar ? "إعداد المنصة لم يُعتمد بعد." : "Platform setup has not been approved yet.")}</small></BaseerCard>
-      {error ? <BaseerEmptyState title={ar ? "تعذر قراءة حالة الموصلات" : "Provider status could not be read"} /> : <div className="baseer-card-grid">{(data?.connections ?? []).map((connection) => <BaseerCard key={connection.provider} tone="muted"><strong>{connection.provider === "GOOGLE_ADS" ? "Google Ads" : "Google Business"}</strong><p>{ar ? connection.messageAr : connection.messageEn}</p><small>{connection.provider === "GOOGLE_ADS" ? (ar ? "المسموح لاحقاً: قراءة وتحليل فقط؛ لا حملات أو إنفاق أو تعديل." : "Later scope: read and analysis only; no campaigns, spending, or changes.") : (ar ? "المسموح الآن: حفظ ربط قراءة فقط؛ لا مزامنة تقييمات أو ردود أو نشر." : "Current scope: save a read-only connection only; no review sync, replies, or publishing.")}</small><footer>{connection.provider === "GOOGLE_BUSINESS" && connection.status === "AUTHORIZED_READ_ONLY_SELECTED" ? <span className="baseer-status-badge baseer-status-badge--info"><i className="baseer-status-badge__dot" />{ar ? "تم الربط للقراءة فقط" : "Connected for read-only preparation"}</span> : connection.provider === "GOOGLE_BUSINESS" && connection.status === "AUTHORIZED_AWAITING_SELECTION" ? <span className="baseer-status-badge baseer-status-badge--warning"><i className="baseer-status-badge__dot" />{ar ? "لم يُحفظ مورد تلقائياً" : "A resource was not saved automatically"}</span> : connection.provider === "GOOGLE_BUSINESS" && connection.status !== "AUTHORIZING" && connection.pilotAuthorizationAvailable && canManage ? <BaseerButton type="button" variant="primary" disabled={busyProvider !== null} onClick={() => void beginGoogleBusinessPilot()}>{busyProvider === "GOOGLE_BUSINESS" ? (ar ? "جارٍ فتح Google…" : "Opening Google…") : (ar ? "ربط Google Business — تجربة ARZ" : "Connect Google Business — ARZ pilot")}</BaseerButton> : connection.status === "SETUP_REQUESTED" ? <span className="baseer-status-badge baseer-status-badge--info"><i className="baseer-status-badge__dot" />{ar ? "طلب التهيئة مسجل — بانتظار تجهيز المنصة" : "Setup requested — awaiting platform preparation"}</span> : canManage ? <BaseerButton type="button" variant="secondary" disabled={busyProvider !== null} onClick={() => void requestSetup(connection.provider, refetch)}>{ar ? "طلب تهيئة الربط" : "Request connection setup"}</BaseerButton> : <small>{ar ? "تحتاج صلاحية إدارة ربط Google للشركة." : "You need company Google-connection management permission."}</small>}</footer></BaseerCard>)}</div>}
-      <small>{ar ? "لا يظهر أي رمز OAuth أو سر في Baseer. الربط لا يفعّل مزامنة التقييمات أو النشر أو الرد الآلي." : "No OAuth token or secret is shown in Baseer. The connection does not enable review synchronization, publishing, or automated replies."}</small>
+      <header><div><strong>{ar ? "ربط Google Business" : "Connect Google Business"}</strong><p>{ar ? "خطوة واحدة: اضغط الزر ثم وافق في Google. Baseer يحفظ المورد الوحيد فقط للقراءة؛ لا تدخل أي مفتاح ولا تختار حساباً أو موقعاً." : "One action: select the button, then consent in Google. Baseer saves only one unambiguous resource for read-only use; you never enter a secret or choose an account or location."}</p></div><span className={`baseer-status-badge ${businessPilotReady ? "baseer-status-badge--info" : "baseer-status-badge--warning"}`}><i className="baseer-status-badge__dot" />{businessPilotReady ? (ar ? "متاح للشركة الحالية" : "Available for this company") : (ar ? "غير متاح لهذه الشركة بعد" : "Not available for this company yet")}</span></header>
+      {error ? <BaseerEmptyState title={ar ? "تعذر قراءة حالة الربط" : "Connection status could not be read"} /> : (() => { const connection = data?.connections.find((item) => item.provider === "GOOGLE_BUSINESS"); if (!connection) return null; const selected = connection.status === "AUTHORIZED_READ_ONLY_SELECTED"; return <BaseerCard tone="muted"><strong>Google Business</strong><p>{ar ? connection.messageAr : connection.messageEn}</p><footer>{selected ? <span className="baseer-status-badge baseer-status-badge--info"><i className="baseer-status-badge__dot" />{ar ? "متصل للقراءة فقط" : "Connected read-only"}</span> : connection.status === "AUTHORIZING" ? <span className="baseer-status-badge baseer-status-badge--info"><i className="baseer-status-badge__dot" />{ar ? "بانتظار إتمام موافقة Google" : "Waiting for Google consent"}</span> : connection.pilotAuthorizationAvailable && canManage ? <BaseerButton type="button" variant="primary" disabled={busy} onClick={() => void beginGoogleBusinessPilot()}>{busy ? (ar ? "جارٍ فتح Google…" : "Opening Google…") : (ar ? "ربط Google Business" : "Connect Google Business")}</BaseerButton> : <small>{canManage ? (ar ? "يُفعّل هذا الزر للشركة بعد قبول بوابة التشغيل؛ لا توجد خطوة يدوية مطلوبة منك." : "This button is enabled for the company after the operating gate is approved; no manual setup is required from you.") : (ar ? "تحتاج صلاحية إدارة ربط Google للشركة." : "You need company Google-connection management permission.")}</small>}</footer></BaseerCard>; })()}
+      <small>{ar ? "الربط لا يشغّل مزامنة التقييمات أو النشر أو الرد الآلي. Google Ads له صفحة قراءة مستقلة ولا يملك إجراء ربط في هذه المرحلة." : "Connection does not turn on review synchronization, publishing, or automated replies. Google Ads has its own read page and no connection action at this stage."}</small>
       {message ? <small role="status">{message}</small> : null}
     </BaseerCard>;
   }}</BaseerCompanyReadQuery>;
