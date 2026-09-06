@@ -49,6 +49,13 @@ type ActiveConnection = {
   socket: WASocket;
   qr: string | null;
   qrExpiresAt: Date | null;
+  /**
+   * Baileys appends messages sent by the linked account.  Keep the precise
+   * first complete second after this socket becomes live. Baileys timestamps
+   * have second precision, so the opening second itself is deliberately
+   * excluded rather than risking a historical row from that same second.
+   */
+  liveSinceAtSeconds: number | null;
   stopped: boolean;
   processing: boolean;
   authRowVersion: number;
@@ -56,6 +63,31 @@ type ActiveConnection = {
   workTimer: ReturnType<typeof setInterval> | null;
   saveChain: Promise<void>;
 };
+
+type MessageUpsertEvent = Readonly<{
+  type: string;
+  messages: readonly WAMessage[];
+}>;
+
+/**
+ * Select only events that are safe for the live, no-history invoice monitor.
+ *
+ * Group members' new messages arrive as `notify`.  A message sent from the
+ * linked personal account arrives as `append` in Baileys, so it is accepted
+ * only when its WhatsApp timestamp is at or after the first full second after
+ * this socket became online.
+ * Historical appended rows and every appended message from another account
+ * remain excluded.
+ */
+export function selectLiveInvoiceMessages(event: MessageUpsertEvent, liveSinceAtSeconds: number | null): readonly WAMessage[] {
+  if (event.type === "notify") return event.messages;
+  if (event.type !== "append" || liveSinceAtSeconds === null) return [];
+  return event.messages.filter((message) => {
+    if (!message.key.fromMe) return false;
+    const sentAtSeconds = Number(message.messageTimestamp);
+    return Number.isSafeInteger(sentAtSeconds) && sentAtSeconds >= liveSinceAtSeconds;
+  });
+}
 
 /**
  * The live, receive-only Baileys boundary for the personal pilot.
@@ -179,7 +211,7 @@ export class WhatsappInvoiceBaileysPilotConnectorService implements OnModuleInit
     const restored = freshPairing ? { creds: initAuthCreds(), keys: {} } : persisted ? revive(persisted.state) : { creds: initAuthCreds(), keys: {} };
     const active: ActiveConnection = {
       scope, ownerToken, fence, socket: undefined as unknown as WASocket, qr: null, qrExpiresAt: null,
-      stopped: false, processing: false, authRowVersion: persisted?.rowVersion ?? 0, heartbeatTimer: null, workTimer: null, saveChain: Promise.resolve(),
+      liveSinceAtSeconds: null, stopped: false, processing: false, authRowVersion: persisted?.rowVersion ?? 0, heartbeatTimer: null, workTimer: null, saveChain: Promise.resolve(),
     };
     const auth = this.authenticationState(restored, () => this.persistAuthentication(active, restored));
     const socket = makeWASocket({ auth, markOnlineOnConnect: false, syncFullHistory: false, shouldIgnoreJid: (jid) => !jid.endsWith("@g.us") });
@@ -195,16 +227,19 @@ export class WhatsappInvoiceBaileysPilotConnectorService implements OnModuleInit
       if (update.connection === "open") {
         active.qr = null;
         active.qrExpiresAt = null;
+        // Message timestamps have only whole-second precision.  Suppressing
+        // the open second closes the only timestamp ambiguity with an
+        // immediately appended historical row without enabling history sync.
+        active.liveSinceAtSeconds = Math.floor(Date.now() / 1_000) + 1;
         this.reconnectAttempts.delete(this.connectionKey(active.scope));
         void this.foundation.setConnectionStatus({ ...active.scope, ownerToken: active.ownerToken, fence: active.fence, status: "CONNECTED" }).catch(() => undefined);
       }
       if (update.connection === "close") void this.handleClosedConnection(active, update.lastDisconnect?.error);
     });
     socket.ev.on("messages.upsert", (event) => {
-      // This monitor deliberately receives only real-time notifications. It
-      // does not ingest history sync/appended chat rows as a catch-up claim.
-      if (event.type !== "notify") return;
-      for (const message of event.messages) void this.receiveMessage(active, message).catch(() => undefined);
+      for (const message of selectLiveInvoiceMessages(event, active.liveSinceAtSeconds)) {
+        void this.receiveMessage(active, message).catch(() => undefined);
+      }
     });
     return active;
   }
@@ -247,7 +282,7 @@ export class WhatsappInvoiceBaileysPilotConnectorService implements OnModuleInit
   }
 
   private async receiveMessage(active: ActiveConnection, message: WAMessage): Promise<void> {
-    if (active.stopped || message.key.fromMe || !message.key.remoteJid?.endsWith("@g.us") || !message.key.id || !message.message) return;
+    if (active.stopped || !message.key.remoteJid?.endsWith("@g.us") || !message.key.id || !message.message) return;
     const receivedAt = message.messageTimestamp ? new Date(Number(message.messageTimestamp) * 1_000) : new Date();
     if (!Number.isFinite(receivedAt.valueOf())) return;
     const groupJid = message.key.remoteJid;
