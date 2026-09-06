@@ -7,6 +7,7 @@ import { BaseerDialog } from "./baseer-dialog";
 import { BaseerCheckbox, BaseerMoneyInput, BaseerMonthPicker, BaseerTextInput, formatBaseerEditableAmount } from "./baseer-form-fields";
 import { useBaseerForm, z } from "./baseer-form-state";
 import { BaseerMoney } from "./baseer-money";
+import { riyadhToday } from "./baseer-period-values";
 import { activeSession, requestId } from "./daily-sales-client";
 import { createHrPayrollRun, discardHrPayrollRun, getHrPayrollRun, previewHrPayrollRun, updateHrPayrollRun, type HrPayrollDetail, type HrPayrollPreviewEmployee, type HrPayrollPreviewReceipt } from "./hr-client";
 import "./hr-payroll-create-dialog.css";
@@ -14,15 +15,14 @@ import "./hr-payroll-create-dialog.css";
 type Language = "ar" | "en";
 type ApplicationChoice = { enabled: boolean; amount: string };
 type EmployeeApplications = { advances: Record<string, ApplicationChoice>; deductions: Record<string, ApplicationChoice> };
-type PayrollDraft = { payrollMonth: string; businessDate: string; notes: string };
+type PayrollDraft = { payrollMonth: string; notes: string };
 
-const today = () => new Date().toISOString().slice(0, 10);
-const month = () => `${today().slice(0, 7)}-01`;
+const month = () => { const date = riyadhToday(); return `${date.year}-${String(date.month).padStart(2, "0")}`; };
+const payrollMonthPattern = /^\d{4}-(0[1-9]|1[0-2])$/;
 const employeeLabel = (language: Language, employee: HrPayrollPreviewEmployee) => `${employee.employeeNumber} · ${language === "ar" ? employee.nameAr : employee.nameEn ?? employee.nameAr}`;
 const selectedApplicationsTotal = (applications: EmployeeApplications | undefined) => Object.values(applications?.advances ?? {}).concat(Object.values(applications?.deductions ?? {})).reduce((total, item) => total + (item.enabled && Number(item.amount) > 0 ? Number(item.amount) : 0), 0);
 const payrollDraftSchema = (ar: boolean) => z.object({
-  payrollMonth: z.string().regex(/^\d{4}-\d{2}-01$/, ar ? "اختر شهر المسير." : "Choose a payroll month."),
-  businessDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, ar ? "تاريخ العمل غير صالح." : "Business date is invalid."),
+  payrollMonth: z.string().regex(payrollMonthPattern, ar ? "اختر شهر المسير." : "Choose a payroll month."),
   notes: z.string(),
 });
 
@@ -46,7 +46,7 @@ export function HrPayrollCreateDialog({ open, payrollRunId, runNumber, onClose, 
   const [sourceIdsComplete, setSourceIdsComplete] = useState(true);
   const [previewLoading, setPreviewLoading] = useState(false);
   const draftSchema = useMemo(() => payrollDraftSchema(ar), [ar]);
-  const draftForm = useBaseerForm<PayrollDraft>({ schema: draftSchema, defaultValues: { payrollMonth: month(), businessDate: today(), notes: "" } });
+  const draftForm = useBaseerForm<PayrollDraft>({ schema: draftSchema, defaultValues: { payrollMonth: month(), notes: "" } });
   const draft = draftForm.watch();
   const [includeOnLeaveIds, setIncludeOnLeaveIds] = useState<string[]>([]);
   const [preview, setPreview] = useState<HrPayrollPreviewReceipt | null>(null);
@@ -94,7 +94,7 @@ export function HrPayrollCreateDialog({ open, payrollRunId, runNumber, onClose, 
           }
           if (Object.keys(advances).length || Object.keys(deductions).length) restored[line.employeeId] = { advances, deductions };
         }
-        draftForm.reset({ payrollMonth: receipt.payrollRun.payrollMonth, businessDate: receipt.payrollRun.businessDate, notes: receipt.payrollRun.notes ?? "" });
+        draftForm.reset({ payrollMonth: receipt.payrollRun.payrollMonth.slice(0, 7), notes: receipt.payrollRun.notes ?? "" });
         setIncludeOnLeaveIds(lines.filter((line) => line.eligibilityCode === "FULL_MONTH_ON_LEAVE_EXCEPTION_V1").map((line) => line.employeeId));
         setApplications(restored);
         setSourceIdsComplete(complete);
@@ -133,7 +133,7 @@ export function HrPayrollCreateDialog({ open, payrollRunId, runNumber, onClose, 
   // Settlement choices are calculated locally while the user edits. Re-fetch
   // only when the population changes; otherwise every keystroke becomes a
   // payroll-preview request and can overload slower installations.
-  const previewInputKey = JSON.stringify({ payrollMonth: draft.payrollMonth, businessDate: draft.businessDate, includeOnLeaveIds });
+  const previewInputKey = JSON.stringify({ payrollMonth: draft.payrollMonth, includeOnLeaveIds });
 
   const resetApplications = () => { setIncludeOnLeaveIds([]); setApplications({}); };
   const loadPreview = useCallback(async (cursor?: string, append = false) => {
@@ -143,9 +143,16 @@ export function HrPayrollCreateDialog({ open, payrollRunId, runNumber, onClose, 
     const controller = new AbortController();
     previewAbortRef.current = controller;
     const sequence = ++requestSequence.current;
+    if (!payrollMonthPattern.test(draft.payrollMonth)) {
+      setPreview(null);
+      setPreviewRows([]);
+      setPreviewCursor(null);
+      setPreviewLoading(false);
+      return;
+    }
     setPreviewLoading(true);
     try {
-      const receipt = await previewHrPayrollRun(session, { payrollMonth: draft.payrollMonth, businessDate: draft.businessDate, includeOnLeaveEmployeeIds: includeOnLeaveIdsRef.current, lines: applicationLinesRef.current, cursor, pageSize: 50 }, controller.signal);
+      const receipt = await previewHrPayrollRun(session, { payrollMonth: `${draft.payrollMonth}-01`, includeOnLeaveEmployeeIds: includeOnLeaveIdsRef.current, lines: applicationLinesRef.current, cursor, pageSize: 50 }, controller.signal);
       if (sequence !== requestSequence.current) return;
       setPreview(receipt);
       setPreviewRows((rows) => append ? [...rows, ...receipt.employees] : receipt.employees);
@@ -159,7 +166,7 @@ export function HrPayrollCreateDialog({ open, payrollRunId, runNumber, onClose, 
       if (previewAbortRef.current === controller) previewAbortRef.current = null;
       if (sequence === requestSequence.current) setPreviewLoading(false);
     }
-  }, [ar, draft.businessDate, draft.payrollMonth, draftReady, language]);
+  }, [ar, draft.payrollMonth, draftReady, language]);
 
   useEffect(() => {
     if (!open || !draftReady) return;
@@ -174,7 +181,7 @@ export function HrPayrollCreateDialog({ open, payrollRunId, runNumber, onClose, 
     if (!session || busy || !preview || preview.counts.included === 0 || preview.counts.exceptions > 0 || !sourceIdsComplete) return;
     setBusy(true);
     try {
-      const payload = { payrollMonth: values.payrollMonth, businessDate: values.businessDate, notes: values.notes || undefined, includeAllEligible: true, includeOnLeaveEmployeeIds: includeOnLeaveIds, lines: applicationLines, idempotencyKey: requestId() };
+      const payload = { payrollMonth: `${values.payrollMonth}-01`, notes: values.notes || undefined, includeAllEligible: true, includeOnLeaveEmployeeIds: includeOnLeaveIds, lines: applicationLines, idempotencyKey: requestId() };
       if (payrollRunId) await updateHrPayrollRun(session, { payrollRunId, ...payload });
       else await createHrPayrollRun(session, payload);
       onClose();
@@ -235,7 +242,7 @@ export function HrPayrollCreateDialog({ open, payrollRunId, runNumber, onClose, 
   const title = editing ? (ar ? `تعديل مسودة ${runNumber ?? ""}`.trim() : `Edit draft ${runNumber ?? ""}`.trim()) : (ar ? "إنشاء مسير راتب" : "Create payroll run");
   return <><BaseerDialog open={open} title={title} size="wide" className="hr-payroll-create-dialog" language={language} busy={busy} onClose={onClose} footer={<><div className="hr-payroll-create__total"><span>{ar ? "صافي المستحق" : "Net payable"}</span>{displayedNetPayable !== null ? <BaseerMoney value={displayedNetPayable} language={language} /> : "—"}</div><div className="hr-payroll-create__actions">{editing ? <BaseerButton type="button" variant="danger" disabled={busy || draftLoading} onClick={() => setDiscardOpen(true)}>{ar ? "حذف المسودة" : "Discard draft"}</BaseerButton> : null}{editing && onReview ? <BaseerButton type="button" variant="secondary" disabled={busy || draftLoading} onClick={onReview}>{ar ? "مراجعة واعتماد" : "Review and approve"}</BaseerButton> : null}<BaseerButton type="button" variant="secondary" disabled={busy} onClick={onClose}>{ar ? "إغلاق" : "Close"}</BaseerButton><BaseerButton type="submit" form="hr-payroll-create-form" disabled={!canSubmit}>{editing ? (ar ? "حفظ التعديلات" : "Save changes") : (ar ? "إنشاء المسودة" : "Create draft")}</BaseerButton></div></>}>
     {draftLoading ? <p className="hr-payroll-create__loading-shell" role="status">{ar ? "جارٍ فتح مسودة المسير…" : "Opening payroll draft…"}</p> : <form id="hr-payroll-create-form" className="hr-payroll-create" data-baseer-rhf-form="true" noValidate onSubmit={draftForm.handleSubmit((values) => void submit(values))}>
-      <header className="hr-payroll-create__controls"><label>{ar ? "الشهر" : "Month"}<BaseerMonthPicker {...draftForm.register("payrollMonth")} required disabled={editing} aria-label={ar ? "الشهر" : "Month"} aria-invalid={draftForm.formState.errors.payrollMonth ? "true" : undefined} aria-describedby={draftForm.formState.errors.payrollMonth ? "hr-payroll-month-error" : undefined} value={draft.payrollMonth.slice(0, 7)} onChange={(event) => { draftForm.setValue("payrollMonth", `${event.target.value}-01`, { shouldDirty: true, shouldValidate: true }); resetApplications(); }} />{draftForm.formState.errors.payrollMonth ? <small id="hr-payroll-month-error" role="alert">{draftForm.formState.errors.payrollMonth.message}</small> : null}</label><label>{ar ? "ملاحظات" : "Notes"}<BaseerTextInput {...draftForm.register("notes")} /></label></header>
+      <header className="hr-payroll-create__controls"><label>{ar ? "الشهر" : "Month"}<BaseerMonthPicker {...draftForm.register("payrollMonth")} required disabled={editing} aria-label={ar ? "الشهر" : "Month"} aria-invalid={draftForm.formState.errors.payrollMonth ? "true" : undefined} aria-describedby={draftForm.formState.errors.payrollMonth ? "hr-payroll-month-error" : undefined} value={draft.payrollMonth} onChange={(event) => { draftForm.setValue("payrollMonth", event.target.value, { shouldDirty: true, shouldValidate: true }); setPreview(null); setPreviewRows([]); setPreviewCursor(null); resetApplications(); }} />{draftForm.formState.errors.payrollMonth ? <small id="hr-payroll-month-error" role="alert">{draftForm.formState.errors.payrollMonth.message}</small> : null}</label><label>{ar ? "ملاحظات" : "Notes"}<BaseerTextInput {...draftForm.register("notes")} /></label></header>
       <div className="hr-payroll-create__table-heading"><strong>{ar ? `قائمة الموظفين (${preview?.totals.employeeCount ?? 0})` : `Employees (${preview?.totals.employeeCount ?? 0})`}</strong><BaseerButton type="button" variant="secondary" disabled={previewLoading} onClick={() => void loadPreview()}>{ar ? "تحديث" : "Refresh"}</BaseerButton></div>
       {previewLoading && !preview ? <p className="hr-payroll-create__loading">{ar ? "جارٍ إعداد المسير…" : "Preparing payroll…"}</p> : null}
       {preview?.exceptions.length ? <p className="hr-payroll-create__notice" role="alert">{ar ? `يلزم معالجة ${preview.counts.exceptions} استثناء قبل إنشاء المسير.` : `${preview.counts.exceptions} exception(s) must be resolved before creating the payroll.`}</p> : null}

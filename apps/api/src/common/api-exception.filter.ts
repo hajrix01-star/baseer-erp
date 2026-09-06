@@ -12,6 +12,7 @@ import type { FastifyReply, FastifyRequest } from 'fastify';
 import { IdempotencyPayloadMismatchError } from '../core-controls/idempotency.service.js';
 import { RequestContext } from '../observability/request-context.js';
 import { ReportRunExpiredException } from '../reports/report-run.service.js';
+import { PayrollDraftRefreshRequiredException } from '../hr/hr-payroll.service.js';
 import { AUTH_THROTTLE_WINDOW_MS } from '../identity/auth-throttle-policy.js';
 
 type ErrorCode = ApiErrorReceipt['error']['code'];
@@ -49,7 +50,9 @@ export class ApiExceptionFilter implements ExceptionFilter {
     const receipt: ApiErrorReceipt = {
       error: {
         code,
-        message: this.messageFor(code),
+        message: exception instanceof PayrollDraftRefreshRequiredException
+          ? { ar: 'افتح مسودة مسير الرواتب واضغط «حفظ التعديلات» قبل اعتمادها لإعادة احتسابها حتى آخر يوم من شهر الرواتب.', en: 'Open this payroll draft and select Save changes before approval so its calculation uses the last day of the payroll month.' }
+          : this.messageFor(code),
         correlationId,
         retry,
       },

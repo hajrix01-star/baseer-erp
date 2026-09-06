@@ -45,7 +45,7 @@ import { FinanceFoundationService } from '../finance/finance-foundation.service.
 import { FinanceCashPerformanceEventService } from '../finance/finance-cash-performance-event.service.js';
 import { JournalPostingService } from '../finance/journal/journal-posting.service.js';
 import { generateHrEmployeeNumber } from './hr-employee-number.util.js';
-import { isHrDateOnOrAfter, isSameHrBusinessMonth, latestHrBusinessDate } from './hr-financial-date.util.js';
+import { isHrDateOnOrAfter, latestHrBusinessDate } from './hr-financial-date.util.js';
 import { hrAdministrativeDeductionLockKey, hrEmployeeAdvanceLockKey, hrPayrollRunLockKey } from './hr-financial-lock.util.js';
 import { hrReplayReceipt } from './hr-idempotency.util.js';
 import { hrPaymentPostingProjection, latestHrPaymentEventDate } from './hr-payment-history.util.js';
@@ -85,6 +85,10 @@ type PayrollRunListQuery = Readonly<{ status?: HrPayrollRunStatus; periodFrom?: 
 type PayrollRunDetailQuery = Readonly<{ lineCursor?: string; linePageSize: number; paymentCursor?: string; paymentPageSize: number }>;
 type EmployeePayrollHistoryQuery = Readonly<{ cursor?: string; pageSize: number }>;
 type PayrollCalculationPeriod = Readonly<{ calculationPeriodStart: Date; calculationPeriodEnd: Date; eligibleDays: number; calendarDaysInMonth: number; prorationRatio: Prisma.Decimal; eligibilityCode: HrPayrollLineEligibilityCode; formulaCode: HrPayrollCalculationFormulaCode }>;
+
+export class PayrollDraftRefreshRequiredException extends ConflictException {
+  constructor() { super('Refresh this payroll draft before approval so its calculation uses the last day of the payroll month.'); }
+}
 
 @Injectable()
 export class HrPayrollService {
@@ -497,32 +501,29 @@ export class HrPayrollService {
    */
   async preview(context: TrustedCompanyActorContext, input: PreviewInput) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const currentDate = await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
       const payrollMonth = firstOfMonth(input.payrollMonth);
-      if (ymd(payrollMonth).slice(0, 7) !== currentDate.businessDate.slice(0, 7)) throw new BadRequestException('Payroll preview is available only for the current operational business month.');
-      if (!isSameHrBusinessMonth(input.businessDate, payrollMonth)) throw new BadRequestException('The payroll business date must belong to the payroll month.');
-      return this.previewPopulation(tx, context, payrollMonth, input, input.businessDate);
+      const businessDate = lastDayOfMonth(payrollMonth);
+      await this.dates.assertNotFutureInTransaction(tx, context, payrollMonth);
+      return this.previewPopulation(tx, context, payrollMonth, input, businessDate);
     });
   }
 
   async create(context: TrustedCompanyActorContext, input: CreateInput, key: string) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const currentDate = await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
-      const begun = await this.begin(tx, context, CREATE_OPERATION, key, input);
+      const begun = await this.begin(tx, context, CREATE_OPERATION, key, payrollPeriodPayload(input), input);
       if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; runNumber: string; replayed: boolean }>(begun.response.body);
       if (begun.kind === 'in-progress') throw new ConflictException('The payroll creation request is already being processed.');
       const payrollMonth = firstOfMonth(input.payrollMonth);
-      if (ymd(payrollMonth).slice(0, 7) !== currentDate.businessDate.slice(0, 7)) throw new BadRequestException('A payroll run can be created only for the current operational business month.');
-      if (!isSameHrBusinessMonth(input.businessDate, payrollMonth)) throw new BadRequestException('The payroll business date must belong to the payroll month.');
+      const businessDate = lastDayOfMonth(payrollMonth);
+      await this.dates.assertNotFutureInTransaction(tx, context, payrollMonth);
       await this.lockPayrollMonth(tx, context, payrollMonth);
       const existing = await tx.hrPayrollRun.findFirst({
         where: { tenantId: context.tenantId, companyId: context.companyId, payrollMonth, status: { not: HrPayrollRunStatus.REVERSED } },
         select: { runNumber: true, status: true },
       });
       if (existing) throw new ConflictException(`The active payroll ${existing.runNumber} (${existing.status}) already covers this month.`);
-      const population = await this.loadPayrollPopulation(tx, context, payrollMonth, input.businessDate, input.includeOnLeaveEmployeeIds);
+      const population = await this.loadPayrollPopulation(tx, context, payrollMonth, businessDate, input.includeOnLeaveEmployeeIds);
       const employees = population.employees;
-      if (population.hiredAfterBusinessDate.length) throw new BadRequestException(`Employees hired after the payroll business date cannot be included: ${population.hiredAfterBusinessDate.slice(0, 10).map((employee) => employee.employeeNumber).join(', ')}.`);
       if (population.compensationCoverageIssue.length) throw new BadRequestException(`Compensation agreements must cover the entire payroll calculation period: ${population.compensationCoverageIssue.slice(0, 10).map((employee) => employee.employeeNumber).join(', ')}.`);
       if (population.activeMissingProfile.length) throw new BadRequestException(`Active employees without a valid monthly compensation agreement: ${population.activeMissingProfile.slice(0, 10).map((employee) => employee.employeeNumber).join(', ')}.`);
       if (population.onLeaveMissingProfile.length) throw new BadRequestException(`Included employees on leave without a valid monthly compensation agreement: ${population.onLeaveMissingProfile.slice(0, 10).map((employee) => employee.employeeNumber).join(', ')}.`);
@@ -536,9 +537,9 @@ export class HrPayrollService {
       const uniqueEmployeeIds = employees.map((employee) => employee.id);
       const employeeById = new Map(employees.map((employee) => [employee.id, employee]));
       const profileByEmployee = population.profileByEmployee;
-      const applicationsByEmployee = await this.resolvePayrollApplications(tx, context, lines, input.businessDate);
+      const applicationsByEmployee = await this.resolvePayrollApplications(tx, context, lines, businessDate);
       const runId = randomUUID();
-      const serial = await this.serials.reserveInTransaction(tx, context, { series: 'PAYROLL_RUN', businessDate: ymd(input.businessDate) });
+      const serial = await this.serials.reserveInTransaction(tx, context, { series: 'PAYROLL_RUN', businessDate: ymd(businessDate) });
       const runNumber = `PAY-${ymd(payrollMonth).slice(0, 7).replace('-', '')}-${serial.toString().padStart(4, '0')}`;
       const defaultPolicyVersion = await this.ensureDefaultCompensationPolicyVersion(tx, context);
       const rows = lines.map((line) => {
@@ -563,7 +564,7 @@ export class HrPayrollService {
       const advanceSettlementAmount = sum(rows.map((row) => row.advanceAmount));
       const administrativeDeductionAmount = sum(rows.map((row) => row.deductionAmount));
       const netPayableAmount = grossAmount.minus(advanceSettlementAmount).minus(administrativeDeductionAmount);
-      await tx.hrPayrollRun.create({ data: { id: runId, tenantId: context.tenantId, companyId: context.companyId, runNumber, payrollMonth, businessDate: input.businessDate, employeeCount: rows.length, grossAmount, advanceSettlementAmount, administrativeDeductionAmount, netPayableAmount, notes: nullable(input.notes), createdByUserId: context.actorUserId } });
+      await tx.hrPayrollRun.create({ data: { id: runId, tenantId: context.tenantId, companyId: context.companyId, runNumber, payrollMonth, businessDate, employeeCount: rows.length, grossAmount, advanceSettlementAmount, administrativeDeductionAmount, netPayableAmount, notes: nullable(input.notes), createdByUserId: context.actorUserId } });
       for (const rowChunk of chunks(rows, 500)) await tx.hrPayrollLine.createMany({ data: rowChunk.map((row) => ({
           id: row.id, tenantId: context.tenantId, companyId: context.companyId, payrollRunId: runId, employeeId: row.employee.id,
           employeeNumberSnapshot: row.employee.employeeNumber, employeeNameArSnapshot: row.employee.nameAr, employeeNameEnSnapshot: row.employee.nameEn,
@@ -587,8 +588,7 @@ export class HrPayrollService {
 
   async updateDraft(context: TrustedCompanyActorContext, input: UpdateDraftInput, key: string) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      const currentDate = await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
-      const begun = await this.begin(tx, context, UPDATE_DRAFT_OPERATION, key, input);
+      const begun = await this.begin(tx, context, UPDATE_DRAFT_OPERATION, key, payrollPeriodPayload(input), input);
       if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; runNumber: string; replayed: boolean }>(begun.response.body);
       if (begun.kind === 'in-progress') throw new ConflictException('The payroll draft update is already being processed.');
 
@@ -599,13 +599,12 @@ export class HrPayrollService {
         throw new ConflictException('Only an unposted draft payroll run can be updated.');
       }
       const payrollMonth = firstOfMonth(input.payrollMonth);
+      const businessDate = lastDayOfMonth(payrollMonth);
       if (payrollMonth.getTime() !== run.payrollMonth.getTime()) throw new ConflictException('A payroll draft cannot be moved to another month.');
-      if (ymd(payrollMonth).slice(0, 7) !== currentDate.businessDate.slice(0, 7)) throw new BadRequestException('A payroll draft can be updated only in the current operational business month.');
-      if (!isSameHrBusinessMonth(input.businessDate, payrollMonth)) throw new BadRequestException('The payroll business date must belong to the payroll month.');
+      await this.dates.assertNotFutureInTransaction(tx, context, payrollMonth);
 
-      const population = await this.loadPayrollPopulation(tx, context, payrollMonth, input.businessDate, input.includeOnLeaveEmployeeIds);
+      const population = await this.loadPayrollPopulation(tx, context, payrollMonth, businessDate, input.includeOnLeaveEmployeeIds);
       const employees = population.employees;
-      if (population.hiredAfterBusinessDate.length) throw new BadRequestException(`Employees hired after the payroll business date cannot be included: ${population.hiredAfterBusinessDate.slice(0, 10).map((employee) => employee.employeeNumber).join(', ')}.`);
       if (population.compensationCoverageIssue.length) throw new BadRequestException(`Compensation agreements must cover the entire payroll calculation period: ${population.compensationCoverageIssue.slice(0, 10).map((employee) => employee.employeeNumber).join(', ')}.`);
       if (population.activeMissingProfile.length) throw new BadRequestException(`Active employees without a valid monthly compensation agreement: ${population.activeMissingProfile.slice(0, 10).map((employee) => employee.employeeNumber).join(', ')}.`);
       if (population.onLeaveMissingProfile.length) throw new BadRequestException(`Included employees on leave without a valid monthly compensation agreement: ${population.onLeaveMissingProfile.slice(0, 10).map((employee) => employee.employeeNumber).join(', ')}.`);
@@ -617,7 +616,7 @@ export class HrPayrollService {
       if (requestedEmployeeIds.some((employeeId) => !eligibleIds.has(employeeId))) throw new BadRequestException('Settlement applications can only target an employee included by the server in this payroll run.');
       const lines = employees.map((employee) => requestedLines.get(employee.id) ?? { employeeId: employee.id, advances: [], administrativeDeductions: [] });
       const employeeById = new Map(employees.map((employee) => [employee.id, employee]));
-      const applicationsByEmployee = await this.resolvePayrollApplications(tx, context, lines, input.businessDate);
+      const applicationsByEmployee = await this.resolvePayrollApplications(tx, context, lines, businessDate);
       const defaultPolicyVersion = await this.ensureDefaultCompensationPolicyVersion(tx, context);
       const rows = lines.map((line) => {
         const employee = employeeById.get(line.employeeId)!;
@@ -649,7 +648,7 @@ export class HrPayrollService {
       }
       const updated = await tx.hrPayrollRun.updateMany({
         where: { id: run.id, tenantId: context.tenantId, companyId: context.companyId, status: HrPayrollRunStatus.DRAFT, accrualJournalEntryId: null, paidAmount: 0 },
-        data: { businessDate: input.businessDate, employeeCount: rows.length, grossAmount, advanceSettlementAmount, administrativeDeductionAmount, netPayableAmount, notes: nullable(input.notes) },
+        data: { businessDate, employeeCount: rows.length, grossAmount, advanceSettlementAmount, administrativeDeductionAmount, netPayableAmount, notes: nullable(input.notes) },
       });
       if (updated.count !== 1) throw new ConflictException('The payroll draft changed before the update could be applied.');
       for (const rowChunk of chunks(rows, 500)) await tx.hrPayrollLine.createMany({ data: rowChunk.map((row) => ({
@@ -669,43 +668,44 @@ export class HrPayrollService {
 
       const receipt = { id: run.id, runNumber: run.runNumber, replayed: false };
       await this.complete(tx, context, begun.receiptId, receipt, 200);
-      await this.audit(tx, context, 'hr.payroll.draft_updated', 'HrPayrollRun', run.id, { ...receipt, businessDate: ymd(input.businessDate), includedEmployeeCount: rows.length, includeOnLeaveEmployeeIds: input.includeOnLeaveEmployeeIds });
+      await this.audit(tx, context, 'hr.payroll.draft_updated', 'HrPayrollRun', run.id, { ...receipt, businessDate: ymd(businessDate), includedEmployeeCount: rows.length, includeOnLeaveEmployeeIds: input.includeOnLeaveEmployeeIds });
       return receipt;
     });
   }
 
   async approve(context: TrustedCompanyActorContext, input: ApproveInput, key: string) {
     return this.database.inTenantTransaction(context.tenantId, async (tx) => {
-      await this.dates.assertNotFutureInTransaction(tx, context, input.businessDate);
-      const begun = await this.begin(tx, context, APPROVE_OPERATION, key, input);
+      const begun = await this.begin(tx, context, APPROVE_OPERATION, key, { payrollRunId: input.payrollRunId }, input);
       if (begun.kind === 'replay') return hrReplayReceipt<{ id: string; runNumber: string; replayed: boolean }>(begun.response.body);
       if (begun.kind === 'in-progress') throw new ConflictException('The payroll approval is already being processed.');
       await this.lockPayrollRun(tx, context, input.payrollRunId);
       const run = await this.findRun(tx, context, input.payrollRunId, true);
       if (run.status !== HrPayrollRunStatus.DRAFT) throw new ConflictException('Only a draft payroll run can be approved.');
-      if (!isHrDateOnOrAfter(input.businessDate, run.businessDate)) throw new BadRequestException('The payroll approval date cannot be before the payroll business date.');
+      const businessDate = lastDayOfMonth(run.payrollMonth);
+      if (ymd(run.businessDate) !== ymd(businessDate)) throw new PayrollDraftRefreshRequiredException();
+      await this.dates.assertNotFutureInTransaction(tx, context, businessDate);
       // Older or newly created companies may not yet have all payroll accounts.
       // Initialising here is idempotent and runs in this same transaction before
       // the first payroll accrual; it never changes an existing journal entry.
       await this.foundation.initializeInTransaction(tx, context);
       const accounts = await this.systemAccounts(tx, context, [PAYROLL_EXPENSE, PAYROLL_PAYABLE, EMPLOYEE_ADVANCES, ADMIN_DEDUCTION_RECOVERY]);
-      const journal = await this.journals.postInTransaction(tx, { tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId, requestId: `payroll-accrual:${run.id}`, sourceType: 'hr_payroll_accrual', sourceReference: run.id, businessDate: input.businessDate, description: `Payroll accrual ${run.runNumber}`, lines: [
+      const journal = await this.journals.postInTransaction(tx, { tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId, requestId: `payroll-accrual:${run.id}`, sourceType: 'hr_payroll_accrual', sourceReference: run.id, businessDate, description: `Payroll accrual ${run.runNumber}`, lines: [
         { accountId: accounts.get(PAYROLL_EXPENSE)!, debitAmount: fixed(run.grossAmount), description: run.runNumber },
         ...(run.advanceSettlementAmount.gt(0) ? [{ accountId: accounts.get(EMPLOYEE_ADVANCES)!, creditAmount: fixed(run.advanceSettlementAmount), description: `${run.runNumber} advance settlements` }] : []),
         ...(run.administrativeDeductionAmount.gt(0) ? [{ accountId: accounts.get(ADMIN_DEDUCTION_RECOVERY)!, creditAmount: fixed(run.administrativeDeductionAmount), description: `${run.runNumber} administrative recoveries` }] : []),
         ...(run.netPayableAmount.gt(0) ? [{ accountId: accounts.get(PAYROLL_PAYABLE)!, creditAmount: fixed(run.netPayableAmount), description: `${run.runNumber} net payroll payable` }] : []),
       ] });
       for (const line of run.lines) {
-        for (const app of line.advanceApplications) await this.applyAdvance(tx, context, app.advanceId, app.amount, input.businessDate, journal.journalEntryId, run.runNumber);
-        for (const app of line.deductionApplications) await this.applyDeduction(tx, context, app.deductionId, app.amount, input.businessDate, run.runNumber);
+        for (const app of line.advanceApplications) await this.applyAdvance(tx, context, app.advanceId, app.amount, businessDate, journal.journalEntryId, run.runNumber);
+        for (const app of line.deductionApplications) await this.applyDeduction(tx, context, app.deductionId, app.amount, businessDate, run.runNumber);
         const advanceSettlementAmount = sum(line.advanceApplications.map((application) => application.amount));
-        if (advanceSettlementAmount.gt(0)) await tx.hrEmployeeFinancialMovement.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, employeeId: line.employeeId, journalEntryId: journal.journalEntryId, movementType: HrEmployeeFinancialMovementType.ADVANCE_SETTLEMENT, businessDate: input.businessDate, amount: advanceSettlementAmount, sourceReference: run.runNumber, description: 'Employee advances settled through payroll' } });
-        await tx.hrEmployeeFinancialMovement.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, employeeId: line.employeeId, journalEntryId: journal.journalEntryId, movementType: HrEmployeeFinancialMovementType.PAYROLL_ACCRUAL, businessDate: input.businessDate, amount: line.grossSalary, sourceReference: run.runNumber, description: 'Payroll accrued' } });
+        if (advanceSettlementAmount.gt(0)) await tx.hrEmployeeFinancialMovement.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, employeeId: line.employeeId, journalEntryId: journal.journalEntryId, movementType: HrEmployeeFinancialMovementType.ADVANCE_SETTLEMENT, businessDate, amount: advanceSettlementAmount, sourceReference: run.runNumber, description: 'Employee advances settled through payroll' } });
+        await tx.hrEmployeeFinancialMovement.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, employeeId: line.employeeId, journalEntryId: journal.journalEntryId, movementType: HrEmployeeFinancialMovementType.PAYROLL_ACCRUAL, businessDate, amount: line.grossSalary, sourceReference: run.runNumber, description: 'Payroll accrued' } });
       }
       await tx.hrPayrollRun.update({ where: { id: run.id }, data: { status: HrPayrollRunStatus.APPROVED, accrualJournalEntryId: journal.journalEntryId, approvedAt: new Date() } });
       const receipt = { id: run.id, runNumber: run.runNumber, replayed: false };
       await this.complete(tx, context, begun.receiptId, receipt);
-      await this.audit(tx, context, 'hr.payroll.approved', 'HrPayrollRun', run.id, { ...receipt, businessDate: ymd(input.businessDate), journalEntryId: journal.journalEntryId });
+      await this.audit(tx, context, 'hr.payroll.approved', 'HrPayrollRun', run.id, { ...receipt, businessDate: ymd(businessDate), journalEntryId: journal.journalEntryId });
       return receipt;
     });
   }
@@ -947,9 +947,9 @@ export class HrPayrollService {
     }
     const grossAmount = sum([...calculatedByEmployee.values()].map((compensation) => compensation.gross));
     return {
-      counts: { active, onLeave, included, excluded: active + onLeave - included, exceptions: population.activeMissingProfile.length + population.onLeaveMissingProfile.length + population.compensationCoverageIssue.length + population.hiredAfterBusinessDate.length },
+      counts: { active, onLeave, included, excluded: active + onLeave - included, exceptions: population.activeMissingProfile.length + population.onLeaveMissingProfile.length + population.compensationCoverageIssue.length },
       totals: { employeeCount: included, grossAmount: fixed(grossAmount), advanceSettlementAmount: fixed(selectedAdvanceAmount), administrativeDeductionAmount: fixed(selectedDeductionAmount), netPayableAmount: fixed(grossAmount.minus(selectedAdvanceAmount).minus(selectedDeductionAmount)) },
-      exceptions: [...missingExamples.map((employee) => ({ employeeId: employee.id, employeeNumber: employee.employeeNumber, employeeNameAr: employee.nameAr, reason: 'ACTIVE_MISSING_COMPENSATION' as const })), ...population.onLeaveMissingProfile.map((employee) => ({ employeeId: employee.id, employeeNumber: employee.employeeNumber, employeeNameAr: employee.nameAr, reason: 'ON_LEAVE_MISSING_COMPENSATION' as const })), ...population.compensationCoverageIssue.map((employee) => ({ employeeId: employee.id, employeeNumber: employee.employeeNumber, employeeNameAr: employee.nameAr, reason: 'COMPENSATION_DOES_NOT_COVER_PAYROLL_PERIOD' as const })), ...population.hiredAfterBusinessDate.map((employee) => ({ employeeId: employee.id, employeeNumber: employee.employeeNumber, employeeNameAr: employee.nameAr, reason: 'HIRED_AFTER_BUSINESS_DATE' as const }))].slice(0, 100),
+      exceptions: [...missingExamples.map((employee) => ({ employeeId: employee.id, employeeNumber: employee.employeeNumber, employeeNameAr: employee.nameAr, reason: 'ACTIVE_MISSING_COMPENSATION' as const })), ...population.onLeaveMissingProfile.map((employee) => ({ employeeId: employee.id, employeeNumber: employee.employeeNumber, employeeNameAr: employee.nameAr, reason: 'ON_LEAVE_MISSING_COMPENSATION' as const })), ...population.compensationCoverageIssue.map((employee) => ({ employeeId: employee.id, employeeNumber: employee.employeeNumber, employeeNameAr: employee.nameAr, reason: 'COMPENSATION_DOES_NOT_COVER_PAYROLL_PERIOD' as const }))].slice(0, 100),
       employees: employeesPage.map((employee) => {
         const hasProfile = profileByEmployee.has(employee.id);
         const onLeave = employee.status === HrEmployeeStatus.ON_LEAVE;
@@ -1163,9 +1163,19 @@ export class HrPayrollService {
     return new Map(accounts.map((account) => [account.systemKey!, account.id]));
   }
 
-  private async begin(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, operation: string, key: string, request: object) {
+  private async begin(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, operation: string, key: string, request: object, legacyRequest?: object) {
     try { return await this.idempotency.beginInTransaction(tx, context, { operation, key, request: jsonPayload(request), expiresAt: tomorrow() }); }
-    catch (error) { if (error instanceof IdempotencyPayloadMismatchError) throw new ConflictException('The idempotency key was used with a different payroll request.'); throw error; }
+    catch (error) {
+      if (!(error instanceof IdempotencyPayloadMismatchError)) throw error;
+      // Existing clients may retry a successful pre-month-end request after a
+      // rollout. Only its exact original hash may replay; new receipts always
+      // use the normalized server-owned period payload.
+      if (legacyRequest) {
+        try { return await this.idempotency.beginInTransaction(tx, context, { operation, key, request: jsonPayload(legacyRequest), expiresAt: tomorrow() }); }
+        catch (legacyError) { if (!(legacyError instanceof IdempotencyPayloadMismatchError)) throw legacyError; }
+      }
+      throw new ConflictException('The idempotency key was used with a different payroll request.');
+    }
   }
   private async complete(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, receiptId: string, body: object, status = 201) { await this.idempotency.completeInTransaction(tx, context, { receiptId, response: { status, headers: null, body: body as never } }); }
   private async audit(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, action: string, entityType: string, entityId: string, afterJson: object) { await tx.auditEvent.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId, action, entityType, entityId, requestId: `${action}:${entityId}`, afterJson: afterJson as Prisma.InputJsonValue } }); }
@@ -1179,6 +1189,10 @@ export class HrPayrollService {
 
 function amount(value: string) { const parsed = new Prisma.Decimal(value); if (!parsed.isFinite() || parsed.lte(0) || (parsed.decimalPlaces() ?? 0) > 4) throw new BadRequestException('A payroll amount must be a positive decimal with at most four places.'); return parsed; }
 function nonNegativeAmount(value: string) { const parsed = new Prisma.Decimal(value); if (!parsed.isFinite() || parsed.lt(0) || (parsed.decimalPlaces() ?? 0) > 4) throw new BadRequestException('A compensation allowance must be a non-negative decimal with at most four places.'); return parsed; }
+function payrollPeriodPayload<T extends { payrollMonth: Date; businessDate?: Date | undefined }>(input: T) {
+  const { businessDate: _legacyDate, ...payload } = input;
+  return { ...payload, payrollMonth: firstOfMonth(input.payrollMonth) };
+}
 function jsonPayload(value: unknown): never { return JSON.parse(JSON.stringify(value)) as never; }
 function sum(values: readonly Prisma.Decimal[]) { return values.reduce((total, value) => total.plus(value), new Prisma.Decimal(0)); }
 function fixed(value: Prisma.Decimal) { return value.toFixed(4); }
