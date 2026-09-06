@@ -70,6 +70,19 @@ type Governance = {
   evaluationRuns: OfflineEvaluation[];
   consumption: { dayStartAt: string; currency: "USD"; chargedCostUsd: string; providerCalls: number };
 };
+type CompanyPolicy = {
+  companyId: string;
+  policyId: string | null;
+  version: number;
+  mode: "DISABLED" | "ENABLED" | "PAUSED";
+  monthlyBudgetUsdCents: string | null;
+  billingTimeZone: "Asia/Riyadh";
+  providerConfigurationIds: string[];
+  pilotSkills: Array<{ skillKey: string; skillVersion: number; policyVersion: number }>;
+  autoEnrollStable: boolean;
+  canManage: boolean;
+  updatedAt: string | null;
+};
 type ContextDraft = { kind: "TERMINOLOGY" | "BUSINESS_SCOPE" | "POLICY_REFERENCE"; moduleScope: string; presentationStyle: "CONCISE" | "DETAILED"; termAr: string; definitionAr: string; businessDomain: string; policyCode: string; policyVersion: string; policyTitleAr: string; sourceReference: string };
 const initialContextDraft: ContextDraft = { kind: "TERMINOLOGY", moduleScope: "general", presentationStyle: "CONCISE", termAr: "", definitionAr: "", businessDomain: "", policyCode: "", policyVersion: "", policyTitleAr: "", sourceReference: "" };
 
@@ -113,9 +126,8 @@ export function AdministrationAiSettingsPanel({ language, session, owner }: { la
     <nav className="basira-workspace__tabs" role="tablist" aria-label={ar ? "أقسام بصيرة" : "Basira sections"}>{tabs.map((tab, index) => <button key={tab.id} id={`basira-tab-${tab.id}`} type="button" role="tab" aria-selected={activeTab === tab.id} aria-controls={`basira-panel-${tab.id}`} tabIndex={activeTab === tab.id ? 0 : -1} className={activeTab === tab.id ? "is-active" : undefined} onKeyDown={(event) => handleTabKeyDown(event, index)} onClick={() => navigate(tab.id)}>{ar ? tab.ar : tab.en}</button>)}</nav>
     <label className="basira-workspace__mobile-navigation"><span>{ar ? "انتقل إلى قسم" : "Go to section"}</span><BaseerStaticSelect label={ar ? "انتقل إلى قسم" : "Go to section"} value={activeTab} onChange={(event) => navigate(event.target.value as BasiraTab)}>{tabs.map((tab) => <option key={tab.id} value={tab.id}>{ar ? tab.ar : tab.en}</option>)}</BaseerStaticSelect></label>
     <BaseerCompanyReadQuery session={session} resource="administration.ai.configuration" load={(current, signal) => api<Configuration>(current, "/administration/ai/configuration", { signal })}>
-      {({ data, loading, error, refetch }) => <AiSettingsContent language={language} session={session} owner={owner} configuration={data} loading={loading} loadError={error} refetch={refetch} activeTab={activeTab} settingsPanel={settingsPanel} onSettingsPanelChange={setSettingsPanel} onNavigate={navigate} />}
+      {({ data, loading, error, refetch }) => <><AiSettingsContent language={language} session={session} owner={owner} configuration={data} loading={loading} loadError={error} refetch={refetch} activeTab={activeTab} settingsPanel={settingsPanel} onSettingsPanelChange={setSettingsPanel} onNavigate={navigate} /><BasiraGovernancePanel language={language} session={session} activeTab={activeTab} configuration={data} /></>}
     </BaseerCompanyReadQuery>
-    <BasiraGovernancePanel language={language} session={session} activeTab={activeTab} />
   </div>;
 }
 
@@ -293,16 +305,62 @@ function AiSettingsContent({ language, session, owner, configuration, loading, l
   </section>;
 }
 
-/** One capability-based surface for the tenant owner and company manager.
- * It deliberately manages structured reference data and governed switches,
- * never prompts, secrets, raw model output, or unrestricted chat memory. */
-function BasiraGovernancePanel({ language, session, activeTab }: { language: Language; session: ActiveSession; activeTab: BasiraTab }) {
-  return <BaseerCompanyReadQuery session={session} resource="administration.ai.governance" load={(current, signal) => api<Governance>(current, "/administration/ai/governance", { signal })}>
-    {({ data, loading, error, refetch }) => <BasiraGovernanceContent language={language} session={session} governance={data} loading={loading} loadError={error} refetch={refetch} activeTab={activeTab} />}
+function BasiraCompanyPolicyPanel({ language, session, governance, configuration }: { language: Language; session: ActiveSession; governance: Governance; configuration: Configuration | undefined }) {
+  return <BaseerCompanyReadQuery session={session} resource="administration.ai.company-policy" load={(current, signal) => api<CompanyPolicy>(current, "/administration/ai/company-policy", { signal })}>
+    {({ data, loading, error, refetch }) => <BasiraCompanyPolicyCard language={language} session={session} governance={governance} configuration={configuration} policy={data} loading={loading} loadError={error} refetch={refetch} />}
   </BaseerCompanyReadQuery>;
 }
 
-function BasiraGovernanceContent({ language, session, governance, loading, loadError, refetch, activeTab }: { language: Language; session: ActiveSession; governance: Governance | undefined; loading: boolean; loadError: unknown; refetch: () => Promise<void>; activeTab: BasiraTab }) {
+function BasiraCompanyPolicyCard({ language, session, governance, configuration, policy, loading, loadError, refetch }: { language: Language; session: ActiveSession; governance: Governance; configuration: Configuration | undefined; policy: CompanyPolicy | undefined; loading: boolean; loadError: unknown; refetch: () => Promise<void> }) {
+  const ar = language === "ar";
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [monthlyUsd, setMonthlyUsd] = useState("5.00");
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => { if (policy?.monthlyBudgetUsdCents) setMonthlyUsd(usdCentsToDisplay(policy.monthlyBudgetUsdCents)); }, [policy?.monthlyBudgetUsdCents]);
+  if (loading) return <BaseerCard className="basira-company-policy"><p>{ar ? "جارٍ قراءة تشغيل بصيرة للشركة…" : "Loading company Basira operation…"}</p></BaseerCard>;
+  if (!policy) return <BaseerCard className="basira-company-policy"><strong>{ar ? "تعذر قراءة تشغيل بصيرة" : "Basira operation is unavailable"}</strong><p>{loadError ? presentBaseerApiError(loadError, language, ar ? "تحقق من صلاحية سياسة بصيرة للشركة." : "Check the company Basira-policy permission.") : null}</p></BaseerCard>;
+  const activeProvider = configuration?.activeProvider ?? null;
+  const availablePilots = governance.catalogue.filter((skill) => skill.status === "PILOT" && skill.runtime.state === "READY").map((skill) => ({ skillKey: skill.key, skillVersion: skill.version, policyVersion: skill.policyVersion }));
+  const status = policy.mode === "ENABLED" ? (ar ? "تعمل بصيرة لهذه الشركة" : "Basira is operating for this company") : policy.mode === "PAUSED" ? (ar ? "بصيرة متوقفة مؤقتاً" : "Basira is paused") : (ar ? "بصيرة غير مفعلة" : "Basira is not enabled");
+  const submit = async (mode: CompanyPolicy["mode"], nextMonthlyUsd = monthlyUsd) => {
+    if (!policy.canManage) return;
+    const monthlyBudgetUsdCents = mode === "ENABLED" ? usdToCents(nextMonthlyUsd) : null;
+    if (mode === "ENABLED" && (!monthlyBudgetUsdCents || !activeProvider)) {
+      setError(!activeProvider ? (ar ? "يلزم إعداد وتفعيل اتصال ذكاء أولاً من الإعدادات المتقدمة." : "Set up and activate an AI connection in Advanced settings first.") : (ar ? "أدخل سقفاً شهرياً صحيحاً بالدولار." : "Enter a valid monthly USD cap."));
+      return;
+    }
+    setBusy(true); setError(null); setMessage(null);
+    try {
+      const idempotencyKey = requestId();
+      await api<CompanyPolicy>(session, "/administration/ai/company-policy", {
+        method: "PUT", headers: { "Content-Type": "application/json", "X-Idempotency-Key": idempotencyKey },
+        body: JSON.stringify({ expectedVersion: policy.version, mode, ...(monthlyBudgetUsdCents ? { monthlyBudgetUsdCents } : {}), providerConfigurationIds: mode === "ENABLED" && activeProvider ? [activeProvider.id] : [], pilotSkills: mode === "ENABLED" ? availablePilots : [], autoEnrollStable: false, changeReason: mode === "ENABLED" ? "Company Basira operating policy enabled" : mode === "PAUSED" ? "Company Basira operating policy paused" : "Company Basira operating policy disabled", idempotencyKey }),
+      });
+      await refetch(); setDialogOpen(false);
+      setMessage(mode === "ENABLED" ? (ar ? "تم تشغيل بصيرة تلقائياً ضمن السقف الشهري." : "Basira was enabled automatically within the monthly cap.") : mode === "PAUSED" ? (ar ? "تم الإيقاف فوراً. تبقى السجلات للقراءة." : "Basira was paused immediately. Records remain readable.") : (ar ? "تم إيقاف بصيرة لهذه الشركة." : "Basira was disabled for this company."));
+    } catch (reason) { setError(presentBaseerApiError(reason, language, ar ? "تعذر تحديث تشغيل بصيرة." : "Basira operation could not be updated.")); }
+    finally { setBusy(false); }
+  };
+  return <BaseerCard className={`basira-company-policy is-${policy.mode.toLowerCase()}`}>
+    <header><div><p className="eyebrow">{ar ? "تشغيل الشركة" : "Company operation"}</p><h4>{status}</h4><p>{policy.mode === "ENABLED" ? (ar ? `السقف الشهري ${formatMoney(monthlyUsd, "USD", language, 2)}. تُفعل التجارب الجاهزة تلقائياً فقط.` : `Monthly cap ${formatMoney(monthlyUsd, "USD", language, 2)}. Only ready pilots are enrolled automatically.`) : (ar ? "زر واحد يدير الإيقاف والتشغيل. يبقى ربط المزود وإدارة السجل ضمن الإعدادات المتقدمة." : "One control manages operation. Provider connection and records remain in Advanced settings.")}</p></div><span className={`basira-company-policy__state is-${policy.mode.toLowerCase()}`}>{policy.mode === "ENABLED" ? (ar ? "يعمل" : "Operating") : policy.mode === "PAUSED" ? (ar ? "متوقف" : "Paused") : (ar ? "غير مفعّل" : "Off")}</span></header>
+    {message ? <p className="daily-sales-message success" role="status">{message}</p> : null}{error ? <p className="daily-sales-message error" role="alert">{error}</p> : null}
+    <footer>{policy.canManage ? <>{policy.mode === "ENABLED" ? <BaseerButton type="button" variant="secondary" disabled={busy} onClick={() => void submit("PAUSED")}>{ar ? "إيقاف مؤقت" : "Pause"}</BaseerButton> : <BaseerButton type="button" variant="primary" disabled={busy || !activeProvider} onClick={() => setDialogOpen(true)}>{policy.mode === "PAUSED" ? (ar ? "استئناف" : "Resume") : (ar ? "تشغيل بصيرة" : "Enable Basira")}</BaseerButton>}<BaseerButton type="button" variant="quiet" disabled={busy} onClick={() => setDialogOpen(true)}>{ar ? "السقف والتجارب" : "Cap and pilots"}</BaseerButton></> : <span>{ar ? "لديك صلاحية القراءة فقط." : "You have read-only access."}</span>}</footer>
+    <BaseerFormDialog open={dialogOpen} title={ar ? "تشغيل بصيرة للشركة" : "Operate Basira for this company"} language={language} formId="basira-company-policy" submitLabel={policy.mode === "ENABLED" ? (ar ? "حفظ السقف" : "Save cap") : (ar ? "تشغيل الآن" : "Enable now")} onClose={() => setDialogOpen(false)} busy={busy} error={error} submitDisabled={!policy.canManage || !activeProvider} size="compact"><form id="basira-company-policy" className="basira-governance__form" onSubmit={(event) => { event.preventDefault(); void submit("ENABLED"); }}><p>{ar ? "سيستخدم التشغيل اتصال الذكاء النشط، ويشغّل فقط التجارب التي اجتازت فحصها الخادمي. لا يضيف صلاحيات ولا ينفذ إجراءات." : "Operation uses the active AI connection and enrolls only pilots that passed their server check. It adds no permissions or actions."}</p><label className="basira-governance__form-full">{ar ? "السقف الشهري بالدولار" : "Monthly USD cap"}<BaseerMoneyInput autoFocus value={monthlyUsd} onValueChange={setMonthlyUsd} /><small>{ar ? "يُحفظ كقيمة دقيقة بالسنت، ويمنع الطلب قبل إرساله عند بلوغ السقف." : "Stored exactly in cents and enforced before a provider request at the cap."}</small></label>{!activeProvider ? <p className="daily-sales-message error">{ar ? "لا يوجد اتصال ذكاء نشط. أعده من الإعدادات المتقدمة." : "There is no active AI connection. Set one up in Advanced settings."}</p> : null}</form></BaseerFormDialog>
+  </BaseerCard>;
+}
+
+/** One capability-based surface for the tenant owner and company manager.
+ * It deliberately manages structured reference data and governed switches,
+ * never prompts, secrets, raw model output, or unrestricted chat memory. */
+function BasiraGovernancePanel({ language, session, activeTab, configuration }: { language: Language; session: ActiveSession; activeTab: BasiraTab; configuration: Configuration | undefined }) {
+  return <BaseerCompanyReadQuery session={session} resource="administration.ai.governance" load={(current, signal) => api<Governance>(current, "/administration/ai/governance", { signal })}>
+    {({ data, loading, error, refetch }) => <BasiraGovernanceContent language={language} session={session} governance={data} loading={loading} loadError={error} refetch={refetch} activeTab={activeTab} configuration={configuration} />}
+  </BaseerCompanyReadQuery>;
+}
+
+function BasiraGovernanceContent({ language, session, governance, loading, loadError, refetch, activeTab, configuration }: { language: Language; session: ActiveSession; governance: Governance | undefined; loading: boolean; loadError: unknown; refetch: () => Promise<void>; activeTab: BasiraTab; configuration: Configuration | undefined }) {
   const ar = language === "ar";
   const [draftOpen, setDraftOpen] = useState(false);
   const [feedbackReceipt, setFeedbackReceipt] = useState<Governance["receipts"][number] | null>(null);
@@ -404,7 +462,7 @@ function BasiraGovernanceContent({ language, session, governance, loading, loadE
   const activeActivations = new Map(governance.activations.filter((item) => item.status !== "SUSPENDED").map((item) => [`${item.skillKey}:${item.skillVersion}:${item.policyVersion}`, item]));
   return <section id={`basira-panel-${activeTab}`} role="tabpanel" aria-labelledby={`basira-tab-${activeTab}`} className="basira-tab-panel basira-governance" data-active-tab={activeTab} aria-label={ar ? "حوكمة بصيرة" : "Basira governance"}>
     {commandError ? <p className="daily-sales-message error" role="alert">{commandError}</p> : null}{message ? <p className="daily-sales-message success" role="status">{message}</p> : null}
-    {activeTab === "overview" ? <><div className="baseer-metric-grid"><BaseerCard className="baseer-metric"><small>{ar ? "سياقات معتمدة" : "Approved context"}</small><strong>{governance.companyContexts.filter((item) => item.status === "APPROVED").length}</strong></BaseerCard><BaseerCard className="baseer-metric"><small>{ar ? "مهارات مفعلة" : "Active skills"}</small><strong>{governance.activations.filter((item) => item.status !== "SUSPENDED").length}</strong></BaseerCard><BaseerCard className="baseer-metric"><small>{ar ? "استهلاك اليوم" : "Today's usage"}</small><strong dir="ltr">{formatUsd(governance.consumption.chargedCostUsd, language)}</strong><small>{ar ? `${formatCount(governance.consumption.providerCalls, language)} طلب مزود اليوم` : `${formatCount(governance.consumption.providerCalls, language)} provider calls today`}</small></BaseerCard><BaseerCard className="baseer-metric"><small>{ar ? "تقييمات منظمة" : "Structured evaluations"}</small><strong>{governance.evaluations.length}</strong></BaseerCard></div><BaseerCard className="basira-governance__overview-note"><strong>{ar ? "حوكمة بصيرة" : "Basira governance"}</strong><p>{ar ? "بصيرة تستقبل حزمة أدلة جاهزة فقط. التفعيل لا يضيف صلاحيات ولا ينفذ إجراءً." : "Basira receives a prepared evidence package only. Activation adds neither permissions nor actions."}</p></BaseerCard></> : null}
+    {activeTab === "overview" ? <><BasiraCompanyPolicyPanel language={language} session={session} governance={governance} configuration={configuration} /><div className="baseer-metric-grid"><BaseerCard className="baseer-metric"><small>{ar ? "سياقات معتمدة" : "Approved context"}</small><strong>{governance.companyContexts.filter((item) => item.status === "APPROVED").length}</strong></BaseerCard><BaseerCard className="baseer-metric"><small>{ar ? "مهارات مفعلة" : "Active skills"}</small><strong>{governance.activations.filter((item) => item.status !== "SUSPENDED").length}</strong></BaseerCard><BaseerCard className="baseer-metric"><small>{ar ? "استهلاك اليوم" : "Today's usage"}</small><strong dir="ltr">{formatUsd(governance.consumption.chargedCostUsd, language)}</strong><small>{ar ? `${formatCount(governance.consumption.providerCalls, language)} طلب مزود اليوم` : `${formatCount(governance.consumption.providerCalls, language)} provider calls today`}</small></BaseerCard><BaseerCard className="baseer-metric"><small>{ar ? "تقييمات منظمة" : "Structured evaluations"}</small><strong>{governance.evaluations.length}</strong></BaseerCard></div><BaseerCard className="basira-governance__overview-note"><strong>{ar ? "حوكمة بصيرة" : "Basira governance"}</strong><p>{ar ? "بصيرة تستقبل حزمة أدلة جاهزة فقط. التفعيل لا يضيف صلاحيات ولا ينفذ إجراءً." : "Basira receives a prepared evidence package only. Activation adds neither permissions nor actions."}</p></BaseerCard></> : null}
     <BaseerCard className="basira-governance__card basira-governance__card--context"><section className="basira-governance__section"><header><div><p className="basira-scope-badge">{ar ? "الشركة الحالية" : "Current company"}</p><h4>{ar ? "معرفة الشركة" : "Company knowledge"}</h4><p>{ar ? "مصطلحات ومراجع عمل فقط؛ لا أرقام مالية متغيرة ولا محتوى بريد أو Google ولا تعليمات للنموذج." : "Business terms and references only; no changing financial facts, email/Google content, or model instructions."}</p></div><BaseerButton type="button" onClick={() => { setCommandError(null); setDraftOpen(true); }}>{ar ? "إضافة معلومة" : "Add knowledge"}</BaseerButton></header><div className="basira-governance__list">{governance.companyContexts.length ? governance.companyContexts.map((item) => <article key={item.id}><div><strong>{contextKindLabel(item.kind, language)} · {item.moduleScope}</strong><small>{contextStatusLabel(item.status, language)} · {ar ? `إصدار ${item.version}` : `Version ${item.version}`} · {date(item.createdAt)}</small><p>{contextSummary(item, language)}</p></div><footer>{item.status === "DRAFT" ? <><BaseerButton type="button" variant="secondary" disabled={busy} onClick={() => void approveContext(item.id)}>{ar ? "اعتماد" : "Approve"}</BaseerButton><BaseerButton type="button" variant="quiet" disabled={busy} onClick={() => void revokeContext(item.id)}>{ar ? "سحب المسودة" : "Withdraw draft"}</BaseerButton></> : item.status === "APPROVED" ? <BaseerButton type="button" variant="quiet" disabled={busy} onClick={() => void revokeContext(item.id)}>{ar ? "سحب الاعتماد" : "Withdraw approval"}</BaseerButton> : null}</footer></article>) : <p className="decision-muted">{ar ? "لا توجد معرفة معتمدة أو مسودة بعد." : "No approved knowledge or draft yet."}</p>}</div></section></BaseerCard>
     <section className="basira-governance__card basira-governance__card--skills basira-skills"><header className="basira-governance__section"><div><p className="basira-scope-badge">{ar ? "الشركة الحالية" : "Current company"}</p><h4>{ar ? "المهارات" : "Skills"}</h4><p>{ar ? "اختر المهارة المناسبة للشركة؛ التفعيل لا يضيف صلاحيات." : "Choose the right skill for the company; activation adds no permissions."}</p></div></header><div className="basira-skill-grid">{governance.catalogue.map((skill) => {
       const activation = activeActivations.get(`${skill.key}:${skill.version}:${skill.policyVersion}`);
@@ -518,6 +576,24 @@ function providerCostTierLabel(costTier: ProviderCapability["costTier"], languag
 function formatUsd(value: string | null, language: Language) {
   if (value === null) return language === "ar" ? "غير محدد" : "Not set";
   return formatMoney(value, "USD", language, 4);
+}
+
+/** The browser only formats a human money entry into the contract's exact
+ * integer cents. The server remains the only budget enforcement boundary. */
+function usdToCents(value: string): string | null {
+  const match = /^(\d+)(?:\.(\d{1,2}))?$/.exec(value.trim());
+  if (!match) return null;
+  const whole = match[1]!.replace(/^0+(?=\d)/, "");
+  const fraction = (match[2] ?? "").padEnd(2, "0");
+  const cents = `${whole}${fraction}`.replace(/^0+(?=\d)/, "");
+  return cents === "0" ? null : cents;
+}
+
+function usdCentsToDisplay(cents: string): string {
+  if (!/^\d+$/.test(cents)) return "5.00";
+  const normalized = cents.replace(/^0+(?=\d)/, "");
+  const padded = normalized.padStart(3, "0");
+  return `${padded.slice(0, -2)}.${padded.slice(-2)}`;
 }
 
 function providerStatusLabel(status: ProviderReceipt["status"], language: Language) {

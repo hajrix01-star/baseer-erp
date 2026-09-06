@@ -42,6 +42,8 @@ import {
   AiConsumptionGuardService,
   type AiCostReservation,
 } from "./ai-consumption-guard.service.js";
+import { AiCompanyPolicyService } from "./ai-company-policy.service.js";
+import { startOfRiyadhMonth } from "./ai-consumption-time.js";
 import { AiInterpretationService, interpretationAad } from "./ai-interpretation.service.js";
 import type { AiProviderUsage } from "./ai-provider-usage.js";
 import { decisionAlertProviderPrompt, marketingCampaignProviderPrompt, promptTextForLocalTokenCount } from "./ai-provider-prompts.js";
@@ -73,6 +75,7 @@ export class AiRuntimeService {
     private readonly vault: AiCredentialVault,
     private readonly interpretations: AiInterpretationService,
     private readonly consumption: AiConsumptionGuardService,
+    private readonly companyPolicy: AiCompanyPolicyService,
     private readonly rateLimit: AiRuntimeRateLimitService,
     private readonly decisions: DecisionIntelligenceService,
     private readonly marketing: MarketingService,
@@ -258,7 +261,6 @@ export class AiRuntimeService {
       companyId: authorized.company.id,
       actorUserId: authorized.principal.userId,
     };
-    const activation = await this.requireLiveSkillActivation(context, skill.key, skill.version, skill.policyVersion, skill.status);
     const readiness = await this.analysisReadiness.decisionAlert(context, input.request.alertId);
     if (readiness.status !== "READY") throw new ConflictException("The decision evidence is not ready for Basira explanation.");
     const brief = await this.decisions.readBasiraDecisionAlertBrief(context, input.request.alertId);
@@ -283,6 +285,10 @@ export class AiRuntimeService {
       if (!provider || provider.provider !== "OPENAI_COMPATIBLE") throw new ConflictException("An active OpenAI provider configuration is required for this pilot.");
       return { provider, companyContexts, systemIdentity };
     });
+    const companyPolicy = await this.companyPolicy.requireLivePolicy(context, {
+      skillKey: skill.key, skillVersion: skill.version, policyVersion: skill.policyVersion, catalogueStatus: skill.status, provider: setup.provider,
+    });
+    const activation = companyPolicy?.activation ?? await this.requireLiveSkillActivation(context, skill.key, skill.version, skill.policyVersion, skill.status);
 
     let begun;
     try {
@@ -352,6 +358,7 @@ export class AiRuntimeService {
           outputChecksum: claim.interpretation.outputChecksum,
           moduleKey: "decision-intelligence", capability: AI_USE_CAPABILITY,
           skillKey: skill.key, skillVersion: skill.version, policyVersion: skill.policyVersion,
+          companyPolicyRevisionId: companyPolicy?.policyRevisionId ?? null, billingPeriodStartAt: companyPolicy ? startOfRiyadhMonth(createdAt) : null,
           outcome: AiExecutionOutcome.SUCCEEDED, providerSnapshot: setup.provider.provider,
           modelSnapshot: setup.provider.model, configurationVersion: setup.provider.configurationVersion,
           identityVersion: null, systemIdentityVersion: setup.systemIdentity?.version ?? null,
@@ -400,6 +407,10 @@ export class AiRuntimeService {
         context,
         provider: setup.provider,
         activation,
+        companyPolicy: companyPolicy ? {
+          policyRevisionId: companyPolicy.policyRevisionId,
+          monthlyBudgetUsdCents: companyPolicy.monthlyBudgetUsdCents,
+        } : null,
         interpretationRunId: claim.runId,
         profile: modelProfile,
         inputText: promptTextForLocalTokenCount(providerPrompt),
@@ -450,6 +461,7 @@ export class AiRuntimeService {
           id: receiptId, tenantId: context.tenantId, companyId: context.companyId,
           providerConfigurationId: setup.provider.id, identityId: null, systemIdentityId: setup.systemIdentity?.id ?? null, skillActivationId: activation.id, evidenceSnapshotId: brief.evidence.snapshotId, promptVersion: INTERPRETATION_PROMPT_VERSION, inputChecksum: brief.evidence.checksum,
           moduleKey: "decision-intelligence", capability: AI_USE_CAPABILITY, skillKey: skill.key, skillVersion: skill.version, policyVersion: skill.policyVersion,
+          companyPolicyRevisionId: companyPolicy?.policyRevisionId ?? null, billingPeriodStartAt: companyPolicy ? startOfRiyadhMonth(createdAt) : null,
           outcome: AiExecutionOutcome.FAILED, providerSnapshot: setup.provider.provider, modelSnapshot: setup.provider.model, configurationVersion: setup.provider.configurationVersion,
           identityVersion: null, systemIdentityVersion: setup.systemIdentity?.version ?? null,
           inputCharacters: JSON.stringify(brief).length, outputCharacters: 0,
@@ -500,6 +512,7 @@ export class AiRuntimeService {
         id: receiptId, tenantId: context.tenantId, companyId: context.companyId,
         providerConfigurationId: setup.provider.id, identityId: null, systemIdentityId: setup.systemIdentity?.id ?? null, skillActivationId: activation.id, evidenceSnapshotId: brief.evidence.snapshotId, promptVersion: INTERPRETATION_PROMPT_VERSION, inputChecksum: brief.evidence.checksum, outputChecksum,
         moduleKey: "decision-intelligence", capability: AI_USE_CAPABILITY, skillKey: skill.key, skillVersion: skill.version, policyVersion: skill.policyVersion,
+        companyPolicyRevisionId: companyPolicy?.policyRevisionId ?? null, billingPeriodStartAt: companyPolicy ? startOfRiyadhMonth(createdAt) : null,
         outcome: AiExecutionOutcome.SUCCEEDED, providerSnapshot: setup.provider.provider, modelSnapshot: setup.provider.model, configurationVersion: setup.provider.configurationVersion,
         identityVersion: null, systemIdentityVersion: setup.systemIdentity?.version ?? null,
         inputCharacters: JSON.stringify(brief).length, outputCharacters: JSON.stringify(explanation).length,
@@ -582,12 +595,24 @@ export class AiRuntimeService {
       companyId: authorized.company.id,
       actorUserId: authorized.principal.userId,
     };
-    const activation = await this.requireLiveSkillActivation(context, skill.key, skill.version, skill.policyVersion, skill.status);
     const readiness = await this.analysisReadiness.marketingCampaign(context, input.request.campaignId);
     if (readiness.status !== "READY") throw new ConflictException("The campaign evidence is not ready for Basira explanation.");
     // Build or reuse the frozen evidence before reserving the request key. A
     // rejected/invalid campaign cannot leave an idempotency receipt hanging.
     const snapshot = await this.marketing.createCampaignEvidenceSnapshot(context, input.request.campaignId);
+    const setup = await this.database.inTenantTransaction(context.tenantId, async (transaction) => {
+      const [provider, companyContexts, systemIdentity] = await Promise.all([
+        transaction.aiProviderConfiguration.findFirst({ where: { tenantId: context.tenantId, status: AiProviderConfigurationStatus.ACTIVE, isDefault: true }, select: { id: true, provider: true, model: true, configurationVersion: true, dailyRequestLimit: true, dailyCostLimit: true, encryptedCredential: true, credentialIv: true, credentialTag: true, credentialKeyVersion: true } }),
+        transaction.aiCompanyContext.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, status: AiCompanyContextStatus.APPROVED, OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] }, select: { id: true, presentationStyle: true, approvedTermsJson: true, policyReferencesJson: true } }),
+        transaction.aiSystemIdentity.findFirst({ where: { tenantId: context.tenantId, status: AiCompanyIdentityStatus.ACTIVE }, select: { id: true, version: true, toneInstructions: true, safetyInstructions: true } }),
+      ]);
+      if (!provider || provider.provider !== "OPENAI_COMPATIBLE") throw new ConflictException("An active OpenAI provider configuration is required for this pilot.");
+      return { provider, companyContexts, systemIdentity };
+    });
+    const companyPolicy = await this.companyPolicy.requireLivePolicy(context, {
+      skillKey: skill.key, skillVersion: skill.version, policyVersion: skill.policyVersion, catalogueStatus: skill.status, provider: setup.provider,
+    });
+    const activation = companyPolicy?.activation ?? await this.requireLiveSkillActivation(context, skill.key, skill.version, skill.policyVersion, skill.status);
 
     let begun;
     try {
@@ -606,16 +631,6 @@ export class AiRuntimeService {
       if (begun.response.status !== 200) throw new HttpException("The previous AI explanation attempt was unavailable. Start a new request.", begun.response.status);
       return explainMarketingCampaignReceiptSchema.parse({ ...(begun.response.body as object), replayed: true });
     }
-
-    const setup = await this.database.inTenantTransaction(context.tenantId, async (transaction) => {
-      const [provider, companyContexts, systemIdentity] = await Promise.all([
-        transaction.aiProviderConfiguration.findFirst({ where: { tenantId: context.tenantId, status: AiProviderConfigurationStatus.ACTIVE, isDefault: true }, select: { id: true, provider: true, model: true, configurationVersion: true, dailyRequestLimit: true, dailyCostLimit: true, encryptedCredential: true, credentialIv: true, credentialTag: true, credentialKeyVersion: true } }),
-        transaction.aiCompanyContext.findMany({ where: { tenantId: context.tenantId, companyId: context.companyId, status: AiCompanyContextStatus.APPROVED, OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] }, select: { id: true, presentationStyle: true, approvedTermsJson: true, policyReferencesJson: true } }),
-        transaction.aiSystemIdentity.findFirst({ where: { tenantId: context.tenantId, status: AiCompanyIdentityStatus.ACTIVE }, select: { id: true, version: true, toneInstructions: true, safetyInstructions: true } }),
-      ]);
-      if (!provider || provider.provider !== "OPENAI_COMPATIBLE") throw new ConflictException("An active OpenAI provider configuration is required for this pilot.");
-      return { provider, companyContexts, systemIdentity };
-    });
 
     const companyContextDigest = this.companyContextDigest(setup.companyContexts);
     const modelProfile = this.requireLiveModelProfile(
@@ -666,6 +681,7 @@ export class AiRuntimeService {
           outputChecksum: claim.interpretation.outputChecksum,
           moduleKey: "marketing", capability: AI_USE_CAPABILITY,
           skillKey: skill.key, skillVersion: skill.version, policyVersion: skill.policyVersion,
+          companyPolicyRevisionId: companyPolicy?.policyRevisionId ?? null, billingPeriodStartAt: companyPolicy ? startOfRiyadhMonth(createdAt) : null,
           outcome: AiExecutionOutcome.SUCCEEDED, providerSnapshot: setup.provider.provider,
           modelSnapshot: setup.provider.model, configurationVersion: setup.provider.configurationVersion,
           identityVersion: null, systemIdentityVersion: setup.systemIdentity?.version ?? null,
@@ -711,6 +727,10 @@ export class AiRuntimeService {
         context,
         provider: setup.provider,
         activation,
+        companyPolicy: companyPolicy ? {
+          policyRevisionId: companyPolicy.policyRevisionId,
+          monthlyBudgetUsdCents: companyPolicy.monthlyBudgetUsdCents,
+        } : null,
         interpretationRunId: claim.runId,
         profile: modelProfile,
         inputText: promptTextForLocalTokenCount(providerPrompt),
@@ -754,7 +774,7 @@ export class AiRuntimeService {
       this.logger.warn(JSON.stringify({ event: "basira.marketing_campaign_explanation_failed", failureKind }));
       const receiptId = randomUUID(); const createdAt = new Date();
       await this.database.inTenantTransaction(context.tenantId, async (transaction) => {
-        await transaction.aiExecutionReceipt.create({ data: { id: receiptId, tenantId: context.tenantId, companyId: context.companyId, providerConfigurationId: setup.provider.id, identityId: null, systemIdentityId: setup.systemIdentity?.id ?? null, skillActivationId: activation.id, evidenceSnapshotId: snapshot.id, promptVersion: INTERPRETATION_PROMPT_VERSION, inputChecksum: snapshot.checksum, moduleKey: "marketing", capability: AI_USE_CAPABILITY, skillKey: skill.key, skillVersion: skill.version, policyVersion: skill.policyVersion, outcome: AiExecutionOutcome.FAILED, providerSnapshot: setup.provider.provider, modelSnapshot: setup.provider.model, configurationVersion: setup.provider.configurationVersion, identityVersion: null, systemIdentityVersion: setup.systemIdentity?.version ?? null, inputCharacters: JSON.stringify(snapshot.payload).length, outputCharacters: 0, modelPriceRevisionId: reservation?.modelPriceRevisionId ?? null, estimatedCostUsd: reservation?.estimatedCostUsd ?? null, actualCostUsd: chargedCostUsd, safeErrorCode: failureKind, requestId: RequestContext.correlationId() ?? randomUUID(), createdAt } });
+        await transaction.aiExecutionReceipt.create({ data: { id: receiptId, tenantId: context.tenantId, companyId: context.companyId, providerConfigurationId: setup.provider.id, identityId: null, systemIdentityId: setup.systemIdentity?.id ?? null, skillActivationId: activation.id, evidenceSnapshotId: snapshot.id, promptVersion: INTERPRETATION_PROMPT_VERSION, inputChecksum: snapshot.checksum, moduleKey: "marketing", capability: AI_USE_CAPABILITY, skillKey: skill.key, skillVersion: skill.version, policyVersion: skill.policyVersion, companyPolicyRevisionId: companyPolicy?.policyRevisionId ?? null, billingPeriodStartAt: companyPolicy ? startOfRiyadhMonth(createdAt) : null, outcome: AiExecutionOutcome.FAILED, providerSnapshot: setup.provider.provider, modelSnapshot: setup.provider.model, configurationVersion: setup.provider.configurationVersion, identityVersion: null, systemIdentityVersion: setup.systemIdentity?.version ?? null, inputCharacters: JSON.stringify(snapshot.payload).length, outputCharacters: 0, modelPriceRevisionId: reservation?.modelPriceRevisionId ?? null, estimatedCostUsd: reservation?.estimatedCostUsd ?? null, actualCostUsd: chargedCostUsd, safeErrorCode: failureKind, requestId: RequestContext.correlationId() ?? randomUUID(), createdAt } });
         await transaction.auditEvent.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId, action: "platform.ai.marketing_campaign_explanation_failed", entityType: "AiExecutionReceipt", entityId: receiptId, requestId: RequestContext.correlationId() ?? randomUUID(), afterJson: { campaignId: input.request.campaignId, snapshotId: snapshot.id, checksum: snapshot.checksum, skillKey: skill.key, model: setup.provider.model } } });
         await this.idempotency.completeInTransaction(transaction, context, { receiptId: begun.receiptId, response: {
           status: error instanceof HttpException ? error.getStatus() : 503,
@@ -795,7 +815,7 @@ export class AiRuntimeService {
         usage: providerUsage,
         executionReceiptId: null,
       });
-      await transaction.aiExecutionReceipt.create({ data: { id: receiptId, tenantId: context.tenantId, companyId: context.companyId, providerConfigurationId: setup.provider.id, identityId: null, systemIdentityId: setup.systemIdentity?.id ?? null, skillActivationId: activation.id, evidenceSnapshotId: snapshot.id, promptVersion: INTERPRETATION_PROMPT_VERSION, inputChecksum: snapshot.checksum, outputChecksum, moduleKey: "marketing", capability: AI_USE_CAPABILITY, skillKey: skill.key, skillVersion: skill.version, policyVersion: skill.policyVersion, outcome: AiExecutionOutcome.SUCCEEDED, providerSnapshot: setup.provider.provider, modelSnapshot: setup.provider.model, configurationVersion: setup.provider.configurationVersion, identityVersion: null, systemIdentityVersion: setup.systemIdentity?.version ?? null, inputCharacters: JSON.stringify(snapshot.payload).length, outputCharacters: JSON.stringify(explanation).length, inputTokens: providerUsage?.inputTokens ?? null, cachedInputTokens: providerUsage?.cachedInputTokens ?? null, outputTokens: providerUsage?.outputTokens ?? null, reasoningTokens: providerUsage?.reasoningTokens ?? null, modelPriceRevisionId: reservation.modelPriceRevisionId, estimatedCostUsd: reservation.estimatedCostUsd, actualCostUsd, providerRequestId: providerUsage?.providerRequestId ?? null, requestId: RequestContext.correlationId() ?? randomUUID(), createdAt } });
+      await transaction.aiExecutionReceipt.create({ data: { id: receiptId, tenantId: context.tenantId, companyId: context.companyId, providerConfigurationId: setup.provider.id, identityId: null, systemIdentityId: setup.systemIdentity?.id ?? null, skillActivationId: activation.id, evidenceSnapshotId: snapshot.id, promptVersion: INTERPRETATION_PROMPT_VERSION, inputChecksum: snapshot.checksum, outputChecksum, moduleKey: "marketing", capability: AI_USE_CAPABILITY, skillKey: skill.key, skillVersion: skill.version, policyVersion: skill.policyVersion, companyPolicyRevisionId: companyPolicy?.policyRevisionId ?? null, billingPeriodStartAt: companyPolicy ? startOfRiyadhMonth(createdAt) : null, outcome: AiExecutionOutcome.SUCCEEDED, providerSnapshot: setup.provider.provider, modelSnapshot: setup.provider.model, configurationVersion: setup.provider.configurationVersion, identityVersion: null, systemIdentityVersion: setup.systemIdentity?.version ?? null, inputCharacters: JSON.stringify(snapshot.payload).length, outputCharacters: JSON.stringify(explanation).length, inputTokens: providerUsage?.inputTokens ?? null, cachedInputTokens: providerUsage?.cachedInputTokens ?? null, outputTokens: providerUsage?.outputTokens ?? null, reasoningTokens: providerUsage?.reasoningTokens ?? null, modelPriceRevisionId: reservation.modelPriceRevisionId, estimatedCostUsd: reservation.estimatedCostUsd, actualCostUsd, providerRequestId: providerUsage?.providerRequestId ?? null, requestId: RequestContext.correlationId() ?? randomUUID(), createdAt } });
       await transaction.aiInterpretation.create({ data: {
         id: interpretationId, tenantId: context.tenantId, companyId: context.companyId,
         subjectKind: "MARKETING_CAMPAIGN", subjectId: input.request.campaignId,

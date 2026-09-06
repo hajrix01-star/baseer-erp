@@ -74,6 +74,8 @@ export type AiExecutionReceiptMinAggregateOutputType = {
   skillKey: string | null
   skillVersion: number | null
   policyVersion: number | null
+  companyPolicyRevisionId: string | null
+  billingPeriodStartAt: Date | null
   outcome: $Enums.AiExecutionOutcome | null
   providerSnapshot: $Enums.AiProviderKind | null
   modelSnapshot: string | null
@@ -112,6 +114,8 @@ export type AiExecutionReceiptMaxAggregateOutputType = {
   skillKey: string | null
   skillVersion: number | null
   policyVersion: number | null
+  companyPolicyRevisionId: string | null
+  billingPeriodStartAt: Date | null
   outcome: $Enums.AiExecutionOutcome | null
   providerSnapshot: $Enums.AiProviderKind | null
   modelSnapshot: string | null
@@ -150,6 +154,8 @@ export type AiExecutionReceiptCountAggregateOutputType = {
   skillKey: number
   skillVersion: number
   policyVersion: number
+  companyPolicyRevisionId: number
+  billingPeriodStartAt: number
   outcome: number
   providerSnapshot: number
   modelSnapshot: number
@@ -224,6 +230,8 @@ export type AiExecutionReceiptMinAggregateInputType = {
   skillKey?: true
   skillVersion?: true
   policyVersion?: true
+  companyPolicyRevisionId?: true
+  billingPeriodStartAt?: true
   outcome?: true
   providerSnapshot?: true
   modelSnapshot?: true
@@ -262,6 +270,8 @@ export type AiExecutionReceiptMaxAggregateInputType = {
   skillKey?: true
   skillVersion?: true
   policyVersion?: true
+  companyPolicyRevisionId?: true
+  billingPeriodStartAt?: true
   outcome?: true
   providerSnapshot?: true
   modelSnapshot?: true
@@ -300,6 +310,8 @@ export type AiExecutionReceiptCountAggregateInputType = {
   skillKey?: true
   skillVersion?: true
   policyVersion?: true
+  companyPolicyRevisionId?: true
+  billingPeriodStartAt?: true
   outcome?: true
   providerSnapshot?: true
   modelSnapshot?: true
@@ -425,6 +437,8 @@ export type AiExecutionReceiptGroupByOutputType = {
   skillKey: string | null
   skillVersion: number | null
   policyVersion: number | null
+  companyPolicyRevisionId: string | null
+  billingPeriodStartAt: Date | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot: $Enums.AiProviderKind | null
   modelSnapshot: string | null
@@ -486,6 +500,8 @@ export type AiExecutionReceiptWhereInput = {
   skillKey?: Prisma.StringNullableFilter<"AiExecutionReceipt"> | string | null
   skillVersion?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
   policyVersion?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
+  companyPolicyRevisionId?: Prisma.UuidNullableFilter<"AiExecutionReceipt"> | string | null
+  billingPeriodStartAt?: Prisma.DateTimeNullableFilter<"AiExecutionReceipt"> | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFilter<"AiExecutionReceipt"> | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.EnumAiProviderKindNullableFilter<"AiExecutionReceipt"> | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.StringNullableFilter<"AiExecutionReceipt"> | string | null
@@ -518,6 +534,7 @@ export type AiExecutionReceiptWhereInput = {
   generatedInterpretations?: Prisma.AiInterpretationListRelationFilter
   usageLedgerEntries?: Prisma.AiUsageLedgerListRelationFilter
   modelPriceRevision?: Prisma.XOR<Prisma.AiModelPriceRevisionNullableScalarRelationFilter, Prisma.AiModelPriceRevisionWhereInput> | null
+  companyPolicyRevision?: Prisma.XOR<Prisma.AiCompanyPolicyRevisionNullableScalarRelationFilter, Prisma.AiCompanyPolicyRevisionWhereInput> | null
 }
 
 export type AiExecutionReceiptOrderByWithRelationInput = {
@@ -534,6 +551,8 @@ export type AiExecutionReceiptOrderByWithRelationInput = {
   skillKey?: Prisma.SortOrderInput | Prisma.SortOrder
   skillVersion?: Prisma.SortOrderInput | Prisma.SortOrder
   policyVersion?: Prisma.SortOrderInput | Prisma.SortOrder
+  companyPolicyRevisionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  billingPeriodStartAt?: Prisma.SortOrderInput | Prisma.SortOrder
   outcome?: Prisma.SortOrder
   providerSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
   modelSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -566,6 +585,7 @@ export type AiExecutionReceiptOrderByWithRelationInput = {
   generatedInterpretations?: Prisma.AiInterpretationOrderByRelationAggregateInput
   usageLedgerEntries?: Prisma.AiUsageLedgerOrderByRelationAggregateInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionOrderByWithRelationInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionOrderByWithRelationInput
 }
 
 export type AiExecutionReceiptWhereUniqueInput = Prisma.AtLeast<{
@@ -586,6 +606,8 @@ export type AiExecutionReceiptWhereUniqueInput = Prisma.AtLeast<{
   skillKey?: Prisma.StringNullableFilter<"AiExecutionReceipt"> | string | null
   skillVersion?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
   policyVersion?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
+  companyPolicyRevisionId?: Prisma.UuidNullableFilter<"AiExecutionReceipt"> | string | null
+  billingPeriodStartAt?: Prisma.DateTimeNullableFilter<"AiExecutionReceipt"> | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFilter<"AiExecutionReceipt"> | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.EnumAiProviderKindNullableFilter<"AiExecutionReceipt"> | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.StringNullableFilter<"AiExecutionReceipt"> | string | null
@@ -618,6 +640,7 @@ export type AiExecutionReceiptWhereUniqueInput = Prisma.AtLeast<{
   generatedInterpretations?: Prisma.AiInterpretationListRelationFilter
   usageLedgerEntries?: Prisma.AiUsageLedgerListRelationFilter
   modelPriceRevision?: Prisma.XOR<Prisma.AiModelPriceRevisionNullableScalarRelationFilter, Prisma.AiModelPriceRevisionWhereInput> | null
+  companyPolicyRevision?: Prisma.XOR<Prisma.AiCompanyPolicyRevisionNullableScalarRelationFilter, Prisma.AiCompanyPolicyRevisionWhereInput> | null
 }, "id" | "id_tenantId_companyId">
 
 export type AiExecutionReceiptOrderByWithAggregationInput = {
@@ -634,6 +657,8 @@ export type AiExecutionReceiptOrderByWithAggregationInput = {
   skillKey?: Prisma.SortOrderInput | Prisma.SortOrder
   skillVersion?: Prisma.SortOrderInput | Prisma.SortOrder
   policyVersion?: Prisma.SortOrderInput | Prisma.SortOrder
+  companyPolicyRevisionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  billingPeriodStartAt?: Prisma.SortOrderInput | Prisma.SortOrder
   outcome?: Prisma.SortOrder
   providerSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
   modelSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -680,6 +705,8 @@ export type AiExecutionReceiptScalarWhereWithAggregatesInput = {
   skillKey?: Prisma.StringNullableWithAggregatesFilter<"AiExecutionReceipt"> | string | null
   skillVersion?: Prisma.IntNullableWithAggregatesFilter<"AiExecutionReceipt"> | number | null
   policyVersion?: Prisma.IntNullableWithAggregatesFilter<"AiExecutionReceipt"> | number | null
+  companyPolicyRevisionId?: Prisma.UuidNullableWithAggregatesFilter<"AiExecutionReceipt"> | string | null
+  billingPeriodStartAt?: Prisma.DateTimeNullableWithAggregatesFilter<"AiExecutionReceipt"> | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeWithAggregatesFilter<"AiExecutionReceipt"> | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.EnumAiProviderKindNullableWithAggregatesFilter<"AiExecutionReceipt"> | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.StringNullableWithAggregatesFilter<"AiExecutionReceipt"> | string | null
@@ -711,6 +738,7 @@ export type AiExecutionReceiptCreateInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -742,6 +770,7 @@ export type AiExecutionReceiptCreateInput = {
   generatedInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutSourceExecutionReceiptInput
   usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutExecutionReceiptInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionCreateNestedOneWithoutAiExecutionReceiptsInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionCreateNestedOneWithoutReceiptsInput
 }
 
 export type AiExecutionReceiptUncheckedCreateInput = {
@@ -758,6 +787,8 @@ export type AiExecutionReceiptUncheckedCreateInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  companyPolicyRevisionId?: string | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -792,6 +823,7 @@ export type AiExecutionReceiptUpdateInput = {
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -823,6 +855,7 @@ export type AiExecutionReceiptUpdateInput = {
   generatedInterpretations?: Prisma.AiInterpretationUpdateManyWithoutSourceExecutionReceiptNestedInput
   usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutExecutionReceiptNestedInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneWithoutAiExecutionReceiptsNestedInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionUpdateOneWithoutReceiptsNestedInput
 }
 
 export type AiExecutionReceiptUncheckedUpdateInput = {
@@ -839,6 +872,8 @@ export type AiExecutionReceiptUncheckedUpdateInput = {
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -880,6 +915,8 @@ export type AiExecutionReceiptCreateManyInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  companyPolicyRevisionId?: string | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -911,6 +948,7 @@ export type AiExecutionReceiptUpdateManyMutationInput = {
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -948,6 +986,8 @@ export type AiExecutionReceiptUncheckedUpdateManyInput = {
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1002,6 +1042,8 @@ export type AiExecutionReceiptCountOrderByAggregateInput = {
   skillKey?: Prisma.SortOrder
   skillVersion?: Prisma.SortOrder
   policyVersion?: Prisma.SortOrder
+  companyPolicyRevisionId?: Prisma.SortOrder
+  billingPeriodStartAt?: Prisma.SortOrder
   outcome?: Prisma.SortOrder
   providerSnapshot?: Prisma.SortOrder
   modelSnapshot?: Prisma.SortOrder
@@ -1057,6 +1099,8 @@ export type AiExecutionReceiptMaxOrderByAggregateInput = {
   skillKey?: Prisma.SortOrder
   skillVersion?: Prisma.SortOrder
   policyVersion?: Prisma.SortOrder
+  companyPolicyRevisionId?: Prisma.SortOrder
+  billingPeriodStartAt?: Prisma.SortOrder
   outcome?: Prisma.SortOrder
   providerSnapshot?: Prisma.SortOrder
   modelSnapshot?: Prisma.SortOrder
@@ -1095,6 +1139,8 @@ export type AiExecutionReceiptMinOrderByAggregateInput = {
   skillKey?: Prisma.SortOrder
   skillVersion?: Prisma.SortOrder
   policyVersion?: Prisma.SortOrder
+  companyPolicyRevisionId?: Prisma.SortOrder
+  billingPeriodStartAt?: Prisma.SortOrder
   outcome?: Prisma.SortOrder
   providerSnapshot?: Prisma.SortOrder
   modelSnapshot?: Prisma.SortOrder
@@ -1314,6 +1360,48 @@ export type AiExecutionReceiptUncheckedUpdateManyWithoutIdentityNestedInput = {
   deleteMany?: Prisma.AiExecutionReceiptScalarWhereInput | Prisma.AiExecutionReceiptScalarWhereInput[]
 }
 
+export type AiExecutionReceiptCreateNestedManyWithoutCompanyPolicyRevisionInput = {
+  create?: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutCompanyPolicyRevisionInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutCompanyPolicyRevisionInput> | Prisma.AiExecutionReceiptCreateWithoutCompanyPolicyRevisionInput[] | Prisma.AiExecutionReceiptUncheckedCreateWithoutCompanyPolicyRevisionInput[]
+  connectOrCreate?: Prisma.AiExecutionReceiptCreateOrConnectWithoutCompanyPolicyRevisionInput | Prisma.AiExecutionReceiptCreateOrConnectWithoutCompanyPolicyRevisionInput[]
+  createMany?: Prisma.AiExecutionReceiptCreateManyCompanyPolicyRevisionInputEnvelope
+  connect?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+}
+
+export type AiExecutionReceiptUncheckedCreateNestedManyWithoutCompanyPolicyRevisionInput = {
+  create?: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutCompanyPolicyRevisionInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutCompanyPolicyRevisionInput> | Prisma.AiExecutionReceiptCreateWithoutCompanyPolicyRevisionInput[] | Prisma.AiExecutionReceiptUncheckedCreateWithoutCompanyPolicyRevisionInput[]
+  connectOrCreate?: Prisma.AiExecutionReceiptCreateOrConnectWithoutCompanyPolicyRevisionInput | Prisma.AiExecutionReceiptCreateOrConnectWithoutCompanyPolicyRevisionInput[]
+  createMany?: Prisma.AiExecutionReceiptCreateManyCompanyPolicyRevisionInputEnvelope
+  connect?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+}
+
+export type AiExecutionReceiptUpdateManyWithoutCompanyPolicyRevisionNestedInput = {
+  create?: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutCompanyPolicyRevisionInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutCompanyPolicyRevisionInput> | Prisma.AiExecutionReceiptCreateWithoutCompanyPolicyRevisionInput[] | Prisma.AiExecutionReceiptUncheckedCreateWithoutCompanyPolicyRevisionInput[]
+  connectOrCreate?: Prisma.AiExecutionReceiptCreateOrConnectWithoutCompanyPolicyRevisionInput | Prisma.AiExecutionReceiptCreateOrConnectWithoutCompanyPolicyRevisionInput[]
+  upsert?: Prisma.AiExecutionReceiptUpsertWithWhereUniqueWithoutCompanyPolicyRevisionInput | Prisma.AiExecutionReceiptUpsertWithWhereUniqueWithoutCompanyPolicyRevisionInput[]
+  createMany?: Prisma.AiExecutionReceiptCreateManyCompanyPolicyRevisionInputEnvelope
+  set?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  disconnect?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  delete?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  connect?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  update?: Prisma.AiExecutionReceiptUpdateWithWhereUniqueWithoutCompanyPolicyRevisionInput | Prisma.AiExecutionReceiptUpdateWithWhereUniqueWithoutCompanyPolicyRevisionInput[]
+  updateMany?: Prisma.AiExecutionReceiptUpdateManyWithWhereWithoutCompanyPolicyRevisionInput | Prisma.AiExecutionReceiptUpdateManyWithWhereWithoutCompanyPolicyRevisionInput[]
+  deleteMany?: Prisma.AiExecutionReceiptScalarWhereInput | Prisma.AiExecutionReceiptScalarWhereInput[]
+}
+
+export type AiExecutionReceiptUncheckedUpdateManyWithoutCompanyPolicyRevisionNestedInput = {
+  create?: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutCompanyPolicyRevisionInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutCompanyPolicyRevisionInput> | Prisma.AiExecutionReceiptCreateWithoutCompanyPolicyRevisionInput[] | Prisma.AiExecutionReceiptUncheckedCreateWithoutCompanyPolicyRevisionInput[]
+  connectOrCreate?: Prisma.AiExecutionReceiptCreateOrConnectWithoutCompanyPolicyRevisionInput | Prisma.AiExecutionReceiptCreateOrConnectWithoutCompanyPolicyRevisionInput[]
+  upsert?: Prisma.AiExecutionReceiptUpsertWithWhereUniqueWithoutCompanyPolicyRevisionInput | Prisma.AiExecutionReceiptUpsertWithWhereUniqueWithoutCompanyPolicyRevisionInput[]
+  createMany?: Prisma.AiExecutionReceiptCreateManyCompanyPolicyRevisionInputEnvelope
+  set?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  disconnect?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  delete?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  connect?: Prisma.AiExecutionReceiptWhereUniqueInput | Prisma.AiExecutionReceiptWhereUniqueInput[]
+  update?: Prisma.AiExecutionReceiptUpdateWithWhereUniqueWithoutCompanyPolicyRevisionInput | Prisma.AiExecutionReceiptUpdateWithWhereUniqueWithoutCompanyPolicyRevisionInput[]
+  updateMany?: Prisma.AiExecutionReceiptUpdateManyWithWhereWithoutCompanyPolicyRevisionInput | Prisma.AiExecutionReceiptUpdateManyWithWhereWithoutCompanyPolicyRevisionInput[]
+  deleteMany?: Prisma.AiExecutionReceiptScalarWhereInput | Prisma.AiExecutionReceiptScalarWhereInput[]
+}
+
 export type AiExecutionReceiptCreateNestedManyWithoutSkillActivationInput = {
   create?: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutSkillActivationInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutSkillActivationInput> | Prisma.AiExecutionReceiptCreateWithoutSkillActivationInput[] | Prisma.AiExecutionReceiptUncheckedCreateWithoutSkillActivationInput[]
   connectOrCreate?: Prisma.AiExecutionReceiptCreateOrConnectWithoutSkillActivationInput | Prisma.AiExecutionReceiptCreateOrConnectWithoutSkillActivationInput[]
@@ -1499,6 +1587,7 @@ export type AiExecutionReceiptCreateWithoutCompanyInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -1529,6 +1618,7 @@ export type AiExecutionReceiptCreateWithoutCompanyInput = {
   generatedInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutSourceExecutionReceiptInput
   usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutExecutionReceiptInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionCreateNestedOneWithoutAiExecutionReceiptsInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionCreateNestedOneWithoutReceiptsInput
 }
 
 export type AiExecutionReceiptUncheckedCreateWithoutCompanyInput = {
@@ -1543,6 +1633,8 @@ export type AiExecutionReceiptUncheckedCreateWithoutCompanyInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  companyPolicyRevisionId?: string | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -1613,6 +1705,8 @@ export type AiExecutionReceiptScalarWhereInput = {
   skillKey?: Prisma.StringNullableFilter<"AiExecutionReceipt"> | string | null
   skillVersion?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
   policyVersion?: Prisma.IntNullableFilter<"AiExecutionReceipt"> | number | null
+  companyPolicyRevisionId?: Prisma.UuidNullableFilter<"AiExecutionReceipt"> | string | null
+  billingPeriodStartAt?: Prisma.DateTimeNullableFilter<"AiExecutionReceipt"> | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFilter<"AiExecutionReceipt"> | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.EnumAiProviderKindNullableFilter<"AiExecutionReceipt"> | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.StringNullableFilter<"AiExecutionReceipt"> | string | null
@@ -1644,6 +1738,7 @@ export type AiExecutionReceiptCreateWithoutEvidenceSnapshotInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -1674,6 +1769,7 @@ export type AiExecutionReceiptCreateWithoutEvidenceSnapshotInput = {
   generatedInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutSourceExecutionReceiptInput
   usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutExecutionReceiptInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionCreateNestedOneWithoutAiExecutionReceiptsInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionCreateNestedOneWithoutReceiptsInput
 }
 
 export type AiExecutionReceiptUncheckedCreateWithoutEvidenceSnapshotInput = {
@@ -1687,6 +1783,8 @@ export type AiExecutionReceiptUncheckedCreateWithoutEvidenceSnapshotInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  companyPolicyRevisionId?: string | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -1747,6 +1845,7 @@ export type AiExecutionReceiptCreateWithoutProviderConfigurationInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -1777,6 +1876,7 @@ export type AiExecutionReceiptCreateWithoutProviderConfigurationInput = {
   generatedInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutSourceExecutionReceiptInput
   usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutExecutionReceiptInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionCreateNestedOneWithoutAiExecutionReceiptsInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionCreateNestedOneWithoutReceiptsInput
 }
 
 export type AiExecutionReceiptUncheckedCreateWithoutProviderConfigurationInput = {
@@ -1791,6 +1891,8 @@ export type AiExecutionReceiptUncheckedCreateWithoutProviderConfigurationInput =
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  companyPolicyRevisionId?: string | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -1851,6 +1953,7 @@ export type AiExecutionReceiptCreateWithoutIdentityInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -1881,6 +1984,7 @@ export type AiExecutionReceiptCreateWithoutIdentityInput = {
   generatedInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutSourceExecutionReceiptInput
   usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutExecutionReceiptInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionCreateNestedOneWithoutAiExecutionReceiptsInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionCreateNestedOneWithoutReceiptsInput
 }
 
 export type AiExecutionReceiptUncheckedCreateWithoutIdentityInput = {
@@ -1894,6 +1998,8 @@ export type AiExecutionReceiptUncheckedCreateWithoutIdentityInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  companyPolicyRevisionId?: string | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -1947,6 +2053,113 @@ export type AiExecutionReceiptUpdateManyWithWhereWithoutIdentityInput = {
   data: Prisma.XOR<Prisma.AiExecutionReceiptUpdateManyMutationInput, Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutIdentityInput>
 }
 
+export type AiExecutionReceiptCreateWithoutCompanyPolicyRevisionInput = {
+  id?: string
+  moduleKey: string
+  capability: string
+  skillKey?: string | null
+  skillVersion?: number | null
+  policyVersion?: number | null
+  billingPeriodStartAt?: Date | string | null
+  outcome: $Enums.AiExecutionOutcome
+  providerSnapshot?: $Enums.AiProviderKind | null
+  modelSnapshot?: string | null
+  configurationVersion?: number | null
+  identityVersion?: number | null
+  systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
+  inputCharacters?: number
+  outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
+  safeErrorCode?: string | null
+  requestId: string
+  createdAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutAiExecutionReceiptsInput
+  providerConfiguration?: Prisma.AiProviderConfigurationCreateNestedOneWithoutExecutionReceiptsInput
+  identity?: Prisma.AiCompanyIdentityCreateNestedOneWithoutExecutionReceiptsInput
+  systemIdentity?: Prisma.AiSystemIdentityCreateNestedOneWithoutExecutionReceiptsInput
+  skillActivation?: Prisma.AiSkillActivationCreateNestedOneWithoutReceiptsInput
+  evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotCreateNestedOneWithoutAiExecutionReceiptsInput
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutExecutionReceiptInput
+  generatedInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutSourceExecutionReceiptInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutExecutionReceiptInput
+  modelPriceRevision?: Prisma.AiModelPriceRevisionCreateNestedOneWithoutAiExecutionReceiptsInput
+}
+
+export type AiExecutionReceiptUncheckedCreateWithoutCompanyPolicyRevisionInput = {
+  id?: string
+  providerConfigurationId?: string | null
+  identityId?: string | null
+  systemIdentityId?: string | null
+  skillActivationId?: string | null
+  evidenceSnapshotId?: string | null
+  moduleKey: string
+  capability: string
+  skillKey?: string | null
+  skillVersion?: number | null
+  policyVersion?: number | null
+  billingPeriodStartAt?: Date | string | null
+  outcome: $Enums.AiExecutionOutcome
+  providerSnapshot?: $Enums.AiProviderKind | null
+  modelSnapshot?: string | null
+  configurationVersion?: number | null
+  identityVersion?: number | null
+  systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
+  inputCharacters?: number
+  outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  modelPriceRevisionId?: string | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
+  safeErrorCode?: string | null
+  requestId: string
+  createdAt?: Date | string
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedCreateNestedManyWithoutExecutionReceiptInput
+  generatedInterpretations?: Prisma.AiInterpretationUncheckedCreateNestedManyWithoutSourceExecutionReceiptInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedCreateNestedManyWithoutExecutionReceiptInput
+}
+
+export type AiExecutionReceiptCreateOrConnectWithoutCompanyPolicyRevisionInput = {
+  where: Prisma.AiExecutionReceiptWhereUniqueInput
+  create: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutCompanyPolicyRevisionInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutCompanyPolicyRevisionInput>
+}
+
+export type AiExecutionReceiptCreateManyCompanyPolicyRevisionInputEnvelope = {
+  data: Prisma.AiExecutionReceiptCreateManyCompanyPolicyRevisionInput | Prisma.AiExecutionReceiptCreateManyCompanyPolicyRevisionInput[]
+  skipDuplicates?: boolean
+}
+
+export type AiExecutionReceiptUpsertWithWhereUniqueWithoutCompanyPolicyRevisionInput = {
+  where: Prisma.AiExecutionReceiptWhereUniqueInput
+  update: Prisma.XOR<Prisma.AiExecutionReceiptUpdateWithoutCompanyPolicyRevisionInput, Prisma.AiExecutionReceiptUncheckedUpdateWithoutCompanyPolicyRevisionInput>
+  create: Prisma.XOR<Prisma.AiExecutionReceiptCreateWithoutCompanyPolicyRevisionInput, Prisma.AiExecutionReceiptUncheckedCreateWithoutCompanyPolicyRevisionInput>
+}
+
+export type AiExecutionReceiptUpdateWithWhereUniqueWithoutCompanyPolicyRevisionInput = {
+  where: Prisma.AiExecutionReceiptWhereUniqueInput
+  data: Prisma.XOR<Prisma.AiExecutionReceiptUpdateWithoutCompanyPolicyRevisionInput, Prisma.AiExecutionReceiptUncheckedUpdateWithoutCompanyPolicyRevisionInput>
+}
+
+export type AiExecutionReceiptUpdateManyWithWhereWithoutCompanyPolicyRevisionInput = {
+  where: Prisma.AiExecutionReceiptScalarWhereInput
+  data: Prisma.XOR<Prisma.AiExecutionReceiptUpdateManyMutationInput, Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutCompanyPolicyRevisionInput>
+}
+
 export type AiExecutionReceiptCreateWithoutSkillActivationInput = {
   id?: string
   moduleKey: string
@@ -1954,6 +2167,7 @@ export type AiExecutionReceiptCreateWithoutSkillActivationInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -1984,6 +2198,7 @@ export type AiExecutionReceiptCreateWithoutSkillActivationInput = {
   generatedInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutSourceExecutionReceiptInput
   usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutExecutionReceiptInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionCreateNestedOneWithoutAiExecutionReceiptsInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionCreateNestedOneWithoutReceiptsInput
 }
 
 export type AiExecutionReceiptUncheckedCreateWithoutSkillActivationInput = {
@@ -1997,6 +2212,8 @@ export type AiExecutionReceiptUncheckedCreateWithoutSkillActivationInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  companyPolicyRevisionId?: string | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -2057,6 +2274,7 @@ export type AiExecutionReceiptCreateWithoutGeneratedInterpretationsInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -2087,6 +2305,7 @@ export type AiExecutionReceiptCreateWithoutGeneratedInterpretationsInput = {
   evaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutExecutionReceiptInput
   usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutExecutionReceiptInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionCreateNestedOneWithoutAiExecutionReceiptsInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionCreateNestedOneWithoutReceiptsInput
 }
 
 export type AiExecutionReceiptUncheckedCreateWithoutGeneratedInterpretationsInput = {
@@ -2103,6 +2322,8 @@ export type AiExecutionReceiptUncheckedCreateWithoutGeneratedInterpretationsInpu
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  companyPolicyRevisionId?: string | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -2152,6 +2373,7 @@ export type AiExecutionReceiptUpdateWithoutGeneratedInterpretationsInput = {
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2182,6 +2404,7 @@ export type AiExecutionReceiptUpdateWithoutGeneratedInterpretationsInput = {
   evaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutExecutionReceiptNestedInput
   usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutExecutionReceiptNestedInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneWithoutAiExecutionReceiptsNestedInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionUpdateOneWithoutReceiptsNestedInput
 }
 
 export type AiExecutionReceiptUncheckedUpdateWithoutGeneratedInterpretationsInput = {
@@ -2198,6 +2421,8 @@ export type AiExecutionReceiptUncheckedUpdateWithoutGeneratedInterpretationsInpu
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2231,6 +2456,7 @@ export type AiExecutionReceiptCreateWithoutModelPriceRevisionInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -2261,6 +2487,7 @@ export type AiExecutionReceiptCreateWithoutModelPriceRevisionInput = {
   evaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutExecutionReceiptInput
   generatedInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutSourceExecutionReceiptInput
   usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutExecutionReceiptInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionCreateNestedOneWithoutReceiptsInput
 }
 
 export type AiExecutionReceiptUncheckedCreateWithoutModelPriceRevisionInput = {
@@ -2277,6 +2504,8 @@ export type AiExecutionReceiptUncheckedCreateWithoutModelPriceRevisionInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  companyPolicyRevisionId?: string | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -2336,6 +2565,7 @@ export type AiExecutionReceiptCreateWithoutUsageLedgerEntriesInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -2366,6 +2596,7 @@ export type AiExecutionReceiptCreateWithoutUsageLedgerEntriesInput = {
   evaluationFeedback?: Prisma.AiEvaluationFeedbackCreateNestedManyWithoutExecutionReceiptInput
   generatedInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutSourceExecutionReceiptInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionCreateNestedOneWithoutAiExecutionReceiptsInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionCreateNestedOneWithoutReceiptsInput
 }
 
 export type AiExecutionReceiptUncheckedCreateWithoutUsageLedgerEntriesInput = {
@@ -2382,6 +2613,8 @@ export type AiExecutionReceiptUncheckedCreateWithoutUsageLedgerEntriesInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  companyPolicyRevisionId?: string | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -2431,6 +2664,7 @@ export type AiExecutionReceiptUpdateWithoutUsageLedgerEntriesInput = {
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2461,6 +2695,7 @@ export type AiExecutionReceiptUpdateWithoutUsageLedgerEntriesInput = {
   evaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutExecutionReceiptNestedInput
   generatedInterpretations?: Prisma.AiInterpretationUpdateManyWithoutSourceExecutionReceiptNestedInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneWithoutAiExecutionReceiptsNestedInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionUpdateOneWithoutReceiptsNestedInput
 }
 
 export type AiExecutionReceiptUncheckedUpdateWithoutUsageLedgerEntriesInput = {
@@ -2477,6 +2712,8 @@ export type AiExecutionReceiptUncheckedUpdateWithoutUsageLedgerEntriesInput = {
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2510,6 +2747,7 @@ export type AiExecutionReceiptCreateWithoutEvaluationFeedbackInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -2540,6 +2778,7 @@ export type AiExecutionReceiptCreateWithoutEvaluationFeedbackInput = {
   generatedInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutSourceExecutionReceiptInput
   usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutExecutionReceiptInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionCreateNestedOneWithoutAiExecutionReceiptsInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionCreateNestedOneWithoutReceiptsInput
 }
 
 export type AiExecutionReceiptUncheckedCreateWithoutEvaluationFeedbackInput = {
@@ -2556,6 +2795,8 @@ export type AiExecutionReceiptUncheckedCreateWithoutEvaluationFeedbackInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  companyPolicyRevisionId?: string | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -2605,6 +2846,7 @@ export type AiExecutionReceiptUpdateWithoutEvaluationFeedbackInput = {
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2635,6 +2877,7 @@ export type AiExecutionReceiptUpdateWithoutEvaluationFeedbackInput = {
   generatedInterpretations?: Prisma.AiInterpretationUpdateManyWithoutSourceExecutionReceiptNestedInput
   usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutExecutionReceiptNestedInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneWithoutAiExecutionReceiptsNestedInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionUpdateOneWithoutReceiptsNestedInput
 }
 
 export type AiExecutionReceiptUncheckedUpdateWithoutEvaluationFeedbackInput = {
@@ -2651,6 +2894,8 @@ export type AiExecutionReceiptUncheckedUpdateWithoutEvaluationFeedbackInput = {
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2684,6 +2929,7 @@ export type AiExecutionReceiptCreateWithoutSystemIdentityInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -2714,6 +2960,7 @@ export type AiExecutionReceiptCreateWithoutSystemIdentityInput = {
   generatedInterpretations?: Prisma.AiInterpretationCreateNestedManyWithoutSourceExecutionReceiptInput
   usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutExecutionReceiptInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionCreateNestedOneWithoutAiExecutionReceiptsInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionCreateNestedOneWithoutReceiptsInput
 }
 
 export type AiExecutionReceiptUncheckedCreateWithoutSystemIdentityInput = {
@@ -2728,6 +2975,8 @@ export type AiExecutionReceiptUncheckedCreateWithoutSystemIdentityInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  companyPolicyRevisionId?: string | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -2793,6 +3042,8 @@ export type AiExecutionReceiptCreateManyCompanyInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  companyPolicyRevisionId?: string | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -2824,6 +3075,7 @@ export type AiExecutionReceiptUpdateWithoutCompanyInput = {
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2854,6 +3106,7 @@ export type AiExecutionReceiptUpdateWithoutCompanyInput = {
   generatedInterpretations?: Prisma.AiInterpretationUpdateManyWithoutSourceExecutionReceiptNestedInput
   usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutExecutionReceiptNestedInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneWithoutAiExecutionReceiptsNestedInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionUpdateOneWithoutReceiptsNestedInput
 }
 
 export type AiExecutionReceiptUncheckedUpdateWithoutCompanyInput = {
@@ -2868,6 +3121,8 @@ export type AiExecutionReceiptUncheckedUpdateWithoutCompanyInput = {
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2907,6 +3162,8 @@ export type AiExecutionReceiptUncheckedUpdateManyWithoutCompanyInput = {
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2942,6 +3199,8 @@ export type AiExecutionReceiptCreateManyEvidenceSnapshotInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  companyPolicyRevisionId?: string | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -2973,6 +3232,7 @@ export type AiExecutionReceiptUpdateWithoutEvidenceSnapshotInput = {
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3003,6 +3263,7 @@ export type AiExecutionReceiptUpdateWithoutEvidenceSnapshotInput = {
   generatedInterpretations?: Prisma.AiInterpretationUpdateManyWithoutSourceExecutionReceiptNestedInput
   usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutExecutionReceiptNestedInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneWithoutAiExecutionReceiptsNestedInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionUpdateOneWithoutReceiptsNestedInput
 }
 
 export type AiExecutionReceiptUncheckedUpdateWithoutEvidenceSnapshotInput = {
@@ -3016,6 +3277,8 @@ export type AiExecutionReceiptUncheckedUpdateWithoutEvidenceSnapshotInput = {
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3054,6 +3317,8 @@ export type AiExecutionReceiptUncheckedUpdateManyWithoutEvidenceSnapshotInput = 
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3090,6 +3355,8 @@ export type AiExecutionReceiptCreateManyProviderConfigurationInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  companyPolicyRevisionId?: string | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -3121,6 +3388,7 @@ export type AiExecutionReceiptUpdateWithoutProviderConfigurationInput = {
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3151,6 +3419,7 @@ export type AiExecutionReceiptUpdateWithoutProviderConfigurationInput = {
   generatedInterpretations?: Prisma.AiInterpretationUpdateManyWithoutSourceExecutionReceiptNestedInput
   usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutExecutionReceiptNestedInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneWithoutAiExecutionReceiptsNestedInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionUpdateOneWithoutReceiptsNestedInput
 }
 
 export type AiExecutionReceiptUncheckedUpdateWithoutProviderConfigurationInput = {
@@ -3165,6 +3434,8 @@ export type AiExecutionReceiptUncheckedUpdateWithoutProviderConfigurationInput =
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3204,6 +3475,8 @@ export type AiExecutionReceiptUncheckedUpdateManyWithoutProviderConfigurationInp
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3239,6 +3512,8 @@ export type AiExecutionReceiptCreateManyIdentityInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  companyPolicyRevisionId?: string | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -3270,6 +3545,7 @@ export type AiExecutionReceiptUpdateWithoutIdentityInput = {
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3300,6 +3576,7 @@ export type AiExecutionReceiptUpdateWithoutIdentityInput = {
   generatedInterpretations?: Prisma.AiInterpretationUpdateManyWithoutSourceExecutionReceiptNestedInput
   usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutExecutionReceiptNestedInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneWithoutAiExecutionReceiptsNestedInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionUpdateOneWithoutReceiptsNestedInput
 }
 
 export type AiExecutionReceiptUncheckedUpdateWithoutIdentityInput = {
@@ -3313,6 +3590,8 @@ export type AiExecutionReceiptUncheckedUpdateWithoutIdentityInput = {
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3351,6 +3630,163 @@ export type AiExecutionReceiptUncheckedUpdateManyWithoutIdentityInput = {
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
+  providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
+  modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  modelPriceRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AiExecutionReceiptCreateManyCompanyPolicyRevisionInput = {
+  id?: string
+  providerConfigurationId?: string | null
+  identityId?: string | null
+  systemIdentityId?: string | null
+  skillActivationId?: string | null
+  evidenceSnapshotId?: string | null
+  moduleKey: string
+  capability: string
+  skillKey?: string | null
+  skillVersion?: number | null
+  policyVersion?: number | null
+  billingPeriodStartAt?: Date | string | null
+  outcome: $Enums.AiExecutionOutcome
+  providerSnapshot?: $Enums.AiProviderKind | null
+  modelSnapshot?: string | null
+  configurationVersion?: number | null
+  identityVersion?: number | null
+  systemIdentityVersion?: number | null
+  promptVersion?: number | null
+  inputChecksum?: string | null
+  outputChecksum?: string | null
+  inputCharacters?: number
+  outputCharacters?: number
+  inputTokens?: number | null
+  cachedInputTokens?: number | null
+  outputTokens?: number | null
+  reasoningTokens?: number | null
+  modelPriceRevisionId?: string | null
+  estimatedCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: string | null
+  safeErrorCode?: string | null
+  requestId: string
+  createdAt?: Date | string
+}
+
+export type AiExecutionReceiptUpdateWithoutCompanyPolicyRevisionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
+  capability?: Prisma.StringFieldUpdateOperationsInput | string
+  skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
+  providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
+  modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutAiExecutionReceiptsNestedInput
+  providerConfiguration?: Prisma.AiProviderConfigurationUpdateOneWithoutExecutionReceiptsNestedInput
+  identity?: Prisma.AiCompanyIdentityUpdateOneWithoutExecutionReceiptsNestedInput
+  systemIdentity?: Prisma.AiSystemIdentityUpdateOneWithoutExecutionReceiptsNestedInput
+  skillActivation?: Prisma.AiSkillActivationUpdateOneWithoutReceiptsNestedInput
+  evidenceSnapshot?: Prisma.DecisionEvidenceSnapshotUpdateOneWithoutAiExecutionReceiptsNestedInput
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutExecutionReceiptNestedInput
+  generatedInterpretations?: Prisma.AiInterpretationUpdateManyWithoutSourceExecutionReceiptNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutExecutionReceiptNestedInput
+  modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneWithoutAiExecutionReceiptsNestedInput
+}
+
+export type AiExecutionReceiptUncheckedUpdateWithoutCompanyPolicyRevisionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  providerConfigurationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  identityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  systemIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillActivationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceSnapshotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
+  capability?: Prisma.StringFieldUpdateOperationsInput | string
+  skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
+  providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
+  modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  configurationVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  identityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  systemIdentityVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  inputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outputChecksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  outputCharacters?: Prisma.IntFieldUpdateOperationsInput | number
+  inputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cachedInputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  outputTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reasoningTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  modelPriceRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimatedCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  actualCostUsd?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  providerRequestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  safeErrorCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  evaluationFeedback?: Prisma.AiEvaluationFeedbackUncheckedUpdateManyWithoutExecutionReceiptNestedInput
+  generatedInterpretations?: Prisma.AiInterpretationUncheckedUpdateManyWithoutSourceExecutionReceiptNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedUpdateManyWithoutExecutionReceiptNestedInput
+}
+
+export type AiExecutionReceiptUncheckedUpdateManyWithoutCompanyPolicyRevisionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  providerConfigurationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  identityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  systemIdentityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillActivationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  evidenceSnapshotId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moduleKey?: Prisma.StringFieldUpdateOperationsInput | string
+  capability?: Prisma.StringFieldUpdateOperationsInput | string
+  skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3386,6 +3822,8 @@ export type AiExecutionReceiptCreateManySkillActivationInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  companyPolicyRevisionId?: string | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -3417,6 +3855,7 @@ export type AiExecutionReceiptUpdateWithoutSkillActivationInput = {
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3447,6 +3886,7 @@ export type AiExecutionReceiptUpdateWithoutSkillActivationInput = {
   generatedInterpretations?: Prisma.AiInterpretationUpdateManyWithoutSourceExecutionReceiptNestedInput
   usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutExecutionReceiptNestedInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneWithoutAiExecutionReceiptsNestedInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionUpdateOneWithoutReceiptsNestedInput
 }
 
 export type AiExecutionReceiptUncheckedUpdateWithoutSkillActivationInput = {
@@ -3460,6 +3900,8 @@ export type AiExecutionReceiptUncheckedUpdateWithoutSkillActivationInput = {
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3498,6 +3940,8 @@ export type AiExecutionReceiptUncheckedUpdateManyWithoutSkillActivationInput = {
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3536,6 +3980,8 @@ export type AiExecutionReceiptCreateManyModelPriceRevisionInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  companyPolicyRevisionId?: string | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -3566,6 +4012,7 @@ export type AiExecutionReceiptUpdateWithoutModelPriceRevisionInput = {
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3596,6 +4043,7 @@ export type AiExecutionReceiptUpdateWithoutModelPriceRevisionInput = {
   evaluationFeedback?: Prisma.AiEvaluationFeedbackUpdateManyWithoutExecutionReceiptNestedInput
   generatedInterpretations?: Prisma.AiInterpretationUpdateManyWithoutSourceExecutionReceiptNestedInput
   usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutExecutionReceiptNestedInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionUpdateOneWithoutReceiptsNestedInput
 }
 
 export type AiExecutionReceiptUncheckedUpdateWithoutModelPriceRevisionInput = {
@@ -3612,6 +4060,8 @@ export type AiExecutionReceiptUncheckedUpdateWithoutModelPriceRevisionInput = {
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3652,6 +4102,8 @@ export type AiExecutionReceiptUncheckedUpdateManyWithoutModelPriceRevisionInput 
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3687,6 +4139,8 @@ export type AiExecutionReceiptCreateManySystemIdentityInput = {
   skillKey?: string | null
   skillVersion?: number | null
   policyVersion?: number | null
+  companyPolicyRevisionId?: string | null
+  billingPeriodStartAt?: Date | string | null
   outcome: $Enums.AiExecutionOutcome
   providerSnapshot?: $Enums.AiProviderKind | null
   modelSnapshot?: string | null
@@ -3718,6 +4172,7 @@ export type AiExecutionReceiptUpdateWithoutSystemIdentityInput = {
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3748,6 +4203,7 @@ export type AiExecutionReceiptUpdateWithoutSystemIdentityInput = {
   generatedInterpretations?: Prisma.AiInterpretationUpdateManyWithoutSourceExecutionReceiptNestedInput
   usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutExecutionReceiptNestedInput
   modelPriceRevision?: Prisma.AiModelPriceRevisionUpdateOneWithoutAiExecutionReceiptsNestedInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionUpdateOneWithoutReceiptsNestedInput
 }
 
 export type AiExecutionReceiptUncheckedUpdateWithoutSystemIdentityInput = {
@@ -3762,6 +4218,8 @@ export type AiExecutionReceiptUncheckedUpdateWithoutSystemIdentityInput = {
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3801,6 +4259,8 @@ export type AiExecutionReceiptUncheckedUpdateManyWithoutSystemIdentityInput = {
   skillKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   skillVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   policyVersion?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  billingPeriodStartAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   outcome?: Prisma.EnumAiExecutionOutcomeFieldUpdateOperationsInput | $Enums.AiExecutionOutcome
   providerSnapshot?: Prisma.NullableEnumAiProviderKindFieldUpdateOperationsInput | $Enums.AiProviderKind | null
   modelSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3888,6 +4348,8 @@ export type AiExecutionReceiptSelect<ExtArgs extends runtime.Types.Extensions.In
   skillKey?: boolean
   skillVersion?: boolean
   policyVersion?: boolean
+  companyPolicyRevisionId?: boolean
+  billingPeriodStartAt?: boolean
   outcome?: boolean
   providerSnapshot?: boolean
   modelSnapshot?: boolean
@@ -3920,6 +4382,7 @@ export type AiExecutionReceiptSelect<ExtArgs extends runtime.Types.Extensions.In
   generatedInterpretations?: boolean | Prisma.AiExecutionReceipt$generatedInterpretationsArgs<ExtArgs>
   usageLedgerEntries?: boolean | Prisma.AiExecutionReceipt$usageLedgerEntriesArgs<ExtArgs>
   modelPriceRevision?: boolean | Prisma.AiExecutionReceipt$modelPriceRevisionArgs<ExtArgs>
+  companyPolicyRevision?: boolean | Prisma.AiExecutionReceipt$companyPolicyRevisionArgs<ExtArgs>
   _count?: boolean | Prisma.AiExecutionReceiptCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["aiExecutionReceipt"]>
 
@@ -3937,6 +4400,8 @@ export type AiExecutionReceiptSelectCreateManyAndReturn<ExtArgs extends runtime.
   skillKey?: boolean
   skillVersion?: boolean
   policyVersion?: boolean
+  companyPolicyRevisionId?: boolean
+  billingPeriodStartAt?: boolean
   outcome?: boolean
   providerSnapshot?: boolean
   modelSnapshot?: boolean
@@ -3966,6 +4431,7 @@ export type AiExecutionReceiptSelectCreateManyAndReturn<ExtArgs extends runtime.
   skillActivation?: boolean | Prisma.AiExecutionReceipt$skillActivationArgs<ExtArgs>
   evidenceSnapshot?: boolean | Prisma.AiExecutionReceipt$evidenceSnapshotArgs<ExtArgs>
   modelPriceRevision?: boolean | Prisma.AiExecutionReceipt$modelPriceRevisionArgs<ExtArgs>
+  companyPolicyRevision?: boolean | Prisma.AiExecutionReceipt$companyPolicyRevisionArgs<ExtArgs>
 }, ExtArgs["result"]["aiExecutionReceipt"]>
 
 export type AiExecutionReceiptSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -3982,6 +4448,8 @@ export type AiExecutionReceiptSelectUpdateManyAndReturn<ExtArgs extends runtime.
   skillKey?: boolean
   skillVersion?: boolean
   policyVersion?: boolean
+  companyPolicyRevisionId?: boolean
+  billingPeriodStartAt?: boolean
   outcome?: boolean
   providerSnapshot?: boolean
   modelSnapshot?: boolean
@@ -4011,6 +4479,7 @@ export type AiExecutionReceiptSelectUpdateManyAndReturn<ExtArgs extends runtime.
   skillActivation?: boolean | Prisma.AiExecutionReceipt$skillActivationArgs<ExtArgs>
   evidenceSnapshot?: boolean | Prisma.AiExecutionReceipt$evidenceSnapshotArgs<ExtArgs>
   modelPriceRevision?: boolean | Prisma.AiExecutionReceipt$modelPriceRevisionArgs<ExtArgs>
+  companyPolicyRevision?: boolean | Prisma.AiExecutionReceipt$companyPolicyRevisionArgs<ExtArgs>
 }, ExtArgs["result"]["aiExecutionReceipt"]>
 
 export type AiExecutionReceiptSelectScalar = {
@@ -4027,6 +4496,8 @@ export type AiExecutionReceiptSelectScalar = {
   skillKey?: boolean
   skillVersion?: boolean
   policyVersion?: boolean
+  companyPolicyRevisionId?: boolean
+  billingPeriodStartAt?: boolean
   outcome?: boolean
   providerSnapshot?: boolean
   modelSnapshot?: boolean
@@ -4051,7 +4522,7 @@ export type AiExecutionReceiptSelectScalar = {
   createdAt?: boolean
 }
 
-export type AiExecutionReceiptOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "providerConfigurationId" | "identityId" | "systemIdentityId" | "skillActivationId" | "evidenceSnapshotId" | "moduleKey" | "capability" | "skillKey" | "skillVersion" | "policyVersion" | "outcome" | "providerSnapshot" | "modelSnapshot" | "configurationVersion" | "identityVersion" | "systemIdentityVersion" | "promptVersion" | "inputChecksum" | "outputChecksum" | "inputCharacters" | "outputCharacters" | "inputTokens" | "cachedInputTokens" | "outputTokens" | "reasoningTokens" | "modelPriceRevisionId" | "estimatedCostUsd" | "actualCostUsd" | "providerRequestId" | "safeErrorCode" | "requestId" | "createdAt", ExtArgs["result"]["aiExecutionReceipt"]>
+export type AiExecutionReceiptOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "providerConfigurationId" | "identityId" | "systemIdentityId" | "skillActivationId" | "evidenceSnapshotId" | "moduleKey" | "capability" | "skillKey" | "skillVersion" | "policyVersion" | "companyPolicyRevisionId" | "billingPeriodStartAt" | "outcome" | "providerSnapshot" | "modelSnapshot" | "configurationVersion" | "identityVersion" | "systemIdentityVersion" | "promptVersion" | "inputChecksum" | "outputChecksum" | "inputCharacters" | "outputCharacters" | "inputTokens" | "cachedInputTokens" | "outputTokens" | "reasoningTokens" | "modelPriceRevisionId" | "estimatedCostUsd" | "actualCostUsd" | "providerRequestId" | "safeErrorCode" | "requestId" | "createdAt", ExtArgs["result"]["aiExecutionReceipt"]>
 export type AiExecutionReceiptInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   providerConfiguration?: boolean | Prisma.AiExecutionReceipt$providerConfigurationArgs<ExtArgs>
@@ -4063,6 +4534,7 @@ export type AiExecutionReceiptInclude<ExtArgs extends runtime.Types.Extensions.I
   generatedInterpretations?: boolean | Prisma.AiExecutionReceipt$generatedInterpretationsArgs<ExtArgs>
   usageLedgerEntries?: boolean | Prisma.AiExecutionReceipt$usageLedgerEntriesArgs<ExtArgs>
   modelPriceRevision?: boolean | Prisma.AiExecutionReceipt$modelPriceRevisionArgs<ExtArgs>
+  companyPolicyRevision?: boolean | Prisma.AiExecutionReceipt$companyPolicyRevisionArgs<ExtArgs>
   _count?: boolean | Prisma.AiExecutionReceiptCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AiExecutionReceiptIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4073,6 +4545,7 @@ export type AiExecutionReceiptIncludeCreateManyAndReturn<ExtArgs extends runtime
   skillActivation?: boolean | Prisma.AiExecutionReceipt$skillActivationArgs<ExtArgs>
   evidenceSnapshot?: boolean | Prisma.AiExecutionReceipt$evidenceSnapshotArgs<ExtArgs>
   modelPriceRevision?: boolean | Prisma.AiExecutionReceipt$modelPriceRevisionArgs<ExtArgs>
+  companyPolicyRevision?: boolean | Prisma.AiExecutionReceipt$companyPolicyRevisionArgs<ExtArgs>
 }
 export type AiExecutionReceiptIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
@@ -4082,6 +4555,7 @@ export type AiExecutionReceiptIncludeUpdateManyAndReturn<ExtArgs extends runtime
   skillActivation?: boolean | Prisma.AiExecutionReceipt$skillActivationArgs<ExtArgs>
   evidenceSnapshot?: boolean | Prisma.AiExecutionReceipt$evidenceSnapshotArgs<ExtArgs>
   modelPriceRevision?: boolean | Prisma.AiExecutionReceipt$modelPriceRevisionArgs<ExtArgs>
+  companyPolicyRevision?: boolean | Prisma.AiExecutionReceipt$companyPolicyRevisionArgs<ExtArgs>
 }
 
 export type $AiExecutionReceiptPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4097,6 +4571,7 @@ export type $AiExecutionReceiptPayload<ExtArgs extends runtime.Types.Extensions.
     generatedInterpretations: Prisma.$AiInterpretationPayload<ExtArgs>[]
     usageLedgerEntries: Prisma.$AiUsageLedgerPayload<ExtArgs>[]
     modelPriceRevision: Prisma.$AiModelPriceRevisionPayload<ExtArgs> | null
+    companyPolicyRevision: Prisma.$AiCompanyPolicyRevisionPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -4112,6 +4587,8 @@ export type $AiExecutionReceiptPayload<ExtArgs extends runtime.Types.Extensions.
     skillKey: string | null
     skillVersion: number | null
     policyVersion: number | null
+    companyPolicyRevisionId: string | null
+    billingPeriodStartAt: Date | null
     outcome: $Enums.AiExecutionOutcome
     providerSnapshot: $Enums.AiProviderKind | null
     modelSnapshot: string | null
@@ -4538,6 +5015,7 @@ export interface Prisma__AiExecutionReceiptClient<T, Null = never, ExtArgs exten
   generatedInterpretations<T extends Prisma.AiExecutionReceipt$generatedInterpretationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiExecutionReceipt$generatedInterpretationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiInterpretationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   usageLedgerEntries<T extends Prisma.AiExecutionReceipt$usageLedgerEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiExecutionReceipt$usageLedgerEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiUsageLedgerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   modelPriceRevision<T extends Prisma.AiExecutionReceipt$modelPriceRevisionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiExecutionReceipt$modelPriceRevisionArgs<ExtArgs>>): Prisma.Prisma__AiModelPriceRevisionClient<runtime.Types.Result.GetResult<Prisma.$AiModelPriceRevisionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  companyPolicyRevision<T extends Prisma.AiExecutionReceipt$companyPolicyRevisionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiExecutionReceipt$companyPolicyRevisionArgs<ExtArgs>>): Prisma.Prisma__AiCompanyPolicyRevisionClient<runtime.Types.Result.GetResult<Prisma.$AiCompanyPolicyRevisionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4580,6 +5058,8 @@ export interface AiExecutionReceiptFieldRefs {
   readonly skillKey: Prisma.FieldRef<"AiExecutionReceipt", 'String'>
   readonly skillVersion: Prisma.FieldRef<"AiExecutionReceipt", 'Int'>
   readonly policyVersion: Prisma.FieldRef<"AiExecutionReceipt", 'Int'>
+  readonly companyPolicyRevisionId: Prisma.FieldRef<"AiExecutionReceipt", 'String'>
+  readonly billingPeriodStartAt: Prisma.FieldRef<"AiExecutionReceipt", 'DateTime'>
   readonly outcome: Prisma.FieldRef<"AiExecutionReceipt", 'AiExecutionOutcome'>
   readonly providerSnapshot: Prisma.FieldRef<"AiExecutionReceipt", 'AiProviderKind'>
   readonly modelSnapshot: Prisma.FieldRef<"AiExecutionReceipt", 'String'>
@@ -5186,6 +5666,25 @@ export type AiExecutionReceipt$modelPriceRevisionArgs<ExtArgs extends runtime.Ty
    */
   include?: Prisma.AiModelPriceRevisionInclude<ExtArgs> | null
   where?: Prisma.AiModelPriceRevisionWhereInput
+}
+
+/**
+ * AiExecutionReceipt.companyPolicyRevision
+ */
+export type AiExecutionReceipt$companyPolicyRevisionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AiCompanyPolicyRevision
+   */
+  select?: Prisma.AiCompanyPolicyRevisionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AiCompanyPolicyRevision
+   */
+  omit?: Prisma.AiCompanyPolicyRevisionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiCompanyPolicyRevisionInclude<ExtArgs> | null
+  where?: Prisma.AiCompanyPolicyRevisionWhereInput
 }
 
 /**

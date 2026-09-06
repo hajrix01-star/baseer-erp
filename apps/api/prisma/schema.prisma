@@ -955,6 +955,23 @@ enum AiSkillActivationStatus {
   SUSPENDED
 }
 
+enum AiCompanyPolicyMode {
+  DISABLED
+  ENABLED
+  PAUSED
+}
+
+enum AiSkillActivationOrigin {
+  LEGACY
+  MANUAL
+  COMPANY_POLICY
+}
+
+enum AiCompanySkillOverrideState {
+  BLOCKED
+  CLEARED
+}
+
 enum AiEvaluationFeedbackKind {
   USEFUL
   NOT_USEFUL
@@ -1021,6 +1038,7 @@ enum AiBudgetReservationStatus {
   SETTLED
   RELEASED
   EXPIRED
+  UNKNOWN_PROVIDER_OUTCOME
 }
 
 /// The ledger is append-only. A reservation, its actual settlement, and a
@@ -1195,6 +1213,8 @@ model User {
   cashPerformanceHistoricalImports       FinanceCashPerformanceHistoricalImport[] @relation("FinanceCashPerformanceHistoricalImportCreator")
   tenantAdministrationAssignments        TenantAdministrationAssignment[]
   approvedAiCompanyContexts              AiCompanyContext[]                       @relation("AiCompanyContextApprover")
+  changedAiCompanyPolicyRevisions        AiCompanyPolicyRevision[]                @relation("AiCompanyPolicyRevisionChanger")
+  changedAiCompanySkillOverrides         AiCompanySkillOverride[]                 @relation("AiCompanySkillOverrideChanger")
   approvedAiSkillActivations             AiSkillActivation[]                      @relation("AiSkillActivationApprover")
   suspendedAiSkillActivations            AiSkillActivation[]                      @relation("AiSkillActivationSuspender")
   aiEvaluationFeedback                   AiEvaluationFeedback[]
@@ -1319,6 +1339,9 @@ model Company {
   hrFinalSettlements                         HrFinalSettlement[]
   aiCompanyIdentities                        AiCompanyIdentity[]
   aiCompanyContexts                          AiCompanyContext[]
+  aiCompanyPolicy                            AiCompanyPolicy?
+  aiCompanyPolicyRevisions                   AiCompanyPolicyRevision[]
+  aiCompanySkillOverrides                    AiCompanySkillOverride[]
   aiSkillActivations                         AiSkillActivation[]
   aiExecutionReceipts                        AiExecutionReceipt[]
   aiEvaluationFeedback                       AiEvaluationFeedback[]
@@ -6036,6 +6059,106 @@ model AiCompanyContext {
   @@index([tenantId, companyId, kind, moduleScope, status])
 }
 
+/// One current policy pointer per company. Each operational decision is held
+/// in an immutable revision so executions can retain their governing policy.
+model AiCompanyPolicy {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  currentVersion Int      @default(0)
+  createdAt      DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime @updatedAt @db.Timestamptz(6)
+
+  company   Company                   @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  revisions AiCompanyPolicyRevision[]
+
+  @@unique([tenantId, companyId])
+  @@unique([companyId, tenantId])
+  @@unique([id, tenantId, companyId])
+}
+
+/// The monthly input is a whole number of USD cents. Provider charges retain
+/// their existing precise decimal representation in the consumption ledger.
+model AiCompanyPolicyRevision {
+  id                    String              @id @default(uuid()) @db.Uuid
+  tenantId              String              @db.Uuid
+  companyId             String              @db.Uuid
+  policyId              String              @db.Uuid
+  version               Int
+  mode                  AiCompanyPolicyMode
+  monthlyBudgetUsdCents Decimal?            @db.Decimal(18, 0)
+  billingTimeZone       String              @default("Asia/Riyadh") @db.VarChar(64)
+  autoEnrollStable      Boolean             @default(false)
+  changedByUserId       String              @db.Uuid
+  changeReason          String              @db.VarChar(500)
+  policyDigest          String              @db.Char(64)
+  createdAt             DateTime            @default(now()) @db.Timestamptz(6)
+
+  policy             AiCompanyPolicy                  @relation(fields: [policyId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+  company            Company                          @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  changedBy          User                             @relation("AiCompanyPolicyRevisionChanger", fields: [changedByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  providerAllowlists AiCompanyPolicyProviderAllowlist[]
+  pilotAllowlists    AiCompanyPolicyPilotAllowlist[]
+  policyActivations  AiSkillActivation[]
+  reservations       AiBudgetReservation[]
+  receipts           AiExecutionReceipt[]
+
+  @@unique([id, tenantId, companyId])
+  @@unique([policyId, version])
+  @@index([tenantId, companyId, createdAt])
+}
+
+model AiCompanyPolicyProviderAllowlist {
+  id                      String                  @id @default(uuid()) @db.Uuid
+  tenantId                String                  @db.Uuid
+  companyId               String                  @db.Uuid
+  policyRevisionId        String                  @db.Uuid
+  providerConfigurationId String                  @db.Uuid
+  providerSnapshot        AiProviderKind
+  modelSnapshot           String                  @db.VarChar(160)
+  createdAt               DateTime                @default(now()) @db.Timestamptz(6)
+
+  revision AiCompanyPolicyRevision @relation(fields: [policyRevisionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([policyRevisionId, providerConfigurationId])
+  @@index([tenantId, companyId, providerConfigurationId])
+}
+
+model AiCompanyPolicyPilotAllowlist {
+  id               String                  @id @default(uuid()) @db.Uuid
+  tenantId         String                  @db.Uuid
+  companyId        String                  @db.Uuid
+  policyRevisionId String                  @db.Uuid
+  skillKey         String                  @db.VarChar(120)
+  skillVersion     Int
+  policyVersion    Int
+  createdAt        DateTime                @default(now()) @db.Timestamptz(6)
+
+  revision AiCompanyPolicyRevision @relation(fields: [policyRevisionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
+
+  @@unique([policyRevisionId, skillKey, skillVersion, policyVersion])
+  @@index([tenantId, companyId, skillKey])
+}
+
+/// A key-wide stop survives a future code-owned skill revision.
+model AiCompanySkillOverride {
+  id              String                      @id @default(uuid()) @db.Uuid
+  tenantId        String                      @db.Uuid
+  companyId       String                      @db.Uuid
+  skillKey        String                      @db.VarChar(120)
+  state           AiCompanySkillOverrideState @default(BLOCKED)
+  rowVersion      Int                         @default(1)
+  reason          String                      @db.VarChar(500)
+  changedByUserId String                      @db.Uuid
+  changedAt       DateTime                    @default(now()) @db.Timestamptz(6)
+
+  company   Company @relation(fields: [companyId, tenantId], references: [id, tenantId], onDelete: Restrict)
+  changedBy User    @relation("AiCompanySkillOverrideChanger", fields: [changedByUserId, tenantId], references: [id, tenantId], onDelete: Restrict)
+
+  @@unique([tenantId, companyId, skillKey])
+  @@unique([id, tenantId, companyId])
+}
+
 /// Company-scoped approval for a fixed code-owned skill revision. Catalogue
 /// status alone never authorises runtime use.
 model AiSkillActivation {
@@ -6055,6 +6178,8 @@ model AiSkillActivation {
   suspendedByUserId String?                 @db.Uuid
   suspendedAt       DateTime?               @db.Timestamptz(6)
   suspensionReason  String?                 @db.VarChar(500)
+  origin            AiSkillActivationOrigin @default(LEGACY)
+  companyPolicyRevisionId String?           @db.Uuid
   createdAt         DateTime                @default(now()) @db.Timestamptz(6)
   updatedAt         DateTime                @updatedAt @db.Timestamptz(6)
 
@@ -6064,6 +6189,7 @@ model AiSkillActivation {
   receipts           AiExecutionReceipt[]
   budgetReservations AiBudgetReservation[]
   usageLedgerEntries AiUsageLedger[]
+  companyPolicyRevision AiCompanyPolicyRevision? @relation(fields: [companyPolicyRevisionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
 
   @@unique([id, tenantId, companyId])
   @@unique([companyId, skillKey, skillVersion, policyVersion])
@@ -6084,6 +6210,8 @@ model AiExecutionReceipt {
   skillKey                String?            @db.VarChar(120)
   skillVersion            Int?
   policyVersion           Int?
+  companyPolicyRevisionId String?            @db.Uuid
+  billingPeriodStartAt    DateTime?          @db.Timestamptz(6)
   outcome                 AiExecutionOutcome
   providerSnapshot        AiProviderKind?
   modelSnapshot           String?            @db.VarChar(160)
@@ -6117,6 +6245,7 @@ model AiExecutionReceipt {
   generatedInterpretations AiInterpretation[]        @relation("AiInterpretationSourceReceipt")
   usageLedgerEntries       AiUsageLedger[]
   modelPriceRevision       AiModelPriceRevision?     @relation(fields: [modelPriceRevisionId], references: [id], onDelete: Restrict)
+  companyPolicyRevision    AiCompanyPolicyRevision?  @relation(fields: [companyPolicyRevisionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
 
   @@unique([id, tenantId, companyId])
   @@index([tenantId, companyId, createdAt])
@@ -6231,6 +6360,8 @@ model AiBudgetReservation {
   interpretationRunId     String                    @db.Uuid
   modelPriceRevisionId    String                    @db.Uuid
   dayStartAt              DateTime                  @db.Timestamptz(6)
+  monthStartAt            DateTime?                 @db.Timestamptz(6)
+  companyPolicyRevisionId String?                   @db.Uuid
   status                  AiBudgetReservationStatus @default(RESERVED)
   inputTokenEstimate      Int
   maxOutputTokens         Int
@@ -6248,12 +6379,14 @@ model AiBudgetReservation {
   skillActivation       AiSkillActivation       @relation(fields: [skillActivationId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   interpretationRun     AiInterpretationRun     @relation(fields: [interpretationRunId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   modelPriceRevision    AiModelPriceRevision    @relation(fields: [modelPriceRevisionId], references: [id], onDelete: Restrict)
+  companyPolicyRevision AiCompanyPolicyRevision? @relation(fields: [companyPolicyRevisionId, tenantId, companyId], references: [id, tenantId, companyId], onDelete: Restrict)
   ledgerEntries         AiUsageLedger[]
 
   @@unique([id, tenantId, companyId])
   @@unique([interpretationRunId, tenantId, companyId])
   @@index([tenantId, providerConfigurationId, dayStartAt, status])
   @@index([tenantId, companyId, skillActivationId, dayStartAt, status])
+  @@index([tenantId, companyId, monthStartAt, status])
 }
 
 /// Immutable metering entries. Monetary values are USD because model prices

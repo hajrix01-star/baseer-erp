@@ -9,6 +9,7 @@ const permissions = [
   "administration.users.read", "administration.users.manage",
   "administration.roles.read", "administration.roles.manage",
   "platform.ai.configuration.read", "platform.ai.configuration.write", "platform.ai.provider.configure",
+  "platform.ai.policy.read", "platform.ai.policy.manage",
 ];
 
 const basiraGovernance = {
@@ -20,6 +21,12 @@ const basiraGovernance = {
   evaluations: [],
   evaluationRuns: [],
   consumption: { dayStartAt: "2026-08-25T00:00:00.000Z", currency: "USD", chargedCostUsd: "0.0000", providerCalls: 0 },
+};
+
+const disabledCompanyPolicy = {
+  companyId, policyId: null, version: 0, mode: "DISABLED", monthlyBudgetUsdCents: null,
+  billingTimeZone: "Asia/Riyadh", providerConfigurationIds: [], pilotSkills: [],
+  autoEnrollStable: false, canManage: true, updatedAt: null,
 };
 
 const openAiCapability = {
@@ -56,7 +63,8 @@ function overview(owner = true, logoFileMetadataId: string | null = null) {
   };
 }
 
-async function mockAdministration(page: Page, language: "ar" | "en", requests: string[] = [], owner = true, logoFileMetadataId: string | null = null, aiConfiguration: unknown = { companyId, providerCapabilities: [openAiCapability], activeProvider: null, providerConfigurations: [], latestProviderConnectionCheck: null, activeSystemIdentity: null, activeIdentity: null }) {
+async function mockAdministration(page: Page, language: "ar" | "en", requests: string[] = [], owner = true, logoFileMetadataId: string | null = null, aiConfiguration: unknown = { companyId, providerCapabilities: [openAiCapability], activeProvider: null, providerConfigurations: [], latestProviderConnectionCheck: null, activeSystemIdentity: null, activeIdentity: null }, companyPolicy = disabledCompanyPolicy) {
+  let currentCompanyPolicy = { ...companyPolicy };
   await page.addInitScript(({ locale, company }) => {
     sessionStorage.setItem("baseer.erp.access-token", "administration-e2e-token");
     sessionStorage.setItem("baseer.erp.refresh-token", "administration-e2e-refresh-token");
@@ -72,6 +80,12 @@ async function mockAdministration(page: Page, language: "ar" | "en", requests: s
     if (url.pathname === "/v1/finance/configuration") return fulfill(route, { profile: { vatRateBasisPoints: 1500 } });
     if (url.pathname === "/v1/administration/ai/configuration") return fulfill(route, aiConfiguration);
     if (url.pathname === "/v1/administration/ai/governance") return fulfill(route, basiraGovernance);
+    if (url.pathname === "/v1/administration/ai/company-policy" && route.request().method() === "GET") return fulfill(route, currentCompanyPolicy);
+    if (url.pathname === "/v1/administration/ai/company-policy" && route.request().method() === "PUT") {
+      const update = route.request().postDataJSON() as { mode: "DISABLED" | "ENABLED" | "PAUSED"; monthlyBudgetUsdCents?: string; providerConfigurationIds: string[]; pilotSkills: unknown[]; autoEnrollStable: boolean };
+      currentCompanyPolicy = { ...currentCompanyPolicy, policyId: currentCompanyPolicy.policyId ?? "55555555-5555-4555-8555-555555555555", version: currentCompanyPolicy.version + 1, mode: update.mode, monthlyBudgetUsdCents: update.mode === "ENABLED" ? update.monthlyBudgetUsdCents ?? null : null, providerConfigurationIds: update.providerConfigurationIds, pilotSkills: update.pilotSkills, autoEnrollStable: update.autoEnrollStable, updatedAt: "2026-09-06T20:00:00.000Z" };
+      return fulfill(route, currentCompanyPolicy);
+    }
     if (url.pathname === "/v1/administration/ai/provider-connection" && route.request().method() === "POST") return fulfill(route, { state: "READY", reason: null, provider: "OPENAI_COMPATIBLE", model: "gpt-5-mini", checkedAt: "2026-08-23T12:00:00.000Z" });
     if (url.pathname === "/v1/administration/ai/provider-configurations" && route.request().method() === "POST") return fulfill(route, { id: "44444444-4444-4444-8444-444444444444", provider: "OPENAI_COMPATIBLE", model: "gpt-5-mini", status: "ACTIVE", isDefault: true, dailyRequestLimit: 10, dailyCostLimit: null, configurationVersion: 1, createdAt: "2026-08-23T12:00:00.000Z", updatedAt: "2026-08-23T12:00:00.000Z" }, 201);
     return fulfill(route, { updated: true, id: "44444444-4444-4444-8444-444444444444" });
@@ -246,6 +260,36 @@ test("Basira draft profile exposes a working verification action", async ({ page
   await verify.click();
   await expect.poll(() => requests.filter((request) => request === "POST /v1/administration/ai/provider-connection").length).toBe(1);
 });
+
+for (const language of ["ar", "en"] as const) {
+  test(`Basira company operation enables a bounded policy in ${language}`, async ({ page }) => {
+    const requests: string[] = [];
+    const activeProvider = { id: "44444444-4444-4444-8444-444444444444", provider: "OPENAI_COMPATIBLE", model: "gpt-5-mini", status: "ACTIVE", isDefault: true, dailyRequestLimit: 10, dailyCostLimit: "0.25", configurationVersion: 1, createdAt: "2026-09-06T12:00:00.000Z", updatedAt: "2026-09-06T12:00:00.000Z" };
+    await mockAdministration(page, language, requests, true, null, { companyId, providerCapabilities: [openAiCapability], activeProvider, providerConfigurations: [activeProvider], latestProviderConnectionCheck: null, activeSystemIdentity: null, activeIdentity: null });
+    await page.goto("/#module=administration&section=4");
+    await expect(page.getByRole("heading", { name: language === "ar" ? "بصيرة غير مفعلة" : "Basira is not enabled" })).toBeVisible();
+    const open = page.getByRole("button", { name: language === "ar" ? "تشغيل بصيرة" : "Enable Basira" });
+    await open.click();
+    const dialogName = language === "ar" ? "تشغيل بصيرة للشركة" : "Operate Basira for this company";
+    await expectViewportBoundedDialog(page, dialogName);
+    const dialog = page.getByRole("dialog", { name: dialogName });
+    await dialog.getByLabel(language === "ar" ? "السقف الشهري بالدولار" : "Monthly USD cap").fill("12.50");
+    const policyRequest = page.waitForRequest((request) => request.method() === "PUT" && new URL(request.url()).pathname === "/v1/administration/ai/company-policy");
+    await dialog.getByRole("button", { name: language === "ar" ? "تشغيل الآن" : "Enable now" }).click();
+    const request = await policyRequest;
+    expect(request.postDataJSON()).toMatchObject({ expectedVersion: 0, mode: "ENABLED", monthlyBudgetUsdCents: "1250", providerConfigurationIds: [activeProvider.id], autoEnrollStable: false });
+    await expect(page.getByRole("heading", { name: language === "ar" ? "تعمل بصيرة لهذه الشركة" : "Basira is operating for this company" })).toBeVisible();
+    await expect(page.getByRole("status")).toContainText(language === "ar" ? "تم تشغيل بصيرة تلقائياً" : "Basira was enabled automatically");
+    if (test.info().project.name === "mobile-chromium") {
+      await page.getByLabel(language === "ar" ? "انتقل إلى قسم" : "Go to section").selectOption("context");
+      await expect(page.locator('section[data-active-tab="context"]')).toBeVisible();
+    } else {
+      await page.getByRole("tab", { name: language === "ar" ? "المهارات" : "Skills" }).focus();
+      await page.keyboard.press("ArrowRight");
+      await expect(page.getByRole("tab", { selected: true })).toHaveAccessibleName(language === "ar" ? "معرفة الشركة" : "Company knowledge");
+    }
+  });
+}
 
 for (const language of ["ar", "en"] as const) {
   test(`Basira connection settings retain their visual contract in ${language}`, async ({ page, isMobile }) => {

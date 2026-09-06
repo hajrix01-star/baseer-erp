@@ -6,12 +6,13 @@ import type { TrustedCompanyActorContext } from "../core-controls/trusted-contex
 import { DatabaseService } from "../database/database.service.js";
 import {
   AiBudgetReservationStatus,
+  AiCompanyPolicyMode,
   AiUsageLedgerKind,
   Prisma,
   type AiProviderKind,
 } from "../generated/prisma/client.js";
 import type { AiProviderUsage } from "./ai-provider-usage.js";
-import { startOfRiyadhDay } from "./ai-consumption-time.js";
+import { startOfRiyadhDay, startOfRiyadhMonth } from "./ai-consumption-time.js";
 import { countBasiraS2InputTokens } from "./ai-token-counter.js";
 
 const RESERVATION_LEASE_MS = 10 * 60 * 1_000;
@@ -47,6 +48,11 @@ export type AiCostReservation = Readonly<{
   maxOutputTokens: number;
 }>;
 
+export type AiCompanyMonthlyPolicy = Readonly<{
+  policyRevisionId: string;
+  monthlyBudgetUsdCents: Prisma.Decimal;
+}>;
+
 /**
  * The only accounting boundary before a live model request. It is deliberately
  * called after semantic reuse has been resolved, so opening a page or reading
@@ -63,6 +69,7 @@ export class AiConsumptionGuardService {
     interpretationRunId: string;
     profile: AiConsumptionProfile;
     inputText: string;
+    companyPolicy?: AiCompanyMonthlyPolicy | null;
   }>): Promise<AiCostReservation> {
     const now = new Date();
     let tokenCount;
@@ -89,6 +96,14 @@ export class AiConsumptionGuardService {
 
     return this.database.inTenantTransaction(input.context.tenantId, async (transaction) => {
       await this.lockBudgetInTransaction(transaction, input.context, now);
+      if (input.companyPolicy) {
+        // Policy writes and live-cost reservations share this lock.  A policy
+        // pause or allowlist change therefore cannot land between the runtime
+        // eligibility check and the outbound provider call.
+        await this.lockCompanyPolicyInTransaction(transaction, input.context);
+        await this.assertCompanyPolicySnapshotIsCurrent(transaction, input.context, input.companyPolicy);
+        await this.lockCompanyMonthInTransaction(transaction, input.context, now);
+      }
       await this.expireStaleReservationsInTransaction(transaction, input.context, now);
 
       const price = await transaction.aiModelPriceRevision.findFirst({
@@ -108,7 +123,7 @@ export class AiConsumptionGuardService {
       if (!price) {
         throw new ConflictException("No approved price revision exists for the configured Basira model.");
       }
-      if (!input.provider.dailyCostLimit || !input.activation.dailyCostLimit) {
+      if (!input.provider.dailyCostLimit || (!input.companyPolicy && !input.activation.dailyCostLimit)) {
         throw new ConflictException("Set a daily USD cost limit for the provider and this company skill before enabling live Basira requests.");
       }
 
@@ -119,8 +134,16 @@ export class AiConsumptionGuardService {
         inputUsdPerMillion: price.inputUsdPerMillion,
         outputUsdPerMillion: price.outputUsdPerMillion,
       });
-      const activeStatuses = [AiBudgetReservationStatus.RESERVED, AiBudgetReservationStatus.SETTLED];
-      const [providerTotals, activationTotals, providerRequests, activationRequests] = await Promise.all([
+      // An expired reservation can follow a process crash after the provider
+      // accepted the request. It remains charged until reconciliation proves
+      // otherwise; expiry must never create a new paid retry window.
+      const activeStatuses = [
+        AiBudgetReservationStatus.RESERVED,
+        AiBudgetReservationStatus.SETTLED,
+        AiBudgetReservationStatus.UNKNOWN_PROVIDER_OUTCOME,
+      ];
+      const monthStartAt = input.companyPolicy ? startOfRiyadhMonth(now) : null;
+      const [providerTotals, activationTotals, providerRequests, activationRequests, monthlyTotals] = await Promise.all([
         transaction.aiBudgetReservation.aggregate({
           where: {
             tenantId: input.context.tenantId,
@@ -159,12 +182,18 @@ export class AiConsumptionGuardService {
               status: { in: activeStatuses },
             },
           }),
+        input.companyPolicy
+          ? transaction.aiBudgetReservation.aggregate({
+            where: { tenantId: input.context.tenantId, companyId: input.context.companyId, monthStartAt: monthStartAt!, status: { in: activeStatuses } },
+            _sum: { chargeCostUsd: true },
+          })
+          : Promise.resolve(null),
       ]);
 
       if (providerRequests >= input.provider.dailyRequestLimit) {
         throw new HttpException("The configured daily AI request limit has been reached.", HttpStatus.TOO_MANY_REQUESTS);
       }
-      if (input.activation.dailyRequestLimit !== null && activationRequests >= input.activation.dailyRequestLimit) {
+      if (!input.companyPolicy && input.activation.dailyRequestLimit !== null && activationRequests >= input.activation.dailyRequestLimit) {
         throw new HttpException("The company AI request limit has been reached.", HttpStatus.TOO_MANY_REQUESTS);
       }
       const providerProjected = decimalOrZero(providerTotals._sum.chargeCostUsd).plus(estimatedCostUsd);
@@ -172,8 +201,14 @@ export class AiConsumptionGuardService {
       if (providerProjected.greaterThan(input.provider.dailyCostLimit)) {
         throw new HttpException("The configured daily AI cost limit has been reached.", HttpStatus.TOO_MANY_REQUESTS);
       }
-      if (activationProjected.greaterThan(input.activation.dailyCostLimit)) {
+      if (!input.companyPolicy && activationProjected.greaterThan(input.activation.dailyCostLimit!)) {
         throw new HttpException("The company AI cost limit has been reached.", HttpStatus.TOO_MANY_REQUESTS);
+      }
+      if (input.companyPolicy) {
+        const monthlyProjected = decimalOrZero(monthlyTotals?._sum.chargeCostUsd).plus(estimatedCostUsd);
+        if (monthlyProjected.mul(100).ceil().greaterThan(input.companyPolicy.monthlyBudgetUsdCents)) {
+          throw new HttpException("The company Basira monthly cost limit has been reached.", HttpStatus.TOO_MANY_REQUESTS);
+        }
       }
 
       const reservation = await transaction.aiBudgetReservation.create({
@@ -186,6 +221,8 @@ export class AiConsumptionGuardService {
           interpretationRunId: input.interpretationRunId,
           modelPriceRevisionId: price.id,
           dayStartAt,
+          monthStartAt,
+          companyPolicyRevisionId: input.companyPolicy?.policyRevisionId ?? null,
           status: AiBudgetReservationStatus.RESERVED,
           inputTokenEstimate,
           maxOutputTokens: input.profile.maxOutputTokens,
@@ -237,6 +274,18 @@ export class AiConsumptionGuardService {
     });
   }
 
+  /**
+   * A crashed API can leave a reservation after the provider may have accepted
+   * it. The scheduler records that uncertainty durably and retains the
+   * conservative charge; it never invents a provider result or reopens budget.
+   */
+  async reconcileExpiredReservationsForTenant(tenantId: string, now = new Date()): Promise<{ markedUnknown: number }> {
+    return this.database.inTenantTransaction(tenantId, async (transaction) => {
+      await this.lockBudgetInTransaction(transaction, { tenantId }, now);
+      return { markedUnknown: await this.expireStaleReservationsInTransaction(transaction, { tenantId }, now) };
+    });
+  }
+
   async settleInTransaction(
     transaction: Prisma.TransactionClient,
     context: TrustedCompanyActorContext,
@@ -252,7 +301,7 @@ export class AiConsumptionGuardService {
         id: input.reservation.id,
         tenantId: context.tenantId,
         companyId: context.companyId,
-        status: AiBudgetReservationStatus.RESERVED,
+        status: { in: [AiBudgetReservationStatus.RESERVED, AiBudgetReservationStatus.UNKNOWN_PROVIDER_OUTCOME] },
       },
       include: {
         modelPriceRevision: {
@@ -278,6 +327,8 @@ export class AiConsumptionGuardService {
         actualCostUsd,
         chargeCostUsd: actualCostUsd,
         settledAt: new Date(),
+        releasedAt: null,
+        releaseReason: null,
       },
     });
     await transaction.aiUsageLedger.create({
@@ -313,24 +364,77 @@ export class AiConsumptionGuardService {
     );
   }
 
+  private async lockCompanyMonthInTransaction(
+    transaction: Prisma.TransactionClient,
+    context: Pick<TrustedCompanyActorContext, "tenantId" | "companyId">,
+    now: Date,
+  ): Promise<void> {
+    await transaction.$executeRaw(
+      Prisma.sql`SELECT pg_advisory_xact_lock(hashtextextended(${`baseer-ai-company-month:${context.tenantId}:${context.companyId}:${startOfRiyadhMonth(now).toISOString()}`}, 0))`,
+    );
+  }
+
+  private async lockCompanyPolicyInTransaction(
+    transaction: Prisma.TransactionClient,
+    context: Pick<TrustedCompanyActorContext, "tenantId" | "companyId">,
+  ): Promise<void> {
+    await transaction.$executeRaw(
+      Prisma.sql`SELECT pg_advisory_xact_lock(hashtext(${`ai-company-policy:${context.tenantId}:${context.companyId}`}))`,
+    );
+  }
+
+  private async assertCompanyPolicySnapshotIsCurrent(
+    transaction: Prisma.TransactionClient,
+    context: Pick<TrustedCompanyActorContext, "tenantId" | "companyId">,
+    snapshot: AiCompanyMonthlyPolicy,
+  ): Promise<void> {
+    const policy = await transaction.aiCompanyPolicy.findFirst({
+      where: { tenantId: context.tenantId, companyId: context.companyId },
+      select: { id: true, currentVersion: true },
+    });
+    const revision = policy
+      ? await transaction.aiCompanyPolicyRevision.findFirst({
+        where: {
+          id: snapshot.policyRevisionId,
+          tenantId: context.tenantId,
+          companyId: context.companyId,
+          policyId: policy.id,
+          version: policy.currentVersion,
+          mode: AiCompanyPolicyMode.ENABLED,
+          monthlyBudgetUsdCents: snapshot.monthlyBudgetUsdCents,
+        },
+        select: { id: true },
+      })
+      : null;
+    if (!revision) {
+      throw new ConflictException("The Basira company policy changed before this request could reserve cost. Review the current policy and try again.");
+    }
+  }
+
   private async expireStaleReservationsInTransaction(
     transaction: Prisma.TransactionClient,
     context: Pick<TrustedCompanyActorContext, "tenantId">,
     now: Date,
-  ): Promise<void> {
-    await transaction.aiBudgetReservation.updateMany({
-      where: {
-        tenantId: context.tenantId,
-        status: AiBudgetReservationStatus.RESERVED,
-        expiresAt: { lte: now },
-      },
-      data: {
-        status: AiBudgetReservationStatus.EXPIRED,
-        chargeCostUsd: new Prisma.Decimal(0),
-        releasedAt: now,
-        releaseReason: "RESERVATION_LEASE_EXPIRED_BEFORE_PROVIDER_SETTLEMENT",
-      },
+  ): Promise<number> {
+    const candidates = await transaction.aiBudgetReservation.findMany({
+      where: { tenantId: context.tenantId, status: AiBudgetReservationStatus.RESERVED, expiresAt: { lte: now } },
+      select: { id: true, companyId: true, expiresAt: true, chargeCostUsd: true },
     });
+    let markedUnknown = 0;
+    for (const candidate of candidates) {
+      const updated = await transaction.aiBudgetReservation.updateMany({
+        where: { id: candidate.id, tenantId: context.tenantId, companyId: candidate.companyId, status: AiBudgetReservationStatus.RESERVED, expiresAt: { lte: now } },
+        data: { status: AiBudgetReservationStatus.UNKNOWN_PROVIDER_OUTCOME, releasedAt: now, releaseReason: "PROVIDER_OUTCOME_UNCERTAIN_AFTER_RESERVATION_LEASE" },
+      });
+      if (!updated.count) continue;
+      markedUnknown += 1;
+      await transaction.auditEvent.create({ data: {
+        id: randomUUID(), tenantId: context.tenantId, companyId: candidate.companyId, actorUserId: null,
+        action: "platform.ai.budget_reservation_provider_outcome_unknown", entityType: "AiBudgetReservation", entityId: candidate.id,
+        requestId: randomUUID(), afterJson: { expiresAt: candidate.expiresAt.toISOString(), retainedChargeUsd: candidate.chargeCostUsd.toString(), actionRequired: "Reconcile authoritative provider usage before any manual settlement." },
+      } });
+    }
+    return markedUnknown;
   }
 }
 
@@ -361,6 +465,6 @@ function calculateActualCost(
     .plus(price.outputUsdPerMillion.mul(Math.max(usage.outputTokens, 0)).div(USD_PER_MILLION));
 }
 
-function decimalOrZero(value: Prisma.Decimal | null): Prisma.Decimal {
+function decimalOrZero(value: Prisma.Decimal | null | undefined): Prisma.Decimal {
   return value ?? new Prisma.Decimal(0);
 }

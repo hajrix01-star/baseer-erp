@@ -2812,11 +2812,52 @@ export type EnumAiCompanyPresentationStyleWithAggregatesFilter<$PrismaModel = ne
   _max?: Prisma.NestedEnumAiCompanyPresentationStyleFilter<$PrismaModel>
 }
 
+export type EnumAiCompanyPolicyModeFilter<$PrismaModel = never> = {
+  equals?: $Enums.AiCompanyPolicyMode | Prisma.EnumAiCompanyPolicyModeFieldRefInput<$PrismaModel>
+  in?: $Enums.AiCompanyPolicyMode[] | Prisma.ListEnumAiCompanyPolicyModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AiCompanyPolicyMode[] | Prisma.ListEnumAiCompanyPolicyModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAiCompanyPolicyModeFilter<$PrismaModel> | $Enums.AiCompanyPolicyMode
+}
+
+export type EnumAiCompanyPolicyModeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AiCompanyPolicyMode | Prisma.EnumAiCompanyPolicyModeFieldRefInput<$PrismaModel>
+  in?: $Enums.AiCompanyPolicyMode[] | Prisma.ListEnumAiCompanyPolicyModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AiCompanyPolicyMode[] | Prisma.ListEnumAiCompanyPolicyModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAiCompanyPolicyModeWithAggregatesFilter<$PrismaModel> | $Enums.AiCompanyPolicyMode
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAiCompanyPolicyModeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAiCompanyPolicyModeFilter<$PrismaModel>
+}
+
+export type EnumAiCompanySkillOverrideStateFilter<$PrismaModel = never> = {
+  equals?: $Enums.AiCompanySkillOverrideState | Prisma.EnumAiCompanySkillOverrideStateFieldRefInput<$PrismaModel>
+  in?: $Enums.AiCompanySkillOverrideState[] | Prisma.ListEnumAiCompanySkillOverrideStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AiCompanySkillOverrideState[] | Prisma.ListEnumAiCompanySkillOverrideStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAiCompanySkillOverrideStateFilter<$PrismaModel> | $Enums.AiCompanySkillOverrideState
+}
+
+export type EnumAiCompanySkillOverrideStateWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AiCompanySkillOverrideState | Prisma.EnumAiCompanySkillOverrideStateFieldRefInput<$PrismaModel>
+  in?: $Enums.AiCompanySkillOverrideState[] | Prisma.ListEnumAiCompanySkillOverrideStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AiCompanySkillOverrideState[] | Prisma.ListEnumAiCompanySkillOverrideStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAiCompanySkillOverrideStateWithAggregatesFilter<$PrismaModel> | $Enums.AiCompanySkillOverrideState
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAiCompanySkillOverrideStateFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAiCompanySkillOverrideStateFilter<$PrismaModel>
+}
+
 export type EnumAiSkillActivationStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.AiSkillActivationStatus | Prisma.EnumAiSkillActivationStatusFieldRefInput<$PrismaModel>
   in?: $Enums.AiSkillActivationStatus[] | Prisma.ListEnumAiSkillActivationStatusFieldRefInput<$PrismaModel>
   notIn?: $Enums.AiSkillActivationStatus[] | Prisma.ListEnumAiSkillActivationStatusFieldRefInput<$PrismaModel>
   not?: Prisma.NestedEnumAiSkillActivationStatusFilter<$PrismaModel> | $Enums.AiSkillActivationStatus
+}
+
+export type EnumAiSkillActivationOriginFilter<$PrismaModel = never> = {
+  equals?: $Enums.AiSkillActivationOrigin | Prisma.EnumAiSkillActivationOriginFieldRefInput<$PrismaModel>
+  in?: $Enums.AiSkillActivationOrigin[] | Prisma.ListEnumAiSkillActivationOriginFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AiSkillActivationOrigin[] | Prisma.ListEnumAiSkillActivationOriginFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAiSkillActivationOriginFilter<$PrismaModel> | $Enums.AiSkillActivationOrigin
 }
 
 export type EnumAiSkillActivationStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -2827,6 +2868,16 @@ export type EnumAiSkillActivationStatusWithAggregatesFilter<$PrismaModel = never
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumAiSkillActivationStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumAiSkillActivationStatusFilter<$PrismaModel>
+}
+
+export type EnumAiSkillActivationOriginWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AiSkillActivationOrigin | Prisma.EnumAiSkillActivationOriginFieldRefInput<$PrismaModel>
+  in?: $Enums.AiSkillActivationOrigin[] | Prisma.ListEnumAiSkillActivationOriginFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AiSkillActivationOrigin[] | Prisma.ListEnumAiSkillActivationOriginFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAiSkillActivationOriginWithAggregatesFilter<$PrismaModel> | $Enums.AiSkillActivationOrigin
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAiSkillActivationOriginFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAiSkillActivationOriginFilter<$PrismaModel>
 }
 
 export type EnumAiExecutionOutcomeFilter<$PrismaModel = never> = {
@@ -5973,11 +6024,52 @@ export type NestedEnumAiCompanyPresentationStyleWithAggregatesFilter<$PrismaMode
   _max?: Prisma.NestedEnumAiCompanyPresentationStyleFilter<$PrismaModel>
 }
 
+export type NestedEnumAiCompanyPolicyModeFilter<$PrismaModel = never> = {
+  equals?: $Enums.AiCompanyPolicyMode | Prisma.EnumAiCompanyPolicyModeFieldRefInput<$PrismaModel>
+  in?: $Enums.AiCompanyPolicyMode[] | Prisma.ListEnumAiCompanyPolicyModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AiCompanyPolicyMode[] | Prisma.ListEnumAiCompanyPolicyModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAiCompanyPolicyModeFilter<$PrismaModel> | $Enums.AiCompanyPolicyMode
+}
+
+export type NestedEnumAiCompanyPolicyModeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AiCompanyPolicyMode | Prisma.EnumAiCompanyPolicyModeFieldRefInput<$PrismaModel>
+  in?: $Enums.AiCompanyPolicyMode[] | Prisma.ListEnumAiCompanyPolicyModeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AiCompanyPolicyMode[] | Prisma.ListEnumAiCompanyPolicyModeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAiCompanyPolicyModeWithAggregatesFilter<$PrismaModel> | $Enums.AiCompanyPolicyMode
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAiCompanyPolicyModeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAiCompanyPolicyModeFilter<$PrismaModel>
+}
+
+export type NestedEnumAiCompanySkillOverrideStateFilter<$PrismaModel = never> = {
+  equals?: $Enums.AiCompanySkillOverrideState | Prisma.EnumAiCompanySkillOverrideStateFieldRefInput<$PrismaModel>
+  in?: $Enums.AiCompanySkillOverrideState[] | Prisma.ListEnumAiCompanySkillOverrideStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AiCompanySkillOverrideState[] | Prisma.ListEnumAiCompanySkillOverrideStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAiCompanySkillOverrideStateFilter<$PrismaModel> | $Enums.AiCompanySkillOverrideState
+}
+
+export type NestedEnumAiCompanySkillOverrideStateWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AiCompanySkillOverrideState | Prisma.EnumAiCompanySkillOverrideStateFieldRefInput<$PrismaModel>
+  in?: $Enums.AiCompanySkillOverrideState[] | Prisma.ListEnumAiCompanySkillOverrideStateFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AiCompanySkillOverrideState[] | Prisma.ListEnumAiCompanySkillOverrideStateFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAiCompanySkillOverrideStateWithAggregatesFilter<$PrismaModel> | $Enums.AiCompanySkillOverrideState
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAiCompanySkillOverrideStateFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAiCompanySkillOverrideStateFilter<$PrismaModel>
+}
+
 export type NestedEnumAiSkillActivationStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.AiSkillActivationStatus | Prisma.EnumAiSkillActivationStatusFieldRefInput<$PrismaModel>
   in?: $Enums.AiSkillActivationStatus[] | Prisma.ListEnumAiSkillActivationStatusFieldRefInput<$PrismaModel>
   notIn?: $Enums.AiSkillActivationStatus[] | Prisma.ListEnumAiSkillActivationStatusFieldRefInput<$PrismaModel>
   not?: Prisma.NestedEnumAiSkillActivationStatusFilter<$PrismaModel> | $Enums.AiSkillActivationStatus
+}
+
+export type NestedEnumAiSkillActivationOriginFilter<$PrismaModel = never> = {
+  equals?: $Enums.AiSkillActivationOrigin | Prisma.EnumAiSkillActivationOriginFieldRefInput<$PrismaModel>
+  in?: $Enums.AiSkillActivationOrigin[] | Prisma.ListEnumAiSkillActivationOriginFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AiSkillActivationOrigin[] | Prisma.ListEnumAiSkillActivationOriginFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAiSkillActivationOriginFilter<$PrismaModel> | $Enums.AiSkillActivationOrigin
 }
 
 export type NestedEnumAiSkillActivationStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -5988,6 +6080,16 @@ export type NestedEnumAiSkillActivationStatusWithAggregatesFilter<$PrismaModel =
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumAiSkillActivationStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumAiSkillActivationStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumAiSkillActivationOriginWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AiSkillActivationOrigin | Prisma.EnumAiSkillActivationOriginFieldRefInput<$PrismaModel>
+  in?: $Enums.AiSkillActivationOrigin[] | Prisma.ListEnumAiSkillActivationOriginFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AiSkillActivationOrigin[] | Prisma.ListEnumAiSkillActivationOriginFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAiSkillActivationOriginWithAggregatesFilter<$PrismaModel> | $Enums.AiSkillActivationOrigin
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAiSkillActivationOriginFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAiSkillActivationOriginFilter<$PrismaModel>
 }
 
 export type NestedEnumAiExecutionOutcomeFilter<$PrismaModel = never> = {

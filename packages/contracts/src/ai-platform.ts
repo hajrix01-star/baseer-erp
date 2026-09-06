@@ -194,6 +194,54 @@ export type AiProviderModelCapabilityReceipt = z.infer<
 >;
 export type CreateAiIdentityRequest = z.infer<typeof createAiIdentityRequestSchema>;
 export type CreateAiSystemIdentityRequest = z.infer<typeof createAiSystemIdentityRequestSchema>;
+
+export const aiCompanyPolicyModeSchema = z.enum(["DISABLED", "ENABLED", "PAUSED"]);
+export const aiCompanyPolicyPilotSkillSchema = z.object({
+  skillKey: z.enum(["decision.command_center_analyst", "marketing.performance_analyst"]),
+  skillVersion: z.number().int().positive(),
+  policyVersion: z.number().int().positive(),
+}).strict();
+
+/** The human budget is whole USD cents so no browser floating-point value is
+ * ever used to authorize spend. It is required only while starting Basira. */
+export const putAiCompanyPolicyRequestSchema = z.object({
+  expectedVersion: z.number().int().min(0),
+  mode: aiCompanyPolicyModeSchema,
+  monthlyBudgetUsdCents: z.string().regex(/^\d{1,18}$/).optional(),
+  providerConfigurationIds: z.array(z.string().uuid()).max(10),
+  pilotSkills: z.array(aiCompanyPolicyPilotSkillSchema).max(8),
+  autoEnrollStable: z.boolean().default(false),
+  changeReason: z.string().trim().min(1).max(500),
+  idempotencyKey: aiIdempotencyKeySchema,
+}).strict().superRefine((value, context) => {
+  if (value.mode === "ENABLED") {
+    if (!value.monthlyBudgetUsdCents || BigInt(value.monthlyBudgetUsdCents) <= 0n) {
+      context.addIssue({ code: z.ZodIssueCode.custom, path: ["monthlyBudgetUsdCents"], message: "A positive monthly USD budget is required when Basira is enabled." });
+    }
+    if (!value.providerConfigurationIds.length) {
+      context.addIssue({ code: z.ZodIssueCode.custom, path: ["providerConfigurationIds"], message: "Choose an approved provider configuration." });
+    }
+  } else if (value.monthlyBudgetUsdCents !== undefined) {
+    context.addIssue({ code: z.ZodIssueCode.custom, path: ["monthlyBudgetUsdCents"], message: "A monthly budget is stored only for an enabled policy." });
+  }
+});
+
+export const aiCompanyPolicyReceiptSchema = z.object({
+  companyId: companyIdSchema,
+  policyId: z.string().uuid().nullable(),
+  version: z.number().int().min(0),
+  mode: aiCompanyPolicyModeSchema,
+  monthlyBudgetUsdCents: z.string().regex(/^\d+$/).nullable(),
+  billingTimeZone: z.literal("Asia/Riyadh"),
+  providerConfigurationIds: z.array(z.string().uuid()),
+  pilotSkills: z.array(aiCompanyPolicyPilotSkillSchema),
+  autoEnrollStable: z.boolean(),
+  canManage: z.boolean(),
+  updatedAt: z.coerce.date().nullable(),
+}).strict();
+export type PutAiCompanyPolicyRequest = z.infer<typeof putAiCompanyPolicyRequestSchema>;
+export type AiCompanyPolicyReceipt = z.infer<typeof aiCompanyPolicyReceiptSchema>;
+
 export const aiSkillRiskTierSchema = z.enum(["S1", "S2", "S3", "S4"]);
 export const aiSkillStatusSchema = z.enum([
   "PLANNED",

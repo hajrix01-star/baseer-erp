@@ -1266,6 +1266,32 @@ export const AiSkillActivationStatus = {
 export type AiSkillActivationStatus = (typeof AiSkillActivationStatus)[keyof typeof AiSkillActivationStatus]
 
 
+export const AiCompanyPolicyMode = {
+  DISABLED: 'DISABLED',
+  ENABLED: 'ENABLED',
+  PAUSED: 'PAUSED'
+} as const
+
+export type AiCompanyPolicyMode = (typeof AiCompanyPolicyMode)[keyof typeof AiCompanyPolicyMode]
+
+
+export const AiSkillActivationOrigin = {
+  LEGACY: 'LEGACY',
+  MANUAL: 'MANUAL',
+  COMPANY_POLICY: 'COMPANY_POLICY'
+} as const
+
+export type AiSkillActivationOrigin = (typeof AiSkillActivationOrigin)[keyof typeof AiSkillActivationOrigin]
+
+
+export const AiCompanySkillOverrideState = {
+  BLOCKED: 'BLOCKED',
+  CLEARED: 'CLEARED'
+} as const
+
+export type AiCompanySkillOverrideState = (typeof AiCompanySkillOverrideState)[keyof typeof AiCompanySkillOverrideState]
+
+
 export const AiEvaluationFeedbackKind = {
   USEFUL: 'USEFUL',
   NOT_USEFUL: 'NOT_USEFUL',
@@ -1343,7 +1369,8 @@ export const AiBudgetReservationStatus = {
   RESERVED: 'RESERVED',
   SETTLED: 'SETTLED',
   RELEASED: 'RELEASED',
-  EXPIRED: 'EXPIRED'
+  EXPIRED: 'EXPIRED',
+  UNKNOWN_PROVIDER_OUTCOME: 'UNKNOWN_PROVIDER_OUTCOME'
 } as const
 
 export type AiBudgetReservationStatus = (typeof AiBudgetReservationStatus)[keyof typeof AiBudgetReservationStatus]

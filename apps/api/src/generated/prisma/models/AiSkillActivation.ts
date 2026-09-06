@@ -58,6 +58,8 @@ export type AiSkillActivationMinAggregateOutputType = {
   suspendedByUserId: string | null
   suspendedAt: Date | null
   suspensionReason: string | null
+  origin: $Enums.AiSkillActivationOrigin | null
+  companyPolicyRevisionId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -79,6 +81,8 @@ export type AiSkillActivationMaxAggregateOutputType = {
   suspendedByUserId: string | null
   suspendedAt: Date | null
   suspensionReason: string | null
+  origin: $Enums.AiSkillActivationOrigin | null
+  companyPolicyRevisionId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -100,6 +104,8 @@ export type AiSkillActivationCountAggregateOutputType = {
   suspendedByUserId: number
   suspendedAt: number
   suspensionReason: number
+  origin: number
+  companyPolicyRevisionId: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -137,6 +143,8 @@ export type AiSkillActivationMinAggregateInputType = {
   suspendedByUserId?: true
   suspendedAt?: true
   suspensionReason?: true
+  origin?: true
+  companyPolicyRevisionId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -158,6 +166,8 @@ export type AiSkillActivationMaxAggregateInputType = {
   suspendedByUserId?: true
   suspendedAt?: true
   suspensionReason?: true
+  origin?: true
+  companyPolicyRevisionId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -179,6 +189,8 @@ export type AiSkillActivationCountAggregateInputType = {
   suspendedByUserId?: true
   suspendedAt?: true
   suspensionReason?: true
+  origin?: true
+  companyPolicyRevisionId?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -287,6 +299,8 @@ export type AiSkillActivationGroupByOutputType = {
   suspendedByUserId: string | null
   suspendedAt: Date | null
   suspensionReason: string | null
+  origin: $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId: string | null
   createdAt: Date
   updatedAt: Date
   _count: AiSkillActivationCountAggregateOutputType | null
@@ -331,6 +345,8 @@ export type AiSkillActivationWhereInput = {
   suspendedByUserId?: Prisma.UuidNullableFilter<"AiSkillActivation"> | string | null
   suspendedAt?: Prisma.DateTimeNullableFilter<"AiSkillActivation"> | Date | string | null
   suspensionReason?: Prisma.StringNullableFilter<"AiSkillActivation"> | string | null
+  origin?: Prisma.EnumAiSkillActivationOriginFilter<"AiSkillActivation"> | $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId?: Prisma.UuidNullableFilter<"AiSkillActivation"> | string | null
   createdAt?: Prisma.DateTimeFilter<"AiSkillActivation"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AiSkillActivation"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
@@ -339,6 +355,7 @@ export type AiSkillActivationWhereInput = {
   receipts?: Prisma.AiExecutionReceiptListRelationFilter
   budgetReservations?: Prisma.AiBudgetReservationListRelationFilter
   usageLedgerEntries?: Prisma.AiUsageLedgerListRelationFilter
+  companyPolicyRevision?: Prisma.XOR<Prisma.AiCompanyPolicyRevisionNullableScalarRelationFilter, Prisma.AiCompanyPolicyRevisionWhereInput> | null
 }
 
 export type AiSkillActivationOrderByWithRelationInput = {
@@ -358,6 +375,8 @@ export type AiSkillActivationOrderByWithRelationInput = {
   suspendedByUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   suspendedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   suspensionReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  origin?: Prisma.SortOrder
+  companyPolicyRevisionId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   company?: Prisma.CompanyOrderByWithRelationInput
@@ -366,6 +385,7 @@ export type AiSkillActivationOrderByWithRelationInput = {
   receipts?: Prisma.AiExecutionReceiptOrderByRelationAggregateInput
   budgetReservations?: Prisma.AiBudgetReservationOrderByRelationAggregateInput
   usageLedgerEntries?: Prisma.AiUsageLedgerOrderByRelationAggregateInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionOrderByWithRelationInput
 }
 
 export type AiSkillActivationWhereUniqueInput = Prisma.AtLeast<{
@@ -390,6 +410,8 @@ export type AiSkillActivationWhereUniqueInput = Prisma.AtLeast<{
   suspendedByUserId?: Prisma.UuidNullableFilter<"AiSkillActivation"> | string | null
   suspendedAt?: Prisma.DateTimeNullableFilter<"AiSkillActivation"> | Date | string | null
   suspensionReason?: Prisma.StringNullableFilter<"AiSkillActivation"> | string | null
+  origin?: Prisma.EnumAiSkillActivationOriginFilter<"AiSkillActivation"> | $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId?: Prisma.UuidNullableFilter<"AiSkillActivation"> | string | null
   createdAt?: Prisma.DateTimeFilter<"AiSkillActivation"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AiSkillActivation"> | Date | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
@@ -398,6 +420,7 @@ export type AiSkillActivationWhereUniqueInput = Prisma.AtLeast<{
   receipts?: Prisma.AiExecutionReceiptListRelationFilter
   budgetReservations?: Prisma.AiBudgetReservationListRelationFilter
   usageLedgerEntries?: Prisma.AiUsageLedgerListRelationFilter
+  companyPolicyRevision?: Prisma.XOR<Prisma.AiCompanyPolicyRevisionNullableScalarRelationFilter, Prisma.AiCompanyPolicyRevisionWhereInput> | null
 }, "id" | "id_tenantId_companyId" | "companyId_skillKey_skillVersion_policyVersion">
 
 export type AiSkillActivationOrderByWithAggregationInput = {
@@ -417,6 +440,8 @@ export type AiSkillActivationOrderByWithAggregationInput = {
   suspendedByUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   suspendedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   suspensionReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  origin?: Prisma.SortOrder
+  companyPolicyRevisionId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.AiSkillActivationCountOrderByAggregateInput
@@ -446,6 +471,8 @@ export type AiSkillActivationScalarWhereWithAggregatesInput = {
   suspendedByUserId?: Prisma.UuidNullableWithAggregatesFilter<"AiSkillActivation"> | string | null
   suspendedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"AiSkillActivation"> | Date | string | null
   suspensionReason?: Prisma.StringNullableWithAggregatesFilter<"AiSkillActivation"> | string | null
+  origin?: Prisma.EnumAiSkillActivationOriginWithAggregatesFilter<"AiSkillActivation"> | $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId?: Prisma.UuidNullableWithAggregatesFilter<"AiSkillActivation"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"AiSkillActivation"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"AiSkillActivation"> | Date | string
 }
@@ -463,6 +490,7 @@ export type AiSkillActivationCreateInput = {
   approvedAt?: Date | string
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  origin?: $Enums.AiSkillActivationOrigin
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutAiSkillActivationsInput
@@ -471,6 +499,7 @@ export type AiSkillActivationCreateInput = {
   receipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutSkillActivationInput
   budgetReservations?: Prisma.AiBudgetReservationCreateNestedManyWithoutSkillActivationInput
   usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutSkillActivationInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionCreateNestedOneWithoutPolicyActivationsInput
 }
 
 export type AiSkillActivationUncheckedCreateInput = {
@@ -490,6 +519,8 @@ export type AiSkillActivationUncheckedCreateInput = {
   suspendedByUserId?: string | null
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  origin?: $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   receipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutSkillActivationInput
@@ -510,6 +541,7 @@ export type AiSkillActivationUpdateInput = {
   approvedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumAiSkillActivationOriginFieldUpdateOperationsInput | $Enums.AiSkillActivationOrigin
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutAiSkillActivationsNestedInput
@@ -518,6 +550,7 @@ export type AiSkillActivationUpdateInput = {
   receipts?: Prisma.AiExecutionReceiptUpdateManyWithoutSkillActivationNestedInput
   budgetReservations?: Prisma.AiBudgetReservationUpdateManyWithoutSkillActivationNestedInput
   usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutSkillActivationNestedInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionUpdateOneWithoutPolicyActivationsNestedInput
 }
 
 export type AiSkillActivationUncheckedUpdateInput = {
@@ -537,6 +570,8 @@ export type AiSkillActivationUncheckedUpdateInput = {
   suspendedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumAiSkillActivationOriginFieldUpdateOperationsInput | $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   receipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutSkillActivationNestedInput
@@ -561,6 +596,8 @@ export type AiSkillActivationCreateManyInput = {
   suspendedByUserId?: string | null
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  origin?: $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -578,6 +615,7 @@ export type AiSkillActivationUpdateManyMutationInput = {
   approvedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumAiSkillActivationOriginFieldUpdateOperationsInput | $Enums.AiSkillActivationOrigin
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -599,6 +637,8 @@ export type AiSkillActivationUncheckedUpdateManyInput = {
   suspendedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumAiSkillActivationOriginFieldUpdateOperationsInput | $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -643,6 +683,8 @@ export type AiSkillActivationCountOrderByAggregateInput = {
   suspendedByUserId?: Prisma.SortOrder
   suspendedAt?: Prisma.SortOrder
   suspensionReason?: Prisma.SortOrder
+  origin?: Prisma.SortOrder
+  companyPolicyRevisionId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -671,6 +713,8 @@ export type AiSkillActivationMaxOrderByAggregateInput = {
   suspendedByUserId?: Prisma.SortOrder
   suspendedAt?: Prisma.SortOrder
   suspensionReason?: Prisma.SortOrder
+  origin?: Prisma.SortOrder
+  companyPolicyRevisionId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -692,6 +736,8 @@ export type AiSkillActivationMinOrderByAggregateInput = {
   suspendedByUserId?: Prisma.SortOrder
   suspendedAt?: Prisma.SortOrder
   suspensionReason?: Prisma.SortOrder
+  origin?: Prisma.SortOrder
+  companyPolicyRevisionId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -839,8 +885,54 @@ export type AiSkillActivationUncheckedUpdateManyWithoutCompanyNestedInput = {
   deleteMany?: Prisma.AiSkillActivationScalarWhereInput | Prisma.AiSkillActivationScalarWhereInput[]
 }
 
+export type AiSkillActivationCreateNestedManyWithoutCompanyPolicyRevisionInput = {
+  create?: Prisma.XOR<Prisma.AiSkillActivationCreateWithoutCompanyPolicyRevisionInput, Prisma.AiSkillActivationUncheckedCreateWithoutCompanyPolicyRevisionInput> | Prisma.AiSkillActivationCreateWithoutCompanyPolicyRevisionInput[] | Prisma.AiSkillActivationUncheckedCreateWithoutCompanyPolicyRevisionInput[]
+  connectOrCreate?: Prisma.AiSkillActivationCreateOrConnectWithoutCompanyPolicyRevisionInput | Prisma.AiSkillActivationCreateOrConnectWithoutCompanyPolicyRevisionInput[]
+  createMany?: Prisma.AiSkillActivationCreateManyCompanyPolicyRevisionInputEnvelope
+  connect?: Prisma.AiSkillActivationWhereUniqueInput | Prisma.AiSkillActivationWhereUniqueInput[]
+}
+
+export type AiSkillActivationUncheckedCreateNestedManyWithoutCompanyPolicyRevisionInput = {
+  create?: Prisma.XOR<Prisma.AiSkillActivationCreateWithoutCompanyPolicyRevisionInput, Prisma.AiSkillActivationUncheckedCreateWithoutCompanyPolicyRevisionInput> | Prisma.AiSkillActivationCreateWithoutCompanyPolicyRevisionInput[] | Prisma.AiSkillActivationUncheckedCreateWithoutCompanyPolicyRevisionInput[]
+  connectOrCreate?: Prisma.AiSkillActivationCreateOrConnectWithoutCompanyPolicyRevisionInput | Prisma.AiSkillActivationCreateOrConnectWithoutCompanyPolicyRevisionInput[]
+  createMany?: Prisma.AiSkillActivationCreateManyCompanyPolicyRevisionInputEnvelope
+  connect?: Prisma.AiSkillActivationWhereUniqueInput | Prisma.AiSkillActivationWhereUniqueInput[]
+}
+
+export type AiSkillActivationUpdateManyWithoutCompanyPolicyRevisionNestedInput = {
+  create?: Prisma.XOR<Prisma.AiSkillActivationCreateWithoutCompanyPolicyRevisionInput, Prisma.AiSkillActivationUncheckedCreateWithoutCompanyPolicyRevisionInput> | Prisma.AiSkillActivationCreateWithoutCompanyPolicyRevisionInput[] | Prisma.AiSkillActivationUncheckedCreateWithoutCompanyPolicyRevisionInput[]
+  connectOrCreate?: Prisma.AiSkillActivationCreateOrConnectWithoutCompanyPolicyRevisionInput | Prisma.AiSkillActivationCreateOrConnectWithoutCompanyPolicyRevisionInput[]
+  upsert?: Prisma.AiSkillActivationUpsertWithWhereUniqueWithoutCompanyPolicyRevisionInput | Prisma.AiSkillActivationUpsertWithWhereUniqueWithoutCompanyPolicyRevisionInput[]
+  createMany?: Prisma.AiSkillActivationCreateManyCompanyPolicyRevisionInputEnvelope
+  set?: Prisma.AiSkillActivationWhereUniqueInput | Prisma.AiSkillActivationWhereUniqueInput[]
+  disconnect?: Prisma.AiSkillActivationWhereUniqueInput | Prisma.AiSkillActivationWhereUniqueInput[]
+  delete?: Prisma.AiSkillActivationWhereUniqueInput | Prisma.AiSkillActivationWhereUniqueInput[]
+  connect?: Prisma.AiSkillActivationWhereUniqueInput | Prisma.AiSkillActivationWhereUniqueInput[]
+  update?: Prisma.AiSkillActivationUpdateWithWhereUniqueWithoutCompanyPolicyRevisionInput | Prisma.AiSkillActivationUpdateWithWhereUniqueWithoutCompanyPolicyRevisionInput[]
+  updateMany?: Prisma.AiSkillActivationUpdateManyWithWhereWithoutCompanyPolicyRevisionInput | Prisma.AiSkillActivationUpdateManyWithWhereWithoutCompanyPolicyRevisionInput[]
+  deleteMany?: Prisma.AiSkillActivationScalarWhereInput | Prisma.AiSkillActivationScalarWhereInput[]
+}
+
+export type AiSkillActivationUncheckedUpdateManyWithoutCompanyPolicyRevisionNestedInput = {
+  create?: Prisma.XOR<Prisma.AiSkillActivationCreateWithoutCompanyPolicyRevisionInput, Prisma.AiSkillActivationUncheckedCreateWithoutCompanyPolicyRevisionInput> | Prisma.AiSkillActivationCreateWithoutCompanyPolicyRevisionInput[] | Prisma.AiSkillActivationUncheckedCreateWithoutCompanyPolicyRevisionInput[]
+  connectOrCreate?: Prisma.AiSkillActivationCreateOrConnectWithoutCompanyPolicyRevisionInput | Prisma.AiSkillActivationCreateOrConnectWithoutCompanyPolicyRevisionInput[]
+  upsert?: Prisma.AiSkillActivationUpsertWithWhereUniqueWithoutCompanyPolicyRevisionInput | Prisma.AiSkillActivationUpsertWithWhereUniqueWithoutCompanyPolicyRevisionInput[]
+  createMany?: Prisma.AiSkillActivationCreateManyCompanyPolicyRevisionInputEnvelope
+  set?: Prisma.AiSkillActivationWhereUniqueInput | Prisma.AiSkillActivationWhereUniqueInput[]
+  disconnect?: Prisma.AiSkillActivationWhereUniqueInput | Prisma.AiSkillActivationWhereUniqueInput[]
+  delete?: Prisma.AiSkillActivationWhereUniqueInput | Prisma.AiSkillActivationWhereUniqueInput[]
+  connect?: Prisma.AiSkillActivationWhereUniqueInput | Prisma.AiSkillActivationWhereUniqueInput[]
+  update?: Prisma.AiSkillActivationUpdateWithWhereUniqueWithoutCompanyPolicyRevisionInput | Prisma.AiSkillActivationUpdateWithWhereUniqueWithoutCompanyPolicyRevisionInput[]
+  updateMany?: Prisma.AiSkillActivationUpdateManyWithWhereWithoutCompanyPolicyRevisionInput | Prisma.AiSkillActivationUpdateManyWithWhereWithoutCompanyPolicyRevisionInput[]
+  deleteMany?: Prisma.AiSkillActivationScalarWhereInput | Prisma.AiSkillActivationScalarWhereInput[]
+}
+
 export type EnumAiSkillActivationStatusFieldUpdateOperationsInput = {
   set?: $Enums.AiSkillActivationStatus
+}
+
+export type EnumAiSkillActivationOriginFieldUpdateOperationsInput = {
+  set?: $Enums.AiSkillActivationOrigin
 }
 
 export type AiSkillActivationCreateNestedOneWithoutReceiptsInput = {
@@ -900,6 +992,7 @@ export type AiSkillActivationCreateWithoutApprovedByInput = {
   approvedAt?: Date | string
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  origin?: $Enums.AiSkillActivationOrigin
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutAiSkillActivationsInput
@@ -907,6 +1000,7 @@ export type AiSkillActivationCreateWithoutApprovedByInput = {
   receipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutSkillActivationInput
   budgetReservations?: Prisma.AiBudgetReservationCreateNestedManyWithoutSkillActivationInput
   usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutSkillActivationInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionCreateNestedOneWithoutPolicyActivationsInput
 }
 
 export type AiSkillActivationUncheckedCreateWithoutApprovedByInput = {
@@ -924,6 +1018,8 @@ export type AiSkillActivationUncheckedCreateWithoutApprovedByInput = {
   suspendedByUserId?: string | null
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  origin?: $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   receipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutSkillActivationInput
@@ -954,6 +1050,7 @@ export type AiSkillActivationCreateWithoutSuspendedByInput = {
   approvedAt?: Date | string
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  origin?: $Enums.AiSkillActivationOrigin
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutAiSkillActivationsInput
@@ -961,6 +1058,7 @@ export type AiSkillActivationCreateWithoutSuspendedByInput = {
   receipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutSkillActivationInput
   budgetReservations?: Prisma.AiBudgetReservationCreateNestedManyWithoutSkillActivationInput
   usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutSkillActivationInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionCreateNestedOneWithoutPolicyActivationsInput
 }
 
 export type AiSkillActivationUncheckedCreateWithoutSuspendedByInput = {
@@ -978,6 +1076,8 @@ export type AiSkillActivationUncheckedCreateWithoutSuspendedByInput = {
   approvedAt?: Date | string
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  origin?: $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   receipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutSkillActivationInput
@@ -1031,6 +1131,8 @@ export type AiSkillActivationScalarWhereInput = {
   suspendedByUserId?: Prisma.UuidNullableFilter<"AiSkillActivation"> | string | null
   suspendedAt?: Prisma.DateTimeNullableFilter<"AiSkillActivation"> | Date | string | null
   suspensionReason?: Prisma.StringNullableFilter<"AiSkillActivation"> | string | null
+  origin?: Prisma.EnumAiSkillActivationOriginFilter<"AiSkillActivation"> | $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId?: Prisma.UuidNullableFilter<"AiSkillActivation"> | string | null
   createdAt?: Prisma.DateTimeFilter<"AiSkillActivation"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AiSkillActivation"> | Date | string
 }
@@ -1064,6 +1166,7 @@ export type AiSkillActivationCreateWithoutCompanyInput = {
   approvedAt?: Date | string
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  origin?: $Enums.AiSkillActivationOrigin
   createdAt?: Date | string
   updatedAt?: Date | string
   approvedBy: Prisma.UserCreateNestedOneWithoutApprovedAiSkillActivationsInput
@@ -1071,6 +1174,7 @@ export type AiSkillActivationCreateWithoutCompanyInput = {
   receipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutSkillActivationInput
   budgetReservations?: Prisma.AiBudgetReservationCreateNestedManyWithoutSkillActivationInput
   usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutSkillActivationInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionCreateNestedOneWithoutPolicyActivationsInput
 }
 
 export type AiSkillActivationUncheckedCreateWithoutCompanyInput = {
@@ -1088,6 +1192,8 @@ export type AiSkillActivationUncheckedCreateWithoutCompanyInput = {
   suspendedByUserId?: string | null
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  origin?: $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   receipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutSkillActivationInput
@@ -1121,6 +1227,79 @@ export type AiSkillActivationUpdateManyWithWhereWithoutCompanyInput = {
   data: Prisma.XOR<Prisma.AiSkillActivationUpdateManyMutationInput, Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyInput>
 }
 
+export type AiSkillActivationCreateWithoutCompanyPolicyRevisionInput = {
+  id?: string
+  skillKey: string
+  skillVersion: number
+  policyVersion: number
+  status?: $Enums.AiSkillActivationStatus
+  validFrom?: Date | string
+  validUntil?: Date | string | null
+  dailyRequestLimit?: number | null
+  dailyCostLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  approvedAt?: Date | string
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
+  origin?: $Enums.AiSkillActivationOrigin
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  company: Prisma.CompanyCreateNestedOneWithoutAiSkillActivationsInput
+  approvedBy: Prisma.UserCreateNestedOneWithoutApprovedAiSkillActivationsInput
+  suspendedBy?: Prisma.UserCreateNestedOneWithoutSuspendedAiSkillActivationsInput
+  receipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutSkillActivationInput
+  budgetReservations?: Prisma.AiBudgetReservationCreateNestedManyWithoutSkillActivationInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutSkillActivationInput
+}
+
+export type AiSkillActivationUncheckedCreateWithoutCompanyPolicyRevisionInput = {
+  id?: string
+  skillKey: string
+  skillVersion: number
+  policyVersion: number
+  status?: $Enums.AiSkillActivationStatus
+  validFrom?: Date | string
+  validUntil?: Date | string | null
+  dailyRequestLimit?: number | null
+  dailyCostLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  approvedByUserId: string
+  approvedAt?: Date | string
+  suspendedByUserId?: string | null
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
+  origin?: $Enums.AiSkillActivationOrigin
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  receipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutSkillActivationInput
+  budgetReservations?: Prisma.AiBudgetReservationUncheckedCreateNestedManyWithoutSkillActivationInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedCreateNestedManyWithoutSkillActivationInput
+}
+
+export type AiSkillActivationCreateOrConnectWithoutCompanyPolicyRevisionInput = {
+  where: Prisma.AiSkillActivationWhereUniqueInput
+  create: Prisma.XOR<Prisma.AiSkillActivationCreateWithoutCompanyPolicyRevisionInput, Prisma.AiSkillActivationUncheckedCreateWithoutCompanyPolicyRevisionInput>
+}
+
+export type AiSkillActivationCreateManyCompanyPolicyRevisionInputEnvelope = {
+  data: Prisma.AiSkillActivationCreateManyCompanyPolicyRevisionInput | Prisma.AiSkillActivationCreateManyCompanyPolicyRevisionInput[]
+  skipDuplicates?: boolean
+}
+
+export type AiSkillActivationUpsertWithWhereUniqueWithoutCompanyPolicyRevisionInput = {
+  where: Prisma.AiSkillActivationWhereUniqueInput
+  update: Prisma.XOR<Prisma.AiSkillActivationUpdateWithoutCompanyPolicyRevisionInput, Prisma.AiSkillActivationUncheckedUpdateWithoutCompanyPolicyRevisionInput>
+  create: Prisma.XOR<Prisma.AiSkillActivationCreateWithoutCompanyPolicyRevisionInput, Prisma.AiSkillActivationUncheckedCreateWithoutCompanyPolicyRevisionInput>
+}
+
+export type AiSkillActivationUpdateWithWhereUniqueWithoutCompanyPolicyRevisionInput = {
+  where: Prisma.AiSkillActivationWhereUniqueInput
+  data: Prisma.XOR<Prisma.AiSkillActivationUpdateWithoutCompanyPolicyRevisionInput, Prisma.AiSkillActivationUncheckedUpdateWithoutCompanyPolicyRevisionInput>
+}
+
+export type AiSkillActivationUpdateManyWithWhereWithoutCompanyPolicyRevisionInput = {
+  where: Prisma.AiSkillActivationScalarWhereInput
+  data: Prisma.XOR<Prisma.AiSkillActivationUpdateManyMutationInput, Prisma.AiSkillActivationUncheckedUpdateManyWithoutCompanyPolicyRevisionInput>
+}
+
 export type AiSkillActivationCreateWithoutReceiptsInput = {
   id?: string
   skillKey: string
@@ -1134,6 +1313,7 @@ export type AiSkillActivationCreateWithoutReceiptsInput = {
   approvedAt?: Date | string
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  origin?: $Enums.AiSkillActivationOrigin
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutAiSkillActivationsInput
@@ -1141,6 +1321,7 @@ export type AiSkillActivationCreateWithoutReceiptsInput = {
   suspendedBy?: Prisma.UserCreateNestedOneWithoutSuspendedAiSkillActivationsInput
   budgetReservations?: Prisma.AiBudgetReservationCreateNestedManyWithoutSkillActivationInput
   usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutSkillActivationInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionCreateNestedOneWithoutPolicyActivationsInput
 }
 
 export type AiSkillActivationUncheckedCreateWithoutReceiptsInput = {
@@ -1160,6 +1341,8 @@ export type AiSkillActivationUncheckedCreateWithoutReceiptsInput = {
   suspendedByUserId?: string | null
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  origin?: $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   budgetReservations?: Prisma.AiBudgetReservationUncheckedCreateNestedManyWithoutSkillActivationInput
@@ -1195,6 +1378,7 @@ export type AiSkillActivationUpdateWithoutReceiptsInput = {
   approvedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumAiSkillActivationOriginFieldUpdateOperationsInput | $Enums.AiSkillActivationOrigin
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutAiSkillActivationsNestedInput
@@ -1202,6 +1386,7 @@ export type AiSkillActivationUpdateWithoutReceiptsInput = {
   suspendedBy?: Prisma.UserUpdateOneWithoutSuspendedAiSkillActivationsNestedInput
   budgetReservations?: Prisma.AiBudgetReservationUpdateManyWithoutSkillActivationNestedInput
   usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutSkillActivationNestedInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionUpdateOneWithoutPolicyActivationsNestedInput
 }
 
 export type AiSkillActivationUncheckedUpdateWithoutReceiptsInput = {
@@ -1221,6 +1406,8 @@ export type AiSkillActivationUncheckedUpdateWithoutReceiptsInput = {
   suspendedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumAiSkillActivationOriginFieldUpdateOperationsInput | $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   budgetReservations?: Prisma.AiBudgetReservationUncheckedUpdateManyWithoutSkillActivationNestedInput
@@ -1240,6 +1427,7 @@ export type AiSkillActivationCreateWithoutBudgetReservationsInput = {
   approvedAt?: Date | string
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  origin?: $Enums.AiSkillActivationOrigin
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutAiSkillActivationsInput
@@ -1247,6 +1435,7 @@ export type AiSkillActivationCreateWithoutBudgetReservationsInput = {
   suspendedBy?: Prisma.UserCreateNestedOneWithoutSuspendedAiSkillActivationsInput
   receipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutSkillActivationInput
   usageLedgerEntries?: Prisma.AiUsageLedgerCreateNestedManyWithoutSkillActivationInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionCreateNestedOneWithoutPolicyActivationsInput
 }
 
 export type AiSkillActivationUncheckedCreateWithoutBudgetReservationsInput = {
@@ -1266,6 +1455,8 @@ export type AiSkillActivationUncheckedCreateWithoutBudgetReservationsInput = {
   suspendedByUserId?: string | null
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  origin?: $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   receipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutSkillActivationInput
@@ -1301,6 +1492,7 @@ export type AiSkillActivationUpdateWithoutBudgetReservationsInput = {
   approvedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumAiSkillActivationOriginFieldUpdateOperationsInput | $Enums.AiSkillActivationOrigin
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutAiSkillActivationsNestedInput
@@ -1308,6 +1500,7 @@ export type AiSkillActivationUpdateWithoutBudgetReservationsInput = {
   suspendedBy?: Prisma.UserUpdateOneWithoutSuspendedAiSkillActivationsNestedInput
   receipts?: Prisma.AiExecutionReceiptUpdateManyWithoutSkillActivationNestedInput
   usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutSkillActivationNestedInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionUpdateOneWithoutPolicyActivationsNestedInput
 }
 
 export type AiSkillActivationUncheckedUpdateWithoutBudgetReservationsInput = {
@@ -1327,6 +1520,8 @@ export type AiSkillActivationUncheckedUpdateWithoutBudgetReservationsInput = {
   suspendedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumAiSkillActivationOriginFieldUpdateOperationsInput | $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   receipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutSkillActivationNestedInput
@@ -1346,6 +1541,7 @@ export type AiSkillActivationCreateWithoutUsageLedgerEntriesInput = {
   approvedAt?: Date | string
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  origin?: $Enums.AiSkillActivationOrigin
   createdAt?: Date | string
   updatedAt?: Date | string
   company: Prisma.CompanyCreateNestedOneWithoutAiSkillActivationsInput
@@ -1353,6 +1549,7 @@ export type AiSkillActivationCreateWithoutUsageLedgerEntriesInput = {
   suspendedBy?: Prisma.UserCreateNestedOneWithoutSuspendedAiSkillActivationsInput
   receipts?: Prisma.AiExecutionReceiptCreateNestedManyWithoutSkillActivationInput
   budgetReservations?: Prisma.AiBudgetReservationCreateNestedManyWithoutSkillActivationInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionCreateNestedOneWithoutPolicyActivationsInput
 }
 
 export type AiSkillActivationUncheckedCreateWithoutUsageLedgerEntriesInput = {
@@ -1372,6 +1569,8 @@ export type AiSkillActivationUncheckedCreateWithoutUsageLedgerEntriesInput = {
   suspendedByUserId?: string | null
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  origin?: $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   receipts?: Prisma.AiExecutionReceiptUncheckedCreateNestedManyWithoutSkillActivationInput
@@ -1407,6 +1606,7 @@ export type AiSkillActivationUpdateWithoutUsageLedgerEntriesInput = {
   approvedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumAiSkillActivationOriginFieldUpdateOperationsInput | $Enums.AiSkillActivationOrigin
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutAiSkillActivationsNestedInput
@@ -1414,6 +1614,7 @@ export type AiSkillActivationUpdateWithoutUsageLedgerEntriesInput = {
   suspendedBy?: Prisma.UserUpdateOneWithoutSuspendedAiSkillActivationsNestedInput
   receipts?: Prisma.AiExecutionReceiptUpdateManyWithoutSkillActivationNestedInput
   budgetReservations?: Prisma.AiBudgetReservationUpdateManyWithoutSkillActivationNestedInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionUpdateOneWithoutPolicyActivationsNestedInput
 }
 
 export type AiSkillActivationUncheckedUpdateWithoutUsageLedgerEntriesInput = {
@@ -1433,6 +1634,8 @@ export type AiSkillActivationUncheckedUpdateWithoutUsageLedgerEntriesInput = {
   suspendedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumAiSkillActivationOriginFieldUpdateOperationsInput | $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   receipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutSkillActivationNestedInput
@@ -1454,6 +1657,8 @@ export type AiSkillActivationCreateManyApprovedByInput = {
   suspendedByUserId?: string | null
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  origin?: $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1473,6 +1678,8 @@ export type AiSkillActivationCreateManySuspendedByInput = {
   approvedAt?: Date | string
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  origin?: $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1490,6 +1697,7 @@ export type AiSkillActivationUpdateWithoutApprovedByInput = {
   approvedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumAiSkillActivationOriginFieldUpdateOperationsInput | $Enums.AiSkillActivationOrigin
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutAiSkillActivationsNestedInput
@@ -1497,6 +1705,7 @@ export type AiSkillActivationUpdateWithoutApprovedByInput = {
   receipts?: Prisma.AiExecutionReceiptUpdateManyWithoutSkillActivationNestedInput
   budgetReservations?: Prisma.AiBudgetReservationUpdateManyWithoutSkillActivationNestedInput
   usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutSkillActivationNestedInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionUpdateOneWithoutPolicyActivationsNestedInput
 }
 
 export type AiSkillActivationUncheckedUpdateWithoutApprovedByInput = {
@@ -1514,6 +1723,8 @@ export type AiSkillActivationUncheckedUpdateWithoutApprovedByInput = {
   suspendedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumAiSkillActivationOriginFieldUpdateOperationsInput | $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   receipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutSkillActivationNestedInput
@@ -1536,6 +1747,8 @@ export type AiSkillActivationUncheckedUpdateManyWithoutApprovedByInput = {
   suspendedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumAiSkillActivationOriginFieldUpdateOperationsInput | $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1553,6 +1766,7 @@ export type AiSkillActivationUpdateWithoutSuspendedByInput = {
   approvedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumAiSkillActivationOriginFieldUpdateOperationsInput | $Enums.AiSkillActivationOrigin
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutAiSkillActivationsNestedInput
@@ -1560,6 +1774,7 @@ export type AiSkillActivationUpdateWithoutSuspendedByInput = {
   receipts?: Prisma.AiExecutionReceiptUpdateManyWithoutSkillActivationNestedInput
   budgetReservations?: Prisma.AiBudgetReservationUpdateManyWithoutSkillActivationNestedInput
   usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutSkillActivationNestedInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionUpdateOneWithoutPolicyActivationsNestedInput
 }
 
 export type AiSkillActivationUncheckedUpdateWithoutSuspendedByInput = {
@@ -1577,6 +1792,8 @@ export type AiSkillActivationUncheckedUpdateWithoutSuspendedByInput = {
   approvedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumAiSkillActivationOriginFieldUpdateOperationsInput | $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   receipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutSkillActivationNestedInput
@@ -1599,6 +1816,8 @@ export type AiSkillActivationUncheckedUpdateManyWithoutSuspendedByInput = {
   approvedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumAiSkillActivationOriginFieldUpdateOperationsInput | $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1618,6 +1837,8 @@ export type AiSkillActivationCreateManyCompanyInput = {
   suspendedByUserId?: string | null
   suspendedAt?: Date | string | null
   suspensionReason?: string | null
+  origin?: $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1635,6 +1856,7 @@ export type AiSkillActivationUpdateWithoutCompanyInput = {
   approvedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumAiSkillActivationOriginFieldUpdateOperationsInput | $Enums.AiSkillActivationOrigin
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   approvedBy?: Prisma.UserUpdateOneRequiredWithoutApprovedAiSkillActivationsNestedInput
@@ -1642,6 +1864,7 @@ export type AiSkillActivationUpdateWithoutCompanyInput = {
   receipts?: Prisma.AiExecutionReceiptUpdateManyWithoutSkillActivationNestedInput
   budgetReservations?: Prisma.AiBudgetReservationUpdateManyWithoutSkillActivationNestedInput
   usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutSkillActivationNestedInput
+  companyPolicyRevision?: Prisma.AiCompanyPolicyRevisionUpdateOneWithoutPolicyActivationsNestedInput
 }
 
 export type AiSkillActivationUncheckedUpdateWithoutCompanyInput = {
@@ -1659,6 +1882,8 @@ export type AiSkillActivationUncheckedUpdateWithoutCompanyInput = {
   suspendedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumAiSkillActivationOriginFieldUpdateOperationsInput | $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   receipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutSkillActivationNestedInput
@@ -1681,6 +1906,95 @@ export type AiSkillActivationUncheckedUpdateManyWithoutCompanyInput = {
   suspendedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumAiSkillActivationOriginFieldUpdateOperationsInput | $Enums.AiSkillActivationOrigin
+  companyPolicyRevisionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AiSkillActivationCreateManyCompanyPolicyRevisionInput = {
+  id?: string
+  skillKey: string
+  skillVersion: number
+  policyVersion: number
+  status?: $Enums.AiSkillActivationStatus
+  validFrom?: Date | string
+  validUntil?: Date | string | null
+  dailyRequestLimit?: number | null
+  dailyCostLimit?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  approvedByUserId: string
+  approvedAt?: Date | string
+  suspendedByUserId?: string | null
+  suspendedAt?: Date | string | null
+  suspensionReason?: string | null
+  origin?: $Enums.AiSkillActivationOrigin
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type AiSkillActivationUpdateWithoutCompanyPolicyRevisionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  skillKey?: Prisma.StringFieldUpdateOperationsInput | string
+  skillVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  policyVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumAiSkillActivationStatusFieldUpdateOperationsInput | $Enums.AiSkillActivationStatus
+  validFrom?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dailyRequestLimit?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dailyCostLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  approvedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumAiSkillActivationOriginFieldUpdateOperationsInput | $Enums.AiSkillActivationOrigin
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  company?: Prisma.CompanyUpdateOneRequiredWithoutAiSkillActivationsNestedInput
+  approvedBy?: Prisma.UserUpdateOneRequiredWithoutApprovedAiSkillActivationsNestedInput
+  suspendedBy?: Prisma.UserUpdateOneWithoutSuspendedAiSkillActivationsNestedInput
+  receipts?: Prisma.AiExecutionReceiptUpdateManyWithoutSkillActivationNestedInput
+  budgetReservations?: Prisma.AiBudgetReservationUpdateManyWithoutSkillActivationNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUpdateManyWithoutSkillActivationNestedInput
+}
+
+export type AiSkillActivationUncheckedUpdateWithoutCompanyPolicyRevisionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  skillKey?: Prisma.StringFieldUpdateOperationsInput | string
+  skillVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  policyVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumAiSkillActivationStatusFieldUpdateOperationsInput | $Enums.AiSkillActivationStatus
+  validFrom?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dailyRequestLimit?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dailyCostLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  approvedByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  approvedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  suspendedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumAiSkillActivationOriginFieldUpdateOperationsInput | $Enums.AiSkillActivationOrigin
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  receipts?: Prisma.AiExecutionReceiptUncheckedUpdateManyWithoutSkillActivationNestedInput
+  budgetReservations?: Prisma.AiBudgetReservationUncheckedUpdateManyWithoutSkillActivationNestedInput
+  usageLedgerEntries?: Prisma.AiUsageLedgerUncheckedUpdateManyWithoutSkillActivationNestedInput
+}
+
+export type AiSkillActivationUncheckedUpdateManyWithoutCompanyPolicyRevisionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  skillKey?: Prisma.StringFieldUpdateOperationsInput | string
+  skillVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  policyVersion?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumAiSkillActivationStatusFieldUpdateOperationsInput | $Enums.AiSkillActivationStatus
+  validFrom?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dailyRequestLimit?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dailyCostLimit?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  approvedByUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  approvedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  suspendedByUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  suspendedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspensionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumAiSkillActivationOriginFieldUpdateOperationsInput | $Enums.AiSkillActivationOrigin
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1751,6 +2065,8 @@ export type AiSkillActivationSelect<ExtArgs extends runtime.Types.Extensions.Int
   suspendedByUserId?: boolean
   suspendedAt?: boolean
   suspensionReason?: boolean
+  origin?: boolean
+  companyPolicyRevisionId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
@@ -1759,6 +2075,7 @@ export type AiSkillActivationSelect<ExtArgs extends runtime.Types.Extensions.Int
   receipts?: boolean | Prisma.AiSkillActivation$receiptsArgs<ExtArgs>
   budgetReservations?: boolean | Prisma.AiSkillActivation$budgetReservationsArgs<ExtArgs>
   usageLedgerEntries?: boolean | Prisma.AiSkillActivation$usageLedgerEntriesArgs<ExtArgs>
+  companyPolicyRevision?: boolean | Prisma.AiSkillActivation$companyPolicyRevisionArgs<ExtArgs>
   _count?: boolean | Prisma.AiSkillActivationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["aiSkillActivation"]>
 
@@ -1779,11 +2096,14 @@ export type AiSkillActivationSelectCreateManyAndReturn<ExtArgs extends runtime.T
   suspendedByUserId?: boolean
   suspendedAt?: boolean
   suspensionReason?: boolean
+  origin?: boolean
+  companyPolicyRevisionId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   approvedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   suspendedBy?: boolean | Prisma.AiSkillActivation$suspendedByArgs<ExtArgs>
+  companyPolicyRevision?: boolean | Prisma.AiSkillActivation$companyPolicyRevisionArgs<ExtArgs>
 }, ExtArgs["result"]["aiSkillActivation"]>
 
 export type AiSkillActivationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1803,11 +2123,14 @@ export type AiSkillActivationSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   suspendedByUserId?: boolean
   suspendedAt?: boolean
   suspensionReason?: boolean
+  origin?: boolean
+  companyPolicyRevisionId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   approvedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   suspendedBy?: boolean | Prisma.AiSkillActivation$suspendedByArgs<ExtArgs>
+  companyPolicyRevision?: boolean | Prisma.AiSkillActivation$companyPolicyRevisionArgs<ExtArgs>
 }, ExtArgs["result"]["aiSkillActivation"]>
 
 export type AiSkillActivationSelectScalar = {
@@ -1827,11 +2150,13 @@ export type AiSkillActivationSelectScalar = {
   suspendedByUserId?: boolean
   suspendedAt?: boolean
   suspensionReason?: boolean
+  origin?: boolean
+  companyPolicyRevisionId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type AiSkillActivationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "skillKey" | "skillVersion" | "policyVersion" | "status" | "validFrom" | "validUntil" | "dailyRequestLimit" | "dailyCostLimit" | "approvedByUserId" | "approvedAt" | "suspendedByUserId" | "suspendedAt" | "suspensionReason" | "createdAt" | "updatedAt", ExtArgs["result"]["aiSkillActivation"]>
+export type AiSkillActivationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "companyId" | "skillKey" | "skillVersion" | "policyVersion" | "status" | "validFrom" | "validUntil" | "dailyRequestLimit" | "dailyCostLimit" | "approvedByUserId" | "approvedAt" | "suspendedByUserId" | "suspendedAt" | "suspensionReason" | "origin" | "companyPolicyRevisionId" | "createdAt" | "updatedAt", ExtArgs["result"]["aiSkillActivation"]>
 export type AiSkillActivationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   approvedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1839,17 +2164,20 @@ export type AiSkillActivationInclude<ExtArgs extends runtime.Types.Extensions.In
   receipts?: boolean | Prisma.AiSkillActivation$receiptsArgs<ExtArgs>
   budgetReservations?: boolean | Prisma.AiSkillActivation$budgetReservationsArgs<ExtArgs>
   usageLedgerEntries?: boolean | Prisma.AiSkillActivation$usageLedgerEntriesArgs<ExtArgs>
+  companyPolicyRevision?: boolean | Prisma.AiSkillActivation$companyPolicyRevisionArgs<ExtArgs>
   _count?: boolean | Prisma.AiSkillActivationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AiSkillActivationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   approvedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   suspendedBy?: boolean | Prisma.AiSkillActivation$suspendedByArgs<ExtArgs>
+  companyPolicyRevision?: boolean | Prisma.AiSkillActivation$companyPolicyRevisionArgs<ExtArgs>
 }
 export type AiSkillActivationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   approvedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   suspendedBy?: boolean | Prisma.AiSkillActivation$suspendedByArgs<ExtArgs>
+  companyPolicyRevision?: boolean | Prisma.AiSkillActivation$companyPolicyRevisionArgs<ExtArgs>
 }
 
 export type $AiSkillActivationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1861,6 +2189,7 @@ export type $AiSkillActivationPayload<ExtArgs extends runtime.Types.Extensions.I
     receipts: Prisma.$AiExecutionReceiptPayload<ExtArgs>[]
     budgetReservations: Prisma.$AiBudgetReservationPayload<ExtArgs>[]
     usageLedgerEntries: Prisma.$AiUsageLedgerPayload<ExtArgs>[]
+    companyPolicyRevision: Prisma.$AiCompanyPolicyRevisionPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1879,6 +2208,8 @@ export type $AiSkillActivationPayload<ExtArgs extends runtime.Types.Extensions.I
     suspendedByUserId: string | null
     suspendedAt: Date | null
     suspensionReason: string | null
+    origin: $Enums.AiSkillActivationOrigin
+    companyPolicyRevisionId: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["aiSkillActivation"]>
@@ -2281,6 +2612,7 @@ export interface Prisma__AiSkillActivationClient<T, Null = never, ExtArgs extend
   receipts<T extends Prisma.AiSkillActivation$receiptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiSkillActivation$receiptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiExecutionReceiptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   budgetReservations<T extends Prisma.AiSkillActivation$budgetReservationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiSkillActivation$budgetReservationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiBudgetReservationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   usageLedgerEntries<T extends Prisma.AiSkillActivation$usageLedgerEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiSkillActivation$usageLedgerEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AiUsageLedgerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  companyPolicyRevision<T extends Prisma.AiSkillActivation$companyPolicyRevisionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AiSkillActivation$companyPolicyRevisionArgs<ExtArgs>>): Prisma.Prisma__AiCompanyPolicyRevisionClient<runtime.Types.Result.GetResult<Prisma.$AiCompanyPolicyRevisionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2326,6 +2658,8 @@ export interface AiSkillActivationFieldRefs {
   readonly suspendedByUserId: Prisma.FieldRef<"AiSkillActivation", 'String'>
   readonly suspendedAt: Prisma.FieldRef<"AiSkillActivation", 'DateTime'>
   readonly suspensionReason: Prisma.FieldRef<"AiSkillActivation", 'String'>
+  readonly origin: Prisma.FieldRef<"AiSkillActivation", 'AiSkillActivationOrigin'>
+  readonly companyPolicyRevisionId: Prisma.FieldRef<"AiSkillActivation", 'String'>
   readonly createdAt: Prisma.FieldRef<"AiSkillActivation", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"AiSkillActivation", 'DateTime'>
 }
@@ -2817,6 +3151,25 @@ export type AiSkillActivation$usageLedgerEntriesArgs<ExtArgs extends runtime.Typ
   take?: number
   skip?: number
   distinct?: Prisma.AiUsageLedgerScalarFieldEnum | Prisma.AiUsageLedgerScalarFieldEnum[]
+}
+
+/**
+ * AiSkillActivation.companyPolicyRevision
+ */
+export type AiSkillActivation$companyPolicyRevisionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AiCompanyPolicyRevision
+   */
+  select?: Prisma.AiCompanyPolicyRevisionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AiCompanyPolicyRevision
+   */
+  omit?: Prisma.AiCompanyPolicyRevisionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AiCompanyPolicyRevisionInclude<ExtArgs> | null
+  where?: Prisma.AiCompanyPolicyRevisionWhereInput
 }
 
 /**

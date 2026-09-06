@@ -25,7 +25,9 @@ async function verify(): Promise<void> {
   const userId = randomUUID();
   const providerId = randomUUID();
   const activationId = randomUUID();
-  const runIds = [randomUUID(), randomUUID()];
+  const runIds = Array.from({ length: 24 }, () => randomUUID());
+  const policyId = randomUUID();
+  const policyRevisionId = randomUUID();
   const context: TrustedCompanyActorContext = { tenantId, companyId, actorUserId: userId };
 
   try {
@@ -35,18 +37,24 @@ async function verify(): Promise<void> {
       await transaction.company.create({ data: { id: companyId, tenantId, nameAr: "شركة تحقق استهلاك بصيرة", nameEn: "Basira consumption verification company" } });
       await transaction.aiProviderConfiguration.create({ data: {
         id: providerId, tenantId, provider: "OPENAI_COMPATIBLE", model: "gpt-5-mini", status: "ACTIVE", isDefault: true,
-        dailyRequestLimit: 1, dailyCostLimit: new Prisma.Decimal("0.01000000"), encryptedCredential: "verification-ciphertext", credentialIv: "iv", credentialTag: "tag",
+        dailyRequestLimit: 10, dailyCostLimit: new Prisma.Decimal("0.01000000"), encryptedCredential: "verification-ciphertext", credentialIv: "iv", credentialTag: "tag",
       } });
       await transaction.aiSkillActivation.create({ data: {
         id: activationId, tenantId, companyId, skillKey: "verification.cost_skill", skillVersion: 1, policyVersion: 1,
         status: "PILOT", dailyRequestLimit: 1, dailyCostLimit: new Prisma.Decimal("0.01000000"), approvedByUserId: userId,
       } });
       await transaction.aiInterpretationRun.createMany({ data: runIds.map((id, index) => ({
-        id, tenantId, companyId, reuseKey: `${index + 1}`.repeat(64), status: "PENDING", leaseExpiresAt: new Date(Date.now() + 60_000), claimedByUserId: userId,
+        id, tenantId, companyId, reuseKey: String(index + 1).padStart(2, "0").repeat(32), status: "PENDING", leaseExpiresAt: new Date(Date.now() + 60_000), claimedByUserId: userId,
       })) });
+      await transaction.aiCompanyPolicy.create({ data: { id: policyId, tenantId, companyId, currentVersion: 1 } });
+      await transaction.aiCompanyPolicyRevision.create({ data: {
+        id: policyRevisionId, tenantId, companyId, policyId, version: 1, mode: "ENABLED",
+        monthlyBudgetUsdCents: new Prisma.Decimal(100), billingTimeZone: "Asia/Riyadh",
+        changedByUserId: userId, changeReason: "Verification policy", policyDigest: "0".repeat(64),
+      } });
     });
 
-    const provider = { id: providerId, provider: "OPENAI_COMPATIBLE" as const, model: "gpt-5-mini", dailyRequestLimit: 1, dailyCostLimit: new Prisma.Decimal("0.01000000") };
+    const provider = { id: providerId, provider: "OPENAI_COMPATIBLE" as const, model: "gpt-5-mini", dailyRequestLimit: 10, dailyCostLimit: new Prisma.Decimal("0.01000000") };
     const activation = { id: activationId, dailyRequestLimit: 1, dailyCostLimit: new Prisma.Decimal("0.01000000") };
     const profile = { key: "verification.low_cost", tokenizerModel: BASIRA_S2_TOKENIZER_MODEL, tokenSafetyMargin: 32, maxInputTokens: 500, maxOutputTokens: 100 };
     const arabicCount = countBasiraS2InputTokens({
@@ -58,14 +66,14 @@ async function verify(): Promise<void> {
     assert.ok(!arabicCount.exceedsLimit && arabicCount.contentTokens !== null && arabicCount.estimatedTokens === arabicCount.contentTokens + 32, "Arabic evidence must use the local GPT-5 BPE counter plus the fixed safety margin.");
     const oversizedCount = countBasiraS2InputTokens({ model: "gpt-5-mini", text: "حد".repeat(10_000), maxInputTokens: 64, safetyMarginTokens: 16 });
     assert.equal(oversizedCount.exceedsLimit, true, "The local counter must reject oversized evidence before provider egress.");
-    const results = await Promise.allSettled(runIds.map((interpretationRunId) => guard.reserve({
+    const results = await Promise.allSettled(runIds.slice(0, 20).map((interpretationRunId) => guard.reserve({
       context, provider, activation, interpretationRunId, profile, inputText: "حزمة أدلة تحقق محلية",
     })));
     const fulfilled = results.filter((result): result is PromiseFulfilledResult<Awaited<ReturnType<typeof guard.reserve>>> => result.status === "fulfilled");
     const rejected = results.filter((result): result is PromiseRejectedResult => result.status === "rejected");
     const resultSummary = results.map((result) => result.status === "fulfilled" ? "fulfilled" : result.reason instanceof Error ? `${result.reason.name}:${result.reason.message}` : "rejected").join(" | ");
-    assert.equal(fulfilled.length, 1, `Exactly one concurrent reservation may pass a one-request cap. ${resultSummary}`);
-    assert.equal(rejected.length, 1, "The second concurrent reservation must be blocked.");
+    assert.equal(fulfilled.length, 1, `Exactly one of twenty concurrent reservations may pass a one-request cap. ${resultSummary}`);
+    assert.equal(rejected.length, 19, "Every competing reservation must be blocked before provider egress.");
     const rejectedResult = rejected[0];
     const fulfilledResult = fulfilled[0];
     assert.ok(rejectedResult && rejectedResult.reason instanceof HttpException && rejectedResult.reason.getStatus() === 429, "The blocked reservation must be a pre-egress consumption limit.");
@@ -84,10 +92,37 @@ async function verify(): Promise<void> {
       });
       assert.ok(actual.greaterThan(0), "Actual metered cost must be positive.");
     });
-    console.log("Basira consumption guard verification passed: concurrent reservation, hard pre-egress cap, and settlement are active.");
+    const companyPolicy = { policyRevisionId, monthlyBudgetUsdCents: new Prisma.Decimal(100) };
+    const uncertain = await guard.reserve({ context, provider, activation, interpretationRunId: requiredRunId(runIds, 20), profile, inputText: "حجز قد يتعذر معه تأكيد نتيجة المزود", companyPolicy });
+    const reconciliation = await guard.reconcileExpiredReservationsForTenant(tenantId, new Date(Date.now() + 11 * 60 * 1_000));
+    assert.equal(reconciliation.markedUnknown, 1, "The scheduled reconciliation must classify every elapsed reservation without another provider request.");
+    await database.inTenantTransaction(tenantId, async (transaction) => {
+      const expired = await transaction.aiBudgetReservation.findUniqueOrThrow({ where: { id: uncertain.id } });
+      assert.equal(expired.status, AiBudgetReservationStatus.UNKNOWN_PROVIDER_OUTCOME, "A lapsed reservation must retain an uncertain provider outcome, not release its budget.");
+      assert.ok(expired.chargeCostUsd.greaterThan(0), "An uncertain provider outcome must keep its conservative cost charge.");
+      assert.equal(await transaction.auditEvent.count({ where: { tenantId, companyId, action: "platform.ai.budget_reservation_provider_outcome_unknown", entityId: uncertain.id } }), 1, "The scheduled reconciliation must leave one durable operational audit record.");
+      await transaction.aiCompanyPolicyRevision.create({ data: {
+        id: randomUUID(), tenantId, companyId, policyId, version: 2, mode: "PAUSED",
+        monthlyBudgetUsdCents: null, billingTimeZone: "Asia/Riyadh",
+        changedByUserId: userId, changeReason: "Verification pause", policyDigest: "1".repeat(64),
+      } });
+      await transaction.aiCompanyPolicy.update({ where: { tenantId_companyId: { tenantId, companyId } }, data: { currentVersion: 2 } });
+    });
+    await assert.rejects(
+      () => guard.reserve({ context, provider, activation, interpretationRunId: requiredRunId(runIds, 22), profile, inputText: "طلب بعد إيقاف السياسة", companyPolicy }),
+      (error: unknown) => error instanceof HttpException && error.getStatus() === 409,
+      "A reservation must reject a policy snapshot that is no longer the current enabled revision.",
+    );
+    console.log("Basira consumption guard verification passed: concurrent reservation, hard pre-egress cap, scheduled conservative unknown-outcome reconciliation, and current-policy reservation gating are active.");
   } finally {
     await database.onModuleDestroy();
   }
 }
 
 void verify();
+
+function requiredRunId(runIds: readonly string[], index: number): string {
+  const runId = runIds[index];
+  assert.ok(runId, `Missing verification run at index ${index}.`);
+  return runId;
+}

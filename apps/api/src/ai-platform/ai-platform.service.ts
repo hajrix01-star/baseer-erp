@@ -20,6 +20,7 @@ import type {
   CreateAiSystemIdentityRequest,
   RevokeAiCompanyContextRequest,
   SuspendAiSkillActivationRequest,
+  PutAiCompanyPolicyRequest,
 } from "@baseer-erp/contracts";
 import { aiProviderConnectionReceiptSchema } from "@baseer-erp/contracts";
 import OpenAI from "openai";
@@ -37,6 +38,8 @@ import {
   AiSkillEvaluationRunMode,
   AiSkillEvaluationRunStatus,
   AiProviderConfigurationStatus,
+  AiCompanySkillOverrideState,
+  AiSkillActivationOrigin,
   AiSkillActivationStatus,
   CompanyStatus,
   Prisma,
@@ -44,6 +47,7 @@ import {
 } from "../generated/prisma/client.js";
 import { RequestContext } from "../observability/request-context.js";
 import { AiCredentialVault } from "./ai-credential-vault.js";
+import { AiCompanyPolicyService } from "./ai-company-policy.service.js";
 import { startOfRiyadhDay } from "./ai-consumption-time.js";
 import { AiProviderAdapterRegistry } from "./ai-provider-adapter-registry.js";
 import {
@@ -69,6 +73,8 @@ const CONTEXT_READ = "platform.ai.context.read";
 const CONTEXT_WRITE = "platform.ai.context.write";
 const SKILLS_READ = "platform.ai.skills.read";
 const SKILLS_ACTIVATE = "platform.ai.skills.activate";
+const POLICY_READ = "platform.ai.policy.read";
+const POLICY_MANAGE = "platform.ai.policy.manage";
 const RECEIPTS_READ = "platform.ai.receipts.read";
 const EVALUATIONS_READ = "platform.ai.evaluations.read";
 const EVALUATIONS_WRITE = "platform.ai.evaluations.write";
@@ -93,6 +99,7 @@ export class AiPlatformService {
     private readonly vault: AiCredentialVault,
     private readonly tenantAdministration: TenantAdministrationContextService,
     private readonly adapters: AiProviderAdapterRegistry,
+    private readonly companyPolicy: AiCompanyPolicyService,
   ) {}
 
   async read(input: { accessToken: string; companyId: string }) {
@@ -669,7 +676,7 @@ export class AiPlatformService {
         status: input.status === "ACTIVE" ? AiSkillActivationStatus.ACTIVE : AiSkillActivationStatus.PILOT,
         validFrom: input.validFrom ?? new Date(), validUntil: input.validUntil ?? null,
         dailyRequestLimit: input.dailyRequestLimit ?? null, dailyCostLimit: input.dailyCostLimit ?? null,
-        approvedByUserId: context.actorUserId,
+        approvedByUserId: context.actorUserId, origin: AiSkillActivationOrigin.MANUAL,
       } });
       await this.audit(transaction, context, "platform.ai.skill_activated", id, { skillKey: catalog.key, skillVersion: catalog.version, policyVersion: catalog.policyVersion, status: input.status, evaluationRunId: passedEvaluation.id });
       await this.idempotency.completeInTransaction(transaction, context, { receiptId: begun.receiptId, response: { status: 201, headers: null, body: { activationId: id } } });
@@ -680,13 +687,18 @@ export class AiPlatformService {
 
   async suspendSkillActivation(context: TrustedCompanyActorContext, activationId: string, input: SuspendAiSkillActivationRequest) {
     const suspendedId = await this.database.inTenantTransaction(context.tenantId, async (transaction) => {
-      const activation = await transaction.aiSkillActivation.findFirst({ where: { id: activationId, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true, status: true } });
+      const activation = await transaction.aiSkillActivation.findFirst({ where: { id: activationId, tenantId: context.tenantId, companyId: context.companyId }, select: { id: true, skillKey: true, status: true } });
       if (!activation) throw new NotFoundException("The Basira skill activation was not found.");
       if (activation.status === AiSkillActivationStatus.SUSPENDED) throw new ConflictException("The Basira skill is already suspended.");
       const begun = await this.idempotency.beginInTransaction(transaction, context, { operation: SKILL_SUSPEND_OPERATION, key: input.idempotencyKey, request: { activationId, reason: input.reason }, expiresAt: new Date(Date.now() + 86_400_000) });
       if (begun.kind === "replay") return (begun.response.body as { activationId: string }).activationId;
       if (begun.kind === "in-progress") throw new ConflictException("The Basira skill suspension is still in progress.");
       await transaction.aiSkillActivation.update({ where: { id: activation.id }, data: { status: AiSkillActivationStatus.SUSPENDED, suspendedByUserId: context.actorUserId, suspendedAt: new Date(), suspensionReason: input.reason } });
+      await transaction.aiCompanySkillOverride.upsert({
+        where: { tenantId_companyId_skillKey: { tenantId: context.tenantId, companyId: context.companyId, skillKey: activation.skillKey } },
+        create: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, skillKey: activation.skillKey, state: AiCompanySkillOverrideState.BLOCKED, reason: input.reason, changedByUserId: context.actorUserId },
+        update: { state: AiCompanySkillOverrideState.BLOCKED, reason: input.reason, changedByUserId: context.actorUserId, changedAt: new Date(), rowVersion: { increment: 1 } },
+      });
       await this.audit(transaction, context, "platform.ai.skill_suspended", activation.id, { reason: input.reason });
       await this.idempotency.completeInTransaction(transaction, context, { receiptId: begun.receiptId, response: { status: 200, headers: null, body: { activationId: activation.id } } });
       return activation.id;
@@ -823,6 +835,19 @@ export class AiPlatformService {
     return this.authorize(accessToken, companyId, SKILLS_ACTIVATE);
   }
 
+  async readCompanyPolicy(input: { accessToken: string; companyId: string }) {
+    const context = await this.authorize(input.accessToken, input.companyId, POLICY_READ);
+    return this.companyPolicy.read(context, await this.canManageCompanyPolicy(input.accessToken, input.companyId));
+  }
+
+  async putCompanyPolicy(context: TrustedCompanyActorContext, input: PutAiCompanyPolicyRequest) {
+    return this.companyPolicy.put(context, input);
+  }
+
+  async authorizeCompanyPolicyWrite(accessToken: string, companyId: string) {
+    return this.authorize(accessToken, companyId, POLICY_MANAGE);
+  }
+
   async authorizeEvaluationWrite(accessToken: string, companyId: string) {
     return this.authorize(accessToken, companyId, EVALUATIONS_WRITE);
   }
@@ -880,7 +905,7 @@ export class AiPlatformService {
             tenantId: context.tenantId,
             companyId: context.companyId,
             dayStartAt,
-            status: { in: [AiBudgetReservationStatus.RESERVED, AiBudgetReservationStatus.SETTLED] },
+            status: { in: [AiBudgetReservationStatus.RESERVED, AiBudgetReservationStatus.SETTLED, AiBudgetReservationStatus.UNKNOWN_PROVIDER_OUTCOME] },
           },
           _sum: { chargeCostUsd: true },
           _count: { _all: true },
@@ -945,6 +970,11 @@ export class AiPlatformService {
       companyId: authorized.company.id,
       actorUserId: authorized.principal.userId,
     };
+  }
+
+  private async canManageCompanyPolicy(accessToken: string, companyId: string): Promise<boolean> {
+    const inspected = await this.companyContext.authorizeAvailable({ accessToken, companyId, requestedCapabilities: [POLICY_MANAGE] });
+    return inspected.capabilities.includes(POLICY_MANAGE);
   }
 
   private async authorizeInterpretationAccess(
