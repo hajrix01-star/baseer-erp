@@ -555,7 +555,7 @@ function publicProviderConnection(
     messageAr: authorizing
       ? "بدأت رحلة موافقة Google لهذه الشركة. أكملها في نافذة Google خلال عشر دقائق؛ لا يوجد حساب مختار أو مزامنة قبل التحقق اللاحق."
       : awaitingSelection
-      ? "اكتملت موافقة Google Business، لكن توجد عدة حسابات أو مواقع محتملة. يلزم لمسؤول المنصة تعيين المورد الافتراضي؛ لا توجد مزامنة أو نشر أو رد آلي."
+      ? "اكتملت موافقة Google Business، لكن لم يُحفظ مورد وحيد تلقائياً. قد توجد عدة حسابات أو مواقع، أو تعذرت قراءتها مؤقتاً؛ يراجع مسؤول المنصة ذلك. لا توجد مزامنة أو نشر أو رد آلي."
       : readOnlySelected
       ? "تم ربط Google Business واختيار الموقع للقراءة فقط. لم تبدأ مزامنة التقييمات أو الرد الآلي أو النشر."
       : readiness.ready
@@ -568,7 +568,7 @@ function publicProviderConnection(
     messageEn: authorizing
       ? "This company has started Google consent. Complete it in the Google window within ten minutes; no account is selected and no sync occurs before later verification."
       : awaitingSelection
-      ? "Google Business consent is complete, but multiple possible accounts or locations need a platform-admin default. There is no synchronization, publishing, or automated reply."
+      ? "Google Business consent is complete, but one resource was not saved automatically. There may be multiple accounts or locations, or Google resources may be temporarily unavailable; a platform administrator must review it. There is no synchronization, publishing, or automated reply."
       : readOnlySelected
       ? "Google Business is connected with a location selected for read-only preparation. Review synchronization, automated replies, and publishing have not started."
       : readiness.ready
