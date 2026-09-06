@@ -277,7 +277,7 @@ for (const language of ["ar", "en"] as const) {
     const policyRequest = page.waitForRequest((request) => request.method() === "PUT" && new URL(request.url()).pathname === "/v1/administration/ai/company-policy");
     await dialog.getByRole("button", { name: language === "ar" ? "تشغيل الآن" : "Enable now" }).click();
     const request = await policyRequest;
-    expect(request.postDataJSON()).toMatchObject({ expectedVersion: 0, mode: "ENABLED", monthlyBudgetUsdCents: "1250", providerConfigurationIds: [activeProvider.id], autoEnrollStable: false });
+    expect(request.postDataJSON()).toMatchObject({ expectedVersion: 0, mode: "ENABLED", monthlyBudgetUsdCents: "1250", providerConfigurationIds: [activeProvider.id], autoEnrollStable: true });
     await expect(page.getByRole("heading", { name: language === "ar" ? "تعمل بصيرة لهذه الشركة" : "Basira is operating for this company" })).toBeVisible();
     await expect(page.getByRole("status")).toContainText(language === "ar" ? "تم تشغيل بصيرة تلقائياً" : "Basira was enabled automatically");
     if (test.info().project.name === "mobile-chromium") {
