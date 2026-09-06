@@ -5,6 +5,7 @@ import {
   downloadContentFromMessage,
   initAuthCreds,
   makeWASocket,
+  normalizeMessageContent,
   type AuthenticationCreds,
   type AuthenticationState,
   type DownloadableMessage,
@@ -87,6 +88,16 @@ export function selectLiveInvoiceMessages(event: MessageUpsertEvent, liveSinceAt
     const sentAtSeconds = Number(message.messageTimestamp);
     return Number.isSafeInteger(sentAtSeconds) && sentAtSeconds >= liveSinceAtSeconds;
   });
+}
+
+/**
+ * WhatsApp can wrap an otherwise ordinary image or PDF in an ephemeral,
+ * view-once, edited, or caption envelope.  Normalize only the envelope so
+ * the existing group, media-type, receipt, and storage controls still decide
+ * whether anything is admitted.
+ */
+export function normalizeInvoiceMessageContent(message: WAMessage): NonNullable<WAMessage["message"]> | null {
+  return normalizeMessageContent(message.message) ?? null;
 }
 
 /**
@@ -286,8 +297,10 @@ export class WhatsappInvoiceBaileysPilotConnectorService implements OnModuleInit
     const receivedAt = message.messageTimestamp ? new Date(Number(message.messageTimestamp) * 1_000) : new Date();
     if (!Number.isFinite(receivedAt.valueOf())) return;
     const groupJid = message.key.remoteJid;
-    const image = message.message.imageMessage;
-    const document = message.message.documentMessage;
+    const content = normalizeInvoiceMessageContent(message);
+    if (!content) return;
+    const image = content.imageMessage;
+    const document = content.documentMessage;
     const candidates: Array<Readonly<{ mimeType: "image/jpeg" | "image/png" | "application/pdf"; originalFileName: string; metadata: TransportMetadata }>> = [];
     if (image && (image.mimetype === "image/jpeg" || image.mimetype === "image/png")) {
       const metadata = this.transportMetadata(image, "image");
