@@ -14,7 +14,10 @@ const GOOGLE_TIMEOUT_MS = 12_000;
 const MAX_PROVIDER_PAGES = 100;
 const PAGE_SIZE = 50;
 const REVIEW_RETENTION_MS = 90 * 24 * 60 * 60 * 1_000;
-const RUN_STALE_AFTER_MS = 15 * 60 * 1_000;
+// The reader is capped at 100 × 12-second provider calls (20 minutes).
+// The 30-minute lease keeps a second manual request from reaching Google while
+// a valid worst-case run is still in flight; persistence also verifies RUNNING.
+const RUN_STALE_AFTER_MS = 30 * 60 * 1_000;
 const ACCOUNT_NAME = /^accounts\/[A-Za-z0-9_-]{1,128}$/;
 const LOCATION_NAME = /^locations\/[A-Za-z0-9_-]{1,128}$/;
 
@@ -227,9 +230,12 @@ export class MarketingGoogleBusinessReviewsService {
       const connection = await tx.marketingProviderConnection.findFirst({ where: { id: active.connectionId, tenantId: context.tenantId, companyId: context.companyId, provider: "GOOGLE_BUSINESS", status: "AUTHORIZED_READ_ONLY_SELECTED" }, select: { id: true } });
       const mapping = await tx.marketingGoogleBusinessLocationMapping.findFirst({ where: { id: active.mappingId, tenantId: context.tenantId, companyId: context.companyId, provider: "GOOGLE_BUSINESS" }, select: { id: true } });
       if (!connection || !mapping) throw new ForbiddenException("Google Business connection changed before synchronization completed.");
+      const activeRun = await tx.marketingProviderSyncRun.findFirst({ where: { id: active.runId, tenantId: context.tenantId, companyId: context.companyId, provider: "GOOGLE_BUSINESS", status: "RUNNING" }, select: { id: true } });
+      if (!activeRun) throw new ConflictException("This Google Business review synchronization was superseded.");
       const retentionCutoff = new Date(sourceFreshAt.valueOf() - REVIEW_RETENTION_MS);
-      await tx.marketingGoogleBusinessReviewFact.deleteMany({ where: { tenantId: context.tenantId, companyId: context.companyId, fetchedAt: { lt: retentionCutoff } } });
-      for (const review of reviews) {
+      const retainedReviews = reviews.filter((review) => review.reviewUpdatedAt >= retentionCutoff);
+      await tx.marketingGoogleBusinessReviewFact.deleteMany({ where: { tenantId: context.tenantId, companyId: context.companyId, reviewUpdatedAt: { lt: retentionCutoff } } });
+      for (const review of retainedReviews) {
         const contentHash = hash(JSON.stringify(review));
         await tx.marketingGoogleBusinessReviewFact.upsert({
           where: { tenantId_companyId_locationMappingId_providerReviewResourceName: { tenantId: context.tenantId, companyId: context.companyId, locationMappingId: active.mappingId, providerReviewResourceName: review.resourceName } },
@@ -237,10 +243,10 @@ export class MarketingGoogleBusinessReviewsService {
           update: { rating: review.rating, reviewerDisplayName: review.reviewerDisplayName, reviewComment: review.reviewComment, reviewCreatedAt: review.reviewCreatedAt, reviewUpdatedAt: review.reviewUpdatedAt, replyComment: review.replyComment, replyUpdatedAt: review.replyUpdatedAt, fetchedAt: sourceFreshAt, contentHash },
         });
       }
-      const checksum = hash(JSON.stringify(reviews.map((review) => ({ resourceName: review.resourceName, rating: review.rating, updatedAt: review.reviewUpdatedAt.toISOString(), replyUpdatedAt: review.replyUpdatedAt?.toISOString() ?? null }))));
-      await tx.marketingProviderSyncRun.update({ where: { id: active.runId }, data: { status: "COMPLETED", rowsRead, rowsWritten: reviews.length, sourceChecksum: checksum, sourceFreshAt, providerAverageRating: averageRating === null ? null : averageRating.toFixed(1), providerTotalReviewCount: totalReviewCount, safeErrorCode: null } });
-      await tx.auditEvent.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId, action: "marketing.google_business_reviews.synchronized", entityType: "MarketingProviderSyncRun", entityId: active.runId, requestId: randomUUID(), beforeJson: Prisma.JsonNull, afterJson: { status: "COMPLETED", rowsRead, rowsWritten: reviews.length, sourceFreshAt: sourceFreshAt.toISOString() } } });
-      return reviews.length;
+      const checksum = hash(JSON.stringify(retainedReviews.map((review) => ({ resourceName: review.resourceName, rating: review.rating, updatedAt: review.reviewUpdatedAt.toISOString(), replyUpdatedAt: review.replyUpdatedAt?.toISOString() ?? null }))));
+      await tx.marketingProviderSyncRun.update({ where: { id: active.runId }, data: { status: "COMPLETED", rowsRead, rowsWritten: retainedReviews.length, sourceChecksum: checksum, sourceFreshAt, providerAverageRating: averageRating === null ? null : averageRating.toFixed(1), providerTotalReviewCount: totalReviewCount, safeErrorCode: null } });
+      await tx.auditEvent.create({ data: { id: randomUUID(), tenantId: context.tenantId, companyId: context.companyId, actorUserId: context.actorUserId, action: "marketing.google_business_reviews.synchronized", entityType: "MarketingProviderSyncRun", entityId: active.runId, requestId: randomUUID(), beforeJson: Prisma.JsonNull, afterJson: { status: "COMPLETED", rowsRead, rowsWritten: retainedReviews.length, sourceFreshAt: sourceFreshAt.toISOString() } } });
+      return retainedReviews.length;
     });
   }
 

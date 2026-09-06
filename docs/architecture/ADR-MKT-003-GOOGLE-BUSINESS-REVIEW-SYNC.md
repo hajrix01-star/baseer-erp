@@ -1,6 +1,6 @@
 # ADR-MKT-003 — مزامنة تقييمات Google Business والقراءة التحليلية
 
-**الحالة:** Accepted for the Google Business reviews slice — 2026-09-06  
+**الحالة:** Accepted for the Google Business reviews slice — 2026-09-06
 **المرجع:** `BASEER-ARCH v1.0` / `BASEER-IMPACT-2026-09-06-GOOGLE-BUSINESS-REVIEWS-SYNC`
 
 ## القرار
@@ -28,8 +28,9 @@
   credential نشط لنفس tenant/company. أي حالة أخرى ترفض قبل egress.
 - الحد: حتى 100 صفحة × 50 تقييماً لكل طلب يدوي، بمهلة 12 ثانية لكل نداء.
   لا scheduler ولا retry خفي. المزامنة التالية يدويّة وصريحة.
-- منع التداخل: قفل advisory على tenant/company/provider. طلب ثانٍ أثناء تشغيل
-  الأول يعيد تعارضاً آمناً ولا يضاعف الكتابة أو Google requests.
+- منع التداخل: قفل advisory على tenant/company/provider، وlease خادمي 30 دقيقة
+  يغطي حد القراءة الأقصى (20 دقيقة). طلب ثانٍ أثناء تشغيل الأول يعيد تعارضاً
+  آمناً ولا يضاعف الكتابة أو Google requests، كما ترفض الكتابة نتيجة run مستبدل.
 - البيانات: review id، النجوم، وقت الإنشاء/التحديث، النص والكاتب والرد كما
   يعيدها Google، ووقت الجلب/checksum. النصوص تعامل كبيانات مزود؛ لا raw payload
   أو token في DB أو API أو audit. الاحتفاظ 90 يوماً للنص/الكاتب والرد، وتبقى

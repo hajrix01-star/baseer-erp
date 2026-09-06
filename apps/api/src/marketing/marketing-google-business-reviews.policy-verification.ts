@@ -39,13 +39,17 @@ class ReviewsDatabase {
         Object.assign(run, data);
         return run;
       },
-      findFirst: async () => {
-        const run = [...this.runs].reverse().find((candidate) => candidate.status === "COMPLETED");
+      findFirst: async ({ where }: any) => {
+        const run = [...this.runs].reverse().find((candidate) => !where.status || candidate.status === where.status);
         return run ? { ...run, providerAverageRating: run.providerAverageRating ? { toNumber: () => Number(run.providerAverageRating) } : null } : null;
       },
     },
     marketingGoogleBusinessReviewFact: {
-      deleteMany: async () => ({ count: 0 }),
+      deleteMany: async ({ where }: any) => {
+        const before = this.facts.length;
+        if (where.reviewUpdatedAt?.lt) this.facts = this.facts.filter((fact) => fact.reviewUpdatedAt >= where.reviewUpdatedAt.lt);
+        return { count: before - this.facts.length };
+      },
       upsert: async ({ where, create, update }: any) => {
         const key = where.tenantId_companyId_locationMappingId_providerReviewResourceName.providerReviewResourceName;
         const current = this.facts.find((fact) => fact.providerReviewResourceName === key);
@@ -112,6 +116,16 @@ try {
   assert.equal(read.summary.totalReviewCount, 2);
   assert.equal(read.summary.repliedReviewCount, 1);
   assert.equal(read.reviews[0]?.replyComment, "Thank you", "Existing Google replies must be available for display.");
+
+  const supersededRun = { id: "55555555-5555-4555-8555-555555555555", status: "BLOCKED", rowsRead: 0, rowsWritten: 0, sourceFreshAt: null, providerAverageRating: null, providerTotalReviewCount: null };
+  database.runs.push(supersededRun);
+  await assert.rejects(() => (service as any).persist(context, { connectionId: "connection", mappingId, runId: supersededRun.id }, [], 0, new Date(), null, null), /superseded/, "A replaced run must not write facts after a newer synchronization claimed the lease.");
+
+  database.facts[1]!.reviewUpdatedAt = new Date("2020-01-01T00:00:00.000Z");
+  const retentionRun = { id: "66666666-6666-4666-8666-666666666666", status: "RUNNING", rowsRead: 0, rowsWritten: 0, sourceFreshAt: null, providerAverageRating: null, providerTotalReviewCount: null };
+  database.runs.push(retentionRun);
+  await (service as any).persist(context, { connectionId: "connection", mappingId, runId: retentionRun.id }, [], 0, new Date(), null, null);
+  assert.equal(database.facts.length, 1, "A repeated synchronization must not extend personal-review retention beyond 90 days.");
 
   database.connected = false;
   const beforeBlockedSync = fetchCalls;
