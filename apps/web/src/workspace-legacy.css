@@ -652,6 +652,26 @@
 .administration-role-cards strong {
   font-size: var(--font-body);
 }
+.administration-role-card__summary {
+  display: grid;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: inherit;
+  cursor: pointer;
+}
+.administration-role-card__summary:focus-visible {
+  outline: 2px solid var(--accent, var(--status-info));
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+.administration-role-card__summary > span:last-child {
+  color: var(--accent, var(--status-info));
+  font-size: var(--font-caption);
+  font-weight: 800;
+}
 .administration-role-cards small,
 .administration-role-cards p {
   margin: 0;
@@ -673,6 +693,23 @@
 .administration-role-card__custom {
   color: var(--status-warning);
   background: var(--status-warning-surface);
+}
+.administration-role-card__permissions {
+  display: grid;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-subtle);
+}
+.administration-role-card__permissions strong {
+  font-size: var(--font-caption);
+}
+.administration-role-card__permissions ul {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding-inline-start: 20px;
+  color: var(--muted);
+  font-size: var(--font-caption);
 }
 .administration-role-form {
   display: grid;

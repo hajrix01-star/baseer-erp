@@ -305,7 +305,7 @@ const MODULE_LABELS: Record<string, readonly [string, string]> = {
 const SECTION_PREFIXES: ReadonlyArray<readonly [string, string, string]> = [
   ["administration.companies", "الشركات", "Companies"], ["administration.users", "المستخدمون", "Users"], ["administration.roles", "الأدوار والصلاحيات", "Roles & permissions"],
   ["backup.restore", "الاستعادة", "Recovery"], ["backup.schedule", "جدولة النسخ", "Backup schedules"], ["backup.audit", "تدقيق النسخ", "Backup audit"], ["backup", "النسخ والأرشفة", "Backup & archives"],
-  ["finance.vaults", "الخزائن", "Vaults"], ["finance.daily_sales", "المبيعات اليومية", "Daily sales"], ["finance.purchase_expense", "المشتريات والمصروفات", "Purchases & expenses"], ["finance.supplier_dues", "ذمم الموردين", "Supplier dues"], ["finance.suppliers", "الموردون", "Suppliers"], ["finance.loans", "القروض والالتزامات", "Loans & liabilities"], ["finance.periods", "الفترات المالية", "Fiscal periods"], ["finance.configuration", "إعدادات المالية", "Finance configuration"], ["finance.foundation", "البيانات المالية الأساسية", "Finance master data"], ["finance.setup", "تهيئة المالية", "Finance setup"], ["finance.categories", "التصنيفات المالية", "Finance categories"], ["finance.operational_calendar", "تقويم التشغيل", "Operating calendar"],
+  ["finance.vaults", "الخزائن", "Vaults"], ["finance.daily_sales", "المبيعات اليومية", "Daily sales"], ["finance.purchase_expense", "المشتريات", "Purchases"], ["finance.supplier_dues", "ذمم الموردين", "Supplier dues"], ["finance.suppliers", "الموردون", "Suppliers"], ["finance.loans", "القروض والالتزامات", "Loans & liabilities"], ["finance.periods", "الفترات المالية", "Fiscal periods"], ["finance.configuration", "إعدادات المالية", "Finance configuration"], ["finance.foundation", "البيانات المالية الأساسية", "Finance master data"], ["finance.setup", "تهيئة المالية", "Finance setup"], ["finance.categories", "التصنيفات المالية", "Finance categories"], ["finance.operational_calendar", "تقويم التشغيل", "Operating calendar"],
   ["reports.cash_performance", "تقرير الأداء النقدي", "Cash performance report"], ["reports", "التقارير", "Reports"],
   ["decision.alerts", "التنبيهات", "Alerts"], ["decision.context", "السياق والمناسبات", "Context & events"], ["decision.metrics", "القراءات الرسمية", "Official reads"], ["decision.feedback", "التغذية الراجعة", "Feedback"], ["decision.policy", "سياسات القرار", "Decision policies"], ["decision.human_insights", "الرؤى البشرية", "Human insights"],
   ["marketing.google-business", "Google Business", "Google Business"], ["marketing.google-ads", "Google Ads", "Google Ads"], ["marketing.google-connection", "ربط Google", "Google connection"], ["marketing.reputation", "السمعة", "Reputation"], ["marketing.campaign", "الحملات", "Campaigns"], ["marketing.insights", "الأداء التسويقي", "Marketing performance"],
@@ -314,22 +314,29 @@ const SECTION_PREFIXES: ReadonlyArray<readonly [string, string, string]> = [
   ["operations.whatsapp_invoice_monitoring", "مراقبة فواتير WhatsApp", "WhatsApp invoice monitoring"], ["operations.purchase_receipt", "إيصالات المشتريات", "Purchase receipts"], ["operations.purchase_request", "طلبات الشراء", "Purchase requests"], ["operations.internal_registration", "التسجيل الداخلي", "Internal registration"], ["operations.conversions", "التحويلات", "Conversions"], ["operations.catalog", "كتالوج العمليات", "Operations catalogue"], ["operations.recipe", "الوصفات", "Recipes"], ["operations.inventory", "المخزون", "Inventory"], ["operations.custody", "العهدة", "Custody"], ["operations.assets", "الأصول والضمان", "Assets & warranty"],
   ["platform.ai.system_identity", "هوية بصيرة النظامية", "Basira system identity"], ["platform.ai.identity", "هوية بصيرة", "Basira identity"], ["platform.ai.configuration", "إعدادات بصيرة", "Basira configuration"], ["platform.ai.provider", "مزود الذكاء", "AI provider"], ["platform.ai.context", "سياق بصيرة", "Basira context"], ["platform.ai.skills", "مهارات بصيرة", "Basira skills"], ["platform.ai.receipts", "إيصالات بصيرة", "Basira receipts"], ["platform.ai.evaluations", "تقييمات بصيرة", "Basira evaluations"], ["platform.ai", "بصيرة والذكاء", "Basira & AI"], ["platform.files", "الملفات والمستندات", "Files & documents"], ["platform.business-date", "تاريخ العمل", "Business date"], ["platform.observability", "الرصد", "Observability"], ["platform.output", "الطباعة والتصدير", "Print & export"],
 ];
-const EXPLICIT_DEPENDENCIES: Readonly<Record<string, readonly string[]>> = {
-  "finance.daily_sales.create": ["finance.vaults.read"], "finance.daily_sales.correct": ["finance.vaults.read"], "finance.daily_sales.reverse": ["finance.vaults.read"], "finance.daily_sales.write": ["finance.vaults.read"], "finance.purchase_expense.create": ["finance.vaults.read"], "finance.purchase_expense.correct": ["finance.vaults.read"], "finance.purchase_expense.cancel": ["finance.vaults.read"], "finance.supplier_dues.write": ["finance.vaults.read"], "finance.loans.write": ["finance.vaults.read"], "hr.advances.issue": ["finance.vaults.read"], "hr.advances.settle": ["finance.vaults.read"], "hr.advances.reverse": ["finance.vaults.read"], "hr.payroll.pay": ["finance.vaults.read"], "hr.payroll.reverse": ["finance.vaults.read"], "hr.final_settlements.pay": ["finance.vaults.read"], "hr.final_settlements.reverse": ["finance.vaults.read"],
-};
 const KNOWN_PERMISSION_CODES = new Set(ADMINISTRATION_PERMISSION_CATALOG.map((item) => item.code));
 const READ_DEPENDENT_ACTIONS = new Set(["manage", "write", "create", "correct", "cancel", "reverse", "approve", "pay", "issue", "settle", "receive", "return", "publish", "configure", "activate", "download", "revoke", "verify"]);
 
 export function permissionDependencies(code: string): readonly string[] {
   if (!KNOWN_PERMISSION_CODES.has(code)) return [];
-  const dependencies = new Set(EXPLICIT_DEPENDENCIES[code] ?? []);
+  const dependencies = new Set<string>();
   const parts = code.split("."); const action = parts.at(-1);
   if (action && READ_DEPENDENT_ACTIONS.has(action)) { const siblingRead = [...parts.slice(0, -1), "read"].join("."); if (KNOWN_PERMISSION_CODES.has(siblingRead)) dependencies.add(siblingRead); }
   return [...dependencies].sort();
 }
 export function normalizePermissionCodes(codes: readonly string[]): string[] {
   if (!permissionCodesAreKnown(codes)) return [];
-  const expanded = new Set(codes);
+  return effectivePermissionCodes(codes);
+}
+
+/**
+ * Authorization reads must preserve known grants on historical roles even if a
+ * retired permission code remains stored beside them. Writes stay strict via
+ * normalizePermissionCodes; this helper is deliberately runtime-only.
+ */
+export function effectivePermissionCodes(codes: readonly string[]): string[] {
+  const knownCodes = codes.filter((code) => KNOWN_PERMISSION_CODES.has(code));
+  const expanded = new Set(knownCodes);
   for (const code of expanded) for (const requiredCode of permissionDependencies(code)) expanded.add(requiredCode);
   return [...expanded].sort();
 }
