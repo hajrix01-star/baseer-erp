@@ -187,11 +187,18 @@ try {
   const deductionSearch = await server.inject({ method: "GET", url: "/v1/hr/deductions?search=TARGET-DEDUCTION&pageSize=1", headers: managerHeaders });
   assert.equal(deductionSearch.statusCode, 200, deductionSearch.body);
   assert.equal(deductionSearch.json().deductions.length, 1, "Deduction search must execute against the server register.");
+  // August remains preparable after the operational month advances to September.
+  app.get(BUSINESS_DATE_CLOCK).now = () => new Date("2026-09-06T12:00:00.000Z");
+  const stalePayrollApproval = await server.inject({ method: "POST", url: "/v1/hr/payroll-runs/approve", headers: managerHeaders, payload: { payrollRunId: fixture.payrollRunId, idempotencyKey: randomUUID() } });
+  assert.equal(stalePayrollApproval.statusCode, 409, stalePayrollApproval.body);
+  assert.match(stalePayrollApproval.json().error.message.en, /Open this payroll draft and select Save changes/);
+  assert.match(stalePayrollApproval.json().error.message.ar, /حفظ التعديلات/);
+  await expectError(server.inject({ method: "POST", url: "/v1/hr/payroll-runs/preview", headers: managerHeaders, payload: { payrollMonth: "2026-10-01" } }), 400, "VALIDATION_FAILED", "A future payroll month is still unavailable.");
   const payrollCollectionPreview = await server.inject({
     method: "POST",
     url: "/v1/hr/payroll-runs/preview",
     headers: managerHeaders,
-    payload: { payrollMonth: "2026-08-01", businessDate: "2026-08-20", includeOnLeaveEmployeeIds: [], lines: [], pageSize: 1 },
+    payload: { payrollMonth: "2026-08-01", includeOnLeaveEmployeeIds: [], lines: [], pageSize: 1 },
   });
   assert.equal(payrollCollectionPreview.statusCode, 200, payrollCollectionPreview.body);
   const activePayrollPreview = payrollCollectionPreview.json().employees.find((employee) => employee.id === fixture.activeEmployeeId);
@@ -203,7 +210,6 @@ try {
   const updatePayrollDraftPayload = {
     payrollRunId: fixture.payrollRunId,
     payrollMonth: "2026-08-01",
-    businessDate: "2026-08-20",
     notes: "Updated through HTTP verification",
     includeAllEligible: true,
     includeOnLeaveEmployeeIds: [],
@@ -214,11 +220,12 @@ try {
   assert.equal(payrollDraftUpdate.statusCode, 200, payrollDraftUpdate.body);
   assert.equal(payrollDraftUpdate.json().id, fixture.payrollRunId);
   assert.equal(payrollDraftUpdate.json().replayed, false);
-  const payrollDraftReplay = await server.inject({ method: "POST", url: "/v1/hr/payroll-runs/update", headers: managerHeaders, payload: updatePayrollDraftPayload });
+  const payrollDraftReplay = await server.inject({ method: "POST", url: "/v1/hr/payroll-runs/update", headers: managerHeaders, payload: { ...updatePayrollDraftPayload, businessDate: "1999-01-01" } });
   assert.equal(payrollDraftReplay.statusCode, 200, payrollDraftReplay.body);
   assert.equal(payrollDraftReplay.json().replayed, true, "Payroll-draft HTTP replay must be explicit.");
   const updatedPayrollDetail = await server.inject({ method: "GET", url: `/v1/hr/payroll-runs/${fixture.payrollRunId}`, headers: managerHeaders });
   assert.equal(updatedPayrollDetail.statusCode, 200, updatedPayrollDetail.body);
+  assert.equal(updatedPayrollDetail.json().payrollRun.businessDate, "2026-08-31", "August payroll uses its own month end even when updated in September.");
   assert.equal(updatedPayrollDetail.json().payrollRun.notes, "Updated through HTTP verification");
   assert.equal(updatedPayrollDetail.json().lines[0].administrativeDeductions[0].sourceId, fixture.deductionId);
   await expectError(
@@ -233,6 +240,8 @@ try {
     "CONFLICT",
     "A non-draft payroll run must reject updates.",
   );
+  app.get(BUSINESS_DATE_CLOCK).now = () => new Date("2026-08-20T12:00:00.000Z");
+  await expectError(server.inject({ method: "POST", url: "/v1/hr/payroll-runs/approve", headers: managerHeaders, payload: { payrollRunId: fixture.payrollRunId, businessDate: "2026-08-01", idempotencyKey: randomUUID() } }), 400, "VALIDATION_FAILED", "A forged earlier approval date cannot bypass future month-end posting protection.");
   const emptyAdvanceSearch = await server.inject({ method: "GET", url: "/v1/hr/advances?search=missing&pageSize=1", headers: managerHeaders });
   assert.equal(emptyAdvanceSearch.statusCode, 200, emptyAdvanceSearch.body);
   assert.deepEqual(emptyAdvanceSearch.json().advances, []);
@@ -449,6 +458,7 @@ async function seedFixture() {
       "hr.employees.write",
       "hr.payroll.read",
       "hr.payroll.create",
+      "hr.payroll.approve",
       "hr.compensation.backdate",
       "hr.final_settlements.read",
       "hr.leaves.read",

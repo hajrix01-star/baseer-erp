@@ -22,9 +22,12 @@ const fixture = {
 };
 const todayText = riyadhDate();
 const today = date(todayText);
-const monthStart = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 1));
+// Payroll is prepared for the previous completed month; deferred collections
+// remain in the operational month to exercise the period-end cutoff.
+const monthStart = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth() - 1, 1));
+const monthEnd = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 0));
 const beforeMonth = addDays(monthStart, -1);
-const fiscalStart = new Date(Date.UTC(today.getUTCFullYear(), 0, 1));
+const fiscalStart = new Date(Date.UTC(monthStart.getUTCFullYear(), 0, 1));
 const fiscalEnd = new Date(Date.UTC(today.getUTCFullYear(), 11, 31));
 const creator = actor(fixture.creatorId);
 const approver = actor(fixture.approverId);
@@ -352,13 +355,53 @@ try {
   assert.equal(concurrentDraftLine.advances.length, 1, 'Concurrent draft updates must serialize without duplicate applications.');
   assert.equal(concurrentDraftLine.advanceSettlementAmount, '100.0000');
 
+  // Simulate an existing unposted draft computed under the former mid-month rule.
+  await database.inTenantTransaction(fixture.tenantId, (tx) => tx.hrPayrollRun.update({ where: { id: run.id }, data: { businessDate: monthStart } }));
   await assert.rejects(
-    () => payroll.approve(approver, { payrollRunId: run.id, businessDate: beforeMonth }, randomUUID()),
-    /cannot be before the payroll business date/,
-    'Payroll approval must not predate its header.',
+    () => payroll.approve(approver, { payrollRunId: run.id }, randomUUID()),
+    /Refresh this payroll draft/,
+    'An older draft requires an explicit refresh before month-end posting.',
   );
+  assert.equal((await payroll.detail(creator, run.id)).payrollRun.grossAmount, concurrentDraftDetail.payrollRun.grossAmount, 'Rejected approval must not silently recalculate amounts.');
+  await payroll.updateDraft(creator, updatePayrollInput, randomUUID());
   const approvePayrollKey = randomUUID();
-  const approvedRun = await payroll.approve(approver, { payrollRunId: run.id, businessDate: monthStart }, approvePayrollKey);
+  const readPayrollPostingProof = () => database.inTenantTransaction(fixture.tenantId, async (tx) => {
+    const scope = { tenantId: fixture.tenantId, companyId: fixture.companyId };
+    const [draft, advanceBalance, journalCount, settlementCount, movementCount, deductionActionCount, approvalReceiptCount] = await Promise.all([
+      tx.hrPayrollRun.findFirstOrThrow({ where: { ...scope, id: run.id }, include: { lines: { orderBy: { id: 'asc' }, include: { advanceApplications: { orderBy: { id: 'asc' } }, deductionApplications: { orderBy: { id: 'asc' } } } } } }),
+      tx.hrEmployeeAdvance.findFirstOrThrow({ where: { ...scope, id: advance.id }, select: { remainingAmount: true, settledAmount: true, status: true } }),
+      tx.financeJournalEntry.count({ where: scope }),
+      tx.hrEmployeeAdvanceSettlement.count({ where: scope }),
+      tx.hrEmployeeFinancialMovement.count({ where: scope }),
+      tx.hrEmployeeAdministrativeDeductionAction.count({ where: scope }),
+      tx.idempotencyReceipt.count({ where: { ...scope, actorUserId: approver.actorUserId, operation: 'hr.payroll.approve', idempotencyKey: approvePayrollKey } }),
+    ]);
+    return JSON.parse(JSON.stringify({ draft, advanceBalance, journalCount, settlementCount, movementCount, deductionActionCount, approvalReceiptCount }));
+  });
+  const beforeClosedPeriodApproval = await readPayrollPostingProof();
+  assert.equal(beforeClosedPeriodApproval.draft.status, 'DRAFT');
+  assert.equal(beforeClosedPeriodApproval.draft.accrualJournalEntryId, null);
+  // Seed a closed period directly in this isolated fixture: the production
+  // close command separately prevents closing a period with pending payroll.
+  await database.inTenantTransaction(fixture.tenantId, async (tx) => {
+    const closed = await tx.financeFiscalPeriod.updateMany({ where: { id: finance.periodId, tenantId: fixture.tenantId, companyId: fixture.companyId, status: 'OPEN' }, data: { status: 'CLOSED', closedAt: new Date(), closeReason: 'Isolated payroll posting guard verification' } });
+    assert.equal(closed.count, 1, 'The fixture must close exactly its own payroll fiscal period.');
+  });
+  try {
+    await assert.rejects(
+      () => payroll.approve(approver, { payrollRunId: run.id, businessDate: beforeMonth }, approvePayrollKey),
+      /exactly one open fiscal period/,
+      'A legacy client date must not bypass the selected payroll month-end fiscal-period control.',
+    );
+    assert.deepEqual(await readPayrollPostingProof(), beforeClosedPeriodApproval, 'Closed-period rejection must preserve the draft, application rows, advance balance, journal/settlement/movement counts and approval receipt state.');
+  } finally {
+    await database.inTenantTransaction(fixture.tenantId, async (tx) => {
+      const reopened = await tx.financeFiscalPeriod.updateMany({ where: { id: finance.periodId, tenantId: fixture.tenantId, companyId: fixture.companyId, status: 'CLOSED' }, data: { status: 'OPEN', closedAt: null, closeReason: null } });
+      assert.equal(reopened.count, 1, 'Restore only the isolated fixture period after this rejection test.');
+    });
+  }
+  // Reusing the failed approval key must succeed once its fiscal period opens.
+  const approvedRun = await payroll.approve(approver, { payrollRunId: run.id, businessDate: beforeMonth }, approvePayrollKey);
   assert.equal(approvedRun.replayed, false);
   assert.equal((await payroll.approve(approver, { payrollRunId: run.id, businessDate: monthStart }, approvePayrollKey)).replayed, true, 'Payroll-approval replay must be explicit.');
   await assert.rejects(
@@ -378,18 +421,18 @@ try {
   );
 
   const payrollDetail = await payroll.detail(creator, run.id, { linePageSize: 500, paymentPageSize: 100 });
-  assert.equal(payrollDetail.payrollRun.businessDate, day(monthStart), 'Approval must not rewrite the payroll header date.');
+  assert.equal(payrollDetail.payrollRun.businessDate, day(monthEnd), 'Calculation and accrual must use the selected month end.');
   await assert.rejects(
     () => payroll.pay(payer, { payrollRunId: run.id, businessDate: beforeMonth, allocations: [{ vaultId: cashVaultId, paymentMethod: 'CASH', amount: payrollDetail.payrollRun.netPayableAmount }] }, randomUUID()),
     /cannot be before its approval or latest payment date/,
     'Payroll payment must not predate approval.',
   );
-  const payPayrollInput = { payrollRunId: run.id, businessDate: monthStart, allocations: [{ vaultId: cashVaultId, paymentMethod: 'CASH', amount: payrollDetail.payrollRun.netPayableAmount }] };
+  const payPayrollInput = { payrollRunId: run.id, businessDate: monthEnd, allocations: [{ vaultId: cashVaultId, paymentMethod: 'CASH', amount: payrollDetail.payrollRun.netPayableAmount }] };
   const payPayrollKey = randomUUID();
   assert.equal((await payroll.pay(payer, payPayrollInput, payPayrollKey)).replayed, false);
   assert.equal((await payroll.pay(payer, payPayrollInput, payPayrollKey)).replayed, true, 'Payroll-payment replay must be explicit.');
   await assert.rejects(
-    () => payroll.reverse(payer, { payrollRunId: run.id, businessDate: monthStart, reason: 'A paid payroll must reject reversal' }, randomUUID()),
+    () => payroll.reverse(payer, { payrollRunId: run.id, businessDate: monthEnd, reason: 'A paid payroll must reject reversal' }, randomUUID()),
     /must be unpaid/,
     'A paid payroll reversal must be rejected.',
   );
@@ -403,20 +446,20 @@ try {
   );
   const payrollPaymentReversalKeys = [randomUUID(), randomUUID()];
   const payrollPaymentReversalResults = await Promise.allSettled([
-    payroll.reversePayment(creator, { payrollPaymentId: payrollPayment.id, businessDate: monthStart, reason: 'Concurrent payroll-payment reversal' }, payrollPaymentReversalKeys[0]),
-    payroll.reversePayment(approver, { payrollPaymentId: payrollPayment.id, businessDate: monthStart, reason: 'Concurrent payroll-payment reversal' }, payrollPaymentReversalKeys[1]),
+    payroll.reversePayment(creator, { payrollPaymentId: payrollPayment.id, businessDate: monthEnd, reason: 'Concurrent payroll-payment reversal' }, payrollPaymentReversalKeys[0]),
+    payroll.reversePayment(approver, { payrollPaymentId: payrollPayment.id, businessDate: monthEnd, reason: 'Concurrent payroll-payment reversal' }, payrollPaymentReversalKeys[1]),
   ]);
   assert.equal(payrollPaymentReversalResults.filter((result) => result.status === 'fulfilled').length, 1, 'The payroll-run lock must allow exactly one concurrent payment reversal.');
   const successfulPayrollPaymentReversal = payrollPaymentReversalResults.findIndex((result) => result.status === 'fulfilled');
   assert.match(String(payrollPaymentReversalResults[1 - successfulPayrollPaymentReversal].reason?.message), /already been reversed/);
   const payrollPaymentReversalActor = successfulPayrollPaymentReversal === 0 ? creator : approver;
-  assert.equal((await payroll.reversePayment(payrollPaymentReversalActor, { payrollPaymentId: payrollPayment.id, businessDate: monthStart, reason: 'Concurrent payroll-payment reversal' }, payrollPaymentReversalKeys[successfulPayrollPaymentReversal])).replayed, true, 'Payroll-payment reversal replay must be explicit.');
+  assert.equal((await payroll.reversePayment(payrollPaymentReversalActor, { payrollPaymentId: payrollPayment.id, businessDate: monthEnd, reason: 'Concurrent payroll-payment reversal' }, payrollPaymentReversalKeys[successfulPayrollPaymentReversal])).replayed, true, 'Payroll-payment reversal replay must be explicit.');
   const reversedPayrollPaymentDetail = await payroll.detail(creator, run.id, { linePageSize: 500, paymentPageSize: 100 });
   assert.equal(reversedPayrollPaymentDetail.payments[0]?.status, 'REVERSED', 'Payroll payment detail must derive reversal state from the journal link.');
   assert.ok(reversedPayrollPaymentDetail.payments[0]?.reversalJournalEntryId);
   const mainPayrollReversalKey = randomUUID();
-  assert.equal((await payroll.reverse(payer, { payrollRunId: run.id, businessDate: monthStart, reason: 'Payroll accrual reversal after payment reversal' }, mainPayrollReversalKey)).replayed, false);
-  assert.equal((await payroll.reverse(payer, { payrollRunId: run.id, businessDate: monthStart, reason: 'Payroll accrual reversal after payment reversal' }, mainPayrollReversalKey)).replayed, true, 'Payroll accrual reversal replay must remain explicit after reversing its payment.');
+  assert.equal((await payroll.reverse(payer, { payrollRunId: run.id, businessDate: monthEnd, reason: 'Payroll accrual reversal after payment reversal' }, mainPayrollReversalKey)).replayed, false);
+  assert.equal((await payroll.reverse(payer, { payrollRunId: run.id, businessDate: monthEnd, reason: 'Payroll accrual reversal after payment reversal' }, mainPayrollReversalKey)).replayed, true, 'Payroll accrual reversal replay must remain explicit after reversing its payment.');
   const replacementRun = await payroll.create(creator, { ...createPayrollInput, notes: 'Replacement payroll after cancellation' }, randomUUID());
   assert.notEqual(replacementRun.id, run.id, 'A replacement payroll must be a new immutable record, never a revived cancellation.');
   assert.notEqual(replacementRun.runNumber, run.runNumber, 'A replacement payroll must receive a new document number.');
@@ -444,8 +487,8 @@ try {
   }, randomUUID());
   await payroll.approve(reversalApprover, { payrollRunId: reversalPayroll.id, businessDate: monthStart }, randomUUID());
   const reversalPayrollKey = randomUUID();
-  assert.equal((await payroll.reverse(reversalPayer, { payrollRunId: reversalPayroll.id, businessDate: monthStart, reason: 'Payroll reversal lifecycle verification' }, reversalPayrollKey)).replayed, false);
-  assert.equal((await payroll.reverse(reversalPayer, { payrollRunId: reversalPayroll.id, businessDate: monthStart, reason: 'Payroll reversal lifecycle verification' }, reversalPayrollKey)).replayed, true, 'Payroll reversal replay must be explicit.');
+  assert.equal((await payroll.reverse(reversalPayer, { payrollRunId: reversalPayroll.id, businessDate: monthEnd, reason: 'Payroll reversal lifecycle verification' }, reversalPayrollKey)).replayed, false);
+  assert.equal((await payroll.reverse(reversalPayer, { payrollRunId: reversalPayroll.id, businessDate: monthEnd, reason: 'Payroll reversal lifecycle verification' }, reversalPayrollKey)).replayed, true, 'Payroll reversal replay must be explicit.');
 
   const reverseEmployee = employees.get('reverse');
   const recoveryAdvance = await advances.issue(creator, {
@@ -585,7 +628,7 @@ try {
     return { payrollRow, payrollAdvance, reversedAdvanceRow, reversedAdvanceMovements, serviceRow, serviceMovements, zeroRow, reversedRow, paidRow, payrollPaymentMovements, finalPaymentMovements, recoveryRows, movements, payrollAdvanceMovements, finalAdvanceMovements, reversedPayrollMovements, reversedPayrollSettlements, journalEntries };
   });
   assert.equal(proof.payrollRow.status, 'REVERSED');
-  assert.equal(proof.payrollRow.businessDate.toISOString(), monthStart.toISOString());
+  assert.equal(proof.payrollRow.businessDate.toISOString(), monthEnd.toISOString());
   assert.equal(proof.payrollRow.paidAmount.toFixed(4), '0.0000');
   assert.equal(proof.payrollAdvance.remainingAmount.toFixed(4), '250.0000');
   assert.equal(proof.reversedAdvanceRow.status, 'REVERSED');

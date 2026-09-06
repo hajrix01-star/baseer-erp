@@ -380,7 +380,8 @@ const payrollLineRequestSchema = z.object({
 /** The server snapshots compensation and validates every applied residual. */
 export const createHrPayrollRunRequestSchema = z.object({
   payrollMonth: hrDateSchema,
-  businessDate: hrDateSchema,
+  /** @deprecated Accepted for legacy clients; the server derives the payroll month end. */
+  businessDate: hrDateSchema.optional(),
   notes: z.string().trim().max(2_000).optional(),
   /** @deprecated: ACTIVE employees are always server-selected. Retained for request compatibility. */
   includeAllEligible: z.boolean().default(true),
@@ -399,7 +400,8 @@ export const updateHrPayrollDraftRequestSchema = createHrPayrollRunRequestSchema
 /** Read-only, server-authored payroll population. Cursor pages are by employee id. */
 export const previewHrPayrollRunRequestSchema = z.object({
   payrollMonth: hrDateSchema,
-  businessDate: hrDateSchema,
+  /** @deprecated Accepted for legacy clients; the server derives the payroll month end. */
+  businessDate: hrDateSchema.optional(),
   includeOnLeaveEmployeeIds: z.array(hrEmployeeIdSchema).max(1_000).default([]),
   /** Optional settlement choices are validated and summarized, never used for population selection. */
   lines: z.array(payrollLineRequestSchema).max(10_000).default([]),
@@ -409,7 +411,8 @@ export const previewHrPayrollRunRequestSchema = z.object({
 
 export const approveHrPayrollRunRequestSchema = z.object({
   payrollRunId: z.string().uuid(),
-  businessDate: hrDateSchema,
+  /** @deprecated Accepted for legacy clients; the server derives the payroll month end. */
+  businessDate: hrDateSchema.optional(),
   idempotencyKey: idempotencyKeySchema,
 }).strict();
 

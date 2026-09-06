@@ -85,7 +85,7 @@ export function HrPayrollDetailDialog({ runId, runNumber, language, onClose, onC
   useEffect(() => { void load(); }, [runId]);
   const activeVaults = useMemo(() => vaults.filter((vault) => vault.status === "ACTIVE" && vault.isPaymentDestination), [vaults]);
   const status = detail?.payrollRun.status;
-  const approve = async () => { const session = activeSession(); if (!session || !detail || busy) return; setBusy(true); try { await approveHrPayrollRun(session, { payrollRunId: detail.payrollRun.id, businessDate: today(), idempotencyKey: requestId() }); await load(); await onChanged(); } catch (error) { onError(presentBaseerApiError(error, language, ar ? "اعتماد المسير" : "Approving payroll")); } finally { setBusy(false); } };
+  const approve = async () => { const session = activeSession(); if (!session || !detail || busy) return; setBusy(true); try { await approveHrPayrollRun(session, { payrollRunId: detail.payrollRun.id, idempotencyKey: requestId() }); await load(); await onChanged(); } catch (error) { onError(presentBaseerApiError(error, language, ar ? "اعتماد المسير" : "Approving payroll")); } finally { setBusy(false); } };
   const discard = async () => { const session = activeSession(); if (!session || !detail || busy) return; setBusy(true); try { await discardHrPayrollRun(session, { payrollRunId: detail.payrollRun.id, idempotencyKey: requestId() }); setDiscardOpen(false); await onChanged(); onClose(); } catch (error) { onError(presentBaseerApiError(error, language, ar ? "حذف المسودة" : "Discarding payroll draft")); } finally { setBusy(false); } };
   const openPayment = async () => {
     const session = activeSession(); if (!session || busy) return;

@@ -194,6 +194,8 @@ async function mockHr(page: Page, requested: string[], options: { language?: "ar
     }
     if (url.pathname === `/v1/hr/payroll-runs/${approvedPayrollRun.id}`) return fulfill(route, { payrollRun: approvedPayrollRun, lines: [], payments: [payrollPayment], hasMoreLines: false, nextLineCursor: null, hasMorePayments: false, nextPaymentCursor: null });
     if (url.pathname === "/v1/hr/payroll-runs/preview") {
+      const input = route.request().postDataJSON();
+      if (!/^\d{4}-(0[1-9]|1[0-2])-01$/.test(input.payrollMonth ?? "")) return fulfill(route, { error: { code: "VALIDATION_FAILED", message: { ar: "بيانات الطلب غير صالحة.", en: "Invalid payroll month." }, correlationId: "e2e-payroll-month", retry: { kind: "do-not-retry" } } }, 400);
       if (options.payrollPreviewFailure) return fulfill(route, { error: { code: "PAYROLL_PREVIEW_FAILED", message: { ar: "تعذر إعداد معاينة المسير.", en: "The payroll preview could not be prepared." }, correlationId: "e2e-payroll-preview", retry: { kind: "safe-retry" } } }, 503);
       const previewEmployee = { id: employee.id, employeeNumber: employee.employeeNumber, nameAr: employee.nameAr, nameEn: employee.nameEn, status: "ACTIVE", included: true, reason: "ACTIVE_WITH_VALID_COMPENSATION", eligibilityCode: "FULL_MONTH_V1", calculationPeriodStart: "2026-08-01", calculationPeriodEnd: "2026-08-31", eligibleDays: 31, calendarDaysInMonth: 31, prorationRatio: "1.0000", monthlyGrossAmount: "3000.0000", estimatedGrossAmount: "3000.0000", advances: [{ id: advance.id, referenceNumber: advance.advanceNumber, remainingAmount: advance.remainingAmount }], advanceCount: options.truncatedPreview ? 101 : 1, hasMoreAdvances: Boolean(options.truncatedPreview), administrativeDeductions: [], administrativeDeductionCount: 0, hasMoreAdministrativeDeductions: false };
       return fulfill(route, { companyId, counts: { active: 1, onLeave: 0, included: 1, excluded: 0, exceptions: 0 }, totals: { employeeCount: 1, grossAmount: "3000.0000", advanceSettlementAmount: "100.0000", administrativeDeductionAmount: "0.0000", netPayableAmount: "2900.0000" }, exceptions: [], employees: [previewEmployee], hasMore: false, nextCursor: null });
@@ -387,7 +389,8 @@ test("payroll create and saved draft edit keep one stable full editor", async ({
   const updateRequestPromise = page.waitForRequest((request) => new URL(request.url()).pathname === "/v1/hr/payroll-runs/update" && request.method() === "POST");
   await editor.getByRole("button", { name: "حفظ التعديلات" }).click();
   const updateRequest = await updateRequestPromise;
-  expect(updateRequest.postDataJSON()).toMatchObject({ payrollRunId: payrollRun.id, notes: "ملاحظة معدلة", lines: [{ employeeId: employee.id, advances: [{ id: advance.id, amount: "125" }] }] });
+  expect(updateRequest.postDataJSON()).toMatchObject({ payrollRunId: payrollRun.id, payrollMonth: "2026-08-01", notes: "ملاحظة معدلة", lines: [{ employeeId: employee.id, advances: [{ id: advance.id, amount: "125" }] }] });
+  expect(updateRequest.postDataJSON()).not.toHaveProperty("businessDate");
   await expect(editor).toBeHidden();
   expect(requested.filter((request) => request === "POST /v1/hr/payroll-runs/update")).toHaveLength(1);
   await expectViewportContained(page);
@@ -403,6 +406,42 @@ test("payroll preview failure reports once without a request loop", async ({ pag
   await page.waitForTimeout(700);
   expect(requested.filter((request) => request === "POST /v1/hr/payroll-runs/preview")).toHaveLength(1);
 });
+
+for (const language of ["ar", "en"] as const) {
+  test(`payroll previous month survives blur and submits a canonical date (${language})`, async ({ page }) => {
+    const requested: string[] = [];
+    await page.clock.setFixedTime(new Date("2026-09-06T10:00:00.000Z"));
+    await mockHr(page, requested, { language });
+    await page.goto("/#module=hr&section=3");
+    const runRow = page.getByRole("row").filter({ has: page.getByRole("button", { name: payrollRun.runNumber, exact: true }) });
+    await expect(runRow.getByRole("cell", { name: "2026-08", exact: true })).toBeVisible();
+    await expect(runRow.getByText("2026-08-01", { exact: true })).toHaveCount(0);
+    const ar = language === "ar";
+    await page.getByRole("button", { name: ar ? "إنشاء مسير" : "Create payroll" }).click();
+    const dialog = page.getByRole("dialog", { name: ar ? "إنشاء مسير راتب" : "Create payroll run" });
+    const monthInput = dialog.getByRole("textbox", { name: ar ? "الشهر" : "Month", exact: true });
+    await monthInput.fill("2026-07");
+    await dialog.getByRole("button", { name: ar ? "فتح التقويم: الشهر" : "Open calendar: Month", exact: true }).click();
+    await page.locator(".baseer-calendar-picker__months button").nth(7).click();
+    await dialog.getByLabel(ar ? "ملاحظات" : "Notes", { exact: true }).fill("August payroll");
+    await expect(monthInput).toHaveValue("2026-08");
+    const previewRequestPromise = page.waitForRequest((request) => new URL(request.url()).pathname === "/v1/hr/payroll-runs/preview" && request.postDataJSON()?.payrollMonth === "2026-08-01");
+    await dialog.getByRole("button", { name: ar ? "تحديث" : "Refresh", exact: true }).click();
+    const previewRequest = await previewRequestPromise;
+    expect(previewRequest.postDataJSON()).not.toHaveProperty("businessDate");
+    const create = dialog.getByRole("button", { name: ar ? "إنشاء المسودة" : "Create draft", exact: true });
+    await expect(create).toBeEnabled();
+    const createRequestPromise = page.waitForRequest((request) => new URL(request.url()).pathname === "/v1/hr/payroll-runs" && request.method() === "POST");
+    const summaryRequestsBeforeCreate = requested.filter((request) => request === "GET /v1/hr/payroll-runs/missing-month-preview").length;
+    await create.click();
+    const payload = (await createRequestPromise).postDataJSON();
+    expect(payload).toMatchObject({ payrollMonth: "2026-08-01", notes: "August payroll" });
+    expect(payload).not.toHaveProperty("businessDate");
+    await expect(dialog).toBeHidden();
+    await expect.poll(() => requested.filter((request) => request === "GET /v1/hr/payroll-runs/missing-month-preview").length).toBeGreaterThan(summaryRequestsBeforeCreate);
+    await expectViewportContained(page);
+  });
+}
 
 test("employee profile shows exact counts, lazy compliance paging, and topmost modal semantics", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });

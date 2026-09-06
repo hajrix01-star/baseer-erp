@@ -111,6 +111,11 @@ jobs:
       - run: npm run verify:daily-sales-http
       - name: Verify attendance HTTP boundaries and retention
         run: node scripts/run-attendance-http-verification.mjs
+      - name: Verify payroll periods and financial lifecycle
+        run: |
+          node scripts/run-hr-payroll-period-verification.mjs
+          node scripts/run-hr-lifecycle-verification.mjs
+          node scripts/run-hr-http-verification.mjs
       - run: npm run build --workspace @baseer-erp/web
       - run: npm run check:web-static-route
       - run: npm run verify:web-budget
