@@ -124,6 +124,90 @@ const stoppedConnectionFoundation = new WhatsappInvoiceBaileysPilotFoundationSer
 } as never);
 const stoppedReconnect = await stoppedConnectionFoundation.acquireConnectionLease({ tenantId: "tenant", connectionId: "connection", ownerToken: "owner-token-123456", ttlMs: 5_000, resumeOnly: true });
 assert.equal(stoppedReconnect.acquired, false, "Reconnect must refuse a durable stop intent in the same lease-acquisition transaction.");
-assert.equal((stoppedClaimWhere as { connection?: { is?: { status?: string } } }).connection?.is?.status, "GAP_DETECTED", "The lease claim itself must be conditional on the durable reconnect state.");
+assert.deepEqual(
+  (stoppedClaimWhere as { connection?: { is?: { status?: { in?: string[] } } } }).connection?.is?.status?.in,
+  ["CONNECTED", "GAP_DETECTED"],
+  "Startup recovery may claim only a stale healthy connection or visible gap; a user stop remains excluded in the lease claim itself.",
+);
 
-console.log(JSON.stringify({ ok: true, verified: ["transient-pairing-close-reconnects", "logout-does-not-reconnect", "queued-pairing-credentials-survive-dispose", "stale-owner-cannot-persist-session", "reauthentication-starts-fresh-qr", "stopped-connection-cannot-reconnect"] }));
+const heldLeaseExpiry = new Date(Date.now() + 5_000);
+const heldLeaseFoundation = new WhatsappInvoiceBaileysPilotFoundationService({
+  inTenantTransaction: async (_tenantId: string, operation: (tx: unknown) => Promise<unknown>) => operation({
+    whatsappInvoiceConnection: { findFirst: async () => ({ id: "connection", status: "CONNECTED" }) },
+    whatsappInvoiceConnectionLease: { findFirst: async () => ({ id: "lease", ownerToken: "old-owner", fence: 1n, expiresAt: heldLeaseExpiry }) },
+  }),
+} as never);
+const heldLeaseResume = await heldLeaseFoundation.acquireConnectionLease({ tenantId: "tenant", connectionId: "connection", ownerToken: "owner-token-123456", ttlMs: 5_000, resumeOnly: true });
+assert.equal(heldLeaseResume.acquired, false, "Recovery must not steal a still-valid lease from another API process.");
+assert.equal(heldLeaseResume.expiresAt, heldLeaseExpiry, "A non-owner recovery must learn when to safely retry its fenced lease claim.");
+
+type LeaseRecheckConnector = {
+  start(scope: { tenantId: string; connectionId: string }, resumeOnly?: boolean): Promise<void>;
+  scheduleLeaseRecheck(scope: unknown, expiresAt: Date): void;
+};
+const previousLeasePilotEnabled = process.env.BASEER_WAI_BAILEYS_PILOT_ENABLED;
+process.env.BASEER_WAI_BAILEYS_PILOT_ENABLED = "true";
+const scheduledLeaseRechecks: Array<{ scope: unknown; expiresAt: Date }> = [];
+const leaseRecheckConnector = new WhatsappInvoiceBaileysPilotConnectorService(
+  { acquireConnectionLease: async () => ({ acquired: false, expiresAt: heldLeaseExpiry }) } as never,
+  {} as never,
+) as unknown as LeaseRecheckConnector;
+leaseRecheckConnector.scheduleLeaseRecheck = (scope, expiresAt) => { scheduledLeaseRechecks.push({ scope, expiresAt }); };
+await leaseRecheckConnector.start({ tenantId: "tenant", connectionId: "connection" }, true);
+assert.deepEqual(scheduledLeaseRechecks, [{ scope: { tenantId: "tenant", connectionId: "connection" }, expiresAt: heldLeaseExpiry }], "Boot recovery must retry only after a previous owner's lease becomes claimable.");
+
+const failedResumeStates: string[] = [];
+const failedResumeConnector = new WhatsappInvoiceBaileysPilotConnectorService(
+  {
+    acquireConnectionLease: async () => ({ acquired: true, fence: 1n }),
+    setConnectionStatus: async ({ status }: { status: string }) => { failedResumeStates.push(status); },
+    releaseConnectionLease: async () => true,
+  } as never,
+  { assertIngestionReady: () => { throw new Error("storage unavailable"); } } as never,
+);
+await assert.rejects(
+  () => failedResumeConnector.start({ tenantId: "tenant", connectionId: "connection" }, true),
+  /storage unavailable/,
+  "A failed recovery must retain the operational error for its bounded retry caller.",
+);
+assert.deepEqual(failedResumeStates, ["GAP_DETECTED"], "A recovery failure after claiming the lease must not leave a stale CONNECTED state.");
+if (previousLeasePilotEnabled === undefined) delete process.env.BASEER_WAI_BAILEYS_PILOT_ENABLED; else process.env.BASEER_WAI_BAILEYS_PILOT_ENABLED = previousLeasePilotEnabled;
+
+const resumableFoundation = new WhatsappInvoiceBaileysPilotFoundationService({
+  listTenantIdsForSystemScheduler: async () => ["tenant-a", "tenant-b"],
+  inTenantTransaction: async (tenantId: string, operation: (tx: unknown) => Promise<unknown>) => operation({
+    whatsappInvoiceConnection: {
+      findMany: async () => tenantId === "tenant-a" ? [{ id: "connection-a" }] : [{ id: "connection-b" }],
+    },
+  }),
+} as never);
+assert.deepEqual(
+  await resumableFoundation.resumableConnectionScopes(),
+  [{ tenantId: "tenant-a", connectionId: "connection-a" }, { tenantId: "tenant-b", connectionId: "connection-b" }],
+  "Startup discovery must return connection IDs only, preserving tenant isolation for every later lease claim.",
+);
+
+type LifecycleConnector = {
+  onModuleInit(): void;
+  onModuleDestroy(): Promise<void>;
+  resumePersistedConnections(): Promise<void>;
+  dispose(active: unknown): Promise<void>;
+  active: Map<string, { scope: { tenantId: string; connectionId: string } }>;
+  reconnectTimers: Map<string, ReturnType<typeof setTimeout>>;
+};
+const previousLifecyclePilotEnabled = process.env.BASEER_WAI_BAILEYS_PILOT_ENABLED;
+process.env.BASEER_WAI_BAILEYS_PILOT_ENABLED = "true";
+const lifecycleConnector = new WhatsappInvoiceBaileysPilotConnectorService({} as never, {} as never) as unknown as LifecycleConnector;
+let startupResumes = 0;
+lifecycleConnector.resumePersistedConnections = async () => { startupResumes += 1; };
+lifecycleConnector.onModuleInit();
+await Promise.resolve();
+assert.equal(startupResumes, 1, "An enabled API startup must attempt durable, lease-fenced connector recovery.");
+const disposedScopes: Array<{ tenantId: string; connectionId: string }> = [];
+lifecycleConnector.dispose = async (active) => { disposedScopes.push((active as { scope: { tenantId: string; connectionId: string } }).scope); };
+lifecycleConnector.active.set("tenant:connection", { scope: { tenantId: "tenant", connectionId: "connection" } });
+await lifecycleConnector.onModuleDestroy();
+assert.deepEqual(disposedScopes, [{ tenantId: "tenant", connectionId: "connection" }], "Service shutdown must dispose locally without issuing a durable user stop.");
+if (previousLifecyclePilotEnabled === undefined) delete process.env.BASEER_WAI_BAILEYS_PILOT_ENABLED; else process.env.BASEER_WAI_BAILEYS_PILOT_ENABLED = previousLifecyclePilotEnabled;
+
+console.log(JSON.stringify({ ok: true, verified: ["transient-pairing-close-reconnects", "logout-does-not-reconnect", "queued-pairing-credentials-survive-dispose", "stale-owner-cannot-persist-session", "reauthentication-starts-fresh-qr", "stopped-connection-cannot-reconnect", "expired-owner-rechecks-without-stealing", "recovery-failure-becomes-gap", "startup-finds-resumable-scopes", "service-shutdown-preserves-resume-intent"] }));

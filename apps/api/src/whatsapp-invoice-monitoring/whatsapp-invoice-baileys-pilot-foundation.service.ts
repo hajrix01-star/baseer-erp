@@ -154,7 +154,10 @@ export class WhatsappInvoiceBaileysPilotFoundationService {
         const claimed = await tx.whatsappInvoiceConnectionLease.updateMany({
           where: {
             id: current.id, tenantId: input.tenantId, connectionId: input.connectionId, expiresAt: { lte: now },
-            ...(input.resumeOnly ? { connection: { is: { status: WhatsappInvoiceConnectionStatus.GAP_DETECTED } } } : {}),
+            // A service restart releases its durable lease but deliberately
+            // leaves a healthy connection in CONNECTED.  Recovery may claim
+            // that expired lease (or a visible GAP), but never a user stop.
+            ...(input.resumeOnly ? { connection: { is: { status: { in: [WhatsappInvoiceConnectionStatus.CONNECTED, WhatsappInvoiceConnectionStatus.GAP_DETECTED] } } } } : {}),
           },
           data: { ownerToken: input.ownerToken, fence: { increment: 1 }, heartbeatAt: now, expiresAt },
         });
@@ -163,7 +166,10 @@ export class WhatsappInvoiceBaileysPilotFoundationService {
         if (!lease) throw new ConflictException("The WhatsApp connection lease was released during acquisition.");
         return { acquired: true, fence: lease.fence, expiresAt: lease.expiresAt, requiresFreshPairing };
       }
-      if (current.ownerToken !== input.ownerToken) return { acquired: false };
+      // A different live owner may be a prior API process that has not yet
+      // expired after a crash.  Return its bounded expiry so a standby can
+      // recheck later without racing its fenced ownership.
+      if (current.ownerToken !== input.ownerToken) return { acquired: false, expiresAt: current.expiresAt };
       const renewed = await tx.whatsappInvoiceConnectionLease.updateMany({
         where: { id: current.id, tenantId: input.tenantId, connectionId: input.connectionId, ownerToken: input.ownerToken, fence: current.fence, expiresAt: { gt: now } },
         data: { heartbeatAt: now, expiresAt },
@@ -183,6 +189,21 @@ export class WhatsappInvoiceBaileysPilotFoundationService {
       data: { heartbeatAt: now, expiresAt },
     }));
     return result.count === 1 ? { acquired: true, fence: input.fence, expiresAt } : { acquired: false };
+  }
+
+  /** Returns only the durable scopes that may reconnect after an API restart.
+   * The connector still claims each lease atomically, so another live worker
+   * remains the owner and a user-requested DISCONNECTED state is never resumed. */
+  async resumableConnectionScopes(): Promise<WhatsappInvoiceConnectionScope[]> {
+    const tenantIds = await this.database.listTenantIdsForSystemScheduler();
+    const scopes = await Promise.all(tenantIds.map((tenantId) => this.database.inTenantTransaction(tenantId, async (tx) => {
+      const connections = await tx.whatsappInvoiceConnection.findMany({
+        where: { tenantId, status: { in: [WhatsappInvoiceConnectionStatus.CONNECTED, WhatsappInvoiceConnectionStatus.GAP_DETECTED] } },
+        select: { id: true },
+      });
+      return connections.map((connection) => ({ tenantId, connectionId: connection.id }));
+    })));
+    return scopes.flat();
   }
 
   async releaseConnectionLease(input: Readonly<WhatsappInvoiceConnectionScope & { ownerToken: string; fence: bigint }>): Promise<boolean> {

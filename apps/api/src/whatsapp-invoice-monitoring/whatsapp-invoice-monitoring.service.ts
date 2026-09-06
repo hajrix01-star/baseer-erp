@@ -286,7 +286,11 @@ export class WhatsappInvoiceMonitoringService {
 
   private connection(connection: { status: string; lastSyncedAt: Date | null } | null) {
     const status = this.connectionStatus(connection?.status);
-    const message = status === "NOT_CONFIGURED" ? ["لم يُربط واتساب بعد. هذه واجهة مراقبة داخلية فقط.", "WhatsApp is not connected yet. This is an internal monitoring workspace only."] : status === "GAP_DETECTED" ? ["هناك فجوة مزامنة تحتاج مراجعة قبل الاعتماد على الاكتمال.", "A synchronization gap needs review before relying on completeness."] : status === "BLOCKED" ? ["الربط محظور ويحتاج تدخلاً إدارياً.", "The connection is blocked and needs administrative action."] : ["حالة الربط محفوظة؛ التشغيل الفعلي يتطلب بوابة الموصل المنفصلة.", "Connection state is stored; live operation requires the separate connector gate."];
+    const message = status === "NOT_CONFIGURED" ? ["لم يُربط واتساب بعد. هذه واجهة مراقبة داخلية فقط.", "WhatsApp is not connected yet. This is an internal monitoring workspace only."]
+      : status === "CONNECTED" ? ["الموصل يعمل ويستقبل الصور وPDF الجديدة من المجموعات النشطة فقط. لا يستورد رسائل أو ملفات سابقة.", "The connector is active and receives new image and PDF media from active groups only. It does not import earlier chat messages or files."]
+        : status === "GAP_DETECTED" ? ["هناك فجوة اتصال تحتاج متابعة؛ لا يُفترض اكتمال الرسائل خلال فترة الانقطاع.", "A connection gap needs follow-up; messages from the disconnected period are not assumed complete."]
+          : status === "BLOCKED" ? ["الربط محظور ويحتاج تدخلاً إدارياً.", "The connection is blocked and needs administrative action."]
+            : ["الاتصال متوقف. اضغط ربط واتساب عبر QR لاستئنافه بعد التحقق من الرقم.", "The connection is stopped. Use Connect WhatsApp with QR to resume it after checking the number."];
     return { status, messageAr: message[0], messageEn: message[1], lastSyncedAt: connection?.lastSyncedAt?.toISOString() ?? null };
   }
 

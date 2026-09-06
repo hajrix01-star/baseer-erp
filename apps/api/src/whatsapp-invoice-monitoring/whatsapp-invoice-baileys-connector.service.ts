@@ -69,6 +69,7 @@ export class WhatsappInvoiceBaileysPilotConnectorService implements OnModuleInit
   private readonly active = new Map<string, ActiveConnection>();
   private readonly reconnectTimers = new Map<string, ReturnType<typeof setTimeout>>();
   private readonly reconnectAttempts = new Map<string, number>();
+  private shuttingDown = false;
 
   constructor(
     private readonly foundation: WhatsappInvoiceBaileysPilotFoundationService,
@@ -76,20 +77,27 @@ export class WhatsappInvoiceBaileysPilotConnectorService implements OnModuleInit
   ) {}
 
   onModuleInit(): void {
-    // This is intentionally an opt-in connector. It does not scan, reconnect,
-    // or pair an account on API startup; an authorized settings flow invokes start.
+    // Pairing remains an explicit, authorized UI action.  A previously paired
+    // receive-only connection is different: it must recover after an API
+    // restart so an ordinary deployment never acts like the user stopped it.
+    this.shuttingDown = false;
     if (!this.enabled()) return;
+    void this.resumePersistedConnections().catch(() => undefined);
   }
 
   async onModuleDestroy(): Promise<void> {
+    this.shuttingDown = true;
     for (const timer of this.reconnectTimers.values()) clearTimeout(timer);
     this.reconnectTimers.clear();
-    await Promise.all([...this.active.values()].map((connection) => this.stop(connection.scope)));
+    // Do not write the durable user-stop intent during a service shutdown.
+    // `dispose` closes locally and releases the fenced lease; startup recovery
+    // may claim the expired lease only for CONNECTED/GAP_DETECTED states.
+    await Promise.all([...this.active.values()].map((connection) => this.dispose(connection)));
   }
 
   async start(scope: WhatsappInvoiceConnectionScope, resumeOnly = false): Promise<void> {
+    if (this.shuttingDown) return;
     this.assertEnabled();
-    this.assetStorage.assertIngestionReady();
     const key = this.connectionKey(scope);
     const scheduled = this.reconnectTimers.get(key);
     if (scheduled) {
@@ -101,23 +109,41 @@ export class WhatsappInvoiceBaileysPilotConnectorService implements OnModuleInit
     const ownerToken = randomUUID();
     const acquired = await this.foundation.acquireConnectionLease({ ...scope, ownerToken, ttlMs: CONNECTION_LEASE_MS, resumeOnly });
     if (!acquired.acquired || acquired.fence === undefined) {
-      if (resumeOnly) return;
+      if (resumeOnly) {
+        if (acquired.expiresAt && acquired.expiresAt > new Date()) this.scheduleLeaseRecheck(scope, acquired.expiresAt);
+        return;
+      }
       throw new ServiceUnavailableException("The WhatsApp connection is active on another worker.");
     }
 
     try {
+      this.assetStorage.assertIngestionReady();
       const active = await this.createActiveConnection(scope, ownerToken, acquired.fence, acquired.requiresFreshPairing === true);
       this.active.set(key, active);
+      if (this.shuttingDown) {
+        await this.dispose(active);
+        return;
+      }
       active.heartbeatTimer = setInterval(() => { void this.heartbeat(active); }, Math.floor(CONNECTION_LEASE_MS / 3));
       active.workTimer = setInterval(() => { void this.processNextWorkItem(active); }, 2_000);
       void this.processNextWorkItem(active);
     } catch (error) {
+      // A startup recovery owns this fenced lease at this point.  Make an
+      // unavailable storage/session/runtime prerequisite visible instead of
+      // leaving a stale CONNECTED badge while no socket exists.  A manual
+      // start retains its original error contract for the settings dialog.
+      if (resumeOnly) await this.foundation.setConnectionStatus({ ...scope, ownerToken, fence: acquired.fence, status: "GAP_DETECTED" }).catch(() => undefined);
       await this.foundation.releaseConnectionLease({ ...scope, ownerToken, fence: acquired.fence });
       throw error;
     }
   }
 
   async stop(scope: WhatsappInvoiceConnectionScope): Promise<void> {
+    const scheduled = this.reconnectTimers.get(this.connectionKey(scope));
+    if (scheduled) {
+      clearTimeout(scheduled);
+      this.reconnectTimers.delete(this.connectionKey(scope));
+    }
     await this.foundation.requestConnectionStop(scope);
     const connection = this.active.get(this.connectionKey(scope));
     if (!connection) return;
@@ -318,7 +344,7 @@ export class WhatsappInvoiceBaileysPilotConnectorService implements OnModuleInit
   }
 
   private scheduleReconnect(scope: WhatsappInvoiceConnectionScope): void {
-    if (!this.enabled()) return;
+    if (!this.enabled() || this.shuttingDown) return;
     const key = this.connectionKey(scope);
     if (this.reconnectTimers.has(key)) return;
     const attempt = (this.reconnectAttempts.get(key) ?? 0) + 1;
@@ -329,6 +355,37 @@ export class WhatsappInvoiceBaileysPilotConnectorService implements OnModuleInit
       void this.start(scope, true).catch(() => this.scheduleReconnect(scope));
     }, Math.min(60_000, 2_000 * (2 ** (attempt - 1))) + randomInt(0, MAX_RECONNECT_JITTER_MS + 1));
     this.reconnectTimers.set(key, timer);
+  }
+
+  /** A restart can observe a still-valid lease from a process that died without
+   * shutdown.  Wait only until that lease expires, then re-run the fenced
+   * recovery path; a durable user stop remains rejected by the claim itself. */
+  private scheduleLeaseRecheck(scope: WhatsappInvoiceConnectionScope, expiresAt: Date): void {
+    if (!this.enabled() || this.shuttingDown) return;
+    const key = this.connectionKey(scope);
+    if (this.reconnectTimers.has(key)) return;
+    const delay = Math.max(0, expiresAt.valueOf() - Date.now()) + randomInt(0, MAX_RECONNECT_JITTER_MS + 1);
+    const timer = setTimeout(() => {
+      this.reconnectTimers.delete(key);
+      if (this.shuttingDown) return;
+      void this.start(scope, true).catch(() => undefined);
+    }, delay);
+    this.reconnectTimers.set(key, timer);
+  }
+
+  private async resumePersistedConnections(): Promise<void> {
+    if (this.shuttingDown) return;
+    const scopes = await this.foundation.resumableConnectionScopes();
+    await Promise.all(scopes.map(async (scope) => {
+      try {
+        if (this.shuttingDown) return;
+        await this.start(scope, true);
+      } catch {
+        // A competing owner, missing runtime prerequisite, or transient
+        // transport failure is safe to leave visible through its durable state.
+        // No QR is generated and no manual stop can be overridden here.
+      }
+    }));
   }
 
   private enabled(): boolean { return process.env.BASEER_WAI_BAILEYS_PILOT_ENABLED === "true"; }
