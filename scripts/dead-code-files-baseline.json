@@ -12,6 +12,7 @@
     "packages/contracts"
   ],
   "allowedFiles": [
+    "apps/api/src/operations/document-scanner-gateway.ts",
     "apps/api/src/finance/index.ts",
     "apps/api/src/finance/journal/index.ts",
     "apps/api/src/finance/noorix-category-mapping.ts",

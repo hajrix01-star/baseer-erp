@@ -5,7 +5,9 @@ const applicationImages = {
   BASEER_MIGRATE_IMAGE: "migrate",
   BASEER_WEB_IMAGE: "web",
 };
-const requiredImages = [...Object.keys(applicationImages), "BASEER_POSTGRES_IMAGE", "BASEER_CADDY_IMAGE"];
+// Third-party runtime images are also pinned and preflighted, even though
+// they are intentionally not part of the Baseer CI release manifest.
+const requiredImages = [...Object.keys(applicationImages), "BASEER_POSTGRES_IMAGE", "BASEER_CADDY_IMAGE", "BASEER_CLAMAV_IMAGE"];
 
 function isCanonicalBase64Key(value) {
   if (!/^[A-Za-z0-9+/]{43}=$/.test(value)) return false;
