@@ -87,7 +87,11 @@ function GoogleConnectionCenter({ language, canManage }: { language: MarketingLa
 
 function GoogleBusinessLocationSelection({ language, onSelected }: { language: MarketingLanguage; onSelected: () => Promise<void> }) {
   const ar = marketingIsArabic(language);
-  const session = activeSession();
+  // `activeSession()` reconstructs its return object from sessionStorage.  The
+  // location effect must keep one identity for the mounted selection journey;
+  // otherwise its dependency changes after every loading-state render and
+  // repeats the Google read indefinitely.
+  const [session] = useState(() => activeSession());
   const [opened, setOpened] = useState(false);
   const [resources, setResources] = useState<GoogleBusinessResources | null>(null);
   const [account, setAccount] = useState("");
