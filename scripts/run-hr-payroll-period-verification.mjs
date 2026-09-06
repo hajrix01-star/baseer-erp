@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
-import { HrPayrollService, PayrollDraftRefreshRequiredException } from '../apps/api/dist/hr/hr-payroll.service.js';
+import { HrPayrollService, PayrollDraftRefreshRequiredException, PayrollDeductionsExceedGrossException, PayrollDraftIntegrityException } from '../apps/api/dist/hr/hr-payroll.service.js';
 import { IdempotencyPayloadMismatchError, hashCanonicalJson } from '../apps/api/dist/core-controls/idempotency.service.js';
+import { ApiExceptionFilter } from '../apps/api/dist/common/api-exception.filter.js';
 import { BusinessDateService } from '../apps/api/dist/business-date/business-date.service.js';
 import { Prisma } from '../apps/api/dist/generated/prisma/client.js';
 import { createHrPayrollRunRequestSchema, previewHrPayrollRunRequestSchema, approveHrPayrollRunRequestSchema } from '../packages/contracts/dist/index.js';
@@ -26,8 +27,14 @@ function fixture(month, current = '2026-09-06') {
   const profile = { employeeId: employees[0].id, effectiveFrom: date('2020-01-01'), effectiveTo: null, monthlyGross: decimal(3100), compensationMethod: 'FIXED_MONTHLY', foodAllowance: decimal(0), housingAllowance: decimal(0), transportAllowance: decimal(0), otherAllowance: decimal(0), scheduledHoursPerDay: null, scheduledWorkDays: null, policyVersion: null };
   const profiles = [profile];
   const matchEmployee = (employee, where) => (!where.id || (typeof where.id === 'string' ? employee.id === where.id : where.id.in.includes(employee.id))) && (!where.status || (typeof where.status === 'string' ? employee.status === where.status : where.status.in.includes(employee.status)));
-  const advance = { id: randomUUID(), employeeId: employees[0].id, advanceNumber: 'ADV-1', businessDate: start, remainingAmount: decimal(500), settledAmount: decimal(0), nextSettlementDate: null, status: 'ISSUED' };
-  const deduction = { id: randomUUID(), employeeId: employees[0].id, deductionNumber: 'DED-1', businessDate: start, remainingAmount: decimal(200), appliedAmount: decimal(0), plannedPayrollDate: null, status: 'OPEN' };
+  const advance = { tenantId: context.tenantId, companyId: context.companyId, id: randomUUID(), employeeId: employees[0].id, advanceNumber: 'ADV-1', businessDate: start, remainingAmount: decimal(500), settledAmount: decimal(0), nextSettlementDate: null, status: 'ISSUED' };
+  const deduction = { tenantId: context.tenantId, companyId: context.companyId, id: randomUUID(), employeeId: employees[0].id, deductionNumber: 'DED-1', businessDate: start, remainingAmount: decimal(200), appliedAmount: decimal(0), plannedPayrollDate: null, status: 'OPEN' };
+  const sourceAdvances = [advance], sourceDeductions = [deduction];
+  const sourcePort = (rows) => ({
+    findMany: async ({ where }) => rows.filter(row => (!where.id || where.id.in.includes(row.id)) && (!where.employeeId || row.employeeId === where.employeeId) && (!where.status || where.status.in.includes(row.status)) && (!where.businessDate || row.businessDate <= where.businessDate.lte)),
+    findFirst: async ({ where }) => rows.find(row => row.id === where.id) ?? null,
+    update: async ({ where, data }) => Object.assign(rows.find(row => row.id === where.id), data),
+  });
   const tx = {
     $executeRaw: async () => 1,
     company: { findFirst: async () => ({ businessTimezone: 'Asia/Riyadh' }) },
@@ -44,17 +51,17 @@ function fixture(month, current = '2026-09-06') {
     hrPayrollRun: {
       findFirst: async ({ where }) => {
         const run = state.runs.find(r => where.id ? r.id === where.id : ymd(r.payrollMonth) === ymd(where.payrollMonth));
-        return run ? { ...run, lines: state.lines.filter(l => l.payrollRunId === run.id).map(l => ({ ...l, advanceApplications: state.advances.filter(a => a.payrollLineId === l.id), deductionApplications: state.deductions.filter(a => a.payrollLineId === l.id) })), payments: [] } : null;
+        return run ? { ...run, lines: state.lines.filter(l => l.payrollRunId === run.id).map(l => ({ ...l, advanceApplications: state.advances.filter(a => a.payrollLineId === l.id).map(a => ({ ...a, advance: sourceAdvances.find(source => source.id === a.advanceId) })), deductionApplications: state.deductions.filter(a => a.payrollLineId === l.id).map(a => ({ ...a, deduction: sourceDeductions.find(source => source.id === a.deductionId) })) })), payments: [] } : null;
       },
       create: async ({ data }) => state.runs.push({ ...data, status: 'DRAFT', paidAmount: decimal(0), accrualJournalEntryId: null }),
       update: async ({ where, data }) => Object.assign(state.runs.find(r => r.id === where.id), data),
       updateMany: async ({ where, data }) => { Object.assign(state.runs.find(r => r.id === where.id), data); return { count: 1 }; },
     },
-    hrPayrollLine: { createMany: async ({ data }) => state.lines.push(...data), deleteMany: async ({ where }) => { state.lines = state.lines.filter(l => l.payrollRunId !== where.payrollRunId); } },
+    hrPayrollLine: { createMany: async ({ data }) => state.lines.push(...data.map(line => ({ paidAmount: decimal(0), ...line }))), deleteMany: async ({ where }) => { state.lines = state.lines.filter(l => l.payrollRunId !== where.payrollRunId); } },
     hrPayrollAdvanceApplication: { createMany: async ({ data }) => state.advances.push(...data), deleteMany: async () => { state.advances = []; } },
     hrPayrollAdministrativeDeductionApplication: { createMany: async ({ data }) => state.deductions.push(...data), deleteMany: async () => { state.deductions = []; } },
-    hrEmployeeAdvance: { findMany: async () => [advance], findFirst: async () => advance, update: async ({ data }) => Object.assign(advance, { remainingAmount: data.remainingAmount, status: data.status }) },
-    hrEmployeeAdministrativeDeduction: { findMany: async () => [deduction], findFirst: async () => deduction, update: async ({ data }) => Object.assign(deduction, { remainingAmount: data.remainingAmount, status: data.status }) },
+    hrEmployeeAdvance: sourcePort(sourceAdvances),
+    hrEmployeeAdministrativeDeduction: sourcePort(sourceDeductions),
     hrEmployeeAdvanceSettlement: { create: async ({ data }) => state.settlements.push(data) },
     hrEmployeeAdministrativeDeductionAction: { create: async ({ data }) => state.deductionActions.push(data) },
     hrEmployeeFinancialMovement: { create: async ({ data }) => state.movements.push(data) },
@@ -83,7 +90,7 @@ function fixture(month, current = '2026-09-06') {
   } };
   const service = new HrPayrollService(database, dates, { reserveInTransaction: async () => 1 }, idempotency, {}, journals, { initializeInTransaction: async () => {} }, {});
   service.ensureDefaultCompensationPolicyVersion = async () => ({ id: randomUUID(), policyId: randomUUID(), versionNumber: 1, effectiveFrom: date('2000-01-01'), status: 'APPROVED', formulaCode: 'STANDARD_MONTHLY_V1', policy: { code: 'STANDARD', nameAr: 'قياسي', nameEn: 'Standard' } });
-  return { service, state, employees, profiles, advance, deduction, start, monthEnd };
+  return { service, state, employees, profiles, advance, deduction, sourceAdvances, sourceDeductions, start, monthEnd };
 }
 
 for (const [month, end, current] of [
@@ -226,5 +233,107 @@ assert.equal(Object.hasOwn(withoutSelection, 'excludedEmployeeIds'), false);
 assert.equal(previewHrPayrollRunRequestSchema.safeParse({ payrollMonth: '2026-08-01', selectedEmployeeIds: [], excludedEmployeeIds: [] }).success, false);
 assert.equal(createHrPayrollRunRequestSchema.safeParse({ payrollMonth: '2026-08-01', idempotencyKey: 'duplicate', selectedEmployeeIds: [selected[0], selected[0]] }).success, false);
 console.log('Payroll employee selection verified: default/subset/none, missing profile and leave rules, UUID validation, global paged totals, Decimal row nets, persisted subset/update and canonical selection replay.');
+
+// A zero net is valid only when actual applications equal the salary exactly.
+function salary1800Fixture() {
+  const f = fixture('2026-08');
+  f.profiles[0].monthlyGross = decimal(1800);
+  f.advance.remainingAmount = decimal(1000);
+  f.sourceAdvances.push({ ...f.advance, id: randomUUID(), advanceNumber: 'ADV-2' });
+  const input = (secondAmount) => ({ ...empty, payrollMonth: f.start, lines: [{ employeeId: f.employees[0].id, advances: [{ id: f.advance.id, amount: '1000' }, { id: f.sourceAdvances[1].id, amount: secondAmount }], administrativeDeductions: [] }] });
+  return { ...f, input };
+}
+const overgross = salary1800Fixture();
+const originalBalances = overgross.sourceAdvances.map(a => a.remainingAmount.toFixed(4));
+for (const operation of ['preview', 'create']) {
+  await assert.rejects(() => overgross.service[operation](context, { ...overgross.input('1000'), pageSize: 100 }, 'overgross'), PayrollDeductionsExceedGrossException, operation + ' must reject 1000 + 1000 against 1800.');
+}
+assert.equal(overgross.state.runs.length, 0);
+const zeroPreview = await overgross.service.preview(context, { ...overgross.input('800'), pageSize: 100 });
+assert.equal(zeroPreview.totals.netPayableAmount, '0.0000');
+assert.equal(zeroPreview.employees.find(e => e.id === overgross.employees[0].id).estimatedNetAmount, '0.0000');
+const zeroDraft = await overgross.service.create(context, overgross.input('800'), 'valid-zero');
+const beforeInvalidUpdate = JSON.stringify({ runs: overgross.state.runs, lines: overgross.state.lines, apps: overgross.state.advances });
+await assert.rejects(() => overgross.service.updateDraft(context, { ...overgross.input('1000'), payrollRunId: zeroDraft.id }, 'overgross-update'), PayrollDeductionsExceedGrossException);
+assert.equal(JSON.stringify({ runs: overgross.state.runs, lines: overgross.state.lines, apps: overgross.state.advances }), beforeInvalidUpdate);
+assert.deepEqual(overgross.sourceAdvances.map(a => a.remainingAmount.toFixed(4)), originalBalances, 'Preview/create/update never settle issued advances.');
+await overgross.service.approve(context, { payrollRunId: zeroDraft.id }, 'approve-zero');
+assert.deepEqual(overgross.sourceAdvances.map(a => a.remainingAmount.toFixed(4)), ['0.0000', '200.0000']);
+assert.deepEqual(overgross.state.settlements.map(a => a.amount.toFixed(4)), ['1000.0000', '800.0000']);
+assert.equal(overgross.state.journals[0].lines[0].debitAmount, '1800.0000');
+assert.equal(overgross.state.journals[0].lines[1].creditAmount, '1800.0000');
+assert.equal(overgross.state.journals[0].lines.length, 2, 'A zero net creates no payable credit.');
+
+const corruptions = [
+  ['header gross', f => { f.state.runs[0].grossAmount = decimal(2000); }],
+  ['header advances', f => { f.state.runs[0].advanceSettlementAmount = decimal(1799); }],
+  ['header deductions', f => { f.state.runs[0].administrativeDeductionAmount = decimal(1); }],
+  ['header net', f => { f.state.runs[0].netPayableAmount = decimal(1); }],
+  ['employee count', f => { f.state.runs[0].employeeCount = 2; }],
+  ['empty draft', f => { f.state.lines = []; f.state.runs[0].employeeCount = 0; }],
+  ['duplicate employee', f => { f.state.lines.push({ ...f.state.lines[0], id: randomUUID() }); f.state.runs[0].employeeCount = 2; }],
+  ['line gross', f => { f.state.lines[0].grossSalary = decimal(1799); }],
+  ['line advance summary', f => { f.state.lines[0].advanceSettlementAmount = decimal(1799); }],
+  ['line deduction summary', f => { f.state.lines[0].administrativeDeductionAmount = decimal(1); }],
+  ['line net', f => { f.state.lines[0].netPayableAmount = decimal(1); }],
+  ['application exceeds gross despite balanced header', f => { f.state.advances[1].amount = decimal(1000); f.state.lines[0].advanceSettlementAmount = decimal(2000); f.state.runs[0].grossAmount = decimal(2000); f.state.runs[0].advanceSettlementAmount = decimal(2000); }],
+  ['zero advance application', f => { f.state.advances[0].amount = decimal(0); }],
+  ['duplicate advance source', f => { f.state.advances[1].advanceId = f.state.advances[0].advanceId; }],
+  ['foreign source tenant', f => { f.advance.tenantId = randomUUID(); }],
+  ['foreign source company', f => { f.advance.companyId = randomUUID(); }],
+  ['foreign source employee', f => { f.advance.employeeId = randomUUID(); }],
+  ['foreign line company', f => { f.state.lines[0].companyId = randomUUID(); }],
+  ['foreign application company', f => { f.state.advances[0].companyId = randomUUID(); }],
+];
+for (const bad of ['-1', 'NaN', 'Infinity', '0.00001']) {
+  corruptions.push(['invalid header decimal ' + bad, f => { f.state.runs[0].netPayableAmount = decimal(bad); }]);
+  corruptions.push(['invalid line decimal ' + bad, f => { f.state.lines[0].foodAllowance = decimal(bad); }]);
+  corruptions.push(['invalid app decimal ' + bad, f => { f.state.advances[0].amount = decimal(bad); }]);
+}
+for (const [label, corrupt] of corruptions) {
+  const f = salary1800Fixture();
+  const created = await f.service.create(context, f.input('800'), 'draft');
+  corrupt(f);
+  const snapshot = () => JSON.stringify({ ...f.state, receipts: [...f.state.receipts], sourceAdvances: f.sourceAdvances });
+  const before = snapshot();
+  await assert.rejects(() => f.service.approve(context, { payrollRunId: created.id }, 'integrity'), PayrollDraftIntegrityException, label);
+  assert.equal(snapshot(), before, label + ' must fail before journal, settlement, movement or receipt writes.');
+}
+// Administrative applications use the same strict reconciliation and scoping.
+for (const corrupt of [
+  f => { f.state.deductions[0].amount = decimal(0); },
+  f => { f.state.deductions[0].amount = decimal(101); },
+  f => { f.state.deductions.push({ ...f.state.deductions[0], id: randomUUID() }); },
+  f => { f.deduction.employeeId = randomUUID(); },
+  f => { f.deduction.companyId = randomUUID(); },
+]) {
+  const f = salary1800Fixture(), input = f.input('700');
+  input.lines[0].administrativeDeductions.push({ id: f.deduction.id, amount: '100' });
+  const created = await f.service.create(context, input, 'draft');
+  corrupt(f);
+  await assert.rejects(() => f.service.approve(context, { payrollRunId: created.id }, 'integrity'), PayrollDraftIntegrityException);
+  assert.equal(f.state.journals.length + f.state.settlements.length + f.state.deductionActions.length + f.state.movements.length, 0);
+}
+const repaired = salary1800Fixture();
+const damagedDraft = await repaired.service.create(context, repaired.input('800'), 'draft');
+repaired.state.runs[0].advanceSettlementAmount = decimal(2000);
+await assert.rejects(() => repaired.service.approve(context, { payrollRunId: damagedDraft.id }, 'retry-after-repair'), PayrollDraftIntegrityException);
+await repaired.service.updateDraft(context, { ...repaired.input('800'), payrollRunId: damagedDraft.id }, 'repair');
+assert.equal((await repaired.service.approve(context, { payrollRunId: damagedDraft.id }, 'retry-after-repair')).replayed, false);
+assert.equal((await repaired.service.approve(context, { payrollRunId: damagedDraft.id }, 'retry-after-repair')).replayed, true);
+
+for (const [exception, status, code, arabic] of [
+  [new PayrollDeductionsExceedGrossException(), 400, 'VALIDATION_FAILED', 'يتجاوز راتب الموظف'],
+  [new PayrollDraftIntegrityException(), 409, 'CONFLICT', 'راجع المسودة واحفظها من جديد'],
+]) {
+  let receipt, receivedStatus;
+  const response = { header() { return this; }, status(value) { receivedStatus = value; return this; }, send(value) { receipt = value; } };
+  new ApiExceptionFilter().catch(exception, { switchToHttp: () => ({ getResponse: () => response, getRequest: () => ({ method: 'POST', url: '/hr/payroll', headers: { 'x-request-id': randomUUID() } }) }) });
+  assert.equal(receivedStatus, status);
+  assert.equal(receipt.error.code, code);
+  assert.ok(receipt.error.message.ar.includes(arabic));
+  assert.equal(receipt.error.message.en, exception.message);
+}
+console.log('Payroll approval integrity verified: exact zero net, overgross rejection across preview/create/update, malformed persisted totals/applications/sources rejected before writes, typed Arabic errors and repaired-key replay.');
 
 console.log('Payroll period verification passed: previous August, all month lengths/year rollover, excluded hires, month-end proration, refresh/localization contract, forged-date immunity, legacy/new replay, balanced accrual/application dates and future/fiscal guards.');

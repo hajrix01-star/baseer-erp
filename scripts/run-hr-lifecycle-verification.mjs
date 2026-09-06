@@ -47,7 +47,7 @@ try {
     { AppModule },
     { DatabaseService },
     { CompanyFinanceSetupService },
-    { HrPayrollService },
+    { HrPayrollService, PayrollDraftIntegrityException },
     { HrAdvanceService },
     { HrAdministrativeDeductionService },
     { HrFinalSettlementService },
@@ -434,6 +434,45 @@ try {
     ]);
     return JSON.parse(JSON.stringify({ draft, advanceBalance, journalCount, settlementCount, movementCount, deductionActionCount, approvalReceiptCount }));
   });
+  // Corrupt only this isolated fixture. Each rejection must be completely
+  // atomic, then the normal Save changes command repairs the draft explicitly.
+  // All attempts reuse one key; successful approval below proves failed attempts
+  // did not leave an in-progress receipt or consume the approval request.
+  for (const corruption of ['header gross', 'header settlement total', 'header employee count', 'line gross', 'line settlement total', 'line net', 'application amount']) {
+    const saved = await readPayrollPostingProof();
+    const savedLine = saved.draft.lines.find(line => line.employeeId === payrollEmployee.id);
+    assert.ok(savedLine?.advanceApplications[0], 'The integrity fixture needs a real persisted advance application.');
+    await database.inTenantTransaction(fixture.tenantId, async (tx) => {
+      const scope = { tenantId: fixture.tenantId, companyId: fixture.companyId };
+      if (corruption.startsWith('header')) {
+        const data = corruption === 'header gross' ? { grossAmount: { increment: '1.0000' } }
+          : corruption === 'header settlement total' ? { advanceSettlementAmount: '99.0000' }
+          : { employeeCount: saved.draft.employeeCount + 1 };
+        assert.equal((await tx.hrPayrollRun.updateMany({ where: { ...scope, id: run.id }, data })).count, 1);
+      } else if (corruption.startsWith('line')) {
+        const data = corruption === 'line gross' ? { grossSalary: { decrement: '1.0000' } }
+          : corruption === 'line settlement total' ? { advanceSettlementAmount: '99.0000' }
+          : { netPayableAmount: { increment: '1.0000' } };
+        assert.equal((await tx.hrPayrollLine.updateMany({ where: { ...scope, id: savedLine.id, payrollRunId: run.id }, data })).count, 1);
+      } else {
+        assert.equal((await tx.hrPayrollAdvanceApplication.updateMany({ where: { ...scope, id: savedLine.advanceApplications[0].id, payrollLineId: savedLine.id }, data: { amount: '101.0000' } })).count, 1);
+      }
+    });
+    try {
+      const corrupted = await readPayrollPostingProof();
+      assert.equal(corrupted.approvalReceiptCount, 0);
+      await assert.rejects(() => payroll.approve(approver, { payrollRunId: run.id }, approvePayrollKey), PayrollDraftIntegrityException, corruption);
+      assert.deepEqual(await readPayrollPostingProof(), corrupted, corruption + ': rejected approval must not alter the draft, applications, source balance, journals, settlements, employee movements or idempotency receipt.');
+    } finally {
+      await payroll.updateDraft(creator, updatePayrollInput, randomUUID());
+    }
+    const repaired = await readPayrollPostingProof();
+    assert.equal(repaired.draft.grossAmount, saved.draft.grossAmount);
+    assert.equal(repaired.draft.advanceSettlementAmount, saved.draft.advanceSettlementAmount);
+    assert.equal(repaired.draft.netPayableAmount, saved.draft.netPayableAmount);
+    assert.equal(repaired.draft.employeeCount, saved.draft.employeeCount);
+    assert.equal(repaired.approvalReceiptCount, 0);
+  }
   const beforeClosedPeriodApproval = await readPayrollPostingProof();
   assert.equal(beforeClosedPeriodApproval.draft.status, 'DRAFT');
   assert.equal(beforeClosedPeriodApproval.draft.accrualJournalEntryId, null);
@@ -456,7 +495,7 @@ try {
       assert.equal(reopened.count, 1, 'Restore only the isolated fixture period after this rejection test.');
     });
   }
-  // Reusing the failed approval key must succeed once its fiscal period opens.
+  // Reusing the failed integrity/fiscal approval key succeeds after explicit repair and reopening.
   const approvedRun = await payroll.approve(approver, { payrollRunId: run.id, businessDate: beforeMonth }, approvePayrollKey);
   assert.equal(approvedRun.replayed, false);
   assert.equal((await payroll.approve(approver, { payrollRunId: run.id, businessDate: monthStart }, approvePayrollKey)).replayed, true, 'Payroll-approval replay must be explicit.');

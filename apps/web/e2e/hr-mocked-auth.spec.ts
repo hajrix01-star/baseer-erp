@@ -90,7 +90,7 @@ async function switchToAlternateCompany(page: Page, language: "ar" | "en" = "ar"
   await expect(page.getByRole("button", { name: nextName })).toBeVisible();
 }
 
-async function mockHr(page: Page, requested: string[], options: { language?: "ar" | "en"; onboarding?: "success" | "failure"; truncatedPreview?: boolean; slowPayrollDetail?: boolean; slowEmployeeSearch?: boolean; payrollPreviewFailure?: boolean; payrollSelectionFixture?: boolean; payrollSavedEmployeeStatus?: "ON_LEAVE" | "ACTIVE"; terminatedEmployee?: boolean; permissionCodes?: string[] } = {}) {
+async function mockHr(page: Page, requested: string[], options: { language?: "ar" | "en"; onboarding?: "success" | "failure"; truncatedPreview?: boolean; slowPayrollDetail?: boolean; slowEmployeeSearch?: boolean; payrollPreviewFailure?: boolean; payrollSelectionFixture?: boolean; payrollOverSettlementFixture?: boolean; payrollSavedEmployeeStatus?: "ON_LEAVE" | "ACTIVE"; terminatedEmployee?: boolean; permissionCodes?: string[] } = {}) {
   const language = options.language ?? "ar";
   const grantedPermissions = options.permissionCodes ?? permissions;
   const profileEmployee = options.terminatedEmployee ? { ...employee, status: "TERMINATED", terminatedAt: "2026-08-01" } : employee;
@@ -201,10 +201,12 @@ async function mockHr(page: Page, requested: string[], options: { language?: "ar
       const applied = input.lines?.find((line: { employeeId: string }) => line.employeeId === employee.id);
       const advanceTotal = selected ? (applied?.advances ?? []).reduce((sum: number, item: { amount: string }) => sum + Number(item.amount), 0) : 0;
       const deductionTotal = selected ? (applied?.administrativeDeductions ?? []).reduce((sum: number, item: { amount: string }) => sum + Number(item.amount), 0) : 0;
-      const previewEmployee = { id: employee.id, employeeNumber: employee.employeeNumber, nameAr: employee.nameAr, nameEn: employee.nameEn, status: "ACTIVE", selected, included: selected, estimatedNetAmount: selected ? String(3000 - advanceTotal - deductionTotal) : "0.0000", reason: "ACTIVE_WITH_VALID_COMPENSATION", eligibilityCode: "FULL_MONTH_V1", calculationPeriodStart: "2026-08-01", calculationPeriodEnd: "2026-08-31", eligibleDays: 31, calendarDaysInMonth: 31, prorationRatio: "1.0000", monthlyGrossAmount: "3000.0000", estimatedGrossAmount: "3000.0000", advances: [{ id: advance.id, referenceNumber: advance.advanceNumber, remainingAmount: advance.remainingAmount }], advanceCount: options.truncatedPreview ? 101 : 1, hasMoreAdvances: Boolean(options.truncatedPreview), administrativeDeductions: options.payrollSelectionFixture ? [{ id: "ded-choice", referenceNumber: "DED-001", remainingAmount: "50.0000" }] : [], administrativeDeductionCount: options.payrollSelectionFixture ? 1 : 0, hasMoreAdministrativeDeductions: false };
+      const employeeGross = options.payrollOverSettlementFixture ? 1800 : 3000;
+      if (advanceTotal + deductionTotal > employeeGross) return fulfill(route, { error: { code: "VALIDATION_FAILED", message: { ar: "مجموع السلف والخصومات المختارة يتجاوز راتب الموظف. خفّض مبالغ الاستقطاع ثم أعد المحاولة.", en: "Selected advance settlements and deductions exceed the employee salary. Reduce the deductions and try again." }, correlationId: "e2e-payroll-over-salary", retry: { kind: "do-not-retry" } } }, 400);
+      const previewEmployee = { id: employee.id, employeeNumber: employee.employeeNumber, nameAr: employee.nameAr, nameEn: employee.nameEn, status: "ACTIVE", selected, included: selected, estimatedNetAmount: selected ? String(employeeGross - advanceTotal - deductionTotal) : "0.0000", reason: "ACTIVE_WITH_VALID_COMPENSATION", eligibilityCode: "FULL_MONTH_V1", calculationPeriodStart: "2026-08-01", calculationPeriodEnd: "2026-08-31", eligibleDays: 31, calendarDaysInMonth: 31, prorationRatio: "1.0000", monthlyGrossAmount: String(employeeGross), estimatedGrossAmount: String(employeeGross), advances: options.payrollOverSettlementFixture ? [{ id: advance.id, referenceNumber: advance.advanceNumber, remainingAmount: "1000" }, { id: "second-advance", referenceNumber: "ADV-002", remainingAmount: "1000" }] : [{ id: advance.id, referenceNumber: advance.advanceNumber, remainingAmount: advance.remainingAmount }], advanceCount: options.truncatedPreview ? 101 : options.payrollOverSettlementFixture ? 2 : 1, hasMoreAdvances: Boolean(options.truncatedPreview), administrativeDeductions: options.payrollSelectionFixture ? [{ id: "ded-choice", referenceNumber: "DED-001", remainingAmount: "50.0000" }] : [], administrativeDeductionCount: options.payrollSelectionFixture ? 1 : 0, hasMoreAdministrativeDeductions: false };
       const secondId = "33333333-3333-4333-8333-333333333333";
       const secondSelected = Boolean(options.payrollSelectionFixture) && (input.selectedEmployeeIds ? input.selectedEmployeeIds.includes(secondId) : !(input.excludedEmployeeIds ?? []).includes(secondId));
-      const gross = (selected ? 3000 : 0) + (secondSelected ? 2000 : 0);
+      const gross = (selected ? employeeGross : 0) + (secondSelected ? 2000 : 0);
       const count = Number(selected) + Number(secondSelected);
       const second = { ...previewEmployee, id: secondId, employeeNumber: "EMP-002", nameAr: "الموظف الثاني", nameEn: "Second Employee", selected: secondSelected, included: secondSelected, monthlyGrossAmount: "2000.0000", estimatedGrossAmount: "2000.0000", estimatedNetAmount: secondSelected ? "2000.0000" : "0.0000", advances: [], advanceCount: 0, hasMoreAdvances: false, administrativeDeductions: [], administrativeDeductionCount: 0, hasMoreAdministrativeDeductions: false };
       return fulfill(route, { companyId, counts: { active: options.payrollSelectionFixture ? 2 : 1, onLeave: 0, included: count, excluded: (options.payrollSelectionFixture ? 2 : 1) - count, exceptions: 0 }, totals: { employeeCount: count, grossAmount: String(gross), advanceSettlementAmount: String(advanceTotal), administrativeDeductionAmount: String(deductionTotal), netPayableAmount: String(gross - advanceTotal - deductionTotal) }, exceptions: [], employees: options.payrollSelectionFixture && input.cursor ? [second] : [previewEmployee], hasMore: Boolean(options.payrollSelectionFixture && !input.cursor), nextCursor: options.payrollSelectionFixture && !input.cursor ? employee.id : null });
@@ -1151,5 +1153,33 @@ for (const status of ["ON_LEAVE", "ACTIVE"] as const) {
     const updatePromise = page.waitForRequest((request) => new URL(request.url()).pathname === "/v1/hr/payroll-runs/update" && request.method() === "POST");
     await dialog.getByRole("button", { name: "حفظ التعديلات", exact: true }).click();
     expect((await updatePromise).postDataJSON().includeOnLeaveEmployeeIds).toEqual(status === "ON_LEAVE" ? [employee.id] : []);
+  });
+}
+
+for (const language of ["ar", "en"] as const) {
+  test(`payroll excessive advance settlement blocks creation and recovers after correction (${language})`, async ({ page }) => {
+    const requested: string[] = [];
+    await mockHr(page, requested, { language, payrollOverSettlementFixture: true });
+    const ar = language === "ar";
+    await page.goto("/#module=hr&section=3");
+    await page.getByRole("button", { name: ar ? "إنشاء مسير" : "Create payroll", exact: true }).click();
+    const dialog = page.getByRole("dialog", { name: ar ? "إنشاء مسير راتب" : "Create payroll run" });
+    const net = dialog.getByRole("listitem").filter({ hasText: ar ? "صافي الرواتب" : "Net salaries" });
+    const create = dialog.getByRole("button", { name: ar ? "إنشاء المسودة" : "Create draft", exact: true });
+    await expect(net).toContainText("1,800");
+    await dialog.locator('.hr-payroll-create__application-list label').filter({ hasText: "ADV-001" }).getByRole("checkbox").check();
+    await expect(net).toContainText("800");
+    await dialog.locator('.hr-payroll-create__application-list label').filter({ hasText: "ADV-002" }).getByRole("checkbox").check();
+    await expect(create).toBeDisabled();
+    await expect(dialog.getByRole("alert")).toContainText(ar ? "يتجاوز راتب الموظف" : "exceed the employee salary");
+    await expect(net.locator(".baseer-money")).toHaveCount(0);
+    expect(requested.filter((request) => request === "POST /v1/hr/payroll-runs")).toHaveLength(0);
+    await dialog.getByRole("textbox", { name: ar ? "سلفة ADV-002" : "Advance ADV-002", exact: true }).fill("800");
+    await expect(net.locator(".baseer-money")).toHaveText("0 SAR");
+    await expect(create).toBeEnabled();
+    const saved = page.waitForRequest((request) => new URL(request.url()).pathname === "/v1/hr/payroll-runs" && request.method() === "POST");
+    await create.click();
+    expect((await saved).postDataJSON()).toMatchObject({ lines: [{ employeeId: employee.id, advances: [{ id: advance.id, amount: "1000" }, { id: "second-advance", amount: "800" }] }] });
+    await expect(dialog).toBeHidden();
   });
 }

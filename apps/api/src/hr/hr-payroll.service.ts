@@ -91,6 +91,14 @@ export class PayrollDraftRefreshRequiredException extends ConflictException {
   constructor() { super('Refresh this payroll draft before approval so its calculation uses the last day of the payroll month.'); }
 }
 
+export class PayrollDeductionsExceedGrossException extends BadRequestException {
+  constructor() { super('Selected advance settlements and deductions exceed the employee salary. Reduce the deductions and try again.'); }
+}
+
+export class PayrollDraftIntegrityException extends ConflictException {
+  constructor() { super('Payroll draft amounts or deduction applications are inconsistent. Review and save the draft again before approval.'); }
+}
+
 @Injectable()
 export class HrPayrollService {
   constructor(
@@ -558,7 +566,7 @@ export class HrPayrollService {
         const deductions = applications.deductions;
         const advanceAmount = sum(advances.map((item) => item.amount));
         const deductionAmount = sum(deductions.map((item) => item.amount));
-        if (advanceAmount.plus(deductionAmount).gt(gross)) throw new BadRequestException('Employee deductions cannot exceed the gross salary.');
+        if (advanceAmount.plus(deductionAmount).gt(gross)) throw new PayrollDeductionsExceedGrossException();
         const calculationSnapshot = payrollCalculationSnapshot(period, profile.monthlyGross);
         return { id: randomUUID(), employee, compensation, policyVersion, eligibilityCode: period.eligibilityCode, calculationSnapshot, gross, advances, deductions, advanceAmount, deductionAmount, net: gross.minus(advanceAmount).minus(deductionAmount) };
       });
@@ -634,7 +642,7 @@ export class HrPayrollService {
         const deductions = applications.deductions;
         const advanceAmount = sum(advances.map((item) => item.amount));
         const deductionAmount = sum(deductions.map((item) => item.amount));
-        if (advanceAmount.plus(deductionAmount).gt(gross)) throw new BadRequestException('Employee deductions cannot exceed the gross salary.');
+        if (advanceAmount.plus(deductionAmount).gt(gross)) throw new PayrollDeductionsExceedGrossException();
         return { id: randomUUID(), employee, compensation, policyVersion, eligibilityCode: period.eligibilityCode, calculationSnapshot: payrollCalculationSnapshot(period, profile.monthlyGross), gross, advances, deductions, advanceAmount, deductionAmount, net: gross.minus(advanceAmount).minus(deductionAmount) };
       });
       const grossAmount = sum(rows.map((row) => row.gross));
@@ -686,6 +694,7 @@ export class HrPayrollService {
       const businessDate = lastDayOfMonth(run.payrollMonth);
       if (ymd(run.businessDate) !== ymd(businessDate)) throw new PayrollDraftRefreshRequiredException();
       await this.dates.assertNotFutureInTransaction(tx, context, businessDate);
+      this.assertDraftIntegrity(context, run);
       // Older or newly created companies may not yet have all payroll accounts.
       // Initialising here is idempotent and runs in this same transaction before
       // the first payroll accrual; it never changes an existing journal entry.
@@ -966,7 +975,7 @@ export class HrPayrollService {
     const selectedDeductionAmount = sum([...selectedApplications.values()].flatMap((selection) => selection.deductions.map((application) => application.amount)));
     for (const [employeeId, selection] of selectedApplications) {
       const gross = calculatedByEmployee.get(employeeId)?.gross;
-      if (gross && sum(selection.advances.map((application) => application.amount)).plus(sum(selection.deductions.map((application) => application.amount))).gt(gross)) throw new BadRequestException('Employee deductions cannot exceed the gross salary.');
+      if (gross && sum(selection.advances.map((application) => application.amount)).plus(sum(selection.deductions.map((application) => application.amount))).gt(gross)) throw new PayrollDeductionsExceedGrossException();
     }
     const grossAmount = sum([...calculatedByEmployee.values()].map((compensation) => compensation.gross));
     return {
@@ -1058,8 +1067,8 @@ export class HrPayrollService {
         lines: {
           orderBy: { employeeNumberSnapshot: 'asc' },
           include: {
-            advanceApplications: { include: { advance: { select: { advanceNumber: true } } } },
-            deductionApplications: { include: { deduction: { select: { deductionNumber: true } } } },
+            advanceApplications: { include: { advance: { select: { id: true, tenantId: true, companyId: true, employeeId: true, advanceNumber: true } } } },
+            deductionApplications: { include: { deduction: { select: { id: true, tenantId: true, companyId: true, employeeId: true, deductionNumber: true } } } },
           },
         },
         payments: { orderBy: [{ businessDate: 'desc' }, { id: 'desc' }], include: { journalEntry: { select: { reversalEntry: { select: { businessDate: true } } } } } },
@@ -1067,6 +1076,49 @@ export class HrPayrollService {
     });
     if (!run) throw new NotFoundException('The payroll run was not found.');
     return run;
+  }
+
+  private assertDraftIntegrity(context: TrustedCompanyActorContext, run: Awaited<ReturnType<HrPayrollService['findRun']>>) {
+    const reject = (): never => { throw new PayrollDraftIntegrityException(); };
+    const monetary = (value: Prisma.Decimal): Prisma.Decimal => {
+      if (!Prisma.Decimal.isDecimal(value) || !value.isFinite() || value.decimalPlaces() > 4 || value.lt(0)) reject();
+      return value;
+    };
+    const scoped = (record: { tenantId: string; companyId: string }) => record.tenantId === context.tenantId && record.companyId === context.companyId;
+    const employees = new Set<string>();
+    const advances = new Set<string>();
+    const deductions = new Set<string>();
+    let gross = new Prisma.Decimal(0), advanceTotal = new Prisma.Decimal(0), deductionTotal = new Prisma.Decimal(0), net = new Prisma.Decimal(0);
+    if (!scoped(run) || !run.lines.length || !Number.isSafeInteger(run.employeeCount) || run.employeeCount !== run.lines.length) reject();
+    for (const value of [run.grossAmount, run.advanceSettlementAmount, run.administrativeDeductionAmount, run.netPayableAmount, run.paidAmount]) monetary(value);
+    if (!run.paidAmount.isZero() || run.accrualJournalEntryId !== null) reject();
+    for (const line of run.lines) {
+      if (!scoped(line) || line.payrollRunId !== run.id || !line.employeeId || employees.has(line.employeeId)) reject();
+      employees.add(line.employeeId);
+      for (const value of [line.grossSalary, line.basicSalary, line.foodAllowance, line.housingAllowance, line.transportAllowance, line.otherAllowance, line.overtimeAmount, line.overtimeHours, line.advanceSettlementAmount, line.administrativeDeductionAmount, line.netPayableAmount, line.paidAmount]) monetary(value);
+      if (!line.paidAmount.isZero()) reject();
+      let appliedAdvances = new Prisma.Decimal(0), appliedDeductions = new Prisma.Decimal(0);
+      for (const app of line.advanceApplications) {
+        const source = app.advance;
+        if (!scoped(app) || app.payrollLineId !== line.id || !monetary(app.amount).gt(0) || advances.has(app.advanceId)) reject();
+        advances.add(app.advanceId);
+        if (!source || !scoped(source) || source.id !== app.advanceId || source.employeeId !== line.employeeId) reject();
+        appliedAdvances = appliedAdvances.plus(app.amount);
+      }
+      for (const app of line.deductionApplications) {
+        const source = app.deduction;
+        if (!scoped(app) || app.payrollLineId !== line.id || !monetary(app.amount).gt(0) || deductions.has(app.deductionId)) reject();
+        deductions.add(app.deductionId);
+        if (!source || !scoped(source) || source.id !== app.deductionId || source.employeeId !== line.employeeId) reject();
+        appliedDeductions = appliedDeductions.plus(app.amount);
+      }
+      const calculatedNet = line.grossSalary.minus(appliedAdvances).minus(appliedDeductions);
+      if (!appliedAdvances.eq(line.advanceSettlementAmount) || !appliedDeductions.eq(line.administrativeDeductionAmount) || calculatedNet.lt(0) || !calculatedNet.eq(line.netPayableAmount)) reject();
+      gross = gross.plus(line.grossSalary); advanceTotal = advanceTotal.plus(appliedAdvances); deductionTotal = deductionTotal.plus(appliedDeductions); net = net.plus(calculatedNet);
+    }
+    if (!gross.eq(run.grossAmount) || !advanceTotal.eq(run.advanceSettlementAmount) || !deductionTotal.eq(run.administrativeDeductionAmount) || !net.eq(run.netPayableAmount)) reject();
+    // Settlement methods still acquire each source lock and recheck its balance
+    // after journal preparation; any concurrent change rolls back this transaction.
   }
 
   private async resolveAdvanceApplications(tx: Prisma.TransactionClient, context: TrustedCompanyActorContext, employeeId: string, applications: readonly { id: string; amount: string }[]) {
