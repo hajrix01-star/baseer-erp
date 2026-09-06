@@ -6,6 +6,7 @@ import { DatabaseService } from "../database/database.service.js";
 import { Prisma } from "../generated/prisma/client.js";
 import { MarketingGoogleCredentialVault } from "./marketing-google-credential-vault.js";
 import { MarketingGooglePlatformService } from "./marketing-google-platform.service.js";
+import { MarketingGoogleBusinessResourceSelectionService } from "./marketing-google-business-resource-selection.service.js";
 
 const GOOGLE_BUSINESS_SCOPE = "https://www.googleapis.com/auth/business.manage";
 const CALLBACK_TTL_MS = 10 * 60_000;
@@ -32,6 +33,7 @@ export class MarketingGoogleBusinessOAuthPilotService {
     private readonly database: DatabaseService,
     private readonly platform: MarketingGooglePlatformService,
     private readonly vault: MarketingGoogleCredentialVault,
+    private readonly resourceSelection: MarketingGoogleBusinessResourceSelectionService,
   ) {}
 
   async begin(context: TrustedCompanyActorContext) {
@@ -108,6 +110,15 @@ export class MarketingGoogleBusinessOAuthPilotService {
         await tx.marketingProviderConnection.update({ where: { id: claimed.connectionId }, data: { status: "AUTHORIZED_AWAITING_SELECTION" } });
         await this.audit(tx, claimed, "marketing.google_business_pilot.authorized", claimed.connectionId, { status: "AUTHORIZED_AWAITING_SELECTION" });
       });
+      // A consent callback is the only user action after Google. Complete the
+      // company mapping only for an unambiguous resource; discovery failure or
+      // plurality must preserve authorized consent rather than revoke it.
+      try {
+        await this.resourceSelection.selectOnlyAvailableResource({ tenantId: claimed.tenantId, companyId: claimed.companyId, actorUserId: claimed.initiatedByUserId });
+      } catch {
+        // The authorized credential remains safely stored. The public status
+        // stays awaiting selection until an administrator resolves ambiguity.
+      }
       return "AUTHORIZED";
     } catch {
       await this.block(claimed, "GOOGLE_OAUTH_EXCHANGE_FAILED");

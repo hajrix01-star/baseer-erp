@@ -29,9 +29,14 @@ export class MarketingService {
         orderBy: [{ status: "asc" }, { startsOn: "desc" }, { createdAt: "desc" }],
         take: 1_000,
       });
-      const replyPolicy = await tx.marketingReputationReplyPolicy.findFirst({
-        where: { tenantId: context.tenantId, companyId: context.companyId },
-      });
+      const [replyPolicy, googleBusinessConnection] = await Promise.all([
+        tx.marketingReputationReplyPolicy.findFirst({ where: { tenantId: context.tenantId, companyId: context.companyId } }),
+        tx.marketingProviderConnection.findFirst({
+          where: { tenantId: context.tenantId, companyId: context.companyId, provider: "GOOGLE_BUSINESS" },
+          select: { status: true },
+        }),
+      ]);
+      const googleBusinessSelected = googleBusinessConnection?.status === "AUTHORIZED_READ_ONLY_SELECTED";
       return {
         companyId: context.companyId,
         campaigns: campaigns.map((campaign) => ({
@@ -54,7 +59,7 @@ export class MarketingService {
         })),
         readiness: [
           { provider: "GOOGLE_ADS" as const, status: "NOT_CONNECTED" as const, messageAr: "Google Ads غير متصل في هذه المرحلة؛ لا تُعرض أي تكلفة أو تحويلات أو قرارات إنفاق." },
-          { provider: "GOOGLE_BUSINESS" as const, status: "NOT_CONNECTED" as const, messageAr: "ملف Google Business غير متصل؛ لا توجد تقييمات أو منشورات أو صلاحية نشر في هذه المرحلة." },
+          { provider: "GOOGLE_BUSINESS" as const, status: googleBusinessSelected ? "AUTHORIZED_READ_ONLY_SELECTED" as const : "NOT_CONNECTED" as const, messageAr: googleBusinessSelected ? "تم ربط Google Business واختيار الموقع للقراءة فقط. لم تبدأ مزامنة التقييمات أو الرد الآلي أو النشر." : "ملف Google Business غير متصل؛ لا توجد تقييمات أو منشورات أو صلاحية نشر في هذه المرحلة." },
         ],
         replyPolicy: publicReplyPolicy(replyPolicy),
       };
@@ -531,13 +536,14 @@ function targetStatus(sales: string | null, target: Prisma.Decimal | null) {
 
 function publicProviderConnection(
   provider: "GOOGLE_ADS" | "GOOGLE_BUSINESS",
-  connection: Readonly<{ status: "NOT_CONNECTED" | "SETUP_REQUESTED" | "AUTHORIZING" | "AUTHORIZED_AWAITING_SELECTION" | "BLOCKED"; setupRequestedAt: Date | null }> | undefined,
+  connection: Readonly<{ status: "NOT_CONNECTED" | "SETUP_REQUESTED" | "AUTHORIZING" | "AUTHORIZED_AWAITING_SELECTION" | "AUTHORIZED_READ_ONLY_SELECTED" | "BLOCKED"; setupRequestedAt: Date | null }> | undefined,
   readiness = { ready: false, missing: [] as readonly string[] },
   pilotAuthorizationAvailable = false,
 ) {
   const requested = connection?.status === "SETUP_REQUESTED";
   const authorizing = connection?.status === "AUTHORIZING";
   const awaitingSelection = connection?.status === "AUTHORIZED_AWAITING_SELECTION";
+  const readOnlySelected = connection?.status === "AUTHORIZED_READ_ONLY_SELECTED";
   const business = provider === "GOOGLE_BUSINESS";
   return {
     provider,
@@ -549,7 +555,9 @@ function publicProviderConnection(
     messageAr: authorizing
       ? "بدأت رحلة موافقة Google لهذه الشركة. أكملها في نافذة Google خلال عشر دقائق؛ لا يوجد حساب مختار أو مزامنة قبل التحقق اللاحق."
       : awaitingSelection
-      ? "اكتملت موافقة Google Business للتجربة، لكن لا يزال اختيار الحساب والموقع والمزامنة والنشر غير متاحين في هذه المرحلة."
+      ? "اكتملت موافقة Google Business، لكن لم يُحفظ مورد وحيد تلقائياً. قد توجد عدة حسابات أو مواقع، أو تعذرت قراءتها مؤقتاً؛ يراجع مسؤول المنصة ذلك. لا توجد مزامنة أو نشر أو رد آلي."
+      : readOnlySelected
+      ? "تم ربط Google Business واختيار الموقع للقراءة فقط. لم تبدأ مزامنة التقييمات أو الرد الآلي أو النشر."
       : readiness.ready
       ? "إعداد Google المركزي موجود على الخادم. رحلة التفويض واختيار الحساب/الموقع لم تُفعّل بعد؛ لا يوجد اتصال أو مزامنة حتى تكتمل بوابة OAuth المراجعة."
       : requested
@@ -560,7 +568,9 @@ function publicProviderConnection(
     messageEn: authorizing
       ? "This company has started Google consent. Complete it in the Google window within ten minutes; no account is selected and no sync occurs before later verification."
       : awaitingSelection
-      ? "Google Business pilot consent is complete, but account/location selection, synchronization and publishing remain unavailable in this stage."
+      ? "Google Business consent is complete, but one resource was not saved automatically. There may be multiple accounts or locations, or Google resources may be temporarily unavailable; a platform administrator must review it. There is no synchronization, publishing, or automated reply."
+      : readOnlySelected
+      ? "Google Business is connected with a location selected for read-only preparation. Review synchronization, automated replies, and publishing have not started."
       : readiness.ready
       ? "Central Google configuration is present on the server. The authorization and explicit account/location-selection journey is not enabled yet; there is no connection or sync until the reviewed OAuth gate is completed."
       : requested
