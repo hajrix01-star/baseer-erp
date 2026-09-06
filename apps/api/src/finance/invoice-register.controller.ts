@@ -30,7 +30,7 @@ export class InvoiceRegisterController {
   private async authorize(authorization: string | undefined, companyId: string | undefined) {
     const token = /^Bearer\s+(.+)$/i.exec(authorization ?? "")?.[1]; if (!token) throw new UnauthorizedException("Invalid authentication credentials.");
     const id = companyIdSchema.safeParse(companyId); if (!id.success) throw new ForbiddenException("Company finance scope is not permitted.");
-    const authorized = await this.contexts.authorize({ accessToken: token, companyId: id.data, requiredCapabilities: ["finance.purchase_expense.read"] });
+    const authorized = await this.contexts.authorize({ accessToken: token, companyId: id.data, requiredCapabilities: ["finance.ledger.read"] });
     return { tenantId: authorized.principal.tenantId, companyId: authorized.company.id, actorUserId: authorized.principal.userId };
   }
 }

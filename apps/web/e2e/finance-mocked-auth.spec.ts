@@ -4,7 +4,7 @@ import AxeBuilder from "@axe-core/playwright";
 const companyId = "11111111-1111-4111-8111-111111111111";
 const permissions = ["finance.configuration.read", "finance.setup.write", "finance.foundation.write"];
 const treasuryPermissions = ["finance.vaults.read", "finance.vaults.write", "finance.vaults.transfer"];
-const allFinancePermissions = [...permissions, "finance.purchase_expense.read", ...treasuryPermissions];
+const allFinancePermissions = [...permissions, "finance.purchase_expense.read", "finance.ledger.read", ...treasuryPermissions];
 
 async function fulfill(route: Route, json: unknown, status = 200) {
   await route.fulfill({ status, contentType: "application/json", body: JSON.stringify(json) });
@@ -73,14 +73,14 @@ async function mockTreasury(page: Page) {
 }
 
 async function mockFinancialReads(page: Page, requests: string[]) {
-  await mockAuthenticatedSession(page, "ar", ["finance.configuration.read", "finance.purchase_expense.read"]);
+  await mockAuthenticatedSession(page, "ar", ["finance.configuration.read", "finance.purchase_expense.read", "finance.ledger.read"]);
   const account = { id: "account-1", code: "1000", nameAr: "النقدية", nameEn: "Cash", type: "ASSET", status: "ACTIVE", isSystem: false, balanceDebit: "10.0000", balanceCredit: "0.0000", periodDebit: "10.0000", periodCredit: "0.0000" };
   const movement = (id: string, reference: string) => ({ id, journalEntryId: `journal-${id}`, businessDate: "2026-08-20", sourceType: "JOURNAL", sourceReference: reference, displayLabelAr: "قيد يومية", displayLabelEn: "Journal", displayReference: reference, description: null, debitAmount: "10.0000", creditAmount: "0.0000", reversalOfEntryId: null, reversalEntryId: null });
   const invoice = (id: string, number: string) => ({ id, source: "OUTFLOW_DOCUMENT", sourceType: "outflow_document", documentNumber: number, displayLabelAr: "فاتورة مشتريات", displayLabelEn: "Purchase invoice", businessDate: "2026-08-20", supplierInvoiceDate: null, kind: "PURCHASE", operationFamily: "PURCHASES", operationClass: "PURCHASE_INVOICE", settlementKind: "PAID", status: "POSTED", supplier: { id: "supplier-1", nameAr: "مورد", nameEn: "Supplier" }, category: { id: "category-1", nameAr: "مواد", nameEn: "Materials" }, parentClassification: null, grossAmount: "10.0000", netAmount: "8.6957", vatAmount: "1.3043", payrollAccrual: null, journalEntryId: "journal-1", batchNumber: null, notes: null, recurring: false, createdAt: "2026-08-20T00:00:00Z" });
   await page.route("**/v1/**", async (route) => {
     const url = new URL(route.request().url());
     requests.push(`${url.pathname}${url.search}`);
-    if (url.pathname === "/v1/companies/available") return fulfill(route, availableCompanies(["finance.configuration.read", "finance.purchase_expense.read"]));
+    if (url.pathname === "/v1/companies/available") return fulfill(route, availableCompanies(["finance.configuration.read", "finance.purchase_expense.read", "finance.ledger.read"]));
     if (url.pathname === "/v1/finance/accounts") return fulfill(route, { companyId, asOfBusinessDate: "2026-08-20", fromBusinessDate: null, toBusinessDate: null, summary: { accountCount: 1, periodDebit: "10.0000", periodCredit: "0.0000" }, accounts: [account] });
     if (url.pathname === "/v1/finance/accounts/account-1/movements") {
       const secondPage = url.searchParams.get("cursor") === "account-next";

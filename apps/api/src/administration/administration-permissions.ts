@@ -57,6 +57,7 @@ export const ADMINISTRATION_PERMISSION_CATALOG: readonly AdministrationPermissio
   { code: "finance.purchase_expense.create", module: "finance", nameAr: "إدخال مستندات المشتريات والمصروفات", nameEn: "Create purchase and expense documents", risk: "sensitive" },
   { code: "finance.purchase_expense.correct", module: "finance", nameAr: "تعديل مستندات المشتريات والمصروفات", nameEn: "Correct purchase and expense documents", risk: "sensitive" },
   { code: "finance.purchase_expense.cancel", module: "finance", nameAr: "إلغاء مستندات المشتريات والمصروفات", nameEn: "Cancel purchase and expense documents", risk: "sensitive" },
+  { code: "finance.ledger.read", module: "finance", nameAr: "عرض السجل المالي الموحد", nameEn: "View unified financial register", risk: "standard" },
   { code: "reports.read", module: "reports", nameAr: "عرض التقارير", nameEn: "View reports", risk: "standard" },
   { code: "reports.cash_performance.activate", module: "reports", nameAr: "اعتماد بداية تغطية تقرير الأداء النقدي", nameEn: "Activate cash-performance report coverage", risk: "sensitive" },
 
@@ -227,6 +228,7 @@ const COMPANY_MANAGER_PERMISSIONS = [
   "finance.purchase_expense.create",
   "finance.purchase_expense.correct",
   "finance.purchase_expense.cancel",
+  "finance.ledger.read",
   "hr.employees.read",
   "hr.employees.write",
   "hr.advances.read",
@@ -289,11 +291,11 @@ const COMPANY_MANAGER_PERMISSIONS = [
 export const SYSTEM_ROLE_TEMPLATES = [
   { code: "BASEER_COMPANY_MANAGER", nameAr: "مدير الشركة", nameEn: "Company manager", permissions: COMPANY_MANAGER_PERMISSIONS },
   { code: "BASEER_BACKUP_AUDITOR", nameAr: "مراجع النسخ والاستعادة", nameEn: "Backup and recovery auditor", permissions: ["backup.read", "backup.audit.view"] },
-  { code: "BASEER_FINANCE_ACCOUNTANT", nameAr: "محاسب", nameEn: "Accountant", permissions: ["platform.ai.use", "finance.configuration.read", "reports.read", "finance.vaults.read", "finance.vaults.transfer", "finance.vaults.cancel", "finance.vaults.reconcile", "finance.suppliers.read", "finance.supplier_dues.read", "finance.supplier_dues.write", "finance.loans.read", "finance.loans.write", "finance.purchase_expense.read", "finance.purchase_expense.create", "finance.purchase_expense.correct", "finance.purchase_expense.cancel", "finance.daily_sales.read", "finance.daily_sales.history.read_all", "operations.whatsapp_invoice_monitoring.read", "operations.whatsapp_invoice_monitoring.review", ...DAILY_SALES_MANAGE, "platform.files.read", "platform.files.write", "platform.business-date.read", "platform.output.preview", "platform.output.export"] },
+  { code: "BASEER_FINANCE_ACCOUNTANT", nameAr: "محاسب", nameEn: "Accountant", permissions: ["platform.ai.use", "finance.configuration.read", "reports.read", "finance.vaults.read", "finance.vaults.transfer", "finance.vaults.cancel", "finance.vaults.reconcile", "finance.suppliers.read", "finance.supplier_dues.read", "finance.supplier_dues.write", "finance.loans.read", "finance.loans.write", "finance.purchase_expense.read", "finance.purchase_expense.create", "finance.purchase_expense.correct", "finance.purchase_expense.cancel", "finance.ledger.read", "finance.daily_sales.read", "finance.daily_sales.history.read_all", "operations.whatsapp_invoice_monitoring.read", "operations.whatsapp_invoice_monitoring.review", ...DAILY_SALES_MANAGE, "platform.files.read", "platform.files.write", "platform.business-date.read", "platform.output.preview", "platform.output.export"] },
   { code: "BASEER_SALES_SUPERVISOR", nameAr: "مشرف مبيعات", nameEn: "Sales supervisor", permissions: ["platform.ai.use", "finance.daily_sales.read", "finance.daily_sales.history.read_all", ...DAILY_SALES_MANAGE, "platform.business-date.read", "platform.output.preview"] },
   { code: "BASEER_CASHIER", nameAr: "كاشير", nameEn: "Cashier", permissions: ["platform.ai.use", "finance.daily_sales.read", "finance.daily_sales.create", "platform.business-date.read"] },
   { code: "BASEER_OPERATIONS_ENTRY", nameAr: "موظف تسجيل داخلي", nameEn: "Internal registration employee", permissions: ["operations.internal_registration.create"] },
-  { code: "BASEER_READER", nameAr: "قارئ", nameEn: "Reader", permissions: ["platform.ai.use", "finance.daily_sales.read", "finance.configuration.read", "reports.read", "finance.suppliers.read", "finance.supplier_dues.read", "finance.loans.read", "finance.purchase_expense.read", "operations.whatsapp_invoice_monitoring.read", "platform.business-date.read"] },
+  { code: "BASEER_READER", nameAr: "قارئ", nameEn: "Reader", permissions: ["platform.ai.use", "finance.daily_sales.read", "finance.configuration.read", "reports.read", "finance.suppliers.read", "finance.supplier_dues.read", "finance.loans.read", "finance.purchase_expense.read", "finance.ledger.read", "operations.whatsapp_invoice_monitoring.read", "platform.business-date.read"] },
 ] as const;
 
 export function permissionCodesAreKnown(codes: readonly string[]): boolean {
@@ -328,7 +330,7 @@ const NAVIGATION_PRESENTATION_OVERRIDES: ReadonlyArray<Readonly<{
 const SECTION_PREFIXES: ReadonlyArray<readonly [string, string, string]> = [
   ["administration.companies", "الشركات", "Companies"], ["administration.users", "المستخدمون", "Users"], ["administration.roles", "الأدوار والصلاحيات", "Roles & permissions"],
   ["backup.restore", "الاستعادة", "Recovery"], ["backup.schedule", "جدولة النسخ", "Backup schedules"], ["backup.audit", "تدقيق النسخ", "Backup audit"], ["backup", "النسخ والأرشفة", "Backup & archives"],
-  ["finance.vaults", "الخزائن", "Vaults"], ["finance.daily_sales", "المبيعات اليومية", "Daily sales"], ["finance.purchase_expense", "المشتريات", "Purchases"], ["finance.supplier_dues", "ذمم الموردين", "Supplier dues"], ["finance.suppliers", "الموردون", "Suppliers"], ["finance.loans", "القروض والالتزامات", "Loans & liabilities"], ["finance.periods", "الفترات المالية", "Fiscal periods"], ["finance.configuration", "إعدادات المالية", "Finance configuration"], ["finance.foundation", "البيانات المالية الأساسية", "Finance master data"], ["finance.setup", "تهيئة المالية", "Finance setup"], ["finance.categories", "التصنيفات المالية", "Finance categories"], ["finance.operational_calendar", "تقويم التشغيل", "Operating calendar"],
+  ["finance.ledger", "السجل المالي الموحد", "Unified financial register"], ["finance.vaults", "الخزائن", "Vaults"], ["finance.daily_sales", "المبيعات اليومية", "Daily sales"], ["finance.purchase_expense", "المشتريات", "Purchases"], ["finance.supplier_dues", "ذمم الموردين", "Supplier dues"], ["finance.suppliers", "الموردون", "Suppliers"], ["finance.loans", "القروض والالتزامات", "Loans & liabilities"], ["finance.periods", "الفترات المالية", "Fiscal periods"], ["finance.configuration", "إعدادات المالية", "Finance configuration"], ["finance.foundation", "البيانات المالية الأساسية", "Finance master data"], ["finance.setup", "تهيئة المالية", "Finance setup"], ["finance.categories", "التصنيفات المالية", "Finance categories"], ["finance.operational_calendar", "تقويم التشغيل", "Operating calendar"],
   ["reports.cash_performance", "تقرير الأداء النقدي", "Cash performance report"], ["reports", "التقارير", "Reports"],
   ["decision.alerts", "التنبيهات", "Alerts"], ["decision.context", "السياق والمناسبات", "Context & events"], ["decision.metrics", "القراءات الرسمية", "Official reads"], ["decision.feedback", "التغذية الراجعة", "Feedback"], ["decision.policy", "سياسات القرار", "Decision policies"], ["decision.human_insights", "الرؤى البشرية", "Human insights"],
   ["marketing.google-business", "Google Business", "Google Business"], ["marketing.google-ads", "Google Ads", "Google Ads"], ["marketing.google-connection", "ربط Google", "Google connection"], ["marketing.reputation", "السمعة", "Reputation"], ["marketing.campaign", "الحملات", "Campaigns"], ["marketing.insights", "الأداء التسويقي", "Marketing performance"],
@@ -365,7 +367,12 @@ export function permissionDependencies(code: string): readonly string[] {
 }
 export function normalizePermissionCodes(codes: readonly string[]): string[] {
   if (!permissionCodesAreKnown(codes)) return [];
-  return effectivePermissionCodes(codes);
+  // A role records only the administrator's explicit choices. Read
+  // prerequisites are derived at authorization time, not persisted as if
+  // they had been clicked by the administrator.
+  const directCodes = new Set(codes);
+  for (const code of directCodes) for (const prerequisite of permissionDependencies(code)) directCodes.delete(prerequisite);
+  return [...directCodes].sort();
 }
 
 /**
