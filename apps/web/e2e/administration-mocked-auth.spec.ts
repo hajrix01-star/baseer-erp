@@ -45,7 +45,7 @@ function overview(owner = true, logoFileMetadataId: string | null = null) {
     owner,
     companies: [{ id: companyId, nameAr: "شركة الاختبار", nameEn: "Test company", businessTimezone: "Asia/Riyadh", status: "ACTIVE", logoFileMetadataId, contextLocationCode: null, contextLocationLabelAr: null, contextLatitude: null, contextLongitude: null }],
     users: [{ id: userId, login: "user@test.local", nameAr: "مستخدم الاختبار", nameEn: "Test user", preferredLanguage: "ar", avatarKind: "INITIALS", status: "ACTIVE", isOwner: false, memberships: [{ companyId, companyNameAr: "شركة الاختبار", companyNameEn: "Test company", roleId, roleNameAr: "مدير الاختبار", roleNameEn: "Test manager" }] }],
-    roles: [{ id: roleId, code: "TEST_MANAGER", nameAr: "مدير الاختبار", nameEn: "Test manager", isSystem: false, permissionCodes: ["administration.users.read"] }],
+    roles: [{ id: roleId, code: "TEST_MANAGER", nameAr: "مدير الاختبار", nameEn: "Test manager", isSystem: false, permissionCodes: ["administration.users.manage"] }],
     permissions: [
       { code: "administration.users.read", module: "administration", moduleAr: "الإدارة", moduleEn: "Administration", sectionAr: "المستخدمون", sectionEn: "Users", nameAr: "عرض المستخدمين", nameEn: "View users", risk: "standard", requires: [] },
       { code: "administration.users.manage", module: "administration", moduleAr: "الإدارة", moduleEn: "Administration", sectionAr: "المستخدمون", sectionEn: "Users", nameAr: "إدارة المستخدمين", nameEn: "Manage users", risk: "sensitive", requires: ["administration.users.read"] },
@@ -146,6 +146,21 @@ test("role editor validates its fields and permission selection", async ({ page 
   expect(requests.filter((request) => request === "POST /v1/administration/roles")).toHaveLength(0);
   const accessibility = await new AxeBuilder({ page }).include("[data-baseer-rhf-form]").analyze();
   expect(accessibility.violations).toEqual([]);
+});
+
+test("role card reveals effective permissions without opening the editor", async ({ page }) => {
+  await mockAdministration(page, "ar");
+  await page.goto("/#module=administration&section=3");
+
+  const role = page.locator(".administration-role-cards article", { hasText: "مدير الاختبار" });
+  await role.getByRole("button", { name: "عرض الصلاحيات" }).click();
+  await expect(role.getByRole("button", { name: "إخفاء الصلاحيات" })).toHaveAttribute("aria-expanded", "true");
+  await expect(role.getByText("صلاحيات الدور الفعّالة")).toBeVisible();
+  await expect(role.getByText("عرض المستخدمين")).toBeVisible();
+  await expect(role.getByText("إدارة المستخدمين")).toBeVisible();
+  await expect(page.getByRole("heading", { name: /تعديل دور/ })).toHaveCount(0);
+  await role.getByRole("button", { name: "إخفاء الصلاحيات" }).click();
+  await expect(role.getByRole("button", { name: "عرض الصلاحيات" })).toHaveAttribute("aria-expanded", "false");
 });
 
 test("non-owner administration remains read-only", async ({ page }) => {

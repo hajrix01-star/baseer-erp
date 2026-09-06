@@ -14,7 +14,7 @@ import {
   IdentityTokenError,
   IdentityTokenService,
 } from "../identity/identity-token.service.js";
-import { SYSTEM_ROLE_TEMPLATES } from "../administration/administration-permissions.js";
+import { effectivePermissionCodes, SYSTEM_ROLE_TEMPLATES } from "../administration/administration-permissions.js";
 
 export interface CompanyContextAuthorizationInput {
   accessToken: string;
@@ -73,8 +73,9 @@ export class CompanyContextService {
 
   /**
    * Authenticates one live company context and returns only the requested
-   * capabilities actually granted there. Callers must keep each projection
-   * gated by the returned subset; this method never promotes write to read.
+   * capabilities actually granted there. Catalog-defined prerequisites are
+   * resolved in memory, so an action grant also supplies its required read
+   * capability without mutating the stored role.
    */
   async authorizeAvailable(
     input: CompanyContextCapabilityInspectionInput,
@@ -165,16 +166,14 @@ export class CompanyContextService {
           where: {
             tenantId: claims.tenantId,
             roleId: membership.roleId,
-            permissionCode: { in: requestedCapabilities },
           },
           select: { permissionCode: true },
         });
-        const granted = new Set(grants.map((grant) => grant.permissionCode));
+        const directPermissionCodes = grants.map((grant) => grant.permissionCode);
         if (systemManager) {
-          for (const capability of requestedCapabilities) {
-            if (COMPANY_MANAGER_CAPABILITIES.includes(capability)) granted.add(capability);
-          }
+          directPermissionCodes.push(...COMPANY_MANAGER_CAPABILITIES);
         }
+        const granted = new Set(effectivePermissionCodes(directPermissionCodes));
         if (requireAll && requestedCapabilities.some((capability) => !granted.has(capability)))
           throw this.forbidden();
         return {

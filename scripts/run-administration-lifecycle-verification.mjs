@@ -15,7 +15,7 @@ dotenv.config({ path: "apps/api/.env.baseer-test" });
 const { Pool } = pg;
 const pool = new Pool({ connectionString: requiredEnvironment("DATABASE_URL") });
 const suffix = randomUUID().replaceAll("-", "").slice(0, 12);
-const fixture = { tenantId: randomUUID(), ownerId: randomUUID(), userId: randomUUID(), companyId: randomUUID(), systemRoleId: randomUUID(), foreignTenantId: randomUUID(), foreignUserId: randomUUID() };
+const fixture = { tenantId: randomUUID(), ownerId: randomUUID(), userId: randomUUID(), companyId: randomUUID(), roleId: randomUUID(), systemRoleId: randomUUID(), foreignTenantId: randomUUID(), foreignUserId: randomUUID() };
 const logoStorageRoot = await mkdtemp(join(tmpdir(), "baseer-administration-logo-"));
 let app;
 
@@ -23,20 +23,31 @@ try {
   process.env.BASEER_COMPANY_LOGO_STORAGE_ROOT = logoStorageRoot;
   await seedFixture();
   process.env.BASEER_SYSTEM_TENANT_CODE = `admin-http-${suffix}`;
-  const [{ AppModule }, { AuthService }, { DatabaseService }] = await Promise.all([
+  const [{ AppModule }, { AuthService }, { CompanyContextService }, { CompanyAccessService }, { DatabaseService }] = await Promise.all([
     import("../apps/api/dist/app.module.js"),
     import("../apps/api/dist/identity/auth.service.js"),
+    import("../apps/api/dist/company-context/company-context.service.js"),
+    import("../apps/api/dist/company-context/company-access.service.js"),
     import("../apps/api/dist/database/database.service.js"),
   ]);
   app = await NestFactory.create(AppModule, new FastifyAdapter({ logger: false }));
   app.setGlobalPrefix("v1");
   await app.init();
   const auth = app.get(AuthService);
+  const companyContext = app.get(CompanyContextService);
+  const companyAccess = app.get(CompanyAccessService);
   const database = app.get(DatabaseService);
   const owner = await auth.signIn({ tenantCode: `admin-http-${suffix}`, login: `owner-${suffix}`, password: `Owner-${suffix}`, requestId: randomUUID() });
   const target = await auth.signIn({ tenantCode: `admin-http-${suffix}`, login: `user-${suffix}`, password: `User-${suffix}`, requestId: randomUUID() });
   const server = app.getHttpAdapter().getInstance();
   const headers = { authorization: `Bearer ${owner.accessToken}` };
+  await database.inTenantTransaction(fixture.tenantId, (tx) => tx.rolePermission.createMany({ data: [{ tenantId: fixture.tenantId, roleId: fixture.roleId, permissionCode: "finance.daily_sales.create" }, { tenantId: fixture.tenantId, roleId: fixture.roleId, permissionCode: "legacy.retired.permission" }] }));
+  const legacyCashierRead = await companyContext.authorize({ accessToken: target.accessToken, companyId: fixture.companyId, requiredCapabilities: ["finance.daily_sales.read"] });
+  assert.deepEqual(legacyCashierRead.capabilities, ["finance.daily_sales.read"]);
+  await assert.rejects(() => companyContext.authorize({ accessToken: target.accessToken, companyId: fixture.companyId, requiredCapabilities: ["finance.vaults.read"] }));
+  const legacyCashierCompanies = await companyAccess.listAvailableCompanies(target.accessToken);
+  assert.ok(legacyCashierCompanies[0]?.permissionCodes.includes("finance.daily_sales.read"));
+  assert.ok(!legacyCashierCompanies[0]?.permissionCodes.includes("finance.vaults.read"));
   const missingCredentials = await server.inject({ method: "GET", url: "/v1/administration/overview" });
   assert.equal(missingCredentials.statusCode, 401, missingCredentials.body);
   const nonAdministrator = await server.inject({ method: "GET", url: "/v1/administration/overview", headers: { authorization: `Bearer ${target.accessToken}` } });
@@ -54,7 +65,7 @@ try {
   const createdRoleBody = JSON.parse(createRole.body);
   const createdRole = await database.inTenantTransaction(fixture.tenantId, (tx) => tx.role.findFirstOrThrow({ where: { id: createdRoleBody.id }, include: { grants: { orderBy: { permissionCode: "asc" } } } }));
   assert.match(createdRole.code, /^CUSTOM_TEST_CASHIER_[A-F0-9]{8}$/);
-  assert.deepEqual(createdRole.grants.map((grant) => grant.permissionCode), ["finance.daily_sales.create", "finance.daily_sales.read", "finance.vaults.read"]);
+  assert.deepEqual(createdRole.grants.map((grant) => grant.permissionCode), ["finance.daily_sales.create", "finance.daily_sales.read"]);
 
   const logoPng = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00, 0x0d]);
   const uploadedLogo = await server.inject({ method: "POST", url: `/v1/administration/companies/${fixture.companyId}/logo`, headers, payload: { fileName: "company.png", contentBase64: logoPng.toString("base64") } });
@@ -141,15 +152,14 @@ async function seedFixture() {
     await client.query('INSERT INTO "Tenant" ("id", "code", "name") VALUES ($1::uuid, $2, $3)', [fixture.tenantId, tenantCode, `Administration HTTP ${suffix}`]);
     await client.query('INSERT INTO "Tenant" ("id", "code", "name") VALUES ($1::uuid, $2, $3)', [fixture.foreignTenantId, `admin-foreign-${suffix}`, `Foreign administration ${suffix}`]);
     await client.query("SELECT set_config('app.tenant_id', $1, true)", [fixture.tenantId]);
-    const roleId = randomUUID();
     await client.query('INSERT INTO "User" ("id", "tenantId", "loginNormalized", "nameAr", "nameEn", "passwordHash") VALUES ($1::uuid, $2::uuid, $3, $4, $5, $6), ($7::uuid, $2::uuid, $8, $9, $10, $11)', [fixture.ownerId, fixture.tenantId, `owner-${suffix}@${tenantCode}.baseer.local`, "مالك الاختبار", "Test owner", await bcrypt.hash(`Owner-${suffix}`, 12), fixture.userId, `user-${suffix}@${tenantCode}.baseer.local`, "مستخدم الاختبار", "Test user", await bcrypt.hash(`User-${suffix}`, 12)]);
     await client.query("SELECT set_config('app.tenant_id', $1, true)", [fixture.foreignTenantId]);
     await client.query('INSERT INTO "User" ("id", "tenantId", "loginNormalized", "nameAr", "nameEn", "passwordHash") VALUES ($1::uuid, $2::uuid, $3, $4, $5, $6)', [fixture.foreignUserId, fixture.foreignTenantId, `foreign-${suffix}@admin-foreign-${suffix}.baseer.local`, "مستخدم أجنبي", "Foreign user", await bcrypt.hash(`Foreign-${suffix}`, 12)]);
     await client.query("SELECT set_config('app.tenant_id', $1, true)", [fixture.tenantId]);
     await client.query('INSERT INTO "Company" ("id", "tenantId", "nameAr", "nameEn") VALUES ($1::uuid, $2::uuid, $3, $4)', [fixture.companyId, fixture.tenantId, "شركة اختبار", "Test company"]);
-    await client.query('INSERT INTO "Role" ("id", "tenantId", "code", "nameAr", "nameEn") VALUES ($1::uuid, $2::uuid, $3, $4, $5), ($6::uuid, $2::uuid, $7, $8, $9)', [roleId, fixture.tenantId, "ADMIN_HTTP_TEST", "دور اختبار", "Test role", fixture.systemRoleId, "ADMIN_HTTP_SYSTEM", "دور نظام الاختبار", "Test system role"]);
+    await client.query('INSERT INTO "Role" ("id", "tenantId", "code", "nameAr", "nameEn") VALUES ($1::uuid, $2::uuid, $3, $4, $5), ($6::uuid, $2::uuid, $7, $8, $9)', [fixture.roleId, fixture.tenantId, "ADMIN_HTTP_TEST", "دور اختبار", "Test role", fixture.systemRoleId, "ADMIN_HTTP_SYSTEM", "دور نظام الاختبار", "Test system role"]);
     await client.query('UPDATE "Role" SET "isSystem" = true WHERE "id" = $1::uuid', [fixture.systemRoleId]);
-    await client.query('INSERT INTO "CompanyMembership" ("tenantId", "userId", "companyId", "roleId") VALUES ($1::uuid, $2::uuid, $3::uuid, $4::uuid)', [fixture.tenantId, fixture.userId, fixture.companyId, roleId]);
+    await client.query('INSERT INTO "CompanyMembership" ("tenantId", "userId", "companyId", "roleId") VALUES ($1::uuid, $2::uuid, $3::uuid, $4::uuid)', [fixture.tenantId, fixture.userId, fixture.companyId, fixture.roleId]);
     await client.query('INSERT INTO "TenantAdministrationAssignment" ("tenantId", "userId", "isOwner") VALUES ($1::uuid, $2::uuid, true)', [fixture.tenantId, fixture.ownerId]);
     await client.query("COMMIT");
   } catch (error) {

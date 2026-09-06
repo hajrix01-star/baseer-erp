@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
-import { ADMINISTRATION_PERMISSION_CATALOG, SYSTEM_ROLE_TEMPLATES } from "../administration/administration-permissions.js";
+import { ADMINISTRATION_PERMISSION_CATALOG, effectivePermissionCodes, SYSTEM_ROLE_TEMPLATES } from "../administration/administration-permissions.js";
 import { DatabaseService } from "../database/database.service.js";
 import {
   CompanyStatus,
@@ -103,10 +103,10 @@ export class CompanyAccessService {
             memberships.map((membership) => ({
               ...membership.company,
               isOwner: false,
-              permissionCodes: [...new Set([
+              permissionCodes: effectivePermissionCodes([
                 ...membership.role.grants.map((grant) => grant.permissionCode),
                 ...(membership.role.isSystem && membership.role.code === "BASEER_COMPANY_MANAGER" ? COMPANY_MANAGER_CAPABILITIES : []),
-              ])],
+              ]),
             })),
           );
       },
