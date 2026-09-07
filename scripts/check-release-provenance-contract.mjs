@@ -105,6 +105,31 @@ for (const name of ["quality", "web-acceptance"]) {
   }
 }
 
+const browserGate = workflowJobBlock("web-acceptance");
+for (const control of [
+  "if: github.event_name == 'pull_request' && always()",
+  "needs: [web-acceptance-shard]",
+  "SHARD_RESULT: ${{ needs.web-acceptance-shard.result }}",
+  'run: test "$SHARD_RESULT" = success',
+]) {
+  if (!browserGate.includes(control)) throw new Error(`Browser merge gate must fail closed: ${control}`);
+}
+const browserShard = workflowJobBlock("web-acceptance-shard");
+for (const control of [
+  "if: github.event_name == 'pull_request'",
+  "fail-fast: false",
+  "shard: [1, 2, 3]",
+  "--shard=${{ matrix.shard }}/3",
+  "baseer-erp-pr-web-shard-${{ github.event.pull_request.number || github.ref }}-${{ matrix.shard }}",
+  "cancel-in-progress: true",
+  "name: baseer-web-acceptance-${{ github.sha }}-${{ matrix.shard }}",
+]) {
+  if (!browserShard.includes(control)) throw new Error(`Browser shard coverage/evidence contract missing: ${control}`);
+}
+if (/continue-on-error:/.test(browserGate + browserShard)) {
+  throw new Error("Browser acceptance must not ignore failures.");
+}
+
 for (const name of ["release-api", "release-migrate", "release-web"]) {
   if (!workflowJobBlock(name).includes("needs: [release-preflight]")) {
     throw new Error(`${name} must wait for the exact-main release preflight.`);

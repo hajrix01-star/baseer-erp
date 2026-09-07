@@ -47,7 +47,16 @@ try {
     # upload. Mark the parity invocation so the workflow skips that external
     # post-processing step; all build, test, and acceptance commands remain
     # the workflow's exact commands.
-    $linuxCommand += " ~/.local/bin/act pull_request --workflows '$workflowRelativePath' --job '$selectedJob' --platform 'ubuntu-latest=ghcr.io/catthehacker/ubuntu:full-latest' --container-architecture 'linux/amd64' --bind --no-recurse --env BASEER_CI_PARITY=true;"
+    # Run each browser shard sequentially locally: the bind-mounted checkout
+    # is shared, unlike the isolated hosted runners. Do not run only the gate.
+    $executions = if ($selectedJob -eq 'web-acceptance') {
+      @(1, 2, 3 | ForEach-Object { "--job 'web-acceptance-shard' --matrix shard:$_" })
+    } else {
+      @("--job '$selectedJob'")
+    }
+    foreach ($execution in $executions) {
+      $linuxCommand += " ~/.local/bin/act pull_request --workflows '$workflowRelativePath' $execution --platform 'ubuntu-latest=ghcr.io/catthehacker/ubuntu:full-latest' --container-architecture 'linux/amd64' --bind --no-recurse --env BASEER_CI_PARITY=true;"
+    }
   }
   & $wsl.Source -d Ubuntu -- bash -c $linuxCommand
   if ($LASTEXITCODE -ne 0) {
