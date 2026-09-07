@@ -101,14 +101,16 @@ jobs:
           docker run --rm --entrypoint node baseer-erp-api-runtime-check -e 'for (const name of ["prisma", "@prisma/config", "deepmerge-ts"]) { try { require.resolve(name); process.exit(1); } catch (error) { if (error.code !== "MODULE_NOT_FOUND") throw error; } } for (const name of ["@nestjs/platform-fastify", "@prisma/client", "@prisma/adapter-pg"]) require.resolve(name, { paths: ["/app/apps/api"] });'
           docker run --rm --entrypoint npx baseer-erp-migrate-check prisma --version
       - run: node scripts/run-auth-throttling-verification.mjs
-      - run: npm run verify:administration-lifecycle
+      # These entrypoints reuse the clean build above. Local npm verification
+      # wrappers still build first, but rebuilding per test wastes CI minutes.
+      - run: node scripts/run-administration-lifecycle-verification.mjs
       - run: npm run verify:finance-gate-b-db
-      - run: npm run verify:finance-accounts-http
+      - run: node scripts/run-finance-accounts-http-verification.mjs
       - run: npm run verify:finance-period-race
       - run: npm run verify:ai-gate-b-db
-      - run: npm run verify:ai-gate-b-http
-      - run: npm run verify:daily-sales-db
-      - run: npm run verify:daily-sales-http
+      - run: node scripts/run-ai-gate-b-http-verification.mjs
+      - run: node scripts/run-daily-sales-gate-b-verification.mjs
+      - run: node scripts/run-daily-sales-http-verification.mjs
       - name: Verify attendance HTTP boundaries and retention
         run: node scripts/run-attendance-http-verification.mjs
       - name: Verify payroll periods and financial lifecycle
@@ -135,14 +137,33 @@ jobs:
           node scripts/check-release-provenance-contract.mjs
 
   web-acceptance:
-    # Keep browser acceptance on the proposed merge, then avoid re-running its
-    # expensive Playwright setup after main receives that accepted change.
-    if: github.event_name == 'pull_request'
+    # Stable merge gate: failed, cancelled and skipped shards must fail closed.
+    if: github.event_name == 'pull_request' && always()
+    needs: [web-acceptance-shard]
     concurrency:
       group: baseer-erp-pr-web-acceptance-${{ github.event.pull_request.number || github.ref }}
       cancel-in-progress: true
     runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Require every browser shard to succeed
+        env:
+          SHARD_RESULT: ${{ needs.web-acceptance-shard.result }}
+        run: test "$SHARD_RESULT" = success
+
+  web-acceptance-shard:
+    # Keep browser acceptance on the proposed merge, then avoid re-running its
+    # expensive Playwright setup after main receives that accepted change.
+    if: github.event_name == 'pull_request'
+    concurrency:
+      group: baseer-erp-pr-web-shard-${{ github.event.pull_request.number || github.ref }}-${{ matrix.shard }}
+      cancel-in-progress: true
+    runs-on: ubuntu-latest
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
     permissions:
       contents: read
     steps:
@@ -159,7 +180,7 @@ jobs:
       - name: Run web accessibility and interaction acceptance tests
         run: |
           npx playwright install --with-deps chromium
-          npm run test:e2e --workspace @baseer-erp/web
+          npm run test:e2e --workspace @baseer-erp/web -- --shard=${{ matrix.shard }}/3
       - name: Preserve Playwright failure evidence
         # `act` cannot provide GitHub's short-lived artifact runtime token.
         # The Linux parity runner marks only its local invocation with this
@@ -168,7 +189,7 @@ jobs:
         if: always() && env.BASEER_CI_PARITY != 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: baseer-web-acceptance-${{ github.sha }}
+          name: baseer-web-acceptance-${{ github.sha }}-${{ matrix.shard }}
           path: |
             apps/web/test-results
             apps/web/playwright-report
